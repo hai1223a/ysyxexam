@@ -43,7 +43,7 @@ run: $(BIN)
 	@$^
 
 # 上面是NVBOARD的内容
-VERILATOR_SIM_CFLAGS += -Wall --cc -exe --build --trace-fst \
+VERILATOR_SIM_CFLAGS += -Wall --cc -exe --build --trace-fst --trace\
 						 vsrc/$(TOPNAME).v csrc/main.cpp
 VERILATOR_EXE_CFLAGS +=
 

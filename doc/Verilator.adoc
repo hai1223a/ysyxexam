@@ -5,5 +5,8 @@
 `--exe` 链接生成可执行程序输出 +
 `--build` 自动调用编译器件完成编译和链接 +
 以上三者的关系为 `--cc` -> `--exe` -> `--build` +
-`--trace` 允许生成VCD波形文件
-`--trace-fst` 允许生成FST波形文件
+`--trace` 允许生成VCD波形文件 +
+`--trace-fst` 允许生成FST波形文件 +
+其中VCD波形比较通用,FST文件只能在gtkwave中打开 +
+`--x-assign unique` 设置X的值,可以选择 +
+`--x-initial unique`
