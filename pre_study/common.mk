@@ -54,4 +54,6 @@ clean:
 	rm -rf obj_dir $(BUILD_DIR)
 
 include ../../Makefile
-.PHONY: default all clean run default
+.PHONY: default all clean run
+
+
