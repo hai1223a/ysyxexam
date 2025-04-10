@@ -10,4 +10,6 @@
 !README.md
 !.gitignore
 !init.sh
+!/doc/*
+!/pre_study/*
 /fceux-am

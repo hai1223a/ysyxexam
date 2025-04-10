@@ -1,0 +1,83 @@
+== Makefile常识
+=== 规则
+`Makeflie` 文件简单来说就是用来生成文件的。 +
+如图1所示，我们需要使用 `a.txt`,`b.txt`,`c.txt` 三个文件来生成 `x.txt` 文件。
+
+.生成文件
+image::images/a.png[]
+
+`Makefile` 文件由规则组成，每个规则由三部分组成：目标、依赖和命令。 +
+[source,make]
+----
+# 目标文件: 依赖文件1 依赖文件2
+#   命令
+m.txt: a.txt b.txt
+	cat a.txt b.txt > m.txt
+----
+`make` 命令默认执行第一个规则。执行时，`make` 会检查目标文件是否存在，如果不存在或者依赖文件有更新，则执行命令。如果依赖文件未就绪，`make` 会先执行依赖文件的规则，直到所有依赖文件都就绪为止。 +
+`make` 命令会自动判断目标文件是否需要更新，如果需要更新，则执行命令。 +
+所以实现上面目标的 `Makefile` 文件如下：
+[source,make]
+----
+x.txt: m.txt c.txt
+	cat m.txt c.txt > x.txt
+
+m.txt: a.txt b.txt
+	cat a.txt b.txt > m.txt
+----
+此时执行`make`命令将得到x.txt文件
+
+=== 伪目标
+我们在执行 `make clean` 时并没有生成 `clean` 文件，所以每次都将执行一边命令。
+[source,make]
+----
+clean:
+    rm -f x.txt m.txt
+----
+当然我们也可以将 `clean` 标记为一个伪目标，这样即使存在 `clean文件` ，命令也会执行
+[source,make]
+----
+.PHONY: clean
+clean:
+    rm -f x.txt m.txt
+----
+
+=== 多条指令
+下面这么执行多条指令并不正确，因为每条指令会在不同的 shell 中执行
+[source,make]
+----
+cd:
+	pwd
+	cd ..
+	pwd
+----
+常用的解决办法是使用 `;` 将多条指令连接起来，同时配合 `\` 符号进行换行
+[source,make]
+----
+cd:
+    pwd; \
+    cd ..; \
+    pwd
+----
+或者使用 `&&` 连接符，只有前面的命令成功执行后，才会执行后面的命令
+[source,make]
+----
+cd:
+    pwd && \
+    cd .. && \
+    pwd
+----
+
+=== 控制打印
+`make` 命令前添加 `@` 符号可以禁止打印命令
+[source,make]
+----
+@echo "hello world"
+----
+
+=== 控制错误
+`make` 命令前添加 `-` 符号可以禁止打印错误
+[source,make]
+----
+-echo "hello world"
+----
