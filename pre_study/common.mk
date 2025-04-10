@@ -42,16 +42,21 @@ run: $(BIN)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@$^
 
+# 上面是NVBOARD的内容
+
 all:
 	@echo "Write this Makefile by your self."
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
-	verilator -Wall --cc -exe --build --trace --trace-fst vsrc/top.v csrc/main.cpp	
+	verilator -Wall --cc -exe --build --trace-fst vsrc/$(TOPNAME).v csrc/main.cpp; \
+	@./obj_dir/V$(TOPNAME); \
+	@gtkwave waveform.fst	
 	
+# 上面是仿真的内容
 clean:
-	rm -rf obj_dir $(BUILD_DIR)
+	rm -rf *.fst *.vcd obj_dir $(BUILD_DIR)
 
 include ../../Makefile
 .PHONY: default all clean run
