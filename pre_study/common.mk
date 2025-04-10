@@ -43,6 +43,9 @@ run: $(BIN)
 	@$^
 
 # 上面是NVBOARD的内容
+VERILATOR_SIM_CFLAGS += -Wall --cc -exe --build --trace-fst \
+						 vsrc/$(TOPNAME).v csrc/main.cpp
+VERILATOR_EXE_CFLAGS +=
 
 all:
 	@echo "Write this Makefile by your self."
@@ -50,8 +53,8 @@ all:
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
-	verilator -Wall --cc -exe --build --trace-fst vsrc/$(TOPNAME).v csrc/main.cpp
-	@./obj_dir/V$(TOPNAME)
+	verilator $(VERILATOR_SIM_CFLAGS)
+	@./obj_dir/V$(TOPNAME) $(VERILATOR_EXE_CFLAGS)
 	@gtkwave waveform.fst	
 	
 # 上面是仿真的内容
