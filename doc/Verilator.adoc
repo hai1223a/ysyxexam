@@ -1,0 +1,8 @@
+== Verilator的编译
+=== Verilator常用编译选项
+
+`--cc` 将System verilog/verilog代码转换为C++输出 +
+`--exe` 链接生成可执行程序输出 +
+`--build` 自动调用编译器件完成编译和链接 +
+以上三者的关系为 `--cc` -> `--exe` -> `--build` +
+ 
