@@ -48,10 +48,10 @@ all:
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@echo "Write this Makefile by your self."
-	verilator -Wall --cc -exe --build --trace-fst vsrc/top.v csrc/main.cpp	
+	# verilator -Wall --cc -exe --build --trace-fst vsrc/top.v csrc/main.cpp	
 	
 clean:
 	rm -rf obj_dir $(BUILD_DIR)
 
-include ../Makefile
+include ../../Makefile
 .PHONY: default all clean run default
