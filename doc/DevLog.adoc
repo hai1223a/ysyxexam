@@ -1,0 +1,110 @@
+[[d2025-3-27]]
+== 2025/3/27 实验日志
+=== 今日完成工作
+* 开始学习使用adoc，利用vscodo插件完成了英文pdf，html，Docbook的转换。
+* 完成一生一芯/预学习阶段/复习C语言/笨办法学C/ex0-ex10
+
+=== 今日要点
+* Valgrind的安装使用
+
+教程给的下载地址失效，自己进入 https://valgrind.org/downloads/current.html[Valgrind官网] 下载最新版的bz2压缩包进行源码构建安装
+
+[[d2025-3-29]]
+== 2025/3/29 实验日志
+=== 今日完成工作
+* 完成一生一芯/预学习阶段/复习C语言/笨办法学C/ex11-ex16
+* 源码构建安装了verilatork
+
+=== 今日要点
+* C语言知识点k
+
+stdio.h库主要用于标准输入输出函数，比如printf，scanf。
+stdlib.h库主要用于内存管理、进程控制函数，比如malloc，free。
+string.h库主要用于字符串处理，比如strdup(字符串复制)。
+
+分配内存不释放会造成内存泄漏，堆积会造成内存溢出
+
+[[d2025-3-30]]
+== 2025/3/30 实验日志
+=== 今日完成工作
+* 完成一生一芯/预学习阶段/复习C语言/笨办法学C/ex17-ex18
+* 开始进行PA0环境的搭建，初步学习使用了gdb和tmux
+
+=== 今日要点
+* gdb
+
+主要工作就是配置了一下环境，让linux在错误时能够生成core文件进行gdb调试
+
+* tmux
+
+了解了一下session，window，pane之间的关系，感觉吧要是熟练了可以在linux中不要鼠标操作了
+
+[[d2025-4-1]]
+== 2025/4/1 实验日志
+=== 今日完成工作
+* 完成了PA0的内容，只有vim的学习跳过了，必做题800字读后感还没写
+* 完成一生一芯/预学习阶段/搭建verilator仿真环境/双控开关的设计与仿真
+* 使用Makefile文件完成仿真，实现了fst波形的输出
+* 接入了NVBoard，完成了示例程序的编译和运行
+* 改写了Makefile文件，完成了对NVBoard对双控开关的部署
+
+=== 今日要点
+* NVBoard
+
+在编写双控开关在NVBoard上的main.cpp代码时，没有报错但是开发板没有反应，查阅资料发现是需要在while中调用eval()，
+因为每次改变拨码开关都算是rtl电路的输入改变，需要调用eval()来更新电路的状态
+
+* Makefile
+
+我现在有两个运行选项，make sim用于仿真，make run用于在NVBoard上运行，都复制了commit提交代码
+
+[[d2025-4-7]]
+== 2025/4/7 实验日志
+=== 今日完成工作
+* 这段时间我安装了ubuntu24.04真机双系统
+* 移植原来Vmware虚拟机上的工作内容到真机上
+* 完成了复习C语言/笨办法学C/ex01-ex15的内容和课后题
+
+=== 今日要点
+* C语言知识点
+
+字符串变量直接赋值只是将对应指针进行了赋值，并没有复制字符串的内容。
+例如str1 = str2;
+当str2的内容改变时，str1也会跟着改变，（注意这里想要改变str2的内容，需要使用strcpy函数）。
+
+需要留意的是，str2的大小是固定的，但使用strcpy函数改变str2内容时并不会检查是否越界，要自己确保不会溢出
+
+[[d2025-4-8]]
+== 2025/4/8 实验日志
+=== 今日完成工作
+* 完成了复习C语言/笨办法学C/ex17-18的内容和课后题
+
+=== 今日要点
+* C语言知识点
+
+malloc函数输入参数的单位是字节，返回值是void*类型的指针，表示分配的内存地址。 +
+对FILE文件的fread\fwrite函数的使用必须按照顺序配套使用，比如先后fwrite写入了int，float，struct类型数据，就需要先后fread读取int，float，struct类型数据。 +
+
+下面演示函数指针的用法
+[source,c]
+----
+typedef int (*compare)(int a, int b);
+
+int compare_sub(int a, int b) {return a - b;}
+int compare_add(int a, int b) {return a + b;}
+
+// 这里使用方式如下，将函数指针作为参数传入其他函数中
+int use(compare cmp, int a, int b) {
+    return cmp(a, b);
+}
+int main() {
+    int a = 1, b = 2;
+    printf("%d\n", use(compare_sub, a, b)); // 输出 -1
+    printf("%d\n", use(compare_add, a, b)); // 输出 3
+}
+----
+
+[[d2025-4-9]]
+== 2025/4/9 实验日志
+=== 今日完成工作
+* 完成了复习C语言/笨办法学C/ex32-33的平替内容(学习了单向链表，双向链表，并使用链表完成了冒泡排序和归并排序)

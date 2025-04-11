@@ -1,0 +1,23 @@
+**_以verilator v5.008作为演示对象_** +
+
+== Verilator的编译
+=== Verilator常用编译选项
+
+`--cc` 将System verilog/verilog代码转换为C++输出 +
+`--exe` 链接生成可执行程序输出 +
+`--build` 自动调用编译器件完成编译和链接 +
+以上三者的关系为 `--cc` -> `--exe` -> `--build` +
+`--trace` 允许生成VCD波形文件 +
+`--trace-fst` 允许生成FST波形文件 +
+其中VCD波形比较通用,FST文件只能在gtkwave中打开 +
+`--x-assign unique` 设置X的值,可以选择为0,fast,unique +
+`--x-initial unique` 设置变量初始值,可以选择为0,fast,unique +
+一般使用 `unique` 可以帮忙调试错误 +
+**上面的选项对于一般的仿真可以全部加上**
+
+=== Verilator常用编译组合
+
+[source,bash]
+----
+verilator 
+----
