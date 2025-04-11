@@ -15,3 +15,9 @@
 一般使用 `unique` 可以帮忙调试错误 +
 **上面的选项对于一般的仿真可以全部加上**
 
+=== Verilator常用编译组合
+
+[source,bash]
+----
+verilator 
+----
