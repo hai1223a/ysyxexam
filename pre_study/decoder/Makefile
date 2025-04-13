@@ -1,2 +1,2 @@
-VERILATOR_SIM_CFLAGS += --lint-only --Wno-DECLFILENAME
+VERILATOR_SIM_CFLAGS += --Wno-DECLFILENAME
 include ../common.mk
