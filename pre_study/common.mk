@@ -4,7 +4,8 @@ INC_PATH ?=
 
 VERILATOR = verilator
 VERILATOR_CFLAGS += -MMD --build -cc  \
-				-O3 --x-assign fast --x-initial fast --noassert
+				-O3 --x-assign fast --x-initial fast --noassert \
+				-CFLAGS "-D CONFIG_NVBOARD"
 
 BUILD_DIR = ./build
 OBJ_DIR = $(BUILD_DIR)/obj_dir
@@ -43,8 +44,9 @@ run: $(BIN)
 	@$^
 
 # 上面是NVBOARD的内容
-VERILATOR_SIM_CFLAGS += -Wall --cc -exe --build --trace-fst --trace\
-						 vsrc/$(TOPNAME).v csrc/main.cpp
+VERILATOR_SIM_CFLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
+						-CFLAGS "-D CONFIG_VERILATOR"\
+						vsrc/$(TOPNAME).v csrc/main.cpp
 VERILATOR_EXE_CFLAGS +=
 
 all:
