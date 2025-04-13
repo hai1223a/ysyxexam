@@ -44,7 +44,7 @@ run: $(BIN)
 	@$^
 
 # 上面是NVBOARD的内容
-VERILATOR_SIM_CFLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
+VERILATOR_SIM_CFLAGS +=  --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
 						-CFLAGS "-D CONFIG_VERILATOR"\
 						vsrc/$(TOPNAME).v csrc/main.cpp
 VERILATOR_EXE_CFLAGS +=
