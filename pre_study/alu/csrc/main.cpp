@@ -79,8 +79,9 @@
 			top->B_i = rand()%16-8;
 			top->op_i = 0;
 			top->eval();
-			check_out_valid(top);
+			
 			printf("A = %d, B = %d, Y = %d\n", top->A_i, top->B_i, top->out_o);
+			check_out_valid(top);
 			tfp->dump(sim_time);
 			sim_time++;
 		}
