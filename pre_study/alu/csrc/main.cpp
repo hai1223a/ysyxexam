@@ -19,16 +19,16 @@
 		switch (dut->op_i)
 		{
 		case 0:
-			Y = dut->A_i + dut->B_i;
+			Y = (int8_t)dut->A_i + (int8_t)dut->B_i;
 			overflow = (Y > 7 || Y < -8) ? 1 : 0;
 			zero = !Y;
 			carry = (Y > 15) ? 1 : 0;
 			break;
 		case 1:	
-			Y = dut->A_i - dut->B_i;
+			Y = (int8_t)dut->A_i - (int8_t)dut->B_i;
 			overflow = (Y > 7 || Y < -8) ? 1 : 0;
 			zero = !Y;
-			carry = (dut->A_i < dut->B_i) ? 1 : 0;
+			carry = ((int8_t)dut->A_i < (int8_t)dut->B_i) ? 1 : 0;
 			break;
 		case 2:	
 			Y = ~(dut->A_i);
