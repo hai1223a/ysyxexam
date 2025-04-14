@@ -6,7 +6,7 @@
 	#include "verilated_fst_c.h"
 	#include <cstdlib>
 	#include <assert.h>
-	#define MAX_TIME 20
+	#define MAX_TIME 200
 
 	vluint64_t sim_time = 0;
 
@@ -31,10 +31,10 @@
 		{
 			top->A_i = rand()%16-8;
 			top->B_i = rand()%16-8;
-			top->op_i = 7;
+			top->op_i = rand()%8;
 			top->eval();
-			Y = (top->out_o < 7) ? top->out_o : (int8_t)top->out_o-16;
-			printf("A = %d, B = %d, op = %d,Y = %d, zero = %d, overflow = %d, carry = %d\n, ", (int8_t)top->A_i, (int8_t)top->B_i, 
+			// Y = (top->out_o < 7) ? top->out_o : (int8_t)top->out_o-16;
+			// printf("A = %d, B = %d, op = %d,Y = %d, zero = %d, overflow = %d, carry = %d\n, ", (int8_t)top->A_i, (int8_t)top->B_i, 
 			top->op_i, Y, top->zero_o, top->overflow_o, top->carry_o);
 			tfp->dump(sim_time);
 			sim_time++;
