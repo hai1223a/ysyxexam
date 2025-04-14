@@ -31,7 +31,7 @@
 		{
 			top->A_i = rand()%16-8;
 			top->B_i = rand()%16-8;
-			top->op_i = 1;
+			top->op_i = 2;
 			top->eval();
 			Y = (top->out_o < 7) ? top->out_o : (int8_t)top->out_o-16;
 			printf("A = %d, B = %d, op = %d,Y = %d, zero = %d, overflow = %d, carry = %d\n, ", (int8_t)top->A_i, (int8_t)top->B_i, 
