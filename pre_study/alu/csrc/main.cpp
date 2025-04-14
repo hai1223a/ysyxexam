@@ -22,7 +22,7 @@
 			Y = dut->A_i + dut->B_i;
 			overflow = (Y > 7 || Y < -8) ? 1 : 0;
 			zero = !Y;
-			carry = overflow;
+			carry = (Y > 15) ? 1 : 0;
 			break;
 		case 1:	
 			Y = dut->A_i - dut->B_i;
