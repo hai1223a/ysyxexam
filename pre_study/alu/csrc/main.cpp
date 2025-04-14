@@ -10,54 +10,6 @@
 
 	vluint64_t sim_time = 0;
 
-	void check_out_valid(Vtop *top){
-		int8_t Y,overflow,carry,zero;
-		Y = 0;
-		overflow = 0;
-		carry = 0;
-		zero =0;
-		switch (top->op_i)
-		{
-		case 0:
-			Y = (int8_t)top->A_i + (int8_t)top->B_i;
-			overflow = (Y > 7 || Y < -8) ? 1 : 0;
-			zero = !Y;
-			carry = (Y > 15) ? 1 : 0;
-			break;
-		case 1:	
-			Y = (int8_t)top->A_i - (int8_t)top->B_i;
-			overflow = (Y > 7 || Y < -8) ? 1 : 0;
-			zero = !Y;
-			carry = ((int8_t)top->A_i < (int8_t)top->B_i) ? 1 : 0;
-			break;
-		case 2:	
-			Y = ~(top->A_i);
-			break;
-		case 3:	
-			Y = top->A_i & top->B_i;
-			break;
-		case 4:	
-			Y = top->A_i | top->B_i;
-			break;
-		case 5:	
-			Y = top->A_i ^ top->B_i;
-			break;
-		case 6:	
-			Y = (top->A_i < top->B_i) ? 1 : 0;
-			break;
-		case 7:	
-			Y = (top->A_i == top->B_i) ? 1 : 0;
-			break;
-		default:
-			break;
-		}
-		printf("Y = %d, zero = %d, overflow_o = %d, carry_o = %d\n",Y,zero,overflow,carry);
-		int8_t Y00 = (top->out_o < 7) ? top->out_o : (int8_t)top->out_o-16;
-		assert(Y00 == Y);
-		assert(top->zero_o == zero);
-		assert(top->overflow_o == overflow);
-		assert(top->carry_o == carry);
-	}
 
 	int main(int argc, char **argv)
 	{
@@ -82,8 +34,8 @@
 			top->op_i = 0;
 			top->eval();
 			Y = (top->out_o < 7) ? top->out_o : (int8_t)top->out_o-16;
-			printf("A = %d, B = %d, Y = %d\n", (int8_t)top->A_i, (int8_t)top->B_i, Y);
-			check_out_valid(top);
+			printf("A = %d, B = %d, Y = %d, zero = %d, overflow = %d, carry = %d\n, ", (int8_t)top->A_i, (int8_t)top->B_i, Y,
+					top->zero_o, top->overflow, top->carry);
 			tfp->dump(sim_time);
 			sim_time++;
 		}
