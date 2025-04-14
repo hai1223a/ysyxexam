@@ -40,8 +40,7 @@ void Vtop___024root__trace_chg_0_sub_0(Vtop___024root* vlSelf, VerilatedFst::Buf
                              | (IData)(vlSelfRef.B_i))),4);
     bufp->chgCData(oldp+13,(((IData)(vlSelfRef.A_i) 
                              ^ (IData)(vlSelfRef.B_i))),4);
-    bufp->chgCData(oldp+14,((((IData)(vlSelfRef.A_i) 
-                              < (IData)(vlSelfRef.B_i))
+    bufp->chgCData(oldp+14,((VL_LTS_III(4, (IData)(vlSelfRef.A_i), (IData)(vlSelfRef.B_i))
                               ? 1U : 0U)),4);
     bufp->chgCData(oldp+15,((((IData)(vlSelfRef.A_i) 
                               == (IData)(vlSelfRef.B_i))

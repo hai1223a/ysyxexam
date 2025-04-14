@@ -105,8 +105,7 @@ VL_ATTR_COLD void Vtop___024root__trace_full_0_sub_0(Vtop___024root* vlSelf, Ver
                               | (IData)(vlSelfRef.B_i))),4);
     bufp->fullCData(oldp+14,(((IData)(vlSelfRef.A_i) 
                               ^ (IData)(vlSelfRef.B_i))),4);
-    bufp->fullCData(oldp+15,((((IData)(vlSelfRef.A_i) 
-                               < (IData)(vlSelfRef.B_i))
+    bufp->fullCData(oldp+15,((VL_LTS_III(4, (IData)(vlSelfRef.A_i), (IData)(vlSelfRef.B_i))
                                ? 1U : 0U)),4);
     bufp->fullCData(oldp+16,((((IData)(vlSelfRef.A_i) 
                                == (IData)(vlSelfRef.B_i))
