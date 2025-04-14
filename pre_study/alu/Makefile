@@ -1,3 +1,2 @@
-VERILATOR_SIM_CFLAGS += --x-assign unique --x-initial unique --Wno-fatal
-VERILATOR_EXE_CFLAGS += +verilator+rand+reset+2
+VERILATOR_SIM_CFLAGS += --Wno-fatal
 include ../common.mk
