@@ -52,7 +52,7 @@
 			break;
 		}
 		printf("Y = %d, zero = %d, overflow_o = %d, carry_o = %d\n",Y,zero,overflow,carry);
-		assert(dut->out_o == Y);
+		assert(((top->out_o < 7) ? top->out_o : (int8_t)top->out_o-16) == Y);
 		assert(dut->zero_o == zero);
 		assert(dut->overflow_o == overflow);
 		assert(dut->carry_o == carry);
