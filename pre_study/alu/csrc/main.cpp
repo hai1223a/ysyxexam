@@ -6,7 +6,7 @@
 	#include "verilated_fst_c.h"
 	#include <cstdlib>
 	#include <assert.h>
-	#define MAX_TIME 2000
+	#define MAX_TIME 20
 
 	vluint64_t sim_time = 0;
 
@@ -79,7 +79,7 @@
 			top->B_i = rand()%16-8;
 			top->op_i = 0;
 			top->eval();
-
+			printf("A = %d, B = %d, Y = %d\n", top->A_i, top->B_i, top->out_o);
 			tfp->dump(sim_time);
 			sim_time++;
 		}
