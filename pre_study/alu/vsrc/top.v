@@ -15,7 +15,7 @@ module top(
     wire [3:0] out3 = A_i & B_i;
     wire [3:0] out4 = A_i | B_i;
     wire [3:0] out5 = A_i ^ B_i;
-    wire [3:0] out6 = (A_i < B_i) ? 4'h1 : 0;
+    wire [3:0] out6 = ($signed(A_i) < $signed(B_i)) ? 4'h1 : 0;
     wire [3:0] out7 = (A_i == B_i) ? 4'h1 : 0;
  
     always @(*) begin
