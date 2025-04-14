@@ -80,7 +80,7 @@
 			top->B_i = rand()%16-8;
 			top->op_i = 0;
 			top->eval();
-			Y = (top->out_o > 7) ? top->out_o : 16-(int8_t)top->out_o;
+			Y = (top->out_o < 7) ? top->out_o : 16-(int8_t)top->out_o;
 			printf("A = %d, B = %d, Y = %d\n", (int8_t)top->A_i, (int8_t)top->B_i, Y);
 			check_out_valid(top);
 			tfp->dump(sim_time);
