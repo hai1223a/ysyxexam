@@ -77,7 +77,7 @@
 		{
 			top->A_i = rand()%16-8;
 			top->B_i = rand()%16-8;
-			top->op_i = rand()%8;
+			top->op_i = 0;
 			top->eval();
 
 			tfp->dump(sim_time);
