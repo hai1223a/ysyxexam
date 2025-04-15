@@ -1,2 +1,2 @@
-VERILATOR_SIM_CFLAGS += --Wno-fatal
+VERILATOR_SIM_CFLAGS += --Wno-fatal --timing
 include ../common.mk
