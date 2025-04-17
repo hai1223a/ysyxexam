@@ -107,3 +107,50 @@ clean:
 ----
 -echo "hello world"
 ----
+
+== Makefile高级用法
+=== Makefile模式规则
+手册搜索 `Defining and Redefining Pattern Rules` +
+模式规则(Pattern Rules)与普通规则不同之处在于,其目标包含一个 `%` +
+`%` 可以匹配所有非空字符串,但是与通配符 `*` 不同,包含 `%` 的目标只会匹配一个目标文件 +
+模式规则的依赖文件同样可以使用 `%` 来匹配,依赖文件的 `%` 的取值由目标的 `%` 决定,例如“%.o: %.c”,目标为main.o时,依赖为main.c +
+
+使用示例：
+[source,make]
+----
+main: main.o test.o
+    $(CC) -o $@ $^ $(LDFLAGS)
+
+%.o: %.c
+    $(CC) -c $^ -o $@ $(CFLAGS)
+----
+此时执行make命令,会先去生成依赖文件main.o和test.o,而两者都匹配下面定义的模式规则,所以执行时会执行两条规则来生成这两个依赖文件:
+[source,make]
+----
+main.o: main.c
+    $(CC) -c $^ -o $@ $(CFLAGS)
+test.o: test.c
+    $(CC) -c $^ -o $@ $(CFLAGS)
+----
+
+=== Makefile的函数
+=== wildcard
+`$(wildcard 指定文件类型)` +
+[source,make]
+----
+# 将$(DIR)目录下所有C文件找到,并给SRC
+# 效果等价于$(shell find $(DIR) -name *.c)
+SRC := $(wildcard $(DIR)/*.c)
+----
+该函数常用于包含所有需要的文件,比如一个C工程中所有的C文件
+
+=== patsubst
+`$(patsubst 原模式,目标模式,文件列表)`
+[source,make]
+----
+# 这里将$(SRC)中的文件做了转换
+# 假设DIR = .   OBJDIR = obj    SRC = ./main.c ./test.c
+# 那么OBJ = obj/main.o obj/test.o
+OBJ := $(patsubst $(DIR)/%.c, $(OBJDIR)/%.o, $(SRC))
+----
+该函数常用于将检索包含到的文件做一个文件名的批量修改

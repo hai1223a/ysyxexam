@@ -65,6 +65,8 @@
         "typeinfo": "cpp",
         "coroutine": "cpp",
         "fstream": "cpp",
-        "future": "cpp"
+        "future": "cpp",
+        "*.inc": "c",
+        "memory.h": "c"
     }
 }
