@@ -1,0 +1,29 @@
+== Linux 常用命令记录
+=== 程序安装命令
+* 安装tar.bz2包
+[source,bash]
+----
+tar -jxvf example-1.2.3-1.tar.bz2
+----
+`-j` 使用bzip2解压.bz2格式压缩包 +
+`-x` 表示解压,解压.tar格式压缩包 +
+`-v` 在终端显示详细信息 +
+`-f` 指定文件名,这里指example-1.2.3-1.tar.bz2 +
+解压后的文件可能为安装好的程序,创建桌面快捷方式后即可使用;也可能为源码,需要进行构建安装才能使用
+
+* 安装deb包
+[source,bash]
+----
+sudo dpkg -i example-1.2.3-1.deb
+----
+deb包只能在su环境下进行安装,除了使用 `-i` 进行安装外,还可以使用 `-l` 进行查询,使用 `-e` 进行卸载
+
+* 安装tar.gz包
+[source,bash]
+----
+tar -xzvf example-1.2.3-1.tar.gz
+----
+`-z` 使用gzip解压.gz格式压缩包其他选项含义同tar.bz2 +
+解压得到的内容也同tar.bz2
+
+

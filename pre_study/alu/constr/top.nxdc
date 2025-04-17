@@ -1,5 +1,10 @@
 top=top
 
-f LD0
-a SW0
-b SW1
+A_i (SW3, SW2, SW1, SW0)
+B_i (SW7, SW6, SW5, SW4)
+op_i (SW15, SW14, SW13)
+
+out_o (LD15, LD14, LD13, LD12)
+zero_o LD0
+overflow_o LD1
+carry_o LD2

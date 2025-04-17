@@ -7,38 +7,30 @@
 
 #include "verilated.h"
 
+
 class Vtop__Syms;
-class Vtop___024unit;
 
-
-class Vtop___024root final : public VerilatedModule {
+class alignas(VL_CACHE_LINE_BYTES) Vtop___024root final : public VerilatedModule {
   public:
-    // CELLS
-    Vtop___024unit* __PVT____024unit;
 
     // DESIGN SPECIFIC STATE
-    VL_IN8(clk,0,0);
-    VL_IN8(rst,0,0);
-    VL_IN8(op_in,1,0);
-    VL_IN8(a_in,5,0);
-    VL_IN8(b_in,5,0);
-    VL_IN8(in_valid,0,0);
-    VL_OUT8(out,5,0);
-    VL_OUT8(out_valid,0,0);
-    CData/*1:0*/ top__DOT__op_in_r;
-    CData/*5:0*/ top__DOT__a_in_r;
-    CData/*5:0*/ top__DOT__b_in_r;
-    CData/*0:0*/ top__DOT__in_valid_r;
-    CData/*5:0*/ top__DOT__result;
-    CData/*0:0*/ __Vtrigrprev__TOP__clk;
-    CData/*0:0*/ __Vtrigrprev__TOP__rst;
+    VL_IN8(op_i,2,0);
+    VL_IN8(A_i,3,0);
+    VL_IN8(B_i,3,0);
+    VL_OUT8(out_o,3,0);
+    VL_OUT8(zero_o,0,0);
+    VL_OUT8(overflow_o,0,0);
+    VL_OUT8(carry_o,0,0);
+    CData/*4:0*/ top__DOT__out0;
+    CData/*4:0*/ top__DOT__out1;
+    CData/*0:0*/ __VstlFirstIteration;
+    CData/*0:0*/ __VicoFirstIteration;
     CData/*0:0*/ __VactContinue;
-    IData/*31:0*/ __VstlIterCount;
     IData/*31:0*/ __VactIterCount;
-    VlUnpacked<CData/*0:0*/, 2> __Vm_traceActivity;
     VlTriggerVec<1> __VstlTriggered;
-    VlTriggerVec<1> __VactTriggered;
-    VlTriggerVec<1> __VnbaTriggered;
+    VlTriggerVec<1> __VicoTriggered;
+    VlTriggerVec<0> __VactTriggered;
+    VlTriggerVec<0> __VnbaTriggered;
 
     // INTERNAL VARIABLES
     Vtop__Syms* const vlSymsp;
@@ -50,7 +42,7 @@ class Vtop___024root final : public VerilatedModule {
 
     // INTERNAL METHODS
     void __Vconfigure(bool first);
-} VL_ATTR_ALIGNED(VL_CACHE_LINE_BYTES);
+};
 
 
 #endif  // guard
