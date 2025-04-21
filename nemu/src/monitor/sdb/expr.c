@@ -113,6 +113,7 @@ static bool make_token(char *e) {
 
 
 word_t expr(char *e, bool *success) {
+  printf("a");
   if (!make_token(e)) {
     printf("a");
     // *success = false;
