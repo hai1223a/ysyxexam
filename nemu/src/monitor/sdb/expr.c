@@ -76,7 +76,7 @@ static bool make_token(char *e) {
   regmatch_t pmatch;
 
   nr_token = 0;
-
+  printf("a");
   while (e[position] != '\0') {
     printf("a");
     /* Try all rules one by one. */
@@ -119,8 +119,8 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
 
-  /* TODO: Insert codes to evaluate the expression. */
-  TODO();
+  // /* TODO: Insert codes to evaluate the expression. */
+  // TODO();
 
   return 0;
 }
