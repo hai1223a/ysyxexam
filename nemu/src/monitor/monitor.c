@@ -34,6 +34,8 @@ static void welcome() {
   printf("For help, type \"help\"\n");
   int a = 1000;
   Log("wo jiu shi shi,%d",a);
+  // Assert(a == 100);
+  assert(a == 1000);
   // Log("Exercise: Please remove me in the source code and compile NEMU again.");
   // assert(0);
 }
