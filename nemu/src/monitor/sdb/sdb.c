@@ -97,7 +97,7 @@ static int cmd_x(char *args){
 
 static int cmd_expr(char *args){
   bool success = true;
-  if(!args) expr(args, &success);
+  if(args) expr(args, &success);
   // if(!success) assert(0);
   return 0;
 }
