@@ -69,7 +69,7 @@ static int cmd_si(char *args) {
 
 static int cmd_info(char *args) {
   if (!args) return 0;
-  if (!strcmp(args, "r"))
+  if (!strcmp(args, "r e"))
   {
     isa_reg_display();
   }
