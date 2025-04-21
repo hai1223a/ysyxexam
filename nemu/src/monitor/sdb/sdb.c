@@ -94,6 +94,14 @@ static int cmd_x(char *args){
   }
   return 0;
 }
+
+static int cmd_expr(char *args){
+  bool success = true;
+  expr(args, &success);
+  if(!success) assert(0);
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -104,7 +112,8 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "格式为si [N],让程序单步执行N条指令后暂停执行,当N没有给出时,缺省为1", cmd_si},
   { "info", "格式为info SUBCMD, info r表示打印寄存器状态, info w表示打印监视点信息", cmd_info},
-  { "x", "格式为x N EXPR, 表示以表达式EXPR为基地址, 以16进制的格式打印连续的N个4字节数据", cmd_x}
+  { "x", "格式为x N EXPR, 表示以表达式EXPR为基地址, 以16进制的格式打印连续的N个4字节数据", cmd_x},
+  { "expr", "我就测试一下表达式", cmd_expr},
 
   /* TODO: Add more commands */
 

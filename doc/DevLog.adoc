@@ -128,3 +128,19 @@ int main() {
 
 === 今日要点
 cache直接映射的实现不用考虑替换策略
+
+[[d2025-4-21]]
+== 2025/4/21 实验日志
+=== 今日完成任务
+* 完成了PA1实验的RTFSC和基础设施: 简易调试器
+
+=== 今日要点
+开始看nemu的源码, 学到了很多C语言的用法
+
+* 点击链接查看(该笔记来自网络):link:html/宏的学习笔记_Fenglielie.html[宏的高级使用]
+* 字符串处理函数strtok()和sscanf()
+* 命令行参数处理函数getopt_long(),以及其时用到的结构体类型struct option{}
+* 一些约定常见的组合,使用getopt_long()和strcut option()处理命令行参数 +
+使用宏完成IFDEF(MACRO, 函数)之类的功能 +
+* GUN C的关键字__attribute((aligned(4096)))实现数据4kB对齐
+* GUN C的关键字__builtin_expect完成分支预测
