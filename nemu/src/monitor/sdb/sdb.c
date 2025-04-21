@@ -19,6 +19,7 @@
 #include <readline/history.h>
 #include "sdb.h"
 #include "utils.h"
+#include "memory/vaddr.h"
 
 static int is_batch_mode = false;
 
@@ -69,7 +70,7 @@ static int cmd_si(char *args) {
 
 static int cmd_info(char *args) {
   if (!args) return 0;
-  if (!strcmp(args, "r e"))
+  if (!strcmp(args, "r"))
   {
     isa_reg_display();
   }
@@ -81,6 +82,18 @@ static int cmd_info(char *args) {
   return 0;
 }
 
+static int cmd_x(char *args){
+  int num_word;
+  uint32_t base_addr;
+  sscanf(args, "%d 0x%x", &num_word, &base_addr);
+  printf("Address  Data\n");
+  for (int i = 0; i < num_word; i++)
+  {
+    printf("%x:%x", base_addr, vaddr_read(base_addr, 4));
+    base_addr += 4;
+  }
+  return 0;
+}
 static struct {
   const char *name;
   const char *description;
@@ -91,6 +104,7 @@ static struct {
   { "q", "Exit NEMU", cmd_q },
   { "si", "格式为si [N],让程序单步执行N条指令后暂停执行,当N没有给出时,缺省为1", cmd_si},
   { "info", "格式为info SUBCMD, info r表示打印寄存器状态, info w表示打印监视点信息", cmd_info},
+  { "x", "格式为x N EXPR, 表示以表达式EXPR为基地址, 以16进制的格式打印连续的N个4字节数据", cmd_x}
 
   /* TODO: Add more commands */
 
