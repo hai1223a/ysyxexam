@@ -55,6 +55,18 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args) {
+  uint64_t num_inst;
+  if(likely(!args)){
+    num_inst = 1;
+  }
+  else{
+    num_inst = (uint64_t)atoi(args);
+  }
+  cpu_exec(num_inst);
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -62,8 +74,8 @@ static struct {
 } cmd_table [] = {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
-  { "q", "退出 NEMU", cmd_q },
-  // { "si [N]", "程序单步执行"}
+  { "q", "Exit NEMU", cmd_q },
+  { "si [N]", "让程序单步执行N条指令后暂停执行,当N没有给出时,缺省为1", cmd_si},
 
   /* TODO: Add more commands */
 
