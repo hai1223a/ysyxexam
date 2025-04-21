@@ -89,7 +89,7 @@ static int cmd_x(char *args){
   printf("Address  Data\n");
   for (int i = 0; i < num_word; i++)
   {
-    printf("%x:%x", base_addr, vaddr_read(base_addr, 4));
+    printf("%x:%x\n", base_addr, vaddr_read(base_addr, 4));
     base_addr += 4;
   }
   return 0;
