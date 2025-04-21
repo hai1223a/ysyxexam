@@ -67,6 +67,7 @@
         "fstream": "cpp",
         "future": "cpp",
         "*.inc": "c",
-        "memory.h": "c"
+        "memory.h": "c",
+        "*.def": "c"
     }
 }
