@@ -67,6 +67,20 @@ static int cmd_si(char *args) {
   return 0;
 }
 
+static int cmd_info(char *args) {
+  if (!args) return 0;
+  if (!strcmp(args, "r"))
+  {
+    isa_reg_display();
+  }
+  else if (!strcmp(args, "w"))
+  {
+    /* code */
+  }
+  
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -76,6 +90,7 @@ static struct {
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
   { "si", "格式为si [N],让程序单步执行N条指令后暂停执行,当N没有给出时,缺省为1", cmd_si},
+  { "info", "格式为info SUBCMD, info r表示打印寄存器状态, info w表示打印监视点信息", cmd_info},
 
   /* TODO: Add more commands */
 

@@ -68,6 +68,7 @@
         "future": "cpp",
         "*.inc": "c",
         "memory.h": "c",
-        "*.def": "c"
+        "*.def": "c",
+        "isa.h": "c"
     }
 }
