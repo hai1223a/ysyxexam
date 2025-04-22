@@ -102,7 +102,7 @@ static bool make_token(char *e) {
             break;
           case TK_NUMBER:
             if(substr_len > 2) Assert(0, "The number is too long\n");
-            strncat(tokens[tokens_position].str,e+position, substr_len);
+            strncpy(tokens[tokens_position].str,e+position, substr_len);
             tokens[tokens_position].type = TK_NUMBER;
             break;
           // default: TODO();
