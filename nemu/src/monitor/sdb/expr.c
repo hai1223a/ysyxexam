@@ -241,7 +241,7 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-  check_parentheses(0, valid_tokens-1);
+  if(check_parentheses(0, valid_tokens-1)) printf("\nhit\n");
 
   return 0;
 }
