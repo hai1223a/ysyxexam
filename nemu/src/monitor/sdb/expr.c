@@ -150,10 +150,25 @@ void push_stack(Stack *p_stack, int data) {
 
 int pop_stack(Stack *p_stack) {
   Assert(p_stack->top, "堆栈为空");
-  int data = p_stack->data[p_stack->top--];
+  int data = p_stack->data[--(p_stack->top)];
   return data;
 }
 
+// '>' 表示当前运算符优先级更高
+// '=' 表示当前运算符于堆栈顶运算符优先级相同
+// '<' 表示堆栈顶运算符优先级更高
+// char precede(Stack *p_stack, int op_type) {
+//   if(p_stack->top == 0) return '>';
+//   switch (p_stack->data[top-1])
+//   {
+//   case constant expression:
+//     /* code */
+//     break;
+  
+//   default:
+//     break;
+//   }
+// }
 int arithmetic(int a, int b, int op){
   switch (op)
   {
@@ -172,22 +187,18 @@ word_t expr(char *e, bool *success) {
     
   }
 
-  // int Lbracket[10] = {0};
-  // int Rbracket[10] = {0};
-  // int position_Lbracket,position_Rbracket = 0;
-  // position_Lbracket = position_Rbracket = 0;
 
-  // for(int i = 0; i < 32; i++)
-  // {
-  //   if(tokens[i].type == '(') Lbracket[position_Lbracket++] = i;
-  //   if(tokens[i].type == ')') Rbracket[position_Rbracket++] = i;
-  // }
   // Assert(position_Lbracket == position_Rbracket, "括号不完整");
   Stack numstack = {.top = 0};
-  for(int i = 0; i < 33; i ++)
   push_stack(&numstack, 100);
-  pop_stack(&numstack);
-  
+  printf("%d",pop_stack(&numstack));
+  // Stack opstack = {.top = 0};
+  // int i = 0;
+  // while(tokens[i].type)
+  // {
+
+  //   i++;
+  // }
   // /* TODO: Insert codes to evaluate the expression. */
   // TODO();
 
