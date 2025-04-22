@@ -117,7 +117,7 @@ static bool make_token(char *e) {
             break;
           default: 
         }
-        printf("position = %d, substr_len = %d", position, substr_len);
+        printf("position = %d, substr_len = %d, tokens_position = %d\n", position, substr_len, tokens_position);
         tokens_position++;
         position += substr_len;
         break;
