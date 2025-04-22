@@ -221,6 +221,7 @@ word_t expr(char *e, bool *success) {
       for(int precede_statu = precede(&opstack, tokens[i].type); precede_statu == 1; \
               precede_statu = precede(&opstack, tokens[i].type))
       {
+        printf("%d\n",precede_statu);
         switch(precede_statu)
         {
           case -1: Assert(0, "可能有问题哦");
