@@ -232,7 +232,7 @@ word_t expr(char *e, bool *success) {
             int a = pop_stack(&numstack);
             int b = pop_stack(&numstack);
             int op = pop_stack(&opstack);
-            push_stack(&numstack, arithmetic(a, b, op));
+            push_stack(&numstack, arithmetic(b, a, op));
             break;
           case 2:
             pop_stack(&opstack);
