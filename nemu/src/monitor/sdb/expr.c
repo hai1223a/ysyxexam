@@ -115,7 +115,7 @@ static bool make_token(char *e) {
             strncpy(tokens[tokens_position].str,e+position, substr_len);
             tokens[tokens_position].type = TK_NUMBER;
             break;
-          // default: TODO();
+          default: 
         }
         tokens_position++;
         position += substr_len;
