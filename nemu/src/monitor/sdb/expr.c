@@ -143,13 +143,13 @@ typedef struct stack
 } Stack;
 
 void push_stack(Stack *p_stack, int data) {
-  Assert((p_stack->top < ARRLEN(p_stack->data)),"堆栈已满,函数push_stack");
+  Assert((p_stack->top < ARRLEN(p_stack->data)),"堆栈已满");
   p_stack->data[p_stack->top] = data;
   p_stack->top++;
 }
 
 int pop_stack(Stack *p_stack) {
-  Assert(p_stack->top, "堆栈为空,函数pop_stack");
+  Assert(p_stack->top, "堆栈为空");
   int data = p_stack->data[p_stack->top--];
   return data;
 }
@@ -161,7 +161,7 @@ int arithmetic(int a, int b, int op){
     case '-': return a-b;
     case '*': return a*b;
     case '/': return a/b;
-    default: Assert(0, "无此计算类型,函数:arithmetic");
+    default: Assert(0, "无此计算类型");
   }
 }
 
@@ -184,8 +184,8 @@ word_t expr(char *e, bool *success) {
   // }
   // Assert(position_Lbracket == position_Rbracket, "括号不完整");
   Stack numstack = {.top = 0};
-  // for(int i = 0; i < 40; i ++)
-  // push_stack(&numstack, 100);
+  for(int i = 0; i < 33; i ++)
+  push_stack(&numstack, 100);
   pop_stack(&numstack);
   
   // /* TODO: Insert codes to evaluate the expression. */
