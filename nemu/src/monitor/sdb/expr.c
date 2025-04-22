@@ -136,6 +136,33 @@ static bool make_token(char *e) {
   return true;
 }
 
+typedef struct stack
+{
+  int data[32];
+  int top;
+} Stack;
+
+void push_stack(Stack *p_stack, int data) {
+  p_stack->data[p_stack->top] = data;
+  p_stack->top++;
+}
+
+int pop_stack(Stack *p_stack) {
+  Assert(p_stack->top, "堆栈为空,函数pop_stack");
+  int data = p_stack->data[p_stack->top--];
+  return data;
+}
+
+int arithmetic(int a, int b, int op){
+  switch (op)
+  {
+    case '+': return a+b;
+    case '-': return a-b;
+    case '*': return a*b;
+    case '/': return a/b;
+    default: Assert(0, "无此计算类型,函数:arithmetic");
+  }
+}
 
 word_t expr(char *e, bool *success) {
   if (!make_token(e)) {
@@ -143,15 +170,21 @@ word_t expr(char *e, bool *success) {
     return 0;
     
   }
+
   // int Lbracket[10] = {0};
   // int Rbracket[10] = {0};
-  int position_Lbracket,position_Rbracket = 0;
-  position_Lbracket = position_Rbracket = 0;
-  printf("%d,%d",position_Lbracket,position_Rbracket);  
+  // int position_Lbracket,position_Rbracket = 0;
+  // position_Lbracket = position_Rbracket = 0;
+
   // for(int i = 0; i < 32; i++)
   // {
-  //   if(tokens[i].type == '(') 
+  //   if(tokens[i].type == '(') Lbracket[position_Lbracket++] = i;
+  //   if(tokens[i].type == ')') Rbracket[position_Rbracket++] = i;
   // }
+  // Assert(position_Lbracket == position_Rbracket, "括号不完整");
+  Stack numstack = {.top = 0};
+  pop_stack(&numstack);
+  
   // /* TODO: Insert codes to evaluate the expression. */
   // TODO();
 
