@@ -237,6 +237,7 @@ word_t expr(char *e, bool *success) {
         }
         i++;
       }
+      continue;
     }
     Assert(0, "键入了不支持运算的符号");
   }
