@@ -65,7 +65,7 @@ void init_regex() {
 
 typedef struct token {
   int type;
-  char str[32];
+  char str[8];
 } Token;
 
 static Token tokens[32] __attribute__((used)) = {};
@@ -78,13 +78,13 @@ static bool make_token(char *e) {
 
   nr_token = 0;
 
-  // int tokens_position = 0;
+  int tokens_position = 0;
   for (int i = 0; i < 32; i++)
   {
     printf("tokens.type = %d, tokens.str = %s", tokens[i].type, tokens[i].str);
   }
   strcat(tokens[0].str, "1234567");
-  printf("sizeof is %ld, strlen is %ld",sizeof(tokens[0].str), strlen(tokens[0].str));
+  printf("sizeof is %ld, strlen is %ld",sizeof(tokens[1].str), strlen(tokens[1].str));
   while (e[position] != '\0') {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
@@ -102,19 +102,19 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
-        // switch (rules[i].token_type) {
-        //   case '+': 
-        //     tokens[tokens_position].type = '+';
-        //     tokens_position++;
-        //     break;
-        //   case TK_NUMBER: 
-        //     if(tokens[tokens_position].type == TK_NUMBER){
-              
-        //     }else{
+        switch (rules[i].token_type) {
+          case '+': 
+            tokens[tokens_position].type = '+';
+            tokens_position++;
+            break;
+          case TK_NUMBER: 
+            if(tokens[tokens_position].type == TK_NUMBER){
+              // if(strlen(tokens[tokens_position]))
+            }else{
 
-        //     }
-        //   // default: TODO();
-        // }
+            }
+          // default: TODO();
+        }
 
         break;
       }
