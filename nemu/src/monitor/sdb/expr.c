@@ -184,8 +184,8 @@ word_t expr(char *e, bool *success) {
   // }
   // Assert(position_Lbracket == position_Rbracket, "括号不完整");
   Stack numstack = {.top = 0};
-  for(int i = 0; i < 40; i ++)
-  push_stack(&numstack, 100);
+  // for(int i = 0; i < 40; i ++)
+  // push_stack(&numstack, 100);
   pop_stack(&numstack);
   
   // /* TODO: Insert codes to evaluate the expression. */
