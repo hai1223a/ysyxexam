@@ -95,13 +95,13 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-        if(tokens_position == 2) Assert(0, "The expression is too long\n");
+        if(tokens_position == 31) Assert(0, "The expression is too long\n");
         switch (rules[i].token_type) {
           case '+':
             tokens[tokens_position].type = '+';
             break;
           case TK_NUMBER:
-            if(substr_len > 3) Assert(0, "The number is too long\n");
+            if(substr_len > 2) Assert(0, "The number is too long\n");
             strncat(tokens[tokens_position].str,e+position, substr_len);
             tokens[tokens_position].type = TK_NUMBER;
             break;
