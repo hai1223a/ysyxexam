@@ -129,10 +129,10 @@ static bool make_token(char *e) {
     }
   }
 
-  for (int i = 0; i < 32; i++)
-  {
-    printf("tokens.type = %d, tokens.str = %s\t", tokens[i].type, tokens[i].str);
-  }
+  // for (int i = 0; i < 32; i++)
+  // {
+  //   printf("tokens.type = %d, tokens.str = %s\t", tokens[i].type, tokens[i].str);
+  // }
   return true;
 }
 
@@ -221,7 +221,6 @@ word_t expr(char *e, bool *success) {
       int precede_statu;
       do{
         precede_statu = precede(&opstack, tokens[i].type);
-        printf("%d\n",precede_statu);
         switch(precede_statu)
         {
           case -1: Assert(0, "可能有问题哦");
