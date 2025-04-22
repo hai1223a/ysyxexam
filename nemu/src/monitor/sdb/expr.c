@@ -68,7 +68,7 @@ typedef struct token {
   char str[32];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {0};
+static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 static bool make_token(char *e) {
@@ -81,10 +81,10 @@ static bool make_token(char *e) {
   // int tokens_position = 0;
   for (int i = 0; i < 32; i++)
   {
-    /* code */
     printf("tokens.type = %d, tokens.str = %s", tokens[i].type, tokens[i].str);
   }
-  
+  strcat(tokens[0].str, "1234567");
+  printf("sizeof is %ld, strlen is %ld",sizeof(tokens[0].str), strlen(tokens[0].str));
   while (e[position] != '\0') {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
@@ -102,12 +102,19 @@ static bool make_token(char *e) {
          * of tokens, some extra actions should be performed.
          */
 
-        switch (rules[i].token_type) {
-          // TK_NOTYPE:;
-          // '+': ;
-          // TK_NUMBER: ;
-          // default: TODO();
-        }
+        // switch (rules[i].token_type) {
+        //   case '+': 
+        //     tokens[tokens_position].type = '+';
+        //     tokens_position++;
+        //     break;
+        //   case TK_NUMBER: 
+        //     if(tokens[tokens_position].type == TK_NUMBER){
+              
+        //     }else{
+
+        //     }
+        //   // default: TODO();
+        // }
 
         break;
       }
