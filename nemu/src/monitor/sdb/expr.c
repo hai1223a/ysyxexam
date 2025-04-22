@@ -244,8 +244,10 @@ word_t expr(char *e, bool *success) {
     Assert(0, "键入了不支持运算的符号");
   }
 
+
   Assert(opstack.top == 0, "括号数量不匹配");
   result = pop_stack(&numstack);
+  printf("%d",result);
   Assert(result >= 0, "表达式结果为负数");
   return (word_t)result;
 }
