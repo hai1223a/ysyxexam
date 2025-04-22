@@ -102,9 +102,18 @@ static bool make_token(char *e) {
          */
         if(tokens_position == 31) Assert(0, "The expression is too long\n");
         switch (rules[i].token_type) {
-          case '+':
-            tokens[tokens_position].type = '+';
+          case '+' || '-':
+            tokens[tokens_position].type = rules[i].token_type;
             break;
+          // case '-':
+          //   tokens[tokens_position].type = '+';
+          //   break;
+          // case '*':
+          //   tokens[tokens_position].type = '+';
+          //   break;
+          // case '/':
+          //   tokens[tokens_position].type = '+';
+          //   break;
           case TK_NUMBER:
             if(substr_len > 31) Assert(0, "The number is too long\n");
             strncpy(tokens[tokens_position].str,e+position, substr_len);
