@@ -197,6 +197,7 @@ int precede(Stack *p_stack, int op_type) {
 }
 
 int arithmetic(int a, int b, int op){
+  Assert(!(op == '/' && b == 0), "除数为0");
   switch (op)
   {
     case '+': return a+b;
