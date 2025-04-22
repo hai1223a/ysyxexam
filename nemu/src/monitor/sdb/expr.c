@@ -143,7 +143,15 @@ word_t expr(char *e, bool *success) {
     return 0;
     
   }
-
+  // int Lbracket[10] = {0};
+  // int Rbracket[10] = {0};
+  int position_Lbracket,position_Rbracket = 0;
+  position_Lbracket = position_Rbracket = 0;
+  printf("%d,%d",position_Lbracket,position_Rbracket);  
+  // for(int i = 0; i < 32; i++)
+  // {
+  //   if(tokens[i].type == '(') 
+  // }
   // /* TODO: Insert codes to evaluate the expression. */
   // TODO();
 
