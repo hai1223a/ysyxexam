@@ -252,7 +252,7 @@ word_t expr(char *e, bool *success) {
     push_stack(&numstack, arithmetic(b, a, op));
   }
   result = pop_stack(&numstack);
-  printf("%d",result);
+  printf("%d\n",result);
   Assert(result >= 0, "表达式结果为负数");
   return (word_t)result;
 }
