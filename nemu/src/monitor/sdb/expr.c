@@ -95,28 +95,22 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-        if(tokens_position == 32) Assert(0, "The expression is too long\n");
+        if(tokens_position == 2) Assert(0, "The expression is too long\n");
         switch (rules[i].token_type) {
           case '+':
             tokens[tokens_position].type = '+';
-            tokens_position++;
             break;
           case TK_NUMBER:
-            if(substr_len > 31) Assert(0, "The number is too long\n");
+            if(substr_len > 3) Assert(0, "The number is too long\n");
             strncat(tokens[tokens_position].str,e+position, substr_len);
             tokens[tokens_position].type = TK_NUMBER;
-            tokens_position++;
             break;
           // default: TODO();
         }
+        tokens_position++;
         position += substr_len;
         break;
       }
-    }
-
-    for (int i = 0; i < 32; i++)
-    {
-      printf("tokens.type = %d, tokens.str = %s\t", tokens[i].type, tokens[i].str);
     }
 
     if (i == NR_REGEX) {
@@ -125,6 +119,10 @@ static bool make_token(char *e) {
     }
   }
 
+  for (int i = 0; i < 32; i++)
+  {
+    printf("tokens.type = %d, tokens.str = %s\t", tokens[i].type, tokens[i].str);
+  }
   return true;
 }
 
