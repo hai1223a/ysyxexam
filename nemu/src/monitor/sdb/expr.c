@@ -78,6 +78,13 @@ static bool make_token(char *e) {
 
   nr_token = 0;
 
+  // int tokens_position = 0;
+  for (int i = 0; i < 32; i++)
+  {
+    /* code */
+    printf("tokens.type = %d, tokens.str = %s", tokens[i].type, tokens[i].str);
+  }
+  
   while (e[position] != '\0') {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
@@ -96,6 +103,9 @@ static bool make_token(char *e) {
          */
 
         switch (rules[i].token_type) {
+          // TK_NOTYPE:;
+          // '+': ;
+          // TK_NUMBER: ;
           // default: TODO();
         }
 
