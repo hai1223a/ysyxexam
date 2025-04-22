@@ -218,9 +218,9 @@ word_t expr(char *e, bool *success) {
     if(tokens[i].type == '+' || tokens[i].type == '-' || tokens[i].type == '*' || \
        tokens[i].type == '/' || tokens[i].type == '(' || tokens[i].type == ')')
     {
-      int precede_statu = precede(&opstack, tokens[i].type);
-      for( ;precede_statu == 1; precede_statu = precede(&opstack, tokens[i].type))
-      {
+      int precede_statu;
+      do{
+        precede_statu = precede(&opstack, tokens[i].type);
         printf("%d\n",precede_statu);
         switch(precede_statu)
         {
@@ -237,7 +237,7 @@ word_t expr(char *e, bool *success) {
           case 2:
             pop_stack(&opstack);
         }
-      }
+      } while(precede_statu == 1);
       i++;
       continue;
     }
