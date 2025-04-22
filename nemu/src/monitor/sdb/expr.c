@@ -37,8 +37,13 @@ static struct rule {
    */
 
   {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // plus
-  {"[0-9]+", TK_NUMBER},
+  {"\\+", '+'},         // 加号
+  {"-", '-'},           // 减号
+  {"\\*", '*'},         // 乘号
+  {"/", '/'},           // 除号
+  {"\\(", '('},         // 左括号
+  {"\\)", ')'},         // 右括号
+  {"[0-9]+", TK_NUMBER},// 一个或多个数字
   {"==", TK_EQ},        // equal
 };
 
@@ -101,7 +106,7 @@ static bool make_token(char *e) {
             tokens[tokens_position].type = '+';
             break;
           case TK_NUMBER:
-            if(substr_len > 2) Assert(0, "The number is too long\n");
+            if(substr_len > 31) Assert(0, "The number is too long\n");
             strncpy(tokens[tokens_position].str,e+position, substr_len);
             tokens[tokens_position].type = TK_NUMBER;
             break;
