@@ -21,7 +21,7 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NUMBER, TK_8, TK_7, TK_6, 
+  TK_NOTYPE = 256, TK_EQ, TK_NUMBER,
 
   /* TODO: Add more token types */
 
@@ -154,21 +154,39 @@ int pop_stack(Stack *p_stack) {
   return data;
 }
 
-// '>' 表示当前运算符优先级更高
-// '=' 表示当前运算符于堆栈顶运算符优先级相同
-// '<' 表示堆栈顶运算符优先级更高
-// char precede(Stack *p_stack, int op_type) {
-//   if(p_stack->top == 0) return '>';
-//   switch (p_stack->data[top-1])
-//   {
-//   case constant expression:
-//     /* code */
-//     break;
-  
-//   default:
-//     break;
-//   }
-// }
+/*
+  1: 表示栈内运算符优先级更高,需要弹出运算,并在判断直到入栈或者结束循环
+  0: 表示栈外(当前)运算符优先级更高,需要入栈
+  2: 表示栈内外运算符优先级相同,需要弹出,并结束循环判断
+  -1: 表示错误
+*/
+int precede(Stack *p_stack, int op_type) {
+  int result;
+  if(p_stack->top == 0) return 0;
+  switch (p_stack->data[p_stack->top-1])
+  {
+    case '+':
+    case '-':
+      if(op_type == '+' || op_type == '-' || op_type == ')') result = 1;
+      if(op_type == '*' || op_type == '/' || op_type == '(') result = 0;
+      break;
+    case '*':
+    case '/':
+      if(op_type == '+' || op_type == '-' || op_type == ')' \
+      || op_type == '*' || op_type == '/') result = 1;
+      if(op_type == '(') result = 0;
+      break;
+    case '(':
+      if(op_type == ')') result = 2;
+      if(op_type == '+' || op_type == '-' || op_type == '(' \
+        || op_type == '*' || op_type == '/') result = 0;
+      break;
+    default:
+      result = -1;
+  }
+  return result;
+}
+
 int arithmetic(int a, int b, int op){
   switch (op)
   {
@@ -186,23 +204,45 @@ word_t expr(char *e, bool *success) {
     return 0;
     
   }
-
-
-  // Assert(position_Lbracket == position_Rbracket, "括号不完整");
+  int result;
   Stack numstack = {.top = 0};
-  push_stack(&numstack, 100);
-  push_stack(&numstack, 89);
-  printf("%d",pop_stack(&numstack));
-  printf("%d",pop_stack(&numstack));
-  // Stack opstack = {.top = 0};
-  // int i = 0;
-  // while(tokens[i].type)
-  // {
+  Stack opstack = {.top = 0};
+  int i = 0;
+  while(tokens[i].type)
+  {
+    if(tokens[i].type == TK_NUMBER) {
+      push_stack(&numstack, atoi(tokens[i].str));
+      i++;
+      continue;
+    }
+    if(tokens[i].type == '+' || tokens[i].type == '-' || tokens[i].type == '*' || \
+       tokens[i].type == '/' || tokens[i].type == '(' || tokens[i].type == ')')
+    {
+      for(int precede_statu = precede(&opstack, tokens[i].type); precede_statu == 1;)
+      {
+        switch(precede_statu)
+        {
+          case -1: Assert(0, "可能有问题哦");
+          case 0: 
+            push_stack(&opstack, tokens[i].type);
+            break;
+          case 1: 
+            int a = pop_stack(&numstack);
+            int b = pop_stack(&numstack);
+            int op = pop_stack(&opstack);
+            push_stack(&numstack, arithmetic(a, b, op));
+            break;
+          case 2:
+            pop_stack(&opstack);
+        }
+        i++;
+      }
+    }
+    Assert(0, "键入了不支持运算的符号");
+  }
 
-  //   i++;
-  // }
-  // /* TODO: Insert codes to evaluate the expression. */
-  // TODO();
-
-  return 0;
+  Assert(opstack.top == 0, "括号数量不匹配");
+  result = pop_stack(&numstack);
+  Assert(result >= 0, "表达式结果为负数");
+  return (word_t)result;
 }
