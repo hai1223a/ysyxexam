@@ -218,8 +218,8 @@ word_t expr(char *e, bool *success) {
     if(tokens[i].type == '+' || tokens[i].type == '-' || tokens[i].type == '*' || \
        tokens[i].type == '/' || tokens[i].type == '(' || tokens[i].type == ')')
     {
-      for(int precede_statu = precede(&opstack, tokens[i].type); precede_statu == 1; \
-              precede_statu = precede(&opstack, tokens[i].type))
+      int precede_statu = precede(&opstack, tokens[i].type);
+      for( ;precede_statu == 1; precede_statu = precede(&opstack, tokens[i].type))
       {
         printf("%d\n",precede_statu);
         switch(precede_statu)
@@ -237,8 +237,8 @@ word_t expr(char *e, bool *success) {
           case 2:
             pop_stack(&opstack);
         }
-        i++;
       }
+      i++;
       continue;
     }
     Assert(0, "键入了不支持运算的符号");
