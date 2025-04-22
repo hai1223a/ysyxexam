@@ -191,6 +191,8 @@ word_t expr(char *e, bool *success) {
   // Assert(position_Lbracket == position_Rbracket, "括号不完整");
   Stack numstack = {.top = 0};
   push_stack(&numstack, 100);
+  push_stack(&numstack, 89);
+  printf("%d",pop_stack(&numstack));
   printf("%d",pop_stack(&numstack));
   // Stack opstack = {.top = 0};
   // int i = 0;
