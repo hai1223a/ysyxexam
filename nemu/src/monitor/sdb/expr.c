@@ -76,14 +76,21 @@ typedef struct token {
 static Token tokens[32] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
+void init_tokens(){
+  for (int i = 0; i < 32; i++)
+  {
+    tokens[i].type = 0;
+    memset(tokens[i].str, 0, sizeof(tokens[i].str));
+  }
+}
 static bool make_token(char *e) {
   int position = 0;
   int i;
   regmatch_t pmatch;
 
   nr_token = 0;
-
   int tokens_position = 0;
+  init_tokens();
   while (e[position] != '\0') {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
@@ -109,16 +116,17 @@ static bool make_token(char *e) {
           case '(':
           case ')':
             tokens[tokens_position].type = rules[i].token_type;
+            tokens_position++;
             break;
           case TK_NUMBER:
             if(substr_len > 31) Assert(0, "The number is too long\n");
             strncpy(tokens[tokens_position].str,e+position, substr_len);
             tokens[tokens_position].type = TK_NUMBER;
+            tokens_position++;
             break;
           default: 
         }
         printf("position = %d, substr_len = %d, tokens_position = %d\n", position, substr_len, tokens_position);
-        tokens_position++;
         position += substr_len;
         break;
       }
