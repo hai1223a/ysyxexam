@@ -65,7 +65,7 @@ void init_regex() {
 
 typedef struct token {
   int type;
-  char str[8];
+  char str[32];
 } Token;
 
 static Token tokens[32] __attribute__((used)) = {};
@@ -79,12 +79,6 @@ static bool make_token(char *e) {
   nr_token = 0;
 
   int tokens_position = 0;
-  for (int i = 0; i < 32; i++)
-  {
-    printf("tokens.type = %d, tokens.str = %s", tokens[i].type, tokens[i].str);
-  }
-  strcat(tokens[0].str, "1234567");
-  printf("sizeof is %ld, strlen is %ld",sizeof(tokens[1].str), strlen(tokens[1].str));
   while (e[position] != '\0') {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
@@ -101,23 +95,32 @@ static bool make_token(char *e) {
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-
+        if(tokens_position == 32) Assert(0, "The expression is too long\n");
         switch (rules[i].token_type) {
-          case '+': 
+          case '+':
+            if(tokens[tokens_position].type == TK_NUMBER) tokens_position++;
             tokens[tokens_position].type = '+';
             tokens_position++;
             break;
           case TK_NUMBER: 
             if(tokens[tokens_position].type == TK_NUMBER){
-              // if(strlen(tokens[tokens_position]))
+              if(strlen(tokens[tokens_position].str) == 31) Assert(0, "The number is too long\n");
+              strncat(tokens[tokens_position].str,e+position, 1);
             }else{
-
+              tokens[tokens_position].type = TK_NUMBER;
+              strncat(tokens[tokens_position].str,e+position, 1);
             }
+            break;
           // default: TODO();
         }
 
         break;
       }
+    }
+
+    for (int i = 0; i < 32; i++)
+    {
+      printf("tokens.type = %d, tokens.str = %s\t", tokens[i].type, tokens[i].str);
     }
 
     if (i == NR_REGEX) {
