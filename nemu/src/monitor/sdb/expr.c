@@ -183,6 +183,7 @@ word_t expr(char *e, bool *success) {
   // }
   // Assert(position_Lbracket == position_Rbracket, "括号不完整");
   Stack numstack = {.top = 0};
+  for(int i = 0; i < 33; i ++)
   push_stack(&numstack, 100);
   pop_stack(&numstack);
   
