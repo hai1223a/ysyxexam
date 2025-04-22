@@ -218,7 +218,8 @@ word_t expr(char *e, bool *success) {
     if(tokens[i].type == '+' || tokens[i].type == '-' || tokens[i].type == '*' || \
        tokens[i].type == '/' || tokens[i].type == '(' || tokens[i].type == ')')
     {
-      for(int precede_statu = precede(&opstack, tokens[i].type); precede_statu == 1;)
+      for(int precede_statu = precede(&opstack, tokens[i].type); precede_statu == 1; \
+              precede_statu = precede(&opstack, tokens[i].type))
       {
         switch(precede_statu)
         {
