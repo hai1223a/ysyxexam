@@ -38,7 +38,7 @@ static struct rule {
 
   {" +", TK_NOTYPE},    // spaces
   {"\\+", '+'},         // plus
-  {"[0-9]", TK_NUMBER},
+  {"[0-9]+", TK_NUMBER},
   {"==", TK_EQ},        // equal
 };
 
@@ -89,7 +89,7 @@ static bool make_token(char *e) {
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
-        position += substr_len;
+        
 
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
@@ -98,22 +98,18 @@ static bool make_token(char *e) {
         if(tokens_position == 32) Assert(0, "The expression is too long\n");
         switch (rules[i].token_type) {
           case '+':
-            if(tokens[tokens_position].type == TK_NUMBER) tokens_position++;
             tokens[tokens_position].type = '+';
             tokens_position++;
             break;
-          case TK_NUMBER: 
-            if(tokens[tokens_position].type == TK_NUMBER){
-              if(strlen(tokens[tokens_position].str) == 31) Assert(0, "The number is too long\n");
-              strncat(tokens[tokens_position].str,e+position, 1);
-            }else{
-              tokens[tokens_position].type = TK_NUMBER;
-              strncat(tokens[tokens_position].str,e+position, 1);
-            }
+          case TK_NUMBER:
+            if(substr_len > 31) Assert(0, "The number is too long\n");
+            strncat(tokens[tokens_position].str,e+position, substr_len);
+            tokens[tokens_position].type = TK_NUMBER;
+            tokens_position++;
             break;
           // default: TODO();
         }
-
+        position += substr_len;
         break;
       }
     }
