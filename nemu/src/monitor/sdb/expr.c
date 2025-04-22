@@ -143,6 +143,7 @@ typedef struct stack
 } Stack;
 
 void push_stack(Stack *p_stack, int data) {
+  Assert(0,"堆栈已满,函数push_stack");
   p_stack->data[p_stack->top] = data;
   p_stack->top++;
 }
