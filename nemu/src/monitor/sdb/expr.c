@@ -83,7 +83,7 @@ void init_tokens(){
     memset(tokens[i].str, 0, sizeof(tokens[i].str));
   }
 }
-static bool make_token(char *e) {
+static bool make_token(char *e, int *valid_tokens) {
   int position = 0;
   int i;
   regmatch_t pmatch;
@@ -142,12 +142,29 @@ static bool make_token(char *e) {
   {
     printf("tokens.type = %d, tokens.str = %s\t", tokens[i].type, tokens[i].str);
   }
+  *valid_tokens = tokens_position;
   return true;
 }
+// int find_main_op(int p, int q) {
+//   int op = 0;
+//   for (int i = p; i <= q; i++)
+//   {
+//     int backet_in = 0;
+//     if(tokens[i].type != TK_NUMBER){
+//       if(tokens[i].type == '(') backet_in++;
+//       if(tokens[i].type == ')') backet_in--;
+//       Assert(backet_in >= 0, "表达式不合规");
+//       if(!backet_in && tokens[i].type != '(' && tokens[i].type != ')') {
+//         if(!op) 
+//       }
+//     }
+//   }
+  
+// }
 
 typedef struct stack
 {
-  int data[32];
+  int data[16];
   int top;
 } Stack;
 
@@ -163,106 +180,68 @@ int pop_stack(Stack *p_stack) {
   return data;
 }
 
-/*
-  1: 表示栈内运算符优先级更高,需要弹出运算,并在判断直到入栈或者结束循环
-  0: 表示栈外(当前)运算符优先级更高,需要入栈
-  2: 表示栈内外运算符优先级相同,需要弹出,并结束循环判断
-  -1: 表示错误
-*/
-int precede(Stack *p_stack, int op_type) {
-  int result;
-  if(p_stack->top == 0) return 0;
-  switch (p_stack->data[p_stack->top-1])
-  {
-    case '+':
-    case '-':
-      if(op_type == '+' || op_type == '-' || op_type == ')') result = 1;
-      if(op_type == '*' || op_type == '/' || op_type == '(') result = 0;
-      break;
-    case '*':
-    case '/':
-      if(op_type == '+' || op_type == '-' || op_type == ')' \
-      || op_type == '*' || op_type == '/') result = 1;
-      if(op_type == '(') result = 0;
-      break;
-    case '(':
-      if(op_type == ')') result = 2;
-      if(op_type == '+' || op_type == '-' || op_type == '(' \
-        || op_type == '*' || op_type == '/') result = 0;
-      break;
-    default:
-      result = -1;
-  }
-  return result;
+int get_stack_top(Stack *p_stack) {
+  Assert(p_stack->top, "堆栈为空");
+  int data = p_stack->data[p_stack->top - 1];
+  return data;
 }
 
-int arithmetic(int a, int b, int op){
-  Assert(!(op == '/' && b == 0), "除数为0");
-  switch (op)
+bool check_parentheses(int p, int q) {
+  bool hit = false;
+  Stack backet_stack = {.top = 0};
+  for(int i = p; i <= q; i++) 
   {
-    case '+': return a+b;
-    case '-': return a-b;
-    case '*': return a*b;
-    case '/': return a/b;
-    default: Assert(0, "无此计算类型");
+    if(tokens[i].type == '(')
+    {
+      push_stack(&backet_stack, i);
+    } 
+    else if(tokens[i].type == ')') 
+    {
+      if(i == q && get_stack_top(&backet_stack) == p)  hit = true;
+      pop_stack(&backet_stack);
+    }
+    else
+      continue;
   }
+  Assert(backet_stack.top == 0, "左括号太多了");
+  return hit;
 }
+// p: 表达式开始的位置指示
+// q: 表达式结束的位置指示
+// 例如:p = 0, q = 9, 表示由10个tokens组成的长表达式
+// int eval(int p, int q){
+//   if (p > q) {
+//     Assert(0, "输入表达式指示位置违规");
+//   }
+//   else if (p == q) {
+//     return atoi(tokens[p].str);
+//   }
+//   else if (check_parentheses(p, q) == true) {
+//     return eval(p + 1, q - 1);
+//   }
+//   else {
+//     int op = find_main_op(p,q);
+//     val1 = eval(p, op - 1);
+//     val2 = eval(op + 1, q);
+
+//     switch (op_type) {
+//       case '+': return val1 + val2;
+//       case '-': /* ... */
+//       case '*': /* ... */
+//       case '/': /* ... */
+//       default: assert(0);
+//     }
+//   }
+// }
+
 
 word_t expr(char *e, bool *success) {
-  if (!make_token(e)) {
+  int valid_tokens = 0;
+  if (!make_token(e, &valid_tokens)) {
     *success = false;
     return 0;
-    
   }
-  int result;
-  Stack numstack = {.top = 0};
-  Stack opstack = {.top = 0};
-  int i = 0;
-  while(tokens[i].type)
-  {
-    if(tokens[i].type == TK_NUMBER) {
-      push_stack(&numstack, atoi(tokens[i].str));
-      i++;
-      continue;
-    }
-    if(tokens[i].type == '+' || tokens[i].type == '-' || tokens[i].type == '*' || \
-       tokens[i].type == '/' || tokens[i].type == '(' || tokens[i].type == ')')
-    {
-      int precede_statu;
-      do{
-        precede_statu = precede(&opstack, tokens[i].type);
-        switch(precede_statu)
-        {
-          case -1: Assert(0, "可能有问题哦");
-          case 0: 
-            push_stack(&opstack, tokens[i].type);
-            break;
-          case 1: 
-            int a = pop_stack(&numstack);
-            int b = pop_stack(&numstack);
-            int op = pop_stack(&opstack);
-            push_stack(&numstack, arithmetic(b, a, op));
-            break;
-          case 2:
-            pop_stack(&opstack);
-        }
-      } while(precede_statu == 1);
-      i++;
-      continue;
-    }
-    Assert(0, "键入了不支持运算的符号");
-  }
+  check_parentheses(0, valid_tokens-1);
 
-  while(opstack.top)
-  {
-    Assert(numstack.top > 1, "表达式不正确");
-    int a = pop_stack(&numstack);
-    int b = pop_stack(&numstack);
-    int op = pop_stack(&opstack);
-    push_stack(&numstack, arithmetic(b, a, op));
-  }
-  result = pop_stack(&numstack);
-  printf("%d\n",result);
-  Assert(result >= 0, "表达式结果为负数");
-  return (word_t)result;
+  return 0;
 }
