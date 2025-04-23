@@ -170,9 +170,9 @@ static bool make_token(char *e, int *valid_tokens) {
 
 int find_main_op(int p, int q) {
   int op = -1;
+  int backet_in = 0;
   for (int i = p; i <= q; i++)
   {
-    int backet_in = 0;
     if(tokens[i].type != TK_DECIMAL && tokens[i].type != TK_HEXADECIMAL && tokens[i].type != TK_REG){
       if(tokens[i].type == '(') backet_in++;
       if(tokens[i].type == ')') backet_in--;
