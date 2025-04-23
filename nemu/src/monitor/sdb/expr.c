@@ -206,6 +206,41 @@ bool check_parentheses(int p, int q) {
   Assert(backet_stack.top == 0, "左括号太多了");
   return hit;
 }
+
+void ckeck_expression(int p, int q, int *negetive, int *position) {
+  if(p > q) Assert(0, "你写错了");
+  if(p == q) {
+    Assert(tokens[p].type == TK_NUMBER, "表达式错误");
+    return;
+  }
+  for(int i = p; i <= q; i++)
+  {
+    if(tokens[i].type == '+' || tokens[i].type == '-' || \
+      tokens[i].type == '*' || tokens[i].type == '/')
+    {
+      // 检查负号
+      if(i != q && tokens[i+1].type == TK_NUMBER && tokens[i].type == '-')
+        if(i == p || (i != p && (tokens[i-1].type == '+' || tokens[i-1].type == '-' || \
+           tokens[i-1].type == '*' || tokens[i-1].type == '/')))
+        {
+          *(negetive + *position) = i;
+          (*position)++;
+          continue; 
+        }
+      if(tokens[i].type == '+' || tokens[i].type == '-' || \
+         tokens[i].type == '*' || tokens[i].type == '/')
+      {
+        if(i == p || i == q)
+          Assert(0, "四则运算表达式写错了");
+        else if(tokens[i-1].type == '+' || tokens[i-1].type == '-' || \
+                tokens[i-1].type == '*' || tokens[i-1].type == '/' || \
+                tokens[i+1].type == '+' || tokens[i+1].type == '*' || \
+                tokens[i+1].type == '/')
+                Assert(0, "四则运算表达式子写错了");
+      }
+    } 
+  }
+}
 // p: 表达式开始的位置指示
 // q: 表达式结束的位置指示
 // 例如:p = 0, q = 9, 表示由10个tokens组成的长表达式
@@ -241,7 +276,14 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
+  int negetive[32];
+  int position = 0;
   if(check_parentheses(0, valid_tokens-1)) printf("\nhit\n");
-
+  ckeck_expression(0, valid_tokens-1, negetive, &position);
+  for (int i = 0; i < position; i++)
+  {
+    printf("negetive[%d] = %d", i, negetive[i]);
+  }
+  
   return 0;
 }
