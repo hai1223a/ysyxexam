@@ -19,10 +19,10 @@
  * Type 'man regex' for more information about POSIX regex functions.
  */
 #include <regex.h>
-
+#include "memory/vaddr.h"
 enum {
   TK_NOTYPE = 256, TK_EQ, TK_DECIMAL, TK_HEXADECIMAL, TK_REG,
-  TK_NEQ, TK_LOGICAND,
+  TK_NEQ, TK_LOGICAND, TK_POINT,
 
   /* TODO: Add more token types */
 
@@ -167,22 +167,40 @@ static bool make_token(char *e, int *valid_tokens) {
   *valid_tokens = tokens_position;
   return true;
 }
-// int find_main_op(int p, int q) {
-//   int op = 0;
-//   for (int i = p; i <= q; i++)
-//   {
-//     int backet_in = 0;
-//     if(tokens[i].type != TK_NUMBER){
-//       if(tokens[i].type == '(') backet_in++;
-//       if(tokens[i].type == ')') backet_in--;
-//       Assert(backet_in >= 0, "表达式不合规");
-//       if(!backet_in && tokens[i].type != '(' && tokens[i].type != ')') {
-//         if(!op) 
-//       }
-//     }
-//   }
-  
-// }
+
+int find_main_op(int p, int q) {
+  int op = -1;
+  for (int i = p; i <= q; i++)
+  {
+    int backet_in = 0;
+    if(tokens[i].type != TK_DECIMAL && tokens[i].type != TK_HEXADECIMAL && tokens[i].type != TK_REG){
+      if(tokens[i].type == '(') backet_in++;
+      if(tokens[i].type == ')') backet_in--;
+      Assert(backet_in >= 0, "表达式不合规");
+      if(!backet_in && tokens[i].type != ')') {
+        if(op == -1){
+          op = i;
+          continue;
+        }
+        if(tokens[i].type == TK_LOGICAND){
+          op = i;
+        }
+        else if((tokens[i].type == TK_EQ || tokens[i].type == TK_NEQ) && tokens[op].type != TK_LOGICAND) {
+          op = i;
+        }
+        else if(tokens[i].type == '+' || tokens[i].type == '-'){
+          if(tokens[op].type != TK_EQ || tokens[op].type != TK_NEQ || tokens[op].type != TK_LOGICAND)
+            op = i;
+        }
+        else if(tokens[i].type == '*' || tokens[i].type == '/') {
+          if(tokens[op].type == TK_POINT || tokens[op].type == '*' || tokens[op].type == '/')
+            op = i;
+        }
+      }
+    }
+  }
+  return op;
+}
 
 typedef struct stack
 {
@@ -263,48 +281,64 @@ bool check_parentheses(int p, int q) {
 //     } 
 //   }
 // }
+
 // p: 表达式开始的位置指示
 // q: 表达式结束的位置指示
 // 例如:p = 0, q = 9, 表示由10个tokens组成的长表达式
-// word_t eval(int p, int q){
-  // if (p > q) {
-  //   Assert(0, "输入表达式指示位置违规");
-  // }
-  // else if (p == q) {
-  //   if(tokens[p].type == TK_DECIMAL){
-  //     return atoi(tokens[p].str);
-  //   }
-  //   else if(tokens[p].type == TK_HEXADECIMAL){
-  //     int number;
-  //     sscanf(tokens[p].str, "%i", &number);
-  //     return number;
-  //   }
-  //   else if(tokens[p].type == TK_REG) {
-  //     bool success;
-  //     word_t  isa_reg_str2val(tokens[p].str, &success);
-  //   }
-  //   Assert(tokens[p].type == TK_DECIMAL, "表达式违规");
-  //   return atoi(tokens[p].str);
-  // }
-  // else if (p + 1 == q)
-  // else if (check_parentheses(p, q) == true) {
-  //   return eval(p + 1, q - 1);
-  // }
-  // else {
-    
-  //   int op = find_main_op(p,q);
-  //   val1 = eval(p, op - 1);
-  //   val2 = eval(op + 1, q);
+int eval(int p, int q){
+  if (p > q) {
+    Assert(0, "输入表达式指示位置违规");
+  }
+  else if (p == q) {
+    if(tokens[p].type == TK_DECIMAL){
+      return atoi(tokens[p].str);
+    }
+    else if(tokens[p].type == TK_HEXADECIMAL){
+      int number;
+      sscanf(tokens[p].str, "%i", &number);
+      return number;
+    }
+    else if(tokens[p].type == TK_REG) {
+      bool success;
+      word_t value = isa_reg_str2val(tokens[p].str, &success);
+      return (int) value;
+    }
+    else{
+      Assert(0, "表达式违规");
+    }
+  }
+  else if (check_parentheses(p, q) == true) {
+    return eval(p + 1, q - 1);
+  }
+  else {
+    int op = find_main_op(p,q);
+    int val1 = 0,val2;
+    int is_point = 1;
+    if(op > p) {
+      val1 = eval(p, op - 1);
+      is_point = 0;
+    }
+    val2 = eval(op + 1, q);
 
-  //   switch (op_type) {
-  //     case '+': return val1 + val2;
-  //     case '-': /* ... */
-  //     case '*': /* ... */
-  //     case '/': /* ... */
-  //     default: assert(0);
-  //   }
-  // }
-// }
+    switch (tokens[op].type) {
+      case '+': return val1 + val2;
+      case '-': return val1 - val2;
+      case '*':
+        if(is_point) return vaddr_read((vaddr_t)is_point, 4);
+        else return val1 * val2;
+      case '/': 
+        Assert(val2 != 0, "除数为0了");  
+        return val1 / val2;
+      case TK_EQ:
+        return val1 == val2;
+      case TK_NEQ:
+        return val1 != val2;
+      case TK_LOGICAND:
+        return val1 && val2; 
+      default: assert(0);
+    }
+  }
+}
 
 
 word_t expr(char *e, bool *success) {
@@ -313,13 +347,9 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
+  int result = eval(0, valid_tokens-1);
+  printf("\n%d\n", result);
 
-  word_t a = 0xFFFFFFFF;
-  int b = (int)a;
-  int c = 0x0FFFFFFF;
-  int d = b -c;
-  int f = a -c;
-  printf("\n\na = %x, b = %x, d = %x, f = %x", a, b, d, f);
   // char *str = "0123";
   // int number;
   // sscanf(str, "%i", &number);
