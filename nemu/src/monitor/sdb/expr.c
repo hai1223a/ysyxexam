@@ -266,39 +266,44 @@ bool check_parentheses(int p, int q) {
 // p: 表达式开始的位置指示
 // q: 表达式结束的位置指示
 // 例如:p = 0, q = 9, 表示由10个tokens组成的长表达式
-// int eval(int p, int q){
-//   if (p > q) {
-//     Assert(0, "输入表达式指示位置违规");
-//   }
-//   else if (p == q) {
-//     if(tokens[p].type == TK_DECIMAL){
-//       return atoi(tokens[p].str);
-//     }
-//     else if(tokens[p].type == TK_HEXADECIMAL){
-//       int number;
-//       sscanf(tokens[p].str, "0x%x", &number);
-//     }
-//     Assert(tokens[p].type == TK_DECIMAL, "表达式违规");
-//     return atoi(tokens[p].str);
-//   }
-//   else if (p + 1 == q)
-//   else if (check_parentheses(p, q) == true) {
-//     return eval(p + 1, q - 1);
-//   }
-//   else {
+// word_t eval(int p, int q){
+  // if (p > q) {
+  //   Assert(0, "输入表达式指示位置违规");
+  // }
+  // else if (p == q) {
+  //   if(tokens[p].type == TK_DECIMAL){
+  //     return atoi(tokens[p].str);
+  //   }
+  //   else if(tokens[p].type == TK_HEXADECIMAL){
+  //     int number;
+  //     sscanf(tokens[p].str, "%i", &number);
+  //     return number;
+  //   }
+  //   else if(tokens[p].type == TK_REG) {
+  //     bool success;
+  //     word_t  isa_reg_str2val(tokens[p].str, &success);
+  //   }
+  //   Assert(tokens[p].type == TK_DECIMAL, "表达式违规");
+  //   return atoi(tokens[p].str);
+  // }
+  // else if (p + 1 == q)
+  // else if (check_parentheses(p, q) == true) {
+  //   return eval(p + 1, q - 1);
+  // }
+  // else {
     
-//     int op = find_main_op(p,q);
-//     val1 = eval(p, op - 1);
-//     val2 = eval(op + 1, q);
+  //   int op = find_main_op(p,q);
+  //   val1 = eval(p, op - 1);
+  //   val2 = eval(op + 1, q);
 
-//     switch (op_type) {
-//       case '+': return val1 + val2;
-//       case '-': /* ... */
-//       case '*': /* ... */
-//       case '/': /* ... */
-//       default: assert(0);
-//     }
-//   }
+  //   switch (op_type) {
+  //     case '+': return val1 + val2;
+  //     case '-': /* ... */
+  //     case '*': /* ... */
+  //     case '/': /* ... */
+  //     default: assert(0);
+  //   }
+  // }
 // }
 
 
@@ -309,10 +314,13 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
 
-  char *str = "0123";
-  int number;
-  sscanf(str, "%i", &number);
-  printf("\n%x", number);
+  word_t a = 0xFFFFFFFF;
+  int b = (int)a;
+  printf("\n\na = %x, b = %x", a, b);
+  // char *str = "0123";
+  // int number;
+  // sscanf(str, "%i", &number);
+  // printf("\n%x", number);
   // int negetive[32];
   // int position = 0;
 
