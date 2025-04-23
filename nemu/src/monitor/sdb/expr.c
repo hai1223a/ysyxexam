@@ -21,7 +21,8 @@
 #include <regex.h>
 
 enum {
-  TK_NOTYPE = 256, TK_EQ, TK_NUMBER,
+  TK_NOTYPE = 256, TK_EQ, TK_DECIMAL, TK_HEXADECIMAL, TK_REG,
+  TK_NEQ, TK_LOGICAND,
 
   /* TODO: Add more token types */
 
@@ -35,16 +36,19 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
-
-  {" +", TK_NOTYPE},    // spaces
-  {"\\+", '+'},         // 加号
-  {"-", '-'},           // 减号
-  {"\\*", '*'},         // 乘号
-  {"/", '/'},           // 除号
-  {"\\(", '('},         // 左括号
-  {"\\)", ')'},         // 右括号
-  {"[0-9]+", TK_NUMBER},// 一个或多个数字
-  {"==", TK_EQ},        // equal
+  {"\\+", '+'},                             // 加号
+  {"-", '-'},                               // 减号或者负号
+  {"\\*", '*'},                             // 乘号或者指针
+  {"/", '/'},                               // 除号
+  {"\\(", '('},                             // 左括号
+  {"\\)", ')'},                             // 右括号
+  {" +", TK_NOTYPE},                        // spaces
+  {"==", TK_EQ},                            // equal
+  {"[0-9]+", TK_DECIMAL},                   // 十进制数字
+  {"0[xX][0-9a-fA-F]+", TK_HEXADECIMAL},    // 十六进制数字
+  {"\\$[0-9a-z\\$]+", TK_REG},              // 寄存器名字
+  {"!=", TK_NEQ},                           // 不相等
+  {"&&", TK_LOGICAND},                      // 逻辑与
 };
 
 #define NR_REGEX ARRLEN(rules)
@@ -68,21 +72,25 @@ void init_regex() {
   }
 }
 
+#define NUM_TOKENS 32
+#define TOKEN_STR 32
+
 typedef struct token {
   int type;
-  char str[32];
+  char str[TOKEN_STR];
 } Token;
 
-static Token tokens[32] __attribute__((used)) = {};
+static Token tokens[NUM_TOKENS] __attribute__((used)) = {};
 static int nr_token __attribute__((used))  = 0;
 
 void init_tokens(){
-  for (int i = 0; i < 32; i++)
+  for (int i = 0; i < NUM_TOKENS; i++)
   {
     tokens[i].type = 0;
-    memset(tokens[i].str, 0, sizeof(tokens[i].str));
+    memset(tokens[i].str, 0, TOKEN_STR);
   }
 }
+
 static bool make_token(char *e, int *valid_tokens) {
   int position = 0;
   int i;
@@ -101,13 +109,11 @@ static bool make_token(char *e, int *valid_tokens) {
         Log("match rules[%d] = \"%s\" at position %d with len %d: %.*s",
             i, rules[i].regex, position, substr_len, substr_len, substr_start);
 
-        
-
         /* TODO: Now a new token is recognized with rules[i]. Add codes
          * to record the token in the array `tokens'. For certain types
          * of tokens, some extra actions should be performed.
          */
-        if(tokens_position == 31) Assert(0, "The expression is too long\n");
+        if(tokens_position == NUM_TOKENS - 1) Assert(0, "The expression is too long\n");
         switch (rules[i].token_type) {
           case '+':
           case '-':
@@ -115,13 +121,28 @@ static bool make_token(char *e, int *valid_tokens) {
           case '/':
           case '(':
           case ')':
+          case TK_EQ:
+          case TK_NEQ:
+          case TK_LOGICAND:
             tokens[tokens_position].type = rules[i].token_type;
             tokens_position++;
             break;
-          case TK_NUMBER:
-            if(substr_len > 31) Assert(0, "The number is too long\n");
+          case TK_DECIMAL:
+            if(substr_len > NUM_TOKENS - 1) Assert(0, "The number is too long\n");
             strncpy(tokens[tokens_position].str,e+position, substr_len);
-            tokens[tokens_position].type = TK_NUMBER;
+            tokens[tokens_position].type = TK_DECIMAL;
+            tokens_position++;
+            break;
+          case TK_HEXADECIMAL:
+            if(substr_len > NUM_TOKENS -1) Assert(0, "The number is too long\n");
+            strncpy(tokens[tokens_position].str,e+position, substr_len);
+            tokens[tokens_position].type = TK_HEXADECIMAL;
+            tokens_position++;
+            break;
+          case TK_REG:
+            if(substr_len > NUM_TOKENS -1) Assert(0, "The reg name is too long, 你估计打错了\n");
+            strncpy(tokens[tokens_position].str,e+position, substr_len);
+            tokens[tokens_position].type = TK_REG;
             tokens_position++;
             break;
           default: 
@@ -142,134 +163,11 @@ static bool make_token(char *e, int *valid_tokens) {
   {
     printf("tokens.type = %d, tokens.str = %s\t", tokens[i].type, tokens[i].str);
   }
+
   *valid_tokens = tokens_position;
   return true;
 }
-// int find_main_op(int p, int q) {
-//   int op = 0;
-//   for (int i = p; i <= q; i++)
-//   {
-//     int backet_in = 0;
-//     if(tokens[i].type != TK_NUMBER){
-//       if(tokens[i].type == '(') backet_in++;
-//       if(tokens[i].type == ')') backet_in--;
-//       Assert(backet_in >= 0, "表达式不合规");
-//       if(!backet_in && tokens[i].type != '(' && tokens[i].type != ')') {
-//         if(!op) 
-//       }
-//     }
-//   }
-  
-// }
 
-typedef struct stack
-{
-  int data[16];
-  int top;
-} Stack;
-
-void push_stack(Stack *p_stack, int data) {
-  Assert((p_stack->top < ARRLEN(p_stack->data)),"堆栈已满");
-  p_stack->data[p_stack->top] = data;
-  p_stack->top++;
-}
-
-int pop_stack(Stack *p_stack) {
-  Assert(p_stack->top, "堆栈为空");
-  int data = p_stack->data[--(p_stack->top)];
-  return data;
-}
-
-int get_stack_top(Stack *p_stack) {
-  Assert(p_stack->top, "堆栈为空");
-  int data = p_stack->data[p_stack->top - 1];
-  return data;
-}
-
-bool check_parentheses(int p, int q) {
-  bool hit = false;
-  Stack backet_stack = {.top = 0};
-  for(int i = p; i <= q; i++) 
-  {
-    if(tokens[i].type == '(')
-    {
-      push_stack(&backet_stack, i);
-    } 
-    else if(tokens[i].type == ')') 
-    {
-      if(i == q && get_stack_top(&backet_stack) == p)  hit = true;
-      pop_stack(&backet_stack);
-    }
-    else
-      continue;
-  }
-  Assert(backet_stack.top == 0, "左括号太多了");
-  return hit;
-}
-
-void ckeck_expression(int p, int q, int *negetive, int *position) {
-  if(p > q) Assert(0, "你写错了");
-  if(p == q) {
-    Assert(tokens[p].type == TK_NUMBER, "表达式错误");
-    return;
-  }
-  for(int i = p; i <= q; i++)
-  {
-    if(tokens[i].type == '+' || tokens[i].type == '-' || \
-      tokens[i].type == '*' || tokens[i].type == '/')
-    {
-      // 检查负号
-      if(i != q && tokens[i+1].type == TK_NUMBER && tokens[i].type == '-')
-        if(i == p || (i != p && (tokens[i-1].type == '+' || tokens[i-1].type == '-' || \
-           tokens[i-1].type == '*' || tokens[i-1].type == '/')))
-        {
-          *(negetive + *position) = i;
-          (*position)++;
-          continue; 
-        }
-      if(tokens[i].type == '+' || tokens[i].type == '-' || \
-         tokens[i].type == '*' || tokens[i].type == '/')
-      {
-        if(i == p || i == q)
-          Assert(0, "四则运算表达式写错了");
-        else if(tokens[i-1].type == '+' || tokens[i-1].type == '-' || \
-                tokens[i-1].type == '*' || tokens[i-1].type == '/' || \
-                tokens[i+1].type == '+' || tokens[i+1].type == '*' || \
-                tokens[i+1].type == '/')
-                Assert(0, "四则运算表达式子写错了");
-      }
-    } 
-  }
-}
-// p: 表达式开始的位置指示
-// q: 表达式结束的位置指示
-// 例如:p = 0, q = 9, 表示由10个tokens组成的长表达式
-// int eval(int p, int q){
-//   if (p > q) {
-//     Assert(0, "输入表达式指示位置违规");
-//   }
-//   else if (p == q) {
-//     Assert(tokens[p].type == TK_NUMBER, "表达式违规");
-//     return atoi(tokens[p].str);
-//   }
-//   else if (check_parentheses(p, q) == true) {
-//     return eval(p + 1, q - 1);
-//   }
-//   else {
-    
-//     int op = find_main_op(p,q);
-//     val1 = eval(p, op - 1);
-//     val2 = eval(op + 1, q);
-
-//     switch (op_type) {
-//       case '+': return val1 + val2;
-//       case '-': /* ... */
-//       case '*': /* ... */
-//       case '/': /* ... */
-//       default: assert(0);
-//     }
-//   }
-// }
 
 
 word_t expr(char *e, bool *success) {
@@ -280,7 +178,7 @@ word_t expr(char *e, bool *success) {
   }
   // int negetive[32];
   // int position = 0;
-  printf("%d", atoi("012344"));
+
   // if(check_parentheses(0, valid_tokens-1)) printf("\nhit\n");
   // ckeck_expression(0, valid_tokens-1, negetive, &position);
   // for (int i = 0; i < position; i++)
