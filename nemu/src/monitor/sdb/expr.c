@@ -316,7 +316,10 @@ word_t expr(char *e, bool *success) {
 
   word_t a = 0xFFFFFFFF;
   int b = (int)a;
-  printf("\n\na = %x, b = %x", a, b);
+  int c = 0x0FFFFFFF;
+  int d = b -c;
+  int f = a -c;
+  printf("\n\na = %x, b = %x, d = %x, f = %x", a, b, d, f);
   // char *str = "0123";
   // int number;
   // sscanf(str, "%i", &number);
