@@ -271,9 +271,17 @@ bool check_parentheses(int p, int q) {
 //     Assert(0, "输入表达式指示位置违规");
 //   }
 //   else if (p == q) {
-//     Assert(tokens[p].type == TK_NUMBER, "表达式违规");
+//     if(tokens[p].type == TK_DECIMAL){
+//       return atoi(tokens[p].str);
+//     }
+//     else if(tokens[p].type == TK_HEXADECIMAL){
+//       int number;
+//       sscanf(tokens[p].str, "0x%x", &number);
+//     }
+//     Assert(tokens[p].type == TK_DECIMAL, "表达式违规");
 //     return atoi(tokens[p].str);
 //   }
+//   else if (p + 1 == q)
 //   else if (check_parentheses(p, q) == true) {
 //     return eval(p + 1, q - 1);
 //   }
@@ -300,6 +308,11 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
+
+  char *str = "0x123";
+  int number;
+  sscanf(str, "0x%x", &number);
+  printf("\n%x", number);
   // int negetive[32];
   // int position = 0;
 
