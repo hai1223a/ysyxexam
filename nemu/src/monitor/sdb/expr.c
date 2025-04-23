@@ -309,7 +309,7 @@ word_t expr(char *e, bool *success) {
     return 0;
   }
 
-  char *str = "0x123";
+  char *str = "0X123";
   int number;
   sscanf(str, "0x%x", &number);
   printf("\n%x", number);
