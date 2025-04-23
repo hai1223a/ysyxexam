@@ -311,7 +311,7 @@ word_t expr(char *e, bool *success) {
 
   char *str = "0X123";
   int number;
-  sscanf(str, "0x%x", &number);
+  sscanf(str, "0[xX]%x", &number);
   printf("\n%x", number);
   // int negetive[32];
   // int position = 0;
