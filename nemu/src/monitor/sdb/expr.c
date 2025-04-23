@@ -247,40 +247,34 @@ bool check_parentheses(int p, int q) {
   return hit;
 }
 
-// void ckeck_expression(int p, int q, int *negetive, int *position) {
-//   if(p > q) Assert(0, "你写错了");
-//   if(p == q) {
-//     Assert(tokens[p].type == TK_NUMBER, "表达式错误");
-//     return;
-//   }
-//   for(int i = p; i <= q; i++)
-//   {
-//     if(tokens[i].type == '+' || tokens[i].type == '-' || 
-//       tokens[i].type == '*' || tokens[i].type == '/')
-//     {
-//       // 检查负号
-//       if(i != q && tokens[i+1].type == TK_NUMBER && tokens[i].type == '-')
-//         if(i == p || (i != p && (tokens[i-1].type == '+' || tokens[i-1].type == '-' || 
-//            tokens[i-1].type == '*' || tokens[i-1].type == '/')))
-//         {
-//           *(negetive + *position) = i;
-//           (*position)++;
-//           continue; 
-//         }
-//       if(tokens[i].type == '+' || tokens[i].type == '-' || 
-//          tokens[i].type == '*' || tokens[i].type == '/')
-//       {
-//         if(i == p || i == q)
-//           Assert(0, "四则运算表达式写错了");
-//         else if(tokens[i-1].type == '+' || tokens[i-1].type == '-' || 
-//                 tokens[i-1].type == '*' || tokens[i-1].type == '/' || 
-//                 tokens[i+1].type == '+' || tokens[i+1].type == '*' || 
-//                 tokens[i+1].type == '/')
-//                 Assert(0, "四则运算表达式子写错了");
-//       }
-//     } 
-//   }
-// }
+#define OP(i) tokens[i].type == '+' || tokens[i].type == '-' || tokens[i].type == '*' ||\
+                      tokens[i].type == '/' || tokens[i].type == TK_EQ || tokens[i].type == TK_NEQ ||\
+                      tokens[i].type == TK_LOGICAND
+
+#define EXPRESSION(i) tokens[i].type == TK_HEXADECIMAL || tokens[i].type == TK_DECIMAL || tokens[i].type == TK_REG
+
+void ckeck_expression(int p, int q) {
+  // 已经确保了q>p
+  for(int i = p; i <= q; i++)
+  {
+    if(OP(i))
+    {
+      // 检查指针
+      if(tokens[i].type == '*')
+        if(i != q && (EXPRESSION(i+1) || tokens[i+1].type == '('))
+          if(i == p || (i != p && (OP(i-1))))
+            {
+              tokens[i].type = TK_POINT;
+            }
+      if(tokens[i].type != TK_POINT) {
+        if(i == p || i == q)
+          Assert(0, "四则运算表达式写错了");
+        else if(OP(i-1) || tokens[i-1].type == '(' || OP(i+1) || tokens[i-1].type == ')')
+                Assert(0, "四则运算表达式子写错了");
+      }
+    } 
+  }
+}
 
 // p: 表达式开始的位置指示
 // q: 表达式结束的位置指示
@@ -301,6 +295,7 @@ int eval(int p, int q){
     else if(tokens[p].type == TK_REG) {
       bool success;
       word_t value = isa_reg_str2val(tokens[p].str, &success);
+      Assert(success, "取寄存器的表示错误了");
       return (int) value;
     }
     else{
@@ -311,6 +306,7 @@ int eval(int p, int q){
     return eval(p + 1, q - 1);
   }
   else {
+    ckeck_expression(p, q);
     int op = find_main_op(p,q);
     int val1 = 0,val2;
     int is_point = 1;
