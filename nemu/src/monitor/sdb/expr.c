@@ -280,7 +280,7 @@ word_t expr(char *e, bool *success) {
   }
   // int negetive[32];
   // int position = 0;
-  printf("%d", atoi("12344"));
+  printf("%d", atoi("012344"));
   // if(check_parentheses(0, valid_tokens-1)) printf("\nhit\n");
   // ckeck_expression(0, valid_tokens-1, negetive, &position);
   // for (int i = 0; i < position; i++)
