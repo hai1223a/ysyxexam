@@ -249,12 +249,14 @@ void ckeck_expression(int p, int q, int *negetive, int *position) {
 //     Assert(0, "输入表达式指示位置违规");
 //   }
 //   else if (p == q) {
+//     Assert(tokens[p].type == TK_NUMBER, "表达式违规");
 //     return atoi(tokens[p].str);
 //   }
 //   else if (check_parentheses(p, q) == true) {
 //     return eval(p + 1, q - 1);
 //   }
 //   else {
+    
 //     int op = find_main_op(p,q);
 //     val1 = eval(p, op - 1);
 //     val2 = eval(op + 1, q);
@@ -276,14 +278,15 @@ word_t expr(char *e, bool *success) {
     *success = false;
     return 0;
   }
-  int negetive[32];
-  int position = 0;
-  if(check_parentheses(0, valid_tokens-1)) printf("\nhit\n");
-  ckeck_expression(0, valid_tokens-1, negetive, &position);
-  for (int i = 0; i < position; i++)
-  {
-    printf("negetive[%d] = %d", i, negetive[i]);
-  }
+  // int negetive[32];
+  // int position = 0;
+  printf("%d", atoi("12344"));
+  // if(check_parentheses(0, valid_tokens-1)) printf("\nhit\n");
+  // ckeck_expression(0, valid_tokens-1, negetive, &position);
+  // for (int i = 0; i < position; i++)
+  // {
+  //   printf("negetive[%d] = %d", i, negetive[i]);
+  // }
   
   return 0;
 }
