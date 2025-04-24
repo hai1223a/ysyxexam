@@ -154,21 +154,24 @@ void sdb_mainloop() {
     cmd_c(NULL);
     return;
   }
-  FILE *fp = fopen("/home/yunhai/ysyx-workbench/nemu/tools/gen-expr/data.txt", "r");
-  if (fp == NULL) assert(0);
 
-  word_t theory_result;
-  char expression[1001]; // 假设表达式的长度不会超过 255
+  // FILE *fp = fopen("/home/yunhai/ysyx-workbench/nemu/tools/gen-expr/data.txt", "r");
+  // if (fp == NULL) assert(0);
+  // word_t theory_result;
+  // char expression[1001]; // 假设表达式的长度不会超过 255
+  // // 按照 "%u %s\n" 格式读取文件内容，直到文件结束
+  // while (fscanf(fp, "%u %[^\n]", &theory_result, expression) != EOF) {
+  //   printf("expression =%s\n",expression);
+  //   int test_result = cmd_p(expression);  
+  //   printf("test_result: %u, theory_result: %u\n\n", (word_t)test_result, theory_result);
+  //   Assert((word_t)test_result == theory_result, "有问题");
+  // }
+  // fclose(fp);
 
-  // 按照 "%u %s\n" 格式读取文件内容，直到文件结束
-  while (fscanf(fp, "%u %[^\n]", &theory_result, expression) != EOF) {
-    printf("expression =%s\n",expression);
-    int test_result = cmd_p(expression);  
-    printf("test_result: %u, theory_result: %u\n\n", (word_t)test_result, theory_result);
-    Assert((word_t)test_result == theory_result, "有问题");
-  }
+  word_t a = (( ( 8/5))- ((1)-(4-(3*5))/8)+ 3-9/5/1- (((1))));
+  word_t b = (word_t)(( ( 8/5))- ((1)-(4-(3*5))/8)+ 3-9/5/1- (((1))));
 
-  fclose(fp);
+  printf("a=%u, b=%u\n",a,b);
 
   for (char *str; (str = rl_gets()) != NULL; ) {
     char *str_end = str + strlen(str);
