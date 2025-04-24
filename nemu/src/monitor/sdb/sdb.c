@@ -162,9 +162,9 @@ void sdb_mainloop() {
 
   // 按照 "%u %s\n" 格式读取文件内容，直到文件结束
   while (fscanf(fp, "%u %s\n", &theory_result, expression) != EOF) {
-    printf("expression = %s",expression);
+    printf("expression = %s\n",expression);
     int test_result = cmd_p(expression);  
-    printf("test_result: %u, theory_result: %u\n", (word_t)test_result, theory_result);
+    printf("test_result: %u, theory_result: %u\n\n", (word_t)test_result, theory_result);
   }
 
   fclose(fp);
