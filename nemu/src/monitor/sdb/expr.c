@@ -311,19 +311,15 @@ word_t eval(int p, int q){
     ckeck_expression(p, q);
     int op = find_main_op(p,q);
     word_t val1 = 0,val2;
-    int is_point = 1;
-    if(op > p) {
+    if(tokens[op].type != TK_POINT) {
       val1 = eval(p, op - 1);
-      is_point = 0;
     }
     val2 = eval(op + 1, q);
 
     switch (tokens[op].type) {
       case '+': return val1 + val2;
       case '-': return val1 - val2;
-      case '*':
-        if(is_point) return vaddr_read((vaddr_t)is_point, 4);
-        else return val1 * val2;
+      case '*': return val1 * val2;
       case '/': 
         Assert(val2 != 0, "除数为0了");  
         return val1 / val2;
@@ -332,7 +328,9 @@ word_t eval(int p, int q){
       case TK_NEQ:
         return val1 != val2;
       case TK_LOGICAND:
-        return val1 && val2; 
+        return val1 && val2;
+      case TK_POINT:
+        return vaddr_read(val2, 4); 
       default: assert(0);
     }
   }
