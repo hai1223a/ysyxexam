@@ -169,7 +169,7 @@ void sdb_mainloop() {
   // fclose(fp);
 
   int a = (4-15)/8+1;
-  word_t b = (4-15)/8+1;
+  word_t b = (word_t)(4-15)/8+1;
 
   printf("a=%d, b=%u\n",a,b);
 
