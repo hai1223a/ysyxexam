@@ -26,7 +26,7 @@ static char code_buf[65536 + 128] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
-"  unsigned int result = (unsigned int)%s; "
+"  unsigned result = %s; "
 "  printf(\"%%u\", result); "
 "  return 0; "
 "}";
@@ -37,12 +37,19 @@ uint32_t choose(uint32_t max_value) {
   return (uint32_t)rand()%max_value;
 }
 
+
 void gen_num(bool exsit_zero) {
   if(exsit_zero)
     buf[position++] = '0' + rand()%10;
   else
     buf[position++] = '1' + rand()%9;
+}
 
+void gen_str()
+{
+  char *fuhao = "(unsigned)";
+  sprintf(buf+position, "%s", fuhao);
+  position = position + 10;
 }
 
 void gen(char value) {
@@ -70,8 +77,13 @@ static void gen_rand_expr() {
     default: gen_rand_expr(); gen_rand_op(); 
             if(buf[position - 1] == '/') 
               gen_num(false);
-            else
-              gen_rand_expr(); 
+            else if(buf[position - 1] == '-') {
+                gen_str();
+                gen_rand_expr();
+              }
+            else {
+                gen_rand_expr();
+            }
             break;
   }
 }

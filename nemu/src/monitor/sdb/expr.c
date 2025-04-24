@@ -22,7 +22,7 @@
 #include "memory/vaddr.h"
 enum {
   TK_NOTYPE = 256, TK_EQ, TK_DECIMAL, TK_HEXADECIMAL, TK_REG,
-  TK_NEQ, TK_LOGICAND, TK_POINT,
+  TK_NEQ, TK_LOGICAND, TK_POINT,TK_UNSIGNED,
 
   /* TODO: Add more token types */
 
@@ -40,7 +40,7 @@ static struct rule {
   {"-", '-'},                               // 减号或者负号
   {"\\*", '*'},                             // 乘号或者指针
   {"/", '/'},                               // 除号
-  // {"\\(\\)"}
+  {"\\(unsigned\\)", TK_UNSIGNED},          // 无符号标识
   {"\\(", '('},                             // 左括号
   {"\\)", ')'},                             // 右括号
   {" +", TK_NOTYPE},                        // spaces
