@@ -345,6 +345,6 @@ word_t expr(char *e, bool *success) {
   }
   *success = true;
   word_t result = eval(0, valid_tokens-1);
-  
+  printf("%u",result);
   return result;
 }
