@@ -169,7 +169,7 @@ void sdb_mainloop() {
   // fclose(fp);
 
   word_t a = (4-15)/8+1;
-  word_t b = (word_t)(4-15)/8+1;
+  word_t b = ((unsigned)4-(unsigned)15)/(unsigned)8+(unsigned)1;
 
   printf("a=%d, b=%u\n",a,b);
 
