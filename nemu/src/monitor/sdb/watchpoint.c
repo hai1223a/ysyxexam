@@ -73,6 +73,7 @@ void add_monitor(char *args) {
   strcpy(p->args, args);
   if(!head) {
     head = p;
+    return;
   }
   WP *temp = head;
   while (temp->next)
