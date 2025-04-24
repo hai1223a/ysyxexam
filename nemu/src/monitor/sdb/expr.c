@@ -346,7 +346,5 @@ word_t expr(char *e, bool *success) {
   }
   *success = true;
   word_t result = eval(0, valid_tokens-1);
-  printf("%u",result);
   return result;
 }
-// 8/5-((1)-(4-(3*5))/8)+3-9/5/1-1
