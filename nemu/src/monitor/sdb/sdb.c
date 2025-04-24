@@ -168,11 +168,10 @@ void sdb_mainloop() {
   // }
   // fclose(fp);
 
-  word_t a = 2,c =3,d = 1;
-  word_t b = a-c;
-   a =b+d;
+  int a = (4-15)/8+1;
+  word_t b = (4-15)/8+1;
 
-  printf("a=%u, b=%u\n",a,b);
+  printf("a=%d, b=%u\n",a,b);
 
   for (char *str; (str = rl_gets()) != NULL; ) {
     char *str_end = str + strlen(str);
