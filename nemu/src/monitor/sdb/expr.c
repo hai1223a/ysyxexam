@@ -270,7 +270,7 @@ void ckeck_expression(int p, int q) {
       if(tokens[i].type != TK_POINT) {
         if(i == p || i == q)
           Assert(0, "四则运算表达式写错了");
-        else if(OP(i-1) || tokens[i-1].type == '(' || OP(i+1) || tokens[i-1].type == ')')
+        else if(OP(i-1) || tokens[i-1].type == '(' || OP(i+1) || tokens[i+1].type == ')')
                 Assert(0, "四则运算表达式子写错了");
       }
     } 
