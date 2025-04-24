@@ -167,9 +167,9 @@ void sdb_mainloop() {
   //   Assert((word_t)test_result == theory_result, "有问题");
   // }
   // fclose(fp);
-  word_t c = 0;
-  int a = (4-15)/8+1;
-  word_t b = c+(4-15)/8+1;
+
+  word_t a = (4-15)/8+1;
+  word_t b = (word_t)(4-15)/8+1;
 
   printf("a=%d, b=%u\n",a,b);
 
