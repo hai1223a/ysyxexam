@@ -76,6 +76,7 @@ void add_monitor(char *args) {
   WP *temp = head;
   while (temp->next)
   {
+    printf("%p\n", temp);
     temp = temp->next;
   }
   temp->next = p;
