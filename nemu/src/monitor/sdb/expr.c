@@ -73,7 +73,7 @@ void init_regex() {
   }
 }
 
-#define NUM_TOKENS 1001
+#define NUM_TOKENS 1100
 #define TOKEN_STR 32
 
 typedef struct token {
@@ -345,4 +345,5 @@ word_t expr(char *e, bool *success) {
   *success = true;
   word_t result = eval(0, valid_tokens-1);
   return result;
+
 }

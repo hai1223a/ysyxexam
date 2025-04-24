@@ -108,6 +108,10 @@ static int cmd_p(char *args){
   return 0;
 }
 
+static int cmd_w(char *args) {
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -119,7 +123,8 @@ static struct {
   { "si", "格式为si [N],让程序单步执行N条指令后暂停执行,当N没有给出时,缺省为1", cmd_si},
   { "info", "格式为info SUBCMD, info r表示打印寄存器状态, info w表示打印监视点信息", cmd_info},
   { "x", "格式为x N EXPR, 表示以表达式EXPR为基地址, 以16进制的格式打印连续的N个4字节数据", cmd_x},
-  { "p", "查看表达式的值", cmd_p},
+  { "p", "查看表达式的值, 格式为p EXPR, 将会打印表达式EXPR的十进制和十六进制表达", cmd_p},
+  { "w", "设置监视点, 格式为w EXPR, 当EXPR的值发生改变时将会中断程序", cmd_w}
 
   /* TODO: Add more commands */
 
@@ -159,7 +164,6 @@ void sdb_mainloop() {
     cmd_c(NULL);
     return;
   }
-
 
   // FILE *fp = fopen("/home/yunhai/ysyx-workbench/nemu/tools/gen-expr/data.txt", "r");
   // if (fp == NULL) assert(0);

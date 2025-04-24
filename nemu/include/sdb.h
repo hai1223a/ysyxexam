@@ -18,6 +18,8 @@
 
 #include <common.h>
 
+#define NR_WP 32
 word_t expr(char *e, bool *success);
+void scan_monitor(word_t *DATA, int *index);
 
 #endif
