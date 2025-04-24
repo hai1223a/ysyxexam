@@ -19,11 +19,25 @@
 // this is not consistent with uint8_t
 // but it is ok since we do not access the array directly
 static const uint32_t img [] = {
-  0x00000297,  // auipc t0,0
-  0x00028823,  // sb  zero,16(t0)
-  0x0102c503,  // lbu a0,16(t0)
-  0x00100073,  // ebreak (used as nemu_trap)
-  0xdeadbeef,  // some data
+  // 0x00000297,  // auipc t0,0
+  // 0x00028823,  // sb  zero,16(t0)
+  // 0x0102c503,  // lbu a0,16(t0)
+  // 0x00100073,  // ebreak (used as nemu_trap)
+  // 0xdeadbeef,  // some data
+  0x00100293,  // li t0, 1       (addi t0, zero, 1) 将 t0 赋值为 1
+  0x00000013,  // nop            (addi zero, zero, 0) 第 1 个 nop
+  0x00000013,  // nop            (addi zero, zero, 0) 第 2 个 nop
+  0x00000013,  // nop            (addi zero, zero, 0) 第 3 个 nop
+  0x00128293,  // addi t0, t0, 1 (t0 = t0 + 1)       给 t0 加 1
+  0x00000013,  // nop            (addi zero, zero, 0) 第 1 个 nop
+  0x00000013,  // nop            (addi zero, zero, 0) 第 2 个 nop
+  0x00000013,  // nop            (addi zero, zero, 0) 第 3 个 nop
+  0x00128293,  // addi t0, t0, 1 (t0 = t0 + 1)       给 t0 加 1
+  0x00000013,  // nop            (addi zero, zero, 0) 第 1 个 nop
+  0x00000013,  // nop            (addi zero, zero, 0) 第 2 个 nop
+  0x00000013,  // nop            (addi zero, zero, 0) 第 3 个 nop
+  0x00128293,  // addi t0, t0, 1 (t0 = t0 + 1)       给 t0 加 1
+  0x00100073,  // ebreak         (用于触发 NEMU trap)
 };
 
 static void restart() {

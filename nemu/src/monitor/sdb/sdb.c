@@ -109,6 +109,7 @@ static int cmd_p(char *args){
 }
 
 static int cmd_w(char *args) {
+  add_monitor(args);
   return 0;
 }
 
