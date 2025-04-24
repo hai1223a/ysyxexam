@@ -24,13 +24,17 @@ static const uint32_t img [] = {
   // 0x0102c503,  // lbu a0,16(t0)
   // 0x00100073,  // ebreak (used as nemu_trap)
   // 0xdeadbeef,  // some data
-
-  0x00000097,  // li t0, 1       (addi t0, zero, 1) 将 t0 赋值为 1
-  0x00108093,  // addi t0, t0, 1 (t0 = t0 + 1)       给 t0 加 1
-  0x00108093,  // addi t0, t0, 1 (t0 = t0 + 1)       给 t0 加 1
-  0x00108093,  // addi t0, t0, 1 (t0 = t0 + 1)       给 t0 加 1
-  0x00100073,  // ebreak         (用于触发 NEMU trap)
-  0xdeadbeef,  // some data
+  0x00000297,  // auipc t0,0
+  0x00000097,  // auipc t0,0
+  0x00000097,  // auipc t0,0
+  0x00001297,  // auipc t0,0
+  0x00000097,  // auipc t0,0
+  0x00000097,  // auipc t0,0
+  0x00000297,  // auipc t0,0
+  0x00000097,  // auipc t0,0
+  0x00000097,  // auipc t0,0
+  0x00001297,  // auipc t0,0
+  0x00100073,  // ebreak (used as nemu_trap)
 };
 
 static void restart() {
