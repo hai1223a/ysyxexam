@@ -72,7 +72,7 @@ void init_regex() {
   }
 }
 
-#define NUM_TOKENS 32
+#define NUM_TOKENS 1001
 #define TOKEN_STR 32
 
 typedef struct token {

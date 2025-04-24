@@ -158,13 +158,14 @@ void sdb_mainloop() {
   if (fp == NULL) assert(0);
 
   word_t theory_result;
-  char expression[65536]; // 假设表达式的长度不会超过 255
+  char expression[1001]; // 假设表达式的长度不会超过 255
 
   // 按照 "%u %s\n" 格式读取文件内容，直到文件结束
   while (fscanf(fp, "%u %[^\n]", &theory_result, expression) != EOF) {
     printf("expression =%s\n",expression);
     int test_result = cmd_p(expression);  
     printf("test_result: %u, theory_result: %u\n\n", (word_t)test_result, theory_result);
+    Assert((word_t)test_result == theory_result, "有问题");
   }
 
   fclose(fp);

@@ -59,7 +59,7 @@ void gen_rand_op() {
   }
 }
 static void gen_rand_expr() {
-  if(position > 65534) {
+  if(position >= 1000) {
     gen_num(true);
     return;
   }
@@ -110,7 +110,7 @@ int main(int argc, char *argv[]) {
     assert(fp != NULL);
     fprintf(fp, "%u %s\n", result, buf);
     fclose(fp);
-    printf("%u %s\n", result, buf);
+    // printf("%u %s\n", result, buf);
   }
   return 0;
 }
