@@ -100,7 +100,7 @@ static int cmd_p(char *args){
   word_t result = 0;
   if(args) result = expr(args, &success);
   if(!success) assert(0);
-  printf("%u\n",result);
+  printf("十进制:%u\t十六进制:%x\n",result, result);
   return 0;
 }
 
