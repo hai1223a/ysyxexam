@@ -72,6 +72,9 @@
         "isa.h": "c",
         "utils.h": "c",
         "chrono": "c",
-        "format": "c"
+        "format": "c",
+        "stdint.h": "c",
+        "common.h": "c",
+        "time.h": "c"
     }
 }

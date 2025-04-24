@@ -19,20 +19,61 @@
 #include <time.h>
 #include <assert.h>
 #include <string.h>
-
+#include <stdbool.h>
 // this should be enough
 static char buf[65536] = {};
 static char code_buf[65536 + 128] = {}; // a little larger than `buf`
 static char *code_format =
 "#include <stdio.h>\n"
 "int main() { "
-"  unsigned result = %s; "
+"  unsigned int result = %s; "
 "  printf(\"%%u\", result); "
 "  return 0; "
 "}";
 
+int position;
+
+uint32_t choose(uint32_t max_value) {
+  return (uint32_t)rand()%max_value;
+}
+
+void gen_num(bool exsit_zero) {
+  if(exsit_zero)
+    buf[position++] = '0' + rand()%10;
+  else
+    buf[position++] = '1' + rand()%9;
+
+}
+
+void gen(char value) {
+  buf[position++] = value;
+}
+
+void gen_rand_op() {
+  switch (choose(4))
+  {
+    case 0: buf[position++] = '+';break;
+    case 1: buf[position++] = '-';break;
+    case 2: buf[position++] = '*';break;
+    case 3: buf[position++] = '/';break;
+  }
+}
 static void gen_rand_expr() {
-  buf[0] = '\0';
+  if(position > 65534) {
+    gen_num(true);
+    return;
+  }
+  if(choose(5) == 0) gen(' ');
+  switch (choose(3)) {
+    case 0: gen_num(true); break;
+    case 1: gen('('); gen_rand_expr(); gen(')'); break;
+    default: gen_rand_expr(); gen_rand_op(); 
+            if(buf[position - 1] == '/') 
+              gen_num(false);
+            else
+              gen_rand_expr(); 
+            break;
+  }
 }
 
 int main(int argc, char *argv[]) {
@@ -44,7 +85,9 @@ int main(int argc, char *argv[]) {
   }
   int i;
   for (i = 0; i < loop; i ++) {
+    position = 0;
     gen_rand_expr();
+    buf[position] = '\0';
 
     sprintf(code_buf, code_format, buf);
 
@@ -59,10 +102,14 @@ int main(int argc, char *argv[]) {
     fp = popen("/tmp/.expr", "r");
     assert(fp != NULL);
 
-    int result;
-    ret = fscanf(fp, "%d", &result);
+    uint32_t result;
+    ret = fscanf(fp, "%u", &result);
     pclose(fp);
 
+    fp = fopen("data.txt", "a");
+    assert(fp != NULL);
+    fprintf(fp, "%u %s\n", result, buf);
+    fclose(fp);
     printf("%u %s\n", result, buf);
   }
   return 0;

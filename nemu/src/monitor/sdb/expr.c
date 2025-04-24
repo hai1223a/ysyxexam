@@ -159,10 +159,10 @@ static bool make_token(char *e, int *valid_tokens) {
     }
   }
 
-  for (int i = 0; i < 32; i++)
-  {
-    printf("tokens.type = %d, tokens.str = %s\t", tokens[i].type, tokens[i].str);
-  }
+  // for (int i = 0; i < 32; i++)
+  // {
+  //   printf("tokens.type = %d, tokens.str = %s\t", tokens[i].type, tokens[i].str);
+  // }
 
   *valid_tokens = tokens_position;
   return true;
@@ -279,16 +279,16 @@ void ckeck_expression(int p, int q) {
 // p: 表达式开始的位置指示
 // q: 表达式结束的位置指示
 // 例如:p = 0, q = 9, 表示由10个tokens组成的长表达式
-int eval(int p, int q){
+word_t eval(int p, int q){
   if (p > q) {
     Assert(0, "输入表达式指示位置违规");
   }
   else if (p == q) {
     if(tokens[p].type == TK_DECIMAL){
-      return atoi(tokens[p].str);
+      return (word_t)atoi(tokens[p].str);
     }
     else if(tokens[p].type == TK_HEXADECIMAL){
-      int number;
+      word_t number;
       sscanf(tokens[p].str, "%i", &number);
       return number;
     }
@@ -296,7 +296,7 @@ int eval(int p, int q){
       bool success;
       word_t value = isa_reg_str2val(tokens[p].str, &success);
       Assert(success, "取寄存器的表示错误了");
-      return (int) value;
+      return value;
     }
     else{
       Assert(0, "表达式违规");
@@ -308,7 +308,7 @@ int eval(int p, int q){
   else {
     ckeck_expression(p, q);
     int op = find_main_op(p,q);
-    int val1 = 0,val2;
+    word_t val1 = 0,val2;
     int is_point = 1;
     if(op > p) {
       val1 = eval(p, op - 1);
@@ -336,29 +336,13 @@ int eval(int p, int q){
   }
 }
 
-
 word_t expr(char *e, bool *success) {
   int valid_tokens = 0;
   if (!make_token(e, &valid_tokens)) {
     *success = false;
     return 0;
   }
-  int result = eval(0, valid_tokens-1);
-  printf("\n%d\n", result);
-
-  // char *str = "0123";
-  // int number;
-  // sscanf(str, "%i", &number);
-  // printf("\n%x", number);
-  // int negetive[32];
-  // int position = 0;
-
-  // if(check_parentheses(0, valid_tokens-1)) printf("\nhit\n");
-  // ckeck_expression(0, valid_tokens-1, negetive, &position);
-  // for (int i = 0; i < position; i++)
-  // {
-  //   printf("negetive[%d] = %d", i, negetive[i]);
-  // }
+  word_t result = eval(0, valid_tokens-1);
   
-  return 0;
+  return result;
 }
