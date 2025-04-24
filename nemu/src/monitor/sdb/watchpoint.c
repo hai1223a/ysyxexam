@@ -88,7 +88,7 @@ void scan_monitor(word_t *DATA, int *index) {
   if(!head) return;
   WP *p = head;
   bool success = true;
-  while (p->next)
+  while (p->next || p)
   {
     *(index++) = p->NO;
     *(DATA + (p->NO)) = expr(p->args, &success);
