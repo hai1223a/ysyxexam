@@ -95,11 +95,12 @@ static int cmd_x(char *args){
   return 0;
 }
 
-static int cmd_expr(char *args){
+static int cmd_p(char *args){
   bool success = true;
-  if(args) expr(args, &success);
-  // if(!success) assert(0);
-  return 0;
+  word_t result = 0;
+  if(args) result = expr(args, &success);
+  if(!success) assert(0);
+  return (int)result;
 }
 
 static struct {
@@ -113,7 +114,7 @@ static struct {
   { "si", "格式为si [N],让程序单步执行N条指令后暂停执行,当N没有给出时,缺省为1", cmd_si},
   { "info", "格式为info SUBCMD, info r表示打印寄存器状态, info w表示打印监视点信息", cmd_info},
   { "x", "格式为x N EXPR, 表示以表达式EXPR为基地址, 以16进制的格式打印连续的N个4字节数据", cmd_x},
-  { "expr", "我就测试一下表达式", cmd_expr},
+  { "p", "我就测试一下表达式", cmd_p},
 
   /* TODO: Add more commands */
 
@@ -153,6 +154,19 @@ void sdb_mainloop() {
     cmd_c(NULL);
     return;
   }
+  FILE *fp = fopen("/home/yunhai/ysyx-workbench/nemu/tools/gen-expr/data.txt", "r");
+  if (fp == NULL) assert(0);
+
+  word_t theory_result;
+  char expression[65536]; // 假设表达式的长度不会超过 255
+
+  // 按照 "%u %s\n" 格式读取文件内容，直到文件结束
+  while (fscanf(fp, "%u %s\n", &theory_result, expression) != EOF) {
+    int test_result = cmd_p(expression);  
+    printf("test_result: %u, theory_result: %u\n", (word_t)test_result, theory_result);
+  }
+
+  fclose(fp);
 
   for (char *str; (str = rl_gets()) != NULL; ) {
     char *str_end = str + strlen(str);
