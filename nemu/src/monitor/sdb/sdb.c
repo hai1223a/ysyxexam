@@ -100,7 +100,7 @@ static int cmd_p(char *args){
   word_t result = 0;
   if(args) result = expr(args, &success);
   if(!success) assert(0);
-  printf("\n%u\n",result);
+  printf("%u\n",result);
   return 0;
 }
 
