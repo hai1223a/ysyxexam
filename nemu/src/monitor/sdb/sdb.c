@@ -160,6 +160,8 @@ void sdb_mainloop() {
     return;
   }
 
+  int a[3] = {0};
+  printf("%d", a[4]);
   // FILE *fp = fopen("/home/yunhai/ysyx-workbench/nemu/tools/gen-expr/data.txt", "r");
   // if (fp == NULL) assert(0);
   // word_t theory_result;
