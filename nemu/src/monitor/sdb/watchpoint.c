@@ -30,8 +30,8 @@ static WP *head = NULL, *free_ = NULL;
 WP* new_wp() {
   Assert(free_->next, "监控点已经用完了");
   WP *p = free_;
-  p->next = NULL;
   free_ = free_->next;
+  p->next = NULL;
   return p;
 }
 
