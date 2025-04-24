@@ -84,13 +84,17 @@ static int cmd_info(char *args) {
 
 static int cmd_x(char *args){
   int num_word;
-  uint32_t base_addr;
-  sscanf(args, "%d 0x%x", &num_word, &base_addr);
+  char base_addr[1100] = {};
+  sscanf(args, "%d %[^\n]", &num_word, base_addr);
+  bool success = true;
+  word_t result = 0;
+  result = expr(base_addr, &success);
+  if(!success) assert(0);
   printf("Address  Data\n");
   for (int i = 0; i < num_word; i++)
   {
-    printf("%08x:0x%08x\n", base_addr, vaddr_read(base_addr, 4));
-    base_addr += 4;
+    printf("%08x:0x%08x\n", result, vaddr_read(result, 4));
+    result += 4;
   }
   return 0;
 }
