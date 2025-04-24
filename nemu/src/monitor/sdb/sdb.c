@@ -168,9 +168,8 @@ void sdb_mainloop() {
   // }
   // fclose(fp);
 
-  word_t c = 0;
   word_t a = (( ( 8/5))- ((1)-(4-(3*5))/8)+ 3-9/5/1- (((1))));
-  word_t b = c+(c+2-3);
+  word_t b = ((word_t)2-(word_t)3)+(word_t)1;
 
   printf("a=%u, b=%u\n",a,b);
 
