@@ -169,7 +169,8 @@ void sdb_mainloop() {
   // fclose(fp);
 
   word_t a = 2,c =3,d = 1;
-  word_t b = a-c+d;
+  word_t b = a-c;
+   a = a+d;
 
   printf("a=%u, b=%u\n",a,b);
 
