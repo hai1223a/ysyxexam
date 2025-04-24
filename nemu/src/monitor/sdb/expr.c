@@ -234,15 +234,18 @@ bool check_parentheses(int p, int q) {
     if(tokens[i].type == '(')
     {
       push_stack(&backet_stack, i);
+      printf("%d  ",backet_stack.top);
     } 
     else if(tokens[i].type == ')') 
     {
       if(i == q && get_stack_top(&backet_stack) == p)  hit = true;
       pop_stack(&backet_stack);
+      printf("%d  ",backet_stack.top);
     }
     else
       continue;
   }
+
   Assert(backet_stack.top == 0, "左括号太多了");
   return hit;
 }
