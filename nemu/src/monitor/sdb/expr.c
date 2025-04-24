@@ -205,7 +205,7 @@ int find_main_op(int p, int q) {
 
 typedef struct stack
 {
-  int data[16];
+  int data[256];
   int top;
 } Stack;
 
