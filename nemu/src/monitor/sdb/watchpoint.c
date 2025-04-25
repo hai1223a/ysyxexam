@@ -47,17 +47,22 @@ void free_wp(WP *wp) {
   if(p) {
     p_pre = p;
     p = p->next;
-    while (p)
+  }
+  else
+  {
+    p_pre = NULL;
+    p = free_;
+  }
+  while (p)
+  {
+    if(p->NO > wp->NO)
     {
-      if(p->NO > wp->NO)
-      {
-        wp->next = p_pre->next;
-        p_pre->next = wp;
-        break;
-      }
-      p_pre = p;
-      p = p->next;      
+      wp->next = p_pre->next;
+      p_pre->next = wp;
+      break;
     }
+    p_pre = p;
+    p = p->next;      
   }
   if(!p) {
     p_pre->next = wp;
