@@ -69,7 +69,7 @@ void init_wp_pool() {
   free_ = wp_pool;
 }
 
-void add_monitor(char *args) {
+void add_watchpoint(char *args) {
   WP *p = new_wp();
   
   strcpy(p->args, args);
@@ -88,6 +88,16 @@ void add_monitor(char *args) {
   temp->next = p;
   printf("%p\n", p);
   printf("free_ = %p", free_);
+}
+
+void watchpoint_display() {
+  WP *p = head;
+  printf("序号\t表达式\t指针\n");
+  while (p)
+  {
+    printf("%d\t%s\t%p\n", p->NO, p->args, p);
+    p = p->next;
+  }
 }
 
 void scan_monitor(word_t *DATA, int *index) {

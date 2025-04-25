@@ -76,7 +76,7 @@ static int cmd_info(char *args) {
   }
   else if (!strcmp(args, "w"))
   {
-    /* code */
+    watchpoint_display();
   }
   
   return 0;
@@ -109,7 +109,7 @@ static int cmd_p(char *args){
 }
 
 static int cmd_w(char *args) {
-  add_monitor(args);
+  add_watchpoint(args);
   return 0;
 }
 
