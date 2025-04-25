@@ -87,6 +87,7 @@ void add_monitor(char *args) {
   }
   temp->next = p;
   printf("%p\n", p);
+  printf("free_ = %p", free_);
 }
 
 void scan_monitor(word_t *DATA, int *index) {

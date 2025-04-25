@@ -18,7 +18,7 @@
 
 #include <common.h>
 
-#define NR_WP 32
+#define NR_WP 4
 word_t expr(char *e, bool *success);
 void scan_monitor(word_t *DATA, int *index);
 void add_monitor(char *args);
