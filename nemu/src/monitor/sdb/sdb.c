@@ -111,7 +111,7 @@ static int cmd_p(char *args){
 static int cmd_w(char *args) {
   if (!args)
   {
-    printf("请输入要监控的表达式");
+    printf("请输入要监控的表达式\n");
     return 0;
   }
   add_watchpoint(args);
@@ -121,7 +121,7 @@ static int cmd_w(char *args) {
 static int cmd_d(char *args) {
   if (!args)
   {
-    printf("请输入要删除的监控点序号");
+    printf("请输入要删除的监控点序号\n");
     return 0;
   }
   int number = 0;
