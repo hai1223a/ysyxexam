@@ -36,23 +36,31 @@ WP* new_wp() {
 }
 
 void free_wp(WP *wp) {
-  int NO = wp->NO;
   WP *p = free_;
-  while (p->next)
+  WP *p_pre = NULL;
+  while (p)
   {
-    if(!NO)
-    {
-      wp->next = p;
-      free_ = wp;
-      break;
-    }
-    if(p->NO + 1 == NO)
-    {
-      wp->next = p->next;
-      p->next = wp;
-      break;
-    }
+    if(p->NO == NR_WP-1) break;
     p = p->next;
+    /* code */
+  }
+  if(p) {
+    p_pre = p;
+    p = p->next;
+    while (p)
+    {
+      if(p->NO > wp->NO)
+      {
+        wp->next = p_pre->next;
+        p_pre->next = wp;
+        break;
+      }
+      p_pre = p;
+      p = p->next;      
+    }
+  }
+  if(!p) {
+    p_pre->next = wp;
   }
 }
 
@@ -75,19 +83,14 @@ void add_watchpoint(char *args) {
   strcpy(p->args, args);
   if(!head) {
     head = p;
-    printf("%p\n", head);
     return;
   }
   WP *temp = head;
-  printf("%p\n", temp);
   while (temp->next)
   {
     temp = temp->next;
-    printf("%p\n", temp);
   }
   temp->next = p;
-  printf("%p\n", p);
-  printf("free_ = %p", free_);
 }
 
 void watchpoint_display() {
@@ -97,6 +100,13 @@ void watchpoint_display() {
   {
     printf("%d\t%s\t%p\n", p->NO, p->args, p);
     p = p->next;
+  }
+  WP *n = free_;
+  printf("序号\t指针\n");
+  while (n)
+  {
+    printf("%d\t%p\n", n->NO, n);
+    n = n->next;
   }
 }
 
@@ -121,6 +131,7 @@ void delete_watchpoint(int number) {
     p_pre = p;
     p = p->next;
   }
+  free_wp(p);
 }
 
 void scan_monitor(word_t *DATA, int *index) {
