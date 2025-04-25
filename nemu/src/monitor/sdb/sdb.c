@@ -113,6 +113,13 @@ static int cmd_w(char *args) {
   return 0;
 }
 
+static int cmd_d(char *args) {
+  int number = 0;
+  if(sscanf(args, "%d", &number) == 1)  delete_watchpoint(number);
+  else  printf("你打的监视点序号表达式不对\n");
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -125,7 +132,8 @@ static struct {
   { "info", "格式为info SUBCMD, info r表示打印寄存器状态, info w表示打印监视点信息", cmd_info},
   { "x", "格式为x N EXPR, 表示以表达式EXPR为基地址, 以16进制的格式打印连续的N个4字节数据", cmd_x},
   { "p", "查看表达式的值, 格式为p EXPR, 将会打印表达式EXPR的十进制和十六进制表达", cmd_p},
-  { "w", "设置监视点, 格式为w EXPR, 当EXPR的值发生改变时将会中断程序", cmd_w}
+  { "w", "设置监视点, 格式为w EXPR, 当EXPR的值发生改变时将会中断程序", cmd_w},
+  { "d", "删除监视点, 格式为d N, 表示删除序号为N的监视点", cmd_d},
 
   /* TODO: Add more commands */
 

@@ -100,6 +100,29 @@ void watchpoint_display() {
   }
 }
 
+void delete_watchpoint(int number) {
+  WP *p = head;
+  WP *p_pre = NULL;
+  while (p)
+  {
+    if(p->NO == number)
+    {
+      if(p_pre) 
+      {
+        p_pre->next = p->next;
+      }
+      else 
+      {
+        head = p->next;
+      }
+      p->next = NULL;
+      break;
+    }
+    p_pre = p;
+    p = p->next;
+  }
+}
+
 void scan_monitor(word_t *DATA, int *index) {
   if(!head) return;
   WP *p = head;
