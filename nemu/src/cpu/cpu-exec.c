@@ -39,8 +39,8 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
-  word_t data_pre[NR_WP] = {0};
-  word_t data_new[NR_WP] = {0};
+  static word_t data_pre[NR_WP] = {0};
+  static word_t data_new[NR_WP] = {0};
   int index[NR_WP] = {0};
   scan_watchpoint(data_new, index);
   printf("data_pre == %u, data_new == %u, index == %d", data_pre[0], data_new[0], index[0]);

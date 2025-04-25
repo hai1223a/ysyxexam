@@ -145,7 +145,7 @@ void scan_watchpoint(word_t *DATA, int *index) {
   bool success = true;
   while (p)
   {
-    *(index++) = p->NO;
+    *(index + p->NO) = 1;
     *(DATA + (p->NO)) = expr(p->args, &success);
     Assert(success, "表达式计算失败");
     p = p->next;
