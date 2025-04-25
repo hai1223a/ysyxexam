@@ -20,7 +20,7 @@
 
 #define NR_WP 6
 word_t expr(char *e, bool *success);
-void scan_monitor(word_t *DATA, int *index);
+void scan_watchpoint(word_t *DATA, int *index);
 void watchpoint_display();
 void add_watchpoint(char *args);
 void delete_watchpoint(int number);

@@ -139,11 +139,11 @@ void delete_watchpoint(int number) {
   free_wp(p);
 }
 
-void scan_monitor(word_t *DATA, int *index) {
+void scan_watchpoint(word_t *DATA, int *index) {
   if(!head) return;
   WP *p = head;
   bool success = true;
-  while (p->next || p)
+  while (p)
   {
     *(index++) = p->NO;
     *(DATA + (p->NO)) = expr(p->args, &success);
