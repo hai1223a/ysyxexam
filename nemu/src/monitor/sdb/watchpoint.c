@@ -28,7 +28,7 @@ static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
 
 WP* new_wp() {
-  Assert(free_->next, "监控点已经用完了");
+  Assert(free_, "监控点已经用完了");
   WP *p = free_;
   free_ = free_->next;
   p->next = NULL;
@@ -74,8 +74,10 @@ void add_monitor(char *args) {
   if(!head) {
     head = p;
     return;
+    printf("%p\n", head);
   }
   WP *temp = head;
+  printf("%p\n", temp);
   while (temp->next)
   {
     printf("%p\n", temp);

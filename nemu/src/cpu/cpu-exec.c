@@ -39,23 +39,23 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
-  word_t data_pre[NR_WP] = {0};
-  word_t data_new[NR_WP] = {0};
-  int index[NR_WP] = {0};
+  // word_t data_pre[NR_WP] = {0};
+  // word_t data_new[NR_WP] = {0};
+  // int index[NR_WP] = {0};
   
-  scan_monitor(data_new, index);
-  for (int i = 0; i < NR_WP; i++)
-  {
-    if(index[i])
-    {
-      if(data_new[i] != data_pre[i])
-      {
-        nemu_state.state = NEMU_STOP;
-        printf("监控点%d发生了变化", i);
-        data_pre[i] = data_new[i];
-      }
-    }
-  }
+  // scan_monitor(data_new, index);
+  // for (int i = 0; i < NR_WP; i++)
+  // {
+  //   if(index[i])
+  //   {
+  //     if(data_new[i] != data_pre[i])
+  //     {
+  //       nemu_state.state = NEMU_STOP;
+  //       printf("监控点%d发生了变化", i);
+  //       data_pre[i] = data_new[i];
+  //     }
+  //   }
+  // }
 }
 
 static void exec_once(Decode *s, vaddr_t pc) {
