@@ -42,9 +42,8 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   word_t data_pre[NR_WP] = {0};
   word_t data_new[NR_WP] = {0};
   int index[NR_WP] = {0};
-  
   scan_watchpoint(data_new, index);
-  printf("data_pre == %u, data_new == %u", data_pre[0], data_new[0]);
+  printf("data_pre == %u, data_new == %u, index == %d", data_pre[0], data_new[0], index[0]);
   for (int i = 0; i < NR_WP; i++)
   {
     if(index[i])
