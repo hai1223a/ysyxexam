@@ -71,21 +71,22 @@ void init_wp_pool() {
 
 void add_monitor(char *args) {
   WP *p = new_wp();
+  
   strcpy(p->args, args);
   if(!head) {
     head = p;
     printf("%p\n", head);
     return;
-    
   }
   WP *temp = head;
   printf("%p\n", temp);
   while (temp->next)
   {
-    printf("%p\n", temp);
     temp = temp->next;
+    printf("%p\n", temp);
   }
   temp->next = p;
+  printf("%p\n", p);
 }
 
 void scan_monitor(word_t *DATA, int *index) {
