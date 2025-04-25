@@ -109,11 +109,21 @@ static int cmd_p(char *args){
 }
 
 static int cmd_w(char *args) {
+  if (!args)
+  {
+    printf("请输入要监控的表达式");
+    return 0;
+  }
   add_watchpoint(args);
   return 0;
 }
 
 static int cmd_d(char *args) {
+  if (!args)
+  {
+    printf("请输入要删除的监控点序号");
+    return 0;
+  }
   int number = 0;
   if(sscanf(args, "%d", &number) == 1)  delete_watchpoint(number);
   else  printf("你打的监视点序号表达式不对\n");
