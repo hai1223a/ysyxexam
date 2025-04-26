@@ -60,7 +60,23 @@ make sim #执行Verilator仿真并查看波形
 * [*] 已完成 +
 [source,bash]
 cd /home/yunhai/ysyx-workbench/pre_study/spdt 
-`make run` 运行NVBorad
+make run #运行NVBorad
+
+[red]#*必做题*# _将流水灯接入NVBoard_ ::
+* [*] 已完成 +
+[source,bash]
+cd /home/yunhai/ysyx-workbench/pre_study/led 
+make run #运行NVBorad
+
+[red]#*必做题*# _理解RTL仿真的行为(2)_ ::
+* [ ] 未完成(不影响) +
+
+[green]#*选做题*# _verilator进阶学习_ ::
+* [*] 已完成 +
+[source,bash]
+cd /home/yunhai/ysyx-workbench/pre_study/alu_sv
+make sim #执行Verilator仿真并查看波形
+
 
 
 
