@@ -1,0 +1,94 @@
+== 如何科学地提问
+[red]#*必做题*# _填写通识问卷_ ::
+* [*] 已完成 +
+
+[red]#*必做题*# _了解"一生一芯"简历规范_ ::
+* [ ] 未完成(不影响) +
+
+[red]#*必做题*# _阅读“提问的智慧”(一生一芯版)_ ::
+* [ ] 未完成(有影响) +
+
+[red]#*必做题*# _大佬三连: STFW, RTFM, RTFSC_ ::
+* [ ] 未完成(有影响) +
+
+== Linux系统安装和基本使用
+[red]#*必做题*# _安装一个Linux操作系统_ ::
+* [*] 已完成 +
+<<PA0>>
+
+[red]#*必做题*# _获取"一生一芯"框架代码_ ::
+* [*] 已完成 +
+
+[red]#*必做题*# _学习Linux基本使用_ ::
+* [ ] 未完成(有影响) +
+<<The Missing Semester of Your CS Education>>
+
+== 复习C语言
+[red]#*必做题*# _C语言入门必做题_ ::
+* [*] 已完成 +
+<<Learn C the hard way>>
+
+== 搭建Verilator仿真环境
+[red]#*必做题*# _认识verilator_ ::
+* [*] 已完成 +
+
+[red]#*必做题*# _安装verilator_ ::
+* [*] 已完成 +
+
+[red]#*必做题*# _运行示例_ ::
+* [*] 已完成 +
+
+[red]#*必做题*# _对双控开关模块进行仿真_ ::
+* [*] 已完成 +
+[source,bash]
+cd /home/yunhai/ysyx-workbench/pre_study/spdt
+make sim #执行Verilator仿真并查看波形
+
+[red]#*必做题*# _理解RTL仿真的行为_ ::
+* [ ] 未完成(不影响) +
+
+[red]#*必做题*# _生成波形并查看_ ::
+* [*] 已完成 +
+
+[red]#*必做题*# _一键仿真_ ::
+* [*] 已完成 +
+
+[red]#*必做题*# _运行NVBoard示例_ ::
+* [*] 已完成 +
+
+[red]#*必做题*# _在NVBoard上实现双控开关_ ::
+* [*] 已完成 +
+[source,bash]
+cd /home/yunhai/ysyx-workbench/pre_study/spdt 
+`make run` 运行NVBorad
+
+
+
+
+== PA0
+=== Preparation
+=== First Exploration with GNU/Linux
+=== Installing Tools
+=== Configuring vim
+=== More Exploration
+[red]#*必做题*# _Write a "Hello World" program under GNU/Linux_ ::
+* [*] 已完成 +
+link:/home/yunhai/ysyx-workbench/pre_study/PA0/hello.c[点击跳转C文件]
+
+[red]#*必做题*# _Write a Makefile to compile the "Hello World" program_ ::
+* [*] 已完成 +
+link:/home/yunhai/ysyx-workbench/pre_study/PA0/Makefile[点击跳转Makefile文件]
+
+[red]#*必做题*# _Learn to use GDB_ ::
+* [*] 已完成 +
+
+=== Getting Source Code for PAs
+[red]#*必做题*# _在github上添加ssh key_ ::
+* [*] 已完成 +
+
+[red]#*必做题*# _请仔细阅读提问的智慧和别像弱智一样提问并写一个800字的读后感_ ::
+* [ ] 未完成(有影响) +
+
+== The Missing Semester of Your CS Education
+
+== Learn C the hard way
