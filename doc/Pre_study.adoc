@@ -1,3 +1,9 @@
+= 一生一芯预学习任务目标记录
+Doc Writer yunhaigushu;
+v1.0, 2025-04-11
+:toc:
+:toc-title: Directory
+
 == 如何科学地提问
 [red]#*必做题*# _填写通识问卷_ ::
 * [*] 已完成 +
@@ -9,7 +15,7 @@
 * [ ] 未完成(有影响) +
 
 [red]#*必做题*# _大佬三连: STFW, RTFM, RTFSC_ ::
-* [ ] 未完成(有影响) +
+* [*] 已完成 +
 
 == Linux系统安装和基本使用
 [red]#*必做题*# _安装一个Linux操作系统_ ::
@@ -77,9 +83,22 @@ make run #运行NVBorad
 cd /home/yunhai/ysyx-workbench/pre_study/alu_sv
 make sim #执行Verilator仿真并查看波形
 
+== 数字电路基础实验
+[red]#*必做题*# _借助NVBoard完成数字电路实验_ ::
+* [*] 已完成 +
+<<point1,数字逻辑与计算机组成课程实验>>
 
+[red]#*必做题*# _评估电路综合后的时序_ ::
+* [*] 已完成 +
+完成了对南大数电实验中几个时序电路的评估,这个项目在没有diy的前提下使用起来比较简单
 
+== 完成PA1
+[red]#*必做题*# _阅读PA讲义中的FAQ(常见问题)_ ::
+* [*] 已完成 +
 
+[red]#*必做题*# _完成PA1_ ::
+* [*] 已完成 +
+<<PA1>>
 
 == PA0
 === Preparation
@@ -103,8 +122,119 @@ link:/home/yunhai/ysyx-workbench/pre_study/PA0/Makefile[点击跳转Makefile文�
 * [*] 已完成 +
 
 [red]#*必做题*# _请仔细阅读提问的智慧和别像弱智一样提问并写一个800字的读后感_ ::
-* [ ] 未完成(有影响) +
+* [*] 已完成 +
 
 == The Missing Semester of Your CS Education
+=== 课程概览与shell
+[red]#*必做题*# _课后练习_ ::
+* [*] 已完成 +
+
+=== Shell 工具和脚本
+[red]#*必做题*# _课后练习_ ::
+* [*] 已完成 +
+到文件夹查看/home/yunhai/ysyx-workbench/pre_study/CS_education
+[source,bash]
+ls *.html | xargs -d '\n' zip -r a1.zip
+
+=== 编辑器 (Vim)
+[red]#*必做题*# _课后练习_ ::
+* [ ] 未完成(不影响) +
+
+=== 数据整理
+[red]#*必做题*# _课后练习_ ::
+* [ ] 未完成(有影响) +
+
+=== 命令行环境
+[red]#*必做题*# _课后练习_ ::
+* [ ] 未完成(有影响) +
+
+=== 版本控制(Git)
+[red]#*必做题*# _课后练习_ ::
+* [ ] 未完成(有影响) +
 
 == Learn C the hard way
+=== ex0-ex18
+[red]#*必做题*# _附加题_ ::
+* [*] 已完成 +
+代码见/home/yunhai/ysyx-workbench/pre_study/Learn_C,使用make ex01等即可自动化测试
+
+=== ex32,33,42,44
+[red]#*必做题*# _附加题_ ::
+* [ ] 未完成(不影响) +
+需要不少中间章节的东西,偷个懒,我学了只要他不让我跑代码就不成问题
+
+[#point1]
+== 数字逻辑与计算机组成课程实验
+=== 实验一 选择器
+[red]#*必做题*# _上板实验: 二位四选一选择器 :
+* [*] 已完成 +
+[source,bash]
+cd /home/yunhai/ysyx-workbench/pre_study/mux
+make run
+
+=== 实验二 译码器和编码器
+
+=== 实验三 加法器与ALU
+
+=== 实验六 移位寄存器及桶形移位器
+
+=== 实验七 状态机及键盘输入
+
+
+== PA1
+=== 在开始愉快的PA之旅之前
+=== 开天辟地的篇章
+[red]#*必做题*# _尝试理解计算机如何计算_ ::
+* [*] 已完成 +
+
+[red]#*必做题*# _从状态机视角理解程序运行_ ::
+* [ ] 未完成(不影响) +
+
+=== RTFSC
+[red]#*必做题*# _实现x86的寄存器结构体_ ::
+* [ ] 未完成(不影响) +
+
+[red]#*必做题*# _理解框架代码_ ::
+* [*] 已完成 +
+
+[red]#*必做题*# _优美地退出_ ::
+* [*] 已完成 +
+
+=== 基础设施: 简易调试器
+[red]#*必做题*# _实现单步执行, 打印寄存器, 扫描内存_ ::
+* [*] 已完成 +
+link:/home/yunhai/ysyx-workbench/nemu/src/monitor/sdb/sdb.c[点击跳转文件]
+
+=== 表达式求值
+[red]#*必做题*# _实现算术表达式的词法分析_ ::
+* [*] 已完成 +
+link:/home/yunhai/ysyx-workbench/nemu/src/monitor/sdb/sdb.c[点击跳转文件]
+
+[red]#*必做题*# _实现算术表达式的递归求值_ ::
+* [*] 已完成 +
+link:/home/yunhai/ysyx-workbench/nemu/src/monitor/sdb/expr.c[点击跳转文件]
+
+[red]#*必做题*# _实现表达式生成器_ ::
+* [*] 已完成 +
+link:/home/yunhai/ysyx-workbench/nemu/tools/gen-expr/gen-expr.c[点击跳转文件]
+
+=== 监控点
+[red]#*必做题*# _扩展表达式求值的功能_ ::
+* [*] 已完成 +
+link:/home/yunhai/ysyx-workbench/nemu/src/monitor/sdb/expr.c[点击跳转文件]
+
+[red]#*必做题*# _实现监视点池的管理_ ::
+* [*] 已完成 +
+link:/home/yunhai/ysyx-workbench/nemu/src/monitor/sdb/watchpoint.c[点击跳转文件]
+
+[red]#*必做题*# _实现监视点_ ::
+* [*] 已完成 +
+link:/home/yunhai/ysyx-workbench/nemu/src/monitor/sdb/watchpoint.c[点击跳转文件1]
+link:/home/yunhai/ysyx-workbench/nemu/src/cpu/cpu-exec.c[点击跳转文件2]
+
+=== 如何阅读手册
+[red]#*必做题*# _尝试通过目录定位关注的问题_ ::
+* [ ] 未完成(不影响) +
+
+[red]#*必做题*# _必答题_ ::
+* [ ] 未完成(有影响) +

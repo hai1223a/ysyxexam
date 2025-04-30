@@ -1,3 +1,10 @@
+= 一生一芯实验日志
+Doc Writer yunhaigushu;
+v1.0, 2025-04-11
+:toc:
+:toclevels: 1
+:toc-title: Directory
+
 [[d2025-3-27]]
 == 2025/3/27 实验日志
 === 今日完成工作
@@ -160,9 +167,57 @@ cache直接映射的实现不用考虑替换策略
 === 今日完成任务
 
 === 今日BUG
-**1.txt文件中每行数据格式为"100 23+ 31- (99) "之类,每次用fscanf()以格式"%u %s\n"读取一行,结果发现%s没有读取到完整的字符串,以上为例,将只读取到"23+"** +
+[green]##1.txt文件中每行数据格式为"100 23+ 31- (99) "之类,每次用fscanf()以格式"%u %s\n"读取一行,结果发现%s没有读取到完整的字符串,以上为例,将只读取到"23+"**##::
 因为在fscanf()使用%s匹配时将连续读取字符串,直到遇到第一个空白字符(可以是空格,换行或者制表符) +
 解决方法:将%s替换成%[^\n],表示匹配直到换行符的所有字符
 
-**2.在gen-expr.c中生成测试案例时,因为经过了一次字符串转表达式的过程,实际运算的表达式只有数值和运算符,如何确保其的中间运算也是全部按照无符号数的运算规则执行？** +
+[green]##2.在gen-expr.c中生成测试案例时,因为经过了一次字符串转表达式的过程,实际运算的表达式只有数值和运算符,如何确保其的中间运算也是全部按照无符号数的运算规则执行？##::
 解决方法:在生成表达式字符串时,给'-'后的子表达式之前插入一个字符串"(unsigned)",用一定的字符串空间换取无符号运算.同时在nemu的expr.c识别tokens时添加对应的token,优先级要在括号前,并将其像空格一样不做记录
+
+[[d2025-4-28]]
+== 2025/4/28 实验日志
+=== 今日完成任务
+* 正在完成预学习之前没做的必做题,整理并完善Pre_stduy.adoc
+
+=== 今日BUG
+[green]##在进行复习C语言/ex17的课后题时,我正在尝试把存储到FILE中的结构体成员中的数组替换为指针,但是一直报错说是非法访问内存,我当时确实没有意识到是fread和malloc的配合问题,下面我来详细解释##::
+对于一个成员不包含指针的结构体变量,我们像将其存入文件中再读出可以如下操作
+[source,C]
+----
+typedef struct inf {
+    int weight;
+    char name[100];
+} Inf;
+    Inf a = {100,"fuck you"};
+    Inf b;
+    FILE *fl = fopen("data.db","w");
+    fwrite(&a, sizeof(Inf), 1, fl);
+    fclose(fl);
+    fl = fopen("data.db","r+");
+    fread(&b, sizeof(Inf), 1, fl);
+    fclose(fl);
+----
+但是当该结构体中包含指针时,该写法就不对了.比如上面的 `char name[100]` 变成 `char *name`, 这样fwrite存入文件的只是指针值,而不是该指针指向的内容,在下次读取时,该值将会指向无效的数据,哪怕你先fread再malloc也没有用,所以正确的写法应该是
+[source,C]
+----
+typedef struct inf {
+    int weight;
+    char *name;
+} Inf;
+    Inf a,b;
+    a.weight = 100;
+    a.name = malloc(100);
+    memset(a.name,0,100);
+    b.name = malloc(100);
+    FILE *fl = fopen("data.db","w");
+    fwrite(&a, sizeof(int), 1, fl);
+    fwrite(a.name, 100, 1, fl);
+    fclose(fl);
+    fl = fopen("data.db","r+");
+    fread(&b, sizeof(int), 1, fl);
+    fread(b.name, 100, 1, fl);
+    fclose(fl);
+    free(a.name);
+    free(b.name);
+----
+综上所述,你往文件中存变量,`永远不要存指针,要存指针指向的内容`
