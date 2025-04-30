@@ -180,11 +180,25 @@ cd /home/yunhai/ysyx-workbench/pre_study/decoder
 make run
 
 === 实验三 加法器与ALU
+[red]#*必做题*# _上板实验: 实现一个带有逻辑运算的简单ALU_ :
+* [*] 已完成 +
+[source,bash]
+cd /home/yunhai/ysyx-workbench/pre_study/alu
+make run
 
 === 实验六 移位寄存器及桶形移位器
+[red]#*必做题*# _上板验证: 利用移位寄存器实现随机数发生器_ :
+* [*] 已完成 +
+[source,bash]
+cd /home/yunhai/ysyx-workbench/pre_study/shiftreg
+make run
 
 === 实验七 状态机及键盘输入
-
+[red]#*必做题*# _上板实验: 实现一个8-3优先编码器并在七段数码管上显示_ :
+* [*] 已完成 +
+[source,bash]
+cd /home/yunhai/ysyx-workbench/pre_study/decoder
+make run
 
 == PA1
 === 在开始愉快的PA之旅之前
