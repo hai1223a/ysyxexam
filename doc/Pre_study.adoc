@@ -166,13 +166,18 @@ ls *.html | xargs -d '\n' zip -r a1.zip
 [#point1]
 == 数字逻辑与计算机组成课程实验
 === 实验一 选择器
-[red]#*必做题*# _上板实验: 二位四选一选择器 :
+[red]#*必做题*# _上板实验: 二位四选一选择器_ :
 * [*] 已完成 +
 [source,bash]
 cd /home/yunhai/ysyx-workbench/pre_study/mux
 make run
 
 === 实验二 译码器和编码器
+[red]#*必做题*# _上板实验: 实现一个8-3优先编码器并在七段数码管上显示_ :
+* [*] 已完成 +
+[source,bash]
+cd /home/yunhai/ysyx-workbench/pre_study/decoder
+make run
 
 === 实验三 加法器与ALU
 
