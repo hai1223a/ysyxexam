@@ -24,8 +24,22 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
+  for (size_t i = 0; i < 32; i++)
+  {
+    printf("%s: %x\n",regs[i],cpu.gpr[i]);
+  }
+  printf("PC: %x\n",cpu.pc);
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
+  for(int i = 0; i < 32; i++) {
+    char reg[5] = "$";
+    strcat(reg,regs[i]);
+    if(!strcmp(reg, s)) {
+      *success = true;
+      return cpu.gpr[i];
+    }
+  }
+  *success = false;
   return 0;
 }

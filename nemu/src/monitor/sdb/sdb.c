@@ -18,6 +18,8 @@
 #include <readline/readline.h>
 #include <readline/history.h>
 #include "sdb.h"
+#include "utils.h"
+#include "memory/vaddr.h"
 
 static int is_batch_mode = false;
 
@@ -54,6 +56,80 @@ static int cmd_q(char *args) {
 
 static int cmd_help(char *args);
 
+static int cmd_si(char *args) {
+  uint64_t num_inst;
+  if(likely(!args)){
+    num_inst = 1;
+  }
+  else{
+    num_inst = (uint64_t)atoi(args);
+  }
+  cpu_exec(num_inst);
+  return 0;
+}
+
+static int cmd_info(char *args) {
+  if (!args) return 0;
+  if (!strcmp(args, "r"))
+  {
+    isa_reg_display();
+  }
+  else if (!strcmp(args, "w"))
+  {
+    watchpoint_display();
+  }
+  
+  return 0;
+}
+
+static int cmd_x(char *args){
+  int num_word;
+  char base_addr[1100] = {};
+  sscanf(args, "%d %[^\n]", &num_word, base_addr);
+  bool success = true;
+  word_t result = 0;
+  result = expr(base_addr, &success);
+  if(!success) assert(0);
+  printf("Address  Data\n");
+  for (int i = 0; i < num_word; i++)
+  {
+    printf("%08x:0x%08x\n", result, vaddr_read(result, 4));
+    result += 4;
+  }
+  return 0;
+}
+
+static int cmd_p(char *args){
+  bool success = true;
+  word_t result = 0;
+  if(args) result = expr(args, &success);
+  if(!success) assert(0);
+  printf("十进制:%u\t十六进制:%x\n",result, result);
+  return 0;
+}
+
+static int cmd_w(char *args) {
+  if (!args)
+  {
+    printf("请输入要监控的表达式\n");
+    return 0;
+  }
+  add_watchpoint(args);
+  return 0;
+}
+
+static int cmd_d(char *args) {
+  if (!args)
+  {
+    printf("请输入要删除的监控点序号\n");
+    return 0;
+  }
+  int number = 0;
+  if(sscanf(args, "%d", &number) == 1)  delete_watchpoint(number);
+  else  printf("你打的监视点序号表达式不对\n");
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -62,6 +138,12 @@ static struct {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
   { "q", "Exit NEMU", cmd_q },
+  { "si", "格式为si [N],让程序单步执行N条指令后暂停执行,当N没有给出时,缺省为1", cmd_si},
+  { "info", "格式为info SUBCMD, info r表示打印寄存器状态, info w表示打印监视点信息", cmd_info},
+  { "x", "格式为x N EXPR, 表示以表达式EXPR为基地址, 以16进制的格式打印连续的N个4字节数据", cmd_x},
+  { "p", "查看表达式的值, 格式为p EXPR, 将会打印表达式EXPR的十进制和十六进制表达", cmd_p},
+  { "w", "设置监视点, 格式为w EXPR, 当EXPR的值发生改变时将会中断程序", cmd_w},
+  { "d", "删除监视点, 格式为d N, 表示删除序号为N的监视点", cmd_d},
 
   /* TODO: Add more commands */
 
@@ -102,6 +184,19 @@ void sdb_mainloop() {
     return;
   }
 
+  // FILE *fp = fopen("/home/yunhai/ysyx-workbench/nemu/tools/gen-expr/data.txt", "r");
+  // if (fp == NULL) assert(0);
+  // word_t theory_result;
+  // char expression[1001]; // 假设表达式的长度不会超过 255
+  // // 按照 "%u %s\n" 格式读取文件内容，直到文件结束
+  // while (fscanf(fp, "%u %[^\n]", &theory_result, expression) != EOF) {
+  //   printf("expression =%s\n",expression);
+  //   int test_result = cmd_p(expression);  
+  //   printf("test_result: %u, theory_result: %u\n\n", (word_t)test_result, theory_result);
+  //   Assert((word_t)test_result == theory_result, "有问题");
+  // }
+  // fclose(fp);
+
   for (char *str; (str = rl_gets()) != NULL; ) {
     char *str_end = str + strlen(str);
 
@@ -125,7 +220,9 @@ void sdb_mainloop() {
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
-        if (cmd_table[i].handler(args) < 0) { return; }
+        if (cmd_table[i].handler(args) < 0) { 
+          nemu_state.state = NEMU_QUIT; 
+          return; }
         break;
       }
     }

@@ -17,6 +17,7 @@
 #include <cpu/decode.h>
 #include <cpu/difftest.h>
 #include <locale.h>
+#include "sdb.h"
 
 /* The assembly code of instructions executed is only output to the screen
  * when the number of instructions executed is less than this value.
@@ -38,6 +39,23 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+  static word_t data_pre[NR_WP] = {0};
+  static word_t data_new[NR_WP] = {0};
+  int index[NR_WP] = {0};
+  scan_watchpoint(data_new, index);
+  // printf("data_pre == %u, data_new == %u, index == %d", data_pre[0], data_new[0], index[0]);
+  for (int i = 0; i < NR_WP; i++)
+  {
+    if(index[i])
+    {
+      if(data_new[i] != data_pre[i])
+      {
+        nemu_state.state = NEMU_STOP;
+        printf("监控点%d发生了变化", i);
+        data_pre[i] = data_new[i];
+      }
+    }
+  }
 }
 
 static void exec_once(Decode *s, vaddr_t pc) {
@@ -52,8 +70,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
   int i;
   uint8_t *inst = (uint8_t *)&s->isa.inst;
 #ifdef CONFIG_ISA_x86
-  for (i = 0; i < ilen; i ++) {
+  for (i = 0; i < ilen; i ++) 
 #else
+  {
   for (i = ilen - 1; i >= 0; i --) {
 #endif
     p += snprintf(p, 4, " %02x", inst[i]);
@@ -69,7 +88,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, ilen);
 #endif
-}
+}}
 
 static void execute(uint64_t n) {
   Decode s;

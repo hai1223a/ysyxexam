@@ -1,0 +1,523 @@
+===================
+AsciiDoc 是一种文本文件书写格式，文章，手册，书籍和UNIX手册。AsciiDoc 文件可以 asciidoc(1) 命令转换成 HTML 和 DocBook 标记。AsciiDoc 是一种先进的结构：AsciiDoc 语法和输出标记（几乎可以转换成任意的 SGML/XML 标记）都可以有用户自己定义和扩展。
+简介
+------------
+**********************************************************************
+这是一个很大的文档，它可能需要做成一本手册，快速参考或正式资料。
+如果你是一个 AsciiDoc 新手请阅读本节和 <<X6,起步>> 一节 或看看代码文件夹 `doc` 中的例子 AsciiDoc `.txt` 。
+**********************************************************************
+纯文本是最通用的电子文档格式，无论你使用那种计算机环境都可以读写纯文本文件。不过纯文本不是使用最多的文档格式。HTML, PDF and roff (roff 用于手册页) 是使用最广泛的 UNIX 文档格式。 DocBook 是一种流行的 UNIX 文件标记格式，可转换为 HTML，PDF 和其他文稿格式。
+AsciiDoc 是一种人们方便读写的纯文本格式，可以使用 asciidoc(1) 转换成 DocBook 或 HTML 。你可以使用 asciidoc(1) 直接生成 HTML 或运行 asciidoc(1) 通过你喜欢的 DocBook 工具链输出 DocBook ，使用 AsciiDoc a2x(1)  工具链输出产品  PDF, EPUB, DVI, LaTeX, PostScript, man page, HTML 和其他文本格式。
+AsciiDoc 格式本身的特性决定他的易用性：AsciiDoc 文件容易标记，方便查看、校对和编辑。
+AsciiDoc 是一个轻量级软件：只有一个 Python 脚本文件和一些配置文件。除了 asciidoc(1) 和一个 Python 程序，AsciiDoc 文件转换成 DocBook 或 HTML 不需要其他的软件。看下面的 <<X11, AsciiDoc 文档例子>>
+你可以像写普通文本文件一样写一个 AsciiDoc 文档，暂时没有标签和陌生的符号。AsciiDoc 语法规则已经尽量少并且易懂。
+通用的文本标记可能你并不喜欢（经常遇到）：如果默认的语法你不喜欢，你可以通过修改文本格式 asciidoc(1) 配置文件定义自己的语法。你可以通过创建自己的配置文件可以把 AsciiDoc 文档转换成任何 SGML/XML 标记。
+asciidoc(1) 根据配置文件的设置把 AsciiDoc 的文章，图书，手册页 转换成 HTML 或 DocBook 格式。
+.我对 AsciiDoc 的期望
+**********************************************************************
+DocBook 已经成为开源文档事实上的标准格式。但是 DocBook 是一种复杂的语言，直接书写比较困难，写成的文本也难于阅读。-- 我发现自己花太多的时间写标签，查手册和修改语法错误，然后才能写内容。
+**********************************************************************
+[[X6]]
+起步
+---------------
+安装 AsciiDoc
+~~~~~~~~~~~~~~~~~~~
+查看 `README` 和 `INSTALL` 文件了解安装要求和步骤，打包格式查看 <<X38,附录 B: 打包说明>>。
+[[X11]]
+AsciiDoc 文档例子
+~~~~~~~~~~~~~~~~~~~~~~~~~~
+尽快感受 AsciiDoc 的方法是访问 AsciiDoc 网站或现有例子。
+- 看看 AsciiDoc 网站 http://www.methods.co.nz/asciidoc/ 首页的样例链接。点击左边菜单项目 'Page Source' 可以看到相应的 AsciiDoc 代码。
+- 阅读 `./doc` 文件夹中的 `.txt` 代码文件和相应的 HTML 和 DocBook XML 文件。
+AsciiDoc 文档类型
+-----------------------
+AsciiDoc 文档有三种类型：article（文章）, book（图书），和 manpage（手册页）。所有文件类型使用相同 AsciiDoc 格式除了少量细微的差别。
+使用 asciidoc(1) `-d` (`--doctype`) 参数设置 AsciiDoc 文档类型 -- 默认文档类型是 'article（文章）'
+AsciiDoc 文档代码使用 `.txt` 文件扩展名。
+article（文章）
+~~~~~~~~~~~~~
+主要用于短文，文章和一般内容。参见 AsciiDoc 下载目录中 `./doc/article.txt` 例子
+book（图书）
+~~~~~~~~~~
+图书除了使用文章的格式，增加了级别为0的图书段落部分。
+图书文档通常用于生产DocBook的输出，因为
+DocBook的处理器可以自动生成脚注，表格内容，表格的列表，数字清单，清单和例子和索引。
+AsciiDoc标记支持标准的DocBook文前内容和文后内容 <<X16,特殊段落>>（贡献，序言，书目，词汇， 
+索引，版权页）加脚注和索引项。
+.图书文档例子
+图书::
+  The `./doc/book.txt` file in the AsciiDoc distribution.
+多部分图书::
+  The `./doc/book-multi.txt` file in the AsciiDoc distribution.
+手册页
+~~~~~~~
+用于生成 UNIX 手册页。 AsciiDoc 控制文档遵循专有的头标题和段落命名规则 -- 详情参见 <<X1,手册页文档>> 。
+也可以AsciiDoc目录查看asciidoc(1)手册页代码 (`./doc/asciidoc.1.txt`)。 
+[[X5]]
+AsciiDoc 输出
+-----------------
+asciidoc(1) 命令转换一个AsciiDoc格式文件到其他格式使用 `-b` (`--backend`) 命令行参数。asciidoc(1)本身内置了很少文件格式信息，所有转换规则包含在可定制的配置文件里面。输出专有单数列在了<<X88,附录 H>>。
+AsciiDoc 支持一下输出格式：
+docbook
+~~~~~~~
+AsciiDoc可以生成一下DocBook文档格式：article, book 和 refentry (对应 AsciiDoc 'article', 'book' 和 'manpage' 文档类型)
+DocBook文档不能直接预览。多数Linux发行版使用转换工具（一个工具集）见 <<X12,转换 DocBook 文件>> 转换到其他格式如 Postscript, HTML, PDF, DVI, PostScript, LaTeX, roff (原生联机手册格式), HTMLHelp, JavaHelp and text。
+AsciiDoc <<X86,前言>> 部分转换成 DocBook book '前言' 部分虽然他通常是 'Preface' 独立段落 (参见 `./doc/book.txt` 图书样例)。
+[[X33]]
+xhtml11
+~~~~~~~
+asciidoc(1) 默认输出为 `xhtml11` ，用于生成 XHTML 1.1 并使用 CSS2。默认输出文件使用 `.html` 扩展名。'xhtml11' 文档生成受以下参数影响（默认行为生成的 XHTML 没有段落编号，嵌入式CSS，也没有警告图标）：
+[[X35]]
+样式表
+^^^^^^^^^^^
+AsciiDoc 输出 XHTML 使用的 CSS2 样式在安装目录中 `./stylesheets/` 文件夹里面。
+[重要]
+=====================================================================
+所有浏览器都有 CSS 问题，但是微软的 IE6 有太多的漏洞和错误，`xhtml11-quirks.css` 样式和 `xhtml11-quirks.conf` 配置文件在处理的时候对 IE6 进行优化。如果你不使用 IE6 ，那么样式文件和配置文件可以使用 `--attribute quirks!` 命令行参数忽略。
+=====================================================================
+默认 'xhtml11' 样式表:
+`./stylesheets/xhtml11.css`::
+    主样式表。
+`./stylesheets/xhtml11-manpage.css`::
+    用于手册页文档转换。
+`./stylesheets/xhtml11-quirks.css`::
+    调整 IE6 兼容性的样式表。
+使用 'theme' 参数可以定义样式表。例如，命令行参数 `-a theme=foo` 会使用 `foo.css`, `foo-manpage.css` and `foo-quirks.css` 代替默认的样式表。
+使用 'stylesheet' 参数可以在 XHTML 文档中包含一个附加样式表。例如，命令行参数 `-a
+stylesheet=newsletter.css` 会使用 `newsletter.css` 。
+html4
+~~~~~
+用于生成纯（无样式）的 HTML 4.01 转换标记
+文档结构
+------------------
+一个 AsciiDoc 文档由一个 <<X8,基本区块>> 序列组成，由可选的文档头部开始，后面是可选的序言，再后面是0或多个文档段落。
+几乎所有的零或多个基本结构组合起来都是有效的 AsciiDoc 文档：文档范围涵盖单个句子和多部分的图书。
+基本区块
+~~~~~~~~~~~~~~
+基本区块由一行或多行文本，也可以包括其他的基本区块。
+AsciiDoc 区块概括如下[这是一个大概的结构指南，不是严格的语法定义]：
+  文档      ::= (头部?,前言?,章节*)
+  头部        ::= (标题,(作者,修订?)?)
+  作者    ::= (名字,(中间名?,姓氏)?,Email地址?)
+  修订  ::= (版本?,日期)
+  前言      ::= (段落)
+  章节       ::= (标题,段落?,(章节)*)
+  段落   ::= ((块标题?,块)|宏块)+
+  块         ::= (自然段|独立块|列表|表格)
+  列表          ::= (无序列表|有序列表|定义列表|标注列表)
+  无序列表|  ::= (项目)+
+  有序列表  ::= (项目)+
+  标注列表   ::= (项目)+
+  定义列表   ::= (条目)+
+  条目     ::= (标签,项目)
+  标签    ::= (项目+)
+  项目      ::= (项目文本,(列表|段落列表|列表后续)*)
+注释:
+- '?' 表示0或1个, '+' 表示0或多个, '*' 表示1或多个.
+- 所有的基本块有独立的界线分开.
+- `BlockId`, `AttributeEntry` and `AttributeList` block elements (not
+  shown) can occur almost anywhere.
+- There are a number of document type and backend specific
+  restrictions imposed on the block syntax.
+- 下面的基本部分不能包含空行: 头部, 标题,  自然段, 项目文本.
+- 段落列表为有 '列表元素' 项目的段落.
+- 列表后续参见 <<X15,列表后续内容>>.
+头部
+~~~~~~
+头部包含文档标题加上作者和版本信息。头部是可选的但是必须在文档的开始 <<X17,标题>>.  头部可以在注释和<<X18,属性项目>> 前面.  标题后面的作者和修订信息可选。头部可以包含在属性条目行。该文件标题是隔开的一个或多个空行从文档的其余部分.  下面是一个 AsciiDoc 文档头部的例子:
+  使用 AsciiDoc 编写文档
+  ====================================
+  Joe Bloggs <jbloggs@mymail.com>
+  v2.0, February 2003:
+  Rewritten for version 2 release.
+作者行包括作者姓名和作者的Email地址。作者姓名包括名字和可选的使用空格隔开的中间名和姓氏。多个单词的名字，中间名，姓氏使用下划线链接。email必须使用尖括号<>包含。作者名称不能包含尖括号<>.  下面是一些作者行的例子:
+  Joe Bloggs <jbloggs@mymail.com>
+  Joe Bloggs
+  Vincent Willem van_Gogh
+修订行在作者后面可选。版本行可以使用下面的格式:
+. 文档修订版本号后跟可选的修订日期后跟可选的修订注释:
+  * 制定了版本号后面必须跟一个逗号。
+  * 版本号是一个以上的数字.
+  * 版本号前面的非数字字符会被忽略掉.
+  * 版本注释前面必须有冒号。版本注释从冒号到下一个空行或属性标志由普通文本替换
+  * 版本号和注释设置后如果日期没有设置系统会使用 'docdate' 参数输出。
+. 使用 RCS/CSV/SVN $Id$ 标记 (如果使用 $Id$ 作为版本标记则作者行会被忽略).
+下面是一些版本行的例子:
+  v2.0, February 2003
+  February 2003
+  v2.0,
+  v2.0, February 2003: Rewritten for version 2 release.
+  February 2003: Rewritten for version 2 release.
+  v2.0,: Rewritten for version 2 release.
+  :Rewritten for version 2 release.
+你可以使用asciidoc(1) `-a` (`--attribute`) 设置头部内容通过参数 'revnumber', 'revremark', 'revdate', 'email', 'author', 'authorinitials', 'firstname' and 'lastname' . 例子:
+  $ asciidoc -a revdate=2004/07/27 article.txt
+'revnumber' 参数可以使用 RCS/CSV/SVN $Id$ 标签.Attributes can also be added to the header for substitution in the header template with <<X18,Attribute Entry>> elements.
+[[X87]]
+文档头部附加信息
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+DocBook 定义了很多元素，例如：版权，文档历史和原作者信息。AsciiDoc 头部提供基本的修订和作者信息 -- 附加信息像版权信息和文档历史会作为可选包含从独立的包含 DocBook 项目 文档信息文件那些包含在 DocBook  '文章信息' 和 '图书信息' 项目：
+- 文档信息文件必须和文档再同一个目录下面，文件名称类似 `<docname>-docinfo.xml` 。例如，如果源文件为  `mydoc.txt` 那么文档信息文件应该为`mydoc-docinfo.xml` 。
+- 文档信息文件将被包含进 DocBook 输出，如果指定  `docinfo` 参数，例如：
+  $ asciidoc -a docinfo -b docbook mydoc.txt
+参见 AsciiDoc 文件夹中的 `./doc/article-docinfo.xml` 例子
+[[X86]]
+前言
+~~~~~~~~
+前言是可选没有标题的段落，位于头部和第一章节之间。
+章节
+~~~~~~~~
+AsciiDoc 支持0-4共5个章节级别（虽然只有图书允许包含0级别的章节）。章节级别的说明见 <<X17,标题>> 。
+章节使用配置文件转换标记模板。章节模板使用下列方式制定（按优先权重排序）：
+1. 通过设置名称的第一个位置属性或 'template' 属性的配置文件的模板的名称。以下三个章节标题功能相当：
++
+.....................................................................
+[[terms]]
+[glossary]
+List of Terms
+-------------
+["glossary",id="terms"]
+List of Terms
+-------------
+[template="glossary",id="terms"]
+List of Terms
+-------------
+.....................................................................
+2. 标题符合配置文件中的 <<X16,specialsections>> （特殊章节） 部分.
+3. 其他不属于上面的使用  `sect<level>` 模板名称的。
+使用 `-n` (`--section-numbers`) 命令行参数设置 HTML 输出的自动编号 (DocBook 行号由 DocBook toolchain 命令自动生成) 。
+章节编号根据章节标题自动生成如果应用 `sectids` 参数(默认设置)。这个特征主要是为了保证内容链接表的效果：错误的章节编号被 JavaScript TOC 脚本动态生成的 *after* 页面载入，例如，如果你访问的标签是动态生成的 TOC 地址并载入了页面但是浏览器会忽略(因为没有生成) 章节编号。
+章节编号按照下面的算法生成：
+- 为所有非字母数字加上下划线。
+- Strip leading or trailing underscores.
+- 转换成小写字母。
+- 预设  `idprefix` 参数（所以没有与现有文件的ID名称冲突的可能性）。如果 `idprefix `属性没有定义会加上一个下划线
+- 如果自动生成的章节编号存在则在名称后添加编号后缀（`_2`，`_3`...）。
+例如标题 'Jim's House' 将生成编号为 `_jim_s_house`。
+[[X16]]
+特殊章节
+^^^^^^^^^^^^^^^^
+附加 DocBook 正文前和正文后的章节到正常章节 -- 例如：前言，参考书目，目录，索引。
+AsciiDoc 配置文件中有 `[specialsections]` 部分；他们会映射具体的章节到标记模板。格式如下：
+  <title>=<template>
+`<title>` 是Python规则 `<template>` 是配置文件标记模板章节名称。如果 `<title>` 是一个 AsciiDoc 文档的章节标题则输出使用 `<template>` 标记模板（替代默认的 `sect<level>` 章节模板）。如果 'title' 组合 `{title}` 默认的 AsciiDoc 章节标题， `{title}` 参数设置为符合 'title' 规则的组合。如果 `<template>` 为空则所有符合 `<title>` 的标题被删除。
+AsciiDoc 使用下面的特殊章节标题进行重构：
+  前言                    (图书专用)
+  摘要                   (文章专用)
+  贡献者                 (图书专用)
+  术语表
+  参考文献|参考书目
+  版权标志                   (图书专用)
+  索引
+  附录 [A-Z][:.] <title>
+内置元素
+~~~~~~~~~~~~~~~
+<<X34,内置文档元素>> 用来标记字符的格式和不同类型的替换。内置项目和内置项目语法在 asciidoc(1) 配置文件中定义。
+这里是 AsciiDoc 内置元素处理命令列表：
+特殊字符::
+        这些字符转义特殊字符使用后端标记（一般是 "<", ">", 和 "&"），
+        参阅配置文件 `[specialcharacters]` 部分
+引用::
+        标记单词和短语的字符，通常是字符格式。参阅配置文件的 `[quotes]` 部分。
+专用词语::
+        词或短语根据标签选出不用进一步注释。参阅配置文件  `[specialwords]` 部分。
+替换::
+        每替换定义一个字或词短语的模式去搜索相应的替换文本。参阅配置文件  `[replacements]` 部分
+参数::
+        使用相应的参数值替换大括号封闭（属性引用）的文档参数名称。
+内置宏::
+        内置宏被替换使用配置文件中设置的内容。
+文档处理
+-------------------
+AsciiDoc 代码文档像下面读取和处理：
+1. 分析文档头部，使用头部参数替换配置文件中 `[header]` 模板部分等待输出。
+2. 分析文档所有  '章节' 和组成元素转换后等待输出。
+3. 替换配置文件 `[footer]` 部分并且写入输出文件
+asciidoc(1) 安装下面顺序确定块类型（从先到后）：（章节），标题，宏，列表，分割块，表格，属性项，属性列表，块标题，段落。
+默认段落定义 `[paradef-default]` 最后检查。
+知道分析顺序可以帮助你设计明确的宏，列表，块的样式规则。
+内置替换再块内按下面顺序执行。
+1. 特殊字符
+2. 引用
+3. 特殊词
+4. 替换
+5. 属性
+6. 内置宏
+7. 替换
+替换或替换顺序在执行于标题，段落和分割块的时候由配置文件参数决定。
+格式化文本
+---------------
+[[X51]]
+文本描述
+~~~~~~~~~~~
+使用描述字符封闭的词语和句子会被格式化：
+_强调_::
+        使用 \'单引号' 或 \_下划线_ 封闭的词句表示强调。
+*粗体*::
+       使用 \*星号* 封闭的词句表示粗体。
+[[X81]]+等宽字体+::
+        短语 \+使用加号封闭的字符+ 显示为等宽字体。 \`使用重音符号封闭的字符`（重音符号）也会
+        显示为等宽字符，但是这种情况下，封闭的文本显示不受进一步定义 (参阅 <<X80,内置文字>>)。
+`单引号引用'::
+        使用 \`一个重音符号（译注：不是单引号，一般在键盘的左上部）到一个单引号之间' 的字句
+        表示单引号引用。 
+``双引号引用''::
+         使用 \\``两个重音符号（译注：不是单引号，一般在键盘的左上部）到两个单引号之间'' 的字句
+         表示双引号引用。
+#无引用文本#::
+        \#井号包围的文本# 没有效果，这是一种允许应用内置属性到其他无格式文本的机制（见下例）
+引用文字的前缀可以是 <<X21,属性列表>>。目前只适用于指定字体颜色，背景颜色和大小（只用于XHTML/HTML，不能用于 DocBook）使用的前三个位置的属性参数。第一个参数是文本的颜色，第二个背景颜色;第三是字体的大小。颜色是有效的CSS颜色和字体的大小是数字以em为单位。下面是一些例子：
+引用文本会被加上前缀使用 <<X21,属性列表>>。
+---------------------------------------------------------------------
+[red]#红色文本#.
+[,yellow]*加粗文本黄色背景*.
+[blue,#b0e0e6]+等宽的蓝色文本浅蓝色背景+
+[,,2]#2倍大小文本#.
+---------------------------------------------------------------------
+新的引用可以通过修改配置文件定义。参阅 <<X7,配置文件>> 相关部分。
+.引用文本文件
+- 引用不能交叉。
+- 不同类型的引用可以嵌套
+- 为了防止使用引用格式，可以在引号前面放一个反斜杠。不清楚是否引用你需要在前后都添加转义符，
+    多字符引用你需要转义单个字符。
+- 配置文件 `[quotes]` 部分可以是设置为空。
+[[X52]]
+限制引用和非限制引用
+^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+这是引用的两种类型：
+限制引用
+++++++++++++++++++
+引用的文字，必须由空格或常用毗邻标点符号分割。这些是最常用的引用类型。
+非限制引用
+++++++++++++++++++++
+非限制引用没有边界的限制，可放置在任何地方内置文本。为了保持一致，并使其更容易记住非限制引用是双重的`_`，`*`，`+'和`＃`限制引用
+  __非限制强调文本__
+  **非限制加粗文本**
+  ++非限制等宽文本++
+  ##非限制加引号的文本##
+下面例子加粗字母F：
+  **F**ile Open...
+上标和下标
+~~~~~~~~~~~~~~~~~~~~~~~~~~~
+\^中间的字符^ 为上标, \~中间的字符~ 为下标.  例如:
+  e^&#960;i^+1 = 0. H~2~O and x^10^. Some ^super text^
+  and ~some sub text~
+效果:
+e^&#960;i^+1 = 0. H~2~O and x^10^. Some ^super text^
+and ~some sub text~
+上边和下标执行 <<X52,非限制引用>> 所以可以使用反斜杠转义和使用属性列表。
+换行
+~~~~~~~~~~~
+加号后面跟一个空格为强制换行。转换到 HTML 后为换行标签 (`br`) ，转换到 DocBook 时为自定义的 XML `asciidoc-br` 处理命令。 `asciidoc-br` 处理命令参阅 <<X43,a2x(1)>>。
+分页
+~~~~~~~~~~~
+一行只有三个或更多小于号 (`<<<`) 将会生成硬换页在输出到 DocBook 和 打印格式的 HTML，使用 CSS `page-break-after` 属性用于 HTML 输出和自定义的 XML 处理指令 `asciidoc-pagebreak` 用于 DocBook输出。`asciidoc-pagebreak` 处理指令参见 <<X43,a2x(1)>> 。硬分页符有时方便，但作为一般规则，你应该让你的网页处理器，为您产生分页符。
+分割行
+~~~~~~
+一行只有三个或更多省略号将会生成一个分割行。输出 HTML 时生成分割线  (`hr`) 标签，输出 DocBook 时生成 `asciidoc-hr` 的 XML 处理指令，`asciidoc-hr` 指令参阅  <<X43,a2x(1)>> 。
+制表符
+~~~~~
+默认情况下输入制表符的文件将转换为8位。 Tab扩展与'tabsize'的配置项文件中设置 `[miscellaneous]` 部分，可在覆盖包括通过设置 `include` 包括宏的属性列表 'tabsize' 属性的文件。例如：
+  include::addendum.txt[tabsize=2]
+该选项卡的大小也可以使用属性设置命令行选项， 
+例如 `--attribute tabsize=4`
+替换
+~~~~~~~~~~~~
+AsciiDoc 默认定义了下列替换：
+  (C) 版权, (TM) 商标, (R) 注册商标,  -- 破折号, ... 省略号, -> 右箭头, <- 左箭头, => 右双箭头, <= 左双箭头.
+效果如下:
+(C) 版权, (TM) 商标, (R) 注册商标, -- 破折号, ... 省略号, -> 右箭头, <- 左箭头, => 右双箭头, <= 左双箭头.
+你可以包含任何内码引用于 AsciiDoc 代码中。例如:
+  &#x278a; &#182;
+效果:
+&#x278a; &#182;
+To render a replacement literally escape it with a leading back-slash.
+<<X7,配置文件>> 段落说明了如何配置你自己替换项目.
+特殊词语
+~~~~~~~~~~~~~
+词语在配置文件中 `[specialwords]` 部分定义会自动标记，而不必到明确标记。
+<<X7,配置文件>> 说明如何添加和替换特殊词语。
+[[X17]]
+标题
+------
+文档和段落标题会使用下面两种格式中的一种：
+双行标题
+~~~~~~~~~~~~~~~
+双行标题由一个标题行，一个硬回车和一个下划线组成。下划线由重复字符组成和上面标题等宽：
+不同级别的标题默认的下划线如下：
+  0级 (顶级):           ======================
+  1级:                 ----------------------
+  2级:                 ~~~~~~~~~~~~~~~~~~~~~~
+  3级:                 ^^^^^^^^^^^^^^^^^^^^^^
+  4级 (最低级):         ++++++++++++++++++++++
+样例:
+  一级段落标题
+  -----------
+  二级子段落标题
+  ~~~~~~~~~~~~
+[[X46]]
+单行标题
+~~~~~~~~~~~~~~~
+单行标题由等号封闭的文字构成（等号的个数表示段落级别）。下面是一些样例：
+  = Document Title (level 0) =
+  == Section title (level 1) ==
+  === Section title (level 2) ===
+  ==== Section title (level 3) ====
+  ===== Section title (level 4) =====
+  = 文档标题 (0级) =
+  == 段落标题 (1级) ==
+  === 段落标题 (2级) ===
+  ==== 段落标题 (3级) ====
+  ===== 段落标题 (4级) =====
+.注意
+- 标题和标记之间必须有一个或多个空格.
+- 标题的界定符是可选的.
+- 改变单行标题语法可以编辑 configuration 文件 `[titles]` section `sect0`...`sect4` 项.
+浮动标题
+~~~~~~~~~~~~~~~
+设置标题的首位属性或 'style' 属性为 'float' 可以实现自由浮动标题。自由浮动标题看上去像普通标题，但是没有普通的文本结构，没有普通段落的层次，不使用普通的规则。浮动标题可以在上下文使用特殊的标题：例如侧边栏和警告框。样例:
+  [float]
+  第二天
+  ~~~~~~~~~~~~~~
+[[X42]]
+块标题
+------------
+'块标题' 元素是一个句点开始的文本行。块标题应用到紧跟在后面的段落，列表，表格或区块。例如：
+........................
+.Notes
+- Note 1.
+- Note 2.
+........................
+显示效果:
+.Notes
+- Note 1.
+- Note 2.
+[[X41]]
+块标志元素
+---------------
+A 'BlockId' is a single line block element containing a unique
+identifier enclosed in double square brackets. It is used to assign an
+identifier to the ensuing block element for use by referring links.
+For example:
+  [[chapter-titles]]
+  Chapter titles can be ...
+The preceding example identifies the following paragraph so it can be
+linked from other location, for example with
+`<<chapter-titles,chapter titles>>`.
+'BlockId' elements can be applied to Title, Paragraph, List,
+DelimitedBlock, Table and BlockMacro elements.  The BlockId element
+sets the `{id}` attribute for substitution in the subsequent block's
+markup template. If a second argument is supplied it sets the
+`{reftext}` attribute which is used to set the DocBook `xreflabel`
+attribute.
+The 'BlockId' element has the same syntax and serves a similar
+function to the <<X30,anchor inline macro>>.
+[[X79]]
+属性列表元素
+---------------------
+An 'AttributeList' block element is an <<X21,attribute list>> on a
+line by itself.  'AttributeList' attributes are only applied to the
+following block element -- the attributes are available for markup
+template substitution. Often the first attribute in the list is used
+to specify the following element's <<X23,style>>.
+By default only attribute references are substituted within attribute
+values, this is because not all attributes are destined to be marked
+up and rendered as text (for example the table 'cols' attribute). To
+perform normal inline text substitutions (special characters, quotes,
+macros, replacements) on an attribute value you need to enclose it in
+single quotes. In the following quote block the second attribute value
+in the AttributeList is quoted to ensure the 'http' macro is expanded
+to a hyperlink.
+---------------------------------------------------------------------
+[quote,'http://en.wikipedia.org/wiki/Samuel_Johnson[Samuel Johnson]']
+_____________________________________________________________________
+Sir, a woman's preaching is like a dog's walking on his hind legs. It
+is not done well; but you are surprised to find it done at all.
+_____________________________________________________________________
+---------------------------------------------------------------------
+公共属性
+~~~~~~~~~~~~~~~~~
+大多数的文本块支持下列属性：
+[cols="1e,1,5a",frame="topbot",options="header"]
+|====================================================================
+|Name |Backends |Description
+|id |html4, xhtml11, docbook |
+Unique identifier typically serve as link targets.
+Can also be set by the 'BlockId' element.
+|role |docbook |
+Role contains a string used to classify or subclassify an element.
+Used to add the 'role' attribute to DocBook block elements.
+|reftext |docbook |
+'reftext' is used to set the DocBook 'xreflabel' attribute.
+Can also be set by the 'BlockId' element.
+|====================================================================
+[cols="1e,1,5a",frame="topbot",options="header"]
+|====================================================================
+|名称 |Backends |说明
+|id |html4, xhtml11, docbook |
+唯一标识符通常作为链接目标。也可以由 'BlockId' 元素设置。
+|role |docbook |
+Role 包含可用于分类或子类元素一个字符串。用于添加 'role' 属性到 DocBook 的块元素。
+|reftext |docbook |
+'reftext'是用来设置DocBook的'xreflabel'属性。也可以由 'BlockId' 元素设置。
+|====================================================================
+段落
+----------
+Paragraphs are blocks of text terminated by a blank line, the end of
+file, or the start of a DelimitedBlock.  Paragraph markup is specified
+by configuration file `[paradef*]` sections.
+Normal paragraphs consist of one or more non-blank lines of text. The
+first line must start hard against the left margin (no intervening
+white space). The default processing expectation is that of a normal
+paragraph of text. 'literal' and 'verse' paragraph styles are
+available (in addition to the 'default' paragraph style).
+[[X85]]
+文字段落样式
+~~~~~~~~~~~~~~~~~~~~~~~~
+Literal paragraphs are rendered verbatim in a monospaced font without
+any distinguishing background or border.  By default there is no text
+formatting or substitutions within Literal paragraphs apart from
+Special Characters and Callouts. For example:
+---------------------------------------------------------------------
+[literal]
+Consul *necessitatibus* per id,
+consetetur, eu pro everti postulant
+homero verear ea mea, qui.
+---------------------------------------------------------------------
+效果：
+[literal]
+Consul *necessitatibus* per id,
+consetetur, eu pro everti postulant
+homero verear ea mea, qui.
+verse paragraph style
+~~~~~~~~~~~~~~~~~~~~~
+The 'verse' paragraph <<X23,style>> preserves line boundaries and is
+useful for lyrics and poems.  For example:
+---------------------------------------------------------------------
+[verse]
+Consul *necessitatibus* per id,
+consetetur, eu pro everti postulant
+homero verear ea mea, qui.
+---------------------------------------------------------------------
+效果：
+[verse]
+Consul *necessitatibus* per id,
+consetetur, eu pro everti postulant
+homero verear ea mea, qui.
+段落缩进
+~~~~~~~~~~~~~~~~~~~
+Indented paragraphs (the first line indented by one or more space or
+tab characters) are rendered using the <<X85,literal paragraph
+style>>.  For example:
+---------------------------------------------------------------------
+  Consul *necessitatibus* per id,
+  consetetur, eu pro everti postulant
+  homero verear ea mea, qui.
+---------------------------------------------------------------------
+效果：
+  Consul *necessitatibus* per id,
+  consetetur, eu pro everti postulant
+  homero verear ea mea, qui.
+NOTE: Because <<X64,lists>> can be indented it's possible for your
+indented paragraph to be misinterpreted as a list -- in situations
+like this apply the 'literal' style to a normal paragraph.
