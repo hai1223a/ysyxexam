@@ -12,7 +12,7 @@ v1.0, 2025-04-11
 * [ ] 未完成(不影响) +
 
 [red]#*必做题*# _阅读“提问的智慧”(一生一芯版)_ ::
-* [ ] 未完成(有影响) +
+* [*] 已完成 +
 
 [red]#*必做题*# _大佬三连: STFW, RTFM, RTFSC_ ::
 * [*] 已完成 +
@@ -194,10 +194,16 @@ cd /home/yunhai/ysyx-workbench/pre_study/shiftreg
 make run
 
 === 实验七 状态机及键盘输入
-[red]#*必做题*# _上板实验: 实现一个8-3优先编码器并在七段数码管上显示_ :
+[red]#*必做题*# _上板验收: 实现单个按键的ASCII码显示_ :
 * [*] 已完成 +
 [source,bash]
-cd /home/yunhai/ysyx-workbench/pre_study/decoder
+cd /home/yunhai/ysyx-workbench/pre_study/FSM
+make run
+
+[green]#*选做题*# _高级选做内容_ :
+* [*] 已完成 +
+[source,bash]
+cd /home/yunhai/ysyx-workbench/pre_study/FSM
 make run
 
 == PA1
@@ -256,4 +262,53 @@ link:/home/yunhai/ysyx-workbench/nemu/src/cpu/cpu-exec.c[点击跳转文件2]
 * [ ] 未完成(不影响) +
 
 [red]#*必做题*# _必答题_ ::
-* [ ] 未完成(有影响) +
+* [*] 已完成 +
+1.计算 1+2+...+100 的程序状态机 +
+[source,C]
++-------------------+
+| PC: Instruction   | // Label: Statement
++-------------------+
+| 0: mov r1, 0      | pc0: r1 = 0;          // 初始化 sum = 0
+| 1: mov r2, 0      | pc1: r2 = 0;          // 初始化 i = 0
+| 2: addi r2, r2, 1 | pc2: r2 = r2 + 1;     // i++
+| 3: add r1, r1, r2 | pc3: r1 = r1 + r2;    // sum += i
+| 4: blt r2, 100, 2 | pc4: if (r2 < 100)    // 如果 i < 100,跳转到 pc2
+|                   |      goto pc2;
+| 5: jmp 5          | pc5: goto pc5;        // 程序结束
++-------------------+
+
+2.那么这个学期下来, 你将会在调试上花费多少时间? +
+使用 GDB 调试总调试时间:450 * 10 分钟 = 4500 分钟 = 75 小时。使用简易调试器:总调试时间:450 * 3.33 分钟 ≈ 1500 分钟 = 25 小时。节省时间:75 小时 - 25 小时 = 50 小时。 +
+3.RTFM +
+x86 + 
+CF(Carry Flag)表示进位标志,用于指示算术运算中是否发生了进位或借位。 +
+ModR/M 字节用于扩展指令的寻址模式,包含 Mod、Reg 和 R/M 三部分。 +
+mov 指令用于数据传输,格式为 mov destination, source。 +
+MIPS32 +
+MIPS32 有R 型、I 型、J 型指令格式 +
+CP0 是协处理器 0,用于管理异常、状态和控制寄存器。 +
+若除法指令的除数为 0,触发异常 +
+RISC-V32 +
+RISC-V32 有R 型、I 型、S 型、B 型、U 型、J 型指令格式 +
+LUI 指令将立即数加载到寄存器的高 20 位 +
+mstatus 是机器模式的状态寄存器,包含全局中断使能位、特权模式等。 +
+3.Shell +
+[source,bash]
+#统计 nemu 目录下的所有 .c 和 .h 文件总行数:
+find nemu/ -name "*.[ch]" | xargs wc -l
+#统计除去空行后的代码行数
+find nemu/ -name "*.[ch]" | xargs grep -v '^\s*$' | wc -l
+#统计 PA1 中编写的代码行数
+git checkout pa0
+find nemu/ -name "*.[ch]" | xargs wc -l
+git checkout <current-branch>
+find nemu/ -name "*.[ch]" | xargs wc -l
+#计算差值
+
+4.RTFM +
+-Wall:
+启用所有常见的警告,帮助开发者发现潜在问题。
+例如:未使用的变量、未初始化的变量等。
+-Werror:
+将所有警告视为错误,强制开发者修复警告。
+目的是提高代码质量,避免忽略潜在问题。

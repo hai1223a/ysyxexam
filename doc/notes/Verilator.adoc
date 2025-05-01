@@ -1,0 +1,314 @@
+**_以verilator v5.008作为演示对象_** +
+
+== Verilator的编译
+=== Verilator常用编译选项
+
+`--cc` 将System verilog/verilog代码转换为C++输出 +
+`--exe` 链接生成可执行程序输出 +
+`--build` 自动调用编译器件完成编译和链接 +
+以上三者的关系为 `--cc` -> `--exe` -> `--build` 
+
+`--trace` 允许生成VCD波形文件 +
+`--trace-fst` 允许生成FST波形文件 +
+其中VCD波形比较通用,FST文件只能在gtkwave中打开 
+
+`--x-assign unique` 设置X的值,可以选择为0,fast,unique +
+`--x-initial unique` 设置变量初始值,可以选择为0,fast,unique +
+一般使用 `unique` 可以帮忙调试错误 +
+**上面的选项对于一般的仿真可以全部加上**
+
+`--top-module modulename` 在包含多个src文件时,用来指示顶层模块名 +
+`file.v` 在工程文件较少时,可以直接将用到的所有工程文件添加到编译选项中,注意需要有相对或者绝对路径进行指示 +
+`file.c/.cc/.cpp/.cxx` 当用到了 `--exe` 时,需要包含对应的C++文件与Verilog模型进行链接得到可执行程序 +
+`file.a/.o/.so` 当用到了 `--exe` 时,可选的包含的object或者library文件 +
+**上面的选项用于最基础的仿真包含文件**
+
+`-y <dir>` 和 `+incdir+<dir>` 具有与 `-I<dir>` 相似的功能,但这个目录多服务与verilog tools +
+`-I<dir>` 添加目录给verilator用于搜索文件或者库,这个目录多服务于C++编译器 +
+**上面的选项用于包含检索目录**
+
+`-CFLAGS <flags>` 在生成的Makefile中用于传递给C编译器的参数,多个参数这么使用 `-CFLAGS "-a -b"` 或者 `-CLFGAS -a -CLFAGS -b` + 
+`-LDFLAGS <flags>` 传递给C链接器的参数,多参数时用法同 `CFLAGS` +
+**上面的选项用于给C工具链传递参数**
+
+`--timing` 和 `--no-timing` 开启或者禁用Verilog中的时间操作,比如延时# +
+
+=== Verilator常用编译组合
+* 我有一个verilog工程,顶层为top,我想执行仿真并查看波形
+[source,bash]
+----
+verilator --cc --exe --build --top-module top \
+          $(VSRCS) $(CSRCS) --trace --x-assign unique \  
+          --x-initial unique
+----
+
+== Verilator脚本文件
+=== 用于仿真的main.cpp脚本
+==== 类型一：顶层为可综合模块,测试逻辑均在main.cpp中实现
+* 纯组合电路 
+
+top.v +
+[source,verilog]
+----
+module top(
+  input [1:0] Y,
+  input [1:0] X0,X1,X2,X3,
+  output reg [1:0] F
+);
+  always @(*) begin
+    case (Y)
+    2'b00: F = X0;
+    2'b01: F = X1;
+    2'b10: F = X2;
+    2'b11: F = X3;
+    default: F = 0;
+    endcase
+  end
+
+endmodule
+
+----
+main.cpp +
+[source,C++]
+----
+    #include "Vtop.h"               // 包含Verilog工程的C++模型
+	#include <verilated.h>          // Verilator的库
+	#include "verilated_fst_c.h"    // fst波形文件所需要的库
+	#include <cstdlib>              // rand()函数所在库
+	#include <assert.h>             // assert()函数所在库
+	#define MAX_TIME 20000          // 最大仿真时间
+
+	vluint64_t sim_time = 0;        // 记录当前仿真时间
+
+	int main(int argc, char **argv)
+	{
+        // 为rand()生成随机数种子
+		srand (time(NULL));
+		// 传递参数给verilator,建议在创建任何模型之前使用
+		Verilated::commandArgs(argc, argv);
+		// 创建一个fst波形文件指针
+		VerilatedFstC *tfp = new VerilatedFstC;
+		// 构建一个名为top的仿真模型
+		Vtop *top = new Vtop;
+
+		// 启用跟踪
+		Verilated::traceEverOn(true);
+		// 采样深度为5
+		top->trace(tfp, 5);
+		// 打开波形文件
+		tfp->open("waveform.fst");
+        // 仿真主循环
+		while (sim_time < MAX_TIME)
+		{
+            // 给输入引脚赋值
+			top->X0 = rand() % 4;
+			top->X1 = rand() % 4;
+			top->X2 = rand() % 4;
+			top->X3 = rand() % 4;
+			top->Y = rand() % 4;
+            // 赋值完必须调用eval()才能重新计算电路状态
+			top->eval();
+            // 断言,用于测试结果正确性
+			assert(top->F == ((top->Y == 0) ? top->X0 :
+							 (top->Y == 1) ? top->X1 :
+							 (top->Y == 2) ? top->X2 :
+							 (top->Y == 3) ? top->X3 : 0));
+			// 记录波形,按照sim_time这个变量进行记录
+            tfp->dump(sim_time);
+            // 推动仿真
+			sim_time++;
+		}
+        // 关闭波形文件
+		tfp->close();
+        // 删除指针
+		delete top;
+        // 结束
+		return 0;
+	}
+----
+
+* 时序电路
+
+top.v
+[source,Verilog]
+module top(
+  input clk,
+  input rst,
+  output reg [15:0] led
+);
+  reg [31:0] count;
+  always @(posedge clk) begin
+    if (rst) begin led <= 3; count <= 0; end
+    else begin
+      if (count == 0) led <= {led[13:0], led[15:14]};
+      count <= (count >= 5000000 ? 32'b0 : count + 1);
+    end
+  end
+endmodule
+
+main.cpp
+[source,C++]
+----
+    #include "Vtop.h"               // 包含Verilog工程的C++模型
+	#include <verilated.h>          // Verilator的库
+	#include "verilated_fst_c.h"    // fst波形文件所需要的库
+	#define MAX_TIME 20000          // 最大仿真时间
+
+	vluint64_t sim_time = 0;        // 记录当前仿真时间
+
+	void reset(Vtop *top, vluint64_t &sim_time)
+	{
+		top->rst = 0;
+		if (sim_time < 10)
+		{
+			top->rst = 1;
+		}
+		
+	}
+
+	int main(int argc, char **argv)
+	{
+		// 传递参数给verilator,建议在创建任何模型之前使用
+		Verilated::commandArgs(argc, argv);
+		// 创建一个fst波形文件指针
+		VerilatedFstC *tfp = new VerilatedFstC;
+		// 构建一个名为top的仿真模型
+		Vtop *top = new Vtop;
+
+		// 启用跟踪
+		Verilated::traceEverOn(true);
+		// 采样深度为5
+		top->trace(tfp, 5);
+		// 打开波形文件
+		tfp->open("waveform.fst");
+
+		while (sim_time < MAX_TIME)
+		{
+            // 复位
+			reset(top, sim_time);
+			// 模拟时钟反转
+            top->clk ^= 1;
+            // 计算电路状态
+			top->eval();
+            // 捕获时钟上升沿,其他输入信号可以在这时候改变
+			if(top->clk == 1)
+			{
+
+			}
+            // 记录波形数据
+			tfp->dump(sim_time);
+            // 推动仿真进行
+			sim_time++;
+		}
+        // 关闭波形文件
+		tfp->close();
+        // 删除指针
+		delete top;
+        // 结束
+		return 0;
+	}
+----
+
+==== 类型二：顶层为测试模块,main.cpp中只记录波形并推动仿真
+top.v
+[source,verilog]
+----
+// 时间刻度十分必要
+`timescale 1ns/1ns
+module top;
+
+/* parameter */
+parameter [31:0] clock_period = 10;
+
+/* ps2_keyboard interface signals */
+reg clk,clrn;
+wire [7:0] data;
+wire ready,overflow;
+wire kbd_clk, kbd_data;
+reg nextdata_n;
+
+ps2_keyboard_model model(
+    .ps2_clk(kbd_clk),
+    .ps2_data(kbd_data)
+);
+
+ps2_keyboard inst(
+    .clk(clk),
+    .clrn(clrn),
+    .ps2_clk(kbd_clk),
+    .ps2_data(kbd_data),
+    .data(data),
+    .ready(ready),
+    .nextdata_n(nextdata_n),
+    .overflow(overflow)
+);
+
+initial begin /* clock driver */
+    clk = 0;
+    forever
+        #(clock_period/2) clk = ~clk;
+end
+
+initial begin
+    clrn = 1'b0;  #20;
+    clrn = 1'b1;  #20;
+    model.kbd_sendcode(8'h1C); // press 'A'
+    #20 nextdata_n =1'b0; #20 nextdata_n =1'b1;//read data
+    model.kbd_sendcode(8'hF0); // break code
+    #20 nextdata_n =1'b0; #20 nextdata_n =1'b1; //read data
+    model.kbd_sendcode(8'h1C); // release 'A'
+    #20 nextdata_n =1'b0; #20 nextdata_n =1'b1; //read data
+    model.kbd_sendcode(8'h1B); // press 'S'
+    #20 model.kbd_sendcode(8'h1B); // keep pressing 'S'
+    #20 model.kbd_sendcode(8'h1B); // keep pressing 'S'
+    model.kbd_sendcode(8'hF0); // break code
+    model.kbd_sendcode(8'h1B); // release 'S'
+    #20;
+    // $finish很重要
+    $finish;
+end
+
+endmodule
+
+----
+main.cpp +
+[source,C++]
+----
+    #include "Vtop.h"               // 包含Verilog工程的C++模型
+	#include <verilated.h>          // Verilator的库
+	#include "verilated_fst_c.h"    // fst波形文件所需要的库
+
+	int main(int argc, char **argv)
+	{
+		// 这个指针用于存储仿真时间
+		VerilatedContext* m_contextp = new VerilatedContext;
+		// 传递参数给verilator,建议在创建任何模型之前使用
+		Verilated::commandArgs(argc, argv);
+		// 创建一个fst波形文件指针
+		VerilatedFstC *tfp = new VerilatedFstC;
+		// 构建一个名为top的仿真模型
+		Vtop *top = new Vtop;
+		// 启用跟踪,这里不一样
+		m_contextp->traceEverOn(true);
+		// 采样深度为5
+		top->trace(tfp, 5);
+		// 打开波形文件
+		tfp->open("waveform.fst");
+        // 一直运行,知道finish()
+		while (!m_contextp->gotFinish())
+		{
+            // 计算电路状态
+			top->eval();
+            // 按照仿真时间记录波形
+			tfp->dump(m_contextp->time());
+			// 推动仿真时间
+            m_contextp->timeInc(1);
+		}
+        // 关闭波形文件
+		tfp->close();
+        // 删除指针
+		delete top;
+        // 结束
+		return 0;
+	}
+----

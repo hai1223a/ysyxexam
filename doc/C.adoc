@@ -1,0 +1,10 @@
+= 一生一芯C阶段任务目标记录
+Doc Writer yunhaigushu;
+v1.0, 2025-04-11
+:toc:
+:toc-title: Directory
+
+== PA2
+=== RTFM
+[red]#*必做题*# _RTFSC理解指令执行的过程_ ::
+* [*] 已完成 +

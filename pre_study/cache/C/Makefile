@@ -22,7 +22,7 @@ $(OBJDIR)/%.o: $(SRCDIR)/%.c
 
 # 清理生成的文件
 clean:
-	@rm -rf $(TARGET) $(OBJDIR)
+	@rm -rf $(TARGET) $(OBJDIR) memory
 
 # 伪目标
 .PHONY: all clean
