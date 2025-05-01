@@ -28,11 +28,14 @@ LDFLAGS := -O2 $(LDFLAGS)
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRC:%.cc=$(OBJ_DIR)/%.o)
 
 # Compilation patterns
-$(OBJ_DIR)/%.o: %.c
-	@echo + CC $<
-	@mkdir -p $(dir $@)
+$(OBJ_DIR)/%.o: $(OBJ_DIR)/%.i
 	@$(CC) $(CFLAGS) -c -o $@ $<
 	$(call call_fixdep, $(@:.o=.d), $@)
+
+$(OBJ_DIR)/%.i: %.c
+	@echo + CC $<
+	@mkdir -p $(dir $@)
+	@$(CC) $(CFLAGS) -E -C -o $@ $<
 
 $(OBJ_DIR)/%.o: %.cc
 	@echo + CXX $<
