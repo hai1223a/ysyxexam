@@ -30,7 +30,7 @@ OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRC:%.cc=$(OBJ_DIR)/%.o)
 # Compilation patterns
 $(OBJ_DIR)/%.o: $(OBJ_DIR)/%.i
 	@$(CC) $(CFLAGS) -c -o $@ $<
-	# $(call call_fixdep, $(@:.o=.d), $@)
+	$(call call_fixdep, $(@:.o=.d), $@)
 
 $(OBJ_DIR)/%.i: %.c
 	@echo + CC $<
