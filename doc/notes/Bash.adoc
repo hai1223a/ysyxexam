@@ -57,7 +57,6 @@ mkdir foo bar
 touch {foo,bar}/{a..h}
 ----
 
-== Linux 常用命令
 === 文件操作相关
 [source,bash]
 ----
