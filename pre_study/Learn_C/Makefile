@@ -1,7 +1,6 @@
 # 通用变量
 CC := gcc
-CFLAGS := -g -Wall -fsanitize=address
-
+CFLAGS := -g -Wall -fsanitize=address 
 # 默认目标
 .PHONY: all
 all:
