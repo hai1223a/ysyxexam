@@ -78,6 +78,9 @@
         "time.h": "c",
         "sdb.h": "c",
         "locale.h": "c",
-        "ex": "c"
+        "ex": "c",
+        "charconv": "c",
+        "ranges": "c",
+        "variant": "c"
     }
 }
