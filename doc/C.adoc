@@ -8,3 +8,7 @@ v1.0, 2025-04-11
 === RTFM
 [red]#*必做题*# _RTFSC理解指令执行的过程_ ::
 * [*] 已完成 +
+- `nemu/src/cpu/cpu-exec.c` 的 `exec_once` 中完成PC值的设置和下一个PC值的选择,并进入 `isa_exec_once`
+- `nemu/src/isa/riscv32/inst.c` 的 `isa_exec_once` 中调用的第一个函数 `inst_fetch` 完成了取值,调用的第二个函数 `decode_exec` 完成了译码和执行
+- `nemu/include/cpu/ifetch.h` 的 `inst_fetch` 通过调用 `vaddr_ifetch` 直接从内存中取指令
+- `nemu/src/isa/riscv32/inst.c` 的 `decode_exec` 通过宏 `INSTPAT` 完成译码工作和执行工作 

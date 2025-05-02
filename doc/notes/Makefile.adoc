@@ -1,3 +1,9 @@
+= Make学习记录
+Doc Writer yunhaigushu;
+v1.0, 2025-04-11
+:toc:
+:toc-title: Directory
+:toclevels: 4
 == Makefile常识
 === 规则
 `Makeflie` 文件简单来说就是用来生成文件的。 +
@@ -27,7 +33,8 @@ m.txt: a.txt b.txt
 ----
 此时执行`make`命令将得到x.txt文件
 
-=== 伪目标
+=== 特殊目标
+==== 伪目标
 我们在执行 `make clean` 时并没有生成 `clean` 文件，所以每次都将执行一边命令。
 [source,make]
 ----
@@ -41,6 +48,11 @@ clean:
 clean:
     rm -f x.txt m.txt
 ----
+
+==== 用于保存中间文件
+make在运行时像 `.i` 文件这样的中间文件是会被自动删除的,如果想要保留下来,需要一点点手段 +
+`.SECONDARY` 这个特殊目标的依赖文件会被视作中间文件,且不会被删除,但是这个特殊目标的依赖文件不支持模式和通配 +
+`.PRECIOUS` 这个特殊目标的效果同 `.SECONDARY` 一样,但是它的依赖文件支持模式,如 `ex%.i`
 
 === 多条指令
 下面这么执行多条指令并不正确，因为每条指令会在不同的 shell 中执行
@@ -134,7 +146,7 @@ test.o: test.c
 ----
 
 === Makefile的函数
-=== wildcard
+==== wildcard
 `$(wildcard 指定文件类型)` +
 [source,make]
 ----
@@ -144,7 +156,7 @@ SRC := $(wildcard $(DIR)/*.c)
 ----
 该函数常用于包含所有需要的文件,比如一个C工程中所有的C文件
 
-=== patsubst
+==== patsubst
 `$(patsubst 原模式,目标模式,文件列表)`
 [source,make]
 ----
