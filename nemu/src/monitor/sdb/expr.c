@@ -257,6 +257,7 @@ bool check_parentheses(int p, int q) {
 
 void ckeck_expression(int p, int q) {
   // 已经确保了q>p
+  printf("p = %d, q =%d\n",p,q);
   for(int i = p; i <= q; i++)
   {
     if(OP(i))
