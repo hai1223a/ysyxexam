@@ -27,7 +27,6 @@ LDFLAGS := -O2 $(LDFLAGS)
 
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRC:%.cc=$(OBJ_DIR)/%.o)
 
-.SECONDARY: $(OBJ_DIR)/%.i
 
 # Compilation patterns
 $(OBJ_DIR)/%.o: $(OBJ_DIR)/%.i
@@ -49,7 +48,7 @@ $(OBJ_DIR)/%.o: %.cc
 -include $(OBJS:.o=.d)
 
 # Some convenient rules
-
+.SECONDARY: $(OBJ_DIR)/%.i
 .PHONY: app clean
 
 app: $(BINARY)
