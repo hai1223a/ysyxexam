@@ -261,21 +261,22 @@ void ckeck_expression(int p, int q) {
   for(int i = p; i <= q; i++)
   {
     if(OP(i))
-    {
-      // 检查指针
       if(tokens[i].type == '*')
         if(i != q && (EXPRESSION(i+1) || tokens[i+1].type == '('))
           if(i == p || (i != p && (OP(i-1))))
             {
               tokens[i].type = TK_POINT;
             }
+  }
+  for(int i = p; i <= q; i++)
+  {
+    if(OP(i))
       if(tokens[i].type != TK_POINT) {
         if(i == p || i == q)
           Assert(0, "四则运算表达式写错了");
         else if(OP(i-1) || tokens[i-1].type == '(' || OP(i+1) || tokens[i+1].type == ')')
                 Assert(0, "四则运算表达式子写错了");
       }
-    } 
   }
 }
 
