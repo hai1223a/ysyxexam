@@ -27,7 +27,6 @@ LDFLAGS := -O2 $(LDFLAGS)
 
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRC:%.cc=$(OBJ_DIR)/%.o)
 
-
 # Compilation patterns
 $(OBJ_DIR)/%.o: $(OBJ_DIR)/%.i
 	@$(CC) $(CFLAGS) -c -o $@ $<
