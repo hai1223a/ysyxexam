@@ -257,7 +257,7 @@ bool check_parentheses(int p, int q) {
 
 void ckeck_expression(int p, int q) {
   // 已经确保了q>p
-  printf("p = %d, q =%d\n",p,q);
+  // printf("p = %d, q =%d\n",p,q);
   for(int i = p; i <= q; i++)
   {
     if(OP(i))
@@ -312,7 +312,7 @@ word_t eval(int p, int q){
   else {
     ckeck_expression(p, q);
     int op = find_main_op(p,q);
-    printf("op = %d\n",op);
+    // printf("op = %d\n",op);
     word_t val1 = 0,val2;
     if(tokens[op].type != TK_POINT) {
       val1 = eval(p, op - 1);
