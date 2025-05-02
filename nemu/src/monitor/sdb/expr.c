@@ -263,7 +263,7 @@ void ckeck_expression(int p, int q) {
     if(OP(i))
       if(tokens[i].type == '*')
         if(i != q && (EXPRESSION(i+1) || tokens[i+1].type == '('))
-          if(i == p || (i != p && (OP(i-1))))
+          if(i == p || (i != p && (OP(i-1) || tokens[i-1].type == '(')))
             {
               tokens[i].type = TK_POINT;
             }
