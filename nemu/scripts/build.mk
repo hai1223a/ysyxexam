@@ -48,7 +48,7 @@ $(OBJ_DIR)/%.o: %.cc
 -include $(OBJS:.o=.d)
 
 # Some convenient rules
-.SECONDARY: $(OBJ_DIR)/%.o
+.PRECIOUS: $(OBJ_DIR)/%.i
 .PHONY: app clean
 
 app: $(BINARY)
