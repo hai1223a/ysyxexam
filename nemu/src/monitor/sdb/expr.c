@@ -311,6 +311,7 @@ word_t eval(int p, int q){
   else {
     ckeck_expression(p, q);
     int op = find_main_op(p,q);
+    printf("op = %d\n",op);
     word_t val1 = 0,val2;
     if(tokens[op].type != TK_POINT) {
       val1 = eval(p, op - 1);
