@@ -105,7 +105,7 @@ static int cmd_p(char *args){
   if(args) result = expr(args, &success);
   if(!success) assert(0);
   printf("十进制:%u\t十六进制:%x\n",result, result);
-  return result;
+  return 0;
 }
 
 static int cmd_w(char *args) {
