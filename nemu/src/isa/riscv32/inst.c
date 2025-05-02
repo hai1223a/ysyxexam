@@ -61,7 +61,7 @@ static int decode_exec(Decode *s) {
   int rd = 0; \
   word_t src1 = 0, src2 = 0, imm = 0; \
   decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type)); \
-  printf("imm = %d\n",(int)imm); \
+  printf("imm = %d  %u  %x\n",(int)imm, imm, imm); \
   __VA_ARGS__ ; \
 }
 
