@@ -32,7 +32,7 @@ enum {
 #define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
-#define immJ() do { *imm = (SEXT(BITS(i, 31, 31), 12) << 20) | (BITS(i, 19, 12) << 12) | \
+#define immJ() do { *imm = (SEXT(BITS(i, 31, 31), 13) << 20) | (BITS(i, 19, 12) << 12) | \
                     (BITS(i, 20, 20) << 11) | (BITS(i, 30, 21) << 1) | 0; } while(0)
 
 static word_t alu(word_t op1, word_t op2) {
@@ -61,12 +61,18 @@ static int decode_exec(Decode *s) {
   int rd = 0; \
   word_t src1 = 0, src2 = 0, imm = 0; \
   decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type)); \
-  printf("imm = %d  %u  %x\n",(int)imm, imm, imm); \
+  printf("imm = %d  %u  %x \n",(int)imm, imm, imm); \
   __VA_ARGS__ ; \
 }
 
   INSTPAT_START();
   // RV32I
+  /*
+  fe 9f f0 ef
+  1111 1110 1001 1111 1111 0000 1110 1111
+  1 1111110100 1 11111111 00001 11011 11
+  111111111111 1 11111111 1 1111110100 0
+  */
   INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, R(rd) = imm);
   INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc  , U, R(rd) = s->pc + imm);
   INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, R(rd) = s->snpc; s->dnpc = alu(s->pc, imm));
