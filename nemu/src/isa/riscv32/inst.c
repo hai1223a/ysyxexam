@@ -28,7 +28,7 @@ enum {
 };
 
 enum {
-  ADD,EQ,LEQ_U,
+  ADD, SUB, EQ, LEQ_U,
 };
 
 #define src1R() do { *src1 = R(rs1); } while (0)
@@ -48,6 +48,9 @@ static word_t alu(const word_t op1, const word_t op2, int op) {
   {
     case ADD:
       return op1 + op2;          
+      break;
+    case SUB:
+      return op1 - op2;          
       break;
     case EQ:
       return op1 == op2;
@@ -106,6 +109,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, Mw(src1 + imm, 4, src2));
   INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, R(rd) = alu(src1, imm, ADD));
   INSTPAT("0000000 ????? ????? 000 ????? 01100 11", add    , R, R(rd) = alu(src1, src2, ADD));
+  INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, R(rd) = alu(src1, src2, SUB));
   INSTPAT("??????? ????? ????? 010 ????? 00100 11", sltiu  , I, R(rd) = alu(src1, imm, LEQ_U));
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, R(10))); // R(10) is $a0
