@@ -87,8 +87,8 @@ static int decode_exec(Decode *s) {
   word_t src1 = 0, src2 = 0, imm = 0; \
   decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type)); \
   __VA_ARGS__ ; \
+  printf("imm = %d  %u  %x \n src1 = %u \n src2 = %u",(int)imm, imm, imm, src1, src2); \
 }
-  // printf("imm = %d  %u  %x \n",(int)imm, imm, imm); 
   INSTPAT_START();
   // RV32I
   /*
