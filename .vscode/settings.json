@@ -81,6 +81,7 @@
         "ex": "c",
         "charconv": "c",
         "ranges": "c",
-        "variant": "c"
+        "variant": "c",
+        "isa-def.h": "c"
     }
 }
