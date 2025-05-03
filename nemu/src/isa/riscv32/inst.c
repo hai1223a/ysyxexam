@@ -87,7 +87,7 @@ static int decode_exec(Decode *s) {
   word_t src1 = 0, src2 = 0, imm = 0; \
   decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type)); \
   __VA_ARGS__ ; \
-  printf("imm = %d  %u  %x \n src1 = %x, src2 = %x\n",(int)imm, imm, imm, src1, src2); \
+  printf("imm = %d  %u  %x \n src1 = %x, src2 = %x, rd = %d, Reg(rd) = %x\n",(int)imm, imm, imm, src1, src2, rd, Reg(rd)); \
 }
   INSTPAT_START();
   // RV32I
@@ -115,7 +115,6 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, Reg(10))); // R(10) is $a0
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
-
   Reg(0) = 0; // reset $zero to 0
 
   return 0;
