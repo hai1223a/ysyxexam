@@ -13,10 +13,7 @@ v1.0, 2025-04-11
 - `nemu/include/cpu/ifetch.h` 的 `inst_fetch` 通过调用 `vaddr_ifetch` 直接从内存中取指令
 - `nemu/src/isa/riscv32/inst.c` 的 `decode_exec` 通过宏 `INSTPAT` 完成译码工作和执行工作 
 
-lui
-addi
-auipc
-jal
-jalr
-sw
-ebreak
+[red]#*必做题*# _运行第一个客户程序_ ::
+* [*] 已完成 +
+这个程序涉及到的指令包括 `lui`,`addi`,`auipc`,`jal`,`jalr`,`sw`,`ebreak` +
+更改的文件主要有 `nemu/src/isa/riscv32/inst.c` 

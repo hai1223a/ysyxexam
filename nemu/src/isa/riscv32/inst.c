@@ -36,7 +36,7 @@ enum {
                     (BITS(i, 20, 20) << 11) | (BITS(i, 30, 21) << 1) | 0; } while(0)
 
 static word_t alu(word_t op1, word_t op2) {
-  return (word_t)((int)op1 + (int)op2);
+  return op1+op2;
 }
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
   uint32_t i = s->isa.inst;
