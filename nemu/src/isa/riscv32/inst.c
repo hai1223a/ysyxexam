@@ -33,7 +33,11 @@ enum {
   lb, lh, lw, lbu, lhu, sb, sh, sw, addi, slti, 
   sltiu, xori, ori, andi, slli, srli, srai, add, sub, sll,
   slt, sltu, xor, srl, sra, or, and, fence, fence_tso, 
-  pause, ecall, ebreak, inv, 
+  pause, ecall, ebreak,  
+  // RV32M
+  mul, mulh, mulhsu, mulhu, i_div, divu, rem, remu,
+  // NEMU
+  inv,
 };
 enum {
   // 算数
@@ -44,6 +48,8 @@ enum {
   EQ, NEQ, LEQ_U, GEQ_U, LEQ, GEQ,
   // 移位 
   SRA, SLL, SRL, 
+  // 乘除法
+  MUL, 
 };
 
 #define src1R() do { *src1 = Reg(rs1); } while (0)
@@ -59,7 +65,6 @@ enum {
 
 
 static word_t alu(const word_t op1, const word_t op2, int op) {
-  
   switch (op)
   { 
     case ADD:     return op1 + op2;          
@@ -79,6 +84,19 @@ static word_t alu(const word_t op1, const word_t op2, int op) {
     default:      return 0;
   }
 }
+
+// static word_t mul_div(const word_t op1, const word_t op2, int op) {
+//   uint64_t mul_result = 0;
+//   switch (op)
+//   {
+//   case MUL:
+//     return op1*op2;
+//     break;
+//   default:
+//     break;
+//   }
+// }
+
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type, int name) {
   uint32_t i = s->isa.inst;
   int rs1 = BITS(i, 19, 15);
@@ -98,7 +116,9 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 
 static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
-
+  word_t a = -12;
+  word_t b = 13;
+  printf("a*b = %d\n", a*b);
 #define INSTPAT_INST(s) ((s)->isa.inst)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
   int rd = 0; \
@@ -137,9 +157,9 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 ????? ????? 100 ????? 01100 11", xor    , R, Reg(rd) = alu(src1, src2, XOR));
   INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or     , R, Reg(rd) = alu(src1, src2, OR));
   INSTPAT("0000000 ????? ????? 111 ????? 01100 11", and    , R, Reg(rd) = alu(src1, src2, AND));
-  
-
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, Reg(10))); // R(10) is $a0
+  //RV32M
+  INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul    , R, Reg(rd) = alu(src1, src2, AND));
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
   Reg(0) = 0; // reset $zero to 0
