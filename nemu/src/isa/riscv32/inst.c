@@ -65,6 +65,9 @@ enum {
 
 
 static word_t alu(const word_t op1, const word_t op2, int op) {
+  int32_t int_op1 = (int32_t)op1;
+  int32_t int_op2 = (int32_t)op2;
+
   switch (op)
   { 
     case ADD:     return op1 + op2;          
@@ -76,9 +79,9 @@ static word_t alu(const word_t op1, const word_t op2, int op) {
     case NEQ:     return op1 != op2;
     case LEQ_U:   return op1 < op2;
     case GEQ_U:   return op1 >= op2;
-    case LEQ:     return (int32_t)op1 < (int32_t)op2;
-    case GEQ:     return (int32_t)op1 >= (int32_t)op2;
-    case SRA:     return (int32_t)op1 >> op2;
+    case LEQ:     return int_op1 <  int_op2;
+    case GEQ:     return int_op1 >= int_op2;
+    case SRA:     return int_op1 >> op2;
     case SLL:     return op1 << op2;
     case SRL:     return op1 >> op2;                                  
     default:      return 0;
