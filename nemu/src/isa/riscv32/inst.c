@@ -54,7 +54,7 @@ enum {
 
 #define src1R() do { *src1 = Reg(rs1); } while (0)
 #define src2R() do { *src2 = Reg(rs2); } while (0)
-#define immI() do { if(name == srai || name == srli) *imm = BITS(i, 24, 20); \
+#define immI() do { if(name == srai || name == sra) *imm = BITS(i, 24, 20); \
                     else *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
@@ -168,6 +168,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 ????? ????? 001 ????? 01100 11", sll    , R, Reg(rd) = alu(src1, src2, SLL));
   INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, Reg(rd) = alu(src1, src2, LEQ_U));
   INSTPAT("0000000 ????? ????? 100 ????? 01100 11", xor    , R, Reg(rd) = alu(src1, src2, XOR));
+  INSTPAT("0000000 ????? ????? 101 ????? 01100 11", srl    , R, Reg(rd) = alu(src1, src2, SRL));
   INSTPAT("0100000 ????? ????? 101 ????? 01100 11", sra    , R, Reg(rd) = alu(src1, src2, SRA));
   INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or     , R, Reg(rd) = alu(src1, src2, OR));
   INSTPAT("0000000 ????? ????? 111 ????? 01100 11", and    , R, Reg(rd) = alu(src1, src2, AND));
