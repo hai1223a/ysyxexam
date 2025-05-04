@@ -28,7 +28,7 @@ enum {
 };
 
 enum {
-  ADD, SUB, EQ, LEQ_U, XOR,
+  ADD, SUB, EQ, LEQ_U, XOR, OR,
 };
 
 #define src1R() do { *src1 = Reg(rs1); } while (0)
@@ -58,6 +58,8 @@ static word_t alu(const word_t op1, const word_t op2, int op) {
       return op1 < op2;
     case XOR:
       return op1 ^ op2;
+    case OR:
+      return op1 | op2;
     default:
       return 0;
       break;
@@ -114,6 +116,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, Reg(rd) = alu(src1, src2, SUB));
   INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, Reg(rd) = alu(src1, src2, LEQ_U));
   INSTPAT("0000000 ????? ????? 100 ????? 01100 11", xor    , R, Reg(rd) = alu(src1, src2, XOR));
+  INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or     , R, Reg(rd) = alu(src1, src2, OR));
   INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, Reg(rd) = alu(src1, imm, LEQ_U));
 
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, Reg(10))); // R(10) is $a0
