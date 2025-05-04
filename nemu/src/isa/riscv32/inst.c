@@ -36,7 +36,14 @@ enum {
   pause, ecall, ebreak, inv, 
 };
 enum {
-  ADD, SUB, EQ, LEQ_U, XOR, OR, AND, SRA, SLL, 
+  // 算数
+  ADD, SUB, 
+  // 逻辑运算
+  XOR, OR, AND,
+  // 比较
+  EQ, NEQ, LEQ_U, GEQ_U, LEQ, GEQ,
+  // 移位 
+  SRA, SLL, SRL, 
 };
 
 #define src1R() do { *src1 = Reg(rs1); } while (0)
@@ -54,30 +61,22 @@ enum {
 static word_t alu(const word_t op1, const word_t op2, int op) {
   
   switch (op)
-  {
-    case ADD:
-      return op1 + op2;          
-      break;
-    case SUB:
-      return op1 - op2;          
-      break;
-    case EQ:
-      return op1 == op2;
-    case LEQ_U:
-      return op1 < op2;
-    case XOR:
-      return op1 ^ op2;
-    case OR:
-      return op1 | op2;
-    case AND:
-      return op1 & op2;
-    case SRA:
-      return (int32_t)op1 >> op2;
-    case SLL:
-      return op1 << op2;
-    default:
-      return 0;
-      break;
+  { 
+    case ADD:     return op1 + op2;          
+    case SUB:     return op1 - op2;          
+    case XOR:     return op1 ^ op2;
+    case OR:      return op1 | op2;
+    case AND:     return op1 & op2;
+    case EQ:      return op1 == op2;
+    case NEQ:     return op1 != op2;
+    case LEQ_U:   return op1 < op2;
+    case GEQ_U:   return op1 >= op2;
+    case LEQ:     return (int32_t)op1 < (int32_t)op2;
+    case GEQ:     return (int32_t)op1 >= (int32_t)op2;
+    case SRA:     return (int32_t)op1 >> op2;
+    case SLL:     return op1 << op2;
+    case SRL:     return op1 >> op2;                                  
+    default:      return 0;
   }
 }
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type, int name) {
@@ -115,7 +114,8 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, Reg(rd) = s->snpc; s->dnpc = alu(s->pc, imm, ADD));
   INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, Reg(rd) = s->snpc; s->dnpc = alu(src1, imm, ADD) & ~1);
   INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, if(alu(src1, src2, EQ)) s->dnpc = alu(s->pc, imm, ADD));
-  INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if(!alu(src1, src2, EQ)) s->dnpc = alu(s->pc, imm, ADD));
+  INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if(alu(src1, src2, NEQ)) s->dnpc = alu(s->pc, imm, ADD));
+  INSTPAT("??????? ????? ????? 101 ????? 11000 11", bge    , B, if(alu(src1, src2, GEQ)) s->dnpc = alu(s->pc, imm, ADD));
   INSTPAT("??????? ????? ????? 010 ????? 00000 11", lw     , I, Reg(rd) = Mr(src1 + imm, 4));
   INSTPAT("??????? ????? ????? 100 ????? 00000 11", lbu    , I, Reg(rd) = Mr(src1 + imm, 1));
   INSTPAT("??????? ????? ????? 000 ????? 01000 11", sb     , S, Mw(src1 + imm, 1, src2));
