@@ -131,6 +131,11 @@ static int cmd_d(char *args) {
   return 0;
 }
 
+static int cmd_r(char *args) {
+  printf("告诉你还没实现了\n");
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -145,9 +150,8 @@ static struct {
   { "p", "查看表达式的值, 格式为p EXPR, 将会打印表达式EXPR的十进制和十六进制表达", cmd_p},
   { "w", "设置监视点, 格式为w EXPR, 当EXPR的值发生改变时将会中断程序", cmd_w},
   { "d", "删除监视点, 格式为d N, 表示删除序号为N的监视点", cmd_d},
-
+  { "r", "重新开始程序,还没实现", cmd_r},
   /* TODO: Add more commands */
-
 };
 
 #define NR_CMD ARRLEN(cmd_table)
