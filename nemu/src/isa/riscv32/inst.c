@@ -123,7 +123,7 @@ static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
   word_t a = 2930885290;
   word_t b = 2930885290;
-  printf("a*b = %x, a*b = %x, a*b = %lx, a*b = %ld\n", (word_t)BITS((int64_t)a * (int64_t)a, 63, 32), (int32_t)a*(int32_t)b, (int64_t)a*(int64_t)b, (int64_t)a*(int64_t)b);
+  printf("a*b = %x, a*b = %x, a*b = %lx, a*b = %llx\n", (word_t)BITS((int64_t)a * (int64_t)a, 63, 32), (int32_t)a*(int32_t)b, (int64_t)a*(int64_t)b, (long long)a*(long long)b);
 #define INSTPAT_INST(s) ((s)->isa.inst)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
   int rd = 0; \
