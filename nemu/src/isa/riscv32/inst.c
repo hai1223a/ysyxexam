@@ -67,6 +67,7 @@ enum {
 static word_t alu(const word_t op1, const word_t op2, int op) {
   int32_t int_op1 = (int32_t)op1;
   int32_t int_op2 = (int32_t)op2;
+  word_t  op2_low5 = BITS(op2, 4, 0);
 
   switch (op)
   { 
@@ -81,9 +82,9 @@ static word_t alu(const word_t op1, const word_t op2, int op) {
     case GEQ_U:   return op1 >= op2;
     case LEQ:     return int_op1 <  int_op2;
     case GEQ:     return int_op1 >= int_op2;
-    case SRA:     return int_op1 >> op2;
-    case SLL:     return op1 << op2;
-    case SRL:     return op1 >> op2;                                  
+    case SRA:     return int_op1 >> op2_low5;
+    case SLL:     return op1 << op2_low5;
+    case SRL:     return op1 >> op2_low5;                                  
     default:      return 0;
   }
 }
@@ -167,6 +168,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 ????? ????? 001 ????? 01100 11", sll    , R, Reg(rd) = alu(src1, src2, SLL));
   INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, Reg(rd) = alu(src1, src2, LEQ_U));
   INSTPAT("0000000 ????? ????? 100 ????? 01100 11", xor    , R, Reg(rd) = alu(src1, src2, XOR));
+  INSTPAT("0100000 ????? ????? 101 ????? 01100 11", sra    , R, Reg(rd) = alu(src1, src2, SRA));
   INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or     , R, Reg(rd) = alu(src1, src2, OR));
   INSTPAT("0000000 ????? ????? 111 ????? 01100 11", and    , R, Reg(rd) = alu(src1, src2, AND));
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, Reg(10))); // R(10) is $a0
