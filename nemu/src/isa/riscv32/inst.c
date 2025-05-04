@@ -28,12 +28,21 @@ enum {
 };
 
 enum {
-  ADD, SUB, EQ, LEQ_U, XOR, OR,
+  // RV32I
+  lui, auipc, jal, jalr, beq, bne, blt, bge, bltu, bgeu, 
+  lb, lh, lw, lbu, lhu, sb, sh, sw, addi, slti, 
+  sltiu, xori, ori, andi, slli, srli, srai, add, sub, sll,
+  slt, sltu, xor, srl, sra, or, and, fence, fence_tso, 
+  pause, ecall, ebreak, inv, 
+};
+enum {
+  ADD, SUB, EQ, LEQ_U, XOR, OR, SRA,
 };
 
 #define src1R() do { *src1 = Reg(rs1); } while (0)
 #define src2R() do { *src2 = Reg(rs2); } while (0)
-#define immI() do { *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
+#define immI() do { if(name == srai) *imm = BITS(i, 24, 20); \
+                    else *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
 #define immJ() do { *imm = (SEXT(BITS(i, 31, 31), 1) << 20) | (BITS(i, 19, 12) << 12) | \
@@ -60,12 +69,14 @@ static word_t alu(const word_t op1, const word_t op2, int op) {
       return op1 ^ op2;
     case OR:
       return op1 | op2;
+    case SRA:
+      return (int32_t)op1 >> op2;
     default:
       return 0;
       break;
   }
 }
-static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type) {
+static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type, int name) {
   uint32_t i = s->isa.inst;
   int rs1 = BITS(i, 19, 15);
   int rs2 = BITS(i, 24, 20);
@@ -84,12 +95,13 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 
 static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
-
+  word_t a = -10;
+  printf("a = %u, a>>3 = %u, a>>>3 = %u", a, a>>3, (int32_t)a>>3);
 #define INSTPAT_INST(s) ((s)->isa.inst)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
   int rd = 0; \
   word_t src1 = 0, src2 = 0, imm = 0; \
-  decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type)); \
+  decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type), name); \
   __VA_ARGS__ ; \
   printf("imm = %d  %u  %x \n src1 = %x, src2 = %x, rd = %s, Reg(rd) = %x\n",(int)imm, imm, imm, src1, src2, reg_name(rd), Reg(rd)); \
 }
@@ -113,6 +125,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 001 ????? 01000 11", sh     , S, Mw(src1 + imm, 2, src2));
   INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, Mw(src1 + imm, 4, src2));
   INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, Reg(rd) = alu(src1, imm, ADD));
+  INSTPAT("0100000 ????? ????? 101 ????? 00100 11", srai   , I, Reg(rd) = alu(src1, src2, ADD));//
   INSTPAT("0000000 ????? ????? 000 ????? 01100 11", add    , R, Reg(rd) = alu(src1, src2, ADD));
   INSTPAT("0100000 ????? ????? 000 ????? 01100 11", sub    , R, Reg(rd) = alu(src1, src2, SUB));
   INSTPAT("0000000 ????? ????? 011 ????? 01100 11", sltu   , R, Reg(rd) = alu(src1, src2, LEQ_U));
