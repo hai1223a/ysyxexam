@@ -122,7 +122,7 @@ static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
   word_t a = 2930885290;
   word_t b = 2930885290;
-  printf("a*b = %d, a*b = %d\n", (int32_t)((int64_t)a*(int64_t)b), (int32_t)a*(int32_t)b);
+  printf("a*b = %x, a*b = %x\n", (int32_t)((int64_t)a*(int64_t)b), (int32_t)a*(int32_t)b);
 #define INSTPAT_INST(s) ((s)->isa.inst)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
   int rd = 0; \
