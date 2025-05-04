@@ -29,7 +29,6 @@ void init_wp_pool();
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
   static char *line_read = NULL;
-  static char *last_command = NULL; // 保存上一次输入的命令
 
   if (line_read) {
     free(line_read);
@@ -39,16 +38,7 @@ static char* rl_gets() {
   line_read = readline("(nemu) ");
 
   if (line_read && *line_read) {
-    // 如果用户输入了新命令，保存到 last_command
-    if (last_command) {
-      free(last_command);
-    }
-    last_command = strdup(line_read); // 复制当前命令
     add_history(line_read);
-  } else if (!line_read && last_command) {
-    // 如果用户未输入任何字符，返回上一次的命令
-    printf("Repeating last command: %s\n", last_command);
-    line_read = strdup(last_command); // 复制上一次命令
   }
 
   return line_read;
