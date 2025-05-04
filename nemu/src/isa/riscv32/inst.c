@@ -120,9 +120,9 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 
 static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
-  // word_t a = -12;
-  // word_t b = 13;
-  // printf("a*b = %d\n", (int)a*(int)b);
+  word_t a = 2930885290;
+  word_t b = 2930885290;
+  printf("a*b = %ld\n", (int64_t)a*(int64_t)b);
 #define INSTPAT_INST(s) ((s)->isa.inst)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
   int rd = 0; \
