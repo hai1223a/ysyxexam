@@ -127,17 +127,18 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 
 static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
-  word_t a = 2930885290;
-  word_t b = 2930885290;
-  printf("a*b = %x, a*b = %x, a*b = %lx, a*b = %llx\n", (word_t)BITS((int64_t)a * (int64_t)a, 63, 32), (int32_t)a*(int32_t)b, (int64_t)a*(int64_t)b, (long long)a*(long long)b);
+  // word_t a = 2930885290;
+  // word_t b = 2930885290;
+  // printf("a*b = %x, a*b = %x, a*b = %lx, a*b = %llx\n", (word_t)BITS((int64_t)a * (int64_t)a, 63, 32), (int32_t)a*(int32_t)b, (int64_t)a*(int64_t)b, (long long)a*(long long)b);
 #define INSTPAT_INST(s) ((s)->isa.inst)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
   int rd = 0; \
   word_t src1 = 0, src2 = 0, imm = 0; \
   decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type), name); \
   __VA_ARGS__ ; \
-  printf("imm = %d  %u  %x \n src1 = %x, src2 = %x, rd = %s, Reg(rd) = %x\n $pc = 0x%x\n",(int)imm, imm, imm, src1, src2, reg_name(rd), Reg(rd), s->pc); \
 }
+  // printf("imm = %d  %u  %x \n src1 = %x, src2 = %x, rd = %s, Reg(rd) = %x\n $pc = 0x%x\n",(int)imm, imm, imm, src1, src2, reg_name(rd), Reg(rd), s->pc); 
+
   INSTPAT_START();
   // RV32I
   INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, Reg(rd) = imm);
