@@ -51,7 +51,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
       if(data_new[i] != data_pre[i])
       {
         nemu_state.state = NEMU_STOP;
-        printf("监控点%d发生了变化", i);
+        printf("监控点%d发生了变化\n", i);
         data_pre[i] = data_new[i];
       }
     }
