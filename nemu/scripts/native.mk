@@ -24,7 +24,7 @@ $(BINARY):: compile_git
 
 # Some convenient rules
 
-ARGS ?= --log=$(BUILD_DIR)/nemu-log.txt
+ARGS += --log=$(BUILD_DIR)/nemu-log.txt
 ARGS += $(ARGS_DIFF)
 
 # Command to execute NEMU
