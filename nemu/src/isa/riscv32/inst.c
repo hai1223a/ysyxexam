@@ -101,6 +101,7 @@ static word_t mul_div(const word_t op1, const word_t op2, int op) {
   }
 }
 
+
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type, int name) {
   uint32_t i = s->isa.inst;
   int rs1 = BITS(i, 19, 15);
