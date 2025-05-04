@@ -91,7 +91,7 @@ static word_t mul_div(const word_t op1, const word_t op2, int op) {
   {
     case MUL:     return (int32_t)op1 * (int32_t)op2;
     case MULH:
-      result_mul = (int64_t)op1 * (int64_t)op2;
+      result_mul = (int32_t)op1 * (int32_t)op2;
       return (word_t)BITS(result_mul, 63, 32);
     case DIV:     return (int32_t)op1 / (int32_t)op2;
     case DIVU:    return op1 / op2;
