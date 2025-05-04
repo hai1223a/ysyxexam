@@ -35,7 +35,7 @@ enum {
   slt, sltu, xor, srl, sra, or, and, fence, fence_tso, 
   pause, ecall, ebreak,  
   // RV32M
-  mul, mulh, mulhsu, mulhu, i_div, divu, rem, remu,
+  mul_, mulh_, mulhsu_, mulhu_, div_, divu_, rem_, remu_,
   // NEMU
   inv,
 };
@@ -85,17 +85,16 @@ static word_t alu(const word_t op1, const word_t op2, int op) {
   }
 }
 
-// static word_t mul_div(const word_t op1, const word_t op2, int op) {
-//   uint64_t mul_result = 0;
-//   switch (op)
-//   {
-//   case MUL:
-//     return op1*op2;
-//     break;
-//   default:
-//     break;
-//   }
-// }
+static word_t mul_div(const word_t op1, const word_t op2, int op) {
+  switch (op)
+  {
+  case MUL:
+    return op1*op2;
+    break;
+  default:
+    return 0;
+  }
+}
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type, int name) {
   uint32_t i = s->isa.inst;
@@ -116,9 +115,9 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 
 static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
-  word_t a = -12;
-  word_t b = 13;
-  printf("a*b = %d\n", (int)a*(int)b);
+  // word_t a = -12;
+  // word_t b = 13;
+  // printf("a*b = %d\n", (int)a*(int)b);
 #define INSTPAT_INST(s) ((s)->isa.inst)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
   int rd = 0; \
@@ -159,7 +158,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 ????? ????? 111 ????? 01100 11", and    , R, Reg(rd) = alu(src1, src2, AND));
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak , N, NEMUTRAP(s->pc, Reg(10))); // R(10) is $a0
   //RV32M
-  INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul    , R, Reg(rd) = alu(src1, src2, AND));
+  INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul_   , R, Reg(rd) = mul_div(src1, src2, MUL));
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
   Reg(0) = 0; // reset $zero to 0
