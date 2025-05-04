@@ -49,7 +49,7 @@ enum {
   // 移位 
   SRA, SLL, SRL, 
   // 乘除法
-  MUL, MULH, DIV, REM, REMU,
+  MUL, MULH, DIV, DIVU, REM, REMU,
 };
 
 #define src1R() do { *src1 = Reg(rs1); } while (0)
@@ -89,19 +89,15 @@ static word_t mul_div(const word_t op1, const word_t op2, int op) {
   int64_t result_mul;
   switch (op)
   {
-    case MUL:
-      return (int32_t)op1 * (int32_t)op2;
+    case MUL:     return (int32_t)op1 * (int32_t)op2;
     case MULH:
       result_mul = (int64_t)op1 * (int64_t)op2;
       return (word_t)BITS(result_mul, 63, 32);
-    case DIV:
-      return (int32_t)op1 / (int32_t)op2;
-    case REM:
-      return (int32_t)op1 % (int32_t)op2;
-    case REMU:
-      return op1 % op2;
-    default:
-      return 0;
+    case DIV:     return (int32_t)op1 / (int32_t)op2;
+    case DIVU:    return op1 / op2;
+    case REM:     return (int32_t)op1 % (int32_t)op2;
+    case REMU:    return op1 % op2;
+    default:      return 0;
   }
 }
 
@@ -172,6 +168,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul_   , R, Reg(rd) = mul_div(src1, src2, MUL));
   INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh_  , R, Reg(rd) = mul_div(src1, src2, MULH));
   INSTPAT("0000001 ????? ????? 100 ????? 01100 11", div_   , R, Reg(rd) = mul_div(src1, src2, DIV));
+  INSTPAT("0000001 ????? ????? 101 ????? 01100 11", divu_  , R, Reg(rd) = mul_div(src1, src2, DIVU));
   INSTPAT("0000001 ????? ????? 110 ????? 01100 11", rem_   , R, Reg(rd) = mul_div(src1, src2, REM));
   INSTPAT("0000001 ????? ????? 111 ????? 01100 11", remu_  , R, Reg(rd) = mul_div(src1, src2, REMU));
 
