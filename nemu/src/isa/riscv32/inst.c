@@ -71,8 +71,8 @@ static word_t alu(const word_t op1, const word_t op2, int op) {
 
   switch (op)
   { 
-    case ADD:     return op1 + op2;          
-    case SUB:     return op1 - op2;          
+    case ADD:     return int_op1 + int_op2;          
+    case SUB:     return int_op1 - int_op2;          
     case XOR:     return op1 ^ op2;
     case OR:      return op1 | op2;
     case AND:     return op1 & op2;
