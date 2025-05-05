@@ -94,7 +94,7 @@ static word_t mul_div(const word_t op1, const word_t op2, int op) {
   int32_t int_op1 = (int32_t)op1;
   int32_t int_op2 = (int32_t)op2;
   printf("op1 = %u, op2 = %u, int_op1 = %d, int_op2 = %d\n", op1, op2, int_op1, int_op2);
-  
+
   switch (op)
   {
     case MUL:     return int_op1 * int_op2;
@@ -135,8 +135,8 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 
 static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
-  word_t a = 0x80000000;
-  word_t b = 0xffffffff;
+  word_t a = 2147483648;
+  word_t b = 4294967295;
   printf("a/b = %d", (int32_t)a / (int32_t)b);
   // printf("a*b = %x, a*b = %x, a*b = %lx, a*b = %llx\n", (word_t)BITS((int64_t)a * (int64_t)a, 63, 32), (int32_t)a*(int32_t)b, (int64_t)a*(int64_t)b, (long long)a*(long long)b);
 #define INSTPAT_INST(s) ((s)->isa.inst)
