@@ -3,7 +3,7 @@ CSRCS = csrc/main.cpp
 VSRCS = $(wildcard vsrc/*.v)
 
 VERILATOR = verilator
-VERILATOR_CFLAGS += -Wall --cc -exe --build --x-assign unique --x-initial unique\
+VERILATOR_CFLAGS += --cc -exe --build --x-assign unique --x-initial unique\
 				   --top-module $(TOPNAME) $(VSRCS) $(CSRCS)
 
 all: sim
