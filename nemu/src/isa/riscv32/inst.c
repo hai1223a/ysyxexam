@@ -96,7 +96,7 @@ static word_t mul_div(const word_t op1, const word_t op2, int op) {
 
   if (op == DIV && int_op1 == INT32_MIN && int_op2 == -1) {
     printf("Warning: Division overflow detected: %d / %d\n", int_op1, int_op2);
-    return (word_t)INT32_MIN; // 返回一个合理的值，例如 INT32_MIN
+    return (word_t)0; // 返回一个合理的值，例如 INT32_MIN
   }
 
   if (op == REM && int_op1 == INT32_MIN && int_op2 == -1) {
@@ -111,7 +111,7 @@ static word_t mul_div(const word_t op1, const word_t op2, int op) {
 
   if ((op == REM || op == REMU) && op2 == 0) {
     printf("你对0求余数了: %d %% %d\n", int_op1, int_op2);
-    return 0; // 返回一个合理的值，例如 INT32_MIN
+    return op1; // 返回一个合理的值，例如 INT32_MIN
   }
 
   switch (op)
