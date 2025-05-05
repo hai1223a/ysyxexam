@@ -111,7 +111,7 @@ static word_t mul_div(const word_t op1, const word_t op2, int op) {
 
   if ((op == REM || op == REMU) && op2 == 0) {
     printf("你对0求余数了: %d %% %d\n", int_op1, int_op2);
-    return op1; // 返回一个合理的值，例如 INT32_MIN
+    return op2; // 返回一个合理的值，例如 INT32_MIN
   }
 
   switch (op)
