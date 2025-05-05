@@ -89,28 +89,28 @@ static word_t alu(const word_t op1, const word_t op2, int op) {
   }
 }
 
-static word_t mul_div(const word_t op1, const word_t op2, int op) {
+static word_t mul_div(Decode *s, const word_t op1, const word_t op2, int op) {
   int64_t result_mul;
   int32_t int_op1 = (int32_t)op1;
   int32_t int_op2 = (int32_t)op2;
 
   if (op == DIV && int_op1 == INT32_MIN && int_op2 == -1) {
-    Log("检测到除法溢出: %d / %d\n", int_op1, int_op2);
+    printf("PC = 0x%x, 检测到除法溢出: %d / %d\n", s->pc, int_op1, int_op2);
     return (word_t)INT32_MIN; // 返回一个合理的值，例如 INT32_MIN
   }
 
   if (op == REM && int_op1 == INT32_MIN && int_op2 == -1) {
-    Log("检测到求余数溢出: %d %% %d\n", int_op1, int_op2);
+    printf("PC = 0x%x, 检测到求余数溢出: %d %% %d\n", s->pc, int_op1, int_op2);
     return 0; // 因为求余用到了除法，所以也需要区分
   }
 
   if ((op == DIV || op == DIVU) && op2 == 0) {
-    Log("检测到除0: %d / %d\n", int_op1, int_op2);
+    printf("PC = 0x%x, 检测到除0: %d / %d\n", s->pc, int_op1, int_op2);
     return (word_t)UINT32_MAX; // 返回一个合理的值，例如 INT32_MIN
   }
 
   if ((op == REM || op == REMU) && op2 == 0) {
-    Log("检测到对0求余: %d %% %d\n", int_op1, int_op2);
+    printf("PC = 0x%x, 检测到对0求余: %d %% %d\n", s->pc, int_op1, int_op2);
     return op1; // 返回一个合理的值，例如 INT32_MIN
   }
 
@@ -213,14 +213,14 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall      , N, );
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak     , N, NEMUTRAP(s->pc, Reg(10))); // R(10) is $a0
   //RV32M
-  INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul_   , R, Reg(rd) = mul_div(src1, src2, MUL));
-  INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh_  , R, Reg(rd) = mul_div(src1, src2, MULH));
-  INSTPAT("0000001 ????? ????? 010 ????? 01100 11", mulhsu_, R, Reg(rd) = mul_div(src1, src2, MULHSU));
-  INSTPAT("0000001 ????? ????? 011 ????? 01100 11", mulhu_ , R, Reg(rd) = mul_div(src1, src2, MULHU));
-  INSTPAT("0000001 ????? ????? 100 ????? 01100 11", div_   , R, Reg(rd) = mul_div(src1, src2, DIV));
-  INSTPAT("0000001 ????? ????? 101 ????? 01100 11", divu_  , R, Reg(rd) = mul_div(src1, src2, DIVU));
-  INSTPAT("0000001 ????? ????? 110 ????? 01100 11", rem_   , R, Reg(rd) = mul_div(src1, src2, REM));
-  INSTPAT("0000001 ????? ????? 111 ????? 01100 11", remu_  , R, Reg(rd) = mul_div(src1, src2, REMU));
+  INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul_   , R, Reg(rd) = mul_div(s, src1, src2, MUL));
+  INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh_  , R, Reg(rd) = mul_div(s, src1, src2, MULH));
+  INSTPAT("0000001 ????? ????? 010 ????? 01100 11", mulhsu_, R, Reg(rd) = mul_div(s, src1, src2, MULHSU));
+  INSTPAT("0000001 ????? ????? 011 ????? 01100 11", mulhu_ , R, Reg(rd) = mul_div(s, src1, src2, MULHU));
+  INSTPAT("0000001 ????? ????? 100 ????? 01100 11", div_   , R, Reg(rd) = mul_div(s, src1, src2, DIV));
+  INSTPAT("0000001 ????? ????? 101 ????? 01100 11", divu_  , R, Reg(rd) = mul_div(s, src1, src2, DIVU));
+  INSTPAT("0000001 ????? ????? 110 ????? 01100 11", rem_   , R, Reg(rd) = mul_div(s, src1, src2, REM));
+  INSTPAT("0000001 ????? ????? 111 ????? 01100 11", remu_  , R, Reg(rd) = mul_div(s, src1, src2, REMU));
 
 
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
