@@ -1,0 +1,3 @@
+module ysyx_25050136_NPC();
+endmodule
+g++ -Os  -I.  -MMD -I/home/yunhai/tools/oss-cad-suite/share/verilator/include -I/home/yunhai/tools/oss-cad-suite/share/verilator/include/vltstd -DVM_COVERAGE=0 -DVM_SC=0 -DVM_TIMING=0 -DVM_TRACE=0 -DVM_TRACE_FST=0 -DVM_TRACE_VCD=0 -DVM_TRACE_SAIF=0 -faligned-new -fcf-protection=none -Wno-bool-operation -Wno-shadow -Wno-sign-compare -Wno-subobject-linkage -Wno-tautological-compare -Wno-uninitialized -Wno-unused-but-set-parameter -Wno-unused-but-set-variable -Wno-unused-parameter -Wno-unused-variable      -c -o verilated_threads.o /home/yunhai/tools/oss-cad-suite/share/verilator/include/verilated_threads.cpp
