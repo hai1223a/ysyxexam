@@ -143,6 +143,7 @@ static int decode_exec(Decode *s) {
   word_t src1 = 0, src2 = 0, imm = 0; \
   decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type), name); \
   __VA_ARGS__ ; \
+  printf("imm = %d  %u  %x \n src1 = %x, src2 = %x, rd = %s, Reg(rd) = %x\n $pc = 0x%x\n",(int)imm, imm, imm, src1, src2, reg_name(rd), Reg(rd), s->pc); \
 }
   // printf("imm = %d  %u  %x \n src1 = %x, src2 = %x, rd = %s, Reg(rd) = %x\n $pc = 0x%x\n",(int)imm, imm, imm, src1, src2, reg_name(rd), Reg(rd), s->pc); 
 
