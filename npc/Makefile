@@ -1,14 +1,21 @@
 TOPNAME = ysyx_25050136_NPC
 CSRCS = csrc/main.cpp
 VSRCS = $(wildcard vsrc/*.v)
+
+VERILATOR = verilator
 VERILATOR_CFLAGS = -Wall --cc -exe --build --x-assign unique --x-initial unique\
 				   --top-module $(TOPNAME) $(VSRCS) $(CSRCS)
 
-all:
+all: sim
 	@echo "Write this Makefile by your self."
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@echo "Write this Makefile by your self."
+	$(VERILATOR) $(VERILATOR_SIM_CFLAGS)
+	@./obj_dir/V$(TOPNAME) $(VERILATOR_EXE_CFLAGS)
 
+clean:
+	rm -rf obj_dir
+
+.PHONY: all sim clean
 include ../Makefile
