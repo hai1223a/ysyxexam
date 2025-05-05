@@ -11,8 +11,8 @@ all: sim
 
 sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(VERILATOR) $(VERILATOR_SIM_CFLAGS)
-	@./obj_dir/V$(TOPNAME) $(VERILATOR_EXE_CFLAGS)
+	$(VERILATOR) $(VERILATOR_CFLAGS)
+	@./obj_dir/V$(TOPNAME)
 
 clean:
 	rm -rf obj_dir
