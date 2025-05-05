@@ -100,17 +100,17 @@ static word_t mul_div(const word_t op1, const word_t op2, int op) {
   }
 
   if (op == REM && int_op1 == INT32_MIN && int_op2 == -1) {
-    printf("Warning: Division overflow detected: %d / %d\n", int_op1, int_op2);
-    return 0; // 返回一个合理的值，例如 INT32_MIN
+    printf("Warning: Remainder overflow detected: %d %% %d\n", int_op1, int_op2);
+    return 0; // 因为求余用到了除法，所以也需要区分
   }
 
   if ((op == DIV || op == DIVU) && op2 == 0) {
-    printf("Warning: Division overflow detected: %d / %d\n", int_op1, int_op2);
+    printf("你除以0了: %d / %d\n", int_op1, int_op2);
     return (word_t)UINT32_MAX; // 返回一个合理的值，例如 INT32_MIN
   }
 
   if ((op == REM || op == REMU) && op2 == 0) {
-    printf("Warning: Division overflow detected: %d / %d\n", int_op1, int_op2);
+    printf("你对0求余数了: %d %% %d\n", int_op1, int_op2);
     return op1; // 返回一个合理的值，例如 INT32_MIN
   }
 
