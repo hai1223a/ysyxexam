@@ -95,22 +95,22 @@ static word_t mul_div(const word_t op1, const word_t op2, int op) {
   int32_t int_op2 = (int32_t)op2;
 
   if (op == DIV && int_op1 == INT32_MIN && int_op2 == -1) {
-    printf("Warning: Division overflow detected: %d / %d\n", int_op1, int_op2);
-    return (word_t)0; // 返回一个合理的值，例如 INT32_MIN
+    printf("检测到除法溢出: %d / %d\n", int_op1, int_op2);
+    return (word_t)INT32_MIN; // 返回一个合理的值，例如 INT32_MIN
   }
 
   if (op == REM && int_op1 == INT32_MIN && int_op2 == -1) {
-    printf("Warning: Remainder overflow detected: %d %% %d\n", int_op1, int_op2);
+    printf("检测到求余数溢出: %d %% %d\n", int_op1, int_op2);
     return 0; // 因为求余用到了除法，所以也需要区分
   }
 
   if ((op == DIV || op == DIVU) && op2 == 0) {
-    printf("你除以0了: %d / %d\n", int_op1, int_op2);
+    printf("检测到除0: %d / %d\n", int_op1, int_op2);
     return (word_t)UINT32_MAX; // 返回一个合理的值，例如 INT32_MIN
   }
 
   if ((op == REM || op == REMU) && op2 == 0) {
-    printf("你对0求余数了: %d %% %d\n", int_op1, int_op2);
+    printf("检测到对0求余: %d %% %d\n", int_op1, int_op2);
     return op1; // 返回一个合理的值，例如 INT32_MIN
   }
 
@@ -126,7 +126,7 @@ static word_t mul_div(const word_t op1, const word_t op2, int op) {
     case MULHSU:
       result_mul = (int64_t)int_op1 * (int64_t)op2;
       return (word_t)BITS(result_mul, 63, 32);
-    case DIV:     return (word_t)(int_op1 / int_op2);
+    case DIV:     return int_op1 / int_op2;
     case DIVU:    return op1 / op2;
     case REM:     return int_op1 % int_op2;
     case REMU:    return op1 % op2;
@@ -154,9 +154,9 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 
 static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
-  word_t a = 0x80000000;
-  word_t b = -1;
-  printf("a/b = %d, a b = %d", (int)a/(int)b, (int)a%(int)b);
+  // word_t a = 0x80000000;
+  // word_t b = -1;
+  // printf("a/b = %d, a b = %d", (int)a/(int)b, (int)a%(int)b);
   // printf("a*b = %x, a*b = %x, a*b = %lx, a*b = %llx\n", (word_t)BITS((int64_t)a * (int64_t)a, 63, 32), (int32_t)a*(int32_t)b, (int64_t)a*(int64_t)b, (long long)a*(long long)b);
 #define INSTPAT_INST(s) ((s)->isa.inst)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
@@ -164,7 +164,6 @@ static int decode_exec(Decode *s) {
   word_t src1 = 0, src2 = 0, imm = 0; \
   decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type), name); \
   __VA_ARGS__ ; \
-  printf("imm = %d  %u  %x \n src1 = %x, src2 = %x, rd = %s, Reg(rd) = %x\n $pc = 0x%x\n",(int)imm, imm, imm, src1, src2, reg_name(rd), Reg(rd), s->pc); \
 }
   // printf("imm = %d  %u  %x \n src1 = %x, src2 = %x, rd = %s, Reg(rd) = %x\n $pc = 0x%x\n",(int)imm, imm, imm, src1, src2, reg_name(rd), Reg(rd), s->pc); 
 
