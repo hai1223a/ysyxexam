@@ -94,7 +94,7 @@ static word_t mul_div(const word_t op1, const word_t op2, int op) {
   int32_t int_op1 = (int32_t)op1;
   int32_t int_op2 = (int32_t)op2;
   // word_t a = (word_t)(int_op1 / int_op2);
-  // printf("op1 = %u, op2 = %u, int_op1 = %d, int_op2 = %d, (word_t)(int_op1 / int_op2) = %u\n", op1, op2, int_op1, int_op2, int_op1/int_op2);
+  printf("op1 = %u, op2 = %u, int_op1 = %d, int_op2 = %d, (word_t)(int_op1 / int_op2) = %u\n", op1, op2, int_op1, int_op2, (int32_t)op1/(int32_t)op2);
   switch (op)
   {
     case MUL:     return int_op1 * int_op2;
