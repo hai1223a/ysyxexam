@@ -133,8 +133,8 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 
 static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
-  word_t a = -2147483456;
-  word_t b = -1;
+  word_t a = 2147483840;
+  word_t b = 4294967295;
   printf("a/b = %d", (int32_t)a / (int32_t)b);
   printf("a*b = %x, a*b = %x, a*b = %lx, a*b = %llx\n", (word_t)BITS((int64_t)a * (int64_t)a, 63, 32), (int32_t)a*(int32_t)b, (int64_t)a*(int64_t)b, (long long)a*(long long)b);
 #define INSTPAT_INST(s) ((s)->isa.inst)
