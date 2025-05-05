@@ -104,6 +104,11 @@ static word_t mul_div(const word_t op1, const word_t op2, int op) {
     return (word_t)UINT32_MAX; // 返回一个合理的值，例如 INT32_MIN
   }
 
+  if ((op == REM || op == REMU) && op2 == 0) {
+    printf("Warning: Division overflow detected: %d / %d\n", int_op1, int_op2);
+    return op1; // 返回一个合理的值，例如 INT32_MIN
+  }
+
   switch (op)
   {
     case MUL:     return int_op1 * int_op2;
