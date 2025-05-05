@@ -83,6 +83,7 @@
         "ranges": "c",
         "variant": "c",
         "isa-def.h": "c",
-        "reg.h": "c"
+        "reg.h": "c",
+        "nemu.h": "c"
     }
 }

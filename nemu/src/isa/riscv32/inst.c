@@ -94,10 +94,10 @@ static word_t mul_div(Decode *s, const word_t op1, const word_t op2, int op) {
   int32_t int_op1 = (int32_t)op1;
   int32_t int_op2 = (int32_t)op2;
 
-  // if (op == DIV && int_op1 == INT32_MIN && int_op2 == -1) {
-  //   printf("PC = 0x%x, 检测到除法溢出: %d / %d\n", s->pc, int_op1, int_op2);
-  //   return (word_t)INT32_MIN; // 返回一个合理的值，例如 INT32_MIN
-  // }
+  if (op == DIV && int_op1 == INT32_MIN && int_op2 == -1) {
+    printf("PC = 0x%x, 检测到除法溢出: %d / %d\n", s->pc, int_op1, int_op2);
+    return (word_t)INT32_MIN; // 返回一个合理的值，例如 INT32_MIN
+  }
 
   if (op == REM && int_op1 == INT32_MIN && int_op2 == -1) {
     printf("PC = 0x%x, 检测到求余数溢出: %d %% %d\n", s->pc, int_op1, int_op2);
