@@ -1,3 +1,5 @@
+TOPNAME = top
+
 all:
 	@echo "Write this Makefile by your self."
 
