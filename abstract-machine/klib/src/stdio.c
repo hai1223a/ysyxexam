@@ -31,8 +31,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
             num = num / 10;
           } while(num > 0);
           while(n) {
-            *(out++) = num_str[n];
             n--;
+            *(out++) = num_str[n];
           }
           break;
         case 's':
