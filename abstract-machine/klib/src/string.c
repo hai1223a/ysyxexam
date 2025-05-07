@@ -71,12 +71,13 @@ int memcmp(const void *s1, const void *s2, size_t n) {
   const char *ss1 = (const char *)s1;
   const char *ss2 = (const char *)s2;
   
-  while (n-- && (*ss1 == *ss2))
+  while (n && (*ss1 == *ss2))
   {
+    n--;
     ss1++;
     ss2++;
   }
-  if(n == -1)
+  if(n)
     return *(unsigned char *)ss1 - *(unsigned char *)ss2;
   else
     return 0;
