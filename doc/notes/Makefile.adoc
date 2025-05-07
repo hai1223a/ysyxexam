@@ -120,6 +120,35 @@ clean:
 -echo "hello world"
 ----
 
+=== 条件判断
+涉及四个关键字 `ifeq`,`ifneq`,`ifdf`,`ifndf`.用法如下:
+[source,make]
+----
+mode = debug
+hello: hello.c
+ifeq ($(mode),debug)
+    @echo "debug mode" 
+    gcc -g -o hello hello.c
+else
+    @echo "release mode"
+    gcc -o hello hello.c
+endif
+----
+`ifeq` 表示比较两个参数是否相等,参数可以是变量的值,字符串甚至空字符串;同样可以使用 `ifneq` 直接替换,表示比较两个参数是否不相等.
+[source,make]
+----
+mode = 
+hello: hello.c
+ifdef mode
+    @echo "debug mode" 
+    gcc -g -o hello hello.c
+else
+    @echo "release mode"
+    gcc -o hello hello.c
+endif
+----
+`ifdef` 表示判断某个变量是否存在,或者是否被赋值;同样可以使用 `ifndef` 替代,表示判断是否不存在
+
 == Makefile高级用法
 === Makefile模式规则
 手册搜索 `Defining and Redefining Pattern Rules` +
@@ -146,17 +175,77 @@ test.o: test.c
 ----
 
 === Makefile的函数
-==== wildcard
-`$(wildcard 指定文件类型)` +
+make的函数分为两种,一种是内嵌函数,一种是自定义函数,前者直接引用,后者通过make的call函数间接调用. +
+make内嵌函数使用格式如下: +
+`$(函数名 参数1,参数2...)` +
+函数的参数也可以是函数或者变量,正常嵌套使用即可
+
+==== Flavor函数
+`$(flavor variable)`
 [source,make]
 ----
-# 将$(DIR)目录下所有C文件找到,并给SRC
-# 效果等价于$(shell find $(DIR) -name *.c)
-SRC := $(wildcard $(DIR)/*.c)
+ARCC = $(ARC) shift
+ARC = fuck
+ARS := hoo
+$(flavor ARS)
+# 结果为 simple
+$(flavor ARCC)
+# 结果为 recursive
+$(flavor ARSS)
+# 结果为 undefined
 ----
-该函数常用于包含所有需要的文件,比如一个C工程中所有的C文件
+文档中介绍变量不同的赋值方式称为变量的flavor,共有四种,常用的是两种 `simple` 和 `recursive`.
+简单理解,`simple` 表示使用 `:=` 赋值的,`recursive` 表示使用 `=` 赋值的. +
+这个函数用于查看变量的flavor,总共就有上面三种返回情况,其中 `undefined` 表示未定义.
 
-==== patsubst
+==== 控制make的函数
+用于提醒用户或在条件满足时停止make运行 +
+包括 `error`,`warning`,`info`
+
+===== error
+`$(error text…)`
+就是会报错退出运行,并且打印错误信息text到标准输出
+
+===== info
+`$(info text…)`
+就是打印文本text到标准输出
+
+==== Shell函数
+`$(shell shell函数...)`
+[source,make]
+----
+# 有a.c和b.c
+CSRCS = $(shell ls)
+# 会得到 CSRCS = a.c b.c
+# 换行符被替换成了空格
+----
+
+==== 文本处理函数
+包括 `subst`,`patsubst`,`strip`,`findstring`,`filter`,`filer-out`,`sort`,`word`,`wordlist`,`words`,`fistword`
+
+===== subst
+`$(subst from,to,text)`
+[source,make]
+----
+$(subst ee,EE,feet on the street)
+#结果为fEEt on the strEEt
+----
+用于实现字符串的转换,将text字符串中的from替换成to
+
+===== findstring
+`$(findstring FIND, IN)`
+[source,make]
+----
+.PHONY: all
+STR =     hello a    b   c   
+FIND = $(findstring hello, $(STR))
+all:
+    @echo "STR = $(STR)"
+    @echo "FIND = $(FIND)"
+----
+用于在IN字符串中寻找FIND字符串,如果找到则返回FIND字符串,没找到则返回空
+
+===== patsubst
 `$(patsubst 原模式,目标模式,文件列表)`
 [source,make]
 ----
@@ -166,3 +255,110 @@ SRC := $(wildcard $(DIR)/*.c)
 OBJ := $(patsubst $(DIR)/%.c, $(OBJDIR)/%.o, $(SRC))
 ----
 该函数常用于将检索包含到的文件做一个文件名的批量修改
+
+===== filter
+`$(filter pattern…,text)`
+[source,make]
+----
+sources := foo.c bar.c baz.s ugh.h
+$(filter %.c %.s,$(sources))
+# 得到foo.c bar.c baz.s
+----
+过滤掉text字符串中所有不符合pattern规则的字符串,这里pattern使用%作为通配符
+
+===== filter-out
+`$(filter-out pattern…,text)`
+[source,make]
+----
+objects=main1.o foo.o main2.o bar.o
+mains=main1.o main2.o
+$(filter-out $(mains),$(objects))
+# 得到foo.o bar.o
+----
+过滤掉text字符串中所有符合pattern规则的字符串,这里pattern使用%作为通配符
+
+===== sort
+`$(sort list)`
+[source,make]
+----
+$(sort foo bar lose lose)
+# 结果为bar foo lose
+----
+将list中的单词按照首字母顺序排列,首字母相同则依次比较下一个字母,并且删除重复的单词
+
+===== word
+`$(word n,text)`
+[source,make]
+----
+$(word 2, foo bar baz)
+# 结果为bar
+----
+返回text中的第N个单词,N=0报错,N大于text中单词总数返回空
+
+==== 文件名处理函数
+包括 `dir`,`notdir`,`suffix`,`basename`,`addsuffix`,`addprefix`,`join`,`wildcard`,`realpath`,`abspath`
+
+===== dir
+`$(notdir names…)`
+[source,make]
+----
+$(notdir src/foo.c hacks)
+# 得到src/ ./
+----
+从完整路径名中取得目录
+
+===== notdir
+`$(notdir names…)`
+[source,make]
+----
+$(notdir src/foo.c hacks)
+# 得到foo.c hacks
+----
+从完整路径名中取得文件名
+
+===== basename
+`$(basename names…)`
+[source,make]
+----
+$(basename src/foo.c src-1.0/bar hacks)
+# 得到src/foo src-1.0/bar hacks
+----
+获得文件前缀名,有一个点去点;有多个点去最后一个点;没有点返回全部
+
+===== addsuffix
+`$(addsuffix suffix,names…)`
+[source,make]
+----
+$(addsuffix .c,foo bar)
+# foo.c bar.c
+----
+简单理解就是给names中每个单词加前缀suffix,names中的每个单词之间使用空格间隔
+
+===== addprefix
+`$(addprefix prefix,names…)`
+[source,make]
+----
+$(addprefix src/,foo bar)
+# 得到src/foo src/bar
+----
+简单理解就是给names中每个单词加前缀prefix,names中的每个单词之间使用空格间隔
+
+===== join
+`$(join list1,list2)`
+[source,make]
+----
+$(join aa bb,.c .o)
+# 得到aa.c bb.o
+----
+按照索引依次拼接list1和list2中的单词,一般要求两个参数中单词数量一致,若不一致将会原样复制多的部分单词给结果
+
+===== wildcard
+`$(wildcard 指定文件类型)` +
+[source,make]
+----
+# 将$(DIR)目录下所有C文件找到,并给SRC
+# 效果等价于$(shell find $(DIR) -name *.c)
+SRC := $(wildcard $(DIR)/*.c)
+----
+该函数常用于包含所有需要的文件,比如一个C工程中所有的C文件
+

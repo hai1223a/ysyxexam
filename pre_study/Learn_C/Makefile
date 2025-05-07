@@ -1,6 +1,9 @@
 # 通用变量
 CC := gcc
-CFLAGS := -g -Wall -fsanitize=address 
+CFLAGS := -g -Wall -fsanitize=address
+objects=main1.o foo.o main2.o bar.o
+mains=main1.o main2.o
+$(info $(filter-out man%,$(objects)))
 # 默认目标
 .PHONY: all
 all:

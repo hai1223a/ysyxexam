@@ -1,0 +1,33 @@
+`include "../vsrc/config.v"
+module ysyx_25050136_EX
+    #(
+         DATA_WIDTH = 32
+     )
+     (
+         input  [`ysyx_25050136_FU_NUM-1:0] fu_i,
+         input  [`ysyx_25050136_ALU_OP_NUM-1:0] alu_op_i,
+         input  [DATA_WIDTH-1:0] op1_i,
+         input  [DATA_WIDTH-1:0] op2_i,
+         output [DATA_WIDTH-1:0] mem_addr_o,
+         output [DATA_WIDTH-1:0] gpr_data_o
+     );
+    // 选择功能部件
+    //=========================================
+    wire alu_en = fu_i[`ysyx_25050136_ALU];
+    // output declaration of module ysyx_25050136_ALU
+    wire [DATA_WIDTH-1:0] alu_out_o;
+    
+    ysyx_25050136_ALU u_ysyx_25050136_ALU(
+        .op1_i       	(op1_i        ),
+        .op2_i       	(op2_i        ),
+        .operation_i 	(alu_op_i     ),
+        .en_i        	(alu_en       ),
+        .out_o       	(alu_out_o    )
+    );
+    
+    assign mem_addr_o = 0;
+    assign gpr_data_o = alu_out_o;
+
+
+endmodule //ysyx_25050136_EX
+
