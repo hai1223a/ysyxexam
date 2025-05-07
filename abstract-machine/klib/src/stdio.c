@@ -10,11 +10,59 @@ int printf(const char *fmt, ...) {
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
-  panic("Not implemented");
+  char *head = out;
+  while (*fmt)
+  {
+    if(*fmt == '%') {
+      fmt++;
+      switch (*fmt)
+      {
+        case 'd':
+          int num = va_arg(ap, int);
+          char num_str[10];
+          int n = 0;
+          if(num < 0) {
+            *(out++) = '-';
+          }
+          do {
+            num_str[n] = (num % 10) + '0';
+            n++;
+            num /= 10;
+          } while(num);
+          while(n) {
+            *(out++) = num_str[n];
+            n--;
+          }
+          break;
+        case 's':
+          const char *s = va_arg(ap, const char *);
+          while(*s) {
+            *(out++) = *(s++);
+          }
+          break;
+        default:
+          *(out++) = '%';
+          *(out++) = *fmt;
+          break;
+      }
+    }
+    else 
+    {
+      *(out++) = *fmt;
+    }
+    fmt++;
+  }
+  
+  *out = '\0';
+  return out - head;
 }
 
 int sprintf(char *out, const char *fmt, ...) {
-  panic("Not implemented");
+  va_list ap;
+  va_start(ap, fmt);
+  int written = vsprintf(out, fmt, ap);
+  va_end(ap);
+  return written;
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
