@@ -22,15 +22,15 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           char num_str[10];
           int n = 0;
           if(num < 0) {
-            *out++ = '-';
+            *(out++) = '-';
           }
           do {
             num_str[n] = (num % 10) + '0';
             n++;
-            num /= 10;
+            num = num / 10;
           } while(num);
           while(n) {
-            *out++ = num_str[n];
+            *(out++) = num_str[n];
             n--;
           }
           break;
