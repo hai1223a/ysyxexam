@@ -23,12 +23,13 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           int n = 0;
           if(num < 0) {
             *(out++) = '-';
+            num = -num;
           }
           do {
             num_str[n] = (num % 10) + '0';
             n++;
             num = num / 10;
-          } while(num);
+          } while(num > 0);
           while(n) {
             *(out++) = num_str[n];
             n--;
