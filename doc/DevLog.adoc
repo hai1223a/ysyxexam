@@ -250,3 +250,14 @@ typedef struct inf {
 [green]##在riscv-tests-am的div测试中,出现了未定义的报错,报错如下 `==8538==ERROR: AddressSanitizer: FPE on unknown address 0x5df0d6b737bc (pc 0x5df0d6b737bc bp 0x7dcaf0b2ad20 sp 0x7ffe14f7ac30 T0)` 为什么呢?##::
 发现了两种情况,一个是除以0的情况,这种情况下需要特殊处理,返回word_t的最大值即可;另一个是-2147483648/-1,在有符号除法时,前者为int的最小值,按理说得到结果应该为2147483648,但是int的最大值是2147483647,故产生了未定义变量,这种情况下需要特殊处理,直接返回-2147483648即可. +
 同理若是在有符号求余时也需要考虑这两种情况,只是返回值不同.第一种返回被除数op1,第二种返回0.
+
+[[d2025-5-7]]
+== 2025/5/7 实验日志
+=== 今日完成任务
+* 学习make的语法,完善makefile.adoc笔记
+* 开始完成PA2.2中的内容,完善abstrac-machine中的kib涉及到的库函数
+
+=== 今日知识点
+- 函数参数可以使用const修饰,表示只读,当const修饰的参数是指针时有两种情况 +
+`const char *src` 表示指针指向的内容只读 +
+`char *const src` 表示指针本身只读 +
