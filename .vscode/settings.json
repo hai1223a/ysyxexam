@@ -84,6 +84,7 @@
         "variant": "c",
         "isa-def.h": "c",
         "reg.h": "c",
-        "nemu.h": "c"
+        "nemu.h": "c",
+        "am.h": "c"
     }
 }
