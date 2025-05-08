@@ -79,7 +79,7 @@ static void monitor_check(Decode *_this) {
       if(i == IRINGBUF.p) 
         printf("--->\n");
       else
-        printf("    \n");
+        printf(">>>>\n");
       puts(IRINGBUF.iringbuf[i]);
     }
   }
