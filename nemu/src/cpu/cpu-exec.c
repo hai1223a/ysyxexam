@@ -75,11 +75,11 @@ static void monitor_check(Decode *_this) {
   } IRINGBUF = {0};
 
   static void print_iringbuf() {
-    for(int i = 0; i < 1; i++) {
+    for(int i = 0; i < 32; i++) {
       if(i == IRINGBUF.p) 
-        printf("--->");
+        printf("--->\n");
       else
-        printf("    ");
+        printf("    \n");
       puts(IRINGBUF.iringbuf[i]);
     }
   }
@@ -164,9 +164,9 @@ void cpu_exec(uint64_t n) {
   }
 
   uint64_t timer_start = get_time();
-
+  print_iringbuf();
   execute(n);
-
+  print_iringbuf();
   uint64_t timer_end = get_time();
   g_timer += timer_end - timer_start;
   
