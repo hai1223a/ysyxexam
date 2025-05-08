@@ -71,7 +71,7 @@ static void monitor_check(Decode *_this) {
   #define IRINGBUF_DEEPTH 3
   struct {
     uint8_t p;
-    char iringbuf[128][IRINGBUF_DEEPTH];
+    char iringbuf[IRINGBUF_DEEPTH][128];
   } IRINGBUF = {0};
 
   static void print_iringbuf() {
