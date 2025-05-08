@@ -117,7 +117,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, ilen);
   // 这里也是IRINGBUF部分的代码
   //===============================================
-  strcpy(IRINGBUF.iringbuf[IRINGBUF.p], s->logbuf);
+  strncpy(IRINGBUF.iringbuf[IRINGBUF.p], s->logbuf, 128);
   if(IRINGBUF.p < IRINGBUF_DEEPTH)
     IRINGBUF.p++;
   else
