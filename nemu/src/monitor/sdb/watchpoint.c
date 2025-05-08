@@ -72,7 +72,6 @@ void free_wp(WP *wp) {
 void init_wp_pool() {
   int i;
   for (i = 0; i < NR_WP; i ++) {
-    printf("%p\n", &wp_pool[i]);
     memset(wp_pool[i].args, 0, sizeof(wp_pool[i].args));
     wp_pool[i].NO = i;
     wp_pool[i].next = (i == NR_WP - 1 ? NULL : &wp_pool[i + 1]);
