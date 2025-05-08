@@ -153,11 +153,11 @@ static void statistic() {
 }
 
 void assert_fail_msg() {
-  isa_reg_display();
   // 下面这里是IRINGBUF
   //===============================================
   IFDEF(CONFIG_ITRACE,print_iringbuf());
   //===============================================
+  isa_reg_display();
   statistic();
 }
 
