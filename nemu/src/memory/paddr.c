@@ -46,7 +46,7 @@ static void pmem_write(paddr_t addr, int len, word_t data) {
 static void out_of_bound(paddr_t addr) {
   #ifdef CONFIG_MTRACE
     printf("mtrace 访存出错报告\n");
-    printf("PC值   访存地址   操作  字节  写入数据\n");
+    printf("PC值\t访存地址   操作  字节  写入数据\n");
     puts(mtrace_buf);
   #endif
   panic("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
@@ -65,7 +65,7 @@ void init_mem() {
 word_t paddr_read(paddr_t addr, int len) {
   #ifdef CONFIG_MTRACE
     char *p = mtrace_buf;
-    p += snprintf(p, sizeof(mtrace_buf), FMT_WORD ":  ", cpu.pc);
+    p += snprintf(p, sizeof(mtrace_buf), FMT_WORD "\t ", cpu.pc);
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "%8x  ", addr);
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "read  %d\n", len);
     *p = '\0';
@@ -79,7 +79,7 @@ word_t paddr_read(paddr_t addr, int len) {
 void paddr_write(paddr_t addr, int len, word_t data) {
   #ifdef CONFIG_MTRACE
     char *p = mtrace_buf;
-    p += snprintf(p, sizeof(mtrace_buf), FMT_WORD ":  ", cpu.pc);
+    p += snprintf(p, sizeof(mtrace_buf), FMT_WORD ":\t", cpu.pc);
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "%8x  ", addr);
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "write  %d  %x  ", len, data);
     *p = '\0';
