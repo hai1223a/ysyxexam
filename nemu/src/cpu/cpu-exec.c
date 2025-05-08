@@ -75,7 +75,7 @@ static void monitor_check(Decode *_this) {
   } IRINGBUF = {0};
 
   static void print_iringbuf() {
-    for(int i = 0; i < 2; i++) {
+    for(int i = 0; i < 1; i++) {
       if(i == IRINGBUF.p) 
         printf("--->");
       else
