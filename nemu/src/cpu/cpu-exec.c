@@ -86,6 +86,7 @@ static void monitor_check(Decode *_this) {
         printf(">>>>");
       puts(IRINGBUF.iringbuf[i]);
     }
+    printf("\n");
   }
 #endif
 //===============================================
