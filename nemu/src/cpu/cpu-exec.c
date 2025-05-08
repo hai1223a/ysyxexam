@@ -76,6 +76,9 @@ static void monitor_check(Decode *_this) {
   } IRINGBUF = {0};
 
   static void print_iringbuf() {
+    printf("iringbuf打印\n");
+    printf("如果是发生了 HIT BAD TRAP 或者 ABORT, 则--->指向发生问题的指令\n");
+    printf("如果是发生了 assert 0 报错的话, 则--->指向发生问题的指令的上一条指令\n");
     for(int i = 0; i < IRINGBUF_DEEPTH; i++) {
       if(i == IRINGBUF.now_p) 
         printf("--->");
