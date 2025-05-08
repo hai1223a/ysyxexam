@@ -68,15 +68,16 @@ static void monitor_check(Decode *_this) {
 // 下面这里是IRINGBUF
 //===============================================
 #ifdef CONFIG_ITRACE
-  #define IRINGBUF_DEEPTH 3
+  #define IRINGBUF_DEEPTH 10
   struct {
+    uint8_t now_p;
     uint8_t p;
     char iringbuf[IRINGBUF_DEEPTH][128];
   } IRINGBUF = {0};
 
   static void print_iringbuf() {
     for(int i = 0; i < IRINGBUF_DEEPTH; i++) {
-      if(i == IRINGBUF.p) 
+      if(i == IRINGBUF.now_p) 
         printf("--->");
       else
         printf(">>>>");
@@ -117,6 +118,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, ilen);
   // 这里也是IRINGBUF部分的代码
   //===============================================
+  IRINGBUF.now_p = IRINGBUF.p;
   strcpy(IRINGBUF.iringbuf[IRINGBUF.p], s->logbuf);
   if(IRINGBUF.p < IRINGBUF_DEEPTH - 1)
     IRINGBUF.p++;
