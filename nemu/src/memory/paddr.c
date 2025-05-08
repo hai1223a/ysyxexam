@@ -46,7 +46,7 @@ static void pmem_write(paddr_t addr, int len, word_t data) {
 static void out_of_bound(paddr_t addr) {
   #ifdef CONFIG_MTRACE
     printf("mtrace 访存出错报告\n");
-    printf("PC值         访存地址   操作  字节  写入数据\n");
+    printf("PC值         访存地址  操作  字节  写入数据\n");
     puts(mtrace_buf);
   #endif
   panic("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
