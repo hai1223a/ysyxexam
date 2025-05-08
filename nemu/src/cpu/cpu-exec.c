@@ -39,11 +39,11 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+  // 下面部分是判断监控点的部分内容
   static word_t data_pre[NR_WP] = {0};
   static word_t data_new[NR_WP] = {0};
   int index[NR_WP] = {0};
   scan_watchpoint(data_new, index);
-  // printf("data_pre == %u, data_new == %u, index == %d", data_pre[0], data_new[0], index[0]);
   for (int i = 0; i < NR_WP; i++)
   {
     if(index[i])
@@ -52,6 +52,7 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
       {
         nemu_state.state = NEMU_STOP;
         printf("监控点%d发生了变化\n", i);
+        puts(_this->logbuf);
         data_pre[i] = data_new[i];
       }
     }
@@ -121,7 +122,7 @@ void cpu_exec(uint64_t n) {
   switch (nemu_state.state) {
     case NEMU_END: case NEMU_ABORT: case NEMU_QUIT:
       printf("Program execution has ended. To restart the program, exit NEMU and run again.\n");
-      // return;
+      return;
     default: nemu_state.state = NEMU_RUNNING;
   }
 
