@@ -10,6 +10,7 @@ int printf(const char *fmt, ...) {
 }
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
+  
   char *head = out;
   while (*fmt)
   {
