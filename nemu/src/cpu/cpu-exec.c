@@ -39,11 +39,16 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
-  // 下面部分是判断监控点的部分内容
+}
+
+// 下面部分是判断监控点的部分内容
+//===============================================
+static void monitor_check(Decode *_this) {
   static word_t data_pre[NR_WP] = {0};
   static word_t data_new[NR_WP] = {0};
   int index[NR_WP] = {0};
   scan_watchpoint(data_new, index);
+
   for (int i = 0; i < NR_WP; i++)
   {
     if(index[i])
@@ -58,6 +63,28 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
     }
   }
 }
+//===============================================
+
+// 下面这里是IRINGBUF
+//===============================================
+#ifdef CONFIG_ITRACE
+  #define IRINGBUF_DEEPTH 10
+  struct {
+    uint8_t p;
+    char iringbuf[128][IRINGBUF_DEEPTH];
+  } IRINGBUF = {0};
+
+  static void print_iringbuf() {
+    for(int i = 0; i < IRINGBUF_DEEPTH; i++) {
+      if(i == IRINGBUF.p) 
+        printf("--->");
+      else
+        printf("    ");
+      puts(IRINGBUF.iringbuf[i]);
+    }
+  }
+#endif
+//===============================================
 
 static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
@@ -88,6 +115,14 @@ static void exec_once(Decode *s, vaddr_t pc) {
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, ilen);
+  // 这里也是IRINGBUF部分的代码
+  //===============================================
+  strcpy(IRINGBUF.iringbuf[IRINGBUF.p], s->logbuf);
+  if(IRINGBUF.p < IRINGBUF_DEEPTH)
+    IRINGBUF.p++;
+  else
+    IRINGBUF.p = 0;
+  //===============================================
 #endif
 }}
 
@@ -97,6 +132,7 @@ static void execute(uint64_t n) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
+    monitor_check(&s);  // 监控点
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
@@ -113,6 +149,7 @@ static void statistic() {
 
 void assert_fail_msg() {
   isa_reg_display();
+  print_iringbuf();
   statistic();
 }
 
