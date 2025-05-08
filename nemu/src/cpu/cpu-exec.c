@@ -68,7 +68,7 @@ static void monitor_check(Decode *_this) {
 // 下面这里是IRINGBUF
 //===============================================
 #ifdef CONFIG_ITRACE
-  #define IRINGBUF_DEEPTH 10
+  #define IRINGBUF_DEEPTH 3
   struct {
     uint8_t p;
     char iringbuf[128][IRINGBUF_DEEPTH];
@@ -77,9 +77,9 @@ static void monitor_check(Decode *_this) {
   static void print_iringbuf() {
     for(int i = 0; i < 32; i++) {
       if(i == IRINGBUF.p) 
-        printf("--->\n");
+        printf("--->");
       else
-        printf(">>>>\n");
+        printf(">>>>");
       puts(IRINGBUF.iringbuf[i]);
     }
   }
@@ -164,7 +164,7 @@ void cpu_exec(uint64_t n) {
   }
 
   uint64_t timer_start = get_time();
-  print_iringbuf();
+  // print_iringbuf();
   execute(n);
   print_iringbuf();
   uint64_t timer_end = get_time();
