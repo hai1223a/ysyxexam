@@ -67,7 +67,7 @@ word_t paddr_read(paddr_t addr, int len) {
     char *p = mtrace_buf;
     p += snprintf(p, sizeof(mtrace_buf), FMT_WORD ":  ", cpu.pc);
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "%8x  ", addr);
-    p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "read  %d\n", len);
+    p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "read  %d", len);
     *p = '\0';
   #endif
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
@@ -81,7 +81,7 @@ void paddr_write(paddr_t addr, int len, word_t data) {
     char *p = mtrace_buf;
     p += snprintf(p, sizeof(mtrace_buf), FMT_WORD ":  ", cpu.pc);
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "%8x  ", addr);
-    p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "write  %d     %x\n", len, data);
+    p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "write  %d     %x", len, data);
     *p = '\0';
   #endif
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
