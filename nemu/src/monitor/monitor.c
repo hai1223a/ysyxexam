@@ -237,7 +237,7 @@ void init_monitor(int argc, char *argv[]) {
   IFDEF(CONFIG_FTRACE, load_elf());
 
   /* 打开ftracer的输出日志 */
-  init_ftracer_log(ftracer_log_file);
+  IFDEF(CONFIG_FTRACE, init_ftracer_log(ftracer_log_file));
 
   /* Display welcome message. */
   welcome();
