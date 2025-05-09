@@ -86,6 +86,7 @@
         "reg.h": "c",
         "nemu.h": "c",
         "am.h": "c",
-        "klib-macros.h": "c"
+        "klib-macros.h": "c",
+        "assert.h": "c"
     }
 }
