@@ -160,10 +160,12 @@ extern struct FUNC_FTRACE{
   char func_name[16];
 } FUNC_FTRACER[10];
 int FUNC_stack[10] = {0};
+char space[10] = {0};
 
 static void ftracer_log(Decode *s, int name)
 {
   static int p_stack = 0;
+
   // 识别 call 调用函数
   if(name == jal)
   {
@@ -171,7 +173,7 @@ static void ftracer_log(Decode *s, int name)
     {
       if(s->dnpc == FUNC_FTRACER[i].addr)
       {
-        ftracer_write("0x%8x call [%s @ 0x%8x]\n",s->pc, FUNC_FTRACER[i].func_name, s->dnpc);
+        ftracer_write("0x%8x call%*s[%s @ 0x%8x]\n",s->pc, p_stack, " ", FUNC_FTRACER[i].func_name, s->dnpc);
         Assert(p_stack < ARRLEN(FUNC_stack), "ftracer 的返回函数堆栈溢出\n");
         FUNC_stack[p_stack++] = i;
       }
@@ -181,7 +183,8 @@ static void ftracer_log(Decode *s, int name)
   if(s->isa.inst == 0x00008067)
   {
     Assert(p_stack > 0, "ftracer 的返回函数堆栈为空\n");
-    ftracer_write("0x%8x ret [%s @ 0x%8x]\n",s->pc, FUNC_FTRACER[FUNC_stack[--p_stack]].func_name, Reg(1));
+    p_stack--;
+    ftracer_write("0x%8x ret %*s[%s @ 0x%8x]\n",s->pc, p_stack, " ", FUNC_FTRACER[FUNC_stack[p_stack]].func_name, Reg(1));
   }
 }
 
