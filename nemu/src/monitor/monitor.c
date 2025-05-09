@@ -72,6 +72,12 @@ static long load_img() {
 // 加载elf文件
 //==================================================
 static char *elf_file = NULL;
+struct FUNC_FTRACE{
+  word_t addr;
+  char func_name[16];
+} FUNC_FTRACER[10] = {0};
+
+
 static void load_elf() {
   if (elf_file == NULL) {
     Log("没有elf文件输入\n");
@@ -138,11 +144,12 @@ static void load_elf() {
           }
           // 遍历符号表
           printf("Symbol Table (Section %d):\n", i);
-          for (int j = 0; j < symtab_entry_count; j++) {
+          for (int j = 0, k = 0; j < symtab_entry_count; j++) {
               if (ELF32_ST_TYPE(symtab[j].st_info) == STT_FUNC) {
-                  const char *sym_name = &strtab[symtab[j].st_name];
-                  printf("  Symbol: %s, Value: 0x%x, Size: %d\n",
-                          sym_name, symtab[j].st_value, symtab[j].st_size);
+                  FUNC_FTRACER[k].addr = symtab[j].st_value;
+                  strncpy(FUNC_FTRACER[k].func_name, &strtab[symtab[j].st_name], sizeof(FUNC_FTRACER[k].func_name) - 1);
+                  FUNC_FTRACER[k].func_name[sizeof(FUNC_FTRACER[k].func_name) - 1] = '\0';
+                  k++;
               }
           }
           free(symtab);
@@ -153,6 +160,15 @@ static void load_elf() {
   free((void *)strtab);
   free(sh_table);
   fclose(file);
+}
+
+static void printf_FUNC()
+{
+  printf("The Symbol Table\n");
+  for(int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
+  {
+    printf("The addr is 0x%8x, The name is %s\n", FUNC_FTRACER[i].addr, FUNC_FTRACER[i].func_name);
+  }
 }
 //==================================================
 
@@ -223,6 +239,7 @@ void init_monitor(int argc, char *argv[]) {
 
   /* 初始化 ftracer*/
   IFDEF(CONFIG_FTRACE, load_elf());
+  printf_FUNC();
 
   /* Display welcome message. */
   welcome();
