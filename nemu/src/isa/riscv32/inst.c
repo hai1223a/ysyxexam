@@ -173,7 +173,7 @@ static void ftracer_log(Decode *s, int name)
     {
       if(s->dnpc == FUNC_FTRACER[i].addr)
       {
-        ftracer_write("0x%8x %*scall [%s @ 0x%8x]\n",s->pc, 2*p_stack, " ", FUNC_FTRACER[i].func_name, s->dnpc);
+        ftracer_write("0x%8x %*scall [%s @ 0x%8x]\n",s->pc, 4*p_stack, " ", FUNC_FTRACER[i].func_name, s->dnpc);
         Assert(p_stack < ARRLEN(FUNC_stack), "ftracer 的返回函数堆栈溢出\n");
         FUNC_stack[p_stack++] = i;
       }
@@ -184,7 +184,7 @@ static void ftracer_log(Decode *s, int name)
   {
     Assert(p_stack > 0, "ftracer 的返回函数堆栈为空\n");
     p_stack--;
-    ftracer_write("0x%8x %*sret [%s @ 0x%8x]\n",s->pc, 2*p_stack, " ", FUNC_FTRACER[FUNC_stack[p_stack]].func_name, Reg(1));
+    ftracer_write("0x%8x %*sret [%s @ 0x%8x]\n",s->pc, 4*p_stack, " ", FUNC_FTRACER[FUNC_stack[p_stack]].func_name, Reg(1));
   }
 }
 
