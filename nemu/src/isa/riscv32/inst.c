@@ -17,6 +17,7 @@
 #include <cpu/cpu.h>
 #include <cpu/ifetch.h>
 #include <cpu/decode.h>
+#include <common.h>
 
 #define Reg(i) gpr(i)
 #define Mr vaddr_read
@@ -154,31 +155,40 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 
 // FTRACER部分内容
 //===============================================
-// extern struct FUNC_FTRACE{
-//   word_t addr;
-//   char func_name[16];
-// } FUNC_FTRACER[10];
-// word_t FUNC_stack[10] = {0};
+extern struct FUNC_FTRACE{
+  word_t addr;
+  char func_name[16];
+} FUNC_FTRACER[10];
+word_t FUNC_stack[10] = {0};
 
 static void ftracer_log(Decode *s, int name)
 {
-  // static int p_stack = 0;
-  // // 识别 call 调用函数
-  // if(name == jal)
-  // {
-  //   for(int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
-  //   {
-  //     if(s->dnpc == FUNC_FTRACER[i].addr)
-  //     {
-  //       return;
-  //     }
-  //   }
-  // }
+  static int p_stack = 0;
+  // 识别 call 调用函数
+  if(name == jal)
+  {
+    for(int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
+    {
+      if(s->dnpc == FUNC_FTRACER[i].addr)
+      {
+        ftracer_write("0x%8x call [%s @ 0x%8x]\n",s->pc, FUNC_FTRACER[i].func_name, s->dnpc);
+        Assert(p_stack < ARRLEN(FUNC_stack), "ftracer 的返回函数堆栈溢出\n");
+        FUNC_stack[p_stack++] = s->dnpc;
+      }
+    }
+  }
+  // 识别 ret 返回函数
+  if(s->isa.inst == 0x00008067)
+  {
+    Assert(p_stack > 0, "ftracer 的返回函数堆栈为空\n");
+    ftracer_write("0x%8x ret [%s @ 0x%8x]\n",s->pc, FUNC_FTRACER[FUNC_stack[--p_stack]].func_name, Reg(1));
+  }
 }
 
 //===============================================
 static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
+
 #define INSTPAT_INST(s) ((s)->isa.inst)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
   int rd = 0; \

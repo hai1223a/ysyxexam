@@ -47,7 +47,5 @@ void init_ftracer_log(const char *ftracer_log_file) {
   }
   Log("Ftracer log is written to %s", ftracer_log_file ? ftracer_log_file : "stdout");
 }
-
-
 //=========================================
 #endif
