@@ -159,7 +159,7 @@ extern struct FUNC_FTRACE{
   word_t addr;
   char func_name[16];
 } FUNC_FTRACER[10];
-word_t FUNC_stack[10] = {0};
+int FUNC_stack[10] = {0};
 
 static void ftracer_log(Decode *s, int name)
 {
@@ -173,7 +173,7 @@ static void ftracer_log(Decode *s, int name)
       {
         ftracer_write("0x%8x call [%s @ 0x%8x]\n",s->pc, FUNC_FTRACER[i].func_name, s->dnpc);
         Assert(p_stack < ARRLEN(FUNC_stack), "ftracer 的返回函数堆栈溢出\n");
-        FUNC_stack[p_stack++] = s->dnpc;
+        FUNC_stack[p_stack++] = i;
       }
     }
   }
