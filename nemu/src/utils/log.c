@@ -34,4 +34,20 @@ bool log_enable() {
   return MUXDEF(CONFIG_TRACE, (g_nr_guest_inst >= CONFIG_TRACE_START) &&
          (g_nr_guest_inst <= CONFIG_TRACE_END), false);
 }
+
+// ftracer 部分内容
+//=========================================
+FILE *ftracer_log_fp = NULL;
+void init_ftracer_log(const char *ftracer_log_file) {
+  ftracer_log_fp = stdout;
+  if (ftracer_log_file != NULL) {
+    FILE *fp = fopen(ftracer_log_file, "w");
+    Assert(fp, "Can not open '%s'", ftracer_log_file);
+    ftracer_log_fp = fp;
+  }
+  Log("Ftracer log is written to %s", ftracer_log_file ? ftracer_log_file : "stdout");
+}
+
+
+//=========================================
 #endif

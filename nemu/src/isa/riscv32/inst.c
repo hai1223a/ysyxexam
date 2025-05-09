@@ -152,18 +152,40 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
   }
 }
 
+// FTRACER部分内容
+//===============================================
+// extern struct FUNC_FTRACE{
+//   word_t addr;
+//   char func_name[16];
+// } FUNC_FTRACER[10];
+// word_t FUNC_stack[10] = {0};
+
+static void ftracer_log(Decode *s, int name)
+{
+  // static int p_stack = 0;
+  // // 识别 call 调用函数
+  // if(name == jal)
+  // {
+  //   for(int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
+  //   {
+  //     if(s->dnpc == FUNC_FTRACER[i].addr)
+  //     {
+  //       return;
+  //     }
+  //   }
+  // }
+}
+
+//===============================================
 static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
-  // word_t a = 0x80000000;
-  // word_t b = -1;
-  // printf("a/b = %d, a b = %d", (int)a/(int)b, (int)a%(int)b);
-  // printf("a*b = %x, a*b = %x, a*b = %lx, a*b = %llx\n", (word_t)BITS((int64_t)a * (int64_t)a, 63, 32), (int32_t)a*(int32_t)b, (int64_t)a*(int64_t)b, (long long)a*(long long)b);
 #define INSTPAT_INST(s) ((s)->isa.inst)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
   int rd = 0; \
   word_t src1 = 0, src2 = 0, imm = 0; \
   decode_operand(s, &rd, &src1, &src2, &imm, concat(TYPE_, type), name); \
   __VA_ARGS__ ; \
+  ftracer_log(s, name); \
 }
   // printf("imm = %d  %u  %x \n src1 = %x, src2 = %x, rd = %s, Reg(rd) = %x\n $pc = 0x%x\n",(int)imm, imm, imm, src1, src2, reg_name(rd), Reg(rd), s->pc); 
 

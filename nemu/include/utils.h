@@ -67,6 +67,19 @@ uint64_t get_time();
   } while (0) \
 )
 
+// ftracer 部分内容
+//=========================================
+#define ftracer_write(...) IFDEF(CONFIG_FTRACE, \
+  do { \
+    extern FILE* ftracer_log_fp; \
+    if(ftracer_log_fp != NULL) { \
+      fprintf(ftracer_log_fp, __VA_ARGS__); \
+      fflush(ftracer_log_fp); \
+    } \
+  } while(0) \
+)
+//=========================================
+
 #define _Log(...) \
   do { \
     printf(__VA_ARGS__); \
