@@ -77,7 +77,6 @@ struct FUNC_FTRACE{
   char func_name[16];
 } FUNC_FTRACER[10] = {0};
 
-
 static void load_elf() {
   if (elf_file == NULL) {
     Log("没有elf文件输入\n");
@@ -142,8 +141,7 @@ static void load_elf() {
             fclose(file);
             return;
           }
-          // 遍历符号表
-          printf("Symbol Table (Section %d):\n", i);
+          // 遍历符号表,筛选各个函数名的入口地址
           for (int j = 0, k = 0; j < symtab_entry_count; j++) {
               if (ELF32_ST_TYPE(symtab[j].st_info) == STT_FUNC) {
                   FUNC_FTRACER[k].addr = symtab[j].st_value;
@@ -160,15 +158,6 @@ static void load_elf() {
   free((void *)strtab);
   free(sh_table);
   fclose(file);
-}
-
-static void printf_FUNC()
-{
-  printf("The Symbol Table\n");
-  for(int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
-  {
-    printf("The addr is 0x%8x, The name is %s\n", FUNC_FTRACER[i].addr, FUNC_FTRACER[i].func_name);
-  }
 }
 //==================================================
 
@@ -239,7 +228,6 @@ void init_monitor(int argc, char *argv[]) {
 
   /* 初始化 ftracer*/
   IFDEF(CONFIG_FTRACE, load_elf());
-  printf_FUNC();
 
   /* Display welcome message. */
   welcome();
