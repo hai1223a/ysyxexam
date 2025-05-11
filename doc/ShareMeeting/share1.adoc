@@ -1,0 +1,18 @@
+[[day2025-5-11]]
+= 2025/5/11日单周分享会
+Doc Writer: 谢平江;
+2025/5/11
+:toc:
+:toc-title: 目录
+:toc-levels: 4
+
+== 学习进度
+`**_完成了PA2.1和PA2.2的部分内容_**` +
+
+=== nemu实现更多的指令
+
+
+
+== 遇到的问题
+[source,bash]
+git config

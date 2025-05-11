@@ -72,6 +72,8 @@ static long load_img() {
 // 加载elf文件和写入ftracer
 //==================================================
 static char *elf_file = NULL;
+static char *ftracer_log_file = NULL;
+#ifdef CONFIG_FTRACE
 struct FUNC_FTRACE{
   word_t addr;
   char func_name[16];
@@ -161,8 +163,9 @@ static void load_elf() {
 }
 
 // 设置 ftracer 的输出
-static char *ftracer_log_file = NULL;
+
 void init_ftracer_log(const char *ftracer_log_file);
+#endif
 //==================================================
 
 static int parse_args(int argc, char *argv[]) {
