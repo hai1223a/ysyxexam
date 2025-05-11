@@ -28,7 +28,7 @@ image::../images/share1_2.png[]
 添加了iringbuf,mtracer,ftracer的功能
 
 .menuconfig可配置tracer
-image::../images/share1_2.png[]
+image::../images/share1_3.png[]
 
 ==== iringbuf
 
