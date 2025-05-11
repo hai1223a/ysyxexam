@@ -24,6 +24,7 @@ char *strncpy(char *dst, const char *src, size_t n) {
 }
 
 char *strcat(char *dst, const char *src) {
+  panic("Not implemented");
   char *det = dst;
   while(*dst) {
     dst++;
