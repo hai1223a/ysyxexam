@@ -69,7 +69,7 @@ uint64_t get_time();
 
 // ftracer 部分内容
 //=========================================
-#ifdef CONFIG_FTRACER
+#ifdef CONFIG_FTRACE
 #define ftracer_write(...) IFDEF(CONFIG_FTRACE, \
   do { \
     extern FILE* ftracer_log_fp; \

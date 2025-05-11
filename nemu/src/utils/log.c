@@ -37,7 +37,7 @@ bool log_enable() {
 
 // ftracer 部分内容
 //=========================================
-#ifdef CONFIG_FTRACER
+#ifdef CONFIG_FTRACE
 FILE *ftracer_log_fp = NULL;
 void init_ftracer_log(const char *ftracer_log_file) {
   ftracer_log_fp = stdout;
