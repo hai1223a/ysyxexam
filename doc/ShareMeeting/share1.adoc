@@ -12,8 +12,13 @@ Doc Writer: 谢平江;
 === nemu实现更多的指令
 实现了rv32IM指令集除(fence, fence_tso, pause, ecall)的所有指令 +
 通过了**am-kernels/tests/cpu-tests**中的所有测试 +
-[source,b]
 
+.cpu-test
+image::../images/share1_1.png[]
+通过了**am-kernels/tests/riscv-tests-am**中的所有测试 +
+
+.riscv-tests-am
+image::../images/share1_2.png[]
 
 == 遇到的问题
 [source,bash]
