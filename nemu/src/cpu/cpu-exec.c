@@ -57,7 +57,7 @@ static void monitor_check(Decode *_this) {
       {
         nemu_state.state = NEMU_STOP;
         printf("监控点%d发生了变化\n", i);
-        puts(_this->logbuf);
+        IFDEF(CONFIG_ITRACER,puts(_this->logbuf));
         data_pre[i] = data_new[i];
       }
     }
@@ -129,8 +129,9 @@ static void exec_once(Decode *s, vaddr_t pc) {
   else
     IRINGBUF.p = 0;
   //===============================================
+  }
 #endif
-}}
+}
 
 static void execute(uint64_t n) {
   Decode s;
