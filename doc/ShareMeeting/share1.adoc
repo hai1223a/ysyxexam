@@ -32,6 +32,14 @@ image::../images/share1_3.png[]
 
 ==== iringbuf
 
+.iringbuf展示
+image::../images/share1_4.png[]
+
+==== mtracer
+
+.mtracer展示
+image::../images/share1_5.png[]
+
 == 遇到的问题
 [source,bash]
 git config
