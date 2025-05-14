@@ -2,7 +2,7 @@
 = 2025/5/11日单周分享会
 Doc Writer: 谢平江;
 2025/5/11
-:toc:
+:toc: left
 :toc-title: 目录
 :toclevels: 3
 
@@ -40,6 +40,7 @@ image::../images/share1_4.png[]
 .mtracer展示
 image::../images/share1_5.png[]
 
-== 遇到的问题
-[source,bash]
-git config
+==== ftracer
+
+.ftracer展示
+image::../images/share1_6.png[]

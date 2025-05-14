@@ -1,7 +1,7 @@
 = 一生一芯实验日志
 Doc Writer yunhaigushu;
 v1.0, 2025-04-11
-:toc:
+:toc: left
 :toclevels: 1
 :toc-title: Directory
 
@@ -267,3 +267,12 @@ typedef struct inf {
 === 今日完成任务
 * 实现了sprintf()函数
 * 实现了iringbuf
+
+[[d2025-5-9]]
+== 2025/5/9 实验日志
+=== 今日完成任务
+* 实现了mtracer和ftracer的功能
+
+[[d2025-5-14]]
+== 2025/5/14 实验日志
+=== 今日完成任务

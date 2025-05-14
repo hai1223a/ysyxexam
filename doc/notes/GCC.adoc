@@ -1,7 +1,7 @@
 = GCC介绍
 Doc Writer yunhaigushu;
 v1.0, 2025-05-11
-:toc:
+:toc: left
 :toc-title: Directory
 == GCC工具介绍
 === GCC的构成和编译过程

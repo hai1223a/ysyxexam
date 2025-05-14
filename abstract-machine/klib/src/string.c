@@ -39,6 +39,7 @@ char *strcat(char *dst, const char *src) {
 }
 
 int strcmp(const char *s1, const char *s2) {
+  panic("Not implemented");
   while (*s1 && *s2 && (*s1 == *s2))
   {
     s1++;
@@ -52,6 +53,7 @@ int strncmp(const char *s1, const char *s2, size_t n) {
 }
 
 void *memset(void *s, int c, size_t n) {
+  panic("Not implemented");
   unsigned char a = (unsigned char)c;
   unsigned char *st = (unsigned char *)s;
   while(n--) {
@@ -70,6 +72,7 @@ void *memcpy(void *out, const void *in, size_t n) {
 }
 
 int memcmp(const void *s1, const void *s2, size_t n) {
+  panic("Not implemented");
   const char *ss1 = (const char *)s1;
   const char *ss2 = (const char *)s2;
   
