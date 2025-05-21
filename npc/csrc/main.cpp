@@ -48,7 +48,7 @@ static int parse_args(int argc, char *argv[]) {
 #define CONFIG_MSIZE 0x8000000
 #define CONFIG_MBASE 0x80000000
 static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
-uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
+uint8_t* guest_to_host(uint32_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 
 void pmem_init()
 {
