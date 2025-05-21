@@ -65,10 +65,10 @@ void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 
 void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
 {
-  ysyx_25050136_NPC->reset = 1;
+  ysyx_25050136_NPC->reset = 0;
   if (sim_time < 10)
   {
-    ysyx_25050136_NPC->reset = 0;
+    ysyx_25050136_NPC->reset = 1;
   }
 }
 
