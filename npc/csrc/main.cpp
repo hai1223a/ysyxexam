@@ -61,7 +61,11 @@ void pmem_init()
     *pmem_w++ = 0x00100073; //ebreak
   if (img_file)
   {
-    printf("你成功了加载了啥东西, img_file = %s", img_file);
+    printf("你成功了加载了啥东西, img_file = %s\n", img_file);
+  }
+  else
+  {
+    printf("你好像加载失败了\n");
   }
   
 
