@@ -5,6 +5,43 @@
 #include "Vysyx_25050136_NPC__pch.h"
 #include "Vysyx_25050136_NPC___024root.h"
 
+void Vysyx_25050136_NPC___024root___ico_sequent__TOP__0(Vysyx_25050136_NPC___024root* vlSelf);
+
+void Vysyx_25050136_NPC___024root___eval_ico(Vysyx_25050136_NPC___024root* vlSelf) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25050136_NPC___024root___eval_ico\n"); );
+    Vysyx_25050136_NPC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    auto& vlSelfRef = std::ref(*vlSelf).get();
+    // Body
+    if ((1ULL & vlSelfRef.__VicoTriggered.word(0U))) {
+        Vysyx_25050136_NPC___024root___ico_sequent__TOP__0(vlSelf);
+    }
+}
+
+VL_INLINE_OPT void Vysyx_25050136_NPC___024root___ico_sequent__TOP__0(Vysyx_25050136_NPC___024root* vlSelf) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25050136_NPC___024root___ico_sequent__TOP__0\n"); );
+    Vysyx_25050136_NPC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    auto& vlSelfRef = std::ref(*vlSelf).get();
+    // Body
+    vlSelfRef.mem_wdata_o = vlSelfRef.mem_rdata_i;
+}
+
+void Vysyx_25050136_NPC___024root___eval_triggers__ico(Vysyx_25050136_NPC___024root* vlSelf);
+
+bool Vysyx_25050136_NPC___024root___eval_phase__ico(Vysyx_25050136_NPC___024root* vlSelf) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25050136_NPC___024root___eval_phase__ico\n"); );
+    Vysyx_25050136_NPC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    auto& vlSelfRef = std::ref(*vlSelf).get();
+    // Init
+    CData/*0:0*/ __VicoExecute;
+    // Body
+    Vysyx_25050136_NPC___024root___eval_triggers__ico(vlSelf);
+    __VicoExecute = vlSelfRef.__VicoTriggered.any();
+    if (__VicoExecute) {
+        Vysyx_25050136_NPC___024root___eval_ico(vlSelf);
+    }
+    return (__VicoExecute);
+}
+
 void Vysyx_25050136_NPC___024root___eval_act(Vysyx_25050136_NPC___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25050136_NPC___024root___eval_act\n"); );
     Vysyx_25050136_NPC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
@@ -71,6 +108,9 @@ bool Vysyx_25050136_NPC___024root___eval_phase__nba(Vysyx_25050136_NPC___024root
 }
 
 #ifdef VL_DEBUG
+VL_ATTR_COLD void Vysyx_25050136_NPC___024root___dump_triggers__ico(Vysyx_25050136_NPC___024root* vlSelf);
+#endif  // VL_DEBUG
+#ifdef VL_DEBUG
 VL_ATTR_COLD void Vysyx_25050136_NPC___024root___dump_triggers__nba(Vysyx_25050136_NPC___024root* vlSelf);
 #endif  // VL_DEBUG
 #ifdef VL_DEBUG
@@ -82,9 +122,28 @@ void Vysyx_25050136_NPC___024root___eval(Vysyx_25050136_NPC___024root* vlSelf) {
     Vysyx_25050136_NPC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Init
+    IData/*31:0*/ __VicoIterCount;
+    CData/*0:0*/ __VicoContinue;
     IData/*31:0*/ __VnbaIterCount;
     CData/*0:0*/ __VnbaContinue;
     // Body
+    __VicoIterCount = 0U;
+    vlSelfRef.__VicoFirstIteration = 1U;
+    __VicoContinue = 1U;
+    while (__VicoContinue) {
+        if (VL_UNLIKELY(((0x64U < __VicoIterCount)))) {
+#ifdef VL_DEBUG
+            Vysyx_25050136_NPC___024root___dump_triggers__ico(vlSelf);
+#endif
+            VL_FATAL_MT("vsrc/top.v", 2, "", "Input combinational region did not converge.");
+        }
+        __VicoIterCount = ((IData)(1U) + __VicoIterCount);
+        __VicoContinue = 0U;
+        if (Vysyx_25050136_NPC___024root___eval_phase__ico(vlSelf)) {
+            __VicoContinue = 1U;
+        }
+        vlSelfRef.__VicoFirstIteration = 0U;
+    }
     __VnbaIterCount = 0U;
     __VnbaContinue = 1U;
     while (__VnbaContinue) {

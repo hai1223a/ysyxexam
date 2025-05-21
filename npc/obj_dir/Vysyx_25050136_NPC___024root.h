@@ -17,6 +17,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC___024root final : public V
     VL_IN8(clk,0,0);
     VL_IN8(reset,0,0);
     CData/*0:0*/ __VstlFirstIteration;
+    CData/*0:0*/ __VicoFirstIteration;
     CData/*0:0*/ __Vtrigprevexpr___TOP__clk__0;
     CData/*0:0*/ __VactContinue;
     VL_IN(inst_i,31,0);
@@ -28,6 +29,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC___024root final : public V
     IData/*31:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__static_npc;
     IData/*31:0*/ __VactIterCount;
     VlTriggerVec<1> __VstlTriggered;
+    VlTriggerVec<1> __VicoTriggered;
     VlTriggerVec<1> __VactTriggered;
     VlTriggerVec<1> __VnbaTriggered;
 

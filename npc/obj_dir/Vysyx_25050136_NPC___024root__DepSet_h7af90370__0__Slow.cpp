@@ -29,7 +29,6 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___eval_initial__TOP(Vysyx_2505013
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
     vlSelfRef.mem_addr_o = 0U;
-    vlSelfRef.mem_wdata_o = 0U;
 }
 
 VL_ATTR_COLD void Vysyx_25050136_NPC___024root___eval_final(Vysyx_25050136_NPC___024root* vlSelf) {
@@ -102,6 +101,7 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___stl_sequent__TOP__0(Vysyx_25050
     Vysyx_25050136_NPC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
+    vlSelfRef.mem_wdata_o = vlSelfRef.mem_rdata_i;
     vlSelfRef.pc_o = vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc;
     vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__static_npc 
         = ((IData)(4U) + vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc);
@@ -123,6 +123,21 @@ VL_ATTR_COLD bool Vysyx_25050136_NPC___024root___eval_phase__stl(Vysyx_25050136_
     }
     return (__VstlExecute);
 }
+
+#ifdef VL_DEBUG
+VL_ATTR_COLD void Vysyx_25050136_NPC___024root___dump_triggers__ico(Vysyx_25050136_NPC___024root* vlSelf) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25050136_NPC___024root___dump_triggers__ico\n"); );
+    Vysyx_25050136_NPC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    auto& vlSelfRef = std::ref(*vlSelf).get();
+    // Body
+    if ((1U & (~ vlSelfRef.__VicoTriggered.any()))) {
+        VL_DBG_MSGF("         No triggers active\n");
+    }
+    if ((1ULL & vlSelfRef.__VicoTriggered.word(0U))) {
+        VL_DBG_MSGF("         'ico' region trigger index 0 is active: Internal 'ico' trigger - first iteration\n");
+    }
+}
+#endif  // VL_DEBUG
 
 #ifdef VL_DEBUG
 VL_ATTR_COLD void Vysyx_25050136_NPC___024root___dump_triggers__act(Vysyx_25050136_NPC___024root* vlSelf) {

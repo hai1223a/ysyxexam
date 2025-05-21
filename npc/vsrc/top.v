@@ -42,7 +42,6 @@ ysyx_25050136_ID #(
 )
 u_ysyx_25050136_ID(
     .inst_i   	(inst_i    ),
-    .pc_i     	(pc_o      ),
     .rdata1_i 	(reg2id_rdata1_o  ),
     .raddr1_o 	(id2reg_raddr1_o  ),
     .rdata2_i 	(reg2id_rdata2_o  ),

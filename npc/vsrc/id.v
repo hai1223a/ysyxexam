@@ -6,7 +6,6 @@ module ysyx_25050136_ID
      )
      (
          input  [31:0]                            inst_i,
-         input  [31:0]                              pc_i,
          input  [DATA_WIDTH-1:0]                rdata1_i,
          output [ADDR_WIDTH-1:0]                raddr1_o,
          input  [DATA_WIDTH-1:0]                rdata2_i,
