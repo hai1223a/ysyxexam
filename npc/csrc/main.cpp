@@ -1,25 +1,80 @@
 #include "Vysyx_25050136_NPC.h"            // 包含Verilog工程的C++模型
+#include <getopt_ext.h>
 #include <verilated.h>       // Verilator的库
 #include "verilated_fst_c.h" // fst波形文件所需要的库
 
 bool cpu_run = true;
-
 vluint64_t sim_time = 0; // 记录当前仿真时间
+
+static char *img_file = NULL;
+static int parse_args(int argc, char *argv[]) {
+  const struct option table[] = {
+    {"batch"    , no_argument      , NULL, 'b'},
+    {"log"      , required_argument, NULL, 'l'},
+    {"diff"     , required_argument, NULL, 'd'},
+    {"port"     , required_argument, NULL, 'p'},
+    {"elf"      , required_argument, NULL, 'e'},
+    {"elf-log"  , required_argument, NULL, 'g'},
+    {"image"    , required_argument, NULL, 'i'},
+    {"help"     , no_argument      , NULL, 'h'},
+    {0          , 0                , NULL,  0 },
+  };
+  int o;
+  while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:g:", table, NULL)) != -1) {
+    switch (o) {
+      case 'b': break;
+      case 'p': break;
+      case 'l': break;
+      case 'd': break;
+      case 'e': break;
+      case 'g': break;
+      case 'i': img_file = optarg; return 0;
+      default:
+        printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
+        printf("\t-b,--batch                run with batch mode\n");
+        printf("\t-l,--log=FILE             output log to FILE\n");
+        printf("\t-d,--diff=REF_SO          run DiffTest with reference REF_SO\n");
+        printf("\t-p,--port=PORT            run DiffTest with port PORT\n");
+        printf("\t-e,--elf=ELF_FILE         load elf file for ftrace\n");
+        printf("\t-g,--elf-log=FTRACER_FILE ftracer output log to FTRACER_FILE\n");
+        printf("\n");
+        exit(0);
+    }
+  }
+  return 0;
+}
 
 // 存储器
 #define CONFIG_MSIZE 0x8000000
 #define CONFIG_MBASE 0x80000000
 static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
+uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 
 void pmem_init()
 {
-  uint32_t *pmem_w = (uint32_t *)pmem;
-  *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
-  *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
-  *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
-  *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
-  *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
-  *pmem_w++ = 0x00100073;
+  if(img_file == NULL){
+    uint32_t *pmem_w = (uint32_t *)pmem;
+    *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
+    *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
+    *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
+    *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
+    *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
+    *pmem_w++ = 0x00100073; //ebreak
+    return;
+  }
+  FILE *fp = fopen(img_file, "rb");
+  assert(fp);
+
+  fseek(fp, 0, SEEK_END);
+  long size = ftell(fp);
+
+  printf("The image is %s, size = %ld", img_file, size);
+
+  fseek(fp, 0, SEEK_SET);
+  int ret = fread(guest_to_host(CONFIG_MBASE), size, 1, fp);
+  assert(ret == 1);
+
+  fclose(fp);
 }
 
 void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC) 
