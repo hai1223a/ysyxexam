@@ -1,5 +1,5 @@
 #include "Vtop.h"
-
+#define CONFIG_VERILATOR
 #ifdef CONFIG_VERILATOR
 	#include <verilated.h>
 	// 包含fst的头文件
