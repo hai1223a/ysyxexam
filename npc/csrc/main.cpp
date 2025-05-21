@@ -2,7 +2,7 @@
 #include <verilated.h>       // Verilator的库
 #include "verilated_fst_c.h" // fst波形文件所需要的库
 
-#define MAX_TIME 40       // 最大仿真时间
+#define MAX_TIME 30       // 最大仿真时间
 
 vluint64_t sim_time = 0; // 记录当前仿真时间
 
@@ -69,7 +69,7 @@ void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
 {
   ysyx_25050136_NPC->reset = 0;
-  if (sim_time < 10)
+  if (sim_time < 4)
   {
     ysyx_25050136_NPC->reset = 1;
   }
