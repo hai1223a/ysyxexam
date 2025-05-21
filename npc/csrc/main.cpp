@@ -25,10 +25,10 @@ void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 {
   ysyx_25050136_NPC->inst_i = *(uint32_t *)(pmem + ysyx_25050136_NPC->pc_o - CONFIG_MBASE);
 }
-void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC)
-{
-  if(ysyx_25050136_NPC->)
-}
+// void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC)
+// {
+//   if(ysyx_25050136_NPC->)
+// }
 
 void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
 {

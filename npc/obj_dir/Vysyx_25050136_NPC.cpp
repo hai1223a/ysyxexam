@@ -11,6 +11,9 @@ Vysyx_25050136_NPC::Vysyx_25050136_NPC(VerilatedContext* _vcontextp__, const cha
     , vlSymsp{new Vysyx_25050136_NPC__Syms(contextp(), _vcname__, this)}
     , clk{vlSymsp->TOP.clk}
     , reset{vlSymsp->TOP.reset}
+    , mem_ren_o{vlSymsp->TOP.mem_ren_o}
+    , mem_wen_o{vlSymsp->TOP.mem_wen_o}
+    , mem_len_o{vlSymsp->TOP.mem_len_o}
     , inst_i{vlSymsp->TOP.inst_i}
     , mem_rdata_i{vlSymsp->TOP.mem_rdata_i}
     , mem_wdata_o{vlSymsp->TOP.mem_wdata_o}
