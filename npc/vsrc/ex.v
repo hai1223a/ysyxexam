@@ -9,6 +9,9 @@ module ysyx_25050136_EX
          input  [DATA_WIDTH-1:0]                   op1_i,
          input  [DATA_WIDTH-1:0]                   op2_i,
          input  [DATA_WIDTH-1:0]             mem_rdata_i,
+         output                                mem_ren_o,
+         output                                mem_wen_o,
+         output [2:0]                          mem_len_o,
          output [DATA_WIDTH-1:0]             mem_wdata_o,
          output [DATA_WIDTH-1:0]              mem_addr_o,
          output [DATA_WIDTH-1:0]              gpr_data_o,
@@ -34,7 +37,9 @@ module ysyx_25050136_EX
     assign jump_addr_o = 0;
     assign jump_en_o = 0;
     assign mem_wdata_o = mem_rdata_i;
-
+    assign mem_wen_o = 0;
+    assign mem_ren_o = 0;
+    assign mem_len_o = 3'd4;
 
 endmodule //ysyx_25050136_EX
 
