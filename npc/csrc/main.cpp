@@ -66,12 +66,11 @@ int main(int argc, char **argv)
     // 计算电路状态
     ysyx_25050136_NPC->eval();
     // 访存操作
-    ysyx_25050136_NPC
     ysyx_25050136_NPC->eval();
     // 捕获时钟上升沿,其他输入信号可以在这时候改变
     if (ysyx_25050136_NPC->clk == 1)
     {
-      ysyx_25050136_NPC->inst_i = inst_read(ysyx_25050136_NPC->pc_o);
+      inst_read(ysyx_25050136_NPC);
     }
     // 记录波形数据
     tfp->dump(sim_time);
