@@ -7,7 +7,7 @@ CFLAGS =
 VERILATOR = verilator
 VERILATOR_CFLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
 				   --top-module $(TOPNAME) $(VSRCS) $(CSRCS) \
-				   -Ivsrc -CFLAGS $(CFLAGS)\
+				   -Ivsrc \
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL					
 
 all: sim
