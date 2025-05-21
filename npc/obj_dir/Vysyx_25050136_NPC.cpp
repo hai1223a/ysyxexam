@@ -20,6 +20,7 @@ Vysyx_25050136_NPC::Vysyx_25050136_NPC(VerilatedContext* _vcontextp__, const cha
     , mem_wdata_o{vlSymsp->TOP.mem_wdata_o}
     , mem_addr_o{vlSymsp->TOP.mem_addr_o}
     , pc_o{vlSymsp->TOP.pc_o}
+    , __PVT____024unit{vlSymsp->TOP.__PVT____024unit}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context

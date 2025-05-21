@@ -15,6 +15,9 @@
 
 // INCLUDE MODULE CLASSES
 #include "Vysyx_25050136_NPC___024root.h"
+#include "Vysyx_25050136_NPC___024unit.h"
+
+// DPI TYPES for DPI Export callbacks (Internal use)
 
 // SYMS CLASS (contains all model state)
 class alignas(VL_CACHE_LINE_BYTES)Vysyx_25050136_NPC__Syms final : public VerilatedSyms {
@@ -28,6 +31,7 @@ class alignas(VL_CACHE_LINE_BYTES)Vysyx_25050136_NPC__Syms final : public Verila
 
     // MODULE INSTANCE STATE
     Vysyx_25050136_NPC___024root   TOP;
+    Vysyx_25050136_NPC___024unit   TOP____024unit;
 
     // CONSTRUCTORS
     Vysyx_25050136_NPC__Syms(VerilatedContext* contextp, const char* namep, Vysyx_25050136_NPC* modelp);

@@ -23,6 +23,28 @@ void Vysyx_25050136_NPC___024root___eval_triggers__ico(Vysyx_25050136_NPC___024r
 #endif
 }
 
+void Vysyx_25050136_NPC___024unit____Vdpiimwrap_find_ebreak_TOP____024unit(CData/*0:0*/ find);
+
+VL_INLINE_OPT void Vysyx_25050136_NPC___024root___ico_sequent__TOP__0(Vysyx_25050136_NPC___024root* vlSelf) {
+    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25050136_NPC___024root___ico_sequent__TOP__0\n"); );
+    Vysyx_25050136_NPC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
+    auto& vlSelfRef = std::ref(*vlSelf).get();
+    // Body
+    Vysyx_25050136_NPC___024unit____Vdpiimwrap_find_ebreak_TOP____024unit(
+                                                                          (0x100073U 
+                                                                           == vlSelfRef.inst_i));
+    vlSelfRef.mem_wdata_o = vlSelfRef.mem_rdata_i;
+    vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__out = 0U;
+    if ((IData)((0x13U == (0x707fU & vlSelfRef.inst_i)))) {
+        vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__out 
+            = (((0U == (0x1fU & (vlSelfRef.inst_i >> 0xfU)))
+                 ? 0U : vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr
+                [(0x1fU & (vlSelfRef.inst_i >> 0xfU))]) 
+               + (((- (IData)((vlSelfRef.inst_i >> 0x1fU))) 
+                   << 0xcU) | (vlSelfRef.inst_i >> 0x14U)));
+    }
+}
+
 #ifdef VL_DEBUG
 VL_ATTR_COLD void Vysyx_25050136_NPC___024root___dump_triggers__act(Vysyx_25050136_NPC___024root* vlSelf);
 #endif  // VL_DEBUG

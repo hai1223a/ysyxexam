@@ -67,7 +67,7 @@ void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC)
   }
 }
 
-extern "C" void find_ebreak(bool find) {cpu_run = false;}
+extern "C" void find_ebreak(bool find) {if(find) cpu_run = false;}
 
 void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
 {

@@ -61,7 +61,7 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___eval_settle(Vysyx_25050136_NPC_
 #ifdef VL_DEBUG
             Vysyx_25050136_NPC___024root___dump_triggers__stl(vlSelf);
 #endif
-            VL_FATAL_MT("vsrc/top.v", 2, "", "Settle region did not converge.");
+            VL_FATAL_MT("vsrc/top.v", 3, "", "Settle region did not converge.");
         }
         __VstlIterCount = ((IData)(1U) + __VstlIterCount);
         __VstlContinue = 0U;
@@ -96,26 +96,6 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___eval_stl(Vysyx_25050136_NPC___0
     // Body
     if ((1ULL & vlSelfRef.__VstlTriggered.word(0U))) {
         Vysyx_25050136_NPC___024root___stl_sequent__TOP__0(vlSelf);
-    }
-}
-
-VL_ATTR_COLD void Vysyx_25050136_NPC___024root___stl_sequent__TOP__0(Vysyx_25050136_NPC___024root* vlSelf) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25050136_NPC___024root___stl_sequent__TOP__0\n"); );
-    Vysyx_25050136_NPC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    auto& vlSelfRef = std::ref(*vlSelf).get();
-    // Body
-    vlSelfRef.mem_wdata_o = vlSelfRef.mem_rdata_i;
-    vlSelfRef.pc_o = vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc;
-    vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__static_npc 
-        = ((IData)(4U) + vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc);
-    vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__out = 0U;
-    if ((IData)((0x13U == (0x707fU & vlSelfRef.inst_i)))) {
-        vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__out 
-            = (((0U == (0x1fU & (vlSelfRef.inst_i >> 0xfU)))
-                 ? 0U : vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr
-                [(0x1fU & (vlSelfRef.inst_i >> 0xfU))]) 
-               + (((- (IData)((vlSelfRef.inst_i >> 0x1fU))) 
-                   << 0xcU) | (vlSelfRef.inst_i >> 0x14U)));
     }
 }
 

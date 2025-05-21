@@ -19,6 +19,7 @@
 
 
 #include "verilated.h"
+#include "verilated_dpi.h"
 
 #include "Vysyx_25050136_NPC__Syms.h"
 #include "Vysyx_25050136_NPC.h"
