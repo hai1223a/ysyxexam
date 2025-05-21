@@ -1,4 +1,5 @@
 #include "Vysyx_25050136_NPC.h"            // 包含Verilog工程的C++模型
+#include <getopt.h>
 #include <verilated.h>       // Verilator的库
 #include "verilated_fst_c.h" // fst波形文件所需要的库
 
