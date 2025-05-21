@@ -23,7 +23,7 @@ void pmem_init()
 
 void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC) 
 {
-  ysyx_25050136_NPC->inst_i = *(uint32_t *)(pmem + ysyx_25050136_NPC->pc_o - CONFIG_MBASE);
+  ysyx_25050136_NPC->inst_i = *(uint32_t *)(pmem);
 }
 
 void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC)
