@@ -15,10 +15,10 @@ void pmem_init()
 {
   uint32_t *pmem_w = (uint32_t *)pmem;
   *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
-  *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
-  *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
-  *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
-  *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
+  *pmem_w++ = 0x11cb0b13; //addi	s6,s6,268
+  *pmem_w++ = 0x12cb0b13; //addi	s6,s6,268
+  *pmem_w++ = 0x13cb0b13; //addi	s6,s6,268
+  *pmem_w++ = 0x14cb0b13; //addi	s6,s6,268
 }
 
 void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC) 
@@ -102,12 +102,11 @@ int main(int argc, char **argv)
     ysyx_25050136_NPC->eval();
     // 访存操作
     pmem_read_write(ysyx_25050136_NPC);
-    inst_read(ysyx_25050136_NPC);
     ysyx_25050136_NPC->eval();
     // 捕获时钟上升沿,其他输入信号可以在这时候改变
     if (ysyx_25050136_NPC->clk == 1)
     {
-      
+      inst_read(ysyx_25050136_NPC);
     }
     // 记录波形数据
     tfp->dump(sim_time);
