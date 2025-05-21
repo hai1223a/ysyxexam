@@ -27,8 +27,6 @@ wire [TOP_DATA_WIDTH-1:0] ex2reg_gpr_data_o;
 ysyx_25050136_IF u_ysyx_25050136_IF(
     .clk             	(clk              ),
     .reset           	(reset            ),
-    .dynamic_npc_i   	(),
-    .static_npc_o    	(),
     .pc_o            	(pc_o             )
 );
 
