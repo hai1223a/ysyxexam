@@ -69,7 +69,7 @@ u_ysyx_25050136_EX(
     .mem_addr_o 	(mem_addr_o        ),
     .mem_ren_o      (mem_ren_o),
     .mem_wen_o      (mem_wen_o),
-    .mem_len_o      (mem_len_o)
+    .mem_len_o      (mem_len_o),
     .gpr_data_o 	(ex2reg_gpr_data_o ),
     .jump_en_o      (ex2if_jump_en_o   ),
     .jump_addr_o    (ex2if_jump_addr_o )
