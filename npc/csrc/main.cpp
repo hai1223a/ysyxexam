@@ -28,7 +28,7 @@ static int parse_args(int argc, char *argv[]) {
       case 'd': break;
       case 'e': break;
       case 'g': break;
-      case 'i': img_file = optarg; return 0;
+      case 'i': img_file = optarg; break;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
         printf("\t-b,--batch                run with batch mode\n");
@@ -154,7 +154,7 @@ int main(int argc, char **argv)
   ysyx_25050136_NPC->trace(tfp, 5);
   // 打开波形文件
   tfp->open("waveform.fst");
-
+  parse_args(argc, argv);
   // 内存初始化
   pmem_init();
   while (cpu_run)
