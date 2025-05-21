@@ -29,6 +29,7 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___eval_initial__TOP(Vysyx_2505013
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
     vlSelfRef.mem_addr_o = 0U;
+    vlSelfRef.mem_wdata_o = 0U;
 }
 
 VL_ATTR_COLD void Vysyx_25050136_NPC___024root___eval_final(Vysyx_25050136_NPC___024root* vlSelf) {
@@ -102,7 +103,7 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___stl_sequent__TOP__0(Vysyx_25050
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
     vlSelfRef.pc_o = vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc;
-    vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__static_npc_o 
+    vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__static_npc 
         = ((IData)(4U) + vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc);
 }
 
@@ -165,9 +166,7 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___ctor_var_reset(Vysyx_25050136_N
     vlSelf->mem_wdata_o = VL_RAND_RESET_I(32);
     vlSelf->mem_addr_o = VL_RAND_RESET_I(32);
     vlSelf->pc_o = VL_RAND_RESET_I(32);
-    vlSelf->ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__dynamic_valid_i = VL_RAND_RESET_I(1);
-    vlSelf->ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__dynamic_npc_i = VL_RAND_RESET_I(32);
-    vlSelf->ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__static_npc_o = VL_RAND_RESET_I(32);
     vlSelf->ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc = VL_RAND_RESET_I(32);
+    vlSelf->ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__static_npc = VL_RAND_RESET_I(32);
     vlSelf->__Vtrigprevexpr___TOP__clk__0 = VL_RAND_RESET_I(1);
 }

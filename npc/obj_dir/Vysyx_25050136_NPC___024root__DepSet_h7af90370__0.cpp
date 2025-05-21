@@ -29,12 +29,9 @@ VL_INLINE_OPT void Vysyx_25050136_NPC___024root___nba_sequent__TOP__0(Vysyx_2505
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
     vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc 
-        = ((IData)(vlSelfRef.reset) ? 0x80000000U : 
-           ((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__dynamic_valid_i)
-             ? vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__dynamic_npc_i
-             : vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__static_npc_o));
+        = ((IData)(vlSelfRef.reset) ? 0x80000000U : vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__static_npc);
     vlSelfRef.pc_o = vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc;
-    vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__static_npc_o 
+    vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__static_npc 
         = ((IData)(4U) + vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc);
 }
 

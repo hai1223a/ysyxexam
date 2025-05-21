@@ -16,7 +16,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC___024root final : public V
     // DESIGN SPECIFIC STATE
     VL_IN8(clk,0,0);
     VL_IN8(reset,0,0);
-    CData/*0:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__dynamic_valid_i;
     CData/*0:0*/ __VstlFirstIteration;
     CData/*0:0*/ __Vtrigprevexpr___TOP__clk__0;
     CData/*0:0*/ __VactContinue;
@@ -25,9 +24,8 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC___024root final : public V
     VL_OUT(mem_wdata_o,31,0);
     VL_OUT(mem_addr_o,31,0);
     VL_OUT(pc_o,31,0);
-    IData/*31:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__dynamic_npc_i;
-    IData/*31:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__static_npc_o;
     IData/*31:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc;
+    IData/*31:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__static_npc;
     IData/*31:0*/ __VactIterCount;
     VlTriggerVec<1> __VstlTriggered;
     VlTriggerVec<1> __VactTriggered;

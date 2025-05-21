@@ -24,7 +24,7 @@ module ysyx_25050136_RegisterFile
             gpr[waddr_i] <= wdata_i;
     end
 
-    assign rdata1_o = raddr1_i ? gpr[raddr1_i] : 0;
-    assign rdata2_o = raddr2_i ? gpr[raddr2_i] : 0;
+    assign rdata1_o = (raddr1_i != 0) ? gpr[raddr1_i] : 0;
+    assign rdata2_o = (raddr2_i != 0) ? gpr[raddr2_i] : 0;
 
 endmodule

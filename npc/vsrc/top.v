@@ -76,7 +76,7 @@ ysyx_25050136_RegisterFile#(
 ) 
 u_ysyx_25050136_RegisterFile(
     .clk      	(clk       ),
-    .wdata_i  	(wdata_i   ),
+    .wdata_i  	(ex2reg_gpr_data_o   ),
     .waddr_i  	(id2reg_rd_o   ),
     .raddr1_i 	(id2reg_raddr1_o  ),
     .rdata1_o 	(reg2id_rdata1_o  ),
