@@ -15,10 +15,10 @@ void pmem_init()
 {
   uint32_t *pmem_w = (uint32_t *)pmem;
   *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
-  *pmem_w++ = 0x11cb0b13; //addi	s6,s6,268
-  *pmem_w++ = 0x12cb0b13; //addi	s6,s6,268
-  *pmem_w++ = 0x13cb0b13; //addi	s6,s6,268
-  *pmem_w++ = 0x14cb0b13; //addi	s6,s6,268
+  *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
+  *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
+  *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
+  *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
 }
 
 void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC) 
@@ -102,6 +102,7 @@ int main(int argc, char **argv)
     reset(ysyx_25050136_NPC, sim_time);
     // 访存操作
     pmem_read_write(ysyx_25050136_NPC);
+    // 取指操作
     inst_read(ysyx_25050136_NPC);
     ysyx_25050136_NPC->eval();
     // 记录波形数据
