@@ -25,10 +25,43 @@ void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 {
   ysyx_25050136_NPC->inst_i = *(uint32_t *)(pmem + ysyx_25050136_NPC->pc_o - CONFIG_MBASE);
 }
-// void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC)
-// {
-//   if(ysyx_25050136_NPC->)
-// }
+
+void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC)
+{
+  uint8_t *addr = pmem + ysyx_25050136_NPC->mem_addr_o - CONFIG_MBASE;
+  if(ysyx_25050136_NPC->mem_ren_o) {
+    switch (ysyx_25050136_NPC->mem_len_o)
+    {
+      case 1:
+        ysyx_25050136_NPC->mem_rdata_i = *addr;
+        break;
+      case 2:
+        ysyx_25050136_NPC->mem_rdata_i = *(uint16_t *)addr;
+        break;
+      case 4:
+        ysyx_25050136_NPC->mem_rdata_i = *(uint32_t *)addr;
+        break;
+      default:
+        break;
+    }
+  }
+  if(ysyx_25050136_NPC->mem_wen_o) {
+    switch (ysyx_25050136_NPC->mem_len_o)
+    {
+      case 1:
+        *addr = (uint8_t)(ysyx_25050136_NPC->mem_wdata_o);
+        break;
+      case 2:
+        *(uint16_t *)addr = (uint16_t)(ysyx_25050136_NPC->mem_wdata_o);
+        break;
+      case 4:
+        *(uint32_t *)addr = ysyx_25050136_NPC->mem_wdata_o;
+        break;
+      default:
+        break;
+    }
+  }
+}
 
 void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
 {
@@ -47,7 +80,6 @@ int main(int argc, char **argv)
   VerilatedFstC *tfp = new VerilatedFstC;
   // 构建一个名为ysyx_25050136_NPC的仿真模型
   Vysyx_25050136_NPC *ysyx_25050136_NPC = new Vysyx_25050136_NPC;
-
   // 启用跟踪
   Verilated::traceEverOn(true);
   // 采样深度为5
@@ -66,6 +98,7 @@ int main(int argc, char **argv)
     // 计算电路状态
     ysyx_25050136_NPC->eval();
     // 访存操作
+    pmem_read_write(ysyx_25050136_NPC);
     ysyx_25050136_NPC->eval();
     // 捕获时钟上升沿,其他输入信号可以在这时候改变
     if (ysyx_25050136_NPC->clk == 1)
