@@ -23,10 +23,15 @@ wire [TOP_DATA_WIDTH-1:0] id2ex_op1_o,id2ex_op2_o;
 wire [TOP_DATA_WIDTH-1:0] reg2id_rdata1_o,reg2id_rdata2_o;
 // EX输出
 wire [TOP_DATA_WIDTH-1:0] ex2reg_gpr_data_o;
+wire [TOP_DATA_WIDTH-1:0] ex2if_jump_addr_o;
+wire ex2if_jump_en_o;
+
 //========================================
 ysyx_25050136_IF u_ysyx_25050136_IF(
     .clk             	(clk              ),
     .reset           	(reset            ),
+    .dynamic_valid_i 	(ex2if_jump_en_o  ),
+    .dynamic_npc_i   	(ex2if_jump_addr_o),
     .pc_o            	(pc_o             )
 );
 
@@ -46,8 +51,7 @@ u_ysyx_25050136_ID(
     .alu_op_o 	(id2ex_alu_op_o  ),
     .op1_o    	(id2ex_op1_o     ),
     .op2_o    	(id2ex_op2_o     ),
-    .rd_o     	(id2reg_rd_o      ),
-    .nop_o    	(     )
+    .rd_o     	(id2reg_rd_o      )
 );
 
 ysyx_25050136_EX #(
@@ -58,8 +62,12 @@ u_ysyx_25050136_EX(
     .alu_op_i   	(id2ex_alu_op_o    ),
     .op1_i      	(id2ex_op1_o       ),
     .op2_i      	(id2ex_op2_o       ),
+    .mem_rdata_i    (mem_rdata_i       ),
+    .mem_wdata_o    (mem_wdata_o       ),
     .mem_addr_o 	(mem_addr_o        ),
-    .gpr_data_o 	(ex2reg_gpr_data_o )
+    .gpr_data_o 	(ex2reg_gpr_data_o ),
+    .jump_en_o      (ex2if_jump_en_o   ),
+    .jump_addr_o    (ex2if_jump_addr_o )
 );
 
 ysyx_25050136_RegisterFile#(
@@ -75,4 +83,6 @@ u_ysyx_25050136_RegisterFile(
     .raddr2_i 	(id2reg_raddr2_o  ),
     .rdata2_o 	(reg2id_rdata2_o  )
 );
+
+
 endmodule

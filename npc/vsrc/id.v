@@ -13,11 +13,9 @@ module ysyx_25050136_ID
          output [ADDR_WIDTH-1:0]                raddr2_o,
          output [`ysyx_25050136_FU_NUM-1:0]         fu_o,
          output [`ysyx_25050136_ALU_OP_NUM-1:0] alu_op_o,
-         
          output [DATA_WIDTH-1:0]                   op1_o,
          output [DATA_WIDTH-1:0]                   op2_o,
-         output [ADDR_WIDTH-1:0]                    rd_o,
-         output                                    nop_o
+         output [ADDR_WIDTH-1:0]                    rd_o
      );
 
     wire [6:0] opcode = inst_i[6:0];
@@ -52,7 +50,6 @@ module ysyx_25050136_ID
     wire funct7_0000000 = (funct7 == 7'b0000000);
     wire funct7_0100000 = (funct7 == 7'b0100000);
     // 具体指令判断
-    wire inst_ebreak = (inst_i == 32'h00100073);
     wire inst_addi = type_op_imm & funct3_000;
     // 指令类型判断
     wire inst_Rtype = type_op;
@@ -82,7 +79,5 @@ module ysyx_25050136_ID
     assign op1_o = rdata1_i;
     assign op2_o = immI;
     assign rd_o  = rd;
-    // 选择操作数
-    assign nop_o = inst_ebreak;
     //=========================================
 endmodule //ysyx_25050136_ID

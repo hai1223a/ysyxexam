@@ -4,12 +4,16 @@ module ysyx_25050136_EX
          DATA_WIDTH = 32
      )
      (
-         input  [`ysyx_25050136_FU_NUM-1:0] fu_i,
+         input  [`ysyx_25050136_FU_NUM-1:0]         fu_i,
          input  [`ysyx_25050136_ALU_OP_NUM-1:0] alu_op_i,
-         input  [DATA_WIDTH-1:0] op1_i,
-         input  [DATA_WIDTH-1:0] op2_i,
-         output [DATA_WIDTH-1:0] mem_addr_o,
-         output [DATA_WIDTH-1:0] gpr_data_o
+         input  [DATA_WIDTH-1:0]                   op1_i,
+         input  [DATA_WIDTH-1:0]                   op2_i,
+         input  [DATA_WIDTH-1:0]             mem_rdata_i,
+         output [DATA_WIDTH-1:0]             mem_wdata_o,
+         output [DATA_WIDTH-1:0]              mem_addr_o,
+         output [DATA_WIDTH-1:0]              gpr_data_o,
+         output                                jump_en_o,
+         output [DATA_WIDTH-1:0]             jump_addr_o
      );
     // 选择功能部件
     //=========================================
@@ -27,6 +31,9 @@ module ysyx_25050136_EX
     
     assign mem_addr_o = 0;
     assign gpr_data_o = alu_out_o;
+    assign jump_addr_o = 0;
+    assign jump_en_o = 0;
+    assign mem_wdata_o = 0;
 
 
 endmodule //ysyx_25050136_EX
