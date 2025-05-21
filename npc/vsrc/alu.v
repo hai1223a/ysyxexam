@@ -1,4 +1,4 @@
-`include "../vsrc/config.v"
+`include "config.v"
 module ysyx_25050136_ALU
     #(
          DATA_WIDTH = 32
