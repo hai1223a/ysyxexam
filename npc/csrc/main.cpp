@@ -2,7 +2,7 @@
 #include <verilated.h>       // Verilator的库
 #include "verilated_fst_c.h" // fst波形文件所需要的库
 
-#define MAX_TIME 30       // 最大仿真时间
+bool cpu_run = true;
 
 vluint64_t sim_time = 0; // 记录当前仿真时间
 
@@ -19,6 +19,7 @@ void pmem_init()
   *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
   *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
   *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
+  *pmem_w++ = 0x00100073;
 }
 
 void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC) 
@@ -66,6 +67,8 @@ void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC)
   }
 }
 
+extern "C" void find_ebreak(bool find) {cpu_run = false;}
+
 void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
 {
   ysyx_25050136_NPC->reset = 0;
@@ -92,7 +95,7 @@ int main(int argc, char **argv)
 
   // 内存初始化
   pmem_init();
-  while (sim_time < MAX_TIME)
+  while (cpu_run)
   {
     // 模拟时钟反转
     ysyx_25050136_NPC->clk ^= 1;
