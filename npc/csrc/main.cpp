@@ -23,44 +23,47 @@ void pmem_init()
 
 void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC) 
 {
-  ysyx_25050136_NPC->inst_i = *(uint32_t *)(pmem);
+  if(!ysyx_25050136_NPC->reset)
+    ysyx_25050136_NPC->inst_i = *(uint32_t *)(pmem + ysyx_25050136_NPC->pc_o - CONFIG_MBASE);
 }
 
 void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 {
-  // uint8_t *addr = pmem + ysyx_25050136_NPC->mem_addr_o - CONFIG_MBASE;
-  // if(ysyx_25050136_NPC->mem_ren_o) {
-  //   switch (ysyx_25050136_NPC->mem_len_o)
-  //   {
-  //     case 1:
-  //       ysyx_25050136_NPC->mem_rdata_i = *addr;
-  //       break;
-  //     case 2:
-  //       ysyx_25050136_NPC->mem_rdata_i = *(uint16_t *)addr;
-  //       break;
-  //     case 4:
-  //       ysyx_25050136_NPC->mem_rdata_i = *(uint32_t *)addr;
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
-  // if(ysyx_25050136_NPC->mem_wen_o) {
-  //   switch (ysyx_25050136_NPC->mem_len_o)
-  //   {
-  //     case 1:
-  //       *addr = (uint8_t)(ysyx_25050136_NPC->mem_wdata_o);
-  //       break;
-  //     case 2:
-  //       *(uint16_t *)addr = (uint16_t)(ysyx_25050136_NPC->mem_wdata_o);
-  //       break;
-  //     case 4:
-  //       *(uint32_t *)addr = ysyx_25050136_NPC->mem_wdata_o;
-  //       break;
-  //     default:
-  //       break;
-  //   }
-  // }
+  uint8_t *addr = pmem + ysyx_25050136_NPC->mem_addr_o - CONFIG_MBASE;
+  if(!ysyx_25050136_NPC->reset) {
+    if(ysyx_25050136_NPC->mem_ren_o) {
+      switch (ysyx_25050136_NPC->mem_len_o)
+      {
+        case 1:
+          ysyx_25050136_NPC->mem_rdata_i = *addr;
+          break;
+        case 2:
+          ysyx_25050136_NPC->mem_rdata_i = *(uint16_t *)addr;
+          break;
+        case 4:
+          ysyx_25050136_NPC->mem_rdata_i = *(uint32_t *)addr;
+          break;
+        default:
+          break;
+      }
+    }
+    if(ysyx_25050136_NPC->mem_wen_o) {
+      switch (ysyx_25050136_NPC->mem_len_o)
+      {
+        case 1:
+          *addr = (uint8_t)(ysyx_25050136_NPC->mem_wdata_o);
+          break;
+        case 2:
+          *(uint16_t *)addr = (uint16_t)(ysyx_25050136_NPC->mem_wdata_o);
+          break;
+        case 4:
+          *(uint32_t *)addr = ysyx_25050136_NPC->mem_wdata_o;
+          break;
+        default:
+          break;
+      }
+    }
+  }
 }
 
 void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
