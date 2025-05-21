@@ -96,10 +96,6 @@ int main(int argc, char **argv)
   {
     // 复位
     reset(ysyx_25050136_NPC, sim_time);
-    // 模拟时钟反转
-    ysyx_25050136_NPC->clk ^= 1;
-    // 计算电路状态
-    ysyx_25050136_NPC->eval();
     // 访存操作
     pmem_read_write(ysyx_25050136_NPC);
     ysyx_25050136_NPC->eval();
@@ -108,6 +104,10 @@ int main(int argc, char **argv)
     {
       inst_read(ysyx_25050136_NPC);
     }
+    // 模拟时钟反转
+    ysyx_25050136_NPC->clk ^= 1;
+    // 计算电路状态
+    ysyx_25050136_NPC->eval();
     // 记录波形数据
     tfp->dump(sim_time);
     // 推动仿真进行
