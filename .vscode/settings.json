@@ -89,6 +89,8 @@
         "klib-macros.h": "c",
         "assert.h": "c",
         "cpu.h": "c",
-        "trap.h": "c"
+        "trap.h": "c",
+        "stdio.h": "c",
+        "limits.h": "c"
     }
 }

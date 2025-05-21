@@ -5,7 +5,11 @@
 #if !defined(__ISA_NATIVE__) || defined(__NATIVE_USE_KLIB__)
 
 size_t strlen(const char *s) {
-  panic("Not implemented");
+  size_t num = 0;
+  while(*s++) {
+    num++;
+  }
+  return num;
 }
 
 char *strcpy(char *dst, const char *src) {
@@ -20,7 +24,15 @@ char *strcpy(char *dst, const char *src) {
 }
 
 char *strncpy(char *dst, const char *src, size_t n) {
-  panic("Not implemented");
+  char *det = dst;
+  while(n--) {
+    if(*src == '\0') {
+      *dst++ = '\0';
+    } else {
+      *dst++ = *src++;
+    }
+  }
+  return det;
 }
 
 char *strcat(char *dst, const char *src) {
@@ -39,23 +51,26 @@ char *strcat(char *dst, const char *src) {
 }
 
 int strcmp(const char *s1, const char *s2) {
-  panic("Not implemented");
   while (*s1 && *s2 && (*s1 == *s2))
   {
     s1++;
     s2++;
   }
-  return *(unsigned char *)s1 - *(unsigned char *)s2;
+  return *(uint8_t *)s1 - *(uint8_t *)s2;
 }
 
 int strncmp(const char *s1, const char *s2, size_t n) {
-  panic("Not implemented");
+  while (n-- && (*s1 == *s2))
+  {
+    s1++;
+    s2++;
+  }
+  return (n == (size_t)-1) ? 0 : *(uint8_t *)s1 - *(uint8_t *)s2;
 }
 
 void *memset(void *s, int c, size_t n) {
-  panic("Not implemented");
-  unsigned char a = (unsigned char)c;
-  unsigned char *st = (unsigned char *)s;
+  uint8_t a = (uint8_t)c;
+  uint8_t *st = (uint8_t *)s;
   while(n--) {
     *st = a;
     st++;
@@ -63,16 +78,35 @@ void *memset(void *s, int c, size_t n) {
   return s;
 }
 
-void *memmove(void *dst, const void *src, size_t n) {
-  panic("Not implemented");
+void *memcpy(void *out, const void *in, size_t n) {
+  void *a = out;
+  while(n--) {
+    *(uint8_t *)out++ = *(uint8_t *)in++;
+  }
+  return a;
 }
 
-void *memcpy(void *out, const void *in, size_t n) {
-  panic("Not implemented");
+void *memmove(void *dst, const void *src, size_t n) {
+  uint8_t *d = (uint8_t *)dst;
+  const uint8_t *s = (const uint8_t *)src;
+
+  if (d > s && s + n > d) {
+    // 从后往前拷贝，避免内存重叠问题
+    d += n;
+    s += n;
+    while (n--) {
+      *(--d) = *(--s);
+    }
+  } else {
+    // 从前往后拷贝
+    while (n--) {
+      *d++ = *s++;
+    }
+  }
+  return dst;
 }
 
 int memcmp(const void *s1, const void *s2, size_t n) {
-  panic("Not implemented");
   const char *ss1 = (const char *)s1;
   const char *ss2 = (const char *)s2;
   
