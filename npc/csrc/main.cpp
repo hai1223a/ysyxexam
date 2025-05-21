@@ -21,7 +21,7 @@ void pmem_init()
   *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
 }
 
-uint32_t inst_read(uint32_t pc) {return *((uint32_t *)pmem + CONFIG_MBASE - pc)};
+uint32_t inst_read(uint32_t pc) {return *((uint32_t *)pmem + CONFIG_MBASE - pc);}
 
 void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
 {
