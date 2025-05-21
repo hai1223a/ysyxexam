@@ -17,6 +17,7 @@ sim:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	$(VERILATOR) $(VERILATOR_CFLAGS)
 	@./obj_dir/V$(TOPNAME)
+	@gtkwave waveform.fst
 
 clean:
 	rm -rf obj_dir
