@@ -102,11 +102,12 @@ int main(int argc, char **argv)
     ysyx_25050136_NPC->eval();
     // 访存操作
     pmem_read_write(ysyx_25050136_NPC);
+    inst_read(ysyx_25050136_NPC);
     ysyx_25050136_NPC->eval();
     // 捕获时钟上升沿,其他输入信号可以在这时候改变
     if (ysyx_25050136_NPC->clk == 1)
     {
-      inst_read(ysyx_25050136_NPC);
+      
     }
     // 记录波形数据
     tfp->dump(sim_time);
