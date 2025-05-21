@@ -33,7 +33,7 @@ module ysyx_25050136_EX
     assign gpr_data_o = alu_out_o;
     assign jump_addr_o = 0;
     assign jump_en_o = 0;
-    assign mem_wdata_o = 0;
+    assign mem_wdata_o = mem_rdata_i;
 
 
 endmodule //ysyx_25050136_EX
