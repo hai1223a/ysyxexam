@@ -6,6 +6,7 @@ VSRCS = $(wildcard vsrc/*.v)
 VERILATOR = verilator
 VERILATOR_CFLAGS += -Wall --cc -exe --build --x-assign unique --x-initial unique\
 				   --top-module $(TOPNAME) $(VSRCS) $(CSRCS) \
+				   -Ivsrc/config.v \
 				   --Wno-DECLFILENAME					
 
 all: sim
