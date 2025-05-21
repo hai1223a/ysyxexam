@@ -98,11 +98,12 @@ int main(int argc, char **argv)
     reset(ysyx_25050136_NPC, sim_time);
     // 访存操作
     pmem_read_write(ysyx_25050136_NPC);
+    inst_read(ysyx_25050136_NPC);
     ysyx_25050136_NPC->eval();
     // 捕获时钟上升沿,其他输入信号可以在这时候改变
     if (ysyx_25050136_NPC->clk == 1)
     {
-      inst_read(ysyx_25050136_NPC);
+      
     }
     // 模拟时钟反转
     ysyx_25050136_NPC->clk ^= 1;
