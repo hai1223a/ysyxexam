@@ -1,4 +1,4 @@
-// #include "Vysyx_25050136_NPC.h"  // 包含Verilog工程的C++模型
+#include "Vysyx_25050136_NPC.h"  // 包含Verilog工程的C++模型
 #include "Vysyx_25050136_NPC___024root.h"
 #include <getopt.h>              // 包含解析命令行参数的库函数
 #include <verilated.h>           // Verilator的库
