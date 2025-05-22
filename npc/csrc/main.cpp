@@ -134,7 +134,8 @@ extern "C" void find_ebreak(bool find) {if(find) cpu_run = false;}
 
 void printf_statu(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 {
-  printf("NPC 的结束状态是%s, PC = 0x%x\n", (ysyx_25050136_NPC->a0 == 0) ? 
+  uint32_t gpr_a0 =  ysyx_25050136_NPC->rootp->ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[10];
+  printf("NPC 的结束状态是%s, PC = 0x%x\n", (gpr_a0 == 0) ? 
           ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED),
           ysyx_25050136_NPC->pc_o);
 }
@@ -185,7 +186,6 @@ int main(int argc, char **argv)
     tfp->dump(sim_time);
     // 推动仿真进行
     sim_time++;
-    printf("%d\n\n\n",ysyx_25050136_NPC->rootp->ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[10]);
   }
   printf_statu(ysyx_25050136_NPC);
   // 关闭波形文件
