@@ -20,11 +20,6 @@
 #include "Vysyx_25050136_NPC.h"  // 包含Verilog工程的C++模型
 #include "Vysyx_25050136_NPC___024root.h"
 
-static int is_batch_mode = false;
-
-void init_regex();
-void init_wp_pool();
-
 /* We use the `readline' library to provide more flexibility to read from stdin. */
 static char* rl_gets() {
   static char *line_read = NULL;
@@ -43,49 +38,49 @@ static char* rl_gets() {
   return line_read;
 }
 
-static int cmd_c(char *args) {
+static int cmd_c(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
   return 0;
 }
 
 
-static int cmd_q(char *args) {
+static int cmd_q(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
   return -1;
 }
 
-static int cmd_help(char *args);
+static int cmd_help(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC);
 
-static int cmd_si(char *args) {
+static int cmd_si(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
   return 0;
 }
 
-static int cmd_info(char *args) {
+static int cmd_info(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
   return 0;
 }
 
-static int cmd_x(char *args){
+static int cmd_x(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC){
   return 0;
 }
 
-static int cmd_p(char *args){
+static int cmd_p(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC){
   return 0;
 }
 
-static int cmd_w(char *args) {
+static int cmd_w(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
   return 0;
 }
 
-static int cmd_d(char *args) {
+static int cmd_d(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
   return 0;
 }
 
-static int cmd_r(char *args) {
+static int cmd_r(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
   return 0;
 }
 
 static struct {
   const char *name;
   const char *description;
-  int (*handler) (char *);
+  int (*handler) (char *, Vysyx_25050136_NPC *);
 } cmd_table [] = {
   { "help", "Display information about all supported commands", cmd_help },
   { "c", "Continue the execution of the program", cmd_c },
@@ -125,11 +120,7 @@ static int cmd_help(char *args) {
   return 0;
 }
 
-void sdb_set_batch_mode() {
-  is_batch_mode = true;
-}
-
-void sdb_mainloop() {
+void sdb_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC) {
   for (char *str; (str = rl_gets()) != NULL; ) {
     char *str_end = str + strlen(str);
 
