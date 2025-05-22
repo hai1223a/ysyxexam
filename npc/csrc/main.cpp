@@ -12,9 +12,9 @@ static char *img_file = NULL;                 // 程序源文件指针
 #define CONFIG_MBASE 0x80000000               // 内存基地址
 #define ANSI_FG_RED     "\33[1;31m"           // 终端红色输出
 #define ANSI_FG_GREEN   "\33[1;32m"           // 终端绿色输出
+#define ANSI_NONE       "\33[0m"              
 #define ANSI_FMT(str, fmt) fmt str ANSI_NONE  // 用于输出有颜色的终端信息
-// 内存变量
-static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
+static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};// 内存变量
 //=====================================================
 // 用于解析命令行参数
 //=====================================================
@@ -133,7 +133,8 @@ extern "C" void find_ebreak(bool find) {if(find) cpu_run = false;}
 
 void printf_statu(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 {
-  printf("NPC 的结束状态是%s, PC = 0x%x\n", (ysyx_25050136_NPC->a0));
+  printf("NPC 的结束状态是%s, PC = 0x%x\n", (ysyx_25050136_NPC->a0 == 0) ? 
+          ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED));
 }
 
 //=====================================================

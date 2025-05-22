@@ -185,6 +185,7 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___ctor_var_reset(Vysyx_25050136_N
     vlSelf->mem_wen_o = VL_RAND_RESET_I(1);
     vlSelf->mem_len_o = VL_RAND_RESET_I(3);
     vlSelf->pc_o = VL_RAND_RESET_I(32);
+    vlSelf->a0 = VL_RAND_RESET_I(32);
     vlSelf->ysyx_25050136_NPC__DOT__if2id_static_npc_o = VL_RAND_RESET_I(32);
     vlSelf->ysyx_25050136_NPC__DOT__id2ex_alu_op_o = VL_RAND_RESET_I(2);
     vlSelf->ysyx_25050136_NPC__DOT__id2ex_op1_o = VL_RAND_RESET_I(32);
