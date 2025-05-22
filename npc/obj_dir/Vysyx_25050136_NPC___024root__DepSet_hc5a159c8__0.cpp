@@ -33,12 +33,10 @@ VL_INLINE_OPT void Vysyx_25050136_NPC___024root___ico_sequent__TOP__0(Vysyx_2505
     Vysyx_25050136_NPC___024unit____Vdpiimwrap_find_ebreak_TOP____024unit(
                                                                           (0x100073U 
                                                                            == vlSelfRef.inst_i));
-    vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_bqu_op_o 
-        = ((6U & (IData)(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_bqu_op_o)) 
-           | (0x67U == (0x7fU & vlSelfRef.inst_i)));
-    vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_ID__DOT____VdfgRegularize_h2f5766ca_0_4 
-        = ((0x6fU == (0x7fU & vlSelfRef.inst_i)) | 
-           (0x63U == (0x7fU & vlSelfRef.inst_i)));
+    vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en 
+        = ((0x67U == (0x7fU & vlSelfRef.inst_i)) | 
+           ((0x6fU == (0x7fU & vlSelfRef.inst_i)) | 
+            (0x63U == (0x7fU & vlSelfRef.inst_i))));
     vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_op5_o = 
         ((0U == (0x1fU & (vlSelfRef.inst_i >> 0x14U)))
           ? 0U : vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr
@@ -120,12 +118,6 @@ VL_INLINE_OPT void Vysyx_25050136_NPC___024root___ico_sequent__TOP__0(Vysyx_2505
                                                            & (vlSelfRef.inst_i 
                                                               >> 0x14U))))
                                                      : 0U)))));
-    vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_bqu_op_o 
-        = ((3U & (IData)(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_bqu_op_o)) 
-           | ((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_ID__DOT____VdfgRegularize_h2f5766ca_0_4) 
-              << 2U));
-    vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en 
-        = ((0x67U == (0x7fU & vlSelfRef.inst_i)) | (IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_ID__DOT____VdfgRegularize_h2f5766ca_0_4));
     vlSelfRef.mem_wdata_o = ((4U == (IData)(vlSelfRef.mem_len_o))
                               ? vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_op5_o
                               : ((2U == (IData)(vlSelfRef.mem_len_o))

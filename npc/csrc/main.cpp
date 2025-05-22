@@ -52,6 +52,7 @@ uint8_t* guest_to_host(uint32_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 
 void pmem_init()
 {
+  if (!img_file){
     uint32_t *pmem_w = (uint32_t *)pmem;
     *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
     *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
@@ -59,29 +60,21 @@ void pmem_init()
     *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
     *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
     *pmem_w++ = 0x00100073; //ebreak
-  if (img_file)
-  {
-    printf("你成功了加载了啥东西, img_file = %s\n", img_file);
+    return;
   }
-  else
-  {
-    printf("你好像加载失败了\n");
-  }
-  
+  FILE *fp = fopen(img_file, "rb");
+  assert(fp);
 
-  // FILE *fp = fopen(img_file, "rb");
-  // assert(fp);
+  fseek(fp, 0, SEEK_END);
+  long size = ftell(fp);
 
-  // fseek(fp, 0, SEEK_END);
-  // long size = ftell(fp);
+  printf("The image is %s, size = %ld", img_file, size);
 
-  // printf("The image is %s, size = %ld", img_file, size);
+  fseek(fp, 0, SEEK_SET);
+  int ret = fread(guest_to_host(CONFIG_MBASE), size, 1, fp);
+  assert(ret == 1);
 
-  // fseek(fp, 0, SEEK_SET);
-  // int ret = fread(guest_to_host(CONFIG_MBASE), size, 1, fp);
-  // assert(ret == 1);
-
-  // fclose(fp);
+  fclose(fp);
 }
 
 void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC) 

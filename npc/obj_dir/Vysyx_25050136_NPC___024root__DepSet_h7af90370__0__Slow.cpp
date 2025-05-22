@@ -187,14 +187,12 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___ctor_var_reset(Vysyx_25050136_N
     vlSelf->pc_o = VL_RAND_RESET_I(32);
     vlSelf->ysyx_25050136_NPC__DOT__if2id_static_npc_o = VL_RAND_RESET_I(32);
     vlSelf->ysyx_25050136_NPC__DOT__id2ex_alu_op_o = VL_RAND_RESET_I(2);
-    vlSelf->ysyx_25050136_NPC__DOT__id2ex_bqu_op_o = VL_RAND_RESET_I(3);
     vlSelf->ysyx_25050136_NPC__DOT__id2ex_op1_o = VL_RAND_RESET_I(32);
     vlSelf->ysyx_25050136_NPC__DOT__id2ex_op4_o = VL_RAND_RESET_I(32);
     vlSelf->ysyx_25050136_NPC__DOT__id2ex_op5_o = VL_RAND_RESET_I(32);
     vlSelf->ysyx_25050136_NPC__DOT__reg2id_rdata1_o = VL_RAND_RESET_I(32);
     vlSelf->ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc = VL_RAND_RESET_I(32);
     vlSelf->ysyx_25050136_NPC__DOT__u_ysyx_25050136_ID__DOT____VdfgRegularize_h2f5766ca_0_3 = VL_RAND_RESET_I(1);
-    vlSelf->ysyx_25050136_NPC__DOT__u_ysyx_25050136_ID__DOT____VdfgRegularize_h2f5766ca_0_4 = VL_RAND_RESET_I(1);
     vlSelf->ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__lsu_en = VL_RAND_RESET_I(1);
     vlSelf->ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en = VL_RAND_RESET_I(1);
     vlSelf->ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__out = VL_RAND_RESET_I(32);

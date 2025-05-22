@@ -104,12 +104,12 @@ VL_INLINE_OPT void Vysyx_25050136_NPC___024root___nba_sequent__TOP__0(Vysyx_2505
     }
     vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc 
         = ((IData)(vlSelfRef.reset) ? 0x80000000U : 
-           ((1U & ((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_bqu_op_o) 
-                   | (((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_bqu_op_o) 
-                       >> 1U) | ((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en) 
-                                 & (0U != vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__out)))))
+           (((0x67U == (0x7fU & vlSelfRef.inst_i)) 
+             | ((0x6fU == (0x7fU & vlSelfRef.inst_i)) 
+                | ((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en) 
+                   & (0U != vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__out))))
              ? ((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en)
-                 ? ((1U & (IData)(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_bqu_op_o))
+                 ? ((0x67U == (0x7fU & vlSelfRef.inst_i))
                      ? ((IData)((vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add 
                                  >> 1U)) << 1U) : (IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add))
                  : 0U) : vlSelfRef.ysyx_25050136_NPC__DOT__if2id_static_npc_o));

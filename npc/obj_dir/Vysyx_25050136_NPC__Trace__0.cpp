@@ -28,95 +28,86 @@ void Vysyx_25050136_NPC___024root__trace_chg_0_sub_0(Vysyx_25050136_NPC___024roo
                                        << 2U) | ((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__lsu_en) 
                                                  << 1U)))),3);
         bufp->chgCData(oldp+1,(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_alu_op_o),2);
-        bufp->chgCData(oldp+2,(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_bqu_op_o),3);
-        bufp->chgIData(oldp+3,(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_op4_o),32);
-        bufp->chgBit(oldp+4,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__lsu_en));
-        bufp->chgBit(oldp+5,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en));
+        bufp->chgIData(oldp+2,(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_op4_o),32);
+        bufp->chgBit(oldp+3,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__lsu_en));
+        bufp->chgBit(oldp+4,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en));
     }
     if (VL_UNLIKELY(((vlSelfRef.__Vm_traceActivity[1U] 
                       | vlSelfRef.__Vm_traceActivity
                       [2U])))) {
-        bufp->chgIData(oldp+6,(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_op1_o),32);
-        bufp->chgIData(oldp+7,(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_op5_o),32);
-        bufp->chgIData(oldp+8,(vlSelfRef.ysyx_25050136_NPC__DOT__reg2id_rdata1_o),32);
-        bufp->chgIData(oldp+9,(((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en)
-                                 ? ((1U & (IData)(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_bqu_op_o))
-                                     ? ((IData)((vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add 
-                                                 >> 1U)) 
-                                        << 1U) : (IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add))
-                                 : 0U)),32);
-        bufp->chgBit(oldp+10,((1U & ((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_bqu_op_o) 
-                                     | (((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_bqu_op_o) 
-                                         >> 1U) | ((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en) 
-                                                   & (0U 
-                                                      != vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__out)))))));
-        bufp->chgIData(oldp+11,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__out),32);
-        bufp->chgQData(oldp+12,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add),33);
-        bufp->chgIData(oldp+14,(((1U & (IData)(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_bqu_op_o))
-                                  ? ((IData)((vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add 
-                                              >> 1U)) 
-                                     << 1U) : (IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add))),32);
+        bufp->chgIData(oldp+5,(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_op1_o),32);
+        bufp->chgIData(oldp+6,(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_op5_o),32);
+        bufp->chgIData(oldp+7,(vlSelfRef.ysyx_25050136_NPC__DOT__reg2id_rdata1_o),32);
+        bufp->chgIData(oldp+8,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__out),32);
+        bufp->chgQData(oldp+9,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add),33);
     }
     if (VL_UNLIKELY((vlSelfRef.__Vm_traceActivity[2U]))) {
-        bufp->chgIData(oldp+15,(((IData)(4U) + vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc)),32);
-        bufp->chgIData(oldp+16,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc),32);
-        bufp->chgIData(oldp+17,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[0]),32);
-        bufp->chgIData(oldp+18,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[1]),32);
-        bufp->chgIData(oldp+19,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[2]),32);
-        bufp->chgIData(oldp+20,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[3]),32);
-        bufp->chgIData(oldp+21,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[4]),32);
-        bufp->chgIData(oldp+22,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[5]),32);
-        bufp->chgIData(oldp+23,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[6]),32);
-        bufp->chgIData(oldp+24,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[7]),32);
-        bufp->chgIData(oldp+25,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[8]),32);
-        bufp->chgIData(oldp+26,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[9]),32);
-        bufp->chgIData(oldp+27,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[10]),32);
-        bufp->chgIData(oldp+28,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[11]),32);
-        bufp->chgIData(oldp+29,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[12]),32);
-        bufp->chgIData(oldp+30,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[13]),32);
-        bufp->chgIData(oldp+31,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[14]),32);
-        bufp->chgIData(oldp+32,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[15]),32);
-        bufp->chgIData(oldp+33,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[16]),32);
-        bufp->chgIData(oldp+34,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[17]),32);
-        bufp->chgIData(oldp+35,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[18]),32);
-        bufp->chgIData(oldp+36,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[19]),32);
-        bufp->chgIData(oldp+37,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[20]),32);
-        bufp->chgIData(oldp+38,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[21]),32);
-        bufp->chgIData(oldp+39,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[22]),32);
-        bufp->chgIData(oldp+40,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[23]),32);
-        bufp->chgIData(oldp+41,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[24]),32);
-        bufp->chgIData(oldp+42,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[25]),32);
-        bufp->chgIData(oldp+43,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[26]),32);
-        bufp->chgIData(oldp+44,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[27]),32);
-        bufp->chgIData(oldp+45,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[28]),32);
-        bufp->chgIData(oldp+46,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[29]),32);
-        bufp->chgIData(oldp+47,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[30]),32);
-        bufp->chgIData(oldp+48,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[31]),32);
+        bufp->chgIData(oldp+11,(((IData)(4U) + vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc)),32);
+        bufp->chgIData(oldp+12,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc),32);
+        bufp->chgIData(oldp+13,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[0]),32);
+        bufp->chgIData(oldp+14,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[1]),32);
+        bufp->chgIData(oldp+15,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[2]),32);
+        bufp->chgIData(oldp+16,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[3]),32);
+        bufp->chgIData(oldp+17,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[4]),32);
+        bufp->chgIData(oldp+18,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[5]),32);
+        bufp->chgIData(oldp+19,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[6]),32);
+        bufp->chgIData(oldp+20,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[7]),32);
+        bufp->chgIData(oldp+21,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[8]),32);
+        bufp->chgIData(oldp+22,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[9]),32);
+        bufp->chgIData(oldp+23,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[10]),32);
+        bufp->chgIData(oldp+24,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[11]),32);
+        bufp->chgIData(oldp+25,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[12]),32);
+        bufp->chgIData(oldp+26,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[13]),32);
+        bufp->chgIData(oldp+27,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[14]),32);
+        bufp->chgIData(oldp+28,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[15]),32);
+        bufp->chgIData(oldp+29,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[16]),32);
+        bufp->chgIData(oldp+30,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[17]),32);
+        bufp->chgIData(oldp+31,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[18]),32);
+        bufp->chgIData(oldp+32,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[19]),32);
+        bufp->chgIData(oldp+33,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[20]),32);
+        bufp->chgIData(oldp+34,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[21]),32);
+        bufp->chgIData(oldp+35,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[22]),32);
+        bufp->chgIData(oldp+36,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[23]),32);
+        bufp->chgIData(oldp+37,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[24]),32);
+        bufp->chgIData(oldp+38,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[25]),32);
+        bufp->chgIData(oldp+39,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[26]),32);
+        bufp->chgIData(oldp+40,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[27]),32);
+        bufp->chgIData(oldp+41,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[28]),32);
+        bufp->chgIData(oldp+42,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[29]),32);
+        bufp->chgIData(oldp+43,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[30]),32);
+        bufp->chgIData(oldp+44,(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[31]),32);
     }
-    bufp->chgBit(oldp+49,(vlSelfRef.clk));
-    bufp->chgBit(oldp+50,(vlSelfRef.reset));
-    bufp->chgIData(oldp+51,(vlSelfRef.inst_i),32);
-    bufp->chgIData(oldp+52,(vlSelfRef.mem_rdata_i),32);
-    bufp->chgIData(oldp+53,(vlSelfRef.mem_wdata_o),32);
-    bufp->chgIData(oldp+54,(vlSelfRef.mem_addr_o),32);
-    bufp->chgBit(oldp+55,(vlSelfRef.mem_ren_o));
-    bufp->chgBit(oldp+56,(vlSelfRef.mem_wen_o));
-    bufp->chgCData(oldp+57,(vlSelfRef.mem_len_o),3);
-    bufp->chgIData(oldp+58,(vlSelfRef.pc_o),32);
-    bufp->chgCData(oldp+59,((0x1fU & (vlSelfRef.inst_i 
+    bufp->chgBit(oldp+45,(vlSelfRef.clk));
+    bufp->chgBit(oldp+46,(vlSelfRef.reset));
+    bufp->chgIData(oldp+47,(vlSelfRef.inst_i),32);
+    bufp->chgIData(oldp+48,(vlSelfRef.mem_rdata_i),32);
+    bufp->chgIData(oldp+49,(vlSelfRef.mem_wdata_o),32);
+    bufp->chgIData(oldp+50,(vlSelfRef.mem_addr_o),32);
+    bufp->chgBit(oldp+51,(vlSelfRef.mem_ren_o));
+    bufp->chgBit(oldp+52,(vlSelfRef.mem_wen_o));
+    bufp->chgCData(oldp+53,(vlSelfRef.mem_len_o),3);
+    bufp->chgIData(oldp+54,(vlSelfRef.pc_o),32);
+    bufp->chgCData(oldp+55,((0x1fU & (vlSelfRef.inst_i 
                                       >> 0xfU))),5);
-    bufp->chgCData(oldp+60,((0x1fU & (vlSelfRef.inst_i 
+    bufp->chgCData(oldp+56,((0x1fU & (vlSelfRef.inst_i 
                                       >> 0x14U))),5);
-    bufp->chgCData(oldp+61,((0x1fU & (vlSelfRef.inst_i 
+    bufp->chgCData(oldp+57,((0x1fU & (vlSelfRef.inst_i 
                                       >> 7U))),5);
-    bufp->chgBit(oldp+62,((1U & (~ ((0x23U == (0x7fU 
+    bufp->chgBit(oldp+58,((1U & (~ ((0x23U == (0x7fU 
                                                & vlSelfRef.inst_i)) 
                                     | (0x63U == (0x7fU 
                                                  & vlSelfRef.inst_i)))))));
-    bufp->chgCData(oldp+63,((((0x23U == (0x7fU & vlSelfRef.inst_i)) 
+    bufp->chgCData(oldp+59,((((0x23U == (0x7fU & vlSelfRef.inst_i)) 
                               << 1U) | (3U == (0x7fU 
                                                & vlSelfRef.inst_i)))),2);
-    bufp->chgIData(oldp+64,((((0x33U == (0x7fU & vlSelfRef.inst_i)) 
+    bufp->chgCData(oldp+60,((((0x63U == (0x7fU & vlSelfRef.inst_i)) 
+                              << 2U) | (((0x6fU == 
+                                          (0x7fU & vlSelfRef.inst_i)) 
+                                         << 1U) | (0x67U 
+                                                   == 
+                                                   (0x7fU 
+                                                    & vlSelfRef.inst_i))))),3);
+    bufp->chgIData(oldp+61,((((0x33U == (0x7fU & vlSelfRef.inst_i)) 
                               | (0x63U == (0x7fU & vlSelfRef.inst_i)))
                               ? vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_op5_o
                               : (((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__lsu_en) 
@@ -126,11 +117,11 @@ void Vysyx_25050136_NPC___024root__trace_chg_0_sub_0(Vysyx_25050136_NPC___024roo
                                                   & vlSelfRef.inst_i))))
                                   ? vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_op4_o
                                   : 0U))),32);
-    bufp->chgIData(oldp+65,(((0x67U == (0x7fU & vlSelfRef.inst_i))
+    bufp->chgIData(oldp+62,(((0x67U == (0x7fU & vlSelfRef.inst_i))
                               ? vlSelfRef.ysyx_25050136_NPC__DOT__reg2id_rdata1_o
                               : vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc)),32);
-    bufp->chgBit(oldp+66,((0x100073U == vlSelfRef.inst_i)));
-    bufp->chgIData(oldp+67,(((3U == (0x7fU & vlSelfRef.inst_i))
+    bufp->chgBit(oldp+63,((0x100073U == vlSelfRef.inst_i)));
+    bufp->chgIData(oldp+64,(((3U == (0x7fU & vlSelfRef.inst_i))
                               ? ((4U == (IData)(vlSelfRef.mem_len_o))
                                   ? vlSelfRef.mem_rdata_i
                                   : ((2U == (IData)(vlSelfRef.mem_len_o))
@@ -150,7 +141,17 @@ void Vysyx_25050136_NPC___024root__trace_chg_0_sub_0(Vysyx_25050136_NPC___024roo
                                              | (0xffU 
                                                 & vlSelfRef.mem_rdata_i))
                                           : 0U))) : vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__out)),32);
-    bufp->chgIData(oldp+68,(((4U == (IData)(vlSelfRef.mem_len_o))
+    bufp->chgIData(oldp+65,(((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en)
+                              ? ((0x67U == (0x7fU & vlSelfRef.inst_i))
+                                  ? ((IData)((vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add 
+                                              >> 1U)) 
+                                     << 1U) : (IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add))
+                              : 0U)),32);
+    bufp->chgBit(oldp+66,(((0x67U == (0x7fU & vlSelfRef.inst_i)) 
+                           | ((0x6fU == (0x7fU & vlSelfRef.inst_i)) 
+                              | ((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en) 
+                                 & (0U != vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__out))))));
+    bufp->chgIData(oldp+67,(((4U == (IData)(vlSelfRef.mem_len_o))
                               ? vlSelfRef.mem_rdata_i
                               : ((2U == (IData)(vlSelfRef.mem_len_o))
                                   ? (((- (IData)((1U 
@@ -166,7 +167,7 @@ void Vysyx_25050136_NPC___024root__trace_chg_0_sub_0(Vysyx_25050136_NPC___024roo
                                           << 8U) | 
                                          (0xffU & vlSelfRef.mem_rdata_i))
                                       : 0U)))),32);
-    bufp->chgQData(oldp+69,((0x1ffffffffULL & ((QData)((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_op1_o)) 
+    bufp->chgQData(oldp+68,((0x1ffffffffULL & ((QData)((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_op1_o)) 
                                                + (QData)((IData)(
                                                                  (((0x33U 
                                                                     == 
@@ -189,6 +190,10 @@ void Vysyx_25050136_NPC___024root__trace_chg_0_sub_0(Vysyx_25050136_NPC___024roo
                                                                            & vlSelfRef.inst_i))))
                                                                     ? vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_op4_o
                                                                     : 0U))))))),33);
+    bufp->chgIData(oldp+70,(((0x67U == (0x7fU & vlSelfRef.inst_i))
+                              ? ((IData)((vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add 
+                                          >> 1U)) << 1U)
+                              : (IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add))),32);
     bufp->chgCData(oldp+71,((0x7fU & vlSelfRef.inst_i)),7);
     bufp->chgCData(oldp+72,((7U & (vlSelfRef.inst_i 
                                    >> 0xcU))),3);
