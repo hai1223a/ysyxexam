@@ -71,7 +71,7 @@ void pmem_init()
   assert(fp);
   fseek(fp, 0, SEEK_END);
   long size = ftell(fp);
-  printf("程序源文件是%s,文件大小是%ld\n", img_file, size);
+  printf("程序源文件是%s,文件大小是%ldbyte\n", img_file, size);
   fseek(fp, 0, SEEK_SET);
   int ret = fread(guest_to_host(CONFIG_MBASE), size, 1, fp);
   assert(ret == 1);
