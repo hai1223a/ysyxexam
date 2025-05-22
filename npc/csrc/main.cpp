@@ -185,6 +185,7 @@ int main(int argc, char **argv)
     // 推动仿真进行
     sim_time++;
   }
+  printf_statu(ysyx_25050136_NPC);
   // 关闭波形文件
   tfp->close();
   // 删除指针
