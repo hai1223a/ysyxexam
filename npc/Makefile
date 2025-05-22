@@ -9,7 +9,8 @@ VERILATOR = verilator
 VERILATOR_CFLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
 				   --top-module $(TOPNAME) $(VSRCS) $(CSRCS) \
 				   $(LDFLAGS) \
-				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL					
+				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
+				   -lreadline					
 
 all: sim
 	@echo "Write this Makefile by your self."
