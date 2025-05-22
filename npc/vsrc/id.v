@@ -100,7 +100,8 @@ module ysyx_25050136_ID
     assign alu_op_o[`ysyx_25050136_ALU_ADD] = type_auipc | type_store | type_load | inst_addi;
     // 选择BQU相关操作
     assign bqu_op_o[`ysyx_25050136_BQU_JALR]  = type_jalr;
-    assign bqu_op_o[`ysyx_25050136_BQU_OTHER] = type_jal | type_branch;
+    assign bqu_op_o[`ysyx_25050136_BQU_JAL]   = type_jal;
+    assign bqu_op_o[`ysyx_25050136_BQU_OTHER] = type_branch;
     // 选择LSU相关操作
     assign lsu_op_o[`ysyx_25050136_LSU_LOAD] = type_load;
     assign lsu_op_o[`ysyx_25050136_LSU_STORE] = type_store;
