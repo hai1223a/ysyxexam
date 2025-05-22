@@ -17,7 +17,9 @@ module ysyx_25050136_RegisterFile
          output  [DATA_WIDTH-1:0] rdata1_o,
          // 读端口2
          input   [ADDR_WIDTH-1:0] raddr2_i,
-         output  [DATA_WIDTH-1:0] rdata2_o
+         output  [DATA_WIDTH-1:0] rdata2_o,
+         // 输出a0,得知程序是否正确执行
+         output  [DATA_WIDTH-1:0] a0
      );
     reg [DATA_WIDTH-1:0] gpr [2**ADDR_WIDTH-1:0];
     always @(posedge clk) begin
@@ -28,5 +30,5 @@ module ysyx_25050136_RegisterFile
 
     assign rdata1_o = (raddr1_i != 0) ? gpr[raddr1_i] : 0;
     assign rdata2_o = (raddr2_i != 0) ? gpr[raddr2_i] : 0;
-
+    assign a0 = gpr[10];
 endmodule

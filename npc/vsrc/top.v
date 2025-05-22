@@ -15,7 +15,8 @@ module ysyx_25050136_NPC
     output                            mem_ren_o,
     output                            mem_wen_o,
     output [2:0]                      mem_len_o,
-    output [TOP_DATA_WIDTH-1:0]            pc_o
+    output [TOP_DATA_WIDTH-1:0]            pc_o,
+    output [TOP_DATA_WIDTH-1:0]              a0
 );
 //========================================
 // 顶层信号定义
@@ -121,7 +122,8 @@ u_ysyx_25050136_RegisterFile(
     .raddr1_i 	(id2reg_raddr1_o    ),
     .rdata1_o 	(reg2id_rdata1_o    ),
     .raddr2_i 	(id2reg_raddr2_o    ),
-    .rdata2_o 	(reg2id_rdata2_o    )
+    .rdata2_o 	(reg2id_rdata2_o    ),
+    .a0         (a0                 )
 );
 
 endmodule

@@ -5,11 +5,14 @@
 //=====================================================
 // 全局变量和宏定义
 //=====================================================
-bool cpu_run = true;              // CPU仿真运行状态
-vluint64_t sim_time = 0;          // 记录仿真时间
-static char *img_file = NULL;     // 程序源文件指针
-#define CONFIG_MSIZE 0x8000000    // 内存大小
-#define CONFIG_MBASE 0x80000000   // 内存基地址
+bool cpu_run = true;                          // CPU仿真运行状态
+vluint64_t sim_time = 0;                      // 记录仿真时间
+static char *img_file = NULL;                 // 程序源文件指针
+#define CONFIG_MSIZE 0x8000000                // 内存大小
+#define CONFIG_MBASE 0x80000000               // 内存基地址
+#define ANSI_FG_RED     "\33[1;31m"           // 终端红色输出
+#define ANSI_FG_GREEN   "\33[1;32m"           // 终端绿色输出
+#define ANSI_FMT(str, fmt) fmt str ANSI_NONE  // 用于输出有颜色的终端信息
 // 内存变量
 static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
 //=====================================================
@@ -52,9 +55,10 @@ static int parse_args(int argc, char *argv[]) {
   return 0;
 }
 //=====================================================
-// 存储器
+// 存储器相关函数
 //=====================================================
 uint8_t* guest_to_host(uint32_t paddr) { return pmem + paddr - CONFIG_MBASE; }
+
 void pmem_init()
 {
   if (!img_file){
@@ -71,7 +75,7 @@ void pmem_init()
   assert(fp);
   fseek(fp, 0, SEEK_END);
   long size = ftell(fp);
-  printf("程序源文件是%s,文件大小是%ldbyte\n", img_file, size);
+  printf("程序源文件是%s, 文件大小是%ld byte.\n", img_file, size);
   fseek(fp, 0, SEEK_SET);
   int ret = fread(guest_to_host(CONFIG_MBASE), size, 1, fp);
   assert(ret == 1);
@@ -122,9 +126,19 @@ void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC)
     }
   }
 }
-
+//=====================================================
+// 调试相关函数
+//=====================================================
 extern "C" void find_ebreak(bool find) {if(find) cpu_run = false;}
 
+void printf_statu(Vysyx_25050136_NPC *ysyx_25050136_NPC)
+{
+  printf("NPC 的结束状态是%s, PC = 0x%x\n", (ysyx_25050136_NPC->a0));
+}
+
+//=====================================================
+// 主函数
+//=====================================================
 void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
 {
   ysyx_25050136_NPC->reset = 0;
