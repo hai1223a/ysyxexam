@@ -35,7 +35,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC___024root final : public V
     VL_OUT(mem_wdata_o,31,0);
     VL_OUT(mem_addr_o,31,0);
     VL_OUT(pc_o,31,0);
-    VL_OUT(a0,31,0);
     IData/*31:0*/ ysyx_25050136_NPC__DOT__if2id_static_npc_o;
     IData/*31:0*/ ysyx_25050136_NPC__DOT__id2ex_op1_o;
     IData/*31:0*/ ysyx_25050136_NPC__DOT__id2ex_op4_o;
