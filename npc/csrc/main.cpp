@@ -3,7 +3,7 @@
 #include <getopt.h>              // 包含解析命令行参数的库函数
 #include <verilated.h>           // Verilator的库
 #include "verilated_fst_c.h"     // fst波形文件所需要的库
-#include "sdb.h"
+#include "../incldue/sdb.h"
 //=====================================================
 // 全局变量和宏定义
 //=====================================================
