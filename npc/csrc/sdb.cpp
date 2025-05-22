@@ -97,7 +97,7 @@ static struct {
 
 #define NR_CMD (int)(sizeof(cmd_table) / sizeof(cmd_table[0]))
 
-static int cmd_help(char *args) {
+static int cmd_help(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
   /* extract the first argument */
   char *arg = strtok(NULL, " ");
   int i;
