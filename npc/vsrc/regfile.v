@@ -11,6 +11,7 @@ module ysyx_25050136_RegisterFile
          // 写端口
          input   [DATA_WIDTH-1:0]  wdata_i,
          input   [ADDR_WIDTH-1:0]  waddr_i,
+         input                       wen_i,
          // 读端口1
          input   [ADDR_WIDTH-1:0] raddr1_i,
          output  [DATA_WIDTH-1:0] rdata1_o,
@@ -20,8 +21,9 @@ module ysyx_25050136_RegisterFile
      );
     reg [DATA_WIDTH-1:0] gpr [2**ADDR_WIDTH-1:0];
     always @(posedge clk) begin
-        if(waddr_i != 0)
-            gpr[waddr_i] <= wdata_i;
+        if(wen_i)
+            if(waddr_i != 0)
+                gpr[waddr_i] <= wdata_i;
     end
 
     assign rdata1_o = (raddr1_i != 0) ? gpr[raddr1_i] : 0;

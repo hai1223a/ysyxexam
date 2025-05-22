@@ -273,6 +273,8 @@ typedef struct inf {
 === 今日完成任务
 * 实现了mtracer和ftracer的功能
 
-[[d2025-5-14]]
-== 2025/5/14 实验日志
+[[d2025-5-21]]
+== 2025/5/21 实验日志
 === 今日完成任务
+* 使用native测试了kib的string.h中的函数以及printf函数完成了nemu和spike的DiffTest
+* 完成npc第一条指令addi
