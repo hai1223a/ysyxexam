@@ -12,7 +12,6 @@ static char *img_file = NULL;     // 程序源文件指针
 #define CONFIG_MBASE 0x80000000   // 内存基地址
 // 内存变量
 static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
- 
 //=====================================================
 // 用于解析命令行参数
 //=====================================================
@@ -55,10 +54,7 @@ static int parse_args(int argc, char *argv[]) {
 //=====================================================
 // 存储器
 //=====================================================
-
-
 uint8_t* guest_to_host(uint32_t paddr) { return pmem + paddr - CONFIG_MBASE; }
-
 void pmem_init()
 {
   if (!img_file){
@@ -73,16 +69,12 @@ void pmem_init()
   }
   FILE *fp = fopen(img_file, "rb");
   assert(fp);
-
   fseek(fp, 0, SEEK_END);
   long size = ftell(fp);
-
-  printf("The image is %s, size = %ld", img_file, size);
-
+  printf("程序源文件是%s,文件大小是%ld\n", img_file, size);
   fseek(fp, 0, SEEK_SET);
   int ret = fread(guest_to_host(CONFIG_MBASE), size, 1, fp);
   assert(ret == 1);
-
   fclose(fp);
 }
 
