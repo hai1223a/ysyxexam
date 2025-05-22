@@ -4,10 +4,11 @@ VSRCS = $(wildcard vsrc/*.v)
 
 # Wno-DECLFILENAME 表示禁用一种代码格式警告,该警告用于检查模块名和文件名的一致性
 CFLAGS =
+LDFLAGS = -Ivsrc -Iinclude
 VERILATOR = verilator
 VERILATOR_CFLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
 				   --top-module $(TOPNAME) $(VSRCS) $(CSRCS) \
-				   -Ivsrc \
+				   $(LDFLAGS) \
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL					
 
 all: sim
