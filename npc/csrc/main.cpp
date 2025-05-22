@@ -185,9 +185,9 @@ int main(int argc, char **argv)
     tfp->dump(sim_time);
     // 推动仿真进行
     sim_time++;
+    printf("%d\n\n\n",ysyx_25050136_NPC->rootp->ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[10]);
   }
   printf_statu(ysyx_25050136_NPC);
-  printf("%d\n\n\n",ysyx_25050136_NPC->rootp->ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr);
   // 关闭波形文件
   tfp->close();
   // 删除指针
