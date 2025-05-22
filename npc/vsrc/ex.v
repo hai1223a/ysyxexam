@@ -59,7 +59,7 @@ module ysyx_25050136_EX
     //===================================================
     wire bqu_en = fu_i[`ysyx_25050136_BQU];
     assign jump_en_o = bqu_op_i[`ysyx_25050136_BQU_JALR] | bqu_op_i[`ysyx_25050136_BQU_JAL] |
-                       (bqu_en && alu_out_o) ;
+                       (bqu_en & |alu_out_o) ;
 
     ysyx_25050136_BQU u_ysyx_25050136_BQU(
         .op1_i       	(op3_i         ),
@@ -74,4 +74,3 @@ module ysyx_25050136_EX
     assign gpr_data_o = lsu_op_i[`ysyx_25050136_LSU_LOAD] ? load_data_o : alu_out_o;
 
 endmodule //ysyx_25050136_EX
-
