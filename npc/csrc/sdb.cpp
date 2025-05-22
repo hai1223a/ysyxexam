@@ -17,6 +17,8 @@
 #include <readline/history.h>
 #include <stdio.h>
 #include <stdlib.h>
+#include "Vysyx_25050136_NPC.h"  // 包含Verilog工程的C++模型
+#include "Vysyx_25050136_NPC___024root.h"
 
 static int is_batch_mode = false;
 

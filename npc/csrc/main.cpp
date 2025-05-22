@@ -141,6 +141,7 @@ void printf_statu(Vysyx_25050136_NPC *ysyx_25050136_NPC)
           ysyx_25050136_NPC->pc_o);
 }
 
+void sdb_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC);
 //=====================================================
 // 主函数
 //=====================================================
@@ -152,6 +153,7 @@ void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
     ysyx_25050136_NPC->reset = 1;
   }
 }
+
 
 int main(int argc, char **argv)
 {
