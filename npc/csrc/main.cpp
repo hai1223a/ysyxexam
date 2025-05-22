@@ -1,12 +1,21 @@
-#include "Vysyx_25050136_NPC.h"            // 包含Verilog工程的C++模型
-#include <getopt.h>
-#include <verilated.h>       // Verilator的库
-#include "verilated_fst_c.h" // fst波形文件所需要的库
-
-bool cpu_run = true;
-vluint64_t sim_time = 0; // 记录当前仿真时间
-
-static char *img_file = NULL;
+#include "Vysyx_25050136_NPC.h"  // 包含Verilog工程的C++模型
+#include <getopt.h>              // 包含解析命令行参数的库函数
+#include <verilated.h>           // Verilator的库
+#include "verilated_fst_c.h"     // fst波形文件所需要的库
+//=====================================================
+// 全局变量和宏定义
+//=====================================================
+bool cpu_run = true;              // CPU仿真运行状态
+vluint64_t sim_time = 0;          // 记录仿真时间
+static char *img_file = NULL;     // 程序源文件指针
+#define CONFIG_MSIZE 0x8000000    // 内存大小
+#define CONFIG_MBASE 0x80000000   // 内存基地址
+// 内存变量
+static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
+ 
+//=====================================================
+// 用于解析命令行参数
+//=====================================================
 static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
     {"batch"    , no_argument      , NULL, 'b'},
@@ -43,11 +52,11 @@ static int parse_args(int argc, char *argv[]) {
   }
   return 0;
 }
-
+//=====================================================
 // 存储器
-#define CONFIG_MSIZE 0x8000000
-#define CONFIG_MBASE 0x80000000
-static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};
+//=====================================================
+
+
 uint8_t* guest_to_host(uint32_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 
 void pmem_init()
