@@ -284,6 +284,7 @@ void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
 
 void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_t inst_num)
 {
+  uint32_t pc_pre = 0x80000000;
   while (cpu_run && inst_num)
   {
       // 模拟时钟反转
@@ -300,6 +301,11 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
       tfp->dump(sim_time);
       // 推动仿真进行
       sim_time++;
+      // 指令计算
+      if(ysyx_25050136_NPC->pc_o != pc_pre) {
+        inst_num--;
+        pc_pre = ysyx_25050136_NPC->pc_o;
+      }
   }
 }
 
