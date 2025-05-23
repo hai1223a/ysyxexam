@@ -17,7 +17,7 @@ static int parse_args(int argc, char *argv[]) {
   int o;
   while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:g:i:", table, NULL)) != -1) {
     switch (o) {
-      case 'b': sdb_mode = true; break;
+      case 'b': batch_mode = true; break;
       case 'p': break;
       case 'l': break;
       case 'd': break;
@@ -295,7 +295,6 @@ void sdb_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
-    cpu_init(ysyx_25050136_NPC, tfp);
         if (cmd_table[i].handler(args, ysyx_25050136_NPC, tfp) < 0) return; 
         break;
       }
@@ -324,10 +323,10 @@ int main(int argc, char **argv)
   ysyx_25050136_NPC->trace(tfp, 5);
   // 打开波形文件
   tfp->open("waveform.fst");
-  if(sdb_mode)
-    sdb_mainloop(ysyx_25050136_NPC,tfp);
-  else  
+  if(batch_mode)
     batch_mainloop(ysyx_25050136_NPC,tfp);
+  else  
+    sdb_mainloop(ysyx_25050136_NPC,tfp);
   printf_statu(ysyx_25050136_NPC);
   // 关闭波形文件
   tfp->close();
