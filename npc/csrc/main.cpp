@@ -268,8 +268,10 @@ void one_cycle(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 {
   ysyx_25050136_NPC->clk = 0;
   ysyx_25050136_NPC->eval();
+  sim_time++;
   ysyx_25050136_NPC->clk = 1;
   ysyx_25050136_NPC->eval();
+  sim_time++;
 }
 
 void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
@@ -284,8 +286,6 @@ void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
     reset(ysyx_25050136_NPC, sim_time);
     // 记录波形数据
     tfp->dump(sim_time);
-    // 推动仿真进行
-    sim_time++;
   }
 }
 
