@@ -266,7 +266,10 @@ void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
 
 void one_cycle(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 {
-
+  ysyx_25050136_NPC->clk = 0;
+  ysyx_25050136_NPC->eval();
+  ysyx_25050136_NPC->clk = 1;
+  ysyx_25050136_NPC->eval();
 }
 
 void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
@@ -276,13 +279,9 @@ void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
   cpu_run = true;
   while (sim_time <= reset_time)
   {
-        // 模拟时钟反转
-        ysyx_25050136_NPC->clk ^= 1;
-        // 计算电路状态
-        ysyx_25050136_NPC->eval();
+    one_cycle(ysyx_25050136_NPC);
     // 复位
     reset(ysyx_25050136_NPC, sim_time);
-
     // 记录波形数据
     tfp->dump(sim_time);
     // 推动仿真进行
