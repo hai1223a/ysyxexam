@@ -182,26 +182,6 @@ static int cmd_r(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
   return 0;
 }
 
-static struct {
-  const char *name;
-  const char *description;
-  int (*handler) (char *, Vysyx_25050136_NPC *);
-} cmd_table [] = {
-  { "help", "Display information about all supported commands", cmd_help },
-  { "c", "Continue the execution of the program", cmd_c },
-  { "q", "Exit NEMU", cmd_q },
-  { "si", "格式为si [N],让程序单步执行N条指令后暂停执行,当N没有给出时,缺省为1", cmd_si},
-  { "info", "格式为info SUBCMD, info r表示打印寄存器状态, info w表示打印监视点信息", cmd_info},
-  { "x", "格式为x N EXPR, 表示以表达式EXPR为基地址, 以16进制的格式打印连续的N个4字节数据", cmd_x},
-  { "p", "查看表达式的值, 格式为p EXPR, 将会打印表达式EXPR的十进制和十六进制表达", cmd_p},
-  { "w", "设置监视点, 格式为w EXPR, 当EXPR的值发生改变时将会中断程序", cmd_w},
-  { "d", "删除监视点, 格式为d N, 表示删除序号为N的监视点", cmd_d},
-  { "r", "重新开始程序,还没实现", cmd_r},
-  /* TODO: Add more commands */
-};
-
-#define NR_CMD (int)(sizeof(cmd_table) / sizeof(cmd_table[0]))
-
 static int cmd_help(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
   /* extract the first argument */
   char *arg = strtok(NULL, " ");
@@ -248,6 +228,7 @@ void sdb_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC) {
     if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
   }
 }
+
 //=====================================================
 // cpu相关函数
 //=====================================================
@@ -300,6 +281,7 @@ int batch_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
   cpu_exec(ysyx_25050136_NPC, tfp, 1);
   return 0;
 }
+
 //=====================================================
 // 主函数
 //=====================================================
