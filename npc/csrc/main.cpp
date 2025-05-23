@@ -133,16 +133,19 @@ void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
     ysyx_25050136_NPC->reset = 1;
 }
 
-void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
-{
+void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
     // 关闭当前波形文件
     tfp->close();
+    printf("Waveform file closed.\n");
 
     // 重新打开波形文件
     tfp->open("waveform_restart.fst");
-  pmem_init();
-  sim_time = 0;
-  cpu_run = true;
+    printf("Waveform file reopened.\n");
+
+    // 初始化其他状态
+    pmem_init();
+    sim_time = 0;  // 重置仿真时间
+    cpu_run = true;
 }
 
 void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_t inst_num)
