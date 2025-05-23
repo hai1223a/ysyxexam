@@ -232,7 +232,7 @@ static int cmd_d(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFst
 }
 
 static int cmd_r(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
-  printf("CPU在sim_time = %ld 时停止了一次\n", stop_time);
+  printf("CPU在 sim_time = %ld 时停止了一次\n", stop_time);
   cpu_init(ysyx_25050136_NPC, tfp);
   cpu_exec(ysyx_25050136_NPC, tfp, -1);
   return 0;
