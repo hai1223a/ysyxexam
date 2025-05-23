@@ -289,14 +289,16 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
   {
       // 模拟时钟反转
       ysyx_25050136_NPC->clk ^= 1;
-      // 取指
-      inst_read(ysyx_25050136_NPC);
       // 计算电路状态
       ysyx_25050136_NPC->eval();
-      // 访存
-      pmem_read_write(ysyx_25050136_NPC);
-      // 计算电路状态
-      ysyx_25050136_NPC->eval();
+      if(ysyx_25050136_NPC->clk = 1) {
+        // 取指
+        inst_read(ysyx_25050136_NPC);
+        // 访存
+        pmem_read_write(ysyx_25050136_NPC);
+        // 计算电路状态
+        ysyx_25050136_NPC->eval();
+      }
       // 记录波形数据
       tfp->dump(sim_time);
       // 推动仿真进行
