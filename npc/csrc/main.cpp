@@ -280,6 +280,7 @@ static int cmd_help(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, Verilated
 }
 
 void sdb_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
+  cpu_init(ysyx_25050136_NPC, tfp);
   for (char *str; (str = rl_gets()) != NULL; ) {
     char *str_end = str + strlen(str);
 
@@ -291,7 +292,6 @@ void sdb_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
       args = NULL;
     }
 
-    cpu_init(ysyx_25050136_NPC, tfp);
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
