@@ -145,6 +145,8 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
   while (cpu_run && inst_num)
   {
     printf("sim_time = %ld, stop_time = %ld\n", sim_time, stop_time);
+    if(cpu_run)
+      printf("d");
     // 模拟时钟反转
     ysyx_25050136_NPC->clk ^= 1;
     // 计算电路状态
