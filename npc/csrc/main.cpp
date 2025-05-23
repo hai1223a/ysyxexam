@@ -295,7 +295,8 @@ void sdb_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
-        if (cmd_table[i].handler(args, ysyx_25050136_NPC) < 0) return; 
+    cpu_init(ysyx_25050136_NPC, tfp);
+        if (cmd_table[i].handler(args, ysyx_25050136_NPC, tfp) < 0) return; 
         break;
       }
     }
