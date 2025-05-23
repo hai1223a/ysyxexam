@@ -319,7 +319,7 @@ int main(int argc, char **argv)
   ysyx_25050136_NPC->trace(tfp, 5);
   // 打开波形文件
   tfp->open("waveform.fst");
-  batch_mainloop(ysyx_25050136_NPC);
+  batch_mainloop(ysyx_25050136_NPC,tfp);
   printf_statu(ysyx_25050136_NPC);
   // 关闭波形文件
   tfp->close();
