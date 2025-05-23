@@ -136,12 +136,12 @@ void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
 void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
     stop_time += sim_time;
     pmem_init();
+    pc_pre = 0x80000000;
     cpu_run = true;
 }
 
 void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_t inst_num)
 {
-  static uint32_t pc_pre = 0x80000000;
   while (cpu_run && inst_num)
   {
     printf("sim_time = %ld, stop_time = %ld\n", sim_time, stop_time);
