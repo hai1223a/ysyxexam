@@ -306,7 +306,7 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
 int batch_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
 {
   cpu_init(ysyx_25050136_NPC, tfp);
-  cpu_exec(-1);
+  cpu_exec(ysyx_25050136_NPC, tfp, -1);
   return 0;
 }
 //=====================================================
