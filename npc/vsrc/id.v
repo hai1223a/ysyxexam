@@ -24,8 +24,7 @@ module ysyx_25050136_ID
          output [2:0]                          mem_len_o,
          output                             mem_signed_o,
          output [ADDR_WIDTH-1:0]                    rd_o,
-         output                                  rd_en_o,
-         output                            find_ebreak_o
+         output                                  rd_en_o
      );
 
     wire [6:0] opcode = inst_i[6:0];
@@ -120,7 +119,5 @@ module ysyx_25050136_ID
     // 写回寄存器地址
     assign rd_o  = rd;
     assign rd_en_o = (type_store | type_branch) ? 0 : 1;
-    // 检查特殊指令
-    assign find_ebreak_o = inst_ebreak;
     //=========================================
 endmodule //ysyx_25050136_ID

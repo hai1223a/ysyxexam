@@ -14,8 +14,7 @@ module ysyx_25050136_NPC
     output                            mem_ren_o,
     output                            mem_wen_o,
     output [2:0]                      mem_len_o,
-    output [TOP_DATA_WIDTH-1:0]            pc_o,
-    output                        find_ebreak_o  
+    output [TOP_DATA_WIDTH-1:0]            pc_o
 );
 //========================================
 // 顶层信号定义
@@ -76,8 +75,7 @@ u_ysyx_25050136_ID(
     .mem_len_o     	(mem_len_o            ),
     .mem_signed_o  	(id2ex_mem_signed_o   ),
     .rd_o          	(id2reg_rd_o          ),
-    .rd_en_o       	(id2reg_rd_en_o       ),
-    .find_ebreak_o 	(find_ebreak_o        )
+    .rd_en_o       	(id2reg_rd_en_o       )
 );
 
 ysyx_25050136_EX #(

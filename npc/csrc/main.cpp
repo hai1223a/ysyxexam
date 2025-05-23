@@ -157,7 +157,7 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
     // 访存
     pmem_read_write(ysyx_25050136_NPC);
     // 计算电路状态
-    if(ysyx_25050136_NPC->find_ebreak_o) cpu_run = false;
+    if(ysyx_25050136_NPC->inst_i == 0x00100073) cpu_run = false;
     ysyx_25050136_NPC->eval();
     // 记录波形数据
     tfp->dump(sim_time);
