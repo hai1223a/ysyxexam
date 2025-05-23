@@ -1,5 +1,4 @@
 `include "config.v"
-import "DPI-C" function void find_ebreak(input bit find);
 module ysyx_25050136_NPC
 #(
     TOP_ADDR_WIDTH = 5,
@@ -15,7 +14,8 @@ module ysyx_25050136_NPC
     output                            mem_ren_o,
     output                            mem_wen_o,
     output [2:0]                      mem_len_o,
-    output [TOP_DATA_WIDTH-1:0]            pc_o
+    output [TOP_DATA_WIDTH-1:0]            pc_o,
+    output                        find_ebreak_o  
 );
 //========================================
 // 顶层信号定义
@@ -31,7 +31,6 @@ wire [`ysyx_25050136_LSU_OP_NUM-1:0] id2ex_lsu_op_o;
 wire [`ysyx_25050136_BQU_OP_NUM-1:0] id2ex_bqu_op_o;
 wire [TOP_DATA_WIDTH-1:0] id2ex_op1_o,id2ex_op2_o,id2ex_op3_o,id2ex_op4_o,id2ex_op5_o;
 wire id2ex_mem_signed_o;
-wire find_ebreak_o;
 // REG输出
 wire [TOP_DATA_WIDTH-1:0] reg2id_rdata1_o,reg2id_rdata2_o;
 // EX输出
@@ -42,9 +41,7 @@ wire ex2if_jump_en_o;
 //========================================
 // 顶层一些操作
 //========================================
-always @(*) begin
-    find_ebreak(find_ebreak_o);
-end
+
 //========================================
 ysyx_25050136_IF u_ysyx_25050136_IF(
     .clk             	(clk                ),
