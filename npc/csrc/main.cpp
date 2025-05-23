@@ -269,6 +269,8 @@ void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
   {
     // 模拟时钟反转
     ysyx_25050136_NPC->clk ^= 1;
+    // 计算电路状态
+    ysyx_25050136_NPC->eval();
     // 复位
     reset(ysyx_25050136_NPC, sim_time);
     // 计算电路状态
@@ -287,8 +289,12 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
   {
       // 模拟时钟反转
       ysyx_25050136_NPC->clk ^= 1;
+      // 计算电路状态
+      ysyx_25050136_NPC->eval();
       // 取指
       inst_read(ysyx_25050136_NPC);
+      // 计算电路状态
+      ysyx_25050136_NPC->eval();
       // 访存
       pmem_read_write(ysyx_25050136_NPC);
       // 计算电路状态
