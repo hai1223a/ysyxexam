@@ -233,6 +233,8 @@ static int cmd_d(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFst
 }
 
 static int cmd_r(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
+  cpu_init(ysyx_25050136_NPC, tfp);
+  cpu_exec(ysyx_25050136_NPC,tfp,-1);
   return 0;
 }
 
