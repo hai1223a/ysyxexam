@@ -285,7 +285,7 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
   uint32_t pc_pre = 0x80000000;
   while (cpu_run && inst_num)
   {
-    while (ysyx_25050136_NPC->clk == 1)
+    if(ysyx_25050136_NPC->clk == 1)
     {
       // 取指
       inst_read(ysyx_25050136_NPC);
