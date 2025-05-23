@@ -15,7 +15,7 @@
 //=====================================================
 bool cpu_run = true;                          // CPU仿真运行状态
 vluint64_t sim_time = 0;                      // 记录仿真时间
-vluint64_t reset_time = 10;
+vluint64_t reset_time = 11;
 static char *img_file = NULL;                 // 程序源文件指针
 #define CONFIG_MSIZE 0x8000000                // 内存大小
 #define CONFIG_MBASE 0x80000000               // 内存基地址
