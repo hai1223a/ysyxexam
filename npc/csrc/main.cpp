@@ -1,22 +1,4 @@
-#include "Vysyx_25050136_NPC.h"  // 包含Verilog工程的C++模型
-#include "Vysyx_25050136_NPC___024root.h"
-#include <getopt.h>              // 包含解析命令行参数的库函数
-#include <verilated.h>           // Verilator的库
-#include "verilated_fst_c.h"     // fst波形文件所需要的库
-#include "sdb.h"
-//=====================================================
-// 全局变量和宏定义
-//=====================================================
-bool cpu_run = true;                          // CPU仿真运行状态
-vluint64_t sim_time = 0;                      // 记录仿真时间
-static char *img_file = NULL;                 // 程序源文件指针
-#define CONFIG_MSIZE 0x8000000                // 内存大小
-#define CONFIG_MBASE 0x80000000               // 内存基地址
-#define ANSI_FG_RED     "\33[1;31m"           // 终端红色输出
-#define ANSI_FG_GREEN   "\33[1;32m"           // 终端绿色输出
-#define ANSI_NONE       "\33[0m"              
-#define ANSI_FMT(str, fmt) fmt str ANSI_NONE  // 用于输出有颜色的终端信息
-static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};// 内存变量
+#include "../include/common.h"
 //=====================================================
 // 用于解析命令行参数
 //=====================================================
@@ -142,20 +124,173 @@ void printf_statu(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 }
 
 //=====================================================
-// 主函数
+// sdb相关函数
+//=====================================================
+static char* rl_gets() {
+  static char *line_read = NULL;
+
+  if (line_read) {
+    free(line_read);
+    line_read = NULL;
+  }
+
+  line_read = readline("(NPC) ");
+
+  if (line_read && *line_read) {
+    add_history(line_read);
+  }
+
+  return line_read;
+}
+
+static int cmd_c(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
+  return 0;
+}
+
+
+static int cmd_q(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
+  return -1;
+}
+
+static int cmd_help(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC);
+
+static int cmd_si(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
+  return 0;
+}
+
+static int cmd_info(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
+  return 0;
+}
+
+static int cmd_x(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC){
+  return 0;
+}
+
+static int cmd_p(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC){
+  return 0;
+}
+
+static int cmd_w(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
+  return 0;
+}
+
+static int cmd_d(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
+  return 0;
+}
+
+static int cmd_r(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
+  return 0;
+}
+
+static struct {
+  const char *name;
+  const char *description;
+  int (*handler) (char *, Vysyx_25050136_NPC *);
+} cmd_table [] = {
+  { "help", "Display information about all supported commands", cmd_help },
+  { "c", "Continue the execution of the program", cmd_c },
+  { "q", "Exit NEMU", cmd_q },
+  { "si", "格式为si [N],让程序单步执行N条指令后暂停执行,当N没有给出时,缺省为1", cmd_si},
+  { "info", "格式为info SUBCMD, info r表示打印寄存器状态, info w表示打印监视点信息", cmd_info},
+  { "x", "格式为x N EXPR, 表示以表达式EXPR为基地址, 以16进制的格式打印连续的N个4字节数据", cmd_x},
+  { "p", "查看表达式的值, 格式为p EXPR, 将会打印表达式EXPR的十进制和十六进制表达", cmd_p},
+  { "w", "设置监视点, 格式为w EXPR, 当EXPR的值发生改变时将会中断程序", cmd_w},
+  { "d", "删除监视点, 格式为d N, 表示删除序号为N的监视点", cmd_d},
+  { "r", "重新开始程序,还没实现", cmd_r},
+  /* TODO: Add more commands */
+};
+
+#define NR_CMD (int)(sizeof(cmd_table) / sizeof(cmd_table[0]))
+
+static int cmd_help(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
+  /* extract the first argument */
+  char *arg = strtok(NULL, " ");
+  int i;
+
+  if (arg == NULL) {
+    /* no argument given */
+    for (i = 0; i < NR_CMD; i ++) {
+      printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
+    }
+  }
+  else {
+    for (i = 0; i < NR_CMD; i ++) {
+      if (strcmp(arg, cmd_table[i].name) == 0) {
+        printf("%s - %s\n", cmd_table[i].name, cmd_table[i].description);
+        return 0;
+      }
+    }
+    printf("Unknown command '%s'\n", arg);
+  }
+  return 0;
+}
+
+void sdb_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC) {
+  for (char *str; (str = rl_gets()) != NULL; ) {
+    char *str_end = str + strlen(str);
+
+    char *cmd = strtok(str, " ");
+    if (cmd == NULL) { continue; }
+
+    char *args = cmd + strlen(cmd) + 1;
+    if (args >= str_end) {
+      args = NULL;
+    }
+
+    int i;
+    for (i = 0; i < NR_CMD; i ++) {
+      if (strcmp(cmd, cmd_table[i].name) == 0) {
+        if (cmd_table[i].handler(args, ysyx_25050136_NPC) < 0) return; 
+        break;
+      }
+    }
+
+    if (i == NR_CMD) { printf("Unknown command '%s'\n", cmd); }
+  }
+}
+//=====================================================
+// cpu相关函数
 //=====================================================
 void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
 {
   ysyx_25050136_NPC->reset = 0;
-  if (sim_time < 4)
+  if (sim_time < 10)
   {
     ysyx_25050136_NPC->reset = 1;
   }
 }
 
+void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
+{
+  pmem_init();
+  sim_time = 0;
+  cpu_run = true;
+  while (cpu_run)
+  {
+    // 模拟时钟反转
+    ysyx_25050136_NPC->clk ^= 1;
+    // 计算电路状态
+    ysyx_25050136_NPC->eval();
+    // 复位
+    reset(ysyx_25050136_NPC, sim_time);
+    // 记录波形数据
+    tfp->dump(sim_time);
+    // 推动仿真进行
+    sim_time++;
+  }
+}
 
+int batch_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
+{
+  return 0;
+}
+//=====================================================
+// 主函数
+//=====================================================
 int main(int argc, char **argv)
 {
+  // 解析命令行参数
+  parse_args(argc, argv);
   // 传递参数给verilator,建议在创建任何模型之前使用
   Verilated::commandArgs(argc, argv);
   // 创建一个fst波形文件指针
@@ -168,28 +303,9 @@ int main(int argc, char **argv)
   ysyx_25050136_NPC->trace(tfp, 5);
   // 打开波形文件
   tfp->open("waveform.fst");
-  parse_args(argc, argv);
-  // 内存初始化
-  pmem_init();
-  sdb_mainloop(ysyx_25050136_NPC);
-  while (cpu_run)
-  {
-    // 模拟时钟反转
-    ysyx_25050136_NPC->clk ^= 1;
-    // 计算电路状态
-    ysyx_25050136_NPC->eval();
-    // 复位
-    reset(ysyx_25050136_NPC, sim_time);
-    // 访存操作
-    pmem_read_write(ysyx_25050136_NPC);
-    // 取指操作
-    inst_read(ysyx_25050136_NPC);
-    ysyx_25050136_NPC->eval();
-    // 记录波形数据
-    tfp->dump(sim_time);
-    // 推动仿真进行
-    sim_time++;
-  }
+
+  cpu_init(ysyx_25050136_NPC, tfp);
+
   printf_statu(ysyx_25050136_NPC);
   // 关闭波形文件
   tfp->close();
