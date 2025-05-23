@@ -15,7 +15,8 @@
 //=====================================================
 bool cpu_run = true;                          // CPU仿真运行状态
 vluint64_t sim_time = 0;                      // 记录仿真时间
-vluint64_t reset_time = 10;                    
+vluint64_t reset_time = 10;                   // 复位时间
+vluint64_t stop_time = 0;                     // 暂停时间点
 static char *img_file = NULL;                 // 程序源文件指针
 bool batch_mode = false;                        // sdb模式
 #define CONFIG_MSIZE 0x8000000                // 内存大小

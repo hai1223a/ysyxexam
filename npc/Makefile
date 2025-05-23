@@ -24,6 +24,7 @@ sim:
 
 clean:
 	rm -rf obj_dir
+	rm *.fst
 
-.PHONY: all sim clean
+.PHONY: all sim cleanf
 include ../Makefile
