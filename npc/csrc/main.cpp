@@ -335,7 +335,7 @@ int main(int argc, char **argv)
   // 打开波形文件
   tfp->open("waveform.fst");
 
-  cpu_init(ysyx_25050136_NPC, tfp);
+  batch_mainloop(ysyx_25050136_NPC, tfp);
 
   printf_statu(ysyx_25050136_NPC);
   // 关闭波形文件
