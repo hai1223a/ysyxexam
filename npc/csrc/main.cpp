@@ -291,7 +291,7 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
       ysyx_25050136_NPC->clk ^= 1;
       // 计算电路状态
       ysyx_25050136_NPC->eval();
-      if(ysyx_25050136_NPC->clk = 1) {
+      if(ysyx_25050136_NPC->clk == 1) {
         // 取指
         inst_read(ysyx_25050136_NPC);
         // 访存
