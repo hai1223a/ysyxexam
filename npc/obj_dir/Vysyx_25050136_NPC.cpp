@@ -15,12 +15,12 @@ Vysyx_25050136_NPC::Vysyx_25050136_NPC(VerilatedContext* _vcontextp__, const cha
     , mem_ren_o{vlSymsp->TOP.mem_ren_o}
     , mem_wen_o{vlSymsp->TOP.mem_wen_o}
     , mem_len_o{vlSymsp->TOP.mem_len_o}
+    , find_ebreak_o{vlSymsp->TOP.find_ebreak_o}
     , inst_i{vlSymsp->TOP.inst_i}
     , mem_rdata_i{vlSymsp->TOP.mem_rdata_i}
     , mem_wdata_o{vlSymsp->TOP.mem_wdata_o}
     , mem_addr_o{vlSymsp->TOP.mem_addr_o}
     , pc_o{vlSymsp->TOP.pc_o}
-    , __PVT____024unit{vlSymsp->TOP.__PVT____024unit}
     , rootp{&(vlSymsp->TOP)}
 {
     // Register model with the context

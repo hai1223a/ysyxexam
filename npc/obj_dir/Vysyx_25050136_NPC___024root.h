@@ -6,15 +6,12 @@
 #define VERILATED_VYSYX_25050136_NPC___024ROOT_H_  // guard
 
 #include "verilated.h"
-class Vysyx_25050136_NPC___024unit;
 
 
 class Vysyx_25050136_NPC__Syms;
 
 class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC___024root final : public VerilatedModule {
   public:
-    // CELLS
-    Vysyx_25050136_NPC___024unit* __PVT____024unit;
 
     // DESIGN SPECIFIC STATE
     VL_IN8(clk,0,0);
@@ -22,6 +19,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC___024root final : public V
     VL_OUT8(mem_ren_o,0,0);
     VL_OUT8(mem_wen_o,0,0);
     VL_OUT8(mem_len_o,2,0);
+    VL_OUT8(find_ebreak_o,0,0);
     CData/*1:0*/ ysyx_25050136_NPC__DOT__id2ex_alu_op_o;
     CData/*0:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_ID__DOT____VdfgRegularize_h2f5766ca_0_3;
     CData/*0:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__lsu_en;

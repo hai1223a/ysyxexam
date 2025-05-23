@@ -87,27 +87,28 @@ void Vysyx_25050136_NPC___024root__trace_chg_0_sub_0(Vysyx_25050136_NPC___024roo
     bufp->chgBit(oldp+52,(vlSelfRef.mem_wen_o));
     bufp->chgCData(oldp+53,(vlSelfRef.mem_len_o),3);
     bufp->chgIData(oldp+54,(vlSelfRef.pc_o),32);
-    bufp->chgCData(oldp+55,((0x1fU & (vlSelfRef.inst_i 
-                                      >> 0xfU))),5);
+    bufp->chgBit(oldp+55,(vlSelfRef.find_ebreak_o));
     bufp->chgCData(oldp+56,((0x1fU & (vlSelfRef.inst_i 
-                                      >> 0x14U))),5);
+                                      >> 0xfU))),5);
     bufp->chgCData(oldp+57,((0x1fU & (vlSelfRef.inst_i 
+                                      >> 0x14U))),5);
+    bufp->chgCData(oldp+58,((0x1fU & (vlSelfRef.inst_i 
                                       >> 7U))),5);
-    bufp->chgBit(oldp+58,((1U & (~ ((0x23U == (0x7fU 
+    bufp->chgBit(oldp+59,((1U & (~ ((0x23U == (0x7fU 
                                                & vlSelfRef.inst_i)) 
                                     | (0x63U == (0x7fU 
                                                  & vlSelfRef.inst_i)))))));
-    bufp->chgCData(oldp+59,((((0x23U == (0x7fU & vlSelfRef.inst_i)) 
+    bufp->chgCData(oldp+60,((((0x23U == (0x7fU & vlSelfRef.inst_i)) 
                               << 1U) | (3U == (0x7fU 
                                                & vlSelfRef.inst_i)))),2);
-    bufp->chgCData(oldp+60,((((0x63U == (0x7fU & vlSelfRef.inst_i)) 
+    bufp->chgCData(oldp+61,((((0x63U == (0x7fU & vlSelfRef.inst_i)) 
                               << 2U) | (((0x6fU == 
                                           (0x7fU & vlSelfRef.inst_i)) 
                                          << 1U) | (0x67U 
                                                    == 
                                                    (0x7fU 
                                                     & vlSelfRef.inst_i))))),3);
-    bufp->chgIData(oldp+61,((((0x33U == (0x7fU & vlSelfRef.inst_i)) 
+    bufp->chgIData(oldp+62,((((0x33U == (0x7fU & vlSelfRef.inst_i)) 
                               | (0x63U == (0x7fU & vlSelfRef.inst_i)))
                               ? vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_op5_o
                               : (((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__lsu_en) 
@@ -117,10 +118,9 @@ void Vysyx_25050136_NPC___024root__trace_chg_0_sub_0(Vysyx_25050136_NPC___024roo
                                                   & vlSelfRef.inst_i))))
                                   ? vlSelfRef.ysyx_25050136_NPC__DOT__id2ex_op4_o
                                   : 0U))),32);
-    bufp->chgIData(oldp+62,(((0x67U == (0x7fU & vlSelfRef.inst_i))
+    bufp->chgIData(oldp+63,(((0x67U == (0x7fU & vlSelfRef.inst_i))
                               ? vlSelfRef.ysyx_25050136_NPC__DOT__reg2id_rdata1_o
                               : vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc)),32);
-    bufp->chgBit(oldp+63,((0x100073U == vlSelfRef.inst_i)));
     bufp->chgIData(oldp+64,(((3U == (0x7fU & vlSelfRef.inst_i))
                               ? ((4U == (IData)(vlSelfRef.mem_len_o))
                                   ? vlSelfRef.mem_rdata_i
