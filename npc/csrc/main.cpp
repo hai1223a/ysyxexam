@@ -287,7 +287,7 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
     // 推动仿真进行
     sim_time++;
     // 指令计算
-    if(ysyx_25050136_NPC->pc_o != pc_pre) {
+    if(sim_time >= reset_time && ysyx_25050136_NPC->pc_o != pc_pre) {
       inst_num--;
       pc_pre = ysyx_25050136_NPC->pc_o;
     }
