@@ -271,10 +271,6 @@ void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
   cpu_run = true;
   while (sim_time <= reset_time)
   {
-    // 模拟时钟反转
-    ysyx_25050136_NPC->clk ^= 1;
-    // 计算电路状态
-    ysyx_25050136_NPC->eval();
     // 复位
     reset(ysyx_25050136_NPC, sim_time);
     // 模拟时钟反转
