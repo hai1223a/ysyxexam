@@ -263,21 +263,6 @@ void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
   pmem_init();
   sim_time = 0;
   cpu_run = true;
-  while (sim_time <= reset_time)
-  {
-    // 模拟时钟反转
-    ysyx_25050136_NPC->clk ^= 1;
-    // 计算电路状态
-    ysyx_25050136_NPC->eval();
-    // 复位
-    reset(ysyx_25050136_NPC, sim_time);
-    // 计算电路状态
-    ysyx_25050136_NPC->eval();
-    // 记录波形数据
-    tfp->dump(sim_time);
-    // 推动仿真进行
-    sim_time++;
-  }
 }
 
 void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_t inst_num)
@@ -289,17 +274,14 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
     ysyx_25050136_NPC->clk ^= 1;
     // 计算电路状态
     ysyx_25050136_NPC->eval();
-    if(ysyx_25050136_NPC->clk == 1)
-    {
-      // 取指
-      inst_read(ysyx_25050136_NPC);
-      // 计算电路状态
-      ysyx_25050136_NPC->eval();
-      // 访存
-      pmem_read_write(ysyx_25050136_NPC);
-      // 计算电路状态
-      ysyx_25050136_NPC->eval();
-    }
+    // 复位
+    reset(ysyx_25050136_NPC, sim_time);
+    // 取指
+    inst_read(ysyx_25050136_NPC);
+    // 访存
+    pmem_read_write(ysyx_25050136_NPC);
+    // 计算电路状态
+    ysyx_25050136_NPC->eval();
     // 记录波形数据
     tfp->dump(sim_time);
     // 推动仿真进行
@@ -337,26 +319,7 @@ int main(int argc, char **argv)
   ysyx_25050136_NPC->trace(tfp, 5);
   // 打开波形文件
   tfp->open("waveform.fst");
-  pmem_init();
-  while (cpu_run)
-  {
-    // 模拟时钟反转
-    ysyx_25050136_NPC->clk ^= 1;
-    // 计算电路状态
-    ysyx_25050136_NPC->eval();
-    // 复位
-    reset(ysyx_25050136_NPC, sim_time);
-    // 取指
-    inst_read(ysyx_25050136_NPC);
-    // 访存
-    pmem_read_write(ysyx_25050136_NPC);
-    // 计算电路状态
-    ysyx_25050136_NPC->eval();
-    // 记录波形数据
-    tfp->dump(sim_time);
-    // 推动仿真进行
-    sim_time++;
-  }
+  batch_mainloop(ysyx_25050136_NPC);
   printf_statu(ysyx_25050136_NPC);
   // 关闭波形文件
   tfp->close();
