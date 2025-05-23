@@ -265,7 +265,7 @@ void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
   pmem_init();
   sim_time = 0;
   cpu_run = true;
-  while (sim_time < reset_time)
+  while (sim_time <= reset_time)
   {
     // 模拟时钟反转
     ysyx_25050136_NPC->clk ^= 1;
