@@ -138,6 +138,7 @@ void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
   pmem_init();
   sim_time = 0;
   cpu_run = true;
+  tfp->flush();
 }
 
 void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_t inst_num)
