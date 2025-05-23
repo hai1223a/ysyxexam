@@ -137,6 +137,9 @@ void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
     pmem_init();
     pc_pre = 0x80000000;
     cpu_run = true;
+    ysyx_25050136_NPC->clk = 0;
+    ysyx_25050136_NPC->inst_i = 0;
+    ysyx_25050136_NPC->mem_rdata_i = 0;
 }
 
 void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_t inst_num)

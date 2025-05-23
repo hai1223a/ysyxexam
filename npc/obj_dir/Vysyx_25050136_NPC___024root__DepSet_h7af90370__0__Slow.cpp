@@ -104,7 +104,6 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___stl_sequent__TOP__0(Vysyx_25050
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
     vlSelfRef.pc_o = vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc;
-    vlSelfRef.find_ebreak_o = (0x100073U == vlSelfRef.inst_i);
     vlSelfRef.ysyx_25050136_NPC__DOT__if2id_static_npc_o 
         = ((IData)(4U) + vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc);
     vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en 
@@ -329,7 +328,6 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___ctor_var_reset(Vysyx_25050136_N
     vlSelf->mem_wen_o = VL_RAND_RESET_I(1);
     vlSelf->mem_len_o = VL_RAND_RESET_I(3);
     vlSelf->pc_o = VL_RAND_RESET_I(32);
-    vlSelf->find_ebreak_o = VL_RAND_RESET_I(1);
     vlSelf->ysyx_25050136_NPC__DOT__if2id_static_npc_o = VL_RAND_RESET_I(32);
     vlSelf->ysyx_25050136_NPC__DOT__id2ex_alu_op_o = VL_RAND_RESET_I(2);
     vlSelf->ysyx_25050136_NPC__DOT__id2ex_op1_o = VL_RAND_RESET_I(32);

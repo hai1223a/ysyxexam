@@ -23,7 +23,6 @@ VL_INLINE_OPT void Vysyx_25050136_NPC___024root___ico_sequent__TOP__0(Vysyx_2505
     Vysyx_25050136_NPC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
-    vlSelfRef.find_ebreak_o = (0x100073U == vlSelfRef.inst_i);
     vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en 
         = ((0x67U == (0x7fU & vlSelfRef.inst_i)) | 
            ((0x6fU == (0x7fU & vlSelfRef.inst_i)) | 

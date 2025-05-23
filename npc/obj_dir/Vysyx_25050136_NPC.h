@@ -34,7 +34,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC VL_NOT_FINAL : public Veri
     VL_OUT8(&mem_ren_o,0,0);
     VL_OUT8(&mem_wen_o,0,0);
     VL_OUT8(&mem_len_o,2,0);
-    VL_OUT8(&find_ebreak_o,0,0);
     VL_IN(&inst_i,31,0);
     VL_IN(&mem_rdata_i,31,0);
     VL_OUT(&mem_wdata_o,31,0);
