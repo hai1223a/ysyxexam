@@ -265,7 +265,7 @@ void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
   pmem_init();
   sim_time = 0;
   cpu_run = true;
-  while (cpu_run)
+  while (!ysyx_25050136_NPC->reset)
   {
     // 模拟时钟反转
     ysyx_25050136_NPC->clk ^= 1;
@@ -282,6 +282,7 @@ void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
 
 int batch_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
 {
+  cpu_init(ysyx_25050136_NPC, tfp);
   return 0;
 }
 //=====================================================
