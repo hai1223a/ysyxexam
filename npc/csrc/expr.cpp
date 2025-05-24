@@ -103,6 +103,7 @@ static bool make_token(char *e, int *valid_tokens) {
     for (i = 0; i < NR_REGEX; i ++) {
       AA
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
+        AA
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
