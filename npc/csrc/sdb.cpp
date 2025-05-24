@@ -74,7 +74,7 @@ static char* rl_gets() {
     bool success = true;
     uint32_t result = 0;
     AA
-    if(args) result = expr(ysyx_25050136_NPC, args, &success);
+    // if(args) result = expr(ysyx_25050136_NPC, args, &success);
     assert(success);
     printf("有符号十进制数:%d\t无符号十进制:%u\t十六进制:%x\n",result, result, result);
     return 0;
