@@ -54,9 +54,6 @@ void printf_statu(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 //=====================================================
 int main(int argc, char **argv)
 {
-  char *a = "1+1+1";
-  bool b = false;
-  expr(a, &b);
   // 解析命令行参数
   parse_args(argc, argv);
   // 传递参数给verilator,建议在创建任何模型之前使用
@@ -73,8 +70,10 @@ int main(int argc, char **argv)
   tfp->open("waveform.fst");
   if(batch_mode)
     batch_mainloop(ysyx_25050136_NPC,tfp);
-  else  
+  else{
+    init_sdb();
     sdb_mainloop(ysyx_25050136_NPC,tfp);
+  }  
   printf_statu(ysyx_25050136_NPC);
   // 关闭波形文件
   tfp->close();
