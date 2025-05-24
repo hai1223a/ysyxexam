@@ -122,6 +122,14 @@ void printf_statu(Vysyx_25050136_NPC *ysyx_25050136_NPC)
           ysyx_25050136_NPC->pc_o);
 }
 
+void printf_regs(Vysyx_25050136_NPC *ysyx_25050136_NPC)
+{
+  for (size_t i = 0; i < 16; i++)
+  {
+    printf("%s : 0x%8x\n", regs[i], ysyx_25050136_NPC->rootp->ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[i]);
+  }
+  printf("pc = 0x%8x\n", ysyx_25050136_NPC->pc_o); 
+}
 //=====================================================
 // cpu相关函数
 //=====================================================
@@ -199,7 +207,7 @@ static char* rl_gets() {
 }
 
 static int cmd_c(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
-  cpu_exec(ysyx_25050136_NPC,tfp,-1);
+  cpu_exec(ysyx_25050136_NPC, tfp, -1);
   return 0;
 }
 
@@ -211,10 +219,26 @@ static int cmd_q(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFst
 static int cmd_help(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp);
 
 static int cmd_si(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
+  uint64_t num_inst;
+  if(likely(!args)){
+    num_inst = 1;
+  }
+  else{
+    num_inst = (uint64_t)atoi(args);
+  }
+  cpu_exec(ysyx_25050136_NPC, tfp, num_inst);
   return 0;
 }
 
 static int cmd_info(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
+  if (!args) return 0;
+  if (!strcmp(args, "r"))
+  {
+    printf_regs(ysyx_25050136_NPC);
+  }
+  else if (!strcmp(args, "w"))
+  {
+  }
   return 0;
 }
 

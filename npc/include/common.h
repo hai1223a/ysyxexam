@@ -27,5 +27,15 @@ bool batch_mode = false;                        // sdb模式
 #define ANSI_NONE       "\33[0m"              
 #define ANSI_FMT(str, fmt) fmt str ANSI_NONE  // 用于输出有颜色的终端信息
 static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};// 内存变量
-
+const char *regs[] = {
+    "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
+    "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5"
+  };
+//=====================================================
+// 通用宏定义
+//=====================================================
+#if !defined(likely)
+#define likely(cond)   __builtin_expect(cond, 1)
+#define unlikely(cond) __builtin_expect(cond, 0)
+#endif
 #endif

@@ -1,7 +1,7 @@
 `include "config.v"
 module ysyx_25050136_NPC
 #(
-    TOP_ADDR_WIDTH = 5,
+    TOP_ADDR_WIDTH = 4,
     TOP_DATA_WIDTH = 32
 )
 (

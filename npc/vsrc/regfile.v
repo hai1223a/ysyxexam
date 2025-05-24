@@ -3,7 +3,7 @@
 // DATA_WIDTH 表示寄存器数据位宽,32表示寄存器32bits
 module ysyx_25050136_RegisterFile
     #(
-         ADDR_WIDTH = 5,
+         ADDR_WIDTH = 4,
          DATA_WIDTH = 32
      )
      (
