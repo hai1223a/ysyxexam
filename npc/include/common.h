@@ -10,6 +10,7 @@
 #include <readline/readline.h>   // 
 #include <readline/history.h>
 #include <getopt.h>              // 包含解析命令行参数的库函数
+#include "cpu.h"
 #include "memory.h"
 #include "macro.h"
 //=====================================================
