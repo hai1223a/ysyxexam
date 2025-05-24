@@ -73,6 +73,7 @@ static char* rl_gets() {
   static int cmd_p(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp){
     bool success = true;
     uint32_t result = 0;
+    printf("args = %s\n", args);
     if(args) result = expr(args, &success);
     assert(success);
     printf("有符号十进制数:%d\t无符号十进制:%u\t十六进制:%x\n",result, result, result);
