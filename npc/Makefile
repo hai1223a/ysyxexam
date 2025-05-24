@@ -9,18 +9,23 @@ VERILATOR_INC_PATH = -Ivsrc
 VERILATOR = verilator
 VERILATOR_CFLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
 				   --top-module $(TOPNAME) $(VSRCS) $(CSRCS) \
+				   --gdb \
 				   $(VERILATOR_INC_PATH) \
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
 				   -LDFLAGS $(LDFLAGS)			
 
-all: sim
+all: rum
 	@echo "Write this Makefile by your self."
 
-sim:
+run:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	$(VERILATOR) $(VERILATOR_CFLAGS)
 	@./obj_dir/V$(TOPNAME) -i /home/yunhai/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
-	@gtkwave waveform.fst
+
+gdb:
+	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	$(VERILATOR) $(VERILATOR_CFLAGS)
+	@gdb -s obj_dir/V$(TOPNAME) --args -i /home/yunhai/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 
 clean:
 	rm -rf obj_dir
