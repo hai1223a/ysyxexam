@@ -342,6 +342,7 @@ uint32_t eval(Vysyx_25050136_NPC *ysyx_25050136_NPC, int p, int q){
 uint32_t expr(Vysyx_25050136_NPC *ysyx_25050136_NPC, char *e, bool *success) {
   int valid_tokens = 0;
   if (!make_token(e, &valid_tokens)) {
+    printf("a");
     *success = false;
     return 0;
   }
