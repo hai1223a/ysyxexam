@@ -13,13 +13,10 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
-#include <isa.h>
-
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
-#include <regex.h>
-#include "memory/vaddr.h"
+#include "../include/common.h"
 enum {
   TK_NOTYPE = 256, TK_EQ, TK_DECIMAL, TK_HEXADECIMAL, TK_REG,
   TK_NEQ, TK_LOGICAND, TK_POINT,TK_UNSIGNED,
@@ -69,7 +66,7 @@ void init_regex() {
     ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
     if (ret != 0) {
       regerror(ret, &re[i], error_msg, 128);
-      panic("regex compilation failed: %s\n%s", error_msg, rules[i].regex);
+      Assert(0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
     }
   }
 }
@@ -299,7 +296,8 @@ uint32_t eval(int p, int q){
     }
     else if(tokens[p].type == TK_REG) {
       bool success;
-      uint32_t value = isa_reg_str2val(tokens[p].str, &success);
+      // uint32_t value = isa_reg_str2val(tokens[p].str, &success);
+      uint32_t value = 0;
       Assert(success, "取寄存器的表示错误了");
       return value;
     }
