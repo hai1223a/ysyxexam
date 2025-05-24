@@ -344,6 +344,7 @@ uint32_t expr(Vysyx_25050136_NPC *ysyx_25050136_NPC, char *e, bool *success) {
   int valid_tokens = 0;
   AA
   if (!make_token(e, &valid_tokens)) {
+    AA
     *success = false;
     return 0;
   }
