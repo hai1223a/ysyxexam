@@ -144,7 +144,8 @@ static bool make_token(char *e, int *valid_tokens) {
             tokens[tokens_position].type = TK_REG;
             tokens_position++;
             break;
-          default: 
+          default:
+            break;  
         }
         // printf("position = %d, substr_len = %d, tokens_position = %d\n", position, substr_len, tokens_position);
         position += substr_len;
