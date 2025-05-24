@@ -59,7 +59,7 @@ static char* rl_gets() {
     sscanf(args, "%d %[^\n]", &num_word, base_addr);
     bool success = true;
     uint32_t result = 0;
-    result = expr(ysyx_25050136_NPC, base_addr, &success);
+    result = expr(base_addr, &success);
     assert(success);
     printf("Address  Data\n");
     // for (int i = 0; i < num_word; i++)
@@ -73,7 +73,7 @@ static char* rl_gets() {
   static int cmd_p(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp){
     bool success = true;
     uint32_t result = 0;
-    if(args) result = expr(ysyx_25050136_NPC, args, &success);
+    if(args) result = expr(args, &success);
     assert(success);
     printf("有符号十进制数:%d\t无符号十进制:%u\t十六进制:%x\n",result, result, result);
     return 0;
