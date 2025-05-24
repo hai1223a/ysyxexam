@@ -9,7 +9,6 @@ VERILATOR_INC_PATH = -Ivsrc
 VERILATOR = verilator
 VERILATOR_CFLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
 				   --top-module $(TOPNAME) $(VSRCS) $(CSRCS) \
-				   --gdb --debug --gdbbt\
 				   $(VERILATOR_INC_PATH) \
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
 				   -LDFLAGS $(LDFLAGS)			
