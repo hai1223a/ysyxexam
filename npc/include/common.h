@@ -10,6 +10,8 @@
 #include <readline/readline.h>   // 
 #include <readline/history.h>
 #include <getopt.h>              // 包含解析命令行参数的库函数
+#include "memory.h"
+#include "macro.h"
 //=====================================================
 // 全局变量和宏定义
 //=====================================================
@@ -22,10 +24,7 @@ static char *img_file = NULL;                 // 程序源文件指针
 bool batch_mode = false;                        // sdb模式
 #define CONFIG_MSIZE 0x8000000                // 内存大小
 #define CONFIG_MBASE 0x80000000               // 内存基地址
-#define ANSI_FG_RED     "\33[1;31m"           // 终端红色输出
-#define ANSI_FG_GREEN   "\33[1;32m"           // 终端绿色输出
-#define ANSI_NONE       "\33[0m"              
-#define ANSI_FMT(str, fmt) fmt str ANSI_NONE  // 用于输出有颜色的终端信息
+
 static uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};// 内存变量
 const char *regs[] = {
     "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
