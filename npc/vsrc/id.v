@@ -1,7 +1,7 @@
 `include "../vsrc/config.v"
 module ysyx_25050136_ID
     #(
-         ADDR_WIDTH = 4,
+         ADDR_WIDTH = 5,
          DATA_WIDTH = 32
      )
      (
