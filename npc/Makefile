@@ -11,7 +11,7 @@ VERILATOR_CFLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-in
 				   --top-module $(TOPNAME) $(VSRCS) $(CSRCS) \
 				   $(VERILATOR_INC_PATH) \
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
-				   -LDFLAGS $(LDFLAGS) -CFLAGS $(CFLAGS) -fsanitize=address				
+				   -LDFLAGS $(LDFLAGS) -CFLAGS $(CFLAGS) 				
 
 all: sim
 	@echo "Write this Makefile by your self."
