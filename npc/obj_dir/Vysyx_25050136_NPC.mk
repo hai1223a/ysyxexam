@@ -47,7 +47,6 @@ VM_USER_LDLIBS = \
 VM_USER_CLASSES = \
 	common \
 	cpu \
-	expr \
 	main \
 	memory \
 	reg \
@@ -71,8 +70,6 @@ VPATH += $(VM_USER_DIR)
 common.o: csrc/common.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 cpu.o: csrc/cpu.cpp 
-	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
-expr.o: csrc/expr.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 main.o: csrc/main.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
