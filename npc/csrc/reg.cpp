@@ -18,7 +18,7 @@ uint32_t reg_str2val(Vysyx_25050136_NPC *ysyx_25050136_NPC, const char *s, bool 
       return ysyx_25050136_NPC->rootp->ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[i];
     }
   }
-  char* reg = "$pc";
+  const char* reg = "$pc";
   if(!strcmp(s, reg)) return ysyx_25050136_NPC->pc_o;
   *success = false;
   return 0;
