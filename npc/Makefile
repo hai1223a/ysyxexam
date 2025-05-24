@@ -3,15 +3,15 @@ CSRCS = $(wildcard csrc/*.cpp)
 VSRCS = $(wildcard vsrc/*.v)
 
 # Wno-DECLFILENAME 表示禁用一种代码格式警告,该警告用于检查模块名和文件名的一致性
-CFLAGS =
-LDFLAGS = -lreadline
+CFLAGS = -fsanitize=address
+LDFLAGS = -lreadline 
 VERILATOR_INC_PATH = -Ivsrc
 VERILATOR = verilator
 VERILATOR_CFLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
 				   --top-module $(TOPNAME) $(VSRCS) $(CSRCS) \
 				   $(VERILATOR_INC_PATH) \
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
-				   -LDFLAGS $(LDFLAGS)				
+				   -LDFLAGS $(LDFLAGS) -CFLAGS $(CFLAGS)				
 
 all: sim
 	@echo "Write this Makefile by your self."
