@@ -13,6 +13,7 @@
 #include "reg.h"
 #include "sdb.h"
 #include "cpu.h"
+#include "expr.h"
 #include "memory.h"
 #include "macro.h"
 //=====================================================

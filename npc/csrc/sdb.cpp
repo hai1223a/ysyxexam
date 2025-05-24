@@ -54,6 +54,19 @@ static char* rl_gets() {
   }
   
   static int cmd_x(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp){
+    int num_word;
+    char base_addr[1100] = {};
+    sscanf(args, "%d %[^\n]", &num_word, base_addr);
+    bool success = true;
+    uint32_t result = 0;
+    result = expr(ysyx_25050136_NPC, base_addr, &success);
+    if(!success) assert(0);
+    printf("Address  Data\n");
+    for (int i = 0; i < num_word; i++)
+    {
+      printf("%08x:0x%08x\n", result, vaddr_read(result, 4));
+      result += 4;
+    }
     return 0;
   }
   
