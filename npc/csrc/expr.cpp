@@ -12,12 +12,14 @@
 *
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
+
+#include <isa.h>
+
 /* We use the POSIX regex functions to process regular expressions.
  * Type 'man regex' for more information about POSIX regex functions.
  */
-
-#include "../include/common.h"
-
+#include <regex.h>
+#include "memory/vaddr.h"
 enum {
   TK_NOTYPE = 256, TK_EQ, TK_DECIMAL, TK_HEXADECIMAL, TK_REG,
   TK_NEQ, TK_LOGICAND, TK_POINT,TK_UNSIGNED,
@@ -67,7 +69,7 @@ void init_regex() {
     ret = regcomp(&re[i], rules[i].regex, REG_EXTENDED);
     if (ret != 0) {
       regerror(ret, &re[i], error_msg, 128);
-      Assert(0, "regex compilation failed: %s\n%s", error_msg, rules[i].regex);
+      panic("regex compilation failed: %s\n%s", error_msg, rules[i].regex);
     }
   }
 }
@@ -102,9 +104,7 @@ static bool make_token(char *e, int *valid_tokens) {
   while (e[position] != '\0') {
     /* Try all rules one by one. */
     for (i = 0; i < NR_REGEX; i ++) {
-      AA
       if (regexec(&re[i], e + position, 1, &pmatch, 0) == 0 && pmatch.rm_so == 0) {
-        AA
         char *substr_start = e + position;
         int substr_len = pmatch.rm_eo;
 
@@ -147,8 +147,7 @@ static bool make_token(char *e, int *valid_tokens) {
             tokens[tokens_position].type = TK_REG;
             tokens_position++;
             break;
-          default:
-            break; 
+          default: 
         }
         // printf("position = %d, substr_len = %d, tokens_position = %d\n", position, substr_len, tokens_position);
         position += substr_len;
@@ -285,7 +284,7 @@ void ckeck_expression(int p, int q) {
 // p: 表达式开始的位置指示
 // q: 表达式结束的位置指示
 // 例如:p = 0, q = 9, 表示由10个tokens组成的长表达式
-uint32_t eval(Vysyx_25050136_NPC *ysyx_25050136_NPC, int p, int q){
+uint32_t eval(int p, int q){
   if (p > q) {
     Assert(0, "输入表达式指示位置违规");
   }
@@ -300,7 +299,7 @@ uint32_t eval(Vysyx_25050136_NPC *ysyx_25050136_NPC, int p, int q){
     }
     else if(tokens[p].type == TK_REG) {
       bool success;
-      uint32_t value = reg_str2val(ysyx_25050136_NPC, tokens[p].str, &success);
+      uint32_t value = isa_reg_str2val(tokens[p].str, &success);
       Assert(success, "取寄存器的表示错误了");
       return value;
     }
@@ -309,7 +308,7 @@ uint32_t eval(Vysyx_25050136_NPC *ysyx_25050136_NPC, int p, int q){
     }
   }
   else if (check_parentheses(p, q) == true) {
-    return eval(ysyx_25050136_NPC, p + 1, q - 1);
+    return eval(p + 1, q - 1);
   }
   else {
     ckeck_expression(p, q);
@@ -317,9 +316,9 @@ uint32_t eval(Vysyx_25050136_NPC *ysyx_25050136_NPC, int p, int q){
     // printf("op = %d\n",op);
     uint32_t val1 = 0,val2;
     if(tokens[op].type != TK_POINT) {
-      val1 = eval(ysyx_25050136_NPC, p, op - 1);
+      val1 = eval(p, op - 1);
     }
-    val2 = eval(ysyx_25050136_NPC, op + 1, q);
+    val2 = eval(op + 1, q);
 
     switch (tokens[op].type) {
       case '+': return val1 + val2;
@@ -341,14 +340,14 @@ uint32_t eval(Vysyx_25050136_NPC *ysyx_25050136_NPC, int p, int q){
   }
 }
 
-uint32_t expr(Vysyx_25050136_NPC *ysyx_25050136_NPC, char *e, bool *success) {
+uint32_t expr(char *e, bool *success) {
   int valid_tokens = 0;
   if (!make_token(e, &valid_tokens)) {
     *success = false;
     return 0;
   }
   *success = true;
-  uint32_t result = eval(ysyx_25050136_NPC, 0, valid_tokens-1);
+  uint32_t result = eval(0, valid_tokens-1);
   return result;
 
 }
