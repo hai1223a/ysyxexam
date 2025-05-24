@@ -60,7 +60,7 @@ static char* rl_gets() {
     bool success = true;
     uint32_t result = 0;
     result = expr(ysyx_25050136_NPC, base_addr, &success);
-    if(!success) assert(0);
+    assert(success);
     printf("Address  Data\n");
     // for (int i = 0; i < num_word; i++)
     // {
@@ -71,6 +71,11 @@ static char* rl_gets() {
   }
   
   static int cmd_p(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp){
+    bool success = true;
+    uint32_t result = 0;
+    if(args) result = expr(ysyx_25050136_NPC, args, &success);
+    assert(success);
+    printf("有符号十进制数:%d\t无符号十进制:%u\t十六进制:%x\n",result, result, result);
     return 0;
   }
   
