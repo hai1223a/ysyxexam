@@ -54,7 +54,9 @@ void printf_statu(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 //=====================================================
 int main(int argc, char **argv)
 {
-  expr("1+1", NULL);
+  char *a = "1+1+1";
+  bool b = false;
+  expr(a, &b);
   // 解析命令行参数
   parse_args(argc, argv);
   // 传递参数给verilator,建议在创建任何模型之前使用
