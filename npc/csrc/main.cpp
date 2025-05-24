@@ -152,6 +152,10 @@ void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
 
 void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_t inst_num)
 {
+  if (!cpu_run)
+  {
+    printf("你的程序已经运行结束了\n");
+  }
   while (cpu_run && inst_num)
   {
     // 模拟时钟反转
