@@ -155,7 +155,7 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
 {
   if (!cpu_run)
   {
-    Assert(0, "你的程序已经运行结束了\n");
+    Assert(1, "你的程序已经运行结束了\n");
     printf("你的程序已经运行结束了\n");
   }
   while (cpu_run && inst_num)
