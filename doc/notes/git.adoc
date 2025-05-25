@@ -1,7 +1,7 @@
 = Git知识点总结
 Doc Writer yunhaigushu;
 v1.0, 2025-05-1
-:toc:
+:toc: left
 :toc-title: Directory
 
 == git教程

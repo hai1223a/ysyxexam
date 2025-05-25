@@ -36,6 +36,7 @@ static struct rule {
   /* TODO: Add more rules.
    * Pay attention to the precedence level of different rules.
    */
+  
   {"\\+", '+'},                             // 加号
   {"-", '-'},                               // 减号或者负号
   {"\\*", '*'},                             // 乘号或者指针
@@ -146,7 +147,8 @@ static bool make_token(char *e, int *valid_tokens) {
             tokens[tokens_position].type = TK_REG;
             tokens_position++;
             break;
-          default: 
+          default:
+            break; 
         }
         // printf("position = %d, substr_len = %d, tokens_position = %d\n", position, substr_len, tokens_position);
         position += substr_len;
@@ -257,24 +259,26 @@ bool check_parentheses(int p, int q) {
 
 void ckeck_expression(int p, int q) {
   // 已经确保了q>p
+  // printf("p = %d, q =%d\n",p,q);
   for(int i = p; i <= q; i++)
   {
     if(OP(i))
-    {
-      // 检查指针
       if(tokens[i].type == '*')
         if(i != q && (EXPRESSION(i+1) || tokens[i+1].type == '('))
-          if(i == p || (i != p && (OP(i-1))))
+          if(i == p || (i != p && (OP(i-1) || tokens[i-1].type == '(')))
             {
               tokens[i].type = TK_POINT;
             }
+  }
+  for(int i = p; i <= q; i++)
+  {
+    if(OP(i))
       if(tokens[i].type != TK_POINT) {
         if(i == p || i == q)
           Assert(0, "四则运算表达式写错了");
         else if(OP(i-1) || tokens[i-1].type == '(' || OP(i+1) || tokens[i+1].type == ')')
                 Assert(0, "四则运算表达式子写错了");
       }
-    } 
   }
 }
 
@@ -310,6 +314,7 @@ word_t eval(int p, int q){
   else {
     ckeck_expression(p, q);
     int op = find_main_op(p,q);
+    // printf("op = %d\n",op);
     word_t val1 = 0,val2;
     if(tokens[op].type != TK_POINT) {
       val1 = eval(p, op - 1);

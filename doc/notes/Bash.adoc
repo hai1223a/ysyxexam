@@ -1,7 +1,7 @@
 = Shell学习记录
 Doc Writer yunhaigushu;
 v1.0, 2025-04-11
-:toc:
+:toc: left
 :toc-title: Directory
 == Shell语法
 === 多条指令使用

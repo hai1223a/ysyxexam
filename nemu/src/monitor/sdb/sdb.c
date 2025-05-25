@@ -51,6 +51,7 @@ static int cmd_c(char *args) {
 
 
 static int cmd_q(char *args) {
+  nemu_state.state = NEMU_QUIT;
   return -1;
 }
 
@@ -104,7 +105,7 @@ static int cmd_p(char *args){
   word_t result = 0;
   if(args) result = expr(args, &success);
   if(!success) assert(0);
-  printf("十进制:%u\t十六进制:%x\n",result, result);
+  printf("有符号十进制数:%d\t无符号十进制:%u\t十六进制:%x\n",result, result, result);
   return 0;
 }
 
@@ -130,6 +131,11 @@ static int cmd_d(char *args) {
   return 0;
 }
 
+static int cmd_r(char *args) {
+  printf("告诉你还没实现了\n");
+  return 0;
+}
+
 static struct {
   const char *name;
   const char *description;
@@ -144,9 +150,8 @@ static struct {
   { "p", "查看表达式的值, 格式为p EXPR, 将会打印表达式EXPR的十进制和十六进制表达", cmd_p},
   { "w", "设置监视点, 格式为w EXPR, 当EXPR的值发生改变时将会中断程序", cmd_w},
   { "d", "删除监视点, 格式为d N, 表示删除序号为N的监视点", cmd_d},
-
+  { "r", "重新开始程序,还没实现", cmd_r},
   /* TODO: Add more commands */
-
 };
 
 #define NR_CMD ARRLEN(cmd_table)
@@ -191,7 +196,8 @@ void sdb_mainloop() {
   // // 按照 "%u %s\n" 格式读取文件内容，直到文件结束
   // while (fscanf(fp, "%u %[^\n]", &theory_result, expression) != EOF) {
   //   printf("expression =%s\n",expression);
-  //   int test_result = cmd_p(expression);  
+  //   bool success = true;
+  //   int test_result = expr(expression, &success);  
   //   printf("test_result: %u, theory_result: %u\n\n", (word_t)test_result, theory_result);
   //   Assert((word_t)test_result == theory_result, "有问题");
   // }
@@ -220,9 +226,7 @@ void sdb_mainloop() {
     int i;
     for (i = 0; i < NR_CMD; i ++) {
       if (strcmp(cmd, cmd_table[i].name) == 0) {
-        if (cmd_table[i].handler(args) < 0) { 
-          nemu_state.state = NEMU_QUIT; 
-          return; }
+        if (cmd_table[i].handler(args) < 0) return; 
         break;
       }
     }

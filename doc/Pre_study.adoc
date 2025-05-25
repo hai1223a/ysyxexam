@@ -1,7 +1,7 @@
 = 一生一芯预学习任务目标记录
 Doc Writer yunhaigushu;
 v1.0, 2025-04-11
-:toc:
+:toc: left
 :toc-title: Directory
 
 == 如何科学地提问

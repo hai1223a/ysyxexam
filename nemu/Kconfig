@@ -151,6 +151,17 @@ config ITRACE_COND
   string "Only trace instructions when the condition is true"
   default "true"
 
+# 有关mtrace的配置
+config MTRACE
+  depends on TRACE
+  bool "Enable memory tracer"
+  default n
+
+# 有关ftrace的配置
+config FTRACE
+  depends on TRACE
+  bool "Enable function tracer"
+  default n
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF

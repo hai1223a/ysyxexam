@@ -39,11 +39,16 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
 #endif
   if (g_print_step) { IFDEF(CONFIG_ITRACE, puts(_this->logbuf)); }
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
+}
+
+// 下面部分是判断监控点的部分内容
+//===============================================
+static void monitor_check(Decode *_this) {
   static word_t data_pre[NR_WP] = {0};
   static word_t data_new[NR_WP] = {0};
   int index[NR_WP] = {0};
   scan_watchpoint(data_new, index);
-  // printf("data_pre == %u, data_new == %u, index == %d", data_pre[0], data_new[0], index[0]);
+
   for (int i = 0; i < NR_WP; i++)
   {
     if(index[i])
@@ -51,12 +56,40 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
       if(data_new[i] != data_pre[i])
       {
         nemu_state.state = NEMU_STOP;
-        printf("监控点%d发生了变化", i);
+        printf("监控点%d发生了变化\n", i);
+        IFDEF(CONFIG_ITRACER,puts(_this->logbuf));
         data_pre[i] = data_new[i];
       }
     }
   }
 }
+//===============================================
+
+// 下面这里是IRINGBUF
+//===============================================
+#ifdef CONFIG_ITRACE
+  #define IRINGBUF_DEEPTH 10
+  struct {
+    uint8_t now_p;
+    uint8_t p;
+    char iringbuf[IRINGBUF_DEEPTH][128];
+  } IRINGBUF = {0};
+
+  static void print_iringbuf() {
+    printf("iringbuf打印\n");
+    printf("如果是发生了 HIT BAD TRAP 或者 ABORT, 则--->指向发生问题的指令\n");
+    printf("如果是发生了 assert 0 报错的话, 则--->指向发生问题的指令的上一条指令\n");
+    for(int i = 0; i < IRINGBUF_DEEPTH; i++) {
+      if(i == IRINGBUF.now_p) 
+        printf("--->");
+      else
+        printf(">>>>");
+      puts(IRINGBUF.iringbuf[i]);
+    }
+    printf("\n");
+  }
+#endif
+//===============================================
 
 static void exec_once(Decode *s, vaddr_t pc) {
   s->pc = pc;
@@ -87,8 +120,18 @@ static void exec_once(Decode *s, vaddr_t pc) {
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(p, s->logbuf + sizeof(s->logbuf) - p,
       MUXDEF(CONFIG_ISA_x86, s->snpc, s->pc), (uint8_t *)&s->isa.inst, ilen);
+  // 这里也是IRINGBUF部分的代码
+  //===============================================
+  IRINGBUF.now_p = IRINGBUF.p;
+  strcpy(IRINGBUF.iringbuf[IRINGBUF.p], s->logbuf);
+  if(IRINGBUF.p < IRINGBUF_DEEPTH - 1)
+    IRINGBUF.p++;
+  else
+    IRINGBUF.p = 0;
+  //===============================================
+  }
 #endif
-}}
+}
 
 static void execute(uint64_t n) {
   Decode s;
@@ -96,6 +139,7 @@ static void execute(uint64_t n) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
+    monitor_check(&s);  // 监控点
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
@@ -111,6 +155,10 @@ static void statistic() {
 }
 
 void assert_fail_msg() {
+  // 下面这里是IRINGBUF
+  //===============================================
+  IFDEF(CONFIG_ITRACE,print_iringbuf());
+  //===============================================
   isa_reg_display();
   statistic();
 }
@@ -131,7 +179,7 @@ void cpu_exec(uint64_t n) {
 
   uint64_t timer_end = get_time();
   g_timer += timer_end - timer_start;
-
+  
   switch (nemu_state.state) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
 
@@ -141,6 +189,11 @@ void cpu_exec(uint64_t n) {
            (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
             ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
           nemu_state.halt_pc);
+      // 下面这里是IRINGBUF
+      //===============================================
+      IFDEF(CONFIG_ITRACE,if(nemu_state.state == NEMU_ABORT || nemu_state.halt_ret != 0)
+      print_iringbuf());
+      //===============================================
       // fall through
     case NEMU_QUIT: statistic();
   }

@@ -14,6 +14,7 @@
 ***************************************************************************************/
 
 #include <isa.h>
+#include <elf.h>
 #include <memory/paddr.h>
 
 void init_rand();
@@ -68,29 +69,134 @@ static long load_img() {
   return size;
 }
 
+// 加载elf文件和写入ftracer
+//==================================================
+static char *elf_file = NULL;
+static char *ftracer_log_file = NULL;
+#ifdef CONFIG_FTRACE
+struct FUNC_FTRACE{
+  word_t addr;
+  char func_name[16];
+} FUNC_FTRACER[10] = {0};
+
+static void load_elf() {
+  if (elf_file == NULL) {
+    Log("没有elf文件输入\n");
+    return; // built-in image size
+  }
+
+  FILE *file = fopen(elf_file, "rb");
+  Assert(file, "无法打开elf文件");
+  // 读取 ELF 文件头
+  Elf32_Ehdr ehdr;
+  if (fread(&ehdr, 1, sizeof(ehdr), file) != sizeof(ehdr)) {
+    printf("Failed to read ELF header\n");
+    fclose(file);
+    return;
+  }
+  // 检查 ELF 魔数
+  if (memcmp(ehdr.e_ident, ELFMAG, SELFMAG) != 0) {
+      printf("Not a valid ELF file\n");
+      fclose(file);
+      return;
+  }
+  // 定位到节头表
+  fseek(file, ehdr.e_shoff, SEEK_SET);
+  // 读取节头表
+  Elf32_Shdr *sh_table = malloc(ehdr.e_shentsize * ehdr.e_shnum);
+  if (fread(sh_table, ehdr.e_shentsize, ehdr.e_shnum, file) != ehdr.e_shnum) {
+    printf("Failed to read section header table\n");
+    free(sh_table);
+    fclose(file);
+    return;
+  }
+  // 找到字符串表节（.strtab）
+  const char *strtab = NULL;
+  size_t strtab_size = 0;
+  for (int i = 0; i < ehdr.e_shnum; i++) {
+      if (sh_table[i].sh_type == SHT_STRTAB && i != ehdr.e_shstrndx) {
+          strtab_size = sh_table[i].sh_size;
+          strtab = malloc(strtab_size);
+          fseek(file, sh_table[i].sh_offset, SEEK_SET);
+          if (fread((void *)strtab, 1, strtab_size, file) != strtab_size) {
+            printf("Failed to read string table\n");
+            free((void *)strtab);
+            free(sh_table);
+            fclose(file);
+            return;
+          }
+          break;
+      }
+  }
+  // 找到符号表节（.symtab）
+  for (int i = 0; i < ehdr.e_shnum; i++) {
+      if (sh_table[i].sh_type == SHT_SYMTAB) {
+          size_t symtab_size = sh_table[i].sh_size;
+          size_t symtab_entry_count = symtab_size / sh_table[i].sh_entsize;
+          Elf32_Sym *symtab = malloc(symtab_size);
+          fseek(file, sh_table[i].sh_offset, SEEK_SET);
+          if (fread(symtab, sh_table[i].sh_entsize, symtab_entry_count, file) != symtab_entry_count) {
+            printf("Failed to read symbol table\n");
+            free(symtab);
+            free((void *)strtab);
+            free(sh_table);
+            fclose(file);
+            return;
+          }
+          // 遍历符号表,筛选各个函数名的入口地址
+          for (int j = 0, k = 0; j < symtab_entry_count; j++) {
+              if (ELF32_ST_TYPE(symtab[j].st_info) == STT_FUNC) {
+                  FUNC_FTRACER[k].addr = symtab[j].st_value;
+                  strncpy(FUNC_FTRACER[k].func_name, &strtab[symtab[j].st_name], sizeof(FUNC_FTRACER[k].func_name) - 1);
+                  FUNC_FTRACER[k].func_name[sizeof(FUNC_FTRACER[k].func_name) - 1] = '\0';
+                  k++;
+              }
+          }
+          free(symtab);
+          break;
+      }
+  }
+  // 清理资源
+  free((void *)strtab);
+  free(sh_table);
+  fclose(file);
+}
+
+// 设置 ftracer 的输出
+
+void init_ftracer_log(const char *ftracer_log_file);
+#endif
+//==================================================
+
 static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
     {"batch"    , no_argument      , NULL, 'b'},
     {"log"      , required_argument, NULL, 'l'},
     {"diff"     , required_argument, NULL, 'd'},
     {"port"     , required_argument, NULL, 'p'},
+    {"elf"      , required_argument, NULL, 'e'},  // 读取elf文件
+    {"elf-log"  , required_argument, NULL, 'g'},  // 写入ftracer的内容
     {"help"     , no_argument      , NULL, 'h'},
     {0          , 0                , NULL,  0 },
   };
   int o;
-  while ( (o = getopt_long(argc, argv, "-bhl:d:p:", table, NULL)) != -1) {
+  while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:g:", table, NULL)) != -1) {
     switch (o) {
       case 'b': sdb_set_batch_mode(); break;
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
       case 'l': log_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
+      case 'e': elf_file = optarg; break;
+      case 'g': ftracer_log_file = optarg; break;
       case 1: img_file = optarg; return 0;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
-        printf("\t-b,--batch              run with batch mode\n");
-        printf("\t-l,--log=FILE           output log to FILE\n");
-        printf("\t-d,--diff=REF_SO        run DiffTest with reference REF_SO\n");
-        printf("\t-p,--port=PORT          run DiffTest with port PORT\n");
+        printf("\t-b,--batch                run with batch mode\n");
+        printf("\t-l,--log=FILE             output log to FILE\n");
+        printf("\t-d,--diff=REF_SO          run DiffTest with reference REF_SO\n");
+        printf("\t-p,--port=PORT            run DiffTest with port PORT\n");
+        printf("\t-e,--elf=ELF_FILE         load elf file for ftrace\n");
+        printf("\t-g,--elf-log=FTRACER_FILE ftracer output log to FTRACER_FILE\n");
         printf("\n");
         exit(0);
     }
@@ -129,6 +235,12 @@ void init_monitor(int argc, char *argv[]) {
   init_sdb();
 
   IFDEF(CONFIG_ITRACE, init_disasm());
+
+  /* 初始化 ftracer */
+  IFDEF(CONFIG_FTRACE, load_elf());
+
+  /* 打开ftracer的输出日志 */
+  IFDEF(CONFIG_FTRACE, init_ftracer_log(ftracer_log_file));
 
   /* Display welcome message. */
   welcome();

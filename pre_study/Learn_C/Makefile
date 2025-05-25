@@ -1,6 +1,4 @@
-# 通用变量
-CC := gcc
-CFLAGS := -g -Wall -fsanitize=address
+MAINARGS ?= 
 
 # 默认目标
 .PHONY: all
@@ -9,7 +7,7 @@ all:
 
 # 通用规则：编译并执行
 ex%: ex%.c
-	@$(CC) $(CFLAGS) -o $@.o $< && ./$@.o
+	@$(CC) $(CFLAGS) -o $@.o $< && ./$@.o $(MAINARGS)
 
 # 特定规则：为某些文件单独处理参数
 ex04: ex04.c
