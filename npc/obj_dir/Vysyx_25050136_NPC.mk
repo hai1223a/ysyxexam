@@ -53,7 +53,6 @@ VM_USER_CLASSES = \
 	memory \
 	reg \
 	sdb \
-	tracer \
 
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
@@ -85,8 +84,6 @@ memory.o: csrc/memory.cpp
 reg.o: csrc/reg.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 sdb.o: csrc/sdb.cpp 
-	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
-tracer.o: csrc/tracer.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 
 ### Link rules... (from --exe)
