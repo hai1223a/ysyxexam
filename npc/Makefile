@@ -4,7 +4,7 @@ VSRCS = $(wildcard vsrc/*.v)
 
 # Wno-DECLFILENAME 表示禁用一种代码格式警告,该警告用于检查模块名和文件名的一致性
 CFLAGS +=
-LDFLAGS = -lreadline tools/capstone/repo/libcapstone.so.5
+LDFLAGS = -lreadline
 VERILATOR_INC_PATH = -Ivsrc
 VERILATOR = verilator
 VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
