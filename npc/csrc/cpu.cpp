@@ -113,7 +113,7 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
       break;
     }
     cpu_exec_once(ysyx_25050136_NPC, tfp);
-    trace_and_difftest(ysyx_25050136_NPC);
+    // trace_and_difftest(ysyx_25050136_NPC);
     printf("%s\n", logbuf);
   }
 }
