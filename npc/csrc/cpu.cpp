@@ -16,14 +16,13 @@ void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
     ysyx_25050136_NPC->inst_i = 0;
     ysyx_25050136_NPC->mem_rdata_i = 0;
 }
-
-void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_t inst_num)
+void cpu_exec_once(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
 {
   if (!cpu_run)
   {
     printf("你的程序已经运行结束了\n");
   }
-  while (cpu_run && inst_num)
+  while (cpu_run)
   {
     // 模拟时钟反转
     ysyx_25050136_NPC->clk ^= 1;
@@ -44,9 +43,16 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
     sim_time++;
     // 指令计算
     if(sim_time >= (reset_time + stop_time) && ysyx_25050136_NPC->pc_o != pc_pre) {
-      inst_num--;
       pc_pre = ysyx_25050136_NPC->pc_o;
+      break;
     }
+  }
+}
+void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_t inst_num)
+{
+  for (uint32_t i = 0; i < inst_num; i++)
+  {
+    cpu_exec_once(ysyx_25050136_NPC, tfp);
   }
 }
 
