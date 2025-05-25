@@ -12,7 +12,9 @@
 *
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
-
+#include <dlfcn.h>
+#include <capstone/capstone.h>
+#include "../tool/capstone/repo/include/capstone/capstone.h"
 #include "../include/common.h"
 
 static size_t (*cs_disasm_dl)(csh handle, const uint8_t *code,

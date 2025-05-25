@@ -11,8 +11,6 @@
 #include <readline/history.h>
 #include <getopt.h>              // 包含解析命令行参数的库函数
 #include <regex.h>
-#include <dlfcn.h>
-#include <capstone/capstone.h>
 #include "reg.h"
 #include "sdb.h"
 #include "cpu.h"
