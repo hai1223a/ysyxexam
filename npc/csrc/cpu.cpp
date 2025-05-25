@@ -45,8 +45,13 @@ void trace_and_difftest(Vysyx_25050136_NPC *ysyx_25050136_NPC)
   // space_len = space_len * 3 + 1;
   // memset(p, ' ', space_len);
   // p += space_len;
+    // 测试数据：RISC-V 指令
+  uint8_t code[] = {0x13, 0x05, 0x00, 0x00}; // RISC-V 指令：addi a0, zero, 0
+  // uint64_t pc = 0x1000; // 指令的起始地址
+  char disasm_str[128]; // 存储反汇编结果
+
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-  disassemble(logbuf, sizeof(logbuf), pc, (uint8_t *)&inst_i, 4);
+  disassemble(logbuf, sizeof(logbuf), pc, code, 4);
   // 这里也是IRINGBUF部分的代码
   //===============================================
   IRINGBUF.now_p = IRINGBUF.p;
