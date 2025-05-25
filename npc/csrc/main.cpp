@@ -51,12 +51,23 @@ void printf_statu(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 }
 
 void init_disasm();
+void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
 void init_main(int argc, char **argv)
 {
   // 解析命令行参数
   parse_args(argc, argv);
   // ITRACE
   IFDEF(CONFIG_ITRACE, init_disasm());
+    // 测试数据：RISC-V 指令
+    uint8_t code[] = {0x13, 0x05, 0x00, 0x00}; // RISC-V 指令：addi a0, zero, 0
+    uint64_t pc = 0x1000; // 指令的起始地址
+    char disasm_str[128]; // 存储反汇编结果
+  
+    // 调用 disassemble 函数
+    disassemble(disasm_str, sizeof(disasm_str), pc, code, sizeof(code));
+  
+    // 输出反汇编结果
+    printf("PC: 0x%lx, Instruction: %s\n", pc, disasm_str);
 }
 //=====================================================
 // 主函数
