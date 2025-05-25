@@ -12,7 +12,7 @@ static csh handle;
 void *load_capstone_library() {
   void *dl_handle = dlopen("tool/capstone/repo/libcapstone.so.5", RTLD_LAZY);
   if (!dl_handle) {
-    fprintf(stderr, "Failed to load Capstone library: %s\n", dlerror());
+    printf("Failed to load Capstone library: %s\n", dlerror());
     exit(1);
   }
 
