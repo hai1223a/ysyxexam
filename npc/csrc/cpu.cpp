@@ -26,7 +26,7 @@ static void print_iringbuf()
     printf("\n");
 }
 
-static void trace_and_difftest(Vysyx_25050136_NPC *ysyx_25050136_NPC)
+void trace_and_difftest(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 {
 #ifdef CONFIG_ITRACE
   uint32_t pc = ysyx_25050136_NPC->pc_o;
