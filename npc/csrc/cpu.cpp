@@ -48,7 +48,7 @@ void trace_and_difftest(Vysyx_25050136_NPC *ysyx_25050136_NPC)
   for (i = ilen - 1; i >= 0; i --) {
     printf(" %02x", inst[i]);
   }
-  disassemble(p, logbuf + sizeof(logbuf) - p, pc, (uint8_t *)&inst_i, ilen);
+  // disassemble(p, logbuf + sizeof(logbuf) - p, pc, (uint8_t *)&inst_i, ilen);
   // 这里也是IRINGBUF部分的代码
   //===============================================
   IRINGBUF.now_p = IRINGBUF.p;
