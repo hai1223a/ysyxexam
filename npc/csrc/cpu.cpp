@@ -8,7 +8,7 @@ struct
     char iringbuf[IRINGBUF_DEEPTH][128];
 } IRINGBUF = {0};
 
-char logbuf[128] = {};
+char logbuf[128] = {0};
 
 static void print_iringbuf()
 {
