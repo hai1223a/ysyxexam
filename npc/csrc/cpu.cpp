@@ -18,10 +18,6 @@ void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
 }
 void cpu_exec_once(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
 {
-  if (!cpu_run)
-  {
-    printf("你的程序已经运行结束了\n");
-  }
   while (cpu_run)
   {
     // 模拟时钟反转
@@ -52,6 +48,11 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
 {
   for (uint32_t i = 0; i < inst_num; i++)
   {
+    if (!cpu_run)
+    {
+      printf("你的程序已经运行结束了\n");
+      break;
+    }
     cpu_exec_once(ysyx_25050136_NPC, tfp);
   }
 }
