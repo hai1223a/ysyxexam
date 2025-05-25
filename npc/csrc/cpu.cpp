@@ -31,24 +31,21 @@ void trace_and_difftest(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 #ifdef CONFIG_ITRACE
   uint32_t pc = ysyx_25050136_NPC->pc_o;
   uint32_t inst_i = ysyx_25050136_NPC->inst_i;
-  char *p = logbuf;
-  p += snprintf(p, sizeof(logbuf), "0x%08x:", pc);
-  int ilen = 4;
-  int i;
-  uint8_t *inst = (uint8_t *)&inst_i;
-  for (i = ilen - 1; i >= 0; i --) {
-    p += snprintf(p, 4, " %02x", inst[i]);
-  }
-  int ilen_max = 4;
-  int space_len = ilen_max - ilen;
-  if (space_len < 0) space_len = 0;
-  space_len = space_len * 3 + 1;
-  memset(p, ' ', space_len);
-  p += space_len;
-  for (i = ilen - 1; i >= 0; i --) {
-    printf(" %02x", inst[i]);
-  }
-  // disassemble(p, logbuf + sizeof(logbuf) - p, pc, (uint8_t *)&inst_i, ilen);
+  // char *p = logbuf;
+  // p += snprintf(p, sizeof(logbuf), "0x%08x:", pc);
+  // int ilen = 4;
+  // int i;
+  // uint8_t *inst = (uint8_t *)&inst_i;
+  // for (i = ilen - 1; i >= 0; i --) {
+  //   p += snprintf(p, 4, " %02x", inst[i]);
+  // }
+  // int ilen_max = 4;
+  // int space_len = ilen_max - ilen;
+  // if (space_len < 0) space_len = 0;
+  // space_len = space_len * 3 + 1;
+  // memset(p, ' ', space_len);
+  // p += space_len;
+  disassemble(logbuf, sizeof(logbuf), pc, (uint8_t *)&inst_i, 4);
   // 这里也是IRINGBUF部分的代码
   //===============================================
   IRINGBUF.now_p = IRINGBUF.p;
