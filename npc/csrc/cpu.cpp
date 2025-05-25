@@ -51,7 +51,7 @@ void trace_and_difftest(Vysyx_25050136_NPC *ysyx_25050136_NPC)
   char disasm_str[128]; // 存储反汇编结果
 
   void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
-  disassemble(logbuf, sizeof(logbuf), pc, code, 4);
+  disassemble(disasm_str, sizeof(disasm_str), pc, code, 4);
   // 这里也是IRINGBUF部分的代码
   //===============================================
   IRINGBUF.now_p = IRINGBUF.p;
