@@ -25,5 +25,13 @@ do { \
     } \
   } while (0)
 
-#define AA printf("\naa_AA\n");
+// IFDEF
+#define __IGNORE(...)
+#define concat_temp(x, y) x ## y
+#define concat(x, y) concat_temp(x, y)
+#define CHOOSE2nd(a, b, ...) b
+#define MUX_WITH_COMMA(contain_comma, a, b) CHOOSE2nd(contain_comma a, b)
+#define MUX_MACRO_PROPERTY(p, macro, a, b) MUX_WITH_COMMA(concat(p, macro), a, b)
+#define MUXDEF(macro, X, Y)  MUX_MACRO_PROPERTY(__P_DEF_, macro, X, Y)
+#define IFDEF(macro, ...) MUXDEF(macro, __KEEP, __IGNORE)(__VA_ARGS__)
 #endif

@@ -11,17 +11,22 @@
 #include <readline/history.h>
 #include <getopt.h>              // 包含解析命令行参数的库函数
 #include <regex.h>
+#include <dlfcn.h>
+#include <capstone/capstone.h>
 #include "reg.h"
 #include "sdb.h"
 #include "cpu.h"
 #include "expr.h"
 #include "memory.h"
 #include "macro.h"
+#include "disasm.h"
 //=====================================================
 // 全局变量和宏定义
 //=====================================================
 #define CONFIG_MSIZE 0x8000000                // 内存大小
 #define CONFIG_MBASE 0x80000000               // 内存基地址
+
+#define CONFIG_ITRACE
 
 extern bool cpu_run;                                           // CPU仿真运行状态
 extern vluint64_t sim_time;                                    // 记录仿真时间

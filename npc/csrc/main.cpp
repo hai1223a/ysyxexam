@@ -49,13 +49,21 @@ void printf_statu(Vysyx_25050136_NPC *ysyx_25050136_NPC)
           ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED),
           ysyx_25050136_NPC->pc_o);
 }
+
+void init_main(int argc, char **argv)
+{
+  // 解析命令行参数
+  parse_args(argc, argv);
+  // ITRACE
+  IFDEF(CONFIG_ITRACE, init_disasm());
+}
 //=====================================================
 // 主函数
 //=====================================================
 int main(int argc, char **argv)
 {
-  // 解析命令行参数
-  parse_args(argc, argv);
+  // 初始化
+  init_main(argc, argv);
   // 传递参数给verilator,建议在创建任何模型之前使用
   Verilated::commandArgs(argc, argv);
   // 创建一个fst波形文件指针
