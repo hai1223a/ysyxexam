@@ -2,7 +2,7 @@
 LIBNAME = capstone
 
 test1: test1.o
-	${CC} $< -O3 -Wall -l$(LIBNAME) -o $@
+	${CXX} $< -O3 -Wall -ldl -Ltools/capstone/repo -lcapstone -o $@
 
-%.o: %.c
-	${CC} -c $< -o $@
+%.o: %.cpp
+	${CXX} -c $< -o $@
