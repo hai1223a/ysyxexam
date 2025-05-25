@@ -37,12 +37,12 @@ VM_PREFIX = Vysyx_25050136_NPC
 VM_MODPREFIX = Vysyx_25050136_NPC
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
-	-g \
+	-g -fsanitize=address \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
 	-lz \
-	-lreadline -ldl -Ltools/capstone/repo -lcapstone \
+	-lreadline -fsanitize=address \
 
 # User .cpp files (from .cpp's on Verilator command line)
 VM_USER_CLASSES = \
