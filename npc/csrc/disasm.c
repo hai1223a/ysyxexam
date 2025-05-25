@@ -12,7 +12,9 @@
 *
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
+
 #include <dlfcn.h>
+#include <capstone/capstone.h>
 #include "../tool/capstone/repo/include/capstone/capstone.h"
 #include "../include/common.h"
 
@@ -24,23 +26,25 @@ static csh handle;
 
 void init_disasm() {
   void *dl_handle;
-  dl_handle = dlopen("../tool/capstone/repo/libcapstone.so.5", RTLD_LAZY);
+  dl_handle = dlopen("tool/capstone/repo/libcapstone.so.5", RTLD_LAZY);
   assert(dl_handle);
 
   cs_err (*cs_open_dl)(cs_arch arch, cs_mode mode, csh *handle) = NULL;
-  cs_open_dl = (cs_err (*)(cs_arch, cs_mode, csh *))dlsym(dl_handle, "cs_open");
+  cs_open_dl = dlsym(dl_handle, "cs_open");
   assert(cs_open_dl);
 
-  cs_open_dl = (cs_err (*)(cs_arch, cs_mode, csh *))dlsym(dl_handle, "cs_disasm");
+  cs_disasm_dl = dlsym(dl_handle, "cs_disasm");
   assert(cs_disasm_dl);
 
-  cs_open_dl = (cs_err (*)(cs_arch, cs_mode, csh *))dlsym(dl_handle, "cs_free");
+  cs_free_dl = dlsym(dl_handle, "cs_free");
   assert(cs_free_dl);
 
   cs_arch arch = CS_ARCH_RISCV;
   cs_mode mode = CS_MODE_RISCV32;
+
 	int ret = cs_open_dl(arch, mode, &handle);
   assert(ret == CS_ERR_OK);
+
 }
 
 void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte) {
