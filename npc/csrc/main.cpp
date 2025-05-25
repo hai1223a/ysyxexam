@@ -27,39 +27,67 @@ static csh handle;
 void init_disasm() {
   void *dl_handle;
   dl_handle = dlopen("tools/capstone/repo/libcapstone.so.5", RTLD_LAZY);
-  assert(dl_handle);
+  if (!dl_handle) {
+    fprintf(stderr, "Failed to load Capstone library: %s\n", dlerror());
+    exit(1);
+  }
 
   cs_err (*cs_open_dl)(cs_arch arch, cs_mode mode, csh *handle) = NULL;
   cs_open_dl = (cs_err (*)(cs_arch, cs_mode, csh *))dlsym(dl_handle, "cs_open");
-  assert(cs_open_dl);
-  int ret = cs_open_dl(arch, mode, &handle);
-  if (ret != CS_ERR_OK) {
-      fprintf(stderr, "Failed to initialize Capstone: %d\n", ret);
-      exit(1);
+  if (!cs_open_dl) {
+    fprintf(stderr, "Failed to load function cs_open: %s\n", dlerror());
+    exit(1);
   }
+
   cs_disasm_dl = (size_t (*)(csh, const uint8_t *, size_t, uint64_t, size_t, cs_insn **))dlsym(dl_handle, "cs_disasm");
-if (!cs_disasm_dl) {
+  if (!cs_disasm_dl) {
     fprintf(stderr, "Failed to load function cs_disasm: %s\n", dlerror());
     exit(1);
-}
+  }
 
   cs_free_dl = (void (*)(cs_insn *, size_t))dlsym(dl_handle, "cs_free");
-  assert(cs_free_dl);
+  if (!cs_free_dl) {
+    fprintf(stderr, "Failed to load function cs_free: %s\n", dlerror());
+    exit(1);
+  }
 
   cs_arch arch = CS_ARCH_RISCV;
   cs_mode mode = CS_MODE_RISCV32;
   int ret = cs_open_dl(arch, mode, &handle);
-  assert(ret == CS_ERR_OK);
+  if (ret != CS_ERR_OK) {
+    fprintf(stderr, "Failed to initialize Capstone: %d\n", ret);
+    exit(1);
+  }
 }
 
 void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte) {
+  if (!code || nbyte == 0) {
+    fprintf(stderr, "Invalid code or size\n");
+    return;
+  }
+
+  if (!cs_disasm_dl) {
+    fprintf(stderr, "cs_disasm_dl is not initialized\n");
+    exit(1);
+  }
+
+  if (!handle) {
+    fprintf(stderr, "Capstone handle is not initialized\n");
+    exit(1);
+  }
+
   cs_insn *insn;
   size_t count = cs_disasm_dl(handle, code, nbyte, pc, 0, &insn);
-  assert(count == 1);
-  int ret = snprintf(str, size, "%s", insn->mnemonic);
-  if (insn->op_str[0] != '\0') {
-    snprintf(str + ret, size - ret, "\t%s", insn->op_str);
+  if (count == 0) {
+    snprintf(str, size, "Failed to disassemble at 0x%lx", pc);
+    return;
   }
+
+  int ret = snprintf(str, size, "%s", insn[0].mnemonic);
+  if (insn[0].op_str[0] != '\0') {
+    snprintf(str + ret, size - ret, "\t%s", insn[0].op_str);
+  }
+
   cs_free_dl(insn, count);
 }
 //=====================================================
