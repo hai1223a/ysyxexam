@@ -148,7 +148,7 @@ void init_main(int argc, char **argv)
   parse_args(argc, argv);
   // ITRACE
   // IFDEF(CONFIG_ITRACE, init_disasm());
-  init_disasm()
+    init_disasm();
     // 测试数据：RISC-V 指令
     uint8_t code[] = {0x13, 0x05, 0x00, 0x00}; // RISC-V 指令：addi a0, zero, 0
     uint64_t pc = 0x1000; // 指令的起始地址
