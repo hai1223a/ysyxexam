@@ -8,8 +8,7 @@ LDFLAGS = "-lreadline -fsanitize=address"
 VERILATOR = verilator
 VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
 				   --top-module $(TOPNAME) $(VSRCS) $(CSRCS) \
-				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
-				   -LDFLAGS $(LDFLAGS) -CFLAGS $(CFLAGS)		
+				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL 	
 
 
 all: rum
