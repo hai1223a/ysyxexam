@@ -38,7 +38,6 @@ void *load_capstone_library() {
     exit(1);
   }
 
-  return cs_open_dl;
 }
 
 // 初始化 Capstone
