@@ -45,6 +45,7 @@ void trace_and_difftest(Vysyx_25050136_NPC *ysyx_25050136_NPC)
   // space_len = space_len * 3 + 1;
   // memset(p, ' ', space_len);
   // p += space_len;
+  void disassemble(char *str, int size, uint64_t pc, uint8_t *code, int nbyte);
   disassemble(logbuf, sizeof(logbuf), pc, (uint8_t *)&inst_i, 4);
   // 这里也是IRINGBUF部分的代码
   //===============================================
