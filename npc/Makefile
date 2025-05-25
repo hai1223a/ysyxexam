@@ -4,7 +4,7 @@ VSRCS = $(wildcard vsrc/*.v)
 
 # Wno-DECLFILENAME 表示禁用一种代码格式警告,该警告用于检查模块名和文件名的一致性
 CFLAGS +=
-LDFLAGS = -lreadline 
+LDFLAGS = -lreadline tools/capstone/repo/libcapstone.so.5
 VERILATOR_INC_PATH = -Ivsrc
 VERILATOR = verilator
 VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
@@ -13,16 +13,6 @@ VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-ini
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
 				   -LDFLAGS $(LDFLAGS)		
 
-# 添加 Capstone 库支持
-ifeq ($(CONFIG_ITRACE),y)
-LIBCAPSTONE = tools/capstone/repo/libcapstone.so.5
-CFLAGS += -I tools/capstone/repo/include
-LDFLAGS += tools/capstone/repo/libcapstone.so.5
-CSRCS += csrc/disasm.cpp  # 添加与 itrace 相关的源文件
-csrc/disasm.cpp: $(LIBCAPSTONE)
-$(LIBCAPSTONE):
-    $(MAKE) -C tools/capstone
-endif
 
 all: rum
 	@echo "Write this Makefile by your self."
