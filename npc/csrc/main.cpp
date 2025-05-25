@@ -50,6 +50,7 @@ void printf_statu(Vysyx_25050136_NPC *ysyx_25050136_NPC)
           ysyx_25050136_NPC->pc_o);
 }
 
+void init_disasm();
 void init_main(int argc, char **argv)
 {
   // 解析命令行参数

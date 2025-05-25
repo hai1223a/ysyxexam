@@ -37,7 +37,7 @@ VM_PREFIX = Vysyx_25050136_NPC
 VM_MODPREFIX = Vysyx_25050136_NPC
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
-	-g \
+	-g -ldl -Ltools/capstone/repo -lcapstone \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
@@ -48,6 +48,7 @@ VM_USER_LDLIBS = \
 VM_USER_CLASSES = \
 	common \
 	cpu \
+	disasm \
 	expr \
 	main \
 	memory \
@@ -72,6 +73,8 @@ VPATH += $(VM_USER_DIR)
 common.o: csrc/common.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 cpu.o: csrc/cpu.cpp 
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
+disasm.o: csrc/disasm.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 expr.o: csrc/expr.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<

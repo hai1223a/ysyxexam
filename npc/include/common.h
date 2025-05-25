@@ -23,6 +23,7 @@
 #define CONFIG_MSIZE 0x8000000                // 内存大小
 #define CONFIG_MBASE 0x80000000               // 内存基地址
 
+#define CONFIG_ITRACE
 
 extern bool cpu_run;                                           // CPU仿真运行状态
 extern vluint64_t sim_time;                                    // 记录仿真时间
