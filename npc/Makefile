@@ -14,7 +14,7 @@ VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-ini
 				   --top-module $(TOPNAME) $(VSRCS) $(CSRCS) \
 				   $(VERILATOR_INC_PATH) \
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
-				   -LDFLAGS $(LDFLAGS) -CFLAGS $(CFLAGS)			
+				   -LDFLAGS $(LDFLAGS)		
 
 all: rum
 	@echo "Write this Makefile by your self."
