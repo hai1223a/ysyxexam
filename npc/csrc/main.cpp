@@ -32,9 +32,16 @@ void init_disasm() {
   cs_err (*cs_open_dl)(cs_arch arch, cs_mode mode, csh *handle) = NULL;
   cs_open_dl = (cs_err (*)(cs_arch, cs_mode, csh *))dlsym(dl_handle, "cs_open");
   assert(cs_open_dl);
-
+  int ret = cs_open_dl(arch, mode, &handle);
+  if (ret != CS_ERR_OK) {
+      fprintf(stderr, "Failed to initialize Capstone: %d\n", ret);
+      exit(1);
+  }
   cs_disasm_dl = (size_t (*)(csh, const uint8_t *, size_t, uint64_t, size_t, cs_insn **))dlsym(dl_handle, "cs_disasm");
-  assert(cs_disasm_dl);
+if (!cs_disasm_dl) {
+    fprintf(stderr, "Failed to load function cs_disasm: %s\n", dlerror());
+    exit(1);
+}
 
   cs_free_dl = (void (*)(cs_insn *, size_t))dlsym(dl_handle, "cs_free");
   assert(cs_free_dl);
