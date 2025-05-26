@@ -66,7 +66,7 @@ void add_mtrace(Vysyx_25050136_NPC *ysyx_25050136_NPC)
   if (ysyx_25050136_NPC->mem_wen_o)
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "write  %d     %x", ysyx_25050136_NPC->mem_len_o, ysyx_25050136_NPC->mem_wdata_o);
   else if (ysyx_25050136_NPC->mem_ren_o)
-    p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "read  %d     %x", ysyx_25050136_NPC->mem_len_o, ysyx_25050136_NPC->mem_rdata_i);
+    p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "read  %d", ysyx_25050136_NPC->mem_len_o);
   *p = '\0';
 }
 
