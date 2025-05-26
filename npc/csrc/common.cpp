@@ -6,7 +6,7 @@ vluint64_t reset_time = 10;                   // 复位时间
 vluint64_t stop_time = 0;                     // 暂停时间点
 uint32_t pc_pre = 0x80000000;                 // 用于单步执行程序
 char *img_file = NULL;                        // 程序源文件指针
-bool batch_mode = false;                      // sdb模式
+bool batch_mode = true;                      // 默认sdb模式
 
 uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};// 内存变量
 const char *regs[] = {

@@ -13,7 +13,7 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
-#include "sdb.h"
+#include "../include/common.h"
 
 typedef struct watchpoint {
   int NO;
@@ -138,19 +138,18 @@ void delete_watchpoint(int number) {
   free_wp(p);
 }
 
-void scan_watchpoint(word_t *DATA, int *index) {
+void scan_watchpoint(Vysyx_25050136_NPC *ysyx_25050136_NPC, uint32_t *DATA, int *index) {
   if(!head) return;
   WP *p = head;
   bool success = true;
   while (p)
   {
     *(index + p->NO) = 1;
-    *(DATA + (p->NO)) = expr(p->args, &success);
+    *(DATA + (p->NO)) = expr(ysyx_25050136_NPC, p->args, &success);
     Assert(success, "表达式计算失败");
     p = p->next;
   }
 }
-
 
 /* TODO: Implement the functionality of watchpoint */
 

@@ -243,7 +243,7 @@ link:/home/yunhai/ysyx-workbench/nemu/src/monitor/sdb/expr.c[点击跳转文件]
 * [*] 已完成 +
 link:/home/yunhai/ysyx-workbench/nemu/tools/gen-expr/gen-expr.c[点击跳转文件]
 
-=== 监控点
+=== 监视点
 [red]#*必做题*# _扩展表达式求值的功能_ ::
 * [*] 已完成 +
 link:/home/yunhai/ysyx-workbench/nemu/src/monitor/sdb/expr.c[点击跳转文件]

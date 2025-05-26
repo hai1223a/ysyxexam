@@ -14,11 +14,13 @@
 #include "memory.h"
 #include "macro.h"
 #include "disasm.h"
+#include "watchpoint.h"
 //=====================================================
 // 全局变量和宏定义
 //=====================================================
 #define CONFIG_MSIZE 0x8000000                // 内存大小
 #define CONFIG_MBASE 0x80000000               // 内存基地址
+#define NR_WP 5
 
 #define CONFIG_ITRACE
 
@@ -28,9 +30,7 @@ extern vluint64_t reset_time;                                  // 复位时间
 extern vluint64_t stop_time;                                   // 暂停时间点
 extern uint32_t pc_pre;                                        // 用于单步执行程序
 extern char *img_file;                                         // 程序源文件指针
-extern bool batch_mode;                                        // sdb模式
+extern bool batch_mode;                                        // batch模式
 extern uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096)));// 内存变量
 extern const char *regs[];
-extern uint32_t pc;
-extern uint32_t inst;
 #endif

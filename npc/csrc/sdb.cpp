@@ -51,6 +51,7 @@ static char* rl_gets() {
     }
     else if (!strcmp(args, "w"))
     {
+      watchpoint_display();
     }
     return 0;
   }
@@ -82,10 +83,24 @@ static char* rl_gets() {
   }
   
   static int cmd_w(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
+    if (!args)
+    {
+      printf("请输入要监视的表达式\n");
+      return 0;
+    }
+    add_watchpoint(args);
     return 0;
   }
   
   static int cmd_d(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
+    if (!args)
+    {
+      printf("请输入要删除的监视点序号\n");
+      return 0;
+    }
+    int number = 0;
+    if(sscanf(args, "%d", &number) == 1)  delete_watchpoint(number);
+    else  printf("你打的监视点序号表达式不对\n");
     return 0;
   }
   
@@ -169,6 +184,6 @@ static char* rl_gets() {
     init_regex();
   
     /* Initialize the watchpoint pool. */
-    // init_wp_pool();
+    init_wp_pool();
   }
   
