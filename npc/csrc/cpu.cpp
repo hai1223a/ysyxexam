@@ -33,30 +33,29 @@ uint32_t inst__ = *(uint32_t *)(pmem + pc__ - CONFIG_MBASE);
 
 void Itrace(uint32_t inst_in, uint32_t pc_in)
 {
-    disassemble(logbuf, sizeof(logbuf), pc_in, (uint8_t *)&inst_in, 4);
-    // char *p = logbuf;
-    // p += snprintf(p, sizeof(logbuf), "0x%08x:", pc_in);
-    // int ilen = 4;
-    // int i;
-    // uint8_t *inst_s = (uint8_t *)&inst_in;
-    // for (i = ilen - 1; i >= 0; i --) {
-    //   p += snprintf(p, 4, " %02x", inst_s[i]);
-    // }
-    // int ilen_max = 4;
-    // int space_len = ilen_max - ilen;
-    // if (space_len < 0) space_len = 0;
-    // space_len = space_len * 3 + 1;
-    // memset(p, ' ', space_len);
-    // p += space_len;
-    // disassemble(p, logbuf + sizeof(logbuf) - p, pc_in, inst_s, 4);
+    char *p = logbuf;
+    p += snprintf(p, sizeof(logbuf), "0x%08x:", pc_in);
+    int ilen = 4;
+    int i;
+    uint8_t *inst_s = (uint8_t *)&inst_in;
+    for (i = ilen - 1; i >= 0; i --) {
+      p += snprintf(p, 4, " %02x", inst_s[i]);
+    }
+    int ilen_max = 4;
+    int space_len = ilen_max - ilen;
+    if (space_len < 0) space_len = 0;
+    space_len = space_len * 3 + 1;
+    memset(p, ' ', space_len);
+    p += space_len;
+    disassemble(p, logbuf + sizeof(logbuf) - p, pc_in, inst_s, 4);
     // 这里也是IRINGBUF部分的代码
     // ===============================================
-    // IRINGBUF.now_p = IRINGBUF.p;
-    // strcpy(IRINGBUF.iringbuf[IRINGBUF.p], logbuf);
-    // if(IRINGBUF.p < IRINGBUF_DEEPTH - 1)
-    //   IRINGBUF.p++;
-    // else
-    //   IRINGBUF.p = 0;
+    IRINGBUF.now_p = IRINGBUF.p;
+    strcpy(IRINGBUF.iringbuf[IRINGBUF.p], logbuf);
+    if(IRINGBUF.p < IRINGBUF_DEEPTH - 1)
+      IRINGBUF.p++;
+    else
+      IRINGBUF.p = 0;
     // ===============================================
 
 }
