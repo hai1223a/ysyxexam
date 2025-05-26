@@ -9,7 +9,8 @@ struct
 } IRINGBUF = {0};
 
 char logbuf[128] = {0};
-uint32_t pc,inst;
+uint32_t pc = 0;
+uint32_t inst = 0;
 
 static void print_iringbuf()
 {
