@@ -38,6 +38,7 @@ void trace_and_difftest(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 {
 #ifdef CONFIG_ITRACE
 
+printf("inst = %08x, pc =%08x\n", inst, pc);
   char *p = logbuf;
   p += snprintf(p, sizeof(logbuf), "0x%08x:", pc);
   int ilen = 4;
@@ -52,7 +53,7 @@ void trace_and_difftest(Vysyx_25050136_NPC *ysyx_25050136_NPC)
   space_len = space_len * 3 + 1;
   memset(p, ' ', space_len);
   p += space_len;
-  disassemble(logbuf, sizeof(logbuf), pc, inst_s, 4);
+  // disassemble(logbuf, sizeof(logbuf), pc, inst_s, 4);
   // 这里也是IRINGBUF部分的代码
   //===============================================
   // IRINGBUF.now_p = IRINGBUF.p;
