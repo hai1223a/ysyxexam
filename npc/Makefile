@@ -10,18 +10,18 @@ LDFLAGS += -lreadline -fsanitize=address
 VERILATOR_INC_PATH = -Ivsrc
 VERILATOR = verilator
 VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
-				   --top-module $(TOPNAME) $(VSRCS) $(CSRCS)\
+				   --top-module $(TOPNAME) \
 				   $(VERILATOR_INC_PATH) \
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
-				   -LDFLAGS "$(LDFLAGS)"" -CFLAGS "$(CFLAGS)"		
+				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"		
 
-# ARGS +=
+ARGS +=
 all: rum
 	@echo "Write this Makefile by your self."
 
 run:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(VERILATOR) $(VERILATOR_FLAGS) 
+	$(VERILATOR) $(VERILATOR_FLAGS) $(VSRCS) $(CSRCS)
 	@./obj_dir/V$(TOPNAME) -i /home/yunhai/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 	@gtkwave waveform.fst
 
