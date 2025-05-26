@@ -1,8 +1,6 @@
 #include "../include/common.h"
 #include <readline/readline.h> 
 #include <readline/history.h>
-#include <regex.h>
-
 
 static char* rl_gets() {
     static char *line_read = NULL;
