@@ -42,6 +42,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC___024root final : public V
     IData/*31:0*/ ysyx_25050136_NPC__DOT__reg2id_rdata1_o;
     IData/*31:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc;
     IData/*31:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__out;
+    IData/*31:0*/ __Vtask_itrace_get_pc_inst__0__pc;
     IData/*31:0*/ __VactIterCount;
     QData/*32:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add;
     VlUnpacked<IData/*31:0*/, 32> ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr;
