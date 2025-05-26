@@ -94,7 +94,7 @@ void cpu_exec_once(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
     pmem_read_write(ysyx_25050136_NPC);
     // 计算电路状态
     if(ysyx_25050136_NPC->inst_i == 0x00100073) cpu_run = false;
-    ysyx_25050136_NPC->eval();
+    // ysyx_25050136_NPC->eval();
         // 模拟时钟反转
         ysyx_25050136_NPC->clk ^= 1;
         // 计算电路状态
