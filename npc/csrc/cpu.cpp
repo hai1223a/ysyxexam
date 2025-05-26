@@ -33,7 +33,7 @@ extern "C" void itrace_get_pc_inst(uint32_t pc_DPIC, uint32_t inst_DPIC)
   inst = inst_DPIC;
 }
 
-void trace_and_difftest(Vysyx_25050136_NPC *ysyx_25050136_NPC)
+void Itrace(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 {
 #ifdef CONFIG_ITRACE
 
@@ -89,6 +89,9 @@ void cpu_exec_once(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
     ysyx_25050136_NPC->clk ^= 1;
     // 计算电路状态
     ysyx_25050136_NPC->eval();
+#ifdef CONFIG_ITRACE
+    Itrace(ysyx_25050136_NPC);
+#endif
     // 复位
     reset(ysyx_25050136_NPC, sim_time);
     // 取指
@@ -119,9 +122,9 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
       printf("你的程序已经运行结束了\n");
       break;
     }
-    trace_and_difftest(ysyx_25050136_NPC);
+    
     cpu_exec_once(ysyx_25050136_NPC, tfp);
-    // printf("%s\n",logbuf);
+    printf("%s\n",logbuf);
   }
 }
 
