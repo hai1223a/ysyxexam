@@ -40,21 +40,22 @@ __EXPORT void difftest_regcpy(void *dut, bool direction) {
   {
     for (size_t i = 0; i < 16; i++)
     {
-      dut-> = cpu.gpr[i]
-      *(uint8_t *)buf = paddr_read(addr + i, 1);
+      *(word_t *)(dut + i) = cpu.gpr[i];
     }
+    *(word_t *)(dut + 16) = cpu.pc;
   }
   if (direction == DIFFTEST_TO_REF)
   {
-    for (size_t i = 0; i < n; i++)
+    for (size_t i = 0; i < 16; i++)
     {
-      paddr_write(addr + i, 1, (word_t)*(uint8_t *)buf);
+      cpu.gpr[i] = *(word_t *)(dut + i);
     }
+    cpu.pc = *(word_t *)(dut + 16);
   }
 }
 
 __EXPORT void difftest_exec(uint64_t n) {
-  assert(0);
+  cpu_exec(n);
 }
 
 __EXPORT void difftest_raise_intr(word_t NO) {
