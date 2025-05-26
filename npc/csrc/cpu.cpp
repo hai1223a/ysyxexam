@@ -30,7 +30,7 @@ static void print_iringbuf()
 
 void Itrace(uint32_t inst_in, uint32_t pc_in)
 {
-  printf("inst = %08x, pc =%08x\n", inst_in, pc_in);
+    printf("inst = %08x, pc =%08x\n", inst_in, pc_in);
     // char *p = logbuf;
     // p += snprintf(p, sizeof(logbuf), "0x%08x:", pc);
     // int ilen = 4;
@@ -115,17 +115,15 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
     cpu_exec_once(ysyx_25050136_NPC, tfp);
 #ifdef CONFIG_ITRACE
     uint32_t pc,inst;
-    if (pc == 0x80000004)
+    if (pc_pre == 0x80000004)
     {
       pc = 0x80000000;
       inst = *(uint32_t *)(pmem + pc - CONFIG_MBASE);
       Itrace(pc, inst);
-      printf("%s\n",logbuf);      
     }
     pc = ysyx_25050136_NPC->pc_o;
     inst = ysyx_25050136_NPC->inst_i;
     Itrace(pc, inst);
-    printf("%s\n",logbuf);
 #endif
     
   }
