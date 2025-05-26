@@ -50,12 +50,12 @@ void Itrace(uint32_t inst_in, uint32_t pc_in)
     disassemble(p, logbuf + sizeof(logbuf) - p, pc_in, inst_s, 4);
     // 这里也是IRINGBUF部分的代码
     // ===============================================
-    IRINGBUF.now_p = IRINGBUF.p;
-    strcpy(IRINGBUF.iringbuf[IRINGBUF.p], logbuf);
-    if(IRINGBUF.p < IRINGBUF_DEEPTH - 1)
-      IRINGBUF.p++;
-    else
-      IRINGBUF.p = 0;
+    // IRINGBUF.now_p = IRINGBUF.p;
+    // strcpy(IRINGBUF.iringbuf[IRINGBUF.p], logbuf);
+    // if(IRINGBUF.p < IRINGBUF_DEEPTH - 1)
+    //   IRINGBUF.p++;
+    // else
+    //   IRINGBUF.p = 0;
     // ===============================================
 
 }
@@ -119,8 +119,8 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
     cpu_exec_once(ysyx_25050136_NPC, tfp);
 #ifdef CONFIG_ITRACE
     Itrace(pc__, inst__);
-    if(inst_num < PRINT_INST_NUM)
-      printf("%s\n", logbuf);
+    // if(inst_num < PRINT_INST_NUM)
+    //   printf("%s\n", logbuf);
 #endif
     
   }
