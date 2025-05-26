@@ -15,7 +15,7 @@ VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-ini
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
 				   -LDFLAGS "$(LDFLAGS)"" -CFLAGS "$(CFLAGS)"		
 
-ARGS +=
+# ARGS +=
 all: rum
 	@echo "Write this Makefile by your self."
 
