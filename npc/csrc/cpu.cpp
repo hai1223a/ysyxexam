@@ -27,7 +27,7 @@ static void print_iringbuf()
     printf("\n");
 }
 
-extern "C" void itrace_get_pc_inst(uint32_t pc, uint32_t inst) 
+extern "C" void itrace_get_pc_inst(uint32_t pc_DPIC, uint32_t inst_DPIC) 
 {
   pc = pc;
   inst = inst;
