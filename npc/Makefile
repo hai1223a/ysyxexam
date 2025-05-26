@@ -10,7 +10,7 @@ LDFLAGS += -lreadline -fsanitize=address
 VERILATOR_INC_PATH = -Ivsrc
 VERILATOR = verilator
 VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
-				   --top-module $(TOPNAME) \
+				   --top-module $(TOPNAME) $(VSRCS) $(CSRCS)\
 				   $(VERILATOR_INC_PATH) \
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
 				   -LDFLAGS "$(LDFLAGS)"" -CFLAGS "$(CFLAGS)"		
@@ -21,7 +21,7 @@ all: rum
 
 run:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(VERILATOR) $(VSRCS) $(CSRCS) $(VERILATOR_FLAGS) 
+	$(VERILATOR) $(VERILATOR_FLAGS) 
 	@./obj_dir/V$(TOPNAME) -i /home/yunhai/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 	@gtkwave waveform.fst
 
