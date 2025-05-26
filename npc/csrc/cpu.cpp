@@ -97,7 +97,7 @@ void cpu_exec_once(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
     pmem_read_write(ysyx_25050136_NPC);
     // 计算电路状态
     if(ysyx_25050136_NPC->inst_i == 0x00100073) cpu_run = false;
-    ysyx_25050136_NPC->eval();
+    // ysyx_25050136_NPC->eval();
     // 记录波形数据
     tfp->dump(sim_time);
     // 推动仿真进行
@@ -119,8 +119,8 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
       break;
     }
     cpu_exec_once(ysyx_25050136_NPC, tfp);
-    trace_and_difftest(ysyx_25050136_NPC);
-    printf("%s\n",logbuf);
+    // trace_and_difftest(ysyx_25050136_NPC);
+    // printf("%s\n",logbuf);
   }
 }
 
