@@ -1,4 +1,5 @@
 #include "../include/common.h"
+#include <getopt.h>              // 包含解析命令行参数的库函数
 
 /***************************************************************************************
 * Copyright (c) 2014-2024 Zihao Yu, Nanjing University

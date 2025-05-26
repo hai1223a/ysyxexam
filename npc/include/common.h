@@ -7,10 +7,6 @@
 #include "Vysyx_25050136_NPC___024root.h"
 #include <verilated.h>           // Verilator的库
 #include "verilated_fst_c.h"     // fst波形文件所需要的库
-#include <readline/readline.h>   // 
-#include <readline/history.h>
-#include <getopt.h>              // 包含解析命令行参数的库函数
-#include <regex.h>
 #include "reg.h"
 #include "sdb.h"
 #include "cpu.h"
