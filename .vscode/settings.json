@@ -104,6 +104,9 @@
         "regex": "cpp",
         "elf.h": "c",
         "dlfcn.h": "c",
-        "capstone.h": "c"
+        "capstone.h": "c",
+        "difftest-def.h": "c",
+        "macro.h": "c",
+        "paddr.h": "c"
     }
 }
