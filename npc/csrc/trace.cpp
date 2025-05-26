@@ -1,6 +1,7 @@
 #include "../include/common.h"
 
-char logbuf[128] = {0};
+// itrace
+char itrace_buf[128] = {0};
 uint32_t pc__ = 0x80000000;
 uint32_t inst__ = *(uint32_t *)(pmem + pc__ - CONFIG_MBASE);
 
@@ -29,8 +30,8 @@ void print_iringbuf()
 
 void Itrace(uint32_t inst_in, uint32_t pc_in)
 {
-    char *p = logbuf;
-    p += snprintf(p, sizeof(logbuf), "0x%08x:", pc_in);
+    char *p = itrace_buf;
+    p += snprintf(p, sizeof(itrace_buf), "0x%08x:", pc_in);
     int ilen = 4;
     int i;
     uint8_t *inst_s = (uint8_t *)&inst_in;
@@ -43,15 +44,35 @@ void Itrace(uint32_t inst_in, uint32_t pc_in)
     space_len = space_len * 3 + 1;
     memset(p, ' ', space_len);
     p += space_len;
-    disassemble(p, logbuf + sizeof(logbuf) - p, pc_in, inst_s, 4);
+    disassemble(p, itrace_buf + sizeof(itrace_buf) - p, pc_in, inst_s, 4);
     // 这里也是IRINGBUF部分的代码
     // ===============================================
     IRINGBUF.now_p = IRINGBUF.p;
-    strcpy(IRINGBUF.iringbuf[IRINGBUF.p], logbuf);
+    strcpy(IRINGBUF.iringbuf[IRINGBUF.p], itrace_buf);
     if(IRINGBUF.p < IRINGBUF_DEEPTH - 1)
       IRINGBUF.p++;
     else
       IRINGBUF.p = 0;
     // ===============================================
+}
+// mtrace
+char mtrace_buf[128] = {0};
 
+void add_mtrace(Vysyx_25050136_NPC *ysyx_25050136_NPC)
+{
+  char *p = mtrace_buf;
+  p += snprintf(p, sizeof(mtrace_buf), "0x%08:  ", ysyx_25050136_NPC->pc_o);
+  p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "%8x  ", ysyx_25050136_NPC->mem_addr_o);
+  if(ysyx_25050136_NPC->mem_wen_o)
+    p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "write  %d     %x", ysyx_25050136_NPC->mem_len_o, ysyx_25050136_NPC->mem_wdata_o);
+  else if(ysyx_25050136_NPC->mem_ren_o)
+    p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "read  %d     %x", ysyx_25050136_NPC->mem_len_o, ysyx_25050136_NPC->mem_rdata_i);
+  *p = '\0';
+}
+
+void printf_mtrace()
+{
+  printf("mtrace 访存出错报告\n");
+  printf("PC值         访存地址  操作   字节  写入数据\n");
+  puts(mtrace_buf);
 }

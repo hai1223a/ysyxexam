@@ -54,6 +54,7 @@ VM_USER_CLASSES = \
 	memory \
 	reg \
 	sdb \
+	trace \
 	watchpoint \
 
 # User .cpp directories (from .cpp's on Verilator command line)
@@ -86,6 +87,8 @@ memory.o: csrc/memory.cpp
 reg.o: csrc/reg.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 sdb.o: csrc/sdb.cpp 
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
+trace.o: csrc/trace.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 watchpoint.o: csrc/watchpoint.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
