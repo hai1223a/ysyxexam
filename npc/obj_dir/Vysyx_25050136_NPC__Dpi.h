@@ -17,7 +17,7 @@ extern "C" {
 
     // DPI IMPORTS
     // DPI import at vsrc/top.v:2:30
-    extern void itrace_get_pc_inst(int pc, int inst);
+    extern void itrace_get_pc_inst(int pc_DPIC, int inst_DPIC);
 
 #ifdef __cplusplus
 }

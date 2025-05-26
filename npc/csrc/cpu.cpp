@@ -29,8 +29,8 @@ static void print_iringbuf()
 
 extern "C" void itrace_get_pc_inst(uint32_t pc_DPIC, uint32_t inst_DPIC) 
 {
-  pc = pc;
-  inst = inst;
+  pc = pc_DPIC;
+  inst = inst_DPIC;
 }
 
 void trace_and_difftest(Vysyx_25050136_NPC *ysyx_25050136_NPC)

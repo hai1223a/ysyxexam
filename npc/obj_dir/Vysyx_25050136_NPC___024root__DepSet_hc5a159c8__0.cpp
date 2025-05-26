@@ -23,7 +23,7 @@ void Vysyx_25050136_NPC___024root___eval_triggers__ico(Vysyx_25050136_NPC___024r
 #endif
 }
 
-void Vysyx_25050136_NPC___024unit____Vdpiimwrap_itrace_get_pc_inst_TOP____024unit(IData/*31:0*/ pc, IData/*31:0*/ inst);
+void Vysyx_25050136_NPC___024unit____Vdpiimwrap_itrace_get_pc_inst_TOP____024unit(IData/*31:0*/ pc_DPIC, IData/*31:0*/ inst_DPIC);
 
 VL_INLINE_OPT void Vysyx_25050136_NPC___024root___ico_sequent__TOP__0(Vysyx_25050136_NPC___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25050136_NPC___024root___ico_sequent__TOP__0\n"); );
