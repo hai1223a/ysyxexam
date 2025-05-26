@@ -8,9 +8,6 @@ uint32_t pc_pre = 0x80000000;                 // 用于单步执行程序
 char *img_file = NULL;                        // 程序源文件指针
 bool batch_mode = false;                      // sdb模式
 
-uint32_t pc = 0;
-uint32_t inst = 0;
-
 uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};// 内存变量
 const char *regs[] = {
     "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",

@@ -27,42 +27,35 @@ static void print_iringbuf()
     printf("\n");
 }
 
-extern "C" void itrace_get_pc_inst(uint32_t pc_DPIC, uint32_t inst_DPIC) 
-{
-  pc = pc_DPIC;
-  inst = inst_DPIC;
-}
 
-void Itrace(Vysyx_25050136_NPC *ysyx_25050136_NPC)
+void Itrace(uint32_t inst_in, uint32_t pc_in)
 {
-#ifdef CONFIG_ITRACE
+  printf("inst = %08x, pc =%08x\n", inst_in, pc_in);
+    // char *p = logbuf;
+    // p += snprintf(p, sizeof(logbuf), "0x%08x:", pc);
+    // int ilen = 4;
+    // int i;
+    // uint8_t *inst_s = (uint8_t *)&inst;
+    // for (i = ilen - 1; i >= 0; i --) {
+    //   p += snprintf(p, 4, " %02x", inst_s[i]);
+    // }
+    // int ilen_max = 4;
+    // int space_len = ilen_max - ilen;
+    // if (space_len < 0) space_len = 0;
+    // space_len = space_len * 3 + 1;
+    // memset(p, ' ', space_len);
+    // p += space_len;
+    // disassemble(logbuf, sizeof(logbuf), pc, inst_s, 4);
+    // 这里也是IRINGBUF部分的代码
+    //===============================================
+    // IRINGBUF.now_p = IRINGBUF.p;
+    // strcpy(IRINGBUF.iringbuf[IRINGBUF.p], logbuf);
+    // if(IRINGBUF.p < IRINGBUF_DEEPTH - 1)
+    //   IRINGBUF.p++;
+    // else
+    //   IRINGBUF.p = 0;
+    //===============================================
 
-printf("inst = %08x, pc =%08x\n", inst, pc);
-  // char *p = logbuf;
-  // p += snprintf(p, sizeof(logbuf), "0x%08x:", pc);
-  // int ilen = 4;
-  // int i;
-  // uint8_t *inst_s = (uint8_t *)&inst;
-  // for (i = ilen - 1; i >= 0; i --) {
-  //   p += snprintf(p, 4, " %02x", inst_s[i]);
-  // }
-  // int ilen_max = 4;
-  // int space_len = ilen_max - ilen;
-  // if (space_len < 0) space_len = 0;
-  // space_len = space_len * 3 + 1;
-  // memset(p, ' ', space_len);
-  // p += space_len;
-  // disassemble(logbuf, sizeof(logbuf), pc, inst_s, 4);
-  // 这里也是IRINGBUF部分的代码
-  //===============================================
-  // IRINGBUF.now_p = IRINGBUF.p;
-  // strcpy(IRINGBUF.iringbuf[IRINGBUF.p], logbuf);
-  // if(IRINGBUF.p < IRINGBUF_DEEPTH - 1)
-  //   IRINGBUF.p++;
-  // else
-  //   IRINGBUF.p = 0;
-  //===============================================
-#endif
 }
 
 void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
@@ -89,9 +82,6 @@ void cpu_exec_once(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
     ysyx_25050136_NPC->clk ^= 1;
     // 计算电路状态
     ysyx_25050136_NPC->eval();
-#ifdef CONFIG_ITRACE
-    Itrace(ysyx_25050136_NPC);
-#endif
     // 复位
     reset(ysyx_25050136_NPC, sim_time);
     // 取指
@@ -122,9 +112,22 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
       printf("你的程序已经运行结束了\n");
       break;
     }
-    
     cpu_exec_once(ysyx_25050136_NPC, tfp);
+#ifdef CONFIG_ITRACE
+    uint32_t pc,inst;
+    if (pc_pre == 0x80000000)
+    {
+      pc = 0x80000000;
+      inst = *(uint32_t *)(pmem + pc - CONFIG_MBASE);
+      Itrace(pc, inst);
+      printf("%s\n",logbuf);      
+    }
+    pc = ysyx_25050136_NPC->pc_o;
+    inst = ysyx_25050136_NPC->inst_i;
+    Itrace(pc, inst);
     printf("%s\n",logbuf);
+#endif
+    
   }
 }
 

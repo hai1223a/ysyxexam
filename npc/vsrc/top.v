@@ -1,5 +1,5 @@
 `include "config.v"
-import "DPI-C" function void itrace_get_pc_inst(input int pc_DPIC, input int inst_DPIC);
+// import "DPI-C" function void itrace_get_pc_inst(input int pc_DPIC, input int inst_DPIC);
 module ysyx_25050136_NPC
 #(
     TOP_ADDR_WIDTH = 5,
@@ -42,9 +42,9 @@ wire ex2if_jump_en_o;
 //========================================
 // 顶层一些操作
 //========================================
-always @(*) begin
-    itrace_get_pc_inst(pc_o, inst_i);
-end
+// always @(*) begin
+//     itrace_get_pc_inst(pc_o, inst_i);
+// end
 
 //========================================
 // 子模块
