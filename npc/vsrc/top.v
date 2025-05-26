@@ -38,9 +38,16 @@ wire [TOP_DATA_WIDTH-1:0] ex2reg_gpr_data_o;
 wire [TOP_DATA_WIDTH-1:0] ex2if_jump_addr_o;
 wire ex2if_jump_en_o;
 
-itrace_get_pc_inst(pc_o, inst_i);
+
 //========================================
 // 顶层一些操作
+//========================================
+always @(*) begin
+    itrace_get_pc_inst(pc_o, inst_i);
+end
+
+//========================================
+// 子模块
 //========================================
 ysyx_25050136_IF u_ysyx_25050136_IF(
     .clk             	(clk                ),
