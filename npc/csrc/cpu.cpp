@@ -33,6 +33,7 @@ uint32_t inst__ = *(uint32_t *)(pmem + pc__ - CONFIG_MBASE);
 
 void Itrace(uint32_t inst_in, uint32_t pc_in)
 {
+    disassemble(logbuf, sizeof(logbuf), pc_in, (uint8_t *)&inst_in, 4);
     // char *p = logbuf;
     // p += snprintf(p, sizeof(logbuf), "0x%08x:", pc_in);
     // int ilen = 4;
@@ -118,7 +119,7 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
     }
     cpu_exec_once(ysyx_25050136_NPC, tfp);
 #ifdef CONFIG_ITRACE
-    Itrace(pc__, inst__);
+    Itrace(inst__, pc__);
     // if(inst_num < PRINT_INST_NUM)
     //   printf("%s\n", logbuf);
 #endif
