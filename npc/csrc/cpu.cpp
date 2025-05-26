@@ -47,7 +47,7 @@ void Itrace(uint32_t inst_in, uint32_t pc_in)
     space_len = space_len * 3 + 1;
     memset(p, ' ', space_len);
     p += space_len;
-    disassemble(logbuf, sizeof(logbuf), pc_in, inst_s, 4);
+    disassemble(p, logbuf + sizeof(logbuf) - p, pc_in, inst_s, 4);
     // 这里也是IRINGBUF部分的代码
     // ===============================================
     IRINGBUF.now_p = IRINGBUF.p;
