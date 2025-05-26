@@ -128,6 +128,7 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
       static uint32_t data_new[NR_WP] = {0};
       int index[NR_WP] = {0};
       scan_watchpoint(ysyx_25050136_NPC, data_new, index);
+      bool find = false;
       for (int i = 0; i < NR_WP; i++)
       {
         if(index[i])
@@ -136,10 +137,11 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
           {
             printf("监视点%d发生了变化\n", i);
             data_pre[i] = data_new[i];
-            break;
+            find = true;
           }
         }
       }
+      if(unlikely(find))  break;
     }
   }
 }
