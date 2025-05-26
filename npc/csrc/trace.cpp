@@ -61,7 +61,7 @@ char mtrace_buf[128] = {0};
 void add_mtrace(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 {
   char *p = mtrace_buf;
-  p += snprintf(p, sizeof(mtrace_buf), "0x%08:  ", ysyx_25050136_NPC->pc_o);
+  p += snprintf(p, sizeof(mtrace_buf), "0x%08x", ":  ", ysyx_25050136_NPC->pc_o);
   p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "%8x  ", ysyx_25050136_NPC->mem_addr_o);
   if(ysyx_25050136_NPC->mem_wen_o)
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "write  %d     %x", ysyx_25050136_NPC->mem_len_o, ysyx_25050136_NPC->mem_wdata_o);
