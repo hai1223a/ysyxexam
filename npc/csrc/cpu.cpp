@@ -85,10 +85,7 @@ void cpu_exec_once(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
 {
   while (cpu_run)
   {
-    // 模拟时钟反转
-    ysyx_25050136_NPC->clk ^= 1;
-    // 计算电路状态
-    // ysyx_25050136_NPC->eval();
+
     // 复位
     reset(ysyx_25050136_NPC, sim_time);
     // 取指
@@ -98,6 +95,10 @@ void cpu_exec_once(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
     // 计算电路状态
     if(ysyx_25050136_NPC->inst_i == 0x00100073) cpu_run = false;
     ysyx_25050136_NPC->eval();
+        // 模拟时钟反转
+        ysyx_25050136_NPC->clk ^= 1;
+        // 计算电路状态
+        ysyx_25050136_NPC->eval();
     // 记录波形数据
     tfp->dump(sim_time);
     // 推动仿真进行
