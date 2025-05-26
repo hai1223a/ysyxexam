@@ -40,6 +40,7 @@ void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC)
   if(!ysyx_25050136_NPC->reset && (ysyx_25050136_NPC->mem_ren_o || ysyx_25050136_NPC->mem_wen_o)) {
 #ifdef CONFIG_MTRACE
     add_mtrace(ysyx_25050136_NPC);
+    printf_mtrace()
 #endif
     if(likely(in_pmem(ysyx_25050136_NPC->mem_addr_o))) {
       uint8_t *addr = pmem + ysyx_25050136_NPC->mem_addr_o - CONFIG_MBASE;
