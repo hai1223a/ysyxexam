@@ -15,20 +15,20 @@ VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-ini
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
 				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"		
 
-ARGS +=
+ARGS += -i /home/yunhai/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 all: rum
 	@echo "Write this Makefile by your self."
 
 run:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	$(VERILATOR) $(VERILATOR_FLAGS) $(VSRCS) $(CSRCS)
-	@./obj_dir/V$(TOPNAME) -i /home/yunhai/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
+	@./obj_dir/V$(TOPNAME) $(ARGS)
 	@gtkwave waveform.fst
 
 gdb:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	$(VERILATOR) $(VERILATOR_FLAGS)
-	@gdb --args  obj_dir/V$(TOPNAME) -i /home/yunhai/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
+	@gdb --args  obj_dir/V$(TOPNAME) $(ARGS)
 
 clean:
 	rm -rf obj_dir
