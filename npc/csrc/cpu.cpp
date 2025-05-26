@@ -27,6 +27,8 @@ static void print_iringbuf()
     printf("\n");
 }
 
+uint32_t pc__ = 0x80000000;
+uint32_t inst__ = *(uint32_t *)(pmem + pc__ - CONFIG_MBASE);
 
 void Itrace(uint32_t inst_in, uint32_t pc_in)
 {
@@ -98,6 +100,8 @@ void cpu_exec_once(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
     sim_time++;
     // 指令计算
     if(sim_time >= (reset_time + stop_time) && ysyx_25050136_NPC->pc_o != pc_pre) {
+      pc__ = pc_pre;
+      inst__ = *(uint32_t *)(pmem + pc__ - CONFIG_MBASE);
       pc_pre = ysyx_25050136_NPC->pc_o;
       break;
     }
@@ -114,16 +118,7 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
     }
     cpu_exec_once(ysyx_25050136_NPC, tfp);
 #ifdef CONFIG_ITRACE
-    uint32_t pc,inst;
-    if (pc_pre == 0x80000004)
-    {
-      pc = 0x80000000;
-      inst = *(uint32_t *)(pmem + pc - CONFIG_MBASE);
-      Itrace(pc, inst);
-    }
-    pc = ysyx_25050136_NPC->pc_o;
-    inst = ysyx_25050136_NPC->inst_i;
-    Itrace(pc, inst);
+    Itrace(pc__, inst__);
 #endif
     
   }
