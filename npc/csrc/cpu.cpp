@@ -60,7 +60,7 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
     cpu_exec_once(ysyx_25050136_NPC, tfp);
 #ifdef CONFIG_ITRACE
     Itrace(inst__, pc__);
-    if(inst_num < PRINT_INST_NUM)
+    // if(inst_num < PRINT_INST_NUM)
       printf("%s\n", itrace_buf);
 #endif
     if(likely(!batch_mode)) {
