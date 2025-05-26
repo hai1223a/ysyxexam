@@ -9,6 +9,7 @@ struct
 } IRINGBUF = {0};
 
 char logbuf[128] = {0};
+uint32_t pc,inst;
 
 static void print_iringbuf()
 {
@@ -26,16 +27,21 @@ static void print_iringbuf()
     printf("\n");
 }
 
+extern "C" void itrace_get_pc_inst(int pc, int inst) 
+{
+  pc = pc;
+  inst = inst;
+}
+
 void trace_and_difftest(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 {
 #ifdef CONFIG_ITRACE
-  uint32_t pc = ysyx_25050136_NPC->pc_o;
-  uint32_t inst_i = ysyx_25050136_NPC->inst_i;
+
   char *p = logbuf;
   p += snprintf(p, sizeof(logbuf), "0x%08x:", pc);
   int ilen = 4;
   int i;
-  uint8_t *inst_s = (uint8_t *)&inst_i;
+  uint8_t *inst_s = (uint8_t *)&inst;
   for (i = ilen - 1; i >= 0; i --) {
     p += snprintf(p, 4, " %02x", inst_s[i]);
   }

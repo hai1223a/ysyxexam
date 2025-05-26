@@ -1,4 +1,5 @@
 `include "config.v"
+import "DPI-C" function void itrace_get_pc_inst(input int pc, input int inst);
 module ysyx_25050136_NPC
 #(
     TOP_ADDR_WIDTH = 5,
@@ -37,10 +38,9 @@ wire [TOP_DATA_WIDTH-1:0] ex2reg_gpr_data_o;
 wire [TOP_DATA_WIDTH-1:0] ex2if_jump_addr_o;
 wire ex2if_jump_en_o;
 
+itrace_get_pc_inst(pc_o, inst_i);
 //========================================
 // 顶层一些操作
-//========================================
-
 //========================================
 ysyx_25050136_IF u_ysyx_25050136_IF(
     .clk             	(clk                ),
