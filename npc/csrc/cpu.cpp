@@ -115,7 +115,7 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
     cpu_exec_once(ysyx_25050136_NPC, tfp);
 #ifdef CONFIG_ITRACE
     uint32_t pc,inst;
-    if (pc_pre == 0x80000000)
+    if (pc == 0x80000004)
     {
       pc = 0x80000000;
       inst = *(uint32_t *)(pmem + pc - CONFIG_MBASE);

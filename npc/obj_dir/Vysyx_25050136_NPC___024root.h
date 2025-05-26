@@ -6,15 +6,12 @@
 #define VERILATED_VYSYX_25050136_NPC___024ROOT_H_  // guard
 
 #include "verilated.h"
-class Vysyx_25050136_NPC___024unit;
 
 
 class Vysyx_25050136_NPC__Syms;
 
 class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC___024root final : public VerilatedModule {
   public:
-    // CELLS
-    Vysyx_25050136_NPC___024unit* __PVT____024unit;
 
     // DESIGN SPECIFIC STATE
     VL_IN8(clk,0,0);
