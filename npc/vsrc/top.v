@@ -1,5 +1,5 @@
 `include "config.v"
-import "DPI-C" function void itrace_get_pc_inst(input int pc, input int inst);
+import "DPI-C" function void itrace_get_pc_inst(output int pc, input int inst);
 module ysyx_25050136_NPC
 #(
     TOP_ADDR_WIDTH = 5,
