@@ -31,5 +31,6 @@ extern char *img_file;                                         // 程序源文�
 extern bool batch_mode;                                        // sdb模式
 extern uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096)));// 内存变量
 extern const char *regs[];
-
+extern uint32_t pc;
+extern uint32_t inst;
 #endif
