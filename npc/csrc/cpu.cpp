@@ -1,65 +1,5 @@
 #include "../include/common.h"
 
-#define IRINGBUF_DEEPTH 10
-#define PRINT_INST_NUM 10
-struct
-{
-    uint8_t now_p;
-    uint8_t p;
-    char iringbuf[IRINGBUF_DEEPTH][128];
-} IRINGBUF = {0};
-
-char logbuf[128] = {0};
-
-
-static void print_iringbuf()
-{
-    printf("iringbuf打印\n");
-    printf("如果是发生了 HIT BAD TRAP 或者 ABORT, 则--->指向发生问题的指令\n");
-    printf("如果是发生了 assert 0 报错的话, 则--->指向发生问题的指令的上一条指令\n");
-    for (int i = 0; i < IRINGBUF_DEEPTH; i++)
-    {
-        if (i == IRINGBUF.now_p)
-            printf("--->");
-        else
-            printf(">>>>");
-        puts(IRINGBUF.iringbuf[i]);
-    }
-    printf("\n");
-}
-
-uint32_t pc__ = 0x80000000;
-uint32_t inst__ = *(uint32_t *)(pmem + pc__ - CONFIG_MBASE);
-
-void Itrace(uint32_t inst_in, uint32_t pc_in)
-{
-    char *p = logbuf;
-    p += snprintf(p, sizeof(logbuf), "0x%08x:", pc_in);
-    int ilen = 4;
-    int i;
-    uint8_t *inst_s = (uint8_t *)&inst_in;
-    for (i = ilen - 1; i >= 0; i --) {
-      p += snprintf(p, 4, " %02x", inst_s[i]);
-    }
-    int ilen_max = 4;
-    int space_len = ilen_max - ilen;
-    if (space_len < 0) space_len = 0;
-    space_len = space_len * 3 + 1;
-    memset(p, ' ', space_len);
-    p += space_len;
-    disassemble(p, logbuf + sizeof(logbuf) - p, pc_in, inst_s, 4);
-    // 这里也是IRINGBUF部分的代码
-    // ===============================================
-    IRINGBUF.now_p = IRINGBUF.p;
-    strcpy(IRINGBUF.iringbuf[IRINGBUF.p], logbuf);
-    if(IRINGBUF.p < IRINGBUF_DEEPTH - 1)
-      IRINGBUF.p++;
-    else
-      IRINGBUF.p = 0;
-    // ===============================================
-
-}
-
 void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
 {
   ysyx_25050136_NPC->reset = 0;
@@ -76,6 +16,7 @@ void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
     ysyx_25050136_NPC->inst_i = 0;
     ysyx_25050136_NPC->mem_rdata_i = 0;
 }
+
 void cpu_exec_once(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
 {
   while (cpu_run)
@@ -119,11 +60,10 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
     cpu_exec_once(ysyx_25050136_NPC, tfp);
 #ifdef CONFIG_ITRACE
     Itrace(inst__, pc__);
-    // if(inst_num < PRINT_INST_NUM)
+    if(inst_num < PRINT_INST_NUM)
       printf("%s\n", logbuf);
 #endif
-    if(likely(!batch_mode))
-    {
+    if(likely(!batch_mode)) {
       static uint32_t data_pre[NR_WP] = {0};
       static uint32_t data_new[NR_WP] = {0};
       int index[NR_WP] = {0};
@@ -143,6 +83,7 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
       }
       if(unlikely(find))  break;
     }
+  
   }
 }
 

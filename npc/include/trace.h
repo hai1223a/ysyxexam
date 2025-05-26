@@ -1,0 +1,16 @@
+#ifndef __TRACE_H__
+#define __TRACE_H__
+
+// itrace
+#define IRINGBUF_DEEPTH 10
+#define PRINT_INST_NUM 10
+extern char logbuf[128];
+extern uint32_t pc__;
+extern uint32_t inst__;
+void Itrace(uint32_t inst_in, uint32_t pc_in);
+void print_iringbuf();
+// mtrace
+
+// ftrace
+
+#endif

@@ -15,6 +15,7 @@
 #include "macro.h"
 #include "disasm.h"
 #include "watchpoint.h"
+#include "trace.h"
 //=====================================================
 // 全局变量和宏定义
 //=====================================================
@@ -23,6 +24,7 @@
 #define NR_WP 5
 
 #define CONFIG_ITRACE
+#define CONFIG_MTRACE
 
 extern bool cpu_run;                                           // CPU仿真运行状态
 extern vluint64_t sim_time;                                    // 记录仿真时间
