@@ -3,7 +3,7 @@
 uint8_t* guest_to_host(uint32_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 bool in_pmem(uint32_t paddr) { return paddr - CONFIG_MBASE < CONFIG_MSIZE;}
 
-void pmem_init()
+long pmem_init()
 {
   if (!img_file){
     uint32_t *pmem_w = (uint32_t *)pmem;
@@ -24,6 +24,7 @@ void pmem_init()
   int ret = fread(guest_to_host(CONFIG_MBASE), size, 1, fp);
   assert(ret == 1);
   fclose(fp);
+  return size;
 }
 
 void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC) 

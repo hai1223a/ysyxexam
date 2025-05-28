@@ -21,7 +21,7 @@ static int parse_args(int argc, char *argv[]) {
       case 'b': batch_mode = true; break;
       case 'p': break;
       case 'l': break;
-      case 'd': break;
+      case 'd': ref_so_file = optarg; break;
       case 'e': break;
       case 'g': break;
       case 'i': img_file = optarg; break;

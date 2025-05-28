@@ -9,7 +9,8 @@ void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
 
 void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
     stop_time = sim_time;
-    pmem_init();
+    long size = pmem_init();
+    init_difftest(ref_so_file, size, 1234, ysyx_25050136_NPC);
     pc_pre = 0x80000000;
     cpu_run = true;
     ysyx_25050136_NPC->clk = 0;
@@ -62,6 +63,9 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
     Itrace(inst__, pc__);
     // if(inst_num < PRINT_INST_NUM)
       printf("%s\n", itrace_buf);
+#endif
+#ifdef CONFIG_DIFFTEST
+    difftest_step(pc_pre, ysyx_25050136_NPC);
 #endif
     if(likely(!batch_mode)) {
       static uint32_t data_pre[NR_WP] = {0};
