@@ -44,7 +44,6 @@ void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 {
   if(!ysyx_25050136_NPC->reset && (ysyx_25050136_NPC->mem_ren_o || ysyx_25050136_NPC->mem_wen_o)) {
-    printf("a\n");
     #ifdef CONFIG_MTRACE
     if(!ysyx_25050136_NPC->clk) {
       add_mtrace(ysyx_25050136_NPC);

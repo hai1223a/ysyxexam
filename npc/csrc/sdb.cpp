@@ -54,8 +54,6 @@ static char* rl_gets() {
     if (!strcmp(args, "r"))
     {
       printf_regs(ysyx_25050136_NPC);
-      ysyx_25050136_NPC->rootp->ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[2] = 0x12345678;
-      printf_regs(ysyx_25050136_NPC);
     }
     else if (!strcmp(args, "w"))
     {
