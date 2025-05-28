@@ -105,10 +105,9 @@ void npc_end()
 }
 
 static void welcome() {
-  Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
-  IFDEF(CONFIG_TRACE, Log("If trace is enabled, a log file will be generated "
-        "to record the trace. This may lead to a large log file. "
-        "If it is not necessary, you can disable it in menuconfig"));
+  Log("ITrace: %s", MUXDEF(CONFIG_ITRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  Log("MTrace: %s", MUXDEF(CONFIG_MTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  Log("FTrace: %s", MUXDEF(CONFIG_FTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
   Log("Build time: %s, %s", __TIME__, __DATE__);
   printf("Welcome to %s-NEMU!\n", ANSI_FMT(str(__GUEST_ISA__), ANSI_FG_YELLOW ANSI_BG_RED));
   printf("For help, type \"help\"\n");
@@ -133,6 +132,7 @@ void init_main(int argc, char **argv)
 #endif
   // CPU初始化
   cpu_init();
-  IFDEF(CONFIG_ITRACE, welcome());
+  // 
+  welcome();
 }
 
