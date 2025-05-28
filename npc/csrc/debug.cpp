@@ -133,6 +133,6 @@ void init_main(int argc, char **argv)
 #endif
   // CPU初始化
   cpu_init();
-  welcome();
+  IFDEF(CONFIG_ITRACE, welcome());
 }
 
