@@ -49,10 +49,10 @@ __EXPORT void difftest_regcpy(void *dut, bool direction) {
     for (size_t i = 0; i < 16; i++)
     {
       cpu.gpr[i] = *(word_t *)(dut + i);
-      printf("dut[%d] = %u\n", i,*(word_t *)(dut + i));
+      printf("dut[%lu] = %u\n", i,*(word_t *)(dut + i));
     }
     cpu.pc = *(word_t *)(dut + 16);
-    printf("dut[16] = %u\n", *(word_t *)(dut + 16))
+    printf("dut[16] = %u\n", *(word_t *)(dut + 16));
   }
 }
 
