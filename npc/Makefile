@@ -29,7 +29,7 @@ run:
 
 gdb:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(VERILATOR) $(VERILATOR_FLAGS)
+	$(VERILATOR) $(VERILATOR_FLAGS) $(VSRCS) $(CSRCS)
 	@gdb --args  obj_dir/V$(TOPNAME) $(ARGS)
 
 clean:
