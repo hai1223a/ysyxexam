@@ -82,6 +82,6 @@ void cpu_exec(uint32_t inst_num)
 
 int batch_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
 {
-  cpu_exec(-1);
+  cpu_exec(1);
   return 0;
 }
