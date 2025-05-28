@@ -39,8 +39,6 @@ do { \
     __FILE__, __LINE__, __func__, ## __VA_ARGS__); \
   } while (0)
 
-
-
 void init_main(int argc, char **argv);
 void npc_end();
 #endif

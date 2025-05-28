@@ -65,10 +65,10 @@ static void init_verilator(int argc, char *argv[])
 //=====================================================
 void printf_statu()
 {
-  uint32_t gpr_a0 =  ysyx_25050136_NPC->rootp->ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[10];
-  Log("NPC 的结束状态是%s, PC = 0x%x\n", (gpr_a0 == 0) ? 
-          ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED),
-          ysyx_25050136_NPC->pc_o);
+    uint32_t gpr_a0 =  ysyx_25050136_NPC->rootp->ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[10];
+    Log("NPC 的结束状态是%s, PC = 0x%x\n", (gpr_a0 == 0) ? 
+            ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED),
+            ysyx_25050136_NPC->pc_o);
 }
 
 void npc_end()
