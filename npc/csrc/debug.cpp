@@ -104,6 +104,15 @@ void npc_end()
   delete ysyx_25050136_NPC;
 }
 
+static void welcome() {
+  Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  IFDEF(CONFIG_TRACE, Log("If trace is enabled, a log file will be generated "
+        "to record the trace. This may lead to a large log file. "
+        "If it is not necessary, you can disable it in menuconfig"));
+  Log("Build time: %s, %s", __TIME__, __DATE__);
+  printf("Welcome to %s-NEMU!\n", ANSI_FMT(str(__GUEST_ISA__), ANSI_FG_YELLOW ANSI_BG_RED));
+  printf("For help, type \"help\"\n");
+}
 //=====================================================
 // 调试相关函数
 //=====================================================
@@ -119,10 +128,10 @@ void init_main(int argc, char **argv)
   init_verilator(argc, argv);
   // 加载内存
   long size = init_pmem();
+#ifdef CONFIG_ITRACE
+  init_disasm();
+#endif
   // CPU初始化
   cpu_init();
-// #ifdef 
-//   init_disasm();
-// #endif
 }
 
