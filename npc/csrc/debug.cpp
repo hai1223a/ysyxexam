@@ -50,9 +50,9 @@ static void init_verilator(int argc, char *argv[])
     // 传递参数给verilator,建议在创建任何模型之前使用
     Verilated::commandArgs(argc, argv);
     // 创建一个fst波形文件指针
-    VerilatedFstC *tfp = new VerilatedFstC;
+    tfp = new VerilatedFstC;
     // 构建一个名为ysyx_25050136_NPC的仿真模型
-    Vysyx_25050136_NPC *ysyx_25050136_NPC = new Vysyx_25050136_NPC;
+    ysyx_25050136_NPC = new Vysyx_25050136_NPC;
     // 启用跟踪
     Verilated::traceEverOn(true);
     // 采样深度为5
