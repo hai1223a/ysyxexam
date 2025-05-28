@@ -9,7 +9,7 @@ int main(int argc, char **argv)
     batch_mainloop(ysyx_25050136_NPC,tfp);
   else{
     init_sdb();
-    sdb_mainloop(ysyx_25050136_NPC,tfp);
+    sdb_mainloop();
   }  
   npc_end();
   // 结束
