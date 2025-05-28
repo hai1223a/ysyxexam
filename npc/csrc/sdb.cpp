@@ -19,19 +19,21 @@ static char* rl_gets() {
     return line_read;
   }
   
-  static int cmd_c(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
+  static int cmd_c(char *args) {
+    if(npcstate.state == NPC_END) {printf("程序已经结束了\n");}
+    if(npcstate.state == NPC_STOP) {npcstate.state == NPC_RUNNING;}
     cpu_exec(-1);
     return 0;
   }
   
   
-  static int cmd_q(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
+  static int cmd_q(char *args) {
     return -1;
   }
   
-  static int cmd_help(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp);
+  static int cmd_help(char *args);
   
-  static int cmd_si(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
+  static int cmd_si(char *args) {
     uint64_t num_inst;
     if(likely(!args)){
       num_inst = 1;
@@ -43,7 +45,7 @@ static char* rl_gets() {
     return 0;
   }
   
-  static int cmd_info(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
+  static int cmd_info(char *args) {
     if (!args) return 0;
     if (!strcmp(args, "r"))
     {
@@ -58,7 +60,7 @@ static char* rl_gets() {
     return 0;
   }
   
-  static int cmd_x(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp){
+  static int cmd_x(char *args){
     int num_word;
     char base_addr[1100] = {};
     sscanf(args, "%d %[^\n]", &num_word, base_addr);
@@ -75,7 +77,7 @@ static char* rl_gets() {
     return 0;
   }
   
-  static int cmd_p(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp){
+  static int cmd_p(char *args){
     bool success = true;
     uint32_t result = 0;
     if(args) result = expr(ysyx_25050136_NPC, args, &success);
@@ -84,7 +86,7 @@ static char* rl_gets() {
     return 0;
   }
   
-  static int cmd_w(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
+  static int cmd_w(char *args) {
     if (!args)
     {
       printf("请输入要监视的表达式\n");
@@ -94,7 +96,7 @@ static char* rl_gets() {
     return 0;
   }
   
-  static int cmd_d(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
+  static int cmd_d(char *args) {
     if (!args)
     {
       printf("请输入要删除的监视点序号\n");
@@ -106,9 +108,9 @@ static char* rl_gets() {
     return 0;
   }
   
-  static int cmd_r(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
+  static int cmd_r(char *args) {
     cpu_init();
-    printf("CPU在 sim_time = %ld 时停止了一次\n", stop_time);
+    printf("CPU在 sim_time = %ld 时停止了一次\n", stop_time - 1);
     cpu_exec(-1);
     return 0;
   }
@@ -116,7 +118,7 @@ static char* rl_gets() {
   static struct {
     const char *name;
     const char *description;
-    int (*handler) (char *, Vysyx_25050136_NPC *, VerilatedFstC *);
+    int (*handler) (char *);
   } cmd_table [] = {
     { "help", "Display information about all supported commands", cmd_help },
     { "c", "Continue the execution of the program", cmd_c },
@@ -133,7 +135,7 @@ static char* rl_gets() {
   
   #define NR_CMD (int)(sizeof(cmd_table) / sizeof(cmd_table[0]))
   
-  static int cmd_help(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
+  static int cmd_help(char *args) {
     /* extract the first argument */
     char *arg = strtok(NULL, " ");
     int i;

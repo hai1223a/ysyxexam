@@ -78,6 +78,7 @@ static void init_verilator(int argc, char *argv[])
 //=====================================================
 void cpu_init()
 {
+  npcstate.state = NPC_RUNNING;
   stop_time = sim_time;
   pc_pre = RESET_VECTOR;
   cpu_run = true;
