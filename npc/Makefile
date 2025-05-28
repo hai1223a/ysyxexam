@@ -5,8 +5,9 @@ VSRCS = $(wildcard vsrc/*.v)
 # Wno-DECLFILENAME 表示禁用一种代码格式警告,该警告用于检查模块名和文件名的一致性
 # Wno-UNUSEDSIGNAL 表示禁用一种代码格式警告,该警告用于检查那些已定义未使用的信号
 # -fsanitize=address 用于检查段错误相关的代码
-CFLAGS += -g -fsanitize=address
-LDFLAGS += -lreadline -fsanitize=address
+BUILD_FLAGS += -fsanitize=address
+CFLAGS +=  $(BUILD_FLAGS)
+LDFLAGS += -lreadline $(BUILD_FLAGS)
 VERILATOR_INC_PATH = -Ivsrc
 VERILATOR = verilator
 VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
