@@ -107,7 +107,7 @@ static char* rl_gets() {
   }
   
   static int cmd_r(char *args, Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
-    cpu_init(ysyx_25050136_NPC, tfp);
+    cpu_init();
     printf("CPU在 sim_time = %ld 时停止了一次\n", stop_time);
     cpu_exec(ysyx_25050136_NPC, tfp, -1);
     return 0;
@@ -157,7 +157,6 @@ static char* rl_gets() {
   }
   
   void sdb_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
-    cpu_init(ysyx_25050136_NPC, tfp);
     for (char *str; (str = rl_gets()) != NULL; ) {
       char *str_end = str + strlen(str);
   
