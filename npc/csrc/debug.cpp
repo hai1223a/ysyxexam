@@ -63,7 +63,7 @@ static void init_verilator(int argc, char *argv[])
 //=====================================================
 // 一些输出日志函数
 //=====================================================
-void printf_statu(Vysyx_25050136_NPC *ysyx_25050136_NPC)
+void printf_statu()
 {
   uint32_t gpr_a0 =  ysyx_25050136_NPC->rootp->ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[10];
   Log("NPC 的结束状态是%s, PC = 0x%x\n", (gpr_a0 == 0) ? 
@@ -73,6 +73,7 @@ void printf_statu(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 
 void npc_end()
 {
+    printf_statu();
     // 关闭波形文件
     tfp->close();
     // 删除指针
