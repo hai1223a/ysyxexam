@@ -40,8 +40,7 @@ do { \
   } while (0)
 
 
-VerilatedFstC *tfp = NULL;
-Vysyx_25050136_NPC *ysyx_25050136_NPC = NULL;
+
 void init_main(int argc, char **argv);
 void npc_end();
 #endif
