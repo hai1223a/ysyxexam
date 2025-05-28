@@ -1,5 +1,6 @@
 #include "../include/common.h"
 
+NPCState npcstate = {.state = NPC_RUNNING};
 bool cpu_run = true;                          // CPU仿真运行状态
 vluint64_t sim_time = 0;                      // 记录仿真时间
 vluint64_t reset_time = 10;                   // 复位时间

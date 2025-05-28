@@ -12,22 +12,32 @@
 #include "cpu.h"
 #include "expr.h"
 #include "memory.h"
-#include "macro.h"
+#include "debug.h"
 #include "disasm.h"
 #include "watchpoint.h"
 #include "trace.h"
 #include "dut.h"
 //=====================================================
-// 全局变量和宏定义
+// 配置选项
 //=====================================================
-#define CONFIG_MSIZE 0x8000000                // 内存大小
-#define CONFIG_MBASE 0x80000000               // 内存基地址
-#define NR_WP 5
-
 #define CONFIG_ITRACE
-// #define CONFIG_MTRACE
+#define CONFIG_MTRACE
+#define CONFIG_FTRACE
 #define CONFIG_DIFFTEST
+//=====================================================
+// 状态
+//=====================================================
+enum { NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT };
 
+typedef struct {
+  int state;
+  uint32_t halt_pc;
+  uint32_t halt_ret;
+} NPCState;
+
+extern NPCState npcstate;                                       
+extern VerilatedFstC *tfp;
+extern Vysyx_25050136_NPC *ysyx_25050136_NPC;
 extern bool cpu_run;                                           // CPU仿真运行状态
 extern vluint64_t sim_time;                                    // 记录仿真时间
 extern vluint64_t reset_time;                                  // 复位时间
