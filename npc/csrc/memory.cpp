@@ -3,7 +3,7 @@
 uint8_t* guest_to_host(uint32_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 bool in_pmem(uint32_t paddr) { return paddr - CONFIG_MBASE < CONFIG_MSIZE;}
 
-long pmem_init()
+long init_pmem()
 {
   if (!img_file){
     uint32_t *pmem_w = (uint32_t *)pmem;
@@ -13,16 +13,21 @@ long pmem_init()
     *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
     *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
     *pmem_w++ = 0x00100073; //ebreak
+    Log("没有给源文件, 程序使用了内置的代码.");
     return 0;
   }
   FILE *fp = fopen(img_file, "rb");
-  assert(fp);
+  Assert(fp, "Can not open '%s'", img_file);
+
   fseek(fp, 0, SEEK_END);
   long size = ftell(fp);
-  printf("程序源文件是%s, 文件大小是%ld byte.\n", img_file, size);
+
+  Log("源文件是 %s, 文件大小为 %ld byte.", img_file, size);
+
   fseek(fp, 0, SEEK_SET);
-  int ret = fread(guest_to_host(CONFIG_MBASE), size, 1, fp);
+  int ret = fread(guest_to_host(RESET_VECTOR), size, 1, fp);
   assert(ret == 1);
+
   fclose(fp);
   return size;
 }

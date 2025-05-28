@@ -3,9 +3,10 @@
 
 #define CONFIG_MSIZE 0x8000000                // 内存大小
 #define CONFIG_MBASE 0x80000000               // 内存基地址
+#define RESET_VECTOR 0x80000000               // 程序复位地址
 
 uint8_t* guest_to_host(uint32_t paddr);
-long pmem_init();
+long init_pmem();
 void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC);
 void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC);
 uint32_t vaddr_read(uint32_t paddr, int len);

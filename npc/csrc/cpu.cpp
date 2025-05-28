@@ -9,7 +9,7 @@ void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
 
 void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
     stop_time = sim_time;
-    long size = pmem_init();
+    long size = init_pmem();
     pc_pre = 0x80000000;
     cpu_run = true;
     ysyx_25050136_NPC->clk = 0;

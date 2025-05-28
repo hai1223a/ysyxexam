@@ -15,7 +15,7 @@
 
 #include <dlfcn.h>
 #include "../include/common.h"
-#define RESET_VECTOR 0x80000000
+
 enum { DIFFTEST_TO_DUT, DIFFTEST_TO_REF };
 
 void (*ref_difftest_memcpy)(uint32_t addr, void *buf, size_t n, bool direction) = NULL;
