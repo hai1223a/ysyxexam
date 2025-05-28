@@ -13,7 +13,7 @@ long pmem_init()
     *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
     *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
     *pmem_w++ = 0x00100073; //ebreak
-    return;
+    return 0;
   }
   FILE *fp = fopen(img_file, "rb");
   assert(fp);
