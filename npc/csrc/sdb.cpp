@@ -22,6 +22,7 @@ static char* rl_gets() {
   static int cmd_c(char *args) {
     if(npcstate.state == NPC_END) {printf("程序已经结束了\n");}
     if(npcstate.state == NPC_STOP) {npcstate.state == NPC_RUNNING;}
+    printf("npcstate.state = %d", npcstate.state);
     cpu_exec(-1);
     return 0;
   }
