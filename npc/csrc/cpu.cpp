@@ -42,7 +42,7 @@ void cpu_exec(uint32_t inst_num)
 {
   for (uint32_t i = 0; i < inst_num; i++)
   {
-    if (!cpu_run)
+    if (npcstate.state == NPC_END)
     {
       printf("你的程序已经运行结束了\n");
       break;
