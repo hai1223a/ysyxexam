@@ -38,15 +38,13 @@ void cpu_exec_once()
     }
   }
 }
+
 void cpu_exec(uint32_t inst_num)
 {
   for (uint32_t i = 0; i < inst_num; i++)
   {
-    if (npcstate.state == NPC_END)
-    {
-      printf("你的程序已经运行结束了\n");
-      break;
-    }
+    if (npcstate.state == NPC_END || npcstate.state == NPC_STOP ||
+        npcstate.state == NPC_ABORT) { break; }
     cpu_exec_once();
 #ifdef CONFIG_ITRACE
     Itrace(inst__, pc__);
@@ -56,32 +54,12 @@ void cpu_exec(uint32_t inst_num)
 #ifdef CONFIG_DIFFTEST
     difftest_step(pc_pre, ysyx_25050136_NPC);
 #endif
-    if(likely(!batch_mode)) {
-      static uint32_t data_pre[NR_WP] = {0};
-      static uint32_t data_new[NR_WP] = {0};
-      int index[NR_WP] = {0};
-      scan_watchpoint(ysyx_25050136_NPC, data_new, index);
-      bool find = false;
-      for (int i = 0; i < NR_WP; i++)
-      {
-        if(index[i])
-        {
-          if(data_new[i] != data_pre[i])
-          {
-            printf("监视点%d发生了变化\n", i);
-            data_pre[i] = data_new[i];
-            find = true;
-          }
-        }
-      }
-      if(unlikely(find))  break;
-    }
-  
+    if(!batch_mode) scan_watchpoint();
   }
 }
 
 int batch_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
 {
-  cpu_exec(1);
+  cpu_exec(-1);
   return 0;
 }

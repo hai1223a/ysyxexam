@@ -138,18 +138,32 @@ void delete_watchpoint(int number) {
   free_wp(p);
 }
 
-void scan_watchpoint(Vysyx_25050136_NPC *ysyx_25050136_NPC, uint32_t *DATA, int *index) {
+void scan_watchpoint() {
+  static uint32_t data_pre[NR_WP] = {0};
+  static uint32_t data_new[NR_WP] = {0};
+  int index[NR_WP] = {0};
   if(!head) return;
   WP *p = head;
   bool success = true;
   while (p)
   {
     *(index + p->NO) = 1;
-    *(DATA + (p->NO)) = expr(ysyx_25050136_NPC, p->args, &success);
+    *(data_new + (p->NO)) = expr(ysyx_25050136_NPC, p->args, &success);
     Assert(success, "表达式计算失败");
     p = p->next;
+  }
+  for (int i = 0; i < NR_WP; i++)
+  {
+    if(index[i])
+    {
+      if(data_new[i] != data_pre[i])
+      {
+        printf("监视点%d发生了变化\n", i);
+        data_pre[i] = data_new[i];
+        npcstate.state = NPC_STOP;
+      }
+    }
   }
 }
 
 /* TODO: Implement the functionality of watchpoint */
-
