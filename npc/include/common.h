@@ -33,8 +33,9 @@ enum { NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT };
 typedef struct {
   int state;
   uint32_t halt_pc;
-  uint32_t halt_ret;
+  int halt_ret;
 } NPCState;
+void set_nemu_state(int state, uint32_t pc, int halt_ret);
 
 extern NPCState npcstate;                                       
 extern VerilatedFstC *tfp;

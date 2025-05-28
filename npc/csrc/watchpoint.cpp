@@ -148,7 +148,7 @@ void scan_watchpoint() {
   while (p)
   {
     *(index + p->NO) = 1;
-    *(data_new + (p->NO)) = expr(ysyx_25050136_NPC, p->args, &success);
+    *(data_new + (p->NO)) = expr(p->args, &success);
     Assert(success, "表达式计算失败");
     p = p->next;
   }

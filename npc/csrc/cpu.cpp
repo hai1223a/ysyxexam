@@ -22,7 +22,10 @@ void cpu_exec_once()
     // 访存
     pmem_read_write(ysyx_25050136_NPC);
     // 找到ebreak
-    if(ysyx_25050136_NPC->inst_i == 0x00100073) npcstate.state = NPC_END;
+    if (ysyx_25050136_NPC->inst_i == 0x00100073)
+    {
+      set_nemu_state(NPC_END, ysyx_25050136_NPC->pc_o, ysyx_25050136_NPC->rootp->ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[10]);
+    }
     // 计算电路状态
     ysyx_25050136_NPC->eval();
     // 记录波形数据
@@ -30,7 +33,8 @@ void cpu_exec_once()
     // 推动仿真进行
     sim_time++;
     // 指令计算
-    if(sim_time >= (reset_time + stop_time) && ysyx_25050136_NPC->pc_o != pc_pre) {
+    if (sim_time >= (reset_time + stop_time) && ysyx_25050136_NPC->pc_o != pc_pre)
+    {
       pc__ = pc_pre;
       inst__ = *(uint32_t *)(pmem + pc__ - CONFIG_MBASE);
       pc_pre = ysyx_25050136_NPC->pc_o;
@@ -44,17 +48,21 @@ void cpu_exec(uint32_t inst_num)
   for (uint32_t i = 0; i < inst_num; i++)
   {
     if (npcstate.state == NPC_END || npcstate.state == NPC_STOP ||
-        npcstate.state == NPC_ABORT) { break; }
+        npcstate.state == NPC_ABORT)
+    {
+      break;
+    }
     cpu_exec_once();
 #ifdef CONFIG_ITRACE
     Itrace(inst__, pc__);
     // if(inst_num < PRINT_INST_NUM)
-      printf("%s\n", itrace_buf);
+    printf("%s\n", itrace_buf);
 #endif
 #ifdef CONFIG_DIFFTEST
     difftest_step(pc_pre, ysyx_25050136_NPC);
 #endif
-    if(!batch_mode) scan_watchpoint();
+    if (!batch_mode)
+      scan_watchpoint();
   }
 }
 

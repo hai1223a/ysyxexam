@@ -65,8 +65,8 @@ void init_difftest(char *ref_so_file, long img_size, int port, Vysyx_25050136_NP
 }
 
 static void checkregs(CPU_state *ref, uint32_t pc, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
-  if (!isa_difftest_checkregs(ref, pc, ysyx_25050136_NPC)) {
-    printf_regs(ysyx_25050136_NPC);
+  if (!isa_difftest_checkregs(ref, pc)) {
+    printf_regs();
     Assert(0, "寄存器检查不通过\n");
   }
 }

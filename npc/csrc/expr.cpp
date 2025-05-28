@@ -284,7 +284,7 @@ void ckeck_expression(int p, int q) {
 // p: 表达式开始的位置指示
 // q: 表达式结束的位置指示
 // 例如:p = 0, q = 9, 表示由10个tokens组成的长表达式
-uint32_t eval(Vysyx_25050136_NPC *ysyx_25050136_NPC, int p, int q){
+uint32_t eval(int p, int q){
   if (p > q) {
     Assert(0, "输入表达式指示位置违规");
   }
@@ -299,7 +299,7 @@ uint32_t eval(Vysyx_25050136_NPC *ysyx_25050136_NPC, int p, int q){
     }
     else if(tokens[p].type == TK_REG) {
       bool success;
-      uint32_t value = reg_str2val(ysyx_25050136_NPC, tokens[p].str, &success);
+      uint32_t value = reg_str2val(tokens[p].str, &success);
       Assert(success, "取寄存器的表示错误了");
       return value;
     }
@@ -308,7 +308,7 @@ uint32_t eval(Vysyx_25050136_NPC *ysyx_25050136_NPC, int p, int q){
     }
   }
   else if (check_parentheses(p, q) == true) {
-    return eval(ysyx_25050136_NPC, p + 1, q - 1);
+    return eval(p + 1, q - 1);
   }
   else {
     ckeck_expression(p, q);
@@ -316,9 +316,9 @@ uint32_t eval(Vysyx_25050136_NPC *ysyx_25050136_NPC, int p, int q){
     // printf("op = %d\n",op);
     uint32_t val1 = 0,val2;
     if(tokens[op].type != TK_POINT) {
-      val1 = eval(ysyx_25050136_NPC, p, op - 1);
+      val1 = eval(p, op - 1);
     }
-    val2 = eval(ysyx_25050136_NPC, op + 1, q);
+    val2 = eval(op + 1, q);
 
     switch (tokens[op].type) {
       case '+': return val1 + val2;
@@ -340,14 +340,14 @@ uint32_t eval(Vysyx_25050136_NPC *ysyx_25050136_NPC, int p, int q){
   }
 }
 
-uint32_t expr(Vysyx_25050136_NPC *ysyx_25050136_NPC, char *e, bool *success) {
+uint32_t expr(char *e, bool *success) {
   int valid_tokens = 0;
   if (!make_token(e, &valid_tokens)) {
     *success = false;
     return 0;
   }
   *success = true;
-  uint32_t result = eval(ysyx_25050136_NPC, 0, valid_tokens-1);
+  uint32_t result = eval(0, valid_tokens-1);
   return result;
 
 }
