@@ -74,6 +74,18 @@ static void init_verilator(int argc, char *argv[])
   tfp->open("waveform.fst");
 }
 //=====================================================
+// 用于初始化cpu
+//=====================================================
+void cpu_init()
+{
+  stop_time = sim_time;
+  pc_pre = 0x80000000;
+  cpu_run = true;
+  ysyx_25050136_NPC->clk = 0;
+  ysyx_25050136_NPC->inst_i = 0;
+  ysyx_25050136_NPC->mem_rdata_i = 0;
+}
+//=====================================================
 // 一些输出日志函数
 //=====================================================
 void printf_statu()
@@ -107,15 +119,10 @@ void init_main(int argc, char **argv)
   init_verilator(argc, argv);
   // 加载内存
   long size = init_pmem();
+  // CPU初始化
+  cpu_init();
+// #ifdef 
+//   init_disasm();
+// #endif
 }
 
-void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
-{
-  stop_time = sim_time;
-  long size = init_pmem();
-  pc_pre = 0x80000000;
-  cpu_run = true;
-  ysyx_25050136_NPC->clk = 0;
-  ysyx_25050136_NPC->inst_i = 0;
-  ysyx_25050136_NPC->mem_rdata_i = 0;
-}

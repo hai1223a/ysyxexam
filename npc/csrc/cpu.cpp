@@ -7,16 +7,6 @@ void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
     ysyx_25050136_NPC->reset = 1;
 }
 
-void cpu_init(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp) {
-    stop_time = sim_time;
-    long size = init_pmem();
-    pc_pre = 0x80000000;
-    cpu_run = true;
-    ysyx_25050136_NPC->clk = 0;
-    ysyx_25050136_NPC->inst_i = 0;
-    ysyx_25050136_NPC->mem_rdata_i = 0;
-}
-
 void cpu_exec_once(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
 {
   while (cpu_run)
@@ -92,7 +82,6 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
 
 int batch_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
 {
-  cpu_init(ysyx_25050136_NPC, tfp);
   cpu_exec(ysyx_25050136_NPC, tfp, -1);
   return 0;
 }
