@@ -51,6 +51,9 @@ static void init_verilator(int argc, char *argv[])
     Verilated::commandArgs(argc, argv);
     // 启用跟踪
     Verilated::traceEverOn(true);
+    VerilatedFstC *tfp = new VerilatedFstC;
+    // 构建一个名为ysyx_25050136_NPC的仿真模型
+    Vysyx_25050136_NPC *ysyx_25050136_NPC = new Vysyx_25050136_NPC;
     // 采样深度为5
     ysyx_25050136_NPC->trace(tfp, 5);
     // 打开波形文件
