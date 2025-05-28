@@ -28,6 +28,7 @@ static char* rl_gets() {
   
   
   static int cmd_q(char *args) {
+    npcstate.state == NPC_END;
     return -1;
   }
   
@@ -41,6 +42,8 @@ static char* rl_gets() {
     else{
       num_inst = (uint64_t)atoi(args);
     }
+    if(npcstate.state == NPC_END) {printf("程序已经结束了\n");}
+    if(npcstate.state == NPC_STOP) {npcstate.state == NPC_RUNNING;}
     cpu_exec(num_inst);
     return 0;
   }
