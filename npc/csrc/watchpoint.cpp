@@ -161,6 +161,7 @@ void scan_watchpoint() {
         printf("监视点%d发生了变化\n", i);
         data_pre[i] = data_new[i];
         npcstate.state = NPC_STOP;
+        break;
       }
     }
   }
