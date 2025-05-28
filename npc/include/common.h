@@ -25,7 +25,7 @@
 #define NR_WP 5
 
 #define CONFIG_ITRACE
-#define CONFIG_MTRACE
+// #define CONFIG_MTRACE
 #define CONFIG_DIFFTEST
 
 extern bool cpu_run;                                           // CPU仿真运行状态
