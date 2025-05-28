@@ -7,9 +7,9 @@ void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
     ysyx_25050136_NPC->reset = 1;
 }
 
-void cpu_exec_once(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
+void cpu_exec_once()
 {
-  while (cpu_run)
+  while (npcstate.state == NPC_RUNNING)
   {
     // 模拟时钟反转
     ysyx_25050136_NPC->clk ^= 1;
@@ -22,7 +22,7 @@ void cpu_exec_once(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
     // 访存
     pmem_read_write(ysyx_25050136_NPC);
     // 找到ebreak
-    if(ysyx_25050136_NPC->inst_i == 0x00100073) cpu_run = false;
+    if(ysyx_25050136_NPC->inst_i == 0x00100073) npcstate.state = NPC_END;
     // 计算电路状态
     ysyx_25050136_NPC->eval();
     // 记录波形数据
@@ -38,7 +38,7 @@ void cpu_exec_once(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
     }
   }
 }
-void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_t inst_num)
+void cpu_exec(uint32_t inst_num)
 {
   for (uint32_t i = 0; i < inst_num; i++)
   {
@@ -47,7 +47,7 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
       printf("你的程序已经运行结束了\n");
       break;
     }
-    cpu_exec_once(ysyx_25050136_NPC, tfp);
+    cpu_exec_once();
 #ifdef CONFIG_ITRACE
     Itrace(inst__, pc__);
     // if(inst_num < PRINT_INST_NUM)
@@ -82,6 +82,6 @@ void cpu_exec(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp, uint32_
 
 int batch_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
 {
-  cpu_exec(ysyx_25050136_NPC, tfp, -1);
+  cpu_exec(-1);
   return 0;
 }

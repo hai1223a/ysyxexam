@@ -79,7 +79,7 @@ static void init_verilator(int argc, char *argv[])
 void cpu_init()
 {
   stop_time = sim_time;
-  pc_pre = 0x80000000;
+  pc_pre = RESET_VECTOR;
   cpu_run = true;
   ysyx_25050136_NPC->clk = 0;
   ysyx_25050136_NPC->inst_i = 0;
