@@ -74,8 +74,8 @@ static void checkregs(CPU_state *ref, uint32_t pc, Vysyx_25050136_NPC *ysyx_2505
 void difftest_step(uint32_t pc, Vysyx_25050136_NPC *ysyx_25050136_NPC) {
   CPU_state ref_r;
   ref_difftest_exec(1);
-  // ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
-  // checkregs(&ref_r, pc, ysyx_25050136_NPC);
+  ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
+  checkregs(&ref_r, pc, ysyx_25050136_NPC);
 }
 #else
 void init_difftest(char *ref_so_file, long img_size, int port) { }
