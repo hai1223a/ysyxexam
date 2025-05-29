@@ -66,10 +66,21 @@ void init_difftest(long img_size, int port)
   ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 }
 
+static void printf_ref_regs(CPU_state *ref)
+{
+  printf(ANSI_FMT("ref的寄存器状态如下:\n", ANSI_FG_MAGENTA));
+  for (size_t i = 0; i < REG_NUM; i++)
+  {
+    printf("ref[%lu] : 0x%8x\n", i, ref->gpr[i]);
+  }
+  printf("ref[%lu] = pc = 0x%8x\n", 16, ref->pc);
+}
+
 static void checkregs(CPU_state *ref, uint32_t pc, Vysyx_25050136_NPC *ysyx_25050136_NPC)
 {
   if (!isa_difftest_checkregs(ref, pc))
   {
+    printf_ref_regs(ref);
     printf_regs();
     Assert(0, "寄存器检查不通过\n");
   }
