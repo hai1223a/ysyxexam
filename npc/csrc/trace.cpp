@@ -49,6 +49,7 @@ void Itrace(uint32_t inst_in, uint32_t pc_in)
       IRINGBUF.p = 0;
     // ===============================================
 }
+
 // mtrace
 char mtrace_buf[128] = {0};
 
