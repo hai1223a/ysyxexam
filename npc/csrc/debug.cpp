@@ -1,5 +1,5 @@
 #include "../include/common.h"
-#include <getopt.h> // 包含解析命令行参数的库函数
+#include <getopt.h> //,包含解析命令行参数的库函数
 
 VerilatedFstC *tfp = NULL;
 Vysyx_25050136_NPC *ysyx_25050136_NPC = NULL;
@@ -9,7 +9,7 @@ bool batch_mode = false;      // 默认sdb模式
 static char *log_file = NULL;        // 日志文件
 static char *ref_so_file = NULL;     // difftest的ref的动态库文件
 static int ref_so_port = 1234;       // difftest的ref端口
-static std::string elf_file = NULL;        // ftrace的elf文件
+static std::string elf_file = "";        // ftrace的elf文件
 static char *ftrace_log_file = NULL; // ftrace的日志文件
 static char *img_file = NULL;        // 程序源文件指针
 //=====================================================
