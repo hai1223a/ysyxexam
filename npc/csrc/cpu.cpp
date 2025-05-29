@@ -29,9 +29,9 @@ void cpu_exec_once()
     // 访存
     pmem_read_write();
     // 找到ebreak
-    if (ysyx_25050136_NPC->inst_i == 0x00100073)
+    if (is_ebreak(ysyx_25050136_NPC->inst_i))
     {
-      set_nemu_state(NPC_END, ysyx_25050136_NPC->pc_o, ysyx_25050136_NPC->rootp->ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[10]);
+      set_nemu_state(NPC_END, ysyx_25050136_NPC->pc_o, get_reg(10));
     }
     // 计算电路状态
     ysyx_25050136_NPC->eval();
@@ -60,17 +60,10 @@ void cpu_exec(uint32_t inst_num)
       break;
     }
     cpu_exec_once();
-#ifdef CONFIG_ITRACE
-    Itrace(inst_pre, pc_pre);
-    log_write("%s\n", itrace_buf);
-    if (inst_num < PRINT_INST_NUM)
-      printf("%s\n", itrace_buf);
-#endif
-#ifdef CONFIG_DIFFTEST
-    difftest_step(pc__);
-#endif
-    if (!batch_mode)
-      scan_watchpoint();
+    IFDEF(CONFIG_ITRACE, Itrace_log(inst_pre, pc_pre, inst_num));
+    IFDEF(CONFIG_FTRACE, ftracer_log(inst_pre, pc_pre));
+    IFDEF(CONFIG_ITRACE, difftest_step(pc__));
+    if (!batch_mode)  scan_watchpoint();
   }
 }
 

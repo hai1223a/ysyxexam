@@ -9,6 +9,7 @@ typedef struct cpu_state {
 
 extern const char *regs[];
 
+uint32_t get_reg(int i);
 void printf_regs();
 uint32_t reg_str2val(const char *s, bool *success);
 bool isa_difftest_checkregs(CPU_state *ref);

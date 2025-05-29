@@ -35,10 +35,11 @@ typedef struct {
   uint32_t halt_pc;
   int halt_ret;
 } NPCState;
+extern NPCState npcstate;       
+
 void set_nemu_state(int state, uint32_t pc, int halt_ret);
-
-extern NPCState npcstate;                                       
-
-
+bool is_ebreak(uint32_t inst_i);
+bool is_jal(uint32_t inst_i);
+bool is_ret(uint32_t inst_i);
 
 #endif

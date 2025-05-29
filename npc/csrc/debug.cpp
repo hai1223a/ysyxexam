@@ -49,6 +49,7 @@ static int parse_args(int argc, char *argv[])
       elf_file = optarg;
       break;
     case 'g':
+      ftrace_log_file = optarg;
       break;
     case 'i':
       img_file = optarg;
@@ -101,7 +102,7 @@ void cpu_init()
 //=====================================================
 // 用于初始化输出日志
 //=====================================================
-void init_log(char *log_file)
+void init_log(const char *log_file)
 {
   log_fp = stdout;
   if (log_file != NULL) {
@@ -164,6 +165,7 @@ void init_main(int argc, char **argv)
   IFDEF(CONFIG_DIFFTEST, init_difftest(ref_so_file, size, ref_so_port));
   // FTRACE
   IFDEF(CONFIG_FTRACE, load_elf(elf_file));
+  IFDEF(CONFIG_FTRACE, init_ftracer_log(ftrace_log_file));
   // sdb初始化
   init_sdb();
   //

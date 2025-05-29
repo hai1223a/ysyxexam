@@ -19,8 +19,9 @@ VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-ini
 
 ARGS += -i $(WORK_DIR)/../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 ARGS += -d $(WORK_DIR)/../nemu/build/riscv32-nemu-interpreter-so 
-ARGS += -l $(WORK_DIR)/obj_dir/log.txt
+ARGS += -l $(WORK_DIR)/obj_dir/log/log.txt
 ARGS += -e $(WORK_DIR)/../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
+ARGS += -g $(WORK_DIR)/obj_dir/log/ftrace-log.txt
 
 all: run
 	@echo "Write this Makefile by your self."

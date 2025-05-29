@@ -32,7 +32,7 @@ void init_difftest(char *ref_so_file, long img_size, int port)
   CPU_state cpu;
   for (size_t i = 0; i < REG_NUM; i++)
   {
-    cpu.gpr[i] = ysyx_25050136_NPC->rootp->ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[i];
+    cpu.gpr[i] = get_reg(i);
   }
   cpu.pc = RESET_VECTOR;
 

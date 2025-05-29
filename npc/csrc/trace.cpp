@@ -22,7 +22,7 @@ void print_iringbuf()
     }
 }
 
-void Itrace(uint32_t inst_in, uint32_t pc_in)
+static void Itrace(uint32_t inst_in, uint32_t pc_in)
 {
     char *p = itrace_buf;
     p += snprintf(p, sizeof(itrace_buf), "0x%08x:", pc_in);
@@ -50,6 +50,13 @@ void Itrace(uint32_t inst_in, uint32_t pc_in)
     // ===============================================
 }
 
+void Itrace_log(uint32_t inst_in, uint32_t pc_in, uint32_t inst_num)
+{
+  Itrace(inst_in, pc_in);
+  log_write("%s\n", itrace_buf);
+  if (inst_num < PRINT_INST_NUM)
+    printf("%s\n", itrace_buf);
+}
 // mtrace
 char mtrace_buf[128] = {0};
 
@@ -73,10 +80,9 @@ void printf_mtrace()
 }
 
 // ftrace
-struct FUNC_FTRACE{
-  uint32_t addr;
-  char func_name[16];
-} FUNC_FTRACER[10] = {0};
+FUNC_FTRACE func_ftracer[10] = {0};
+int FUNC_stack[10] = {0};
+char space[10] = {0};
 
 // 修改 load_elf 函数
 void load_elf(const std::string &elf_file) {
@@ -146,9 +152,9 @@ void load_elf(const std::string &elf_file) {
       // 遍历符号表,筛选各个函数名的入口地址
       for (size_t j = 0, k = 0; j < symtab_entry_count; j++) {
         if (ELF32_ST_TYPE(symtab[j].st_info) == STT_FUNC) {
-          FUNC_FTRACER[k].addr = symtab[j].st_value;
-          strncpy(FUNC_FTRACER[k].func_name, &strtab[symtab[j].st_name], sizeof(FUNC_FTRACER[k].func_name) - 1);
-          FUNC_FTRACER[k].func_name[sizeof(FUNC_FTRACER[k].func_name) - 1] = '\0';
+          func_ftracer[k].addr = symtab[j].st_value;
+          strncpy(func_ftracer[k].func_name, &strtab[symtab[j].st_name], sizeof(func_ftracer[k].func_name) - 1);
+          func_ftracer[k].func_name[sizeof(func_ftracer[k].func_name) - 1] = '\0';
           k++;
         }
       }
@@ -158,4 +164,41 @@ void load_elf(const std::string &elf_file) {
 
   // 清理资源
   fclose(file);
+}
+
+FILE *ftracer_log_fp = NULL;
+void init_ftracer_log(const char *ftrace_log_file) {
+  ftracer_log_fp = stdout;
+  if (ftrace_log_file != NULL) {
+    FILE *fp = fopen(ftrace_log_file, "w");
+    Assert(fp, "无法打开日志文件 '%s'", ftrace_log_file);
+    ftracer_log_fp = fp;
+  }
+  Log("Ftracer 日志被输出到了 %s", ftrace_log_file ? ftrace_log_file : "stdout");
+}
+
+void ftracer_log(uint32_t inst_in, uint32_t pc_in)
+{
+  static int p_stack = 0;
+
+  // 识别 call 调用函数
+  if(is_jal(inst_in))
+  {
+    for(int i = 0; i < ARRLEN(func_ftracer); i++)
+    {
+      if(ysyx_25050136_NPC->pc_o == func_ftracer[i].addr)
+      {
+        ftracer_write("0x%8x %*scall [%s @ 0x%8x]\n", pc_in, 4*p_stack, " ", func_ftracer[i].func_name, ysyx_25050136_NPC->pc_o);
+        Assert(p_stack < ARRLEN(FUNC_stack), "ftracer 的返回函数堆栈溢出\n");
+        FUNC_stack[p_stack++] = i;
+      }
+    }
+  }
+  // 识别 ret 返回函数
+  if(is_ret(inst_in))
+  {
+    Assert(p_stack > 0, "ftracer 的返回函数堆栈为空\n");
+    p_stack--;
+    ftracer_write("0x%8x %*sret [%s @ 0x%8x]\n", pc_in, 4*p_stack, " ", func_ftracer[FUNC_stack[p_stack]].func_name, get_reg(1));
+  }
 }
