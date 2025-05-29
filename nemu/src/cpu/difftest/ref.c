@@ -18,6 +18,7 @@
 #include <difftest-def.h>
 #include <memory/paddr.h>
 
+#define NPC_REGS_NUM 16
 __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
   if (direction == DIFFTEST_TO_DUT)
   {
@@ -38,19 +39,21 @@ __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction)
 __EXPORT void difftest_regcpy(void *dut, bool direction) {
   if (direction == DIFFTEST_TO_DUT)
   {
-    for (size_t i = 0; i < 16; i++)
+    for (size_t i = 0; i < NPC_REGS_NUM; i++)
     {
-      *(word_t *)(dut + i) = cpu.gpr[i];
+      *((word_t *)dut + i) = cpu.gpr[i];
+      printf("cpu.gpr[%2lu] = %x\n", i, cpu.gpr[i]);
     }
-    *(word_t *)(dut + 16) = cpu.pc;
+    *((word_t *)dut + NPC_REGS_NUM) = cpu.pc;
+    printf("cpu.gpr[16] = %x\n", cpu.pc);
   }
   if (direction == DIFFTEST_TO_REF)
   {
-    for (size_t i = 0; i < 16; i++)
+    for (size_t i = 0; i < NPC_REGS_NUM; i++)
     {
       cpu.gpr[i] = *((word_t *)dut + i) ;
     }
-    cpu.pc = *((word_t *)dut + 16);
+    cpu.pc = *((word_t *)dut + NPC_REGS_NUM);
   }
 }
 
