@@ -71,7 +71,7 @@ static void printf_ref_regs(CPU_state *ref)
   printf(ANSI_FMT("ref的寄存器状态如下:\n", ANSI_FG_MAGENTA));
   for (size_t i = 0; i < REG_NUM; i++)
   {
-    printf("ref[%lu] : 0x%8x\n", i, ref->gpr[i]);
+    printf("ref[%2lu] : 0x%8x\n", i, ref->gpr[i]);
   }
   printf("ref[%lu] = pc = 0x%8x\n", 16, ref->pc);
 }
