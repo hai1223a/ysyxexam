@@ -91,7 +91,7 @@ void load_elf(const std::string &elf_file)
 {
   if (elf_file.empty())
   {
-    Log("没有elf文件输入\n");
+    Log("没有elf文件输入");
     return;
   }
 
