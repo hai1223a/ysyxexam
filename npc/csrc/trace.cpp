@@ -16,9 +16,9 @@ void print_iringbuf()
     for (int i = 0; i < IRINGBUF_DEEPTH; i++)
     {
         if (i == IRINGBUF.now_p)
-            printf(ANSI_FMT("--->", ANSI_FG_YELLOW));
+            printf(ANSI_FMT("--->", ANSI_FG_MAGENTA));
         else
-            printf(ANSI_FMT(">>>>", ANSI_FG_YELLOW));
+            printf(">>>>");
         puts(IRINGBUF.iringbuf[i]);
     }
     printf("\n");
