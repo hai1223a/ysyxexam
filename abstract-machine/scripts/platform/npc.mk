@@ -12,12 +12,13 @@ CFLAGS    += -fdata-sections -ffunction-sections
 LDSCRIPTS += $(AM_HOME)/scripts/linker.ld
 LDFLAGS   += --defsym=_pmem_start=0x80000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
-override NPCFLAGS += -l $(shell dirname $(IMAGE).elf)/npc-$(IMAGE)-log.txt \
+IMAGE_NAME = $(basename $(notdir $(IMAGE)))
+override NPCFLAGS += -l $(shell dirname $(IMAGE).elf)/npc-$(IMAGE_NAME)-log.txt \
                      -i $(IMAGE).bin \
                      -d $(NEMU_HOME)/build/riscv32-nemu-interpreter-so \
                      -p 1234 \
                      -e $(IMAGE).elf \
-                     -g $(shell dirname $(IMAGE).elf)/npc-$(IMAGE)-ftracerlog.txt \
+                     -g $(shell dirname $(IMAGE).elf)/npc-$(IMAGE_NAME)-ftracerlog.txt \
                      -b
 
 MAINARGS_MAX_LEN = 64

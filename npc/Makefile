@@ -18,7 +18,7 @@ VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-ini
 				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"		
 
 override ARGS ?= -d $(WORK_DIR)/../nemu/build/riscv32-nemu-interpreter-so \
-	    		 -l $(WORK_DIR)/obj_dir/log/log.txt \
+	    		 -l $(WORK_DIR)/obj_dir/log/log.txt
 
 run: exe
 	./obj_dir/V$(TOPNAME) $(ARGS)
