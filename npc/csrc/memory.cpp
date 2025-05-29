@@ -1,5 +1,6 @@
 #include "../include/common.h"
 
+uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};// 内存变量
 uint8_t* guest_to_host(uint32_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 bool in_pmem(uint32_t paddr) { return paddr - CONFIG_MBASE < CONFIG_MSIZE;}
 
@@ -81,9 +82,8 @@ void pmem_read_write()
             break;
         }
       }
-      IFDEF(CONFIG_MTRACE, printf_mtrace());
     } else {
-
+      IFDEF(CONFIG_MTRACE, printf_mtrace());
       Assert(0, "你访存的地址值不合法,addr = 0x%08x\n", ysyx_25050136_NPC->mem_addr_o);
     }
   }

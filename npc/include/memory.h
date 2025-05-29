@@ -4,6 +4,7 @@
 #define CONFIG_MSIZE 0x8000000                // 内存大小
 #define CONFIG_MBASE 0x80000000               // 内存基地址
 #define RESET_VECTOR 0x80000000               // 程序复位地址
+extern uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096)));// 内存变量
 
 uint8_t* guest_to_host(uint32_t paddr);
 long init_pmem(char *img_file);

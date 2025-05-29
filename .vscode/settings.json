@@ -108,6 +108,7 @@
         "difftest-def.h": "c",
         "macro.h": "c",
         "paddr.h": "c",
-        "difftest.h": "c"
+        "difftest.h": "c",
+        "verilated.h": "c"
     }
 }

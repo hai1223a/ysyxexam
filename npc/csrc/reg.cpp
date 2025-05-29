@@ -1,5 +1,10 @@
 #include "../include/common.h"
 
+const char *regs[] = {
+  "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
+  "s0", "s1", "a0", "a1", "a2", "a3", "a4", "a5"
+};
+
 void printf_regs()
 {
   printf(ANSI_FMT("npc的寄存器状态如下:\n", ANSI_FG_MAGENTA));

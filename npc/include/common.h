@@ -39,6 +39,6 @@ void set_nemu_state(int state, uint32_t pc, int halt_ret);
 
 extern NPCState npcstate;                                       
 
-extern uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096)));// 内存变量
-extern const char *regs[];
+
+
 #endif

@@ -1,5 +1,5 @@
 #include "../include/common.h"
-
+#include <elf.h>
 // itrace
 char itrace_buf[128] = {0};
 
@@ -71,3 +71,6 @@ void printf_mtrace()
   printf(ANSI_FMT("PC值         访存地址  操作   字节  写入数据\n", ANSI_FG_MAGENTA));
   puts(mtrace_buf);
 }
+
+// ftrace
+
