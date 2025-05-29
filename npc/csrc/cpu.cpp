@@ -1,6 +1,6 @@
 #include "../include/common.h"
 
-void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time)
+void reset()
 {
   ysyx_25050136_NPC->reset = 0;
   if (sim_time < (reset_time + stop_time))
@@ -16,11 +16,11 @@ void cpu_exec_once()
     // 计算电路状态
     ysyx_25050136_NPC->eval();
     // 复位
-    reset(ysyx_25050136_NPC, sim_time);
+    reset();
     // 取指
-    inst_read(ysyx_25050136_NPC);
+    inst_read();
     // 访存
-    pmem_read_write(ysyx_25050136_NPC);
+    pmem_read_write();
     // 找到ebreak
     if (ysyx_25050136_NPC->inst_i == 0x00100073)
     {
@@ -66,7 +66,7 @@ void cpu_exec(uint32_t inst_num)
   }
 }
 
-int batch_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp)
+int batch_mainloop()
 {
   cpu_exec(-1);
   return 0;

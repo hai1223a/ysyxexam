@@ -3,8 +3,8 @@
 
 
 
-void reset(Vysyx_25050136_NPC *ysyx_25050136_NPC, vluint64_t &sim_time);
+void reset();
 void cpu_exec(uint32_t inst_num);
-int batch_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp);
+int batch_mainloop();
 
 #endif

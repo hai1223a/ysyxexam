@@ -7,8 +7,8 @@
 
 uint8_t* guest_to_host(uint32_t paddr);
 long init_pmem();
-void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC);
-void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC);
+void inst_read();
+void pmem_read_write();
 uint32_t vaddr_read(uint32_t paddr, int len);
 
 

@@ -32,7 +32,7 @@ long init_pmem()
   return size;
 }
 
-void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC) 
+void inst_read() 
 {
   if(!ysyx_25050136_NPC->reset)
     if(likely(in_pmem(ysyx_25050136_NPC->pc_o)))
@@ -41,7 +41,7 @@ void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC)
       Assert(0, "你取指令的pc值不合法,pc = 0x%08x\n", ysyx_25050136_NPC->pc_o);
 }
 
-void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC)
+void pmem_read_write()
 {
   if(!ysyx_25050136_NPC->reset && (ysyx_25050136_NPC->mem_ren_o || ysyx_25050136_NPC->mem_wen_o)) {
     #ifdef CONFIG_MTRACE
