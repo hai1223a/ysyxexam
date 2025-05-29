@@ -12,13 +12,12 @@ CFLAGS    += -fdata-sections -ffunction-sections
 LDSCRIPTS += $(AM_HOME)/scripts/linker.ld
 LDFLAGS   += --defsym=_pmem_start=0x80000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
-NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-$(IMAGE)-log.txt \
-             -i $(IMAGE).bin \
-             -d $(NEMU_HOME)/build/riscv32-nemu-interpreter-so \
-             -p 1234 \
-             -e $(IMAGE).elf \
-             -g $(shell dirname $(IMAGE).elf)/npc-$(IMAGE)-ftracerlog.txt
-
+override NPCFLAGS += -l $(shell dirname $(IMAGE).elf)/npc-$(IMAGE)-log.txt \
+                     -i $(IMAGE).bin \
+                     -d $(NEMU_HOME)/build/riscv32-nemu-interpreter-so \
+                     -p 1234 \
+                     -e $(IMAGE).elf \
+                     -g $(shell dirname $(IMAGE).elf)/npc-$(IMAGE)-ftracerlog.txt
 
 MAINARGS_MAX_LEN = 64
 MAINARGS_PLACEHOLDER = The insert-arg rule in Makefile will insert mainargs here.
