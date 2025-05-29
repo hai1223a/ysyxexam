@@ -57,10 +57,9 @@ void init_difftest(long img_size, int port)
   void (*ref_difftest_init)(int) = (void (*)(int))dlsym(handle, "difftest_init");
   assert(ref_difftest_init);
 
-  Log("The result of every instruction will be compared with %s. "
-         "This will help you a lot for debugging, but also significantly reduce the performance. "
-         "If it is not necessary, you can turn it off in menuconfig.",
-         ref_so_file);
+  Log("每一条指令的结果将与 %s 进行比较. "
+      "这将帮助你调试, 但是运行会比较慢. "
+      "你可以在common.h中去关闭这个功能. ", ref_so_file);
 
   ref_difftest_init(port);
   ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);
