@@ -21,7 +21,7 @@ ARGS += -i $(WORK_DIR)/../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bi
 ARGS += -d $(WORK_DIR)/../nemu/build/riscv32-nemu-interpreter-so 
 ARGS += -l $(WORK_DIR)/obj_dir/log/log.txt
 ARGS += -e $(WORK_DIR)/../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
-ARGS += -g $(WORK_DIR)/obj_dir/log/ftrace-log.txt
+ARGS += -g $(WORK_DIR)/obj_dir/log/ftrace-log.txt -b
 
 run: exe
 	@./obj_dir/V$(TOPNAME) $(ARGS)
