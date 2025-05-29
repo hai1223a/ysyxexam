@@ -17,25 +17,9 @@ VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-ini
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
 				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"		
 
-ARGS += -i /home/yunhai/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
-ARGS += -d /home/yunhai/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so 
+ARGS += -i $(WORK_DIR)/../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
+ARGS += -d $(WORK_DIR)/../nemu/build/riscv32-nemu-interpreter-so 
 ARGS += -l $(WORK_DIR)/obj_dir/log.txt
-
-# 定义目标文件目录
-OBJ_DIR = $(patsubst %.cpp,obj_dir/csrc/%.o,$(CSRCS)) $(patsubst %.c,obj_dir/csrc/%.o,$(CSRCS))
-DEP_DIR = $(patsubst %.cpp,obj_dir/csrc/%.d,$(CSRCS)) $(patsubst %.c,obj_dir/csrc/%.d,$(CSRCS))
-
-# 创建目标文件目录
-$(OBJ_DIR): | obj_dir/csrc
-obj_dir/csrc:
-	mkdir -p obj_dir/csrc
-
-# 编译规则，确保目标文件路径正确
-obj_dir/csrc/%.o: csrc/%.cpp
-	g++ $(CFLAGS) -MMD -c -o $@ $<
-
-obj_dir/csrc/%.o: csrc/%.c
-	gcc $(CFLAGS) -MMD -c -o $@ $<
 
 all: rum
 	@echo "Write this Makefile by your self."
