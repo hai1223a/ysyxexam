@@ -17,7 +17,7 @@ NPCFLAGS  += -l $(shell dirname $(IMAGE).elf)/npc-$(IMAGE)-log.txt \
              -d $(NEMU_HOME)/build/riscv32-nemu-interpreter-so \
              -p 1234 \
              -e $(IMAGE).elf \
-             -g $(shell dirname $(IMAGE).elf)/npc-$(IMAGE)-ftracerlog.txt \
+             -g $(shell dirname $(IMAGE).elf)/npc-$(IMAGE)-ftracerlog.txt
 
 
 MAINARGS_MAX_LEN = 64
@@ -33,9 +33,9 @@ image: image-dep
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 run: insert-arg
-    $(MAKE) -C $(NPC_HOME) run ARGS="$(NEMUFLAGS)"
+    $(MAKE) -C $(NPC_HOME) run ARGS="$(NPCFLAGS)"
 
-gdb: insert-arg
-    $(MAKE) -C $(NPC_HOME) gdb ARGS="$(NEMUFLAGS)"
+# gdb: insert-arg
+#     $(MAKE) -C $(NPC_HOME) gdb ARGS="$(NPCFLAGS)"
 
 .PHONY: insert-arg
