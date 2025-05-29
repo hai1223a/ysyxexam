@@ -38,16 +38,12 @@ typedef struct {
 void set_nemu_state(int state, uint32_t pc, int halt_ret);
 
 extern NPCState npcstate;                                       
-extern VerilatedFstC *tfp;
-extern Vysyx_25050136_NPC *ysyx_25050136_NPC;
 extern bool cpu_run;                                           // CPU仿真运行状态
 extern vluint64_t sim_time;                                    // 记录仿真时间
 extern vluint64_t reset_time;                                  // 复位时间
 extern vluint64_t stop_time;                                   // 暂停时间点
 extern uint32_t pc_pre;                                        // 用于单步执行程序
-extern char *ref_so_file;   
-extern char *img_file;                                         // 程序源文件指针
-extern bool batch_mode;                                        // batch模式
+
 extern uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096)));// 内存变量
 extern const char *regs[];
 #endif
