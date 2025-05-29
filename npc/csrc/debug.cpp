@@ -132,6 +132,8 @@ void init_main(int argc, char **argv)
   long size = init_pmem();
   // CPU初始化
   cpu_init();
+  // sdb初始化
+  if(!batch_mode) {init_sdb();}
   // 
   welcome();
 }
