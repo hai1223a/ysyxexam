@@ -31,7 +31,7 @@ gdb: exe
 
 exe:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@mkdir -p  /obj_dir/log
+	@mkdir -p  $(WORK_DIR)/obj_dir/log
 	$(VERILATOR) $(VERILATOR_FLAGS) $(VSRCS) $(CSRCS)
 
 wave: run
