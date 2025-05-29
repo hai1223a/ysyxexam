@@ -17,6 +17,7 @@ VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-ini
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
 				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"		
 
+ARGS += -d $(WORK_DIR)/../nemu/build/riscv32-nemu-interpreter-so 
 ARGS += -l $(WORK_DIR)/obj_dir/log/log.txt
 
 run: exe
