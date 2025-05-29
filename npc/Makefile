@@ -23,23 +23,23 @@ ARGS += -l $(WORK_DIR)/obj_dir/log/log.txt
 ARGS += -e $(WORK_DIR)/../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
 ARGS += -g $(WORK_DIR)/obj_dir/log/ftrace-log.txt
 
-all: run
-	@echo "Write this Makefile by your self."
-
-run:
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(VERILATOR) $(VERILATOR_FLAGS) $(VSRCS) $(CSRCS)
+run: exe
 	@./obj_dir/V$(TOPNAME) $(ARGS)
-	@gtkwave waveform.fst
 
-gdb:
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(VERILATOR) $(VERILATOR_FLAGS) $(VSRCS) $(CSRCS)
+gdb: exe
 	@gdb --args obj_dir/V$(TOPNAME) $(ARGS)
+
+exe:
+	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	@mkdir -p  /obj_dir/log
+	$(VERILATOR) $(VERILATOR_FLAGS) $(VSRCS) $(CSRCS)
+
+wave: run
+	@gtkwave waveform.fst
 
 clean:
 	rm -rf obj_dir
 	rm *.fst
 
-.PHONY: all sim cleanf
+.PHONY: run sim exe wave clean
 include ../Makefile
