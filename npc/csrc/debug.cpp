@@ -125,9 +125,7 @@ void init_main(int argc, char **argv)
   // 解析命令行参数
   parse_args(argc, argv);
   // ITRACE
-#ifdef CONFIG_ITRACE
-  init_disasm();
-#endif
+  IFDEF(CONFIG_ITRACE, init_disasm());
   // Verilator 仿真初始化
   init_verilator(argc, argv);
   // 加载内存
