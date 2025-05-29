@@ -157,7 +157,7 @@ void init_main(int argc, char **argv)
   // CPU初始化
   cpu_init();
   // Difftest
-  IFDEF(CONFIG_DIFFTEST, init_difftest(size, 1234));
+  IFDEF(CONFIG_DIFFTEST, init_difftest(ref_so_file, size, 1234));
   // sdb初始化
   if (!batch_mode)
   {
