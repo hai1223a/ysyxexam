@@ -132,9 +132,6 @@ void init_main(int argc, char **argv)
   init_verilator(argc, argv);
   // 加载内存
   long size = init_pmem();
-#ifdef CONFIG_ITRACE
-  init_disasm();
-#endif
   // CPU初始化
   cpu_init();
   // 

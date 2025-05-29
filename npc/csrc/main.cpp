@@ -6,7 +6,7 @@ int main(int argc, char **argv)
 {
   init_main(argc, argv);
   if(batch_mode)
-    batch_mainloop(ysyx_25050136_NPC,tfp);
+    batch_mainloop();
   else{
     init_sdb();
     sdb_mainloop();
