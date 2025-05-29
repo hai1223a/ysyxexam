@@ -118,11 +118,10 @@ void init_log(const char *log_file)
 //=====================================================
 void printf_statu()
 {
-  Log("NPC 的结束状态是%s,PC = 0x%08x,halt = %d",
+  Log("PC = 0x%08x, halt = %d, NPC 的结束状态是%s", npcstate.halt_pc, npcstate.halt_ret,
       (npcstate.state == NPC_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) : 
       (npcstate.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : 
-      ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))),
-      npcstate.halt_pc, npcstate.halt_ret);
+      ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))));
   Log("仿真时间为 %lu 次, 仿真周期为 %lu 个", sim_time - 1, (sim_time - 1) / 2);
 }
 
