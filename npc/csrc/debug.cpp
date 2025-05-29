@@ -37,11 +37,13 @@ static int parse_args(int argc, char *argv[])
       batch_mode = true;
       break;
     case 'l':
+      log_file = optarg;
       break;
     case 'd':
+      ref_so_file = optarg;
       break;
     case 'p':
-      ref_so_file = optarg;
+      ref_so_port = atoi(optarg);
       break;
     case 'e':
       break;
