@@ -102,6 +102,7 @@ void printf_statu()
 void npc_end()
 {
   printf_statu();
+  if(!batch_mode) {free_regex();}
   // 关闭波形文件
   tfp->close();
   // 删除指针
