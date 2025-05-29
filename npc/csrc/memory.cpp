@@ -15,7 +15,7 @@ long init_pmem(char *img_file)
     *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
     *pmem_w++ = 0x00100073; //ebreak
     Log("没有给源文件, 程序使用了内置的代码.");
-    return 0;
+    return 24;
   }
   FILE *fp = fopen(img_file, "rb");
   Assert(fp, "Can not open '%s'", img_file);
