@@ -8,7 +8,7 @@ extern char itrace_buf[128];
 void Itrace(uint32_t inst_in, uint32_t pc_in);
 void print_iringbuf();
 // mtrace
-void add_mtrace(Vysyx_25050136_NPC *ysyx_25050136_NPC);
+void add_mtrace();
 void printf_mtrace();
 // ftrace
 

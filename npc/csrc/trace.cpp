@@ -53,7 +53,7 @@ void Itrace(uint32_t inst_in, uint32_t pc_in)
 // mtrace
 char mtrace_buf[128] = {0};
 
-void add_mtrace(Vysyx_25050136_NPC *ysyx_25050136_NPC)
+void add_mtrace()
 {
   char *p = mtrace_buf;
   p += snprintf(p, sizeof(mtrace_buf), "0x%08x:  ", ysyx_25050136_NPC->pc_o);
@@ -67,7 +67,7 @@ void add_mtrace(Vysyx_25050136_NPC *ysyx_25050136_NPC)
 
 void printf_mtrace()
 {
-  printf("mtrace 访存出错报告\n");
-  printf("PC值         访存地址  操作   字节  写入数据\n");
+  printf(ANSI_FMT("mtrace 访存出错报告\n", ANSI_FG_MAGENTA));
+  printf(ANSI_FMT("PC值         访存地址  操作   字节  写入数据\n", ANSI_FG_MAGENTA));
   puts(mtrace_buf);
 }
