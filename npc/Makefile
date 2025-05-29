@@ -17,7 +17,7 @@ VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-ini
 				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"		
 
 ARGS += -i /home/yunhai/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
-ARGS += -d /home/yunhai/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so 
+ARGS += -d /home/yunhai/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so -call
 
 all: rum
 	@echo "Write this Makefile by your self."
