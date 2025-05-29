@@ -17,17 +17,13 @@ VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-ini
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
 				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"		
 
-ARGS += -i $(WORK_DIR)/../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
-ARGS += -d $(WORK_DIR)/../nemu/build/riscv32-nemu-interpreter-so 
 ARGS += -l $(WORK_DIR)/obj_dir/log/log.txt
-ARGS += -e $(WORK_DIR)/../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
-ARGS += -g $(WORK_DIR)/obj_dir/log/ftrace-log.txt -b
 
 run: exe
-	@./obj_dir/V$(TOPNAME) $(ARGS)
+	./obj_dir/V$(TOPNAME) $(ARGS)
 
 gdb: exe
-	@gdb --args obj_dir/V$(TOPNAME) $(ARGS)
+	gdb --args obj_dir/V$(TOPNAME) $(ARGS)
 
 exe:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
