@@ -15,11 +15,10 @@ void print_iringbuf()
     printf(ANSI_FMT("iringbuf打印, --->执行过的最后一条指令\n", ANSI_FG_MAGENTA));
     for (int i = 0; i < IRINGBUF_DEEPTH; i++)
     {
-        if (i == IRINGBUF.now_p)
-            printf(ANSI_FMT("--->", ANSI_FG_MAGENTA));
+        if (i == IRINGBUF.now_p) 
+            printf(ANSI_FMT("---> %s", ANSI_FG_MAGENTA), IRINGBUF.iringbuf[i]);
         else
             printf(">>>>");
-        puts(IRINGBUF.iringbuf[i]);
     }
     printf("\n");
 }
