@@ -235,9 +235,10 @@ void sdb_mainloop()
 
 void init_sdb()
 {
-  /* Compile the regular expressions. */
-  init_regex();
-
-  /* Initialize the watchpoint pool. */
-  init_wp_pool();
+  if(!batch_mode) {
+    /* Compile the regular expressions. */
+    init_regex();
+    /* Initialize the watchpoint pool. */
+    init_wp_pool();
+  }
 }

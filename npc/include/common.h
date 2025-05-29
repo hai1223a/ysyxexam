@@ -38,7 +38,6 @@ typedef struct {
 void set_nemu_state(int state, uint32_t pc, int halt_ret);
 
 extern NPCState npcstate;                                       
-extern bool cpu_run;                                           // CPU仿真运行状态
 extern vluint64_t sim_time;                                    // 记录仿真时间
 extern vluint64_t reset_time;                                  // 复位时间
 extern vluint64_t stop_time;                                   // 暂停时间点

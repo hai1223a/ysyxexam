@@ -93,7 +93,6 @@ void cpu_init()
   npcstate.state = NPC_RUNNING;
   stop_time = sim_time;
   pc_pre = RESET_VECTOR;
-  cpu_run = true;
   ysyx_25050136_NPC->clk = 0;
   ysyx_25050136_NPC->inst_i = 0;
   ysyx_25050136_NPC->mem_rdata_i = 0;
@@ -159,12 +158,9 @@ void init_main(int argc, char **argv)
   // CPU初始化
   cpu_init();
   // Difftest
-  IFDEF(CONFIG_DIFFTEST, init_difftest(ref_so_file, size, 1234));
+  IFDEF(CONFIG_DIFFTEST, init_difftest(ref_so_file, size, ref_so_port));
   // sdb初始化
-  if (!batch_mode)
-  {
-    init_sdb();
-  }
+  init_sdb();
   //
   welcome();
 }

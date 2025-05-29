@@ -1,5 +1,12 @@
 #include "../include/common.h"
 
+uint32_t pc__ = RESET_VECTOR; // 执行完指令后的PC值
+uint32_t pc_pre = 0;          // 执行的指令的PC值
+uint32_t inst_pre = 0;        // 执行的指令值
+vluint64_t sim_time = 0;      // 记录仿真时间
+vluint64_t reset_time = 10;   // 复位时间
+vluint64_t stop_time = 0;     // 暂停时间点
+
 void reset()
 {
   ysyx_25050136_NPC->reset = 0;
@@ -33,11 +40,11 @@ void cpu_exec_once()
     // 推动仿真进行
     sim_time++;
     // 指令计算
-    if (sim_time >= (reset_time + stop_time) && ysyx_25050136_NPC->pc_o != pc_pre)
+    if (sim_time >= (reset_time + stop_time) && ysyx_25050136_NPC->pc_o != pc__)
     {
-      pc__ = pc_pre;
-      inst__ = *(uint32_t *)(pmem + pc__ - CONFIG_MBASE);
-      pc_pre = ysyx_25050136_NPC->pc_o;
+      pc_pre = pc__;
+      inst_pre = *(uint32_t *)(pmem + pc_pre - CONFIG_MBASE);
+      pc__ = ysyx_25050136_NPC->pc_o;
       break;
     }
   }
@@ -54,13 +61,13 @@ void cpu_exec(uint32_t inst_num)
     }
     cpu_exec_once();
 #ifdef CONFIG_ITRACE
-    Itrace(inst__, pc__);
+    Itrace(inst_pre, pc_pre);
     log_write("%s\n", itrace_buf);
-      if(inst_num < PRINT_INST_NUM)
-    printf("%s\n", itrace_buf);
+    if (inst_num < PRINT_INST_NUM)
+      printf("%s\n", itrace_buf);
 #endif
 #ifdef CONFIG_DIFFTEST
-    difftest_step(pc_pre);
+    difftest_step(pc__);
 #endif
     if (!batch_mode)
       scan_watchpoint();

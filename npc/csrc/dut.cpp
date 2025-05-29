@@ -76,9 +76,9 @@ static void printf_ref_regs(CPU_state *ref)
   printf("ref[16] : 0x%8x\n", ref->pc);
 }
 
-static void checkregs(CPU_state *ref, uint32_t pc, Vysyx_25050136_NPC *ysyx_25050136_NPC)
+static void checkregs(CPU_state *ref)
 {
-  if (!isa_difftest_checkregs(ref, pc))
+  if (!isa_difftest_checkregs(ref))
   {
     printf_ref_regs(ref);
     printf_regs();
@@ -91,5 +91,5 @@ void difftest_step(uint32_t pc)
   CPU_state ref_r;
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
-  checkregs(&ref_r, pc, ysyx_25050136_NPC);
+  checkregs(&ref_r);
 }

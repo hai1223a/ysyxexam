@@ -29,14 +29,14 @@ uint32_t reg_str2val(const char *s, bool *success)
   return 0;
 }
 
-bool isa_difftest_checkregs(CPU_state *ref, uint32_t pc)
+bool isa_difftest_checkregs(CPU_state *ref)
 {
   for (size_t i = 0; i < REG_NUM; i++)
   {
     if (ref->gpr[i] != ysyx_25050136_NPC->rootp->ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[i])
       return false;
   }
-  if (pc != ysyx_25050136_NPC->pc_o)
+  if (ref->pc != ysyx_25050136_NPC->pc_o)
     return false;
   return true;
 }

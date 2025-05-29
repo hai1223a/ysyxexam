@@ -2,8 +2,6 @@
 
 // itrace
 char itrace_buf[128] = {0};
-uint32_t pc__ = 0x80000000;
-uint32_t inst__ = *(uint32_t *)(pmem + pc__ - CONFIG_MBASE);
 
 struct
 {
