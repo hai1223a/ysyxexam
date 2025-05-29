@@ -2,7 +2,6 @@
 #define __EXPR_H__
 
 void init_regex();
-void free_regex();
 uint32_t expr(char *e, bool *success);
 
 #endif

@@ -42,10 +42,8 @@ __EXPORT void difftest_regcpy(void *dut, bool direction) {
     for (size_t i = 0; i < NPC_REGS_NUM; i++)
     {
       *((word_t *)dut + i) = cpu.gpr[i];
-      printf("cpu.gpr[%2lu] = %x\n", i, cpu.gpr[i]);
     }
     *((word_t *)dut + NPC_REGS_NUM) = cpu.pc;
-    printf("cpu.gpr[16] = %x\n", cpu.pc);
   }
   if (direction == DIFFTEST_TO_REF)
   {

@@ -72,12 +72,6 @@ void init_regex() {
   }
 }
 
-void free_regex() {
-  for (int i = 0; i < NR_REGEX; i++) {
-    regfree(&re[i]); // 释放正则表达式资源
-  }
-}
-
 #define NUM_TOKENS 1100
 #define TOKEN_STR 32
 
