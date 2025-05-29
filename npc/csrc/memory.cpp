@@ -3,7 +3,7 @@
 uint8_t* guest_to_host(uint32_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 bool in_pmem(uint32_t paddr) { return paddr - CONFIG_MBASE < CONFIG_MSIZE;}
 
-long init_pmem()
+long init_pmem(char *img_file)
 {
   if (!img_file){
     uint32_t *pmem_w = (uint32_t *)pmem;
