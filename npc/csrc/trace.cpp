@@ -16,11 +16,10 @@ void print_iringbuf()
     for (int i = 0; i < IRINGBUF_DEEPTH; i++)
     {
         if (i == IRINGBUF.now_p) 
-            printf(ANSI_FMT("---> %s", ANSI_FG_MAGENTA), IRINGBUF.iringbuf[i]);
+            printf(ANSI_FMT("---> %s\n", ANSI_FG_MAGENTA), IRINGBUF.iringbuf[i]);
         else
-            printf(">>>>");
+            printf(">>>> %s\n", IRINGBUF.iringbuf[i]);
     }
-    printf("\n");
 }
 
 void Itrace(uint32_t inst_in, uint32_t pc_in)
