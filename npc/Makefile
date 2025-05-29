@@ -30,6 +30,13 @@ $(OBJ_DIR): | obj_dir/csrc
 obj_dir/csrc:
 	mkdir -p obj_dir/csrc
 
+# 编译规则，确保目标文件路径正确
+obj_dir/csrc/%.o: csrc/%.cpp
+	g++ $(CFLAGS) -MMD -c -o $@ $<
+
+obj_dir/csrc/%.o: csrc/%.c
+	gcc $(CFLAGS) -MMD -c -o $@ $<
+
 all: rum
 	@echo "Write this Makefile by your self."
 
