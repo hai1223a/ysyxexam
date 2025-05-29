@@ -22,9 +22,9 @@
 // 配置选项
 //=====================================================
 #define CONFIG_ITRACE 1
-// #define CONFIG_MTRACE
-// #define CONFIG_FTRACE
-// #define CONFIG_DIFFTEST
+// #define CONFIG_MTRACE 1
+// #define CONFIG_FTRACE 1
+// #define CONFIG_DIFFTEST 1
 //=====================================================
 // 状态
 //=====================================================
