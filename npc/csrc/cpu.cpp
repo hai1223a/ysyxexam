@@ -59,7 +59,7 @@ void cpu_exec(uint32_t inst_num)
     printf("%s\n", itrace_buf);
 #endif
 #ifdef CONFIG_DIFFTEST
-    difftest_step(pc_pre, ysyx_25050136_NPC);
+    difftest_step(pc_pre);
 #endif
     if (!batch_mode)
       scan_watchpoint();

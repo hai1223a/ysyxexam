@@ -132,6 +132,8 @@ void init_main(int argc, char **argv)
   long size = init_pmem();
   // CPU初始化
   cpu_init();
+  // Difftest
+  IFDEF(CONFIG_DIFFTEST, init_difftest(size, 1234));
   // sdb初始化
   if(!batch_mode) {init_sdb();}
   // 
