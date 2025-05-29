@@ -33,7 +33,7 @@ image: image-dep
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 run: insert-arg
-    $(MAKE) -C $(NPC_HOME) run ARGS="$(NPCFLAGS)"
+	$(MAKE) -C $(NEMU_HOME) ISA=$(ISA) run
 
 # gdb: insert-arg
 #     $(MAKE) -C $(NPC_HOME) gdb ARGS="$(NPCFLAGS)"
