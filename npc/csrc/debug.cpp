@@ -92,7 +92,7 @@ void cpu_init()
 {
   npcstate.state = NPC_RUNNING;
   stop_time = sim_time;
-  pc_pre = RESET_VECTOR;
+  pc__ = RESET_VECTOR;
   ysyx_25050136_NPC->clk = 0;
   ysyx_25050136_NPC->inst_i = 0;
   ysyx_25050136_NPC->mem_rdata_i = 0;
