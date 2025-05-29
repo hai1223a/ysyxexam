@@ -7,13 +7,6 @@ void set_nemu_state(int state, uint32_t pc, int halt_ret){
   npcstate.halt_ret = halt_ret;
 }
 
-bool cpu_run = true;                          // CPU仿真运行状态
-vluint64_t sim_time = 0;                      // 记录仿真时间
-vluint64_t reset_time = 10;                   // 复位时间
-vluint64_t stop_time = 0;                     // 暂停时间点
-uint32_t pc_pre = 0x80000000;                 // 用于单步执行程序
-
-
 uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {};// 内存变量
 const char *regs[] = {
     "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
