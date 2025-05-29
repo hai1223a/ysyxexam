@@ -123,6 +123,8 @@ void printf_statu()
 
 void npc_end()
 {
+  IFDEF(CONFIG_ITRACE, print_iringbuf());
+  // 输出完成状态
   printf_statu();
   // 关闭波形文件
   tfp->close();
