@@ -55,7 +55,8 @@ void cpu_exec(uint32_t inst_num)
     cpu_exec_once();
 #ifdef CONFIG_ITRACE
     Itrace(inst__, pc__);
-    // if(inst_num < PRINT_INST_NUM)
+    log_write("%s\n", itrace_buf);
+      if(inst_num < PRINT_INST_NUM)
     printf("%s\n", itrace_buf);
 #endif
 #ifdef CONFIG_DIFFTEST
