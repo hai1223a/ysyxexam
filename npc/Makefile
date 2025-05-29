@@ -1,4 +1,5 @@
 TOPNAME = ysyx_25050136_NPC
+WORK_DIR = $(shell pwd)
 CSRCS = $(wildcard csrc/*.cpp csrc/*.c)
 VSRCS = $(wildcard vsrc/*.v)
 
@@ -18,7 +19,16 @@ VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-ini
 
 ARGS += -i /home/yunhai/ysyx-workbench/am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 ARGS += -d /home/yunhai/ysyx-workbench/nemu/build/riscv32-nemu-interpreter-so 
-ARGS += -l /home/yunhai/ysyx-workbench/npc/obj_dir/log.txt
+ARGS += -l $(WORK_DIR)/obj_dir/log.txt
+
+# 定义目标文件目录
+OBJ_DIR = $(patsubst %.cpp,obj_dir/csrc/%.o,$(CSRCS)) $(patsubst %.c,obj_dir/csrc/%.o,$(CSRCS))
+DEP_DIR = $(patsubst %.cpp,obj_dir/csrc/%.d,$(CSRCS)) $(patsubst %.c,obj_dir/csrc/%.d,$(CSRCS))
+
+# 创建目标文件目录
+$(OBJ_DIR): | obj_dir/csrc
+obj_dir/csrc:
+	mkdir -p obj_dir/csrc
 
 all: rum
 	@echo "Write this Makefile by your self."
