@@ -20,8 +20,9 @@ VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-ini
 ARGS += -i $(WORK_DIR)/../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.bin
 ARGS += -d $(WORK_DIR)/../nemu/build/riscv32-nemu-interpreter-so 
 ARGS += -l $(WORK_DIR)/obj_dir/log.txt
+ARGS += -e $(WORK_DIR)/../am-kernels/tests/cpu-tests/build/dummy-riscv32e-npc.elf
 
-all: rum
+all: run
 	@echo "Write this Makefile by your self."
 
 run:
@@ -33,7 +34,7 @@ run:
 gdb:
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	$(VERILATOR) $(VERILATOR_FLAGS) $(VSRCS) $(CSRCS)
-	@gdb --args  obj_dir/V$(TOPNAME) $(ARGS)
+	@gdb --args obj_dir/V$(TOPNAME) $(ARGS)
 
 clean:
 	rm -rf obj_dir

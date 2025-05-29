@@ -11,5 +11,5 @@ void print_iringbuf();
 void add_mtrace();
 void printf_mtrace();
 // ftrace
-
+void load_elf(const std::string &elf_file);
 #endif

@@ -9,7 +9,7 @@ bool batch_mode = false;      // 默认sdb模式
 static char *log_file = NULL;        // 日志文件
 static char *ref_so_file = NULL;     // difftest的ref的动态库文件
 static int ref_so_port = 1234;       // difftest的ref端口
-static char *elf_file = NULL;        // ftrace的elf文件
+static std::string elf_file = NULL;        // ftrace的elf文件
 static char *ftrace_log_file = NULL; // ftrace的日志文件
 static char *img_file = NULL;        // 程序源文件指针
 //=====================================================
@@ -46,6 +46,7 @@ static int parse_args(int argc, char *argv[])
       ref_so_port = atoi(optarg);
       break;
     case 'e':
+      elf_file = optarg;
       break;
     case 'g':
       break;
@@ -161,6 +162,8 @@ void init_main(int argc, char **argv)
   cpu_init();
   // Difftest
   IFDEF(CONFIG_DIFFTEST, init_difftest(ref_so_file, size, ref_so_port));
+  // FTRACE
+  IFDEF(CONFIG_FTRACE, load_elf(elf_file));
   // sdb初始化
   init_sdb();
   //
