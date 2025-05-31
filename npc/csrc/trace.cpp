@@ -82,7 +82,7 @@ void printf_mtrace()
 }
 
 // ftrace
-FUNC_FTRACE func_ftracer[30] = {0};
+FUNC_FTRACE func_ftracer[100] = {0};
 int FUNC_stack[10] = {0};
 char space[10] = {0};
 
