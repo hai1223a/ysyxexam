@@ -16,7 +16,7 @@ typedef struct
     uint32_t addr;
     char func_name[16];
 } FUNC_FTRACE;
-extern FUNC_FTRACE func_ftracer[10];
+extern FUNC_FTRACE func_ftracer[128];
 extern FILE *ftracer_log_fp;
 
 void load_elf(const std::string &elf_file);
