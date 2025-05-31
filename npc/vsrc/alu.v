@@ -32,10 +32,10 @@ module ysyx_25050136_ALU
             operation_i[`ysyx_25050136_ALU_AND  ]: out = add_sub_op1 & add_sub_op2;
             operation_i[`ysyx_25050136_ALU_EQ   ]: out = {DATA_WIDTH{~|op1_xor_op2}};
             operation_i[`ysyx_25050136_ALU_NEQ  ]: out = {DATA_WIDTH{|op1_xor_op2}};
-            operation_i[`ysyx_25050136_ALU_LEQ_U]: out = op1_i < op2_i;
-            operation_i[`ysyx_25050136_ALU_GEQ_U]: out = op1_i >= op2_i;
-            operation_i[`ysyx_25050136_ALU_LEQ  ]: out = $signed(op1_i) < $signed(op2_i);
-            operation_i[`ysyx_25050136_ALU_GEQ  ]: out = $signed(op1_i) >= $signed(op2_i);
+            operation_i[`ysyx_25050136_ALU_LEQ_U]: out = {DATA_WIDTH{op1_i < op2_i}};
+            operation_i[`ysyx_25050136_ALU_GEQ_U]: out = {DATA_WIDTH{op1_i >= op2_i}};
+            operation_i[`ysyx_25050136_ALU_LEQ  ]: out = {DATA_WIDTH{$signed(op1_i) < $signed(op2_i)}};
+            operation_i[`ysyx_25050136_ALU_GEQ  ]: out = {DATA_WIDTH{$signed(op1_i) >= $signed(op2_i)}};
             operation_i[`ysyx_25050136_ALU_SRA  ]: out = sra_result;
             operation_i[`ysyx_25050136_ALU_SLL  ]: out = sll_result;
             operation_i[`ysyx_25050136_ALU_SRL  ]: out = srl_result;     
