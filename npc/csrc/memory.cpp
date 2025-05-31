@@ -83,6 +83,7 @@ void pmem_read_write()
       }
     } else {
       IFDEF(CONFIG_MTRACE, printf_mtrace());
+      printf_regs();
       Assert(0, "你访存的地址值不合法,addr = 0x%08x\n", ysyx_25050136_NPC->mem_addr_o);
     }
   }
