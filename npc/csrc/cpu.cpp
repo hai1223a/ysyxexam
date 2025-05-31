@@ -54,7 +54,7 @@ void cpu_exec_once()
     // 推动仿真进行
     sim_time++;
     // 指令计算
-    if (sim_time > (reset_time + stop_time) && ysyx_25050136_NPC->pc_o != pc__)
+    if (sim_time > (reset_time + stop_time))
     {
       pc_pre = pc__;
       inst_pre = *(uint32_t *)(pmem + pc_pre - CONFIG_MBASE);
