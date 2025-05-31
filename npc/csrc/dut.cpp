@@ -93,5 +93,5 @@ void difftest_step()
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
   printf_ref_regs(&ref_r);
   printf_regs();
-  // checkregs(&ref_r);
+  checkregs(&ref_r);
 }
