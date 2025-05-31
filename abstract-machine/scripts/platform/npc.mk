@@ -19,7 +19,7 @@ override NPCFLAGS += -l $(shell dirname $(IMAGE).elf)/npc-$(IMAGE_NAME)-log.txt 
                      -p 1234 \
                      -e $(IMAGE).elf \
                      -g $(shell dirname $(IMAGE).elf)/npc-$(IMAGE_NAME)-ftracerlog.txt \
-                     
+                     -b
 
 MAINARGS_MAX_LEN = 64
 MAINARGS_PLACEHOLDER = The insert-arg rule in Makefile will insert mainargs here.
