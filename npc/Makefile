@@ -14,7 +14,7 @@ VERILATOR = verilator
 VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
 				   --top-module $(TOPNAME) \
 				   $(VERILATOR_INC_PATH) \
-				   --Wno-DECLFILENAME \
+				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
 				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"		
 
 override ARGS ?= -d $(WORK_DIR)/../nemu/build/riscv32-nemu-interpreter-so \

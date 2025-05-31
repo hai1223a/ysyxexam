@@ -8,14 +8,13 @@ long init_pmem(char *img_file)
 {
   if (!img_file){
     uint32_t *pmem_w = (uint32_t *)pmem;
-    *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
-    *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
-    *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
-    *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
-    *pmem_w++ = 0x10cb0b13; //addi	s6,s6,268
-    *pmem_w++ = 0x00100073; //ebreak
+    *pmem_w++ = 0x00000297;  // auipc t0,0 
+    *pmem_w++ = 0x00028823;  // sb  zero,16(t0)
+    *pmem_w++ = 0x0102c503;  // lbu a0,16(t0)
+    *pmem_w++ = 0x00100073;  // ebreak (used as nemu_trap)
+    *pmem_w++ = 0xdeadbeef;  // some data
     Log("没有给源文件, 程序使用了内置的代码.");
-    return 24;
+    return 20;
   }
   FILE *fp = fopen(img_file, "rb");
   Assert(fp, "Can not open '%s'", img_file);
