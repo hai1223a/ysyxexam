@@ -19,6 +19,7 @@ void cpu_exec_once()
   while (npcstate.state == NPC_RUNNING)
   {
     ysyx_25050136_NPC->clk = !ysyx_25050136_NPC->clk;
+    printf("%d\n",ysyx_25050136_NPC->clk);
     if (ysyx_25050136_NPC->clk == 1)
     {
       // 计算电路状态
