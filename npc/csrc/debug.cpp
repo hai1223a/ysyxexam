@@ -83,7 +83,7 @@ static void init_verilator(int argc, char *argv[])
   // 启用跟踪
   Verilated::traceEverOn(true);
   // 采样深度为5
-  ysyx_25050136_NPC->trace(tfp, 5);
+  ysyx_25050136_NPC->trace(tfp, 10);
   // 打开波形文件
   tfp->open("waveform.fst");
 }
