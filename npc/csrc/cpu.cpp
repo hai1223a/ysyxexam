@@ -22,6 +22,10 @@ void cpu_exec_once()
     ysyx_25050136_NPC->clk = 1;
     // 计算电路状态
     ysyx_25050136_NPC->eval();
+    // 记录上升沿
+    tfp->dump(sim_time);
+    // 推动仿真进行
+    sim_time++;
     // 复位
     reset();
     // 取指
@@ -33,10 +37,6 @@ void cpu_exec_once()
     {
       set_nemu_state(NPC_END, ysyx_25050136_NPC->pc_o, get_reg(10));
     }
-    // 记录上升沿
-    tfp->dump(sim_time);
-    // 推动仿真进行
-    sim_time++;
     // 模拟下降沿
     ysyx_25050136_NPC->clk = 0;
     // 计算电路状态
