@@ -83,7 +83,7 @@ void printf_mtrace()
 
 // ftrace
 FUNC_FTRACE func_ftracer[10] = {0};
-int FUNC_stack[40] = {0};
+int FUNC_stack[100] = {0};
 char space[10] = {0};
 
 // 修改 load_elf 函数
