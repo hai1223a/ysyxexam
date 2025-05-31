@@ -19,32 +19,36 @@ void cpu_exec_once()
   while (npcstate.state == NPC_RUNNING)
   {
     ysyx_25050136_NPC->clk = !ysyx_25050136_NPC->clk;
-    printf("%d\n", ysyx_25050136_NPC->clk);
-    if (ysyx_25050136_NPC->clk == 1)
-    {
-      // 计算电路状态
-      ysyx_25050136_NPC->eval();
-      // 取指
-      inst_read();
-      // 计算电路状态
-      ysyx_25050136_NPC->eval();
-      // 访存
-      pmem_read_write();
-    }
-    else
-    {
-      // 复位
-      reset();
-      if (sim_time == (reset_time + stop_time))
-      {
-        // 取指
-        inst_read();
-        // 计算电路状态
-        ysyx_25050136_NPC->eval();
-        // 访存
-        pmem_read_write();
-      }
-    }
+    // printf("%d\n", ysyx_25050136_NPC->clk);
+    // if (ysyx_25050136_NPC->clk == 1)
+    // {
+    //   // 计算电路状态
+    //   ysyx_25050136_NPC->eval();
+    //   // 取指
+    //   inst_read();
+    //   // 计算电路状态
+    //   ysyx_25050136_NPC->eval();
+    //   // 访存
+    //   pmem_read_write();
+    //   // 计算电路状态
+    //   ysyx_25050136_NPC->eval();
+    // }
+    // else
+    // {
+    //   // 复位
+    //   reset();
+    //   if (sim_time == (reset_time + stop_time))
+    //   {
+    //     // 取指
+    //     inst_read();
+    //     // 计算电路状态
+    //     ysyx_25050136_NPC->eval();
+    //     // 访存
+    //     pmem_read_write();
+    //     // 计算电路状态
+    //     ysyx_25050136_NPC->eval();
+    //   }
+    // }
     // 记录上升沿
     tfp->dump(sim_time);
     // 推动仿真进行
