@@ -19,7 +19,7 @@ void cpu_exec_once()
   while (npcstate.state == NPC_RUNNING)
   {
     ysyx_25050136_NPC->clk = !ysyx_25050136_NPC->clk;
-    printf("%d\n",ysyx_25050136_NPC->clk);
+    printf("%d\n", ysyx_25050136_NPC->clk);
     if (ysyx_25050136_NPC->clk == 1)
     {
       printf("A\n");
@@ -33,10 +33,6 @@ void cpu_exec_once()
       pmem_read_write();
       // 计算电路状态
       ysyx_25050136_NPC->eval();
-      // 记录上升沿
-      tfp->dump(sim_time);
-      // 推动仿真进行
-      sim_time++;
     }
     else
     {
@@ -54,11 +50,11 @@ void cpu_exec_once()
         // 计算电路状态
         ysyx_25050136_NPC->eval();
       }
-      // 记录下降沿
-      tfp->dump(sim_time);
-      // 推动仿真进行
-      sim_time++;
     }
+    // 记录上升沿
+    tfp->dump(sim_time);
+    // 推动仿真进行
+    sim_time++;
     // 指令计算
     if (sim_time > (reset_time + stop_time) && ysyx_25050136_NPC->pc_o != pc__)
     {
