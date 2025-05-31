@@ -18,8 +18,8 @@ void cpu_exec_once()
 {
   while (npcstate.state == NPC_RUNNING)
   {
-    // 模拟时钟反转
-    ysyx_25050136_NPC->clk ^= 1;
+    // 模拟上升沿
+    ysyx_25050136_NPC->clk = 1;
     // 计算电路状态
     ysyx_25050136_NPC->eval();
     // 复位
@@ -33,9 +33,15 @@ void cpu_exec_once()
     {
       set_nemu_state(NPC_END, ysyx_25050136_NPC->pc_o, get_reg(10));
     }
+    // 记录上升沿
+    tfp->dump(sim_time);
+    // 推动仿真进行
+    sim_time++;
+    // 模拟下降沿
+    ysyx_25050136_NPC->clk = 0;
     // 计算电路状态
     ysyx_25050136_NPC->eval();
-    // 记录波形数据
+    // 记录下降沿
     tfp->dump(sim_time);
     // 推动仿真进行
     sim_time++;
