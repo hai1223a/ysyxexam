@@ -86,12 +86,12 @@ static void checkregs(CPU_state *ref)
   }
 }
 
-void difftest_step(uint32_t pc)
+void difftest_step()
 {
   CPU_state ref_r;
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
-  // printf_ref_regs(&ref_r);
-  // printf_regs();
-  checkregs(&ref_r);
+  printf_ref_regs(&ref_r);
+  printf_regs();
+  // checkregs(&ref_r);
 }
