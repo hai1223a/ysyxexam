@@ -24,20 +24,13 @@ int main(int argc, char **argv) {
     top->data1_i = 0;
     while (sim_time < 10)
     {   
-        top->clk = 1;
+        top->clk ^= 1;
         top->reset = 0;
         if(sim_time < reset_time) top->reset = 1;
-        top->data1_i = rand() % 100;
+        if(top->clk == 1)top->data1_i = rand() % 100;
         top->eval();
         tfp->dump(sim_time);
         sim_time++;
-        top->clk = 0;
-        top->reset = 0;
-        if(sim_time < reset_time) top->reset = 1;
-        top->eval();
-        tfp->dump(sim_time);
-        sim_time++;
-        printf("\n");
     }
     
     // 清理资源
