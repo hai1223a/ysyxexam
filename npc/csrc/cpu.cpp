@@ -35,6 +35,7 @@ void cpu_exec_once()
     }
     // 计算电路状态
     ysyx_25050136_NPC->eval();
+    printf("sim_time = %lu,mem_addr_o = %x\n",sim_time,ysyx_25050136_NPC->mem_addr_o);
     // 记录波形数据
     tfp->dump(sim_time);
     // 推动仿真进行
