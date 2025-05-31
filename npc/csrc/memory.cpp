@@ -37,10 +37,9 @@ void inst_read()
   if(!ysyx_25050136_NPC->reset)
     if(likely(in_pmem(ysyx_25050136_NPC->pc_o)))
       ysyx_25050136_NPC->inst_i = *(uint32_t *)(pmem + ysyx_25050136_NPC->pc_o - CONFIG_MBASE);
-    else {
+    else 
       printf_regs();
       Assert(0, "你取指令的pc值不合法,pc = 0x%08x\n", ysyx_25050136_NPC->pc_o);
-    }
 }
 
 void pmem_read_write()
@@ -85,6 +84,7 @@ void pmem_read_write()
       }
     } else {
       IFDEF(CONFIG_MTRACE, printf_mtrace());
+      printf_regs();
       Assert(0, "你访存的地址值不合法,addr = 0x%08x\n", ysyx_25050136_NPC->mem_addr_o);
     }
   }
