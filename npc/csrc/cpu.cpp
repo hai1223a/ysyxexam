@@ -24,6 +24,8 @@ void cpu_exec_once()
     reset();
     // 取指
     inst_read();
+    // 计算电路状态
+    ysyx_25050136_NPC->eval();
     // 访存
     pmem_read_write();
     // 计算电路状态
