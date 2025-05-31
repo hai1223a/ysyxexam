@@ -32,7 +32,7 @@ exe:
 	$(VERILATOR) $(VERILATOR_FLAGS) $(VSRCS) $(CSRCS)
 
 wave: run
-	@gtkwave waveform.fst
+	gtkwave waveform.fst
 
 clean:
 	rm -rf obj_dir
