@@ -38,8 +38,8 @@ void inst_read()
   if (!ysyx_25050136_NPC->reset)
     if (likely(in_pmem(ysyx_25050136_NPC->pc_o)))
       ysyx_25050136_NPC->inst_i = *(uint32_t *)(pmem + ysyx_25050136_NPC->pc_o - CONFIG_MBASE);
-    // else
-    //   Assert(0, "你取指令的pc值不合法,pc = 0x%08x\n", ysyx_25050136_NPC->pc_o);
+    else
+      Assert(0, "你取指令的pc值不合法,pc = 0x%08x\n", ysyx_25050136_NPC->pc_o);
   // 找到ebreak
   if (is_ebreak(ysyx_25050136_NPC->inst_i))
   {

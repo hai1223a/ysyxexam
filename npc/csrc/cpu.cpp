@@ -22,7 +22,6 @@ void cpu_exec_once()
     printf("%d\n", ysyx_25050136_NPC->clk);
     if (ysyx_25050136_NPC->clk == 1)
     {
-      printf("A\n");
       // 计算电路状态
       ysyx_25050136_NPC->eval();
       // 取指
@@ -31,12 +30,9 @@ void cpu_exec_once()
       ysyx_25050136_NPC->eval();
       // 访存
       pmem_read_write();
-      // 计算电路状态
-      ysyx_25050136_NPC->eval();
     }
     else
     {
-      printf("A\n");
       // 复位
       reset();
       if (sim_time == (reset_time + stop_time))
@@ -47,8 +43,6 @@ void cpu_exec_once()
         ysyx_25050136_NPC->eval();
         // 访存
         pmem_read_write();
-        // 计算电路状态
-        ysyx_25050136_NPC->eval();
       }
     }
     // 记录上升沿
