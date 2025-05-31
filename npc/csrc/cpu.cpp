@@ -66,7 +66,7 @@ void cpu_exec_once()
 
 void cpu_exec(uint32_t inst_num)
 {
-  for (uint32_t i = 0; i < inst_num; i++)
+  for (uint32_t i = 0; i < 3; i++)
   {
     if (npcstate.state == NPC_END || npcstate.state == NPC_STOP ||
         npcstate.state == NPC_ABORT)
