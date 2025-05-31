@@ -33,10 +33,8 @@ void cpu_exec_once()
     {
       set_nemu_state(NPC_END, ysyx_25050136_NPC->pc_o, get_reg(10));
     }
-    Log("sim_time = %lu,mem_addr_o = %x\n",sim_time,ysyx_25050136_NPC->mem_addr_o);
     // 计算电路状态
     ysyx_25050136_NPC->eval();
-    printf("sim_time = %lu,mem_addr_o = %x\n",sim_time,ysyx_25050136_NPC->mem_addr_o);
     // 记录波形数据
     tfp->dump(sim_time);
     // 推动仿真进行

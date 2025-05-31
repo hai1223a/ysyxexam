@@ -35,10 +35,13 @@ long init_pmem(char *img_file)
 void inst_read() 
 {
   if(!ysyx_25050136_NPC->reset)
-    if(likely(in_pmem(ysyx_25050136_NPC->pc_o)))
+    if (!ysyx_25050136_NPC->clk)
+    {
+      if(likely(in_pmem(ysyx_25050136_NPC->pc_o)))
       ysyx_25050136_NPC->inst_i = *(uint32_t *)(pmem + ysyx_25050136_NPC->pc_o - CONFIG_MBASE);
     else
       Assert(0, "你取指令的pc值不合法,pc = 0x%08x\n", ysyx_25050136_NPC->pc_o);
+    }
 }
 
 void pmem_read_write()
@@ -46,45 +49,44 @@ void pmem_read_write()
   if(!ysyx_25050136_NPC->reset && (ysyx_25050136_NPC->mem_ren_o || ysyx_25050136_NPC->mem_wen_o)) {
     if(!ysyx_25050136_NPC->clk) {
       IFDEF(CONFIG_MTRACE, add_mtrace());
-    }
-    
-    if(likely(in_pmem(ysyx_25050136_NPC->mem_addr_o))) {
-      uint8_t *addr = pmem + ysyx_25050136_NPC->mem_addr_o - CONFIG_MBASE;
-      if(ysyx_25050136_NPC->mem_ren_o) {
-        switch (ysyx_25050136_NPC->mem_len_o)
-        {
-          case 1:
-            ysyx_25050136_NPC->mem_rdata_i = *addr;
-            break;
-          case 2:
-            ysyx_25050136_NPC->mem_rdata_i = *(uint16_t *)addr;
-            break;
-          case 4:
-            ysyx_25050136_NPC->mem_rdata_i = *(uint32_t *)addr;
-            break;
-          default:
-            break;
+      if(likely(in_pmem(ysyx_25050136_NPC->mem_addr_o))) {
+        uint8_t *addr = pmem + ysyx_25050136_NPC->mem_addr_o - CONFIG_MBASE;
+        if(ysyx_25050136_NPC->mem_ren_o) {
+          switch (ysyx_25050136_NPC->mem_len_o)
+          {
+            case 1:
+              ysyx_25050136_NPC->mem_rdata_i = *addr;
+              break;
+            case 2:
+              ysyx_25050136_NPC->mem_rdata_i = *(uint16_t *)addr;
+              break;
+            case 4:
+              ysyx_25050136_NPC->mem_rdata_i = *(uint32_t *)addr;
+              break;
+            default:
+              break;
+          }
         }
-      }
-      if(ysyx_25050136_NPC->mem_wen_o) {
-        switch (ysyx_25050136_NPC->mem_len_o)
-        {
-          case 1:
-            *addr = (uint8_t)(ysyx_25050136_NPC->mem_wdata_o);
-            break;
-          case 2:
-            *(uint16_t *)addr = (uint16_t)(ysyx_25050136_NPC->mem_wdata_o);
-            break;
-          case 4:
-            *(uint32_t *)addr = ysyx_25050136_NPC->mem_wdata_o;
-            break;
-          default:
-            break;
+        if(ysyx_25050136_NPC->mem_wen_o) {
+          switch (ysyx_25050136_NPC->mem_len_o)
+          {
+            case 1:
+              *addr = (uint8_t)(ysyx_25050136_NPC->mem_wdata_o);
+              break;
+            case 2:
+              *(uint16_t *)addr = (uint16_t)(ysyx_25050136_NPC->mem_wdata_o);
+              break;
+            case 4:
+              *(uint32_t *)addr = ysyx_25050136_NPC->mem_wdata_o;
+              break;
+            default:
+              break;
+          }
         }
+      } else {
+        IFDEF(CONFIG_MTRACE, printf_mtrace());
+        // Assert(0, "你访存的地址值不合法,addr = 0x%08x\n", ysyx_25050136_NPC->mem_addr_o);
       }
-    } else {
-      IFDEF(CONFIG_MTRACE, printf_mtrace());
-      // Assert(0, "你访存的地址值不合法,addr = 0x%08x\n", ysyx_25050136_NPC->mem_addr_o);
     }
   }
 }
