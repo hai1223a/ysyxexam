@@ -30,8 +30,8 @@ module ysyx_25050136_ALU
             operation_i[`ysyx_25050136_ALU_XOR  ]: out = op1_xor_op2;
             operation_i[`ysyx_25050136_ALU_OR   ]: out = add_sub_op1 | add_sub_op2;
             operation_i[`ysyx_25050136_ALU_AND  ]: out = add_sub_op1 & add_sub_op2;
-            operation_i[`ysyx_25050136_ALU_EQ   ]: out = {DATA_WIDTH{!op1_xor_op2}};
-            operation_i[`ysyx_25050136_ALU_NEQ  ]: out = op1_xor_op2;
+            operation_i[`ysyx_25050136_ALU_EQ   ]: out = {DATA_WIDTH{~|op1_xor_op2}};
+            operation_i[`ysyx_25050136_ALU_NEQ  ]: out = {DATA_WIDTH{|op1_xor_op2}};
             operation_i[`ysyx_25050136_ALU_LEQ_U]: out = op1_i < op2_i;
             operation_i[`ysyx_25050136_ALU_GEQ_U]: out = op1_i >= op2_i;
             operation_i[`ysyx_25050136_ALU_LEQ  ]: out = $signed(op1_i) < $signed(op2_i);
