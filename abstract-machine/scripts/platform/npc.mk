@@ -38,4 +38,7 @@ run: insert-arg
 gdb: insert-arg
 	$(MAKE) -C $(NPC_HOME) gdb ARGS="$(NPCFLAGS)"
 
+# wave: insert-arg
+#     $(MAKE) -C $(NPC_HOME) wave ARGS="$(NPCFLAGS)"
+
 .PHONY: insert-arg
