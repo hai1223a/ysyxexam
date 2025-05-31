@@ -91,7 +91,5 @@ void difftest_step()
   CPU_state ref_r;
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
-  printf_ref_regs(&ref_r);
-  printf_regs();
   checkregs(&ref_r);
 }
