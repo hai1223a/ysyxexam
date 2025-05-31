@@ -59,12 +59,43 @@ module ysyx_25050136_ID
     wire funct7_0000000 = (funct7 == 7'b0000000);
     wire funct7_0100000 = (funct7 == 7'b0100000);
     // 具体指令判断
-    wire inst_auipc = type_auipc;
     wire inst_lui = type_lui;
+    wire inst_auipc = type_auipc;
     wire inst_jal = type_jal;
     wire inst_jalr = type_jalr;
-    wire inst_addi = type_op_imm & funct3_000;
+    wire inst_beq = type_branch & funct3_000;
+    wire inst_bne = type_branch & funct3_001;
+    wire inst_blt = type_branch & funct3_100;
+    wire inst_bge = type_branch & funct3_101;
+    wire inst_bltu = type_branch & funct3_110;
+    wire inst_bgeu = type_branch & funct3_111;
+    wire inst_lb = type_load & funct3_000;
+    wire inst_lh = type_load & funct3_001;
+    wire inst_lw = type_load & funct3_010;
+    wire inst_lbu = type_load & funct3_100;
+    wire inst_lhu = type_load & funct3_101;
+    wire inst_sb = type_store & funct3_000;
+    wire inst_sh = type_store & funct3_001;
     wire inst_sw = type_store & funct3_010;
+    wire inst_addi = type_op_imm & funct3_000;
+    wire inst_slti = type_op_imm & funct3_010;
+    wire inst_sltiu = type_op_imm & funct3_011;
+    wire inst_xori = type_op_imm & funct3_100;
+    wire inst_ori = type_op_imm & funct3_110;
+    wire inst_andi = type_op_imm & funct3_111;
+    wire inst_slli = type_op_imm & funct3_001;
+    wire inst_srli = type_op_imm & funct3_101 & funct7_0000000;
+    wire inst_srai = type_op_imm & funct3_101 & funct7_0100000;
+    wire inst_add = type_op & funct3_000 & funct7_0000000;
+    wire inst_sub = type_op & funct3_000 & funct7_0100000;
+    wire inst_sll = type_op & funct3_001;
+    wire inst_slt = type_op & funct3_010;
+    wire inst_sltu = type_op & funct3_011;
+    wire inst_xor = type_op & funct3_100;
+    wire inst_srl = type_op & funct3_101;
+    wire inst_sra = type_op & funct3_101 & funct7_0100000;
+    wire inst_or = type_op & funct3_110;
+    wire inst_and = type_op & funct3_111;
     wire inst_ebreak = (inst_i == 32'h00100073);
     // 指令类型判断
     wire inst_Rtype = type_op;
@@ -95,14 +126,27 @@ module ysyx_25050136_ID
     assign fu_o[`ysyx_25050136_LSU] = type_store | type_load;
     assign fu_o[`ysyx_25050136_BQU] = type_jalr | type_jal | type_branch;
     // 选择ALU相关操作
-    assign alu_op_o[`ysyx_25050136_ALU_NOP] = type_jal | type_jalr | type_lui;
-    assign alu_op_o[`ysyx_25050136_ALU_ADD] = type_auipc | type_store | type_load | inst_addi;
+    assign alu_op_o[`ysyx_25050136_ALU_NOP]   = type_jal | type_jalr | type_lui;
+    assign alu_op_o[`ysyx_25050136_ALU_ADD]   = type_auipc | type_store | type_load | inst_addi | inst_add;
+    assign alu_op_o[`ysyx_25050136_ALU_SUB]   = inst_sub;
+    assign alu_op_o[`ysyx_25050136_ALU_XOR]   = inst_xor | inst_xori;
+    assign alu_op_o[`ysyx_25050136_ALU_OR]    = inst_or | inst_ori;
+    assign alu_op_o[`ysyx_25050136_ALU_AND]   = inst_and | inst_andi;
+    assign alu_op_o[`ysyx_25050136_ALU_EQ]    = inst_beq;
+    assign alu_op_o[`ysyx_25050136_ALU_NEQ]   = inst_bne;
+    assign alu_op_o[`ysyx_25050136_ALU_LEQ_U] = inst_bltu | inst_sltiu | inst_sltu;
+    assign alu_op_o[`ysyx_25050136_ALU_GEQ_U] = inst_bgeu;
+    assign alu_op_o[`ysyx_25050136_ALU_LEQ]   = inst_blt | inst_slti | inst_slt;
+    assign alu_op_o[`ysyx_25050136_ALU_GEQ]   = inst_bge;
+    assign alu_op_o[`ysyx_25050136_ALU_SRA]   = inst_srai | inst_sra;
+    assign alu_op_o[`ysyx_25050136_ALU_SLL]   = inst_slli | inst_sll;
+    assign alu_op_o[`ysyx_25050136_ALU_SRL]   = inst_srli | inst_srl;
     // 选择BQU相关操作
     assign bqu_op_o[`ysyx_25050136_BQU_JALR]  = type_jalr;
     assign bqu_op_o[`ysyx_25050136_BQU_JAL]   = type_jal;
     assign bqu_op_o[`ysyx_25050136_BQU_OTHER] = type_branch;
     // 选择LSU相关操作
-    assign lsu_op_o[`ysyx_25050136_LSU_LOAD] = type_load;
+    assign lsu_op_o[`ysyx_25050136_LSU_LOAD]  = type_load;
     assign lsu_op_o[`ysyx_25050136_LSU_STORE] = type_store;
     // 选择ALU的操作数
     assign op1_o = inst_lui ? imm : (inst_auipc ? pc_i :
@@ -114,8 +158,10 @@ module ysyx_25050136_ID
     assign op4_o = imm;
     // 选择LSU
     assign op5_o = rdata2_i;
-    assign mem_len_o = 4;
-    assign mem_signed_o = 1;
+    assign mem_len_o = (inst_lw | inst_sw) ? 3'd4 : 
+                      ((inst_sh | inst_lhu | inst_lh) ? 3'd2 :
+                      ((inst_sb | inst_lbu | inst_lb) ? 3'd1 : 0));
+    assign mem_signed_o = (inst_lhu | inst_lbu) ? 0 : 1;
     // 写回寄存器地址
     assign rd_o  = rd;
     assign rd_en_o = (type_store | type_branch) ? 0 : 1;
