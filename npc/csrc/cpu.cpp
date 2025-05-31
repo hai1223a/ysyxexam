@@ -56,9 +56,9 @@ void cpu_exec_once()
     // 指令计算
     if (sim_time > (reset_time + stop_time))
     {
-      pc_pre = pc__;
-      inst_pre = *(uint32_t *)(pmem + pc_pre - CONFIG_MBASE);
-      pc__ = ysyx_25050136_NPC->pc_o;
+      // pc_pre = pc__;
+      // inst_pre = *(uint32_t *)(pmem + pc_pre - CONFIG_MBASE);
+      // pc__ = ysyx_25050136_NPC->pc_o;
       break;
     }
   }
