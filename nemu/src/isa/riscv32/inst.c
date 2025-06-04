@@ -106,7 +106,7 @@ static word_t mul_div(Decode *s, const word_t op1, const word_t op2, int op) {
   }
 
   if ((op == DIV || op == DIVU) && op2 == 0) {
-    printf("PC = 0x%x, 检测到除0: %d / %d\n", s->pc, int_op1, int_op2);
+    // printf("PC = 0x%x, 检测到除0: %d / %d\n", s->pc, int_op1, int_op2);
     return (word_t)UINT32_MAX; // 返回一个合理的值，例如 INT32_MIN
   }
 
