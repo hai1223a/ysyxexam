@@ -149,49 +149,124 @@ int printf(const char *fmt, ...) {
 
 int vsprintf(char *out, const char *fmt, va_list ap) {
   char *head = out;
-  while (*fmt)
-  {
-    if(*fmt == '%') {
+  while (*fmt) {
+    if (*fmt == '%') {
       fmt++;
-      switch (*fmt)
-      {
-        case 'd':
+      // 处理零填充和宽度
+      int zero_pad = 0, width = 0;
+      if (*fmt == '0') {
+        zero_pad = 1;
+        fmt++;
+      }
+      while (*fmt >= '0' && *fmt <= '9') {
+        width = width * 10 + (*fmt - '0');
+        fmt++;
+      }
+      switch (*fmt) {
+        case 'd': {
           int num = va_arg(ap, int);
-          char num_str[10];
-          int n = 0;
-          if(num < 0) {
-            *(out++) = '-';
-            num = -num;
+          char num_str[16];
+          int n = 0, neg = 0;
+          unsigned int unum;
+          if (num < 0) {
+            neg = 1;
+            unum = (unsigned int)(-num);
+          } else {
+            unum = (unsigned int)num;
           }
           do {
-            num_str[n] = (num % 10) + '0';
-            n++;
-            num = num / 10;
-          } while(num > 0);
-          while(n) {
-            n--;
-            *(out++) = num_str[n];
+            num_str[n++] = (unum % 10) + '0';
+            unum /= 10;
+          } while (unum > 0);
+          if (neg) num_str[n++] = '-';
+          int pad = width - n;
+          if (zero_pad && pad > 0) {
+            if (neg) {
+              *(out++) = '-';
+              n--;
+            }
+            for (int i = 0; i < pad; i++) {
+              *(out++) = '0';
+            }
+            for (int i = n - 1; i >= (neg ? 1 : 0); i--) {
+              *(out++) = num_str[i];
+            }
+          } else {
+            for (int i = 0; i < pad; i++) {
+              *(out++) = ' ';
+            }
+            for (int i = n - 1; i >= 0; i--) {
+              *(out++) = num_str[i];
+            }
           }
           break;
-        case 's':
+        }
+        case 'u': {
+          unsigned int num = va_arg(ap, unsigned int);
+          char num_str[16];
+          int n = 0;
+          do {
+            num_str[n++] = (num % 10) + '0';
+            num /= 10;
+          } while (num > 0);
+          int pad = width - n;
+          for (int i = 0; i < pad; i++) {
+            *(out++) = zero_pad ? '0' : ' ';
+          }
+          for (int i = n - 1; i >= 0; i--) {
+            *(out++) = num_str[i];
+          }
+          break;
+        }
+        case 'x':
+        case 'X': {
+          unsigned int num = va_arg(ap, unsigned int);
+          char num_str[16];
+          int n = 0;
+          do {
+            int digit = num % 16;
+            if (digit < 10)
+              num_str[n++] = '0' + digit;
+            else
+              num_str[n++] = (*fmt == 'x' ? 'a' : 'A') + (digit - 10);
+            num /= 16;
+          } while (num > 0);
+          int pad = width - n;
+          for (int i = 0; i < pad; i++) {
+            *(out++) = zero_pad ? '0' : ' ';
+          }
+          for (int i = n - 1; i >= 0; i--) {
+            *(out++) = num_str[i];
+          }
+          break;
+        }
+        case 's': {
           const char *s = va_arg(ap, const char *);
-          while(*s) {
+          int slen = 0;
+          const char *sp = s;
+          while (*sp++) slen++;
+          int pad = width - slen;
+          for (int i = 0; i < pad; i++) {
+            *(out++) = ' ';
+          }
+          while (*s) {
             *(out++) = *(s++);
           }
+          break;
+        }
+        case '%':
+          *(out++) = '%';
           break;
         default:
           *(out++) = '%';
           *(out++) = *fmt;
           break;
       }
-    }
-    else 
-    {
+    } else {
       *(out++) = *fmt;
     }
     fmt++;
   }
-  
   *out = '\0';
   return out - head;
 }
