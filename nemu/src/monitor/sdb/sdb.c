@@ -116,6 +116,7 @@ static int cmd_w(char *args) {
     printf("请输入要监视的表达式\n");
     return 0;
   }
+  IFNDEF(CONFIG_WATCHPOINT, Log("你没有启动监视点的配置\n"));
   add_watchpoint(args);
   return 0;
 }
