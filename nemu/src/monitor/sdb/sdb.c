@@ -128,6 +128,7 @@ static int cmd_d(char *args) {
     return 0;
   }
   int number = 0;
+  IFNDEF(CONFIG_WATCHPOINT, Log("你没有启动监视点的配置\n"));
   if(sscanf(args, "%d", &number) == 1)  delete_watchpoint(number);
   else  printf("你打的监视点序号表达式不对\n");
   return 0;
