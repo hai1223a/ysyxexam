@@ -163,6 +163,12 @@ config FTRACE
   bool "Enable function tracer"
   default n
 
+# 有关watchpoint的配置
+config WATCHPOINT
+  depends on TRACE
+  bool "Enable watchpoint"
+  default n
+
 config DIFFTEST
   depends on TARGET_NATIVE_ELF
   bool "Enable differential testing"
