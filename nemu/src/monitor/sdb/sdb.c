@@ -77,6 +77,7 @@ static int cmd_info(char *args) {
   }
   else if (!strcmp(args, "w"))
   {
+    IFNDEF(CONFIG_WATCHPOINT, Log("你没有启动监视点的配置\n"));
     watchpoint_display();
   }
   
