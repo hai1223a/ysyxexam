@@ -126,6 +126,12 @@ int printf(const char *fmt, ...) {
           }
           break;
         }
+        case 'c': {
+          char ch = (char)va_arg(ap, int);
+          putch(ch);
+          count++;
+          break;
+        }
         case '%':
           putch('%');
           count++;
@@ -252,6 +258,11 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           while (*s) {
             *(out++) = *(s++);
           }
+          break;
+        }
+        case 'c': {
+          char ch = (char)va_arg(ap, int);
+          *(out++) = ch;
           break;
         }
         case '%':
