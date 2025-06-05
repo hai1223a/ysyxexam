@@ -53,20 +53,20 @@ void init_map() {
 }
 
 #ifdef CONFIG_DTRACE
-  static char name_buf[10];
-  static int count;
+  char D_name_buf[10];
+  int  D_count;
   void dtrace_log(IOMap *map) {
-    if(!strcmp(name_buf, "")) {
-      strcpy(name_buf, map->name);
+    if(!strcmp(D_name_buf, "")) {
+      strcpy(D_name_buf, map->name);
       dtracer_write("调用的设备列表如下:\n");
     }
-    if(!strcmp(name_buf, map->name)) {
-      count++;
+    if(!strcmp(D_name_buf, map->name)) {
+      D_count++;
     }
     else {
-      strcpy(name_buf, map->name);
-      dtracer_write("调用 %s , 次数为 %d\n", name_buf, count);
-      count = 0;
+      strcpy(D_name_buf, map->name);
+      dtracer_write("调用 %s , 次数为 %d\n", D_name_buf, D_count);
+      D_count = 0;
     }
   }
 #endif
