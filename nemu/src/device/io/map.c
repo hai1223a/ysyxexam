@@ -69,7 +69,7 @@ void init_map() {
       default:
         break;
     }
-    p += snprintf(p, buf + sizeof(buf) - p, "\n");
+    p += snprintf(p, buf + sizeof(buf) - p, "-->");
     printf(ANSI_FMT("%s", ANSI_FG_YELLOW), buf);
   }
 #endif
