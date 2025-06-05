@@ -170,14 +170,14 @@ void init_ftracer_log(const char *ftracer_log_file);
 
 static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
-    {"batch"    , no_argument      , NULL, 'b'},
-    {"log"      , required_argument, NULL, 'l'},
-    {"diff"     , required_argument, NULL, 'd'},
-    {"port"     , required_argument, NULL, 'p'},
-    {"elf"      , required_argument, NULL, 'e'},  // 读取elf文件
-    {"elf-log"  , required_argument, NULL, 'g'},  // 写入ftracer的内容
-    {"help"     , no_argument      , NULL, 'h'},
-    {0          , 0                , NULL,  0 },
+    {"batch"      , no_argument      , NULL, 'b'},
+    {"log"        , required_argument, NULL, 'l'},
+    {"diff"       , required_argument, NULL, 'd'},
+    {"port"       , required_argument, NULL, 'p'},
+    {"elf"        , required_argument, NULL, 'e'},  // 读取elf文件
+    {"elf-log"    , required_argument, NULL, 'g'},  // 写入ftracer的内容
+    {"help"       , no_argument      , NULL, 'h'},
+    {0            , 0                , NULL,  0 },
   };
   int o;
   while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:g:", table, NULL)) != -1) {
@@ -197,6 +197,7 @@ static int parse_args(int argc, char *argv[]) {
         printf("\t-p,--port=PORT            run DiffTest with port PORT\n");
         printf("\t-e,--elf=ELF_FILE         load elf file for ftrace\n");
         printf("\t-g,--elf-log=FTRACER_FILE ftracer output log to FTRACER_FILE\n");
+
         printf("\n");
         exit(0);
     }

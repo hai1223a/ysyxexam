@@ -52,6 +52,28 @@ void init_map() {
   p_space = io_space;
 }
 
+#ifdef CONFIG_DTRACE
+  static char buf[128];
+  enum { read, write };
+  void dtrace_log(IOMap *map, int mode) {
+    char *p = buf;
+    p += snprintf(p, sizeof(buf), map->name, ":   ");
+    switch (mode)
+    {
+      case read:
+        p += snprintf(p, buf + sizeof(buf) - p, "read   ");
+        break;
+      case write:
+        p += snprintf(p, buf + sizeof(buf) - p, "write  ");
+        break;
+      default:
+        break;
+    }
+    p += snprintf(p, buf + sizeof(buf) - p, "\n");
+    printf(ANSI_FMT("%s", ANSI_FG_MAGENTA), buf);
+  }
+#endif
+
 word_t map_read(paddr_t addr, int len, IOMap *map) {
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);

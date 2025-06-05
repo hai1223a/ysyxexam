@@ -144,6 +144,7 @@ static void execute(uint64_t n) {
     IFDEF(CONFIG_WATCHPOINT, monitor_check(&s));
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
+    IFDEF(CONFIG_DTRACE)
   }
 }
 
