@@ -70,7 +70,7 @@ void init_map() {
         break;
     }
     p += snprintf(p, buf + sizeof(buf) - p, "\n");
-    printf(ANSI_FMT("%s", ANSI_FG_MAGENTA), buf);
+    printf(ANSI_FMT("%s", ANSI_FG_YELLOW), buf);
   }
 #endif
 
