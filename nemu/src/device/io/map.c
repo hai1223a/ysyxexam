@@ -54,6 +54,7 @@ void init_map() {
 
 #ifdef CONFIG_DTRACE
   static char buf[128];
+  static int count;
   enum { read, write };
   void dtrace_log(IOMap *map, int mode) {
     char *p = buf;
@@ -70,6 +71,11 @@ void init_map() {
         break;
     }
     p += snprintf(p, buf + sizeof(buf) - p, "-->");
+    count ++;
+    if(count >= 4) {
+      p += snprintf(p, buf + sizeof(buf) - p, "\n");
+      count = 0;
+    }
     dtracer_write("%s", buf);
   }
 #endif
