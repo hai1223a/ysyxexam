@@ -69,6 +69,13 @@ static long load_img() {
   return size;
 }
 
+// 写入 DTACER 文件
+//==================================================
+static char *dtracer_log_file = NULL;
+#ifdef CONFIG_DTRACE
+void init_dtracer_log(const char *dtracer_log_file);
+#endif
+//==================================================
 // 加载elf文件和写入ftracer
 //==================================================
 static char *elf_file = NULL;
@@ -176,11 +183,12 @@ static int parse_args(int argc, char *argv[]) {
     {"port"       , required_argument, NULL, 'p'},
     {"elf"        , required_argument, NULL, 'e'},  // 读取elf文件
     {"elf-log"    , required_argument, NULL, 'g'},  // 写入ftracer的内容
+    {"dtrace-log" , required_argument, NULL, 'k'},  // 写入DTRACE的内容
     {"help"       , no_argument      , NULL, 'h'},
     {0            , 0                , NULL,  0 },
   };
   int o;
-  while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:g:", table, NULL)) != -1) {
+  while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:g:k:", table, NULL)) != -1) {
     switch (o) {
       case 'b': sdb_set_batch_mode(); break;
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
@@ -188,16 +196,17 @@ static int parse_args(int argc, char *argv[]) {
       case 'd': diff_so_file = optarg; break;
       case 'e': elf_file = optarg; break;
       case 'g': ftracer_log_file = optarg; break;
+      case 'k': dtracer_log_file = optarg; break;
       case 1: img_file = optarg; return 0;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
-        printf("\t-b,--batch                run with batch mode\n");
-        printf("\t-l,--log=FILE             output log to FILE\n");
-        printf("\t-d,--diff=REF_SO          run DiffTest with reference REF_SO\n");
-        printf("\t-p,--port=PORT            run DiffTest with port PORT\n");
-        printf("\t-e,--elf=ELF_FILE         load elf file for ftrace\n");
-        printf("\t-g,--elf-log=FTRACER_FILE ftracer output log to FTRACER_FILE\n");
-
+        printf("\t-b,--batch                     run with batch mode\n");
+        printf("\t-l,--log=FILE                  output log to FILE\n");
+        printf("\t-d,--diff=REF_SO               run DiffTest with reference REF_SO\n");
+        printf("\t-p,--port=PORT                 run DiffTest with port PORT\n");
+        printf("\t-e,--elf=ELF_FILE              load elf file for ftrace\n");
+        printf("\t-g,--elf-log=FTRACER_FILE      ftracer output log to FTRACER_FILE\n");
+        printf("\t-k,--dtrace-log=DTRACER_FILE   ftracer output log to DTRACER_FILE\n");
         printf("\n");
         exit(0);
     }
@@ -242,6 +251,9 @@ void init_monitor(int argc, char *argv[]) {
 
   /* 打开ftracer的输出日志 */
   IFDEF(CONFIG_FTRACE, init_ftracer_log(ftracer_log_file));
+
+  /* 打开ftracer的输出日志 */
+  IFDEF(CONFIG_DTRACE, init_dtracer_log(dtracer_log_file));
 
   /* Display welcome message. */
   welcome();
