@@ -66,7 +66,7 @@ void init_map() {
     else {
       strcpy(D_name_buf, map->name);
       dtracer_write("调用 %s , 次数为 %d\n", D_name_buf, D_count);
-      D_count = 0;
+      D_count = 1;
     }
   }
 #endif
