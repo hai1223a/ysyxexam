@@ -56,7 +56,10 @@ void init_map() {
   static char name_buf[10];
   static int count;
   void dtrace_log(IOMap *map) {
-    if(!strcmp(name_buf, "")) strcpy(name_buf, map->name);
+    if(!strcmp(name_buf, "")) {
+      strcpy(name_buf, map->name);
+      dtracer_write("调用的设备列表如下:\n");
+    }
     if(!strcmp(name_buf, map->name)) {
       count++;
     }
