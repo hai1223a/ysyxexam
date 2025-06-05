@@ -53,30 +53,18 @@ void init_map() {
 }
 
 #ifdef CONFIG_DTRACE
-  static char buf[128];
+  static char name_buf[10];
   static int count;
-  enum { read, write };
-  void dtrace_log(IOMap *map, int mode) {
-    char *p = buf;
-    p += snprintf(p, sizeof(buf), "%s", map->name);
-    switch (mode)
-    {
-      case read:
-        p += snprintf(p, buf + sizeof(buf) - p, "   read   ");
-        break;
-      case write:
-        p += snprintf(p, buf + sizeof(buf) - p, "   write  ");
-        break;
-      default:
-        break;
+  void dtrace_log(IOMap *map) {
+    if(!strcmp(name_buf, "")) strcpy(name_buf, map->name);
+    if(!strcmp(name_buf, map->name)) {
+      count++;
     }
-    p += snprintf(p, buf + sizeof(buf) - p, "-->");
-    count ++;
-    if(count >= 4) {
-      p += snprintf(p, buf + sizeof(buf) - p, "\n");
+    else {
+      strcpy(name_buf, map->name);
+      dtracer_write("调用 %s , 次数为 %d\n", name_buf, count);
       count = 0;
     }
-    dtracer_write("%s", buf);
   }
 #endif
 
@@ -85,7 +73,7 @@ word_t map_read(paddr_t addr, int len, IOMap *map) {
   check_bound(map, addr);
   paddr_t offset = addr - map->low;
   invoke_callback(map->callback, offset, len, false); // prepare data to read
-  IFDEF(CONFIG_DTRACE, dtrace_log(map, read));
+  IFDEF(CONFIG_DTRACE, dtrace_log(map));
   word_t ret = host_read(map->space + offset, len);
   return ret;
 }
@@ -96,5 +84,5 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   paddr_t offset = addr - map->low;
   host_write(map->space + offset, len, data);
   invoke_callback(map->callback, offset, len, true);
-  IFDEF(CONFIG_DTRACE, dtrace_log(map, write));
+  IFDEF(CONFIG_DTRACE, dtrace_log(map));
 }
