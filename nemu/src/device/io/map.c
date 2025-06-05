@@ -70,7 +70,7 @@ void init_map() {
         break;
     }
     p += snprintf(p, buf + sizeof(buf) - p, "-->");
-    // dtracer_write("%s", buf);
+    dtracer_write("%s", buf);
   }
 #endif
 
