@@ -59,6 +59,7 @@ void init_map() {
     if(!strcmp(D_name_buf, "")) {
       strcpy(D_name_buf, map->name);
       dtracer_write("调用的设备列表如下:\n");
+      D_count = 1;
     }
     if(!strcmp(D_name_buf, map->name)) {
       D_count++;
