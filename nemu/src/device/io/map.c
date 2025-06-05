@@ -57,14 +57,14 @@ void init_map() {
   enum { read, write };
   void dtrace_log(IOMap *map, int mode) {
     char *p = buf;
-    p += snprintf(p, sizeof(buf), map->name, ":   ");
+    p += snprintf(p, sizeof(buf), "%s", map->name);
     switch (mode)
     {
       case read:
-        p += snprintf(p, buf + sizeof(buf) - p, "read   ");
+        p += snprintf(p, buf + sizeof(buf) - p, "   read   ");
         break;
       case write:
-        p += snprintf(p, buf + sizeof(buf) - p, "write  ");
+        p += snprintf(p, buf + sizeof(buf) - p, "   write  ");
         break;
       default:
         break;
