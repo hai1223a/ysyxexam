@@ -40,6 +40,7 @@ static void audio_play(void *userdata, Uint8 *stream, int len) {
   sbuf_rpos += play_len;
   if (sbuf_rpos >= CONFIG_SB_SIZE) sbuf_rpos -= CONFIG_SB_SIZE;
   audio_base[reg_count] -= play_len;
+  printf("len = %d, play_len = %d, len - play_len = %d\n", len, play_len, len - play_len);
 }
 
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
