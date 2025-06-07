@@ -375,9 +375,10 @@ int sprintf(char *out, const char *fmt, ...) {
 }
 
 int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
-  char *head = out;
   size_t remain = n;
-  if (remain == 0) return 0; // 不能写任何内容
+  int total = 0; // 记录本应写入的字符数
+
+  if (remain == 0) return 0;
 
   while (*fmt) {
     if (*fmt == '%') {
@@ -398,35 +399,25 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
           char num_str[16];
           int nstr = 0, neg = 0;
           unsigned int unum;
-          if (num < 0) {
-            neg = 1;
-            unum = (unsigned int)(-num);
-          } else {
-            unum = (unsigned int)num;
-          }
-          do {
-            num_str[nstr++] = (unum % 10) + '0';
-            unum /= 10;
-          } while (unum > 0);
+          if (num < 0) { neg = 1; unum = (unsigned int)(-num); }
+          else { unum = (unsigned int)num; }
+          do { num_str[nstr++] = (unum % 10) + '0'; unum /= 10; } while (unum > 0);
           if (neg) num_str[nstr++] = '-';
           int pad = width - nstr;
           if (zero_pad && pad > 0) {
-            if (neg && remain > 1) {
-              *(out++) = '-'; remain--;
-              nstr--;
+            if (neg) { if (remain > 1) *(out++) = '-'; nstr--; if (remain > 1) remain--; total++; }
+            for (int i = 0; i < pad; i++, total++) {
+              if (remain > 1) { *(out++) = '0'; remain--; }
             }
-            for (int i = 0; i < pad && remain > 1; i++, remain--) {
-              *(out++) = '0';
-            }
-            for (int i = nstr - 1; i >= (neg ? 1 : 0) && remain > 1; i--, remain--) {
-              *(out++) = num_str[i];
+            for (int i = nstr - 1; i >= (neg ? 1 : 0); i--, total++) {
+              if (remain > 1) { *(out++) = num_str[i]; remain--; }
             }
           } else {
-            for (int i = 0; i < pad && remain > 1; i++, remain--) {
-              *(out++) = ' ';
+            for (int i = 0; i < pad; i++, total++) {
+              if (remain > 1) { *(out++) = ' '; remain--; }
             }
-            for (int i = nstr - 1; i >= 0 && remain > 1; i--, remain--) {
-              *(out++) = num_str[i];
+            for (int i = nstr - 1; i >= 0; i--, total++) {
+              if (remain > 1) { *(out++) = num_str[i]; remain--; }
             }
           }
           break;
@@ -440,11 +431,11 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
             num /= 10;
           } while (num > 0);
           int pad = width - nstr;
-          for (int i = 0; i < pad && remain > 1; i++, remain--) {
-            *(out++) = zero_pad ? '0' : ' ';
+          for (int i = 0; i < pad; i++, total++) {
+            if (remain > 1) { *(out++) = zero_pad ? '0' : ' '; remain--; }
           }
-          for (int i = nstr - 1; i >= 0 && remain > 1; i--, remain--) {
-            *(out++) = num_str[i];
+          for (int i = nstr - 1; i >= 0; i--, total++) {
+            if (remain > 1) { *(out++) = num_str[i]; remain--; }
           }
           break;
         }
@@ -462,11 +453,11 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
             num /= 16;
           } while (num > 0);
           int pad = width - nstr;
-          for (int i = 0; i < pad && remain > 1; i++, remain--) {
-            *(out++) = zero_pad ? '0' : ' ';
+          for (int i = 0; i < pad; i++, total++) {
+            if (remain > 1) { *(out++) = zero_pad ? '0' : ' '; remain--; }
           }
-          for (int i = nstr - 1; i >= 0 && remain > 1; i--, remain--) {
-            *(out++) = num_str[i];
+          for (int i = nstr - 1; i >= 0; i--, total++) {
+            if (remain > 1) { *(out++) = num_str[i]; remain--; }
           }
           break;
         }
@@ -480,11 +471,11 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
             num /= 8;
           } while (num > 0);
           int pad = width - nstr;
-          for (int i = 0; i < pad && remain > 1; i++, remain--) {
-            *(out++) = zero_pad ? '0' : ' ';
+          for (int i = 0; i < pad; i++, total++) {
+            if (remain > 1) { *(out++) = zero_pad ? '0' : ' '; remain--; }
           }
-          for (int i = nstr - 1; i >= 0 && remain > 1; i--, remain--) {
-            *(out++) = num_str[i];
+          for (int i = nstr - 1; i >= 0; i--, total++) {
+            if (remain > 1) { *(out++) = num_str[i]; remain--; }
           }
           break;
         }
@@ -492,58 +483,64 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
           void *ptr = va_arg(ap, void *);
           uintptr_t addr = (uintptr_t)ptr;
           if (remain > 1) { *(out++) = '0'; remain--; }
+          total++;
           if (remain > 1) { *(out++) = 'x'; remain--; }
+          total++;
           char num_str[2 * sizeof(uintptr_t) + 1];
           int nstr = 0;
           if (addr == 0) {
             if (remain > 1) { *(out++) = '0'; remain--; }
+            total++;
           } else {
             while (addr) {
               int digit = addr % 16;
               num_str[nstr++] = (digit < 10) ? ('0' + digit) : ('a' + digit - 10);
               addr /= 16;
             }
-            for (int i = nstr - 1; i >= 0 && remain > 1; i--, remain--) {
-              *(out++) = num_str[i];
+            for (int i = nstr - 1; i >= 0; i--, total++) {
+              if (remain > 1) { *(out++) = num_str[i]; remain--; }
             }
           }
           break;
         }
         case 's': {
           const char *s = va_arg(ap, const char *);
-          int slen = 0;
-          const char *sp = s;
+          int slen = 0; const char *sp = s;
           while (*sp++) slen++;
           int pad = width - slen;
-          for (int i = 0; i < pad && remain > 1; i++, remain--) {
-            *(out++) = ' ';
+          for (int i = 0; i < pad; i++, total++) {
+            if (remain > 1) { *(out++) = ' '; remain--; }
           }
-          while (*s && remain > 1) {
-            *(out++) = *(s++);
-            remain--;
+          while (*s) {
+            if (remain > 1) { *(out++) = *s; remain--; }
+            s++; total++;
           }
           break;
         }
         case 'c': {
           char ch = (char)va_arg(ap, int);
           if (remain > 1) { *(out++) = ch; remain--; }
+          total++;
           break;
         }
         case '%':
           if (remain > 1) { *(out++) = '%'; remain--; }
+          total++;
           break;
         default:
           if (remain > 1) { *(out++) = '%'; remain--; }
           if (remain > 1) { *(out++) = *fmt; remain--; }
+          total += 2;
           break;
       }
     } else {
       if (remain > 1) { *(out++) = *fmt; remain--; }
+      total++;
     }
     fmt++;
   }
   *out = '\0';
-  return out - head;
+  return total;
 }
 
 int snprintf(char *out, size_t n, const char *fmt, ...) {
