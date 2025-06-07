@@ -34,14 +34,12 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
   int nwrite = 0;
   while (nwrite < len) {
     int count = inl(AUDIO_COUNT_ADDR);
-    int remain = buf_size - count;
-    if(remain > len) remain = len; 
-    for(int i = 0; i < remain; i++) {
+    if(count < buf_size) {
       if(sbuf_opt == buf_size) sbuf_opt = 0;
       outb(AUDIO_SBUF_ADDR + sbuf_opt, *((uint8_t *)ctl->buf.start + nwrite));
       sbuf_opt += 1;
       nwrite += 1;
+      outl(AUDIO_COUNT_ADDR, inl(AUDIO_COUNT_ADDR) + 1);
     }
-    outl(AUDIO_COUNT_ADDR, inl(AUDIO_COUNT_ADDR) + remain);
   }
 }
