@@ -374,12 +374,184 @@ int sprintf(char *out, const char *fmt, ...) {
   return written;
 }
 
-int snprintf(char *out, size_t n, const char *fmt, ...) {
-  panic("Not implemented");
+int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
+  char *head = out;
+  size_t remain = n;
+  if (remain == 0) return 0; // 不能写任何内容
+
+  while (*fmt) {
+    if (*fmt == '%') {
+      fmt++;
+      int zero_pad = 0, width = 0;
+      if (*fmt == '0') {
+        zero_pad = 1;
+        fmt++;
+      }
+      while (*fmt >= '0' && *fmt <= '9') {
+        width = width * 10 + (*fmt - '0');
+        fmt++;
+      }
+      if (*fmt == 'l') fmt++;
+      switch (*fmt) {
+        case 'd': {
+          int num = va_arg(ap, int);
+          char num_str[16];
+          int nstr = 0, neg = 0;
+          unsigned int unum;
+          if (num < 0) {
+            neg = 1;
+            unum = (unsigned int)(-num);
+          } else {
+            unum = (unsigned int)num;
+          }
+          do {
+            num_str[nstr++] = (unum % 10) + '0';
+            unum /= 10;
+          } while (unum > 0);
+          if (neg) num_str[nstr++] = '-';
+          int pad = width - nstr;
+          if (zero_pad && pad > 0) {
+            if (neg && remain > 1) {
+              *(out++) = '-'; remain--;
+              nstr--;
+            }
+            for (int i = 0; i < pad && remain > 1; i++, remain--) {
+              *(out++) = '0';
+            }
+            for (int i = nstr - 1; i >= (neg ? 1 : 0) && remain > 1; i--, remain--) {
+              *(out++) = num_str[i];
+            }
+          } else {
+            for (int i = 0; i < pad && remain > 1; i++, remain--) {
+              *(out++) = ' ';
+            }
+            for (int i = nstr - 1; i >= 0 && remain > 1; i--, remain--) {
+              *(out++) = num_str[i];
+            }
+          }
+          break;
+        }
+        case 'u': {
+          unsigned int num = va_arg(ap, unsigned int);
+          char num_str[16];
+          int nstr = 0;
+          do {
+            num_str[nstr++] = (num % 10) + '0';
+            num /= 10;
+          } while (num > 0);
+          int pad = width - nstr;
+          for (int i = 0; i < pad && remain > 1; i++, remain--) {
+            *(out++) = zero_pad ? '0' : ' ';
+          }
+          for (int i = nstr - 1; i >= 0 && remain > 1; i--, remain--) {
+            *(out++) = num_str[i];
+          }
+          break;
+        }
+        case 'x':
+        case 'X': {
+          unsigned int num = va_arg(ap, unsigned int);
+          char num_str[16];
+          int nstr = 0;
+          do {
+            int digit = num % 16;
+            if (digit < 10)
+              num_str[nstr++] = '0' + digit;
+            else
+              num_str[nstr++] = (*fmt == 'x' ? 'a' : 'A') + (digit - 10);
+            num /= 16;
+          } while (num > 0);
+          int pad = width - nstr;
+          for (int i = 0; i < pad && remain > 1; i++, remain--) {
+            *(out++) = zero_pad ? '0' : ' ';
+          }
+          for (int i = nstr - 1; i >= 0 && remain > 1; i--, remain--) {
+            *(out++) = num_str[i];
+          }
+          break;
+        }
+        case 'o': {
+          unsigned int num = va_arg(ap, unsigned int);
+          char num_str[16];
+          int nstr = 0;
+          do {
+            int digit = num % 8;
+            num_str[nstr++] = '0' + digit;
+            num /= 8;
+          } while (num > 0);
+          int pad = width - nstr;
+          for (int i = 0; i < pad && remain > 1; i++, remain--) {
+            *(out++) = zero_pad ? '0' : ' ';
+          }
+          for (int i = nstr - 1; i >= 0 && remain > 1; i--, remain--) {
+            *(out++) = num_str[i];
+          }
+          break;
+        }
+        case 'p': {
+          void *ptr = va_arg(ap, void *);
+          uintptr_t addr = (uintptr_t)ptr;
+          if (remain > 1) { *(out++) = '0'; remain--; }
+          if (remain > 1) { *(out++) = 'x'; remain--; }
+          char num_str[2 * sizeof(uintptr_t) + 1];
+          int nstr = 0;
+          if (addr == 0) {
+            if (remain > 1) { *(out++) = '0'; remain--; }
+          } else {
+            while (addr) {
+              int digit = addr % 16;
+              num_str[nstr++] = (digit < 10) ? ('0' + digit) : ('a' + digit - 10);
+              addr /= 16;
+            }
+            for (int i = nstr - 1; i >= 0 && remain > 1; i--, remain--) {
+              *(out++) = num_str[i];
+            }
+          }
+          break;
+        }
+        case 's': {
+          const char *s = va_arg(ap, const char *);
+          int slen = 0;
+          const char *sp = s;
+          while (*sp++) slen++;
+          int pad = width - slen;
+          for (int i = 0; i < pad && remain > 1; i++, remain--) {
+            *(out++) = ' ';
+          }
+          while (*s && remain > 1) {
+            *(out++) = *(s++);
+            remain--;
+          }
+          break;
+        }
+        case 'c': {
+          char ch = (char)va_arg(ap, int);
+          if (remain > 1) { *(out++) = ch; remain--; }
+          break;
+        }
+        case '%':
+          if (remain > 1) { *(out++) = '%'; remain--; }
+          break;
+        default:
+          if (remain > 1) { *(out++) = '%'; remain--; }
+          if (remain > 1) { *(out++) = *fmt; remain--; }
+          break;
+      }
+    } else {
+      if (remain > 1) { *(out++) = *fmt; remain--; }
+    }
+    fmt++;
+  }
+  *out = '\0';
+  return out - head;
 }
 
-int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
-  panic("Not implemented");
+int snprintf(char *out, size_t n, const char *fmt, ...) {
+  va_list ap;
+  va_start(ap, fmt);
+  int written = vsnprintf(out, n, fmt, ap);
+  va_end(ap);
+  return written;
 }
 
 #endif
