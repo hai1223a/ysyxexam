@@ -44,5 +44,5 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
     }
     
   }
-  printf("aa\n");
+  printf("subf_opt = %d\n", sbuf_opt);
 }
