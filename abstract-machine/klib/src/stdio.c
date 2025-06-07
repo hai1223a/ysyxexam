@@ -212,6 +212,8 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
         width = width * 10 + (*fmt - '0');
         fmt++;
       }
+      // 处理长整型格式符'l'，忽略
+      if (*fmt == 'l') fmt++;
       switch (*fmt) {
         case 'd': {
           int num = va_arg(ap, int);
@@ -287,6 +289,44 @@ int vsprintf(char *out, const char *fmt, va_list ap) {
           }
           for (int i = n - 1; i >= 0; i--) {
             *(out++) = num_str[i];
+          }
+          break;
+        }
+        case 'o': {
+          unsigned int num = va_arg(ap, unsigned int);
+          char num_str[16];
+          int n = 0;
+          do {
+            int digit = num % 8;
+            num_str[n++] = '0' + digit;
+            num /= 8;
+          } while (num > 0);
+          int pad = width - n;
+          for (int i = 0; i < pad; i++) {
+            *(out++) = zero_pad ? '0' : ' ';
+          }
+          for (int i = n - 1; i >= 0; i--) {
+            *(out++) = num_str[i];
+          }
+          break;
+        }
+        case 'p': {
+          void *ptr = va_arg(ap, void *);
+          uintptr_t addr = (uintptr_t)ptr;
+          *(out++) = '0'; *(out++) = 'x';
+          char num_str[2 * sizeof(uintptr_t) + 1];
+          int n = 0;
+          if (addr == 0) {
+            *(out++) = '0';
+          } else {
+            while (addr) {
+              int digit = addr % 16;
+              num_str[n++] = (digit < 10) ? ('0' + digit) : ('a' + digit - 10);
+              addr /= 16;
+            }
+            for (int i = n - 1; i >= 0; i--) {
+              *(out++) = num_str[i];
+            }
           }
           break;
         }
