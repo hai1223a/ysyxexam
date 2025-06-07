@@ -23,6 +23,9 @@ int printf(const char *fmt, ...) {
         width = width * 10 + (*fmt - '0');
         fmt++;
       }
+      // 处理长整型格式符'l',(因为使用32位机器)这里采用忽略策略
+      if(*fmt == 'l') fmt++;
+      // 这里识别各种通配符
       switch (*fmt) {
         case 'd': {
           int num = va_arg(ap, int);
@@ -107,6 +110,47 @@ int printf(const char *fmt, ...) {
           for (int i = n - 1; i >= 0; i--) {
             putch(num_str[i]);
             count++;
+          }
+          break;
+        }
+        case 'o': {
+          unsigned int num = va_arg(ap, unsigned int);
+          char num_str[16];
+          int n = 0;
+          do {
+            int digit = num % 8;
+            num_str[n++] = '0' + digit;
+            num /= 8;
+          } while (num > 0);
+          int pad = width - n;
+          for (int i = 0; i < pad; i++) {
+            putch(zero_pad ? '0' : ' ');
+            count++;
+          }
+          for (int i = n - 1; i >= 0; i--) {
+            putch(num_str[i]);
+            count++;
+          }
+          break;
+        }
+        case 'p': {
+          void *ptr = va_arg(ap, void *);
+          uintptr_t addr = (uintptr_t)ptr;
+          putch('0'); putch('x'); count += 2;
+          char num_str[2 * sizeof(uintptr_t) + 1];
+          int n = 0;
+          if (addr == 0) {
+            putch('0'); count++;
+          } else {
+            while (addr) {
+              int digit = addr % 16;
+              num_str[n++] = (digit < 10) ? ('0' + digit) : ('a' + digit - 10);
+              addr /= 16;
+            }
+            for (int i = n - 1; i >= 0; i--) {
+              putch(num_str[i]);
+              count++;
+            }
           }
           break;
         }
