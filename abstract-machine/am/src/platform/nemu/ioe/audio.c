@@ -42,6 +42,7 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
       nwrite += 1;
       outl(AUDIO_COUNT_ADDR, inl(AUDIO_COUNT_ADDR) + 1);
     }
-    printf("aaa");
+    
   }
+  printf("aa\n");
 }
