@@ -8,7 +8,7 @@ void __am_gpu_init() {
     int w = 400;  
     int h = 300;  
     uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-    for (i = 0; i < w * h; i ++) fb[i] = 0;
+    for (i = 0; i < w * h; i ++) fb[i] = 0x00FFFFFF;
     outl(SYNC_ADDR, 1);
 }
 
@@ -28,8 +28,8 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
     // int point = (w * ctl->y) + ctl->x;
     uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
     for(i = 0; i < 100; i++) 
-      for(j = 0; j < ctl->x; j++) {
-        fb[i * w + j] = 0x00FFFFFF;
+      for(j = 0; j < 200; j++) {
+        fb[i * w + j] = ctl->sync;
       }
     outl(SYNC_ADDR, 1);
   }
