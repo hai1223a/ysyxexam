@@ -33,17 +33,17 @@ void __am_audio_play(AM_AUDIO_PLAY_T *ctl) {
   static uintptr_t sbuf_opt = 0;
   int buf_size = inl(AUDIO_SBUF_SIZE_ADDR);
   int nwrite = 0;
-  printf("count_pre = %d ", inl(AUDIO_COUNT_ADDR));
+  int count = inl(AUDIO_COUNT_ADDR);
   while (nwrite < len) {
-    int count = inl(AUDIO_COUNT_ADDR);
     if(count < buf_size) {
       if(sbuf_opt == buf_size) sbuf_opt = 0;
       outb(AUDIO_SBUF_ADDR + sbuf_opt, *((uint8_t *)ctl->buf.start + nwrite));
       sbuf_opt += 1;
       nwrite += 1;
-      outl(AUDIO_COUNT_ADDR, inl(AUDIO_COUNT_ADDR) + 1);
+      
     }
   }
+  outl(AUDIO_COUNT_ADDR, inl(AUDIO_COUNT_ADDR) + len);
   printf("count_new = %d ", inl(AUDIO_COUNT_ADDR) - len);
   printf("subf_opt = %d, \n", sbuf_opt);
 }
