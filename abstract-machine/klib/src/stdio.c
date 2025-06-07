@@ -378,8 +378,6 @@ int vsnprintf(char *out, size_t n, const char *fmt, va_list ap) {
   size_t remain = n;
   int total = 0; // 记录本应写入的字符数
 
-  if (remain == 0) return 0;
-
   while (*fmt) {
     if (*fmt == '%') {
       fmt++;
