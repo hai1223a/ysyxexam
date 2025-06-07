@@ -5,7 +5,7 @@
 
 void __am_gpu_init() {
   int i;
-  int w = 100;  
+  int w = 400;  
   int h = 200;  
   uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
   for (i = 0; i < w * h; i ++) fb[i] = i;
