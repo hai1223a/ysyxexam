@@ -23,8 +23,8 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   if (ctl->sync) {
     int i, j;
-    int height = (int)(uint32_t)inw(VGACTL_ADDR);
-    int width = (int)(uint32_t)inw(VGACTL_ADDR + 2);
+    int height = 300;
+    int width = 400;
     int point = (width * ctl->y) + ctl->x;
     uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
     for(i = 0; i < ctl->y; i++) 
