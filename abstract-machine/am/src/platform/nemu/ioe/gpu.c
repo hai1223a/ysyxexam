@@ -24,12 +24,12 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   if (ctl->sync) {
     int i, j;
     // int h = 300;
-    // int w = 400;
+    int w = 400;
     // int point = (w * ctl->y) + ctl->x;
     uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
     for(i = 0; i < 200; i++) 
       for(j = 0; j < 200; j++) {
-        fb[i * j] = 0x00FFFFFF;
+        fb[i * w + j] = 0x00FFFFFF;
       }
     outl(SYNC_ADDR, 1);
   }
