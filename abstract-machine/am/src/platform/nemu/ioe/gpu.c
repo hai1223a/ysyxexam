@@ -22,15 +22,20 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   if (ctl->sync) {
-    int i, j;
-    int height = 300;
-    int width = 400;
-    int point = (width * ctl->y) + ctl->x;
+    // int i, j;
+    // int height = 300;
+    // int width = 400;
+    // int point = (width * ctl->y) + ctl->x;
+    // uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
+    // for(i = 0; i < ctl->y; i++) 
+    //   for(j = 0; j < ctl->x; j++) {
+    //     fb[point + j + i * height] = i * j;
+    //   }
+    int i;
+    int w = 400;  
+    int h = 300;  
     uint32_t *fb = (uint32_t *)(uintptr_t)FB_ADDR;
-    for(i = 0; i < ctl->y; i++) 
-      for(j = 0; j < ctl->x; j++) {
-        fb[point + j + i * height] = i * j;
-      }
+    for (i = 0; i < w * h; i ++) fb[i] = 0;
     outl(SYNC_ADDR, 1);
   }
 }
