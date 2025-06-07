@@ -9,7 +9,7 @@ void __am_gpu_init() {
 void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
   *cfg = (AM_GPU_CONFIG_T) {
     .present = true, .has_accel = false,
-    .width = 0, .height = 0,
+    .width = (int)(uint32_t)inw(VGACTL_ADDR + 0x2), .height = (int)(uint32_t)inw(VGACTL_ADDR),
     .vmemsz = 0
   };
 }
