@@ -1,4 +1,4 @@
-#include <common.h>
+#include "../include/common.h"
 
 uint32_t pc__ = RESET_VECTOR; // 执行完指令后的PC值
 uint32_t pc_pre = 0;          // 执行的指令的PC值
