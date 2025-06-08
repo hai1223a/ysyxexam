@@ -22,9 +22,9 @@ $(warning $(COLOR_RED)To build the project, first run 'make menuconfig'.$(COLOR_
 endif
 
 Q            := @
-KCONFIG_PATH := $(TEST_HOME)/tools/kconfig
-FIXDEP_PATH  := $(TEST_HOME)/tools/fixdep
-Kconfig      := $(TEST_HOME)/Kconfig
+KCONFIG_PATH := $(NPC_HOME)/tools/kconfig
+FIXDEP_PATH  := $(NPC_HOME)/tools/fixdep
+Kconfig      := $(NPC_HOME)/Kconfig
 rm-distclean += include/generated include/config .config .config.old
 silent := -s
 

@@ -1,3 +1,24 @@
+#***************************************************************************************
+#
+#**************************************************************************************/
+
+# 第一步:检查路径
+ifeq ($(wildcard $(NPC_HOME)/vsrc/top.v),)
+  $(error NPC_HOME=$(NPC_HOME) is not a NEMU repo)
+endif
+
+# 第二步:检查配置
+-include $(NPC_HOME)/include/config/auto.conf
+-include $(NPC_HOME)/include/config/auto.conf.cmd
+
+CAPSTONE_PATH := $(NPC_HOME)/tools/capstone
+ifeq ($(CONFIG_DIFFTEST),y)
+CAPSTONE_PATH = tools/capstone
+LIBCAPSTONE = tools/capstone/repo/libcapstone.so.5
+$(LIBCAPSTONE):
+	$(MAKE) -C $(CAPSTONE_PATH)
+endif
+
 TOPNAME = ysyx_25050136_NPC
 CSRCS = $(wildcard csrc/*.cpp csrc/*.c)
 VSRCS = $(wildcard vsrc/*.v)
@@ -27,7 +48,7 @@ run: exe
 gdb: exe
 	gdb --args obj_dir/V$(TOPNAME) $(ARGS)
 
-exe:
+exe: $(LIBCAPSTONE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	@mkdir -p  $(NPC_HOME)/obj_dir/log
 	$(VERILATOR) $(VERILATOR_FLAGS) $(VSRCS) $(CSRCS)
