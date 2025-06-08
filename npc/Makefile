@@ -27,7 +27,7 @@ VSRCS = $(wildcard vsrc/*.v)
 $(info $(CSRCS) $(VSRCS))
 BFLAGS   += -fsanitize=address
 INC_PATH := $(NPC_HOME)/include $(NPC_HOME)/include/generated
-CFLAGS   +=  $(BFLAGS) $(addprefix -I, $(INC_PATH))
+CFLAGS   +=  $(BFLAGS) $(addprefix -I, $(INC_PATH)) 
 LDFLAGS  += -lreadline $(BFLAGS)
 VERILATOR_INC_PATH = -Ivsrc
 VERILATOR = verilator

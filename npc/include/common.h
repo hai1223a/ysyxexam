@@ -20,13 +20,6 @@
 #include "dut.h"
 #include "macro.h"
 //=====================================================
-// 配置选项
-//=====================================================
-// #define CONFIG_ITRACE 1
-// #define CONFIG_MTRACE 1
-// #define CONFIG_FTRACE 1
-// #define CONFIG_DIFFTEST 1
-//=====================================================
 // 状态
 //=====================================================
 enum { NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT };
