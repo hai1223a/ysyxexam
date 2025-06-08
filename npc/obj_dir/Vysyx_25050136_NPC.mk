@@ -37,7 +37,7 @@ VM_PREFIX = Vysyx_25050136_NPC
 VM_MODPREFIX = Vysyx_25050136_NPC
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
-	-fsanitize=address -I./include -I./include/generated  \
+	-fsanitize=address -I../include -I../include/generated  \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
