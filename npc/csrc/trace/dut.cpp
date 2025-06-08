@@ -14,7 +14,7 @@
  ***************************************************************************************/
 
 #include <dlfcn.h>
-#include "../include/common.h"
+#include "../../include/common.h"
 
 enum
 {

@@ -1,4 +1,4 @@
-#include "../include/common.h"
+#include "../../include/common.h"
 #include <getopt.h> //,包含解析命令行参数的库函数
 
 VerilatedFstC *tfp = NULL;

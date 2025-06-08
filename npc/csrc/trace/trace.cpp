@@ -1,4 +1,4 @@
-#include "../include/common.h"
+#include "../../include/common.h"
 #include <elf.h>
 // itrace
 char itrace_buf[128] = {0};
