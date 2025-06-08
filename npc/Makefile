@@ -1,16 +1,16 @@
 TOPNAME = ysyx_25050136_NPC
 CSRCS = $(wildcard csrc/*.cpp csrc/*.c)
 VSRCS = $(wildcard vsrc/*.v)
-
 # Wno-DECLFILENAME 表示禁用一种代码格式警告,该警告用于检查模块名和文件名的一致性
 # Wno-UNUSEDSIGNAL 表示禁用一种代码格式警告,该警告用于检查那些已定义未使用的信号
 # -fsanitize=address 用于检查段错误相关的代码
-BUILD_FLAGS += -fsanitize=address
-CFLAGS +=  $(BUILD_FLAGS)
-LDFLAGS += -lreadline $(BUILD_FLAGS)
+BFLAGS   += -fsanitize=address
+INC_PATH := $(NPC_HOME)/include $(NPC_HOME)/include/generated 
+CFLAGS   +=  $(BFLAGS) $(addprefix -I, $(INC_PATH))
+LDFLAGS  += -lreadline $(BFLAGS)
 VERILATOR_INC_PATH = -Ivsrc
 VERILATOR = verilator
-VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique\
+VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique \
 				   --top-module $(TOPNAME) \
 				   $(VERILATOR_INC_PATH) \
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
