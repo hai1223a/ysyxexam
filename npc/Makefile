@@ -24,7 +24,7 @@ endif
 TOPNAME = ysyx_25050136_NPC
 CSRCS = $(wildcard csrc/*.cpp csrc/*.c)
 VSRCS = $(wildcard vsrc/*.v)
-$(echo $(CSRCS) $(VSRCS))
+$(info $(CSRCS) $(VSRCS))
 BFLAGS   += -fsanitize=address
 INC_PATH := $(NPC_HOME)/include $(NPC_HOME)/include/generated
 CFLAGS   +=  $(BFLAGS) $(addprefix -I, $(INC_PATH))
