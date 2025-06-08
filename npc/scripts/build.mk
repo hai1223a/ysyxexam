@@ -3,8 +3,8 @@
 # Add necessary options if the target is a shared library
 ifeq ($(SHARE),1)
 SO = -so
-CFLAGS  += -fPIC -fvisibility=hidden -fsanitize=address
-LDFLAGS += -shared -fPIC -fsanitize=address
+CFLAGS  += -fPIC -fvisibility=hidden
+LDFLAGS += -shared -fPIC
 endif
 
 WORK_DIR  = $(shell pwd)
@@ -28,14 +28,11 @@ LDFLAGS := -O2 $(LDFLAGS)
 OBJS = $(SRCS:%.c=$(OBJ_DIR)/%.o) $(CXXSRC:%.cc=$(OBJ_DIR)/%.o)
 
 # Compilation patterns
-$(OBJ_DIR)/%.o: $(OBJ_DIR)/%.i
-	@$(CC) $(CFLAGS) -c -o $@ $<
-	$(call call_fixdep, $(@:.o=.d), $@)
-
-$(OBJ_DIR)/%.i: %.c
+$(OBJ_DIR)/%.o: %.c
 	@echo + CC $<
 	@mkdir -p $(dir $@)
-	@$(CC) $(CFLAGS) -E -C -o $@ $<
+	@$(CC) $(CFLAGS) -c -o $@ $<
+	$(call call_fixdep, $(@:.o=.d), $@)
 
 $(OBJ_DIR)/%.o: %.cc
 	@echo + CXX $<
@@ -47,7 +44,7 @@ $(OBJ_DIR)/%.o: %.cc
 -include $(OBJS:.o=.d)
 
 # Some convenient rules
-#.PRECIOUS: $(OBJ_DIR)/%.i
+
 .PHONY: app clean
 
 app: $(BINARY)
