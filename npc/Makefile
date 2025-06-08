@@ -26,7 +26,7 @@ VSRCS = $(wildcard vsrc/*.v)
 # Wno-UNUSEDSIGNAL 表示禁用一种代码格式警告,该警告用于检查那些已定义未使用的信号
 # -fsanitize=address 用于检查段错误相关的代码
 BFLAGS   += -fsanitize=address
-INC_PATH := 
+INC_PATH := $(NPC_HOME)/include $(NPC_HOME)/include/generated
 CFLAGS   +=  $(BFLAGS) $(addprefix -I, $(INC_PATH))
 LDFLAGS  += -lreadline $(BFLAGS)
 VERILATOR_INC_PATH = -Ivsrc
