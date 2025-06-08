@@ -22,7 +22,7 @@ endif
 
 # 第三步:准备用于编译工程的选项
 TOPNAME = ysyx_25050136_NPC
-CSRCS = $(wildcard csrc/*/*.cpp csrc/*/*.c)
+CSRCS = $(wildcard csrc/*/*.cpp csrc/*/*.c csrc/*.cpp csrc/*.c)
 VSRCS = $(wildcard vsrc/*.v)
 $(info $(CSRCS) $(VSRCS))
 BFLAGS   += -fsanitize=address
