@@ -40,3 +40,6 @@ clean:
 
 .PHONY: run sim exe wave clean
 include ../Makefile
+-include $(NPC_HOME)/include/config/auto.conf
+-include $(NPC_HOME)/include/config/auto.conf.cmd
+include $(NPC_HOME)/scripts/config.mk
