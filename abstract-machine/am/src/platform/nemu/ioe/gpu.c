@@ -24,8 +24,8 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   int w = ctl->w;
   int point = y * width + x;
   int i,j;
-  for(i = 0; i < h; i++) 
-    for(j = 0; j < w; j++) {
+  for (i = 0; i < h; i++) 
+    for (j = 0; j < w; j++) {
       fb[point + i * width + j] = pb[i * w + j];
     }
   if (ctl->sync) {
