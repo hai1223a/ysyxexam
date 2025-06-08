@@ -11,6 +11,7 @@ endif
 -include $(NPC_HOME)/include/config/auto.conf
 -include $(NPC_HOME)/include/config/auto.conf.cmd
 
+# 检查工具capstone是否就绪
 CAPSTONE_PATH := $(NPC_HOME)/tools/capstone
 ifeq ($(CONFIG_DIFFTEST),y)
 CAPSTONE_PATH = tools/capstone
@@ -19,18 +20,19 @@ $(LIBCAPSTONE):
 	$(MAKE) -C $(CAPSTONE_PATH)
 endif
 
+# 第三步:准备用于编译工程的选项
 TOPNAME = ysyx_25050136_NPC
 CSRCS = $(wildcard csrc/*.cpp csrc/*.c)
 VSRCS = $(wildcard vsrc/*.v)
-# Wno-DECLFILENAME 表示禁用一种代码格式警告,该警告用于检查模块名和文件名的一致性
-# Wno-UNUSEDSIGNAL 表示禁用一种代码格式警告,该警告用于检查那些已定义未使用的信号
-# -fsanitize=address 用于检查段错误相关的代码
 BFLAGS   += -fsanitize=address
 INC_PATH := $(NPC_HOME)/include $(NPC_HOME)/include/generated
 CFLAGS   +=  $(BFLAGS) $(addprefix -I, $(INC_PATH))
 LDFLAGS  += -lreadline $(BFLAGS)
 VERILATOR_INC_PATH = -Ivsrc
 VERILATOR = verilator
+# Wno-DECLFILENAME 表示禁用一种代码格式警告,该警告用于检查模块名和文件名的一致性
+# Wno-UNUSEDSIGNAL 表示禁用一种代码格式警告,该警告用于检查那些已定义未使用的信号
+# -fsanitize=address 用于检查段错误相关的代码
 VERILATOR_FLAGS += -Wall --cc -exe --build --trace-fst --x-assign unique --x-initial unique \
 				   --top-module $(TOPNAME) \
 				   $(VERILATOR_INC_PATH) \
