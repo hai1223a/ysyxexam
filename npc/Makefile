@@ -26,7 +26,7 @@ CSRCS = $(wildcard csrc/*/*.cpp csrc/*/*.c csrc/*.cpp csrc/*.c)
 VSRCS = $(wildcard vsrc/*.v)
 $(info $(CSRCS) $(VSRCS))
 BFLAGS   += -fsanitize=address
-INC_PATH := $(NPC_HOME)/include $(NPC_HOME)/include/generated
+INC_PATH := ./include ./include/generated
 CFLAGS   +=  $(BFLAGS) $(addprefix -I, $(INC_PATH)) 
 LDFLAGS  += -lreadline $(BFLAGS)
 VERILATOR_INC_PATH = -Ivsrc
