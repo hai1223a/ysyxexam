@@ -169,7 +169,6 @@ static void load_elf() {
   free((void *)strtab);
   free(sh_table);
   fclose(file);
-  printf("完成\n");
 }
 
 // 设置 ftracer 的输出

@@ -40,6 +40,7 @@ bool log_enable() {
 #ifdef CONFIG_FTRACE
 FILE *ftracer_log_fp = NULL;
 void init_ftracer_log(const char *ftracer_log_file) {
+  printf("A");
   ftracer_log_fp = stdout;
   if (ftracer_log_file != NULL) {
     FILE *fp = fopen(ftracer_log_file, "w");
@@ -47,6 +48,7 @@ void init_ftracer_log(const char *ftracer_log_file) {
     ftracer_log_fp = fp;
   }
   Log("Ftracer log is written to %s", ftracer_log_file ? ftracer_log_file : "stdout");
+  printf("A");
 }
 #endif
 //=========================================
