@@ -48,10 +48,9 @@ VM_USER_LDLIBS = \
 VM_USER_CLASSES = \
 	common \
 	cpu \
+	main \
 	memory \
 	reg \
-	devices \
-	main \
 	debug \
 	expr \
 	sdb \
@@ -59,15 +58,17 @@ VM_USER_CLASSES = \
 	disasm \
 	dut \
 	trace \
+	timer \
 
 # User .cpp directories (from .cpp's on Verilator command line)
 VM_USER_DIR = \
 	.. \
 	../csrc \
 	../csrc/cpu \
-	../csrc/devices \
+	../csrc/memory \
 	../csrc/monitor \
 	../csrc/trace \
+	../csrc/utils \
 
 
 ### Default rules...
@@ -83,13 +84,11 @@ common.o: csrc/cpu/common.cpp
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 cpu.o: csrc/cpu/cpu.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
-memory.o: csrc/cpu/memory.cpp 
-	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
-reg.o: csrc/cpu/reg.cpp 
-	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
-devices.o: csrc/devices/devices.cpp 
-	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 main.o: csrc/main.cpp 
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
+memory.o: csrc/memory/memory.cpp 
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
+reg.o: csrc/memory/reg.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 debug.o: csrc/monitor/debug.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
@@ -104,6 +103,8 @@ disasm.o: csrc/trace/disasm.cpp
 dut.o: csrc/trace/dut.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 trace.o: csrc/trace/trace.cpp 
+	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
+timer.o: csrc/utils/timer.cpp 
 	$(OBJCACHE) $(CXX) $(CXXFLAGS) $(CPPFLAGS) $(OPT_FAST)  -c -o $@ $<
 
 ### Link rules... (from --exe)
