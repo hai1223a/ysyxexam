@@ -32,7 +32,7 @@ LDFLAGS  += -lreadline $(BFLAGS)
 VERILATOR_INC_PATH = -Ivsrc
 VERILATOR = verilator
 
-VERILATOR_FLAGS += -O2 -Wall --cc -exe --build --trace-fst --x-assign fast --x-initial fast \
+VERILATOR_FLAGS += -O3 -Wall --cc -exe --build --trace-fst --x-assign fast --x-initial fast \
 				   --top-module $(TOPNAME) \
 				   $(VERILATOR_INC_PATH) \
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
