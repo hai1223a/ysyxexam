@@ -41,19 +41,12 @@ bool log_enable() {
 FILE *ftracer_log_fp = NULL;
 void init_ftracer_log(const char *ftracer_log_file) {
   ftracer_log_fp = stdout;
-      printf("A");
   if (ftracer_log_file != NULL) {
-        printf("A");
     FILE *fp = fopen(ftracer_log_file, "w");
-        printf("A");
     Assert(fp, "Can not open '%s'", ftracer_log_file);
-        printf("A");
     ftracer_log_fp = fp;
-        printf("A");
   }
-    printf("A");
   Log("Ftracer log is written to %s", ftracer_log_file ? ftracer_log_file : "stdout");
-  printf("A");
 }
 #endif
 //=========================================
