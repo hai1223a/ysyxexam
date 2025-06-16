@@ -35,11 +35,11 @@ LDFLAGS  += -lreadline $(BFLAGS)
 # 编译选项
 VERILATOR_FLAGS += -Wall --cc -exe --build --x-assign fast --x-initial fast \
 				   --top-module $(TOPNAME) \
-				   -Ivsrc \
+				   -Ivsrc --noassert\
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
 				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"
 ifdef CONFIG_FST
-VERILATOR_FLAGS += --trace-fst --noassert
+VERILATOR_FLAGS += --trace-fst 
 endif
 # 编译选项
 override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
