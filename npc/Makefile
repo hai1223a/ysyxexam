@@ -35,7 +35,7 @@ LDFLAGS  += -lreadline $(BFLAGS)
 # 编译选项
 VERILATOR_FLAGS += -Wall --cc -exe --build --x-assign fast --x-initial fast \
 				   --top-module $(TOPNAME) \
-				   -Ivsrc --noassert\
+				   -Ivsrc --threads 2\
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
 				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"
 ifdef CONFIG_FST
