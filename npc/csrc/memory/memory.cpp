@@ -72,11 +72,14 @@ void pmem_read()
       }
     }
 #ifdef CONFIG_HAS_TIMER
-    // else if(ysyx_25050136_NPC->mem_addr_o == CONFIG_T_BASE)
-    // {
-    //   Assert(ysyx_25050136_NPC->mem_len_o == 1, "你写串口的长度不对");
-    //   putc((uint8_t)(ysyx_25050136_NPC->mem_wdata_o), stderr);
-    // }
+    else if(ysyx_25050136_NPC->mem_addr_o == CONFIG_TIMER_BASE)
+    {
+      ysyx_25050136_NPC->mem_rdata_i = (uint32_t)get_time();
+    }
+    else if(ysyx_25050136_NPC->mem_addr_o == CONFIG_TIMER_BASE)
+    {
+      ysyx_25050136_NPC->mem_rdata_i = get_time() >> 32;
+    }
 #endif
     else 
     {

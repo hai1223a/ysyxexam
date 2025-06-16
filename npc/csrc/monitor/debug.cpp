@@ -153,6 +153,8 @@ static void welcome()
 //=====================================================
 void init_main(int argc, char **argv)
 {
+  // 初始化时钟模型
+  init_rand();
   // 解析命令行参数
   parse_args(argc, argv);
   // 输出日志初始化

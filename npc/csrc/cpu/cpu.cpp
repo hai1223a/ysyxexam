@@ -49,6 +49,7 @@ void cpu_exec_once()
 
 void cpu_exec(uint32_t inst_num)
 {
+  get_time();
   for (uint32_t i = 0; i < inst_num; i++)
   {
     if (npcstate.state == NPC_END || npcstate.state == NPC_STOP ||
