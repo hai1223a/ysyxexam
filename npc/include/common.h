@@ -7,7 +7,9 @@
 #include "Vysyx_25050136_NPC___024root.h"
 #include <verilated.h>           // Verilator的库
 #include "generated/autoconf.h"
+#ifdef CONFIG_FST
 #include "verilated_fst_c.h"     // fst波形文件所需要的库
+#endif
 #include "reg.h"
 #include "sdb.h"
 #include "cpu.h"

@@ -28,38 +28,12 @@ VM_CLASSES_FAST += \
 	Vysyx_25050136_NPC \
 	Vysyx_25050136_NPC___024root__DepSet_hc5a159c8__0 \
 	Vysyx_25050136_NPC___024root__DepSet_h7af90370__0 \
-	Vysyx_25050136_NPC_ysyx_25050136_NPC__DepSet_h5d38b31d__0 \
-	Vysyx_25050136_NPC_ysyx_25050136_EX__DepSet_h68faff53__0 \
-	Vysyx_25050136_NPC_ysyx_25050136_ID__DepSet_hdb17ecc2__0 \
-	Vysyx_25050136_NPC_ysyx_25050136_IF__DepSet_h0d4d4eda__0 \
-	Vysyx_25050136_NPC_ysyx_25050136_RegisterFile__DepSet_h32591906__0 \
-	Vysyx_25050136_NPC_ysyx_25050136_ALU__DepSet_hd2c9b677__0 \
-	Vysyx_25050136_NPC_ysyx_25050136_BQU__DepSet_h853feeb5__0 \
-	Vysyx_25050136_NPC_ysyx_25050136_LSU__DepSet_hdf39cb5e__0 \
 
 # Generated module classes, non-fast-path, compile with low/medium optimization
 VM_CLASSES_SLOW += \
 	Vysyx_25050136_NPC___024root__Slow \
 	Vysyx_25050136_NPC___024root__DepSet_hc5a159c8__0__Slow \
 	Vysyx_25050136_NPC___024root__DepSet_h7af90370__0__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_NPC__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_NPC__DepSet_h5d38b31d__0__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_NPC__DepSet_h0391aa45__0__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_EX__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_EX__DepSet_h68faff53__0__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_EX__DepSet_hd7cf5dfb__0__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_ID__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_ID__DepSet_hdb17ecc2__0__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_IF__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_IF__DepSet_h0d4d4eda__0__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_RegisterFile__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_RegisterFile__DepSet_h32591906__0__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_ALU__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_ALU__DepSet_hd2c9b677__0__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_BQU__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_BQU__DepSet_h853feeb5__0__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_LSU__Slow \
-	Vysyx_25050136_NPC_ysyx_25050136_LSU__DepSet_hdf39cb5e__0__Slow \
 
 # Generated support classes, fast-path, compile with highest optimization
 VM_SUPPORT_FAST += \

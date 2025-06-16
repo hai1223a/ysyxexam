@@ -13,8 +13,6 @@
 class Vysyx_25050136_NPC__Syms;
 class Vysyx_25050136_NPC___024root;
 class VerilatedFstC;
-class Vysyx_25050136_NPC_ysyx_25050136_NPC;
-
 
 // This class is the main interface to the Verilated model
 class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC VL_NOT_FINAL : public VerilatedModel {
@@ -45,7 +43,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC VL_NOT_FINAL : public Veri
     // CELLS
     // Public to allow access to /* verilator public */ items.
     // Otherwise the application code can consider these internals.
-    Vysyx_25050136_NPC_ysyx_25050136_NPC* const __PVT__ysyx_25050136_NPC;
 
     // Root instance pointer to allow access to model internals,
     // including inlined /* verilator public_flat_* */ items.

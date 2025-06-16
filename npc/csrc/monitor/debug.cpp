@@ -76,16 +76,18 @@ static void init_verilator(int argc, char *argv[])
 {
   // 传递参数给verilator,建议在创建任何模型之前使用
   Verilated::commandArgs(argc, argv);
-  // 创建一个fst波形文件指针
-  tfp = new VerilatedFstC;
   // 构建一个名为ysyx_25050136_NPC的仿真模型
   ysyx_25050136_NPC = new Vysyx_25050136_NPC;
+#ifdef CONFIG_FST
+  // 创建一个fst波形文件指针
+  tfp = new VerilatedFstC;
   // 启用跟踪
   Verilated::traceEverOn(true);
   // 采样深度为5
   ysyx_25050136_NPC->trace(tfp, 10);
   // 打开波形文件
   tfp->open("waveform.fst");
+#endif
 }
 //=====================================================
 // 用于初始化cpu
@@ -133,7 +135,7 @@ void npc_end()
   // 输出完成状态
   printf_statu();
   // 关闭波形文件
-  tfp->close();
+  IFDEF(CONFIG_FST, tfp->close());
   // 删除指针
   delete ysyx_25050136_NPC;
 }

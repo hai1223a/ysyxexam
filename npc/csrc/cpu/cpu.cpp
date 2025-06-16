@@ -33,7 +33,7 @@ void cpu_exec_once()
     // 计算电路状态
     ysyx_25050136_NPC->eval();
     // 记录上升沿
-    tfp->dump(sim_time);
+    IFDEF(CONFIG_FST, tfp->dump(sim_time));
     // 推动仿真进行
     sim_time++;
     // 指令计算

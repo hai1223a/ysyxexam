@@ -21,23 +21,27 @@ $(LIBCAPSTONE):
 endif
 
 # 第三步:准备用于编译工程的选项
+# 头文件和工具软件
 TOPNAME = ysyx_25050136_NPC
+VERILATOR = verilator
+# 源文件
 CSRCS = $(wildcard csrc/*/*.cpp csrc/*/*.c csrc/*.cpp csrc/*.c)
 VSRCS = $(wildcard vsrc/*.v)
-$(info $(CSRCS) $(VSRCS))
+# 编译选项
 BFLAGS   += -fsanitize=address
-INC_PATH := ../include ../include/generated
+INC_PATH := $(abspath ../include ../include/generated)
 CFLAGS   +=  $(BFLAGS) $(addprefix -I, $(INC_PATH)) 
 LDFLAGS  += -lreadline $(BFLAGS)
-VERILATOR_INC_PATH = -Ivsrc
-VERILATOR = verilator
-
-VERILATOR_FLAGS += -O2 -Wall --cc -exe --build --trace-fst --x-assign fast --x-initial fast \
+# 编译选项
+VERILATOR_FLAGS += -Wall --cc -exe --build --x-assign fast --x-initial fast \
 				   --top-module $(TOPNAME) \
-				   $(VERILATOR_INC_PATH) \
+				   -Ivsrc \
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
-				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"		
-
+				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"
+ifdef CONFIG_FST
+VERILATOR_FLAGS += --trace-fst
+endif
+# 编译选项
 override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 	    		 -l $(NPC_HOME)/obj_dir/log/log.txt
 
