@@ -6,7 +6,7 @@ uint32_t inst_pre = 0;        // 执行的指令值
 vluint64_t sim_time = 0;      // 记录仿真时间
 vluint64_t reset_time = 9;    // 复位时间
 vluint64_t stop_time = 0;     // 暂停时间点
-
+uint64_t g_timer = 0;         // unit: us
 void reset()
 {
   ysyx_25050136_NPC->reset = 0;
@@ -49,7 +49,7 @@ void cpu_exec_once()
 
 void cpu_exec(uint32_t inst_num)
 {
-  get_time();
+  uint64_t timer_start = get_time();
   for (uint32_t i = 0; i < inst_num; i++)
   {
     if (npcstate.state == NPC_END || npcstate.state == NPC_STOP ||
@@ -63,6 +63,8 @@ void cpu_exec(uint32_t inst_num)
     IFDEF(CONFIG_DIFFTEST, difftest_step());
     IFDEF(CONFIG_WATCHPOINT, if(!batch_mode) scan_watchpoint());
   }
+  uint64_t timer_end = get_time();
+  g_timer += timer_end - timer_start;
 }
 
 int batch_mainloop()
