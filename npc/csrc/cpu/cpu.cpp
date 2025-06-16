@@ -26,7 +26,7 @@ void cpu_exec_once()
     // 取指
     inst_read();
     // 计算电路状态
-    // ysyx_25050136_NPC->eval();
+    ysyx_25050136_NPC->eval();
     // 访存
     pmem_read();
     pmem_write();
