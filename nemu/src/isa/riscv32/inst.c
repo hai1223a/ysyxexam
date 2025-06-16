@@ -168,10 +168,11 @@ static void ftracer_log(Decode *s, int name)
   static int p_stack = 0;
 
   // 识别 call 调用函数
-  if(name == jal)
+  if(name == jal || jalr)
   {
     for(int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
     {
+      if(FUNC_FTRACER[i].addr == 0) break;
       if(s->dnpc == FUNC_FTRACER[i].addr)
       {
         ftracer_write("0x%8x %*scall [%s @ 0x%8x]\n",s->pc, 4*p_stack, " ", FUNC_FTRACER[i].func_name, s->dnpc);
