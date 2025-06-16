@@ -116,7 +116,7 @@ if (!ysyx_25050136_NPC->reset && ysyx_25050136_NPC->mem_wen_o)
     else if(ysyx_25050136_NPC->mem_addr_o == CONFIG_SERIAL_BASE)
     {
       Assert(ysyx_25050136_NPC->mem_len_o == 1, "你写串口的长度不对");
-      putc((uint8_t)(ysyx_25050136_NPC->mem_wdata_o), stderr);
+      putc((char)(ysyx_25050136_NPC->mem_wdata_o), stderr);
     }
 #endif
     else
