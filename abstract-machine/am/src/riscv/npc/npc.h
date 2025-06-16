@@ -2,6 +2,7 @@
 #define NEMU_H__
 
 #include <klib-macros.h>
+#include <riscv/riscv.h>
 #define MMIO_BASE 0xa0000000
 
 #define SERIAL_PORT     (MMIO_BASE + 0x00003f8)

@@ -109,6 +109,7 @@
         "macro.h": "c",
         "paddr.h": "c",
         "difftest.h": "c",
-        "verilated.h": "c"
+        "verilated.h": "c",
+        "amdev.h": "c"
     }
 }

@@ -1,5 +1,5 @@
 #include <am.h>
-#include <npc.h>
+#include <riscv/npc/npc.h>
 
 extern char _heap_start;
 int main(const char *args);
