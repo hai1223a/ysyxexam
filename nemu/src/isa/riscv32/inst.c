@@ -159,7 +159,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 extern struct FUNC_FTRACE{
   word_t addr;
   char func_name[16];
-} FUNC_FTRACER[10];
+} FUNC_FTRACER[128];
 int FUNC_stack[1024] = {0};
 
 static void ftracer_log(Decode *s, int name)
