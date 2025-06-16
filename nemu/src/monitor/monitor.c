@@ -221,7 +221,7 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Parse arguments. */
   parse_args(argc, argv);
-  printf("%s\n", ftracer_log_file);
+
 
   /* Set random seed. */
   init_rand();
