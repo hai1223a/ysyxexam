@@ -169,10 +169,10 @@ static void load_elf() {
   free((void *)strtab);
   free(sh_table);
   fclose(file);
-  // for (size_t i = 0; i < 10; i++)
-  // {
-  //   printf("函数名: %s, 函数地址: %8x\n", FUNC_FTRACER[i].func_name, FUNC_FTRACER[i].addr);
-  // }
+  for (size_t i = 0; i < 10; i++)
+  {
+    printf("函数名: %s, 函数地址: %8x\n", FUNC_FTRACER[i].func_name, FUNC_FTRACER[i].addr);
+  }
   
 }
 
