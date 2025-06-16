@@ -76,7 +76,7 @@ void pmem_read()
     {
       ysyx_25050136_NPC->mem_rdata_i = (uint32_t)get_time();
     }
-    else if(ysyx_25050136_NPC->mem_addr_o == CONFIG_TIMER_BASE)
+    else if(ysyx_25050136_NPC->mem_addr_o == (CONFIG_TIMER_BASE + 4))
     {
       ysyx_25050136_NPC->mem_rdata_i = get_time() >> 32;
     }
