@@ -20,7 +20,7 @@ void cpu_exec_once()
   {
     ysyx_25050136_NPC->clk ^= 1;
     // 计算电路状态
-    // ysyx_25050136_NPC->eval();
+    ysyx_25050136_NPC->eval();
     // 复位
     reset();
     // 取指
@@ -30,8 +30,6 @@ void cpu_exec_once()
     // 访存
     pmem_read();
     pmem_write();
-    // 计算电路状态
-    // ysyx_25050136_NPC->eval();
     // 记录上升沿
     IFDEF(CONFIG_FST, tfp->dump(sim_time));
     // 推动仿真进行
