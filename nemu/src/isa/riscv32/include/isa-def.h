@@ -20,11 +20,11 @@
 // csr
 typedef struct {
   word_t value;
-  const uint16_t addr;
+  uint16_t addr;
+  char name[16];
 } riscv_csr;
 
 typedef struct {
-  riscv_csr csr;
   word_t gpr[MUXDEF(CONFIG_RVE, 16, 32)];
   vaddr_t pc;
 } MUXDEF(CONFIG_RV64, riscv64_CPU_state, riscv32_CPU_state);

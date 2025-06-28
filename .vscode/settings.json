@@ -110,6 +110,7 @@
         "paddr.h": "c",
         "difftest.h": "c",
         "verilated.h": "c",
-        "amdev.h": "c"
+        "amdev.h": "c",
+        "csr.h": "c"
     }
 }
