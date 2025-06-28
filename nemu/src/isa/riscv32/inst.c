@@ -295,7 +295,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 000 ????? 00011 11", fence      , N, );
   INSTPAT("1000001 10011 00000 000 00000 00011 11", fence_tso  , N, );
   INSTPAT("0000000 10000 00000 000 00000 00011 11", pause      , N, );
-  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall      , N, s->dnpc = isa_raise_intr(11,s->pc));
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall      , N, s->dnpc = isa_raise_intr(1,s->pc));
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak     , N, NEMUTRAP(s->pc, Reg(10))); // R(10) is $a0
   // RV32M
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul_   , R, Reg(rd) = mul_div(s, src1, src2, MUL));
