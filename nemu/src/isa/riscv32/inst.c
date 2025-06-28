@@ -157,7 +157,7 @@ static void csru(Decode *s, int op, const word_t src_value, const int rd )
       break;
     }
   }
-  Assert(csr_index_state == true, "你访问的csr没有实现或者不存在, 地址为%3x\n", csr_addr);
+  Assert(csr_index_state == true, "你访问的csr没有实现或者不存在, 地址为%x\n", csr_addr);
   switch (op)
   {
   case CSRRW:
