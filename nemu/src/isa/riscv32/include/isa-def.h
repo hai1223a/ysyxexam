@@ -17,12 +17,6 @@
 #define __ISA_RISCV_H__
 
 #include <common.h>
-// csr
-typedef struct {
-  word_t value;
-  uint16_t addr;
-  char name[16];
-} riscv_csr;
 
 typedef struct {
   word_t gpr[MUXDEF(CONFIG_RVE, 16, 32)];

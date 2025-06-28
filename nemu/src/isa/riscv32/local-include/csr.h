@@ -2,7 +2,12 @@
 #define __RISCV_CSR_H__
 
 #include <common.h>
+typedef struct {
+  word_t value;
+  uint16_t addr;
+  char name[16];
+} riscv_csr;
 
-riscv_csr csrs[3];
+extern riscv_csr csrs[3];
 
 #endif
