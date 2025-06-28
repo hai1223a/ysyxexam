@@ -145,7 +145,7 @@ static word_t mul_div(Decode *s, const word_t op1, const word_t op2, int op) {
 static void csru(Decode *s, int op, const word_t src_value, const int rd )
 {
   uint32_t i = s->isa.inst;
-  uint16_t csr_addr = BITS(i, 31, 12);
+  uint16_t csr_addr = BITS(i, 31, 20);
   int rs1 = BITS(i, 19, 15);
   int csr_index;
   bool csr_index_state = false;
