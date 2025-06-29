@@ -111,6 +111,7 @@
         "difftest.h": "c",
         "verilated.h": "c",
         "amdev.h": "c",
-        "csr.h": "c"
+        "csr.h": "c",
+        "amtest.h": "c"
     }
 }
