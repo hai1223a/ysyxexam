@@ -278,3 +278,9 @@ typedef struct inf {
 === 今日完成任务
 * 使用native测试了kib的string.h中的函数以及printf函数完成了nemu和spike的DiffTest
 * 完成npc第一条指令addi
+
+[[d2025-6-29]]
+== 2025/9/29 实验日志
+=== 今日要点
+我错误地认为risc-v使用a0传递参数,使用a1传递返回值.实际上risc-v使用a0-a8以及栈来传递参数,
+使用a0,a1以及栈来传递返回值.
