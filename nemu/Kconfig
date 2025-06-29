@@ -163,6 +163,12 @@ config FTRACE
   bool "Enable function tracer"
   default n
 
+# 有关etrace的配置
+config ETRACE
+  depends on TRACE
+  bool "Enable exception/interrupt tracer"
+  default n
+
 # 有关watchpoint的配置
 config WATCHPOINT
   depends on TRACE

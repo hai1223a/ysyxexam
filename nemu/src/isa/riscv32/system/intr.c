@@ -18,6 +18,9 @@
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
   csrs[0].value = epc;
   csrs[1].value = NO;
+#ifdef CONFIG_ETRACE
+  Log("触发了异常/中断, mepc = %8x, mcause = %8x, mstatus = %8x\n", csrs[0].value, csrs[1].value, csrs[3].value);
+#endif
   return csrs[2].value;
 }
 
