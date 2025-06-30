@@ -36,9 +36,7 @@ Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   ktx->gpr[10] = (uintptr_t)arg;
   ktx->mepc = (uintptr_t)entry - 4;
   ktx->mstatus = 0x1800;
-  Context **rtx = (Context **)kstack.start;
-  *rtx = ktx;
-  return *rtx;
+  return ktx;
 }
 
 void yield() {
