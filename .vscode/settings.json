@@ -112,6 +112,9 @@
         "verilated.h": "c",
         "amdev.h": "c",
         "csr.h": "c",
-        "amtest.h": "c"
+        "amtest.h": "c",
+        "rtthread.h": "c",
+        "rtdevice.h": "c",
+        "kconfig": "c"
     }
 }
