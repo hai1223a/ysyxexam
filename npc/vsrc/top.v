@@ -31,8 +31,8 @@ wire [`ysyx_25050136_LSU_OP_NUM-1:0]  id2ex_lsu_op_o;
 wire [`ysyx_25050136_BQU_OP_NUM-1:0]  id2ex_bqu_op_o;
 wire [`ysyx_25050136_CSRU_OP_NUM-1:0] id2ex_csru_op_o;
 wire [TOP_DATA_WIDTH-1:0] id2ex_alu_opd1_o, id2ex_alu_opd2_o, id2ex_lsu_opd1_o,
-                          id2ex_bqu_opd1_o, id2ex_bqu_opd2_o, id2ex_csru_opd1_o,
-                          id2ex_csru_opd2_o;
+                          id2ex_bqu_opd1_o, id2ex_bqu_opd2_o, id2ex_csru_opd1_o;
+wire [11:0]               id2ex_csru_opd2_o;
 wire id2ex_mem_signed_o, id2ex_csru_wen_o, id2ex_csru_ren_o;
 // REG输出
 wire [TOP_DATA_WIDTH-1:0] reg2id_rdata1_o,reg2id_rdata2_o;
@@ -79,7 +79,7 @@ u_ysyx_25050136_ID(
     .bqu_op_o       (id2ex_bqu_op_o       ),
     .csru_op_o    	(id2ex_csru_op_o      ),
     .alu_opd1_o     (id2ex_alu_opd1_o     ),
-    .alu_opd2_o     (id2ex_alu_opd1_o     ),
+    .alu_opd2_o     (id2ex_alu_opd2_o     ),
     .bqu_opd1_o     (id2ex_bqu_opd1_o     ),
     .bqu_opd2_o     (id2ex_bqu_opd2_o     ),
     .lsu_opd1_o   	(id2ex_lsu_opd1_o     ),
@@ -99,7 +99,7 @@ ysyx_25050136_EX #(
 u_ysyx_25050136_EX(
     .clk          	(clk                 ),
     .reset        	(reset               ),
-    .pc_i         	(pc_i                ),
+    .pc_i         	(pc_o                ),
     .fu_i         	(id2ex_fu_o          ),
     .alu_op_i     	(id2ex_alu_op_o      ),
     .lsu_op_i     	(id2ex_lsu_op_o      ),
@@ -133,6 +133,7 @@ ysyx_25050136_RegisterFile#(
 ) 
 u_ysyx_25050136_RegisterFile(
     .clk      	(clk                ),
+    .reset      (reset              ),
     .wdata_i  	(ex2reg_gpr_data_o  ),
     .waddr_i  	(id2reg_rd_o        ),
     .wen_i      (id2reg_rd_en_o     ),

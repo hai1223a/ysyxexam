@@ -6,7 +6,7 @@ module ysyx_25050136_CSRU
      (
          input                                              clk,
          input                                            reset,
-         input                                             pc_i,
+         input   [31:0]                                    pc_i,
          input                                             en_i,
          input   [`ysyx_25050136_CSRU_OP_NUM-1:0]   operation_i,
          input   [DATA_WIDTH-1:0]                   csru_opd1_i,

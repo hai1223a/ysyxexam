@@ -67,13 +67,13 @@ module ysyx_25050136_CSR_File
             mstatus <= 0;
         end
         else begin
-            if(mepc_hit)
+            if(|mepc_hit)
                 mepc <= mepc_din;
-            if(mcause_hit)
+            if(|mcause_hit)
                 mcause <= mcause_din;
-            if(mtvec_hit)
+            if(|mtvec_hit)
                 mtvec <= mtvec_din;
-            if(mstatus_hit)
+            if(|mstatus_hit)
                 mstatus <= mstatus_din;
         end
     end
