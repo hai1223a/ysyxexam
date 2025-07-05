@@ -40,7 +40,7 @@ module ysyx_25050136_EX
 
     ysyx_25050136_ALU u_ysyx_25050136_ALU(
         .op1_i          (alu_opd1_i   ),
-        .op1_i          (alu_opd2_i   ),
+        .op2_i          (alu_opd2_i   ),
         .operation_i 	(alu_op_i     ),
         .en_i        	(alu_en       ),
         .out_o       	(alu_out_o    )
