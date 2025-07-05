@@ -136,7 +136,7 @@ module ysyx_25050136_ID
     // 下面用于选择工作部件,相关操作,对应操作数,判断空指令
     //=========================================
     // 选择工作部件
-    assign fu_o[`ysyx_25050136_ALU] = type_store | type_load | type_jal | type_jalr | type_jal | type_branch;
+    assign fu_o[`ysyx_25050136_ALU] = ~(inst_csrrw | inst_csrrs | inst_csrrc | inst_csrrwi | inst_csrrsi | inst_csrrci);
     assign fu_o[`ysyx_25050136_LSU] = type_store | type_load;
     assign fu_o[`ysyx_25050136_BQU] = type_jalr | type_jal | type_branch;
     assign fu_o[`ysyx_25050136_CSRU] = inst_csrrw | inst_csrrs | inst_csrrc | inst_csrrwi | inst_csrrsi | inst_csrrci;
