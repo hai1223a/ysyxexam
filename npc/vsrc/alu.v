@@ -22,7 +22,6 @@ module ysyx_25050136_ALU
     
     reg [DATA_WIDTH-1:0] out;
     always @(*) begin
-        out = 0;
         case (1'b1)
             operation_i[`ysyx_25050136_ALU_NOP  ]: out = op1_i;
             operation_i[`ysyx_25050136_ALU_ADD  ]: out = add_sub_result[DATA_WIDTH-1:0];
@@ -38,7 +37,8 @@ module ysyx_25050136_ALU
             operation_i[`ysyx_25050136_ALU_GEQ  ]: out = {{DATA_WIDTH-1{1'b0}},($signed(op1_i) >= $signed(op2_i))};
             operation_i[`ysyx_25050136_ALU_SRA  ]: out = sra_result;
             operation_i[`ysyx_25050136_ALU_SLL  ]: out = sll_result;
-            operation_i[`ysyx_25050136_ALU_SRL  ]: out = srl_result;     
+            operation_i[`ysyx_25050136_ALU_SRL  ]: out = srl_result;
+            default:                               out = 0;     
         endcase
     end
 

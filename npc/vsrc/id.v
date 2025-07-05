@@ -5,26 +5,31 @@ module ysyx_25050136_ID
          DATA_WIDTH = 32
      )
      (
-         input  [31:0]                            inst_i,
-         input  [31:0]                              pc_i,
-         input  [31:0]                      static_npc_i,
-         input  [DATA_WIDTH-1:0]                rdata1_i,
-         output [ADDR_WIDTH-1:0]                raddr1_o,
-         input  [DATA_WIDTH-1:0]                rdata2_i,
-         output [ADDR_WIDTH-1:0]                raddr2_o,
-         output [`ysyx_25050136_FU_NUM-1:0]         fu_o,
-         output [`ysyx_25050136_ALU_OP_NUM-1:0] alu_op_o,
-         output [`ysyx_25050136_LSU_OP_NUM-1:0] lsu_op_o,
-         output [`ysyx_25050136_BQU_OP_NUM-1:0] bqu_op_o,
-         output [DATA_WIDTH-1:0]                   op1_o,
-         output [DATA_WIDTH-1:0]                   op2_o,
-         output [DATA_WIDTH-1:0]                   op3_o,
-         output [DATA_WIDTH-1:0]                   op4_o,
-         output [DATA_WIDTH-1:0]                   op5_o,
-         output [2:0]                          mem_len_o,
-         output                             mem_signed_o,
-         output [ADDR_WIDTH-1:0]                    rd_o,
-         output                                  rd_en_o
+         input  [31:0]                                inst_i,
+         input  [31:0]                                  pc_i,
+         input  [31:0]                          static_npc_i,
+         input  [DATA_WIDTH-1:0]                    rdata1_i,
+         output [ADDR_WIDTH-1:0]                    raddr1_o,
+         input  [DATA_WIDTH-1:0]                    rdata2_i,
+         output [ADDR_WIDTH-1:0]                    raddr2_o,
+         output [`ysyx_25050136_FU_NUM-1:0]             fu_o,
+         output [`ysyx_25050136_ALU_OP_NUM-1:0]     alu_op_o,
+         output [`ysyx_25050136_LSU_OP_NUM-1:0]     lsu_op_o,
+         output [`ysyx_25050136_BQU_OP_NUM-1:0]     bqu_op_o,
+         output [`ysyx_25050136_CSRU_OP_NUM-1:0]   csru_op_o,
+         output [DATA_WIDTH-1:0]                  alu_opd1_o,
+         output [DATA_WIDTH-1:0]                  alu_opd2_o,
+         output [DATA_WIDTH-1:0]                  bqu_opd1_o,
+         output [DATA_WIDTH-1:0]                  bqu_opd2_o,
+         output [DATA_WIDTH-1:0]                  lsu_opd1_o,
+         output [DATA_WIDTH-1:0]                 csru_opd1_o,
+         output [11:0]                           csru_opd2_o,
+         output                                   csru_ren_o,
+         output                                   csru_wen_o,
+         output [2:0]                              mem_len_o,
+         output                                 mem_signed_o,
+         output [ADDR_WIDTH-1:0]                        rd_o,
+         output                                      rd_en_o
      );
 
     wire [6:0] opcode = inst_i[6:0];
@@ -46,6 +51,7 @@ module ysyx_25050136_ID
     wire type_branch = (opcode == 7'b1100011);
     wire type_jalr   = (opcode == 7'b1100111);
     wire type_jal    = (opcode == 7'b1101111);
+    wire type_system = (opcode == 7'b1110011);
     // funct3判断
     wire funct3_000  = (funct3 == 3'b000);
     wire funct3_001  = (funct3 == 3'b001);
@@ -96,6 +102,14 @@ module ysyx_25050136_ID
     wire inst_sra = type_op & funct3_101 & funct7_0100000;
     wire inst_or = type_op & funct3_110;
     wire inst_and = type_op & funct3_111;
+    wire inst_csrrw = type_system & funct3_001;
+    wire inst_csrrs = type_system & funct3_010;
+    wire inst_csrrc = type_system & funct3_011;
+    wire inst_csrrwi = type_system & funct3_101;
+    wire inst_csrrsi = type_system & funct3_110;
+    wire inst_csrrci = type_system & funct3_011;
+    wire inst_mret = (inst_i == 32'h30200073);
+    wire inst_ecall = (inst_i == 32'h00000073);
     wire inst_ebreak = (inst_i == 32'h00100073);
     // 指令类型判断
     wire inst_Rtype = type_op;
@@ -113,8 +127,8 @@ module ysyx_25050136_ID
     wire [31:0] immU = {inst_i[31:12], 12'h0};
     wire [31:0] immJ = {{12{inst_i[31]}}, inst_i[19:12], inst_i[20], inst_i[30:21], 1'b0};
     wire [31:0] imm = inst_Itype ? immI : (inst_Stype ? immS :
-                     (inst_Utype ? immU : (inst_Btype ? immB : 
-                     (inst_Jtype ? immJ : 0))));
+                                           (inst_Utype ? immU : (inst_Btype ? immB :
+                                                                 (inst_Jtype ? immJ : 0))));
 
     assign raddr1_o = rs1;
     assign raddr2_o = rs2;
@@ -122,9 +136,10 @@ module ysyx_25050136_ID
     // 下面用于选择工作部件,相关操作,对应操作数,判断空指令
     //=========================================
     // 选择工作部件
-    assign fu_o[`ysyx_25050136_ALU] = 1;
+    assign fu_o[`ysyx_25050136_ALU] = type_store | type_load | type_jal | type_jalr | type_jal | type_branch;
     assign fu_o[`ysyx_25050136_LSU] = type_store | type_load;
     assign fu_o[`ysyx_25050136_BQU] = type_jalr | type_jal | type_branch;
+    assign fu_o[`ysyx_25050136_CSRU] = inst_csrrw | inst_csrrs | inst_csrrc | inst_csrrwi | inst_csrrsi | inst_csrrci;
     // 选择ALU相关操作
     assign alu_op_o[`ysyx_25050136_ALU_NOP]   = type_jal | type_jalr | type_lui;
     assign alu_op_o[`ysyx_25050136_ALU_ADD]   = type_auipc | type_store | type_load | inst_addi | inst_add;
@@ -148,20 +163,31 @@ module ysyx_25050136_ID
     // 选择LSU相关操作
     assign lsu_op_o[`ysyx_25050136_LSU_LOAD]  = type_load;
     assign lsu_op_o[`ysyx_25050136_LSU_STORE] = type_store;
+    // 选择CSRU相关操作
+    assign csru_op_o[`ysyx_25050136_CSRU_CSRRW] = inst_csrrw | inst_csrrwi;
+    assign csru_op_o[`ysyx_25050136_CSRU_CSRRS] = inst_csrrs | inst_csrrsi;
+    assign csru_op_o[`ysyx_25050136_CSRU_CSRRC] = inst_csrrc | inst_csrrci;
+    assign csru_op_o[`ysyx_25050136_CSRU_MRET]  = inst_mret;
+    assign csru_op_o[`ysyx_25050136_CSRU_ECALL] = inst_ecall;
     // 选择ALU的操作数
-    assign op1_o = inst_lui ? imm : (inst_auipc ? pc_i :
-                  ((inst_jal | inst_jalr) ? static_npc_i : rdata1_i));
-    assign op2_o = (type_op | type_branch) ? rdata2_i : 
-                  ((type_store | type_load | type_op_imm | type_auipc) ? imm : 0);
+    assign alu_opd1_o = inst_lui ? imm : (inst_auipc ? pc_i :
+                                     ((inst_jal | inst_jalr) ? static_npc_i : rdata1_i));
+    assign alu_opd2_o = (type_op | type_branch) ? rdata2_i :
+           ((type_store | type_load | type_op_imm | type_auipc) ? imm : 0);
     // 选择BQU的操作数
-    assign op3_o = type_jalr ? rdata1_i : pc_i;
-    assign op4_o = imm;
-    // 选择LSU
-    assign op5_o = rdata2_i;
-    assign mem_len_o = (inst_lw | inst_sw) ? 3'd4 : 
-                      ((inst_sh | inst_lhu | inst_lh) ? 3'd2 :
-                      ((inst_sb | inst_lbu | inst_lb) ? 3'd1 : 0));
+    assign bqu_opd1_o = type_jalr ? rdata1_i : pc_i;
+    assign bqu_opd2_o = imm;
+    // 选择LSU的操作数
+    assign lsu_opd1_o = rdata2_i;
+    assign mem_len_o = (inst_lw | inst_sw) ? 3'd4 :
+           ((inst_sh | inst_lhu | inst_lh) ? 3'd2 :
+            ((inst_sb | inst_lbu | inst_lb) ? 3'd1 : 0));
     assign mem_signed_o = (inst_lhu | inst_lbu) ? 0 : 1;
+    // 选择CSR的操作数
+    assign csru_opd1_o = (inst_csrrwi | inst_csrrsi | inst_csrrci) ? {{DATA_WIDTH - 5{1'b0}}, rs1} : rdata1_i;
+    assign csru_opd2_o = inst_i[31:20];
+    assign csru_ren_o = !((inst_csrrw | inst_csrrwi) && (rd == 0));
+    assign csru_wen_o = !((inst_csrrs | inst_csrrsi | inst_csrrc | inst_csrrci) && (rs1 == 0));
     // 写回寄存器地址
     assign rd_o  = rd;
     assign rd_en_o = (type_store | type_branch) ? 0 : 1;

@@ -26,11 +26,14 @@ wire [31:0] if2id_static_npc_o;
 wire [TOP_ADDR_WIDTH-1:0] id2reg_raddr1_o,id2reg_raddr2_o,id2reg_rd_o;
 wire id2reg_rd_en_o;
 wire [`ysyx_25050136_FU_NUM-1:0] id2ex_fu_o;
-wire [`ysyx_25050136_ALU_OP_NUM-1:0] id2ex_alu_op_o;
-wire [`ysyx_25050136_LSU_OP_NUM-1:0] id2ex_lsu_op_o;
-wire [`ysyx_25050136_BQU_OP_NUM-1:0] id2ex_bqu_op_o;
-wire [TOP_DATA_WIDTH-1:0] id2ex_op1_o,id2ex_op2_o,id2ex_op3_o,id2ex_op4_o,id2ex_op5_o;
-wire id2ex_mem_signed_o;
+wire [`ysyx_25050136_ALU_OP_NUM-1:0]  id2ex_alu_op_o;
+wire [`ysyx_25050136_LSU_OP_NUM-1:0]  id2ex_lsu_op_o;
+wire [`ysyx_25050136_BQU_OP_NUM-1:0]  id2ex_bqu_op_o;
+wire [`ysyx_25050136_CSRU_OP_NUM-1:0] id2ex_csru_op_o;
+wire [TOP_DATA_WIDTH-1:0] id2ex_alu_opd1_o, id2ex_alu_opd2_o, id2ex_lsu_opd1_o,
+                          id2ex_bqu_opd1_o, id2ex_bqu_opd2_o, id2ex_csru_opd1_o,
+                          id2ex_csru_opd2_o;
+wire id2ex_mem_signed_o, id2ex_csru_wen_o, id2ex_csru_ren_o;
 // REG输出
 wire [TOP_DATA_WIDTH-1:0] reg2id_rdata1_o,reg2id_rdata2_o;
 // EX输出
@@ -74,11 +77,16 @@ u_ysyx_25050136_ID(
     .alu_op_o 	    (id2ex_alu_op_o       ),
     .lsu_op_o       (id2ex_lsu_op_o       ),
     .bqu_op_o       (id2ex_bqu_op_o       ),
-    .op1_o         	(id2ex_op1_o          ),
-    .op2_o         	(id2ex_op2_o          ),
-    .op3_o         	(id2ex_op3_o          ),
-    .op4_o         	(id2ex_op4_o          ),
-    .op5_o          (id2ex_op5_o          ),
+    .csru_op_o    	(id2ex_csru_op_o      ),
+    .alu_opd1_o     (id2ex_alu_opd1_o     ),
+    .alu_opd2_o     (id2ex_alu_opd1_o     ),
+    .bqu_opd1_o     (id2ex_bqu_opd1_o     ),
+    .bqu_opd2_o     (id2ex_bqu_opd2_o     ),
+    .lsu_opd1_o   	(id2ex_lsu_opd1_o     ),
+    .csru_opd1_o  	(id2ex_csru_opd1_o    ),
+    .csru_opd2_o  	(id2ex_csru_opd2_o    ),
+    .csru_ren_o   	(id2ex_csru_ren_o     ),
+    .csru_wen_o   	(id2ex_csru_wen_o     ),
     .mem_len_o     	(mem_len_o            ),
     .mem_signed_o  	(id2ex_mem_signed_o   ),
     .rd_o          	(id2reg_rd_o          ),
@@ -89,15 +97,23 @@ ysyx_25050136_EX #(
     .DATA_WIDTH(TOP_DATA_WIDTH)
 )
 u_ysyx_25050136_EX(
+    .clk          	(clk                 ),
+    .reset        	(reset               ),
+    .pc_i         	(pc_i                ),
     .fu_i         	(id2ex_fu_o          ),
     .alu_op_i     	(id2ex_alu_op_o      ),
     .lsu_op_i     	(id2ex_lsu_op_o      ),
     .bqu_op_i     	(id2ex_bqu_op_o      ),
-    .op1_i        	(id2ex_op1_o         ),
-    .op2_i        	(id2ex_op2_o         ),
-    .op3_i        	(id2ex_op3_o         ),
-    .op4_i        	(id2ex_op4_o         ),
-    .op5_i        	(id2ex_op5_o         ),
+    .csru_op_i    	(id2ex_csru_op_o     ),
+    .alu_opd1_i   	(id2ex_alu_opd1_o    ),
+    .alu_opd2_i   	(id2ex_alu_opd2_o    ),
+    .bqu_opd1_i   	(id2ex_bqu_opd1_o    ),
+    .bqu_opd2_i   	(id2ex_bqu_opd2_o    ),
+    .lsu_opd1_i   	(id2ex_lsu_opd1_o    ),
+    .csru_opd1_i  	(id2ex_csru_opd1_o   ),
+    .csru_opd2_i  	(id2ex_csru_opd2_o   ),
+    .csru_wen_i   	(id2ex_csru_wen_o    ),
+    .csru_ren_i   	(id2ex_csru_ren_o    ),
     .mem_len_i    	(mem_len_o           ),
     .mem_signed_i 	(id2ex_mem_signed_o  ),
     .mem_rdata_i  	(mem_rdata_i         ),
