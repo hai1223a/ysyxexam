@@ -24,7 +24,7 @@ module ysyx_25050136_RegisterFile
     always @(posedge clk) begin
         if(reset)
             gpr[waddr_i] <= 0;
-        else if(wen_i & (waddr_i != 0))
+        else if(wen_i & (|waddr_i))
             gpr[waddr_i] <= wdata_i;
     end
 

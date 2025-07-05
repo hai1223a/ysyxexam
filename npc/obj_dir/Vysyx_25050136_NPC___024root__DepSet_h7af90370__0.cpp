@@ -637,8 +637,9 @@ VL_INLINE_OPT void Vysyx_25050136_NPC___024root___nba_sequent__TOP__0(Vysyx_2505
         vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__u_ysyx_25050136_CSR_File__DOT__mstatus = 0U;
         vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc = 0x80000000U;
     } else {
-        if ((1U & (~ ((0x23U == (0x7fU & vlSelfRef.inst_i)) 
-                      | (0x63U == (0x7fU & vlSelfRef.inst_i)))))) {
+        if (((~ ((0x23U == (0x7fU & vlSelfRef.inst_i)) 
+                 | (0x63U == (0x7fU & vlSelfRef.inst_i)))) 
+             & (0U != (0x1fU & (vlSelfRef.inst_i >> 7U))))) {
             __VdlyVal__ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr__v1 
                 = ((3U == (0x7fU & vlSelfRef.inst_i))
                     ? vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__load_data_o
