@@ -24,11 +24,10 @@ module ysyx_25050136_RegisterFile
     always @(posedge clk) begin
         if(reset)
             gpr[waddr_i] <= 0;
-        else if(wen_i)
-            if(waddr_i != 0)
+        else if(wen_i & (|waddr_i))
             gpr[waddr_i] <= wdata_i;
     end
 
-    assign rdata1_o = (raddr1_i != 0) ? gpr[raddr1_i] : 0;
-    assign rdata2_o = (raddr2_i != 0) ? gpr[raddr2_i] : 0;
+    assign rdata1_o = gpr[raddr1_i];
+    assign rdata2_o = gpr[raddr2_i];
 endmodule
