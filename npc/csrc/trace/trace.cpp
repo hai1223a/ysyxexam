@@ -199,10 +199,11 @@ void ftracer_log(uint32_t inst_in, uint32_t pc_in)
   static int p_stack = 0;
 
   // 识别 call 调用函数
-  if (is_jal(inst_in))
+  if (is_jal(inst_in) || is_jalr(inst_in))
   {
     for (int i = 0; i < ARRLEN(func_ftracer); i++)
     {
+      if(func_ftracer[i].addr == 0) break;
       if (ysyx_25050136_NPC->pc_o == func_ftracer[i].addr)
       {
         ftracer_write("0x%8x %*scall [%s @ 0x%8x]\n", pc_in, 4 * p_stack, " ", func_ftracer[i].func_name, ysyx_25050136_NPC->pc_o);

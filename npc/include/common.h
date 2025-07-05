@@ -37,6 +37,7 @@ extern NPCState npcstate;
 void set_nemu_state(int state, uint32_t pc, int halt_ret);
 bool is_ebreak(uint32_t inst_i);
 bool is_jal(uint32_t inst_i);
+bool is_jalr(uint32_t inst_i);
 bool is_ret(uint32_t inst_i);
 
 #endif
