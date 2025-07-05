@@ -5,6 +5,7 @@
 static Context* (*user_handler)(Event, Context*) = NULL;
 
 Context* __am_irq_handle(Context *c) {
+  c->mepc += 4;
   if (user_handler) {
     Event ev = {0};
     switch (c->mcause) {
@@ -15,7 +16,6 @@ Context* __am_irq_handle(Context *c) {
     c = user_handler(ev, c);
     assert(c != NULL);
   }
-  c->mepc += 4;
   return c;
 }
 extern void __am_asm_trap(void);
@@ -34,7 +34,7 @@ bool cte_init(Context*(*handler)(Event, Context*)) {
 Context *kcontext(Area kstack, void (*entry)(void *), void *arg) {
   Context *ktx = (Context *)(kstack.end - sizeof(Context));
   ktx->gpr[10] = (uintptr_t)arg;
-  ktx->mepc = (uintptr_t)entry - 4;
+  ktx->mepc = (uintptr_t)entry;
   ktx->mstatus = 0x1800;
   return ktx;
 }
