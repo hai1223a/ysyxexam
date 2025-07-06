@@ -33,99 +33,65 @@ long init_pmem(char *img_file)
   fclose(fp);
   return size;
 }
-
-void inst_read()
+extern "C" int pmem_read(int raddr)
 {
-  if (!ysyx_25050136_NPC->reset)
-    if (likely(in_pmem(ysyx_25050136_NPC->pc_o)))
-      ysyx_25050136_NPC->inst_i = *(uint32_t *)(pmem + ysyx_25050136_NPC->pc_o - CONFIG_MBASE);
-    else
-      Assert(0, "你取指令的pc值不合法,pc = 0x%08x\n", ysyx_25050136_NPC->pc_o);
-  // 找到ebreak
-  if (is_ebreak(ysyx_25050136_NPC->inst_i))
+  uint32_t addr = raddr & ~0x3u;
+  uint32_t data;
+  IFDEF(CONFIG_MTRACE, add_mtrace());
+  if (likely(in_pmem(addr)))
   {
-    set_nemu_state(NPC_END, ysyx_25050136_NPC->pc_o, get_reg(10));
+    data = *(uint32_t *)guest_to_host(addr);
   }
-}
-
-void pmem_read()
-{
-  if (!ysyx_25050136_NPC->reset && ysyx_25050136_NPC->mem_ren_o)
-  {
-    IFDEF(CONFIG_MTRACE, add_mtrace());
-    if (likely(in_pmem(ysyx_25050136_NPC->mem_addr_o)))
-    {
-      uint8_t *addr = guest_to_host(ysyx_25050136_NPC->mem_addr_o);
-      switch (ysyx_25050136_NPC->mem_len_o)
-      {
-      case 1:
-        ysyx_25050136_NPC->mem_rdata_i = *addr;
-        break;
-      case 2:
-        ysyx_25050136_NPC->mem_rdata_i = *(uint16_t *)addr;
-        break;
-      case 4:
-        ysyx_25050136_NPC->mem_rdata_i = *(uint32_t *)addr;
-        break;
-      default:
-        break;
-      }
-    }
 #ifdef CONFIG_HAS_TIMER
-    else if(ysyx_25050136_NPC->mem_addr_o == CONFIG_TIMER_BASE)
-    {
-      ysyx_25050136_NPC->mem_rdata_i = (uint32_t)get_time();
-    }
-    else if(ysyx_25050136_NPC->mem_addr_o == (CONFIG_TIMER_BASE + 4))
-    {
-      ysyx_25050136_NPC->mem_rdata_i = get_time() >> 32;
-    }
+  else if (ysyx_25050136_NPC->mem_addr_o == CONFIG_TIMER_BASE)
+  {
+    data = (uint32_t)get_time();
+  }
+  else if (ysyx_25050136_NPC->mem_addr_o == (CONFIG_TIMER_BASE + 4))
+  {
+    data = get_time() >> 32;
+  }
 #endif
-    else 
+  else
+  {
+    IFDEF(CONFIG_MTRACE, printf_mtrace());
+    Assert(0, "你访存的地址值不合法,raddr = 0x%08x,addr = 0x%08x\n", raddr, addr);
+  }
+  return data;
+}
+
+extern "C" void pmem_write(int waddr, int wdata, char wmask)
+{
+  uint32_t addr = waddr & ~0x3u;
+  IFDEF(CONFIG_MTRACE, add_mtrace());
+  if (likely(in_pmem(addr)))
+  {
+    uint8_t *p = guest_to_host(addr);
+    for (int i = 0; i < 4; i++)
     {
-      IFDEF(CONFIG_MTRACE, printf_mtrace());
-      Assert(0, "你访存的地址值不合法,addr = 0x%08x\n", ysyx_25050136_NPC->mem_addr_o);
+      if (wmask & (1 << i))
+      {
+        p[i] = (wdata >> (8 * i)) & 0xff;
+      }
     }
+  }
+#ifdef CONFIG_HAS_SERIAL
+  else if (ysyx_25050136_NPC->mem_addr_o == CONFIG_SERIAL_BASE)
+  {
+    Assert(ysyx_25050136_NPC->mem_len_o == 1, "你写串口的长度不对");
+    if (ysyx_25050136_NPC->clk == 1)
+      putc((char)(ysyx_25050136_NPC->mem_wdata_o), stderr);
+  }
+#endif
+  else
+  {
+    IFDEF(CONFIG_MTRACE, printf_mtrace());
+    Assert(0, "你访存的地址值不合法,raddr = 0x%08x,addr = 0x%08x\n", waddr, addr);
   }
 }
 
-void pmem_write()
-{
-if (!ysyx_25050136_NPC->reset && ysyx_25050136_NPC->mem_wen_o)
-  {
-    IFDEF(CONFIG_MTRACE, add_mtrace());
-    if (likely(in_pmem(ysyx_25050136_NPC->mem_addr_o)))
-    {
-      uint8_t *addr = guest_to_host(ysyx_25050136_NPC->mem_addr_o);
-      switch (ysyx_25050136_NPC->mem_len_o)
-      {
-      case 1:
-        *addr = (uint8_t)(ysyx_25050136_NPC->mem_wdata_o);
-        break;
-      case 2:
-        *(uint16_t *)addr = (uint16_t)(ysyx_25050136_NPC->mem_wdata_o);
-        break;
-      case 4:
-        *(uint32_t *)addr = ysyx_25050136_NPC->mem_wdata_o;
-        break;
-      default:
-        break;
-      }
-    }
-#ifdef CONFIG_HAS_SERIAL
-    else if(ysyx_25050136_NPC->mem_addr_o == CONFIG_SERIAL_BASE)
-    {
-      Assert(ysyx_25050136_NPC->mem_len_o == 1, "你写串口的长度不对");
-      if(ysyx_25050136_NPC->clk == 1)
-        putc((char)(ysyx_25050136_NPC->mem_wdata_o), stderr);
-    }
-#endif
-    else
-    {
-      IFDEF(CONFIG_MTRACE, printf_mtrace());
-      Assert(0, "你访存的地址值不合法,addr = 0x%08x\n", ysyx_25050136_NPC->mem_addr_o);
-    }
-  }
+extern "C" int find_ebreak() {
+  set_nemu_state(NPC_END, ysyx_25050136_NPC->pc_o, get_reg(10));
 }
 
 uint32_t vaddr_read(uint32_t paddr, int len)

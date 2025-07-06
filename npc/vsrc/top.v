@@ -1,5 +1,8 @@
 `include "config.v"
-// import "DPI-C" function void get_inst(input int pc_DPIC, input int inst_DPIC);
+import "DPI-C" function int pmem_read(input int raddr);
+import "DPI-C" function void pmem_write(input int waddr, input int wdata, input byte wmask);
+import "DPI-C" function void find_ebreak();
+
 module ysyx_25050136_NPC
 #(
     TOP_ADDR_WIDTH = 5,
@@ -8,13 +11,13 @@ module ysyx_25050136_NPC
 (
     input                                   clk,
     input                                 reset,
-    input  [TOP_DATA_WIDTH-1:0]          inst_i,
-    input  [TOP_DATA_WIDTH-1:0]     mem_rdata_i,
+    // input  [TOP_DATA_WIDTH-1:0]          inst_i,
+    // input  [TOP_DATA_WIDTH-1:0]     mem_rdata_i,
     output [TOP_DATA_WIDTH-1:0]     mem_wdata_o,
     output [TOP_DATA_WIDTH-1:0]      mem_addr_o,
     output                            mem_ren_o,
     output                            mem_wen_o,
-    output [2:0]                      mem_len_o,
+    output [3:0]                    mem_wmask_o,
     output [TOP_DATA_WIDTH-1:0]            pc_o
 );
 //========================================
@@ -40,15 +43,28 @@ wire [TOP_DATA_WIDTH-1:0] reg2id_rdata1_o,reg2id_rdata2_o;
 wire [TOP_DATA_WIDTH-1:0] ex2reg_gpr_data_o;
 wire [TOP_DATA_WIDTH-1:0] ex2if_jump_addr_o;
 wire ex2if_jump_en_o;
-
-
 //========================================
-// 顶层一些操作
+// 使用DPI-C实现的取指和访存操作, 以及寻找ebreak
 //========================================
-// always @(*) begin
-//     itrace_get_pc_inst(pc_o, inst_i);
-// end
-
+reg [TOP_DATA_WIDTH-1:0] mem_rdata;
+always @(*) begin
+    if (mem_ren_o) begin // 有读写请求时
+        mem_rdata = pmem_read(mem_addr_o);
+    end else begin
+        mem_rdata = 0;
+    end
+    if (mem_wen_o) begin // 有写请求时
+        pmem_write(mem_addr_o, mem_wdata_o, mem_wmask_o);
+    end
+end
+reg [31:0] inst;
+always @(*) begin
+    inst = pmem_read(pc_o);
+end
+always @(*) begin
+    if(id2ex_csru_op_o[`ysyx_25050136_CSRU_EBREAK])
+        find_ebreak();
+end
 //========================================
 // 子模块
 //========================================
@@ -66,7 +82,7 @@ ysyx_25050136_ID #(
     .DATA_WIDTH(TOP_DATA_WIDTH)
 )
 u_ysyx_25050136_ID(
-    .inst_i   	    (inst_i               ),
+    .inst_i   	    (inst                 ),
     .pc_i           (pc_o                 ),
     .static_npc_i   (if2id_static_npc_o   ),
     .rdata1_i 	    (reg2id_rdata1_o      ),
@@ -87,7 +103,7 @@ u_ysyx_25050136_ID(
     .csru_opd2_o  	(id2ex_csru_opd2_o    ),
     .csru_ren_o   	(id2ex_csru_ren_o     ),
     .csru_wen_o   	(id2ex_csru_wen_o     ),
-    .mem_len_o     	(mem_len_o            ),
+    .mem_wmask_o   	(mem_wmask_o          ),
     .mem_signed_o  	(id2ex_mem_signed_o   ),
     .rd_o          	(id2reg_rd_o          ),
     .rd_en_o       	(id2reg_rd_en_o       )
@@ -114,9 +130,9 @@ u_ysyx_25050136_EX(
     .csru_opd2_i  	(id2ex_csru_opd2_o   ),
     .csru_wen_i   	(id2ex_csru_wen_o    ),
     .csru_ren_i   	(id2ex_csru_ren_o    ),
-    .mem_len_i    	(mem_len_o           ),
+    .mem_wmask_i    (mem_wmask_o         ),
     .mem_signed_i 	(id2ex_mem_signed_o  ),
-    .mem_rdata_i  	(mem_rdata_i         ),
+    .mem_rdata_i  	(mem_rdata           ),
     .mem_ren_o    	(mem_ren_o           ),
     .mem_wen_o    	(mem_wen_o           ),
     .mem_wdata_o  	(mem_wdata_o         ),

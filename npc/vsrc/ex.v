@@ -21,7 +21,7 @@ module ysyx_25050136_EX
          input  [11:0]                            csru_opd2_i,
          input                                     csru_wen_i,
          input                                     csru_ren_i,
-         input  [2:0]                               mem_len_i,
+         input  [3:0]                             mem_wmask_i,
          input                                   mem_signed_i,
          input  [DATA_WIDTH-1:0]                  mem_rdata_i,
          output                                     mem_ren_o,
@@ -55,7 +55,7 @@ module ysyx_25050136_EX
     assign mem_addr_o = alu_out_o;
 
     ysyx_25050136_LSU u_ysyx_25050136_LSU(
-        .mem_len_i    	(mem_len_i     ),
+        .mem_wmask_i  	(mem_wmask_i   ),
         .mem_signed_i 	(mem_signed_i  ),
         .store_data_i 	(lsu_opd1_i    ),
         .mem_rdata_i  	(mem_rdata_i   ),

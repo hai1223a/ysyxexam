@@ -26,7 +26,7 @@ module ysyx_25050136_ID
          output [11:0]                           csru_opd2_o,
          output                                   csru_ren_o,
          output                                   csru_wen_o,
-         output [2:0]                              mem_len_o,
+         output [3:0]                            mem_wmask_o,
          output                                 mem_signed_o,
          output [ADDR_WIDTH-1:0]                        rd_o,
          output                                      rd_en_o
@@ -169,6 +169,7 @@ module ysyx_25050136_ID
     assign csru_op_o[`ysyx_25050136_CSRU_CSRRC] = inst_csrrc | inst_csrrci;
     assign csru_op_o[`ysyx_25050136_CSRU_MRET]  = inst_mret;
     assign csru_op_o[`ysyx_25050136_CSRU_ECALL] = inst_ecall;
+    assign csru_op_o[`ysyx_25050136_CSRU_EBREAK] = inst_ebreak;
     // 选择ALU的操作数
     assign alu_opd1_o = inst_lui ? imm : (inst_auipc ? pc_i :
                                      ((inst_jal | inst_jalr) ? static_npc_i : rdata1_i));
@@ -179,9 +180,9 @@ module ysyx_25050136_ID
     assign bqu_opd2_o = imm;
     // 选择LSU的操作数
     assign lsu_opd1_o = rdata2_i;
-    assign mem_len_o = (inst_lw | inst_sw) ? 3'd4 :
-           ((inst_sh | inst_lhu | inst_lh) ? 3'd2 :
-            ((inst_sb | inst_lbu | inst_lb) ? 3'd1 : 0));
+    assign mem_wmask_o = (inst_lw | inst_sw) ? 4'hF :
+           ((inst_sh | inst_lhu | inst_lh) ? 4'h3 :
+            ((inst_sb | inst_lbu | inst_lb) ? 4'h1 : 0));
     assign mem_signed_o = (inst_lhu | inst_lbu) ? 0 : 1;
     // 选择CSR的操作数
     assign csru_opd1_o = (inst_csrrwi | inst_csrrsi | inst_csrrci) ? {{DATA_WIDTH - 5{1'b0}}, rs1} : rdata1_i;

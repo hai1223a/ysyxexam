@@ -31,9 +31,10 @@
 `define ysyx_25050136_LSU_LOAD  0
 `define ysyx_25050136_LSU_STORE 1
 
-`define ysyx_25050136_CSRU_OP_NUM 5
-`define ysyx_25050136_CSRU_CSRRW 0
-`define ysyx_25050136_CSRU_CSRRS 1
-`define ysyx_25050136_CSRU_CSRRC 2
-`define ysyx_25050136_CSRU_MRET  3
-`define ysyx_25050136_CSRU_ECALL 4
+`define ysyx_25050136_CSRU_OP_NUM 6
+`define ysyx_25050136_CSRU_CSRRW  0
+`define ysyx_25050136_CSRU_CSRRS  1
+`define ysyx_25050136_CSRU_CSRRC  2
+`define ysyx_25050136_CSRU_MRET   3
+`define ysyx_25050136_CSRU_ECALL  4
+`define ysyx_25050136_CSRU_EBREAK 5
