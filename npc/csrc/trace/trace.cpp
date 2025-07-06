@@ -68,16 +68,16 @@ void add_mtrace()
   p += snprintf(p, sizeof(mtrace_buf), "0x%08x:  ", ysyx_25050136_NPC->pc_o);
   p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "%8x  ", ysyx_25050136_NPC->mem_addr_o);
   if (ysyx_25050136_NPC->mem_wen_o)
-    p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "write  %d     %x", ysyx_25050136_NPC->mem_len_o, ysyx_25050136_NPC->mem_wdata_o);
+    p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "write  %04x     %x", ysyx_25050136_NPC->mem_wmask_o, ysyx_25050136_NPC->mem_wdata_o);
   else if (ysyx_25050136_NPC->mem_ren_o)
-    p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "read  %d", ysyx_25050136_NPC->mem_len_o);
+    p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "read  %04x", ysyx_25050136_NPC->mem_wmask_o);
   *p = '\0';
 }
 
 void printf_mtrace()
 {
   printf(ANSI_FMT("mtrace 访存出错报告\n", ANSI_FG_MAGENTA));
-  printf(ANSI_FMT("PC值         访存地址  操作   字节  写入数据\n", ANSI_FG_MAGENTA));
+  printf(ANSI_FMT("PC值         访存地址  操作   字节掩码  写入数据\n", ANSI_FG_MAGENTA));
   puts(mtrace_buf);
 }
 
