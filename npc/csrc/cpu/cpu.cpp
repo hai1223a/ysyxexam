@@ -4,7 +4,7 @@ uint32_t pc__ = RESET_VECTOR; // 执行完指令后的PC值
 uint32_t pc_pre = 0;          // 执行的指令的PC值
 uint32_t inst_pre = 0;        // 执行的指令值
 vluint64_t sim_time = 0;      // 记录仿真时间
-vluint64_t reset_time = 3;    // 复位时间
+vluint64_t reset_time = 4;    // 复位时间
 vluint64_t stop_time = 0;     // 暂停时间点
 uint64_t g_timer = 0;         // unit: us
 void reset()
