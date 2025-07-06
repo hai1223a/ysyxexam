@@ -35,29 +35,32 @@ long init_pmem(char *img_file)
 }
 extern "C" int pmem_read(int raddr)
 {
-  uint32_t addr = raddr & ~0x3u;
-  uint32_t data;
-  IFDEF(CONFIG_MTRACE, add_mtrace());
-  if (likely(in_pmem(addr)))
-  {
-    data = *(uint32_t *)guest_to_host(addr);
+  if(ysyx_25050136_NPC->reset) {
+    uint32_t addr = raddr & ~0x3u;
+    uint32_t data;
+    IFDEF(CONFIG_MTRACE, add_mtrace());
+    if (likely(in_pmem(addr)))
+    {
+      data = *(uint32_t *)guest_to_host(addr);
+    }
+  #ifdef CONFIG_HAS_TIMER
+    else if (ysyx_25050136_NPC->mem_addr_o == CONFIG_TIMER_BASE)
+    {
+      data = (uint32_t)get_time();
+    }
+    else if (ysyx_25050136_NPC->mem_addr_o == (CONFIG_TIMER_BASE + 4))
+    {
+      data = get_time() >> 32;
+    }
+  #endif
+    else
+    {
+      IFDEF(CONFIG_MTRACE, printf_mtrace());
+      Assert(0, "你访存的地址值不合法,raddr = 0x%08x,addr = 0x%08x\n", raddr, addr);
+    }
+    return data;
   }
-#ifdef CONFIG_HAS_TIMER
-  else if (ysyx_25050136_NPC->mem_addr_o == CONFIG_TIMER_BASE)
-  {
-    data = (uint32_t)get_time();
-  }
-  else if (ysyx_25050136_NPC->mem_addr_o == (CONFIG_TIMER_BASE + 4))
-  {
-    data = get_time() >> 32;
-  }
-#endif
-  else
-  {
-    IFDEF(CONFIG_MTRACE, printf_mtrace());
-    Assert(0, "你访存的地址值不合法,raddr = 0x%08x,addr = 0x%08x\n", raddr, addr);
-  }
-  return data;
+  return 0;
 }
 
 extern "C" void pmem_write(int waddr, int wdata, char wmask)
