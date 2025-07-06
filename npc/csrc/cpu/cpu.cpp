@@ -19,10 +19,12 @@ void cpu_exec_once()
   while (npcstate.state == NPC_RUNNING)
   {
     ysyx_25050136_NPC->clk ^= 1;
-    // 复位
-    reset();
-    // 计算电路状态
-    ysyx_25050136_NPC->eval();
+    if(ysyx_25050136_NPC->clk == 1) {
+      // 复位
+      reset();
+      // 计算电路状态
+      ysyx_25050136_NPC->eval();
+    }
     // 记录上升沿
     IFDEF(CONFIG_FST, tfp->dump(sim_time));
     // 推动仿真进行
