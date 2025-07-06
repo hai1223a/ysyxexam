@@ -9,9 +9,12 @@
 #define VERILATED_VYSYX_25050136_NPC_H_  // guard
 
 #include "verilated.h"
+#include "svdpi.h"
 
 class Vysyx_25050136_NPC__Syms;
 class Vysyx_25050136_NPC___024root;
+class Vysyx_25050136_NPC___024unit;
+
 
 // This class is the main interface to the Verilated model
 class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC VL_NOT_FINAL : public VerilatedModel {
@@ -32,9 +35,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC VL_NOT_FINAL : public Veri
     VL_IN8(&reset,0,0);
     VL_OUT8(&mem_ren_o,0,0);
     VL_OUT8(&mem_wen_o,0,0);
-    VL_OUT8(&mem_len_o,2,0);
-    VL_IN(&inst_i,31,0);
-    VL_IN(&mem_rdata_i,31,0);
+    VL_OUT8(&mem_wmask_o,3,0);
     VL_OUT(&mem_wdata_o,31,0);
     VL_OUT(&mem_addr_o,31,0);
     VL_OUT(&pc_o,31,0);
@@ -42,6 +43,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC VL_NOT_FINAL : public Veri
     // CELLS
     // Public to allow access to /* verilator public */ items.
     // Otherwise the application code can consider these internals.
+    Vysyx_25050136_NPC___024unit* const __PVT____024unit;
 
     // Root instance pointer to allow access to model internals,
     // including inlined /* verilator public_flat_* */ items.

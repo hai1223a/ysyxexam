@@ -54,7 +54,7 @@ always @(*) begin
         mem_rdata = 0;
     end
     if (mem_wen_o) begin // 有写请求时
-        pmem_write(mem_addr_o, mem_wdata_o, mem_wmask_o);
+        pmem_write(mem_addr_o, mem_wdata_o, {4'b0, mem_wmask_o});
     end
 end
 reg [31:0] inst;
