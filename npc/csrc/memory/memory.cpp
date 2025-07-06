@@ -35,7 +35,7 @@ long init_pmem(char *img_file)
 }
 extern "C" int pmem_read(int raddr)
 {
-  if(ysyx_25050136_NPC->reset) {
+  if(!ysyx_25050136_NPC->reset) {
     uint32_t addr = raddr & ~0x3u;
     uint32_t data;
     IFDEF(CONFIG_MTRACE, add_mtrace());
