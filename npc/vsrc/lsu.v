@@ -33,5 +33,5 @@ module ysyx_25050136_LSU
             end
         endcase
     end
-        assign mem_wdata_o = mem_rdata_i;
+        assign mem_wdata_o = store_data_i;
 endmodule
