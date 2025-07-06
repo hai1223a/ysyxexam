@@ -13,7 +13,7 @@ bool Vysyx_25050136_NPC___024root___eval_phase__act(Vysyx_25050136_NPC___024root
     Vysyx_25050136_NPC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Init
-    VlTriggerVec<2> __VpreTriggered;
+    VlTriggerVec<1> __VpreTriggered;
     CData/*0:0*/ __VactExecute;
     // Body
     Vysyx_25050136_NPC___024root___eval_triggers__act(vlSelf);

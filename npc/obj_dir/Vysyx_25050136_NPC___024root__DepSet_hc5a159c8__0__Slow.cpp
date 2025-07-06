@@ -47,14 +47,6 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___eval_triggers__stl(Vysyx_250501
     // Body
     vlSelfRef.__VstlTriggered.setBit(0U, (IData)(vlSelfRef.__VstlFirstIteration));
     VL_EXEC_TRACE_ADD_RECORD(vlSymsp).sectionPush("trig stl");
-    vlSelfRef.__VstlTriggered.setBit(1U, (vlSelfRef.ysyx_25050136_NPC__DOT__mem_rdata 
-                                          != vlSelfRef.__Vtrigprevexpr___TOP__ysyx_25050136_NPC__DOT__mem_rdata__0));
-    vlSelfRef.__Vtrigprevexpr___TOP__ysyx_25050136_NPC__DOT__mem_rdata__0 
-        = vlSelfRef.ysyx_25050136_NPC__DOT__mem_rdata;
-    if (VL_UNLIKELY(((1U & (~ (IData)(vlSelfRef.__VstlDidInit)))))) {
-        vlSelfRef.__VstlDidInit = 1U;
-        vlSelfRef.__VstlTriggered.setBit(1U, 1U);
-    }
 #ifdef VL_DEBUG
     if (VL_UNLIKELY(vlSymsp->_vm_contextp__->debug())) {
         Vysyx_25050136_NPC___024root___dump_triggers__stl(vlSelf);
@@ -64,8 +56,6 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___eval_triggers__stl(Vysyx_250501
 }
 
 VL_ATTR_COLD void Vysyx_25050136_NPC___024root___stl_sequent__TOP__0(Vysyx_25050136_NPC___024root* vlSelf);
-VL_ATTR_COLD void Vysyx_25050136_NPC___024root___stl_sequent__TOP__1(Vysyx_25050136_NPC___024root* vlSelf);
-VL_ATTR_COLD void Vysyx_25050136_NPC___024root___stl_comb__TOP__0(Vysyx_25050136_NPC___024root* vlSelf);
 
 VL_ATTR_COLD void Vysyx_25050136_NPC___024root___eval_stl(Vysyx_25050136_NPC___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25050136_NPC___024root___eval_stl\n"); );
@@ -76,17 +66,12 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___eval_stl(Vysyx_25050136_NPC___0
     if ((1ULL & vlSelfRef.__VstlTriggered.word(0U))) {
         Vysyx_25050136_NPC___024root___stl_sequent__TOP__0(vlSelf);
     }
-    if ((2ULL & vlSelfRef.__VstlTriggered.word(0U))) {
-        Vysyx_25050136_NPC___024root___stl_sequent__TOP__1(vlSelf);
-    }
-    if ((3ULL & vlSelfRef.__VstlTriggered.word(0U))) {
-        Vysyx_25050136_NPC___024root___stl_comb__TOP__0(vlSelf);
-    }
     VL_EXEC_TRACE_ADD_RECORD(vlSymsp).sectionPop();
 }
 
 void Vysyx_25050136_NPC___024unit____Vdpiimwrap_pmem_read_TOP____024unit(IData/*31:0*/ raddr, IData/*31:0*/ &pmem_read__Vfuncrtn);
 void Vysyx_25050136_NPC___024unit____Vdpiimwrap_find_ebreak_TOP____024unit();
+void Vysyx_25050136_NPC___024unit____Vdpiimwrap_pmem_write_TOP____024unit(IData/*31:0*/ waddr, IData/*31:0*/ wdata, CData/*7:0*/ wmask);
 
 VL_ATTR_COLD void Vysyx_25050136_NPC___024root___stl_sequent__TOP__0(Vysyx_25050136_NPC___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25050136_NPC___024root___stl_sequent__TOP__0\n"); );
@@ -102,6 +87,9 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___stl_sequent__TOP__0(Vysyx_25050
         = ((0x67U == (0x7fU & vlSelfRef.ysyx_25050136_NPC__DOT__inst)) 
            | ((0x6fU == (0x7fU & vlSelfRef.ysyx_25050136_NPC__DOT__inst)) 
               | (0x63U == (0x7fU & vlSelfRef.ysyx_25050136_NPC__DOT__inst))));
+    vlSelfRef.mem_wdata_o = vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr
+        [(0x1fU & (vlSelfRef.ysyx_25050136_NPC__DOT__inst 
+                   >> 0x14U))];
     vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_ID__DOT__inst_lhu 
         = (IData)((0x5003U == (0x707fU & vlSelfRef.ysyx_25050136_NPC__DOT__inst)));
     vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_ID__DOT__inst_lbu 
@@ -561,15 +549,6 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___stl_sequent__TOP__0(Vysyx_25050
                                         : 0U))))))));
     vlSelfRef.mem_addr_o = ((IData)(vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__csru_en)
                              ? 0U : vlSelfRef.ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__out);
-}
-
-void Vysyx_25050136_NPC___024unit____Vdpiimwrap_pmem_write_TOP____024unit(IData/*31:0*/ waddr, IData/*31:0*/ wdata, CData/*7:0*/ wmask);
-
-VL_ATTR_COLD void Vysyx_25050136_NPC___024root___stl_comb__TOP__0(Vysyx_25050136_NPC___024root* vlSelf) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25050136_NPC___024root___stl_comb__TOP__0\n"); );
-    Vysyx_25050136_NPC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    auto& vlSelfRef = std::ref(*vlSelf).get();
-    // Body
     if (vlSelfRef.mem_ren_o) {
         Vysyx_25050136_NPC___024unit____Vdpiimwrap_pmem_read_TOP____024unit(vlSelfRef.mem_addr_o, vlSelfRef.__Vfunc_pmem_read__0__Vfuncout);
         vlSelfRef.ysyx_25050136_NPC__DOT__mem_rdata 

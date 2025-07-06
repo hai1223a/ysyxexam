@@ -21,7 +21,7 @@ Vysyx_25050136_NPC__Syms::Vysyx_25050136_NPC__Syms(VerilatedContext* contextp, c
     , TOP____024unit{this, Verilated::catName(namep, "$unit")}
 {
         // Check resources
-        Verilated::stackCheck(262);
+        Verilated::stackCheck(202);
     // Configure time unit / time precision
     _vm_contextp__->timeunit(-12);
     _vm_contextp__->timeprecision(-12);

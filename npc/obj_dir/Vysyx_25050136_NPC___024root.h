@@ -52,10 +52,8 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC___024root final : public V
         CData/*1:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__u_ysyx_25050136_CSR_File__DOT__mstatus_hit;
         CData/*0:0*/ __VdfgRegularize_hd87f99a1_0_0;
         CData/*0:0*/ __VdfgRegularize_hd87f99a1_0_3;
-        CData/*0:0*/ __VstlDidInit;
         CData/*0:0*/ __VstlFirstIteration;
         CData/*0:0*/ __Vtrigprevexpr___TOP__clk__0;
-        CData/*0:0*/ __VactDidInit;
         CData/*0:0*/ __VactContinue;
         SData/*14:0*/ ysyx_25050136_NPC__DOT__id2ex_alu_op_o;
         SData/*11:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__csr_waddr1;
@@ -83,19 +81,17 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_NPC___024root final : public V
         IData/*31:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__u_ysyx_25050136_CSR_File__DOT__mcause;
         IData/*31:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__u_ysyx_25050136_CSR_File__DOT__mtvec;
         IData/*31:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__u_ysyx_25050136_CSR_File__DOT__mstatus;
-    };
-    struct {
         IData/*31:0*/ __Vfunc_pmem_read__0__Vfuncout;
         IData/*31:0*/ __Vfunc_pmem_read__2__Vfuncout;
-        IData/*31:0*/ __Vtrigprevexpr___TOP__ysyx_25050136_NPC__DOT__mem_rdata__0;
-        IData/*31:0*/ __Vtrigprevexpr___TOP__ysyx_25050136_NPC__DOT__mem_rdata__1;
+    };
+    struct {
         IData/*31:0*/ __VactIterCount;
         QData/*32:0*/ ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add;
         VlUnpacked<IData/*31:0*/, 32> ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr;
     };
-    VlTriggerVec<2> __VstlTriggered;
-    VlTriggerVec<2> __VactTriggered;
-    VlTriggerVec<2> __VnbaTriggered;
+    VlTriggerVec<1> __VstlTriggered;
+    VlTriggerVec<1> __VactTriggered;
+    VlTriggerVec<1> __VnbaTriggered;
 
     // INTERNAL VARIABLES
     Vysyx_25050136_NPC__Syms* const vlSymsp;

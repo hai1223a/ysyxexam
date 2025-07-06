@@ -78,7 +78,7 @@ extern "C" void pmem_write(int waddr, int wdata, char wmask)
 #ifdef CONFIG_HAS_SERIAL
   else if (ysyx_25050136_NPC->mem_addr_o == CONFIG_SERIAL_BASE)
   {
-    Assert(ysyx_25050136_NPC->mem_len_o == 1, "你写串口的长度不对");
+    Assert(ysyx_25050136_NPC->mem_wmask_o == 1, "你写串口的长度不对");
     if (ysyx_25050136_NPC->clk == 1)
       putc((char)(ysyx_25050136_NPC->mem_wdata_o), stderr);
   }

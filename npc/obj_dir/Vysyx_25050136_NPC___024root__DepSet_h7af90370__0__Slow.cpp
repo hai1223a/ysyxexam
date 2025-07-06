@@ -10,10 +10,6 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___eval_static(Vysyx_25050136_NPC_
     Vysyx_25050136_NPC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
-    vlSelfRef.__Vtrigprevexpr___TOP__ysyx_25050136_NPC__DOT__mem_rdata__0 
-        = vlSelfRef.ysyx_25050136_NPC__DOT__mem_rdata;
-    vlSelfRef.__Vtrigprevexpr___TOP__ysyx_25050136_NPC__DOT__mem_rdata__1 
-        = vlSelfRef.ysyx_25050136_NPC__DOT__mem_rdata;
     vlSelfRef.__Vtrigprevexpr___TOP__clk__0 = vlSelfRef.clk;
 }
 
@@ -41,19 +37,8 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___dump_triggers__stl(Vysyx_250501
     if ((1ULL & vlSelfRef.__VstlTriggered.word(0U))) {
         VL_DBG_MSGF("         'stl' region trigger index 0 is active: Internal 'stl' trigger - first iteration\n");
     }
-    if ((2ULL & vlSelfRef.__VstlTriggered.word(0U))) {
-        VL_DBG_MSGF("         'stl' region trigger index 1 is active: @([hybrid] ysyx_25050136_NPC.mem_rdata)\n");
-    }
 }
 #endif  // VL_DEBUG
-
-VL_ATTR_COLD void Vysyx_25050136_NPC___024root___stl_sequent__TOP__1(Vysyx_25050136_NPC___024root* vlSelf) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25050136_NPC___024root___stl_sequent__TOP__1\n"); );
-    Vysyx_25050136_NPC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    auto& vlSelfRef = std::ref(*vlSelf).get();
-    // Body
-    vlSelfRef.mem_wdata_o = vlSelfRef.ysyx_25050136_NPC__DOT__mem_rdata;
-}
 
 VL_ATTR_COLD void Vysyx_25050136_NPC___024root___eval_triggers__stl(Vysyx_25050136_NPC___024root* vlSelf);
 VL_ATTR_COLD void Vysyx_25050136_NPC___024root___eval_stl(Vysyx_25050136_NPC___024root* vlSelf);
@@ -83,10 +68,7 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___dump_triggers__act(Vysyx_250501
         VL_DBG_MSGF("         No triggers active\n");
     }
     if ((1ULL & vlSelfRef.__VactTriggered.word(0U))) {
-        VL_DBG_MSGF("         'act' region trigger index 0 is active: @([hybrid] ysyx_25050136_NPC.mem_rdata)\n");
-    }
-    if ((2ULL & vlSelfRef.__VactTriggered.word(0U))) {
-        VL_DBG_MSGF("         'act' region trigger index 1 is active: @(posedge clk)\n");
+        VL_DBG_MSGF("         'act' region trigger index 0 is active: @(posedge clk)\n");
     }
 }
 #endif  // VL_DEBUG
@@ -101,10 +83,7 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___dump_triggers__nba(Vysyx_250501
         VL_DBG_MSGF("         No triggers active\n");
     }
     if ((1ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VL_DBG_MSGF("         'nba' region trigger index 0 is active: @([hybrid] ysyx_25050136_NPC.mem_rdata)\n");
-    }
-    if ((2ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VL_DBG_MSGF("         'nba' region trigger index 1 is active: @(posedge clk)\n");
+        VL_DBG_MSGF("         'nba' region trigger index 0 is active: @(posedge clk)\n");
     }
 }
 #endif  // VL_DEBUG
@@ -179,9 +158,5 @@ VL_ATTR_COLD void Vysyx_25050136_NPC___024root___ctor_var_reset(Vysyx_25050136_N
     vlSelf->__VdfgRegularize_hd87f99a1_0_3 = 0;
     vlSelf->__Vfunc_pmem_read__0__Vfuncout = 0;
     vlSelf->__Vfunc_pmem_read__2__Vfuncout = 0;
-    vlSelf->__Vtrigprevexpr___TOP__ysyx_25050136_NPC__DOT__mem_rdata__0 = 0;
-    vlSelf->__VstlDidInit = 0;
-    vlSelf->__Vtrigprevexpr___TOP__ysyx_25050136_NPC__DOT__mem_rdata__1 = 0;
     vlSelf->__Vtrigprevexpr___TOP__clk__0 = 0;
-    vlSelf->__VactDidInit = 0;
 }
