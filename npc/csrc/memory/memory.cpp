@@ -64,7 +64,7 @@ extern "C" int pmem_read(int raddr)
     }
     return data;
   }
-  if(raddr = RESET_VECTOR) return *(uint32_t *)guest_to_host(raddr);
+  if(raddr == RESET_VECTOR) return *(uint32_t *)guest_to_host(raddr);
   return 0;
 }
 
