@@ -12,7 +12,7 @@ module ysyx_25050136_LSU
      );
 
     always @(*) begin
-        case (mem_len_i)
+        case (mem_wmask_i)
             4'hF:begin
                 load_data_o = mem_rdata_i;
             end

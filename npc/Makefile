@@ -26,7 +26,7 @@ TOPNAME = ysyx_25050136_NPC
 VERILATOR = verilator
 # 源文件
 CSRCS = $(wildcard csrc/*/*.cpp csrc/*/*.c csrc/*.cpp csrc/*.c)
-VSRCS = $(wildcard vsrc/*.v)
+VSRCS = $(filter-out vsrc/soc.v, $(wildcard vsrc/*.v))
 # 编译选项
 BFLAGS   += -fsanitize=address
 INC_PATH := $(abspath ../include ../include/generated)
