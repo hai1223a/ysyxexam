@@ -23,16 +23,6 @@ void cpu_exec_once()
     reset();
     // 计算电路状态
     ysyx_25050136_NPC->eval();
-    // if(ysyx_25050136_NPC->clk == 1) {
-
-    //   // 取指
-    //   inst_read();
-    //   // 计算电路状态
-    //   ysyx_25050136_NPC->eval();
-    //   // 访存
-    //   pmem_read();
-    //   pmem_write();
-    // }
     // 记录上升沿
     IFDEF(CONFIG_FST, tfp->dump(sim_time));
     // 推动仿真进行
