@@ -90,7 +90,7 @@ extern "C" void pmem_write(int waddr, int wdata, char wmask)
   }
 }
 
-extern "C" int find_ebreak() {
+extern "C" void find_ebreak() {
   set_nemu_state(NPC_END, ysyx_25050136_NPC->pc_o, get_reg(10));
 }
 
