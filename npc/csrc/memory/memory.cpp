@@ -11,10 +11,6 @@ long init_pmem(char *img_file)
   {
     uint32_t *pmem_w = (uint32_t *)pmem;
     *pmem_w++ = 0x00000297; // auipc t0,0
-    *pmem_w++ = 0x00000297; // auipc t0,0
-    *pmem_w++ = 0x00000297; // auipc t0,0
-    *pmem_w++ = 0x00000297; // auipc t0,0
-    *pmem_w++ = 0x00000297; // auipc t0,0
     *pmem_w++ = 0x00028823; // sb  zero,16(t0)
     *pmem_w++ = 0x0102c503; // lbu a0,16(t0)
     *pmem_w++ = 0x00100073; // ebreak (used as nemu_trap)
