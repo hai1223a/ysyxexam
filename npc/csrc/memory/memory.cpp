@@ -36,7 +36,7 @@ long init_pmem(char *img_file)
 extern "C" int pmem_read(int raddr)
 {
   if(!ysyx_25050136_NPC->reset) {
-    uint32_t addr = (uint32_t)raddr & ~0x3u;
+    uint32_t addr = (uint32_t)raddr;
     uint32_t data;
     IFDEF(CONFIG_MTRACE, add_mtrace());
     if (likely(in_pmem(addr)))
@@ -66,7 +66,7 @@ extern "C" int pmem_read(int raddr)
 
 extern "C" void pmem_write(int waddr, int wdata, char wmask)
 {
-  uint32_t addr = waddr & ~0x3u;
+  uint32_t addr = waddr;
   IFDEF(CONFIG_MTRACE, add_mtrace());
   if (likely(in_pmem(addr)))
   {
