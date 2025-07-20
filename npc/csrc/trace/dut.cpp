@@ -104,6 +104,7 @@ void difftest_step()
         ref_r.gpr[i] = get_reg(i);
       }
       ref_r.pc = ysyx_25050136_NPC->pc_o;
+      printf_regs();
       ref_difftest_regcpy(&ref_r, DIFFTEST_TO_REF);
       is_skip_ref = false;
       return;
