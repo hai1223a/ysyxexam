@@ -10,8 +10,6 @@ long init_pmem(char *img_file)
   if (!img_file)
   {
     uint32_t *pmem_w = (uint32_t *)pmem;
-    *pmem_w++ = 0x00100613; // li	a2,1
-    *pmem_w++ = 0x00b00513; // li	a0,11    
     *pmem_w++ = 0x00000297; // auipc t0,0
     *pmem_w++ = 0x00028823; // sb  zero,16(t0)
     *pmem_w++ = 0x0102c503; // lbu a0,16(t0)
@@ -37,72 +35,64 @@ long init_pmem(char *img_file)
 }
 extern "C" int pmem_read(int raddr)
 {
-  if (ysyx_25050136_NPC->clk == 0)
-  {
-    if(!ysyx_25050136_NPC->reset) {
-      uint32_t addr = (uint32_t)raddr;
-      uint32_t data;
-      IFDEF(CONFIG_MTRACE, add_mtrace());
-      if (likely(in_pmem(addr)))
-      {
-        data = *(uint32_t *)guest_to_host(addr);
-      }
-    #ifdef CONFIG_HAS_TIMER
-      else if (ysyx_25050136_NPC->mem_addr_o == CONFIG_TIMER_BASE)
-      {
-        difftest_skip_ref();
-        data = (uint32_t)get_time();
-      }
-      else if (ysyx_25050136_NPC->mem_addr_o == (CONFIG_TIMER_BASE + 4))
-      {
-        difftest_skip_ref();
-        data = get_time() >> 32;
-      }
-    #endif
-      else
-      {
-        IFDEF(CONFIG_MTRACE, printf_mtrace());
-        Assert(0, "你访存的地址值不合法,raddr = 0x%08x,addr = 0x%08x\n", raddr, addr);
-      }
-      return data;
-    }
-    if(raddr == RESET_VECTOR) return *(uint32_t *)guest_to_host(raddr);
-    return 0;
-  }
-  return 0;
-}
-
-extern "C" void pmem_write(int waddr, int wdata, char wmask)
-{
-  if (ysyx_25050136_NPC->clk == 1)
-  {
-    uint32_t addr = waddr;
+  if(!ysyx_25050136_NPC->reset) {
+    uint32_t addr = (uint32_t)raddr;
+    uint32_t data;
     IFDEF(CONFIG_MTRACE, add_mtrace());
     if (likely(in_pmem(addr)))
     {
-      uint8_t *p = guest_to_host(addr);
-      for (int i = 0; i < 4; i++)
-      {
-        if (wmask & (1 << i))
-        {
-          p[i] = (wdata >> (8 * i)) & 0xff;
-        }
-      }
+      data = *(uint32_t *)guest_to_host(addr);
     }
-  #ifdef CONFIG_HAS_SERIAL
-    else if (ysyx_25050136_NPC->mem_addr_o == CONFIG_SERIAL_BASE)
+  #ifdef CONFIG_HAS_TIMER
+    else if (ysyx_25050136_NPC->mem_addr_o == CONFIG_TIMER_BASE)
     {
-      Assert(ysyx_25050136_NPC->mem_wmask_o == 1, "你写串口的长度不对");
-      difftest_skip_ref();
-      if (ysyx_25050136_NPC->clk == 1)
-        putc((char)(ysyx_25050136_NPC->mem_wdata_o), stderr);
+      difftest_skip_ref(2);
+      data = (uint32_t)get_time();
+    }
+    else if (ysyx_25050136_NPC->mem_addr_o == (CONFIG_TIMER_BASE + 4))
+    {
+      data = get_time() >> 32;
     }
   #endif
     else
     {
       IFDEF(CONFIG_MTRACE, printf_mtrace());
-      Assert(0, "你访存的地址值不合法,raddr = 0x%08x,addr = 0x%08x\n", waddr, addr);
+      Assert(0, "你访存的地址值不合法,raddr = 0x%08x,addr = 0x%08x\n", raddr, addr);
     }
+    return data;
+  }
+  if(raddr == RESET_VECTOR) return *(uint32_t *)guest_to_host(raddr);
+  return 0;
+}
+
+extern "C" void pmem_write(int waddr, int wdata, char wmask)
+{
+  uint32_t addr = waddr;
+  IFDEF(CONFIG_MTRACE, add_mtrace());
+  if (likely(in_pmem(addr)))
+  {
+    uint8_t *p = guest_to_host(addr);
+    for (int i = 0; i < 4; i++)
+    {
+      if (wmask & (1 << i))
+      {
+        p[i] = (wdata >> (8 * i)) & 0xff;
+      }
+    }
+  }
+#ifdef CONFIG_HAS_SERIAL
+  else if (ysyx_25050136_NPC->mem_addr_o == CONFIG_SERIAL_BASE)
+  {
+    difftest_skip_ref(1);
+    Assert(ysyx_25050136_NPC->mem_wmask_o == 1, "你写串口的长度不对");
+    if (ysyx_25050136_NPC->clk == 1)
+      putc((char)(ysyx_25050136_NPC->mem_wdata_o), stderr);
+  }
+#endif
+  else
+  {
+    IFDEF(CONFIG_MTRACE, printf_mtrace());
+    Assert(0, "你访存的地址值不合法,raddr = 0x%08x,addr = 0x%08x\n", waddr, addr);
   }
 }
 
