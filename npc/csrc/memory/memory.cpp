@@ -10,9 +10,11 @@ long init_pmem(char *img_file)
   if (!img_file)
   {
     uint32_t *pmem_w = (uint32_t *)pmem;
-    *pmem_w++ = 0x00000297; // auipc t0,0
-    *pmem_w++ = 0x00028823; // sb  zero,16(t0)
-    *pmem_w++ = 0x0102c503; // lbu a0,16(t0)
+    *pmem_w++ = 0x00100613; // li	a2,1
+    *pmem_w++ = 0x00b00513; // li	a0,11    
+    // *pmem_w++ = 0x00000297; // auipc t0,0
+    // *pmem_w++ = 0x00028823; // sb  zero,16(t0)
+    // *pmem_w++ = 0x0102c503; // lbu a0,16(t0)
     *pmem_w++ = 0x00100073; // ebreak (used as nemu_trap)
     *pmem_w++ = 0xdeadbeef; // some data
     Log("没有给源文件, 程序使用了内置的代码.");
@@ -46,10 +48,12 @@ extern "C" int pmem_read(int raddr)
   #ifdef CONFIG_HAS_TIMER
     else if (ysyx_25050136_NPC->mem_addr_o == CONFIG_TIMER_BASE)
     {
+      difftest_skip_ref();
       data = (uint32_t)get_time();
     }
     else if (ysyx_25050136_NPC->mem_addr_o == (CONFIG_TIMER_BASE + 4))
     {
+      difftest_skip_ref();
       data = get_time() >> 32;
     }
   #endif
@@ -83,6 +87,7 @@ extern "C" void pmem_write(int waddr, int wdata, char wmask)
   else if (ysyx_25050136_NPC->mem_addr_o == CONFIG_SERIAL_BASE)
   {
     Assert(ysyx_25050136_NPC->mem_wmask_o == 1, "你写串口的长度不对");
+    difftest_skip_ref();
     if (ysyx_25050136_NPC->clk == 1)
       putc((char)(ysyx_25050136_NPC->mem_wdata_o), stderr);
   }
