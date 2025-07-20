@@ -87,32 +87,23 @@ static void checkregs(CPU_state *ref)
 }
 
 bool is_skip_ref = false;
-uint8_t skip_insts_ref = 0;
 void difftest_skip_ref() {
   is_skip_ref = true;
-  skip_insts_ref++;
 }
 
 void difftest_step()
 {
   CPU_state ref_r;
-  if (skip_insts_ref == 0)
-  {
-    if(is_skip_ref) {
-      for (size_t i = 0; i < REG_NUM; i++)
-      {
-        ref_r.gpr[i] = get_reg(i);
-      }
-      ref_r.pc = ysyx_25050136_NPC->pc_o;
-      printf_regs();
-      ref_difftest_regcpy(&ref_r, DIFFTEST_TO_REF);
-      is_skip_ref = false;
-      return;
+  if(is_skip_ref) {
+    for (size_t i = 0; i < REG_NUM; i++)
+    {
+      ref_r.gpr[i] = get_reg(i);
     }
-  }
-  else
-  {
-    skip_insts_ref--;
+    ref_r.pc = ysyx_25050136_NPC->pc_o;
+    printf_regs();
+    ref_difftest_regcpy(&ref_r, DIFFTEST_TO_REF);
+    is_skip_ref = false;
+    return;
   }
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
