@@ -38,7 +38,6 @@ enum {
   pause, ecall, ebreak,  
   // RV32M
   mul_, mulh_, mulhsu_, mulhu_, div_, divu_, rem_, remu_,
-<<<<<<< HEAD
   // RV32Zicsr
   csrrw, csrrs, csrrc, csrrwi, csrrsi, csrrci,
   // 特权指令
@@ -47,11 +46,6 @@ enum {
   inv,
 };
 
-=======
-  // NEMU
-  inv,
-};
->>>>>>> master
 enum {
   // 算数
   ADD, SUB, 
@@ -63,21 +57,14 @@ enum {
   SRA, SLL, SRL, 
   // 乘除法
   MUL, MULH, MULHSU, MULHU, DIV, DIVU, REM, REMU,
-<<<<<<< HEAD
   // csr操作
   CSRRW, CSRRS, CSRRC,
-=======
->>>>>>> master
 };
 
 #define src1R() do { *src1 = Reg(rs1); } while (0)
 #define src2R() do { *src2 = Reg(rs2); } while (0)
-<<<<<<< HEAD
 #define immI() do { if(name == csrrwi || name == csrrci || name == csrrsi) *imm = BITS(i, 19, 15);\
                     else if(name == srai) *imm = BITS(i, 24, 20); \
-=======
-#define immI() do { if(name == srai || name == sra) *imm = BITS(i, 24, 20); \
->>>>>>> master
                     else *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
@@ -157,7 +144,6 @@ static word_t mul_div(Decode *s, const word_t op1, const word_t op2, int op) {
   }
 }
 
-<<<<<<< HEAD
 static void csru(Decode *s, int op, const word_t src_value, const int rd )
 {
   uint32_t i = s->isa.inst;
@@ -198,8 +184,6 @@ static void csru(Decode *s, int op, const word_t src_value, const int rd )
     break;
   }
 }
-=======
->>>>>>> master
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type, int name) {
   uint32_t i = s->isa.inst;
@@ -224,32 +208,19 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 extern struct FUNC_FTRACE{
   word_t addr;
   char func_name[16];
-<<<<<<< HEAD
 } FUNC_FTRACER[128];
 int FUNC_stack[1024] = {0};
-=======
-} FUNC_FTRACER[10];
-int FUNC_stack[10] = {0};
-char space[10] = {0};
->>>>>>> master
 
 static void ftracer_log(Decode *s, int name)
 {
   static int p_stack = 0;
 
   // 识别 call 调用函数
-<<<<<<< HEAD
   if(name == jal || jalr)
   {
     for(int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
     {
       if(FUNC_FTRACER[i].addr == 0) break;
-=======
-  if(name == jal)
-  {
-    for(int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
-    {
->>>>>>> master
       if(s->dnpc == FUNC_FTRACER[i].addr)
       {
         ftracer_write("0x%8x %*scall [%s @ 0x%8x]\n",s->pc, 4*p_stack, " ", FUNC_FTRACER[i].func_name, s->dnpc);
@@ -320,7 +291,6 @@ static int decode_exec(Decode *s) {
   INSTPAT("0100000 ????? ????? 101 ????? 01100 11", sra    , R, Reg(rd) = alu(src1, src2, SRA));
   INSTPAT("0000000 ????? ????? 110 ????? 01100 11", or     , R, Reg(rd) = alu(src1, src2, OR));
   INSTPAT("0000000 ????? ????? 111 ????? 01100 11", and    , R, Reg(rd) = alu(src1, src2, AND));
-<<<<<<< HEAD
 
   INSTPAT("??????? ????? ????? 000 ????? 00011 11", fence      , N, );
   INSTPAT("1000001 10011 00000 000 00000 00011 11", fence_tso  , N, );
@@ -346,26 +316,6 @@ static int decode_exec(Decode *s) {
   // 特权指令
   INSTPAT("0011000 00010 00000 000 00000 11100 11", mret , R, s->dnpc = csrs[0].value);
   INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv  , N, INV(s->pc));
-=======
-
-  INSTPAT("??????? ????? ????? 000 ????? 00011 11", fence      , N, );
-  INSTPAT("1000001 10011 00000 000 00000 00011 11", fence_tso  , N, );
-  INSTPAT("0000000 10000 00000 000 00000 00011 11", pause      , N, );
-  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall      , N, );
-  INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak     , N, NEMUTRAP(s->pc, Reg(10))); // R(10) is $a0
-  //RV32M
-  INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul_   , R, Reg(rd) = mul_div(s, src1, src2, MUL));
-  INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh_  , R, Reg(rd) = mul_div(s, src1, src2, MULH));
-  INSTPAT("0000001 ????? ????? 010 ????? 01100 11", mulhsu_, R, Reg(rd) = mul_div(s, src1, src2, MULHSU));
-  INSTPAT("0000001 ????? ????? 011 ????? 01100 11", mulhu_ , R, Reg(rd) = mul_div(s, src1, src2, MULHU));
-  INSTPAT("0000001 ????? ????? 100 ????? 01100 11", div_   , R, Reg(rd) = mul_div(s, src1, src2, DIV));
-  INSTPAT("0000001 ????? ????? 101 ????? 01100 11", divu_  , R, Reg(rd) = mul_div(s, src1, src2, DIVU));
-  INSTPAT("0000001 ????? ????? 110 ????? 01100 11", rem_   , R, Reg(rd) = mul_div(s, src1, src2, REM));
-  INSTPAT("0000001 ????? ????? 111 ????? 01100 11", remu_  , R, Reg(rd) = mul_div(s, src1, src2, REMU));
-
-
-  INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
->>>>>>> master
   INSTPAT_END();
   Reg(0) = 0; // reset $zero to 0
 

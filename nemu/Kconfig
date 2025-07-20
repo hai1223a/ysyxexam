@@ -162,7 +162,6 @@ config FTRACE
   depends on TRACE
   bool "Enable function tracer"
   default n
-<<<<<<< HEAD
 
 # 有关etrace的配置
 config ETRACE
@@ -175,8 +174,6 @@ config WATCHPOINT
   depends on TRACE
   bool "Enable watchpoint"
   default n
-=======
->>>>>>> master
 
 config DIFFTEST
   depends on TARGET_NATIVE_ELF

@@ -41,14 +41,9 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 }
 
-<<<<<<< HEAD
 // 下面部分是判断监视点的部分内容
 //===============================================
 #ifdef CONFIG_WATCHPOINT
-=======
-// 下面部分是判断监控点的部分内容
-//===============================================
->>>>>>> master
 static void monitor_check(Decode *_this) {
   static word_t data_pre[NR_WP] = {0};
   static word_t data_new[NR_WP] = {0};
@@ -62,21 +57,14 @@ static void monitor_check(Decode *_this) {
       if(data_new[i] != data_pre[i])
       {
         nemu_state.state = NEMU_STOP;
-<<<<<<< HEAD
         printf("监视点%d发生了变化\n", i);
-=======
-        printf("监控点%d发生了变化\n", i);
->>>>>>> master
         IFDEF(CONFIG_ITRACER,puts(_this->logbuf));
         data_pre[i] = data_new[i];
       }
     }
   }
 }
-<<<<<<< HEAD
 #endif
-=======
->>>>>>> master
 //===============================================
 
 // 下面这里是IRINGBUF
@@ -153,11 +141,7 @@ static void execute(uint64_t n) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
-<<<<<<< HEAD
     IFDEF(CONFIG_WATCHPOINT, monitor_check(&s));
-=======
-    monitor_check(&s);  // 监控点
->>>>>>> master
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
