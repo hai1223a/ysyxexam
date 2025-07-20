@@ -37,7 +37,7 @@ long init_pmem(char *img_file)
 }
 extern "C" int pmem_read(int raddr)
 {
-  if (ysyx_25050136_NPC->clk == 1)
+  if (ysyx_25050136_NPC->clk == 0)
   {
     if(!ysyx_25050136_NPC->reset) {
       uint32_t addr = (uint32_t)raddr;
