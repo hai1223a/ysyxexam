@@ -90,7 +90,7 @@ bool is_skip_ref = false;
 uint8_t skip_insts_ref = 0;
 void difftest_skip_ref() {
   is_skip_ref = true;
-  skip_insts_ref = 1;
+  skip_insts_ref = 0;
 }
 
 void difftest_step()
