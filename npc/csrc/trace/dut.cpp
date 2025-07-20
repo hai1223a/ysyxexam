@@ -96,22 +96,18 @@ void difftest_skip_ref(uint8_t num) {
 void difftest_step()
 {
   CPU_state ref_r;
-  if (skip_insts_ref == 0)
-  {
-    if(is_skip_ref) {
-      for (size_t i = 0; i < REG_NUM; i++)
-      {
-        ref_r.gpr[i] = get_reg(i);
-      }
-      ref_r.pc = ysyx_25050136_NPC->pc_o;
-      ref_difftest_regcpy(&ref_r, DIFFTEST_TO_REF);
-      is_skip_ref = false;
-      return;
+  if(is_skip_ref) {
+    for (size_t i = 0; i < REG_NUM; i++)
+    {
+      ref_r.gpr[i] = get_reg(i);
     }
-  }
-  else
-  {
-    skip_insts_ref--;
+    ref_r.pc = ysyx_25050136_NPC->pc_o;
+    ref_difftest_regcpy(&ref_r, DIFFTEST_TO_REF);
+    if(skip_insts_ref == 0)
+      is_skip_ref = false;
+    else
+      skip_insts_ref--;
+    return;
   }
   ref_difftest_exec(1);
   ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
