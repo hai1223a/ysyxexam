@@ -2,6 +2,6 @@
 #define __SDB_H__
 
 void init_sdb();
-void sdb_mainloop(Vysyx_25050136_NPC *ysyx_25050136_NPC, VerilatedFstC *tfp);
+void sdb_mainloop();
 
 #endif
