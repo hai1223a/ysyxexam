@@ -46,11 +46,11 @@ extern "C" int pmem_read(int raddr)
   #ifdef CONFIG_HAS_TIMER
     else if (ysyx_25050136_NPC->mem_addr_o == CONFIG_TIMER_BASE)
     {
-      difftest_skip_ref(2);
       data = (uint32_t)get_time();
     }
     else if (ysyx_25050136_NPC->mem_addr_o == (CONFIG_TIMER_BASE + 4))
     {
+      difftest_skip_ref(2);
       data = get_time() >> 32;
     }
   #endif
