@@ -14,7 +14,6 @@
 ***************************************************************************************/
 
 #include "local-include/reg.h"
-#include "local-include/csr.h"
 #include <cpu/cpu.h>
 #include <cpu/ifetch.h>
 #include <cpu/decode.h>
@@ -38,14 +37,9 @@ enum {
   pause, ecall, ebreak,  
   // RV32M
   mul_, mulh_, mulhsu_, mulhu_, div_, divu_, rem_, remu_,
-  // RV32Zicsr
-  csrrw, csrrs, csrrc, csrrwi, csrrsi, csrrci,
-  // 特权指令
-  mret, 
   // NEMU
   inv,
 };
-
 enum {
   // 算数
   ADD, SUB, 
@@ -57,14 +51,11 @@ enum {
   SRA, SLL, SRL, 
   // 乘除法
   MUL, MULH, MULHSU, MULHU, DIV, DIVU, REM, REMU,
-  // csr操作
-  CSRRW, CSRRS, CSRRC,
 };
 
 #define src1R() do { *src1 = Reg(rs1); } while (0)
 #define src2R() do { *src2 = Reg(rs2); } while (0)
-#define immI() do { if(name == csrrwi || name == csrrci || name == csrrsi) *imm = BITS(i, 19, 15);\
-                    else if(name == srai) *imm = BITS(i, 24, 20); \
+#define immI() do { if(name == srai || name == sra) *imm = BITS(i, 24, 20); \
                     else *imm = SEXT(BITS(i, 31, 20), 12); } while(0)
 #define immU() do { *imm = SEXT(BITS(i, 31, 12), 20) << 12; } while(0)
 #define immS() do { *imm = (SEXT(BITS(i, 31, 25), 7) << 5) | BITS(i, 11, 7); } while(0)
@@ -144,46 +135,6 @@ static word_t mul_div(Decode *s, const word_t op1, const word_t op2, int op) {
   }
 }
 
-static void csru(Decode *s, int op, const word_t src_value, const int rd )
-{
-  uint32_t i = s->isa.inst;
-  uint16_t csr_addr = BITS(i, 31, 20);
-  int rs1 = BITS(i, 19, 15);
-  int csr_index;
-  bool csr_index_state = false;
-  for(int i = 0; i < ARRLEN(csrs); i++) 
-  {
-    if(csrs[i].addr == csr_addr) {
-      csr_index = i;
-      csr_index_state = true;
-      break;
-    }
-  }
-  Assert(csr_index_state == true, "你访问的csr没有实现或者不存在, 地址为%x\n", csr_addr);
-  switch (op)
-  {
-  case CSRRW:
-    if (rd != 0) {
-      Reg(rd) = csrs[csr_index].value;
-    }
-    csrs[csr_index].value = src_value;
-    break;
-  case CSRRS:
-    Reg(rd) = csrs[csr_index].value;
-    if (rs1 != 0) {
-      csrs[csr_index].value |= src_value;
-    }
-    break;
-  case CSRRC:
-    Reg(rd) = csrs[csr_index].value;
-    if (rs1 != 0) {
-      csrs[csr_index].value &= ~src_value;
-    }
-    break;
-  default:
-    break;
-  }
-}
 
 static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_t *imm, int type, int name) {
   uint32_t i = s->isa.inst;
@@ -208,19 +159,19 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 extern struct FUNC_FTRACE{
   word_t addr;
   char func_name[16];
-} FUNC_FTRACER[128];
-int FUNC_stack[1024] = {0};
+} FUNC_FTRACER[10];
+int FUNC_stack[10] = {0};
+char space[10] = {0};
 
 static void ftracer_log(Decode *s, int name)
 {
   static int p_stack = 0;
 
   // 识别 call 调用函数
-  if(name == jal || jalr)
+  if(name == jal)
   {
     for(int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
     {
-      if(FUNC_FTRACER[i].addr == 0) break;
       if(s->dnpc == FUNC_FTRACER[i].addr)
       {
         ftracer_write("0x%8x %*scall [%s @ 0x%8x]\n",s->pc, 4*p_stack, " ", FUNC_FTRACER[i].func_name, s->dnpc);
@@ -295,9 +246,9 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 000 ????? 00011 11", fence      , N, );
   INSTPAT("1000001 10011 00000 000 00000 00011 11", fence_tso  , N, );
   INSTPAT("0000000 10000 00000 000 00000 00011 11", pause      , N, );
-  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall      , N, s->dnpc = isa_raise_intr(11,s->pc));
+  INSTPAT("0000000 00000 00000 000 00000 11100 11", ecall      , N, );
   INSTPAT("0000000 00001 00000 000 00000 11100 11", ebreak     , N, NEMUTRAP(s->pc, Reg(10))); // R(10) is $a0
-  // RV32M
+  //RV32M
   INSTPAT("0000001 ????? ????? 000 ????? 01100 11", mul_   , R, Reg(rd) = mul_div(s, src1, src2, MUL));
   INSTPAT("0000001 ????? ????? 001 ????? 01100 11", mulh_  , R, Reg(rd) = mul_div(s, src1, src2, MULH));
   INSTPAT("0000001 ????? ????? 010 ????? 01100 11", mulhsu_, R, Reg(rd) = mul_div(s, src1, src2, MULHSU));
@@ -306,16 +257,9 @@ static int decode_exec(Decode *s) {
   INSTPAT("0000001 ????? ????? 101 ????? 01100 11", divu_  , R, Reg(rd) = mul_div(s, src1, src2, DIVU));
   INSTPAT("0000001 ????? ????? 110 ????? 01100 11", rem_   , R, Reg(rd) = mul_div(s, src1, src2, REM));
   INSTPAT("0000001 ????? ????? 111 ????? 01100 11", remu_  , R, Reg(rd) = mul_div(s, src1, src2, REMU));
-  // RV32Zicsr
-  INSTPAT("??????? ????? ????? 001 ????? 11100 11", csrrw  , I, csru(s, CSRRW, src1, rd));
-  INSTPAT("??????? ????? ????? 010 ????? 11100 11", csrrs  , I, csru(s, CSRRS, src1, rd));
-  INSTPAT("??????? ????? ????? 011 ????? 11100 11", csrrc  , I, csru(s, CSRRC, src1, rd));
-  INSTPAT("??????? ????? ????? 101 ????? 11100 11", csrrwi , I, csru(s, CSRRW, imm, rd));
-  INSTPAT("??????? ????? ????? 110 ????? 11100 11", csrrsi , I, csru(s, CSRRS, imm, rd));
-  INSTPAT("??????? ????? ????? 111 ????? 11100 11", csrrci , I, csru(s, CSRRC, imm, rd));
-  // 特权指令
-  INSTPAT("0011000 00010 00000 000 00000 11100 11", mret , R, s->dnpc = csrs[0].value);
-  INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv  , N, INV(s->pc));
+
+
+  INSTPAT("??????? ????? ????? ??? ????? ????? ??", inv    , N, INV(s->pc));
   INSTPAT_END();
   Reg(0) = 0; // reset $zero to 0
 

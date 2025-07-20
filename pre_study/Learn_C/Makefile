@@ -1,8 +1,5 @@
 MAINARGS ?= 
 
-CFLAGS += -O0 -Wall -Wextra -Werror -std=c99 -ffunction-sections -fdata-sections -fno-common
-LDFLAGS += -Wl,--gc-sections
-
 # 默认目标
 .PHONY: all
 all:
@@ -10,7 +7,7 @@ all:
 
 # 通用规则：编译并执行
 ex%: ex%.c
-	@$(CC) $(CFLAGS) $(LDFLAGS) -o $@.o $< && ./$@.o $(MAINARGS)
+	@$(CC) $(CFLAGS) -o $@.o $< && ./$@.o $(MAINARGS)
 
 # 特定规则：为某些文件单独处理参数
 ex04: ex04.c

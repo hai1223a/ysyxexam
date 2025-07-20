@@ -12,14 +12,6 @@ CFLAGS    += -fdata-sections -ffunction-sections
 LDSCRIPTS += $(AM_HOME)/scripts/linker.ld
 LDFLAGS   += --defsym=_pmem_start=0x80000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
-IMAGE_NAME = $(basename $(notdir $(IMAGE)))
-override NPCFLAGS += -l $(shell dirname $(IMAGE).elf)/npc-$(IMAGE_NAME)-log.txt \
-                     -i $(IMAGE).bin \
-                     -d $(NEMU_HOME)/build/riscv32-nemu-interpreter-so \
-                     -p 1234 \
-                     -e $(IMAGE).elf \
-                     -g $(shell dirname $(IMAGE).elf)/npc-$(IMAGE_NAME)-ftracerlog.txt \
-                     -b
 
 MAINARGS_MAX_LEN = 64
 MAINARGS_PLACEHOLDER = The insert-arg rule in Makefile will insert mainargs here.
@@ -34,12 +26,6 @@ image: image-dep
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 run: insert-arg
-	$(MAKE) -C $(NPC_HOME) run ARGS="$(NPCFLAGS)"
-
-gdb: insert-arg
-	$(MAKE) -C $(NPC_HOME) gdb ARGS="$(NPCFLAGS)"
-
-wave: insert-arg
-	$(MAKE) -C $(NPC_HOME) wave ARGS="$(NPCFLAGS)"
+	echo "TODO: add command here to run simulation"
 
 .PHONY: insert-arg

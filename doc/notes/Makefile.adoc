@@ -299,10 +299,10 @@ $(word 2, foo bar baz)
 包括 `dir`,`notdir`,`suffix`,`basename`,`addsuffix`,`addprefix`,`join`,`wildcard`,`realpath`,`abspath`
 
 ===== dir
-`$(dir names…)`
+`$(notdir names…)`
 [source,make]
 ----
-$(dir src/foo.c hacks)
+$(notdir src/foo.c hacks)
 # 得到src/ ./
 ----
 从完整路径名中取得目录

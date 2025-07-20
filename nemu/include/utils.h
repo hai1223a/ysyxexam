@@ -82,21 +82,6 @@ uint64_t get_time();
 #endif
 //=========================================
 
-// dtracer 部分内容
-//=========================================
-#ifdef CONFIG_DTRACE
-#define dtracer_write(...) IFDEF(CONFIG_DTRACE, \
-  do { \
-    extern FILE* dtracer_log_fp; \
-    if(dtracer_log_fp != NULL) { \
-      fprintf(dtracer_log_fp, __VA_ARGS__); \
-      fflush(dtracer_log_fp); \
-    } \
-  } while(0) \
-)
-#endif
-//=========================================
-
 #define _Log(...) \
   do { \
     printf(__VA_ARGS__); \

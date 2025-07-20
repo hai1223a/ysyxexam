@@ -104,17 +104,6 @@
         "regex": "cpp",
         "elf.h": "c",
         "dlfcn.h": "c",
-        "capstone.h": "c",
-        "difftest-def.h": "c",
-        "macro.h": "c",
-        "paddr.h": "c",
-        "difftest.h": "c",
-        "verilated.h": "c",
-        "amdev.h": "c",
-        "csr.h": "c",
-        "amtest.h": "c",
-        "rtthread.h": "c",
-        "rtdevice.h": "c",
-        "kconfig": "c"
+        "capstone.h": "c"
     }
 }

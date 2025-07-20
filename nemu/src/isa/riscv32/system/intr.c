@@ -14,14 +14,13 @@
 ***************************************************************************************/
 
 #include <isa.h>
-#include "../local-include/csr.h"
+
 word_t isa_raise_intr(word_t NO, vaddr_t epc) {
-  csrs[0].value = epc;
-  csrs[1].value = NO;
-#ifdef CONFIG_ETRACE
-  Log("触发了异常/中断, mepc = %8x, mcause = %d, mstatus = %08x", csrs[0].value, csrs[1].value, csrs[3].value);
-#endif
-  return csrs[2].value;
+  /* TODO: Trigger an interrupt/exception with ``NO''.
+   * Then return the address of the interrupt/exception vector.
+   */
+
+  return 0;
 }
 
 word_t isa_query_intr() {
