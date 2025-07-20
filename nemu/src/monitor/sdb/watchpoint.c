@@ -28,7 +28,11 @@ static WP wp_pool[NR_WP] = {};
 static WP *head = NULL, *free_ = NULL;
 
 WP* new_wp() {
+<<<<<<< HEAD
+  Assert(free_, "监视点已经用完了");
+=======
   Assert(free_, "监控点已经用完了");
+>>>>>>> master
   WP *p = free_;
   free_ = free_->next;
   p->next = NULL;

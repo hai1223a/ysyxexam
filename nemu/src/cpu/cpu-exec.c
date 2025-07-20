@@ -41,8 +41,14 @@ static void trace_and_difftest(Decode *_this, vaddr_t dnpc) {
   IFDEF(CONFIG_DIFFTEST, difftest_step(_this->pc, dnpc));
 }
 
+<<<<<<< HEAD
+// 下面部分是判断监视点的部分内容
+//===============================================
+#ifdef CONFIG_WATCHPOINT
+=======
 // 下面部分是判断监控点的部分内容
 //===============================================
+>>>>>>> master
 static void monitor_check(Decode *_this) {
   static word_t data_pre[NR_WP] = {0};
   static word_t data_new[NR_WP] = {0};
@@ -56,13 +62,21 @@ static void monitor_check(Decode *_this) {
       if(data_new[i] != data_pre[i])
       {
         nemu_state.state = NEMU_STOP;
+<<<<<<< HEAD
+        printf("监视点%d发生了变化\n", i);
+=======
         printf("监控点%d发生了变化\n", i);
+>>>>>>> master
         IFDEF(CONFIG_ITRACER,puts(_this->logbuf));
         data_pre[i] = data_new[i];
       }
     }
   }
 }
+<<<<<<< HEAD
+#endif
+=======
+>>>>>>> master
 //===============================================
 
 // 下面这里是IRINGBUF
@@ -139,7 +153,11 @@ static void execute(uint64_t n) {
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
+<<<<<<< HEAD
+    IFDEF(CONFIG_WATCHPOINT, monitor_check(&s));
+=======
     monitor_check(&s);  // 监控点
+>>>>>>> master
     if (nemu_state.state != NEMU_RUNNING) break;
     IFDEF(CONFIG_DEVICE, device_update());
   }
@@ -184,6 +202,11 @@ void cpu_exec(uint64_t n) {
     case NEMU_RUNNING: nemu_state.state = NEMU_STOP; break;
 
     case NEMU_END: case NEMU_ABORT:
+#ifdef CONFIG_DTRACE
+      extern char D_name_buf[10];
+      extern int  D_count;
+      dtracer_write("调用 %s , 次数为 %d\n", D_name_buf, D_count);
+#endif
       Log("nemu: %s at pc = " FMT_WORD,
           (nemu_state.state == NEMU_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) :
            (nemu_state.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) :
