@@ -51,7 +51,7 @@ extern "C" int pmem_read(int raddr)
     }
     else if (ysyx_25050136_NPC->mem_addr_o == (CONFIG_TIMER_BASE + 4))
     {
-      difftest_skip_ref(1);
+      difftest_skip_ref(0);
       data = get_time() >> 32;
     }
   #endif
