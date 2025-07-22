@@ -209,7 +209,7 @@ extern struct FUNC_FTRACE{
   word_t addr;
   char func_name[16];
 } FUNC_FTRACER[128];
-int FUNC_stack[1024] = {0};
+int FUNC_stack[65535] = {0};
 
 static void ftracer_log(Decode *s, int name)
 {
