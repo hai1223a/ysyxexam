@@ -20,7 +20,7 @@ image::../images/a.png[]
 m.txt: a.txt b.txt
 	cat a.txt b.txt > m.txt
 ----
-`make` 命令默认执行第一个规则。执行时，`make` 会检查目标文件是否存在，如果不存在或者依赖文件有更新，则执行命令。如果依赖文件未就绪，`make` 会先执行依赖文件的规则，直到所有依赖文件都就绪为止。 +
+`make` 命令默认执行第一个规则。执行时，`make` 会检查目标文件是否存在，如果不存在 或者依赖文件有更新，则执行命令。如果依赖文件未就绪，`make` 会先执行依赖文件的规则，直到所有依赖文件都就绪为止。 +
 `make` 命令会自动判断目标文件是否需要更新，如果需要更新，则执行命令。 +
 所以实现上面目标的 `Makefile` 文件如下：
 [source,make]
@@ -299,10 +299,10 @@ $(word 2, foo bar baz)
 包括 `dir`,`notdir`,`suffix`,`basename`,`addsuffix`,`addprefix`,`join`,`wildcard`,`realpath`,`abspath`
 
 ===== dir
-`$(notdir names…)`
+`$(dir names…)`
 [source,make]
 ----
-$(notdir src/foo.c hacks)
+$(dir src/foo.c hacks)
 # 得到src/ ./
 ----
 从完整路径名中取得目录

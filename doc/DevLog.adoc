@@ -277,4 +277,20 @@ typedef struct inf {
 == 2025/5/21 实验日志
 === 今日完成任务
 * 使用native测试了kib的string.h中的函数以及printf函数完成了nemu和spike的DiffTest
-* 完成npc第一条指令addi
+* 完成npc第一条指令addi 
+
+[[d2025-6-29]]
+== 2025/6/29 实验日志
+=== 今日要点
+我错误地认为risc-v使用a0传递参数,使用a1传递返回值.实际上risc-v使用a0-a8以及栈来传递参数,
+使用a0,a1以及栈来传递返回值.
+
+=== 今日BUG
+[green]##在完成PA4.1 git rt-thread时, 我发现make init## + 
+[red]##ImportError: cannot import name 'mk_rtconfig' from 'menuconfig' (/usr/lib/python3/dist-packages/menuconfig.py):
+File "/home/yunhai/ysyx-workbench/Templates/rt-thread-am/bsp/abstract-machine/SConstruct", line 28:objs = PrepareBuilding(env, RTT_ROOT, has_libcpu = True)
+File "/home/yunhai/ysyx-workbench/Templates/rt-thread-am/bsp/abstract-machine/../../tools/building.py", line 362:
+from menuconfig import mk_rtconfig
+make: *** [Makefile:18: rtconfig.h] Error 2##
+[green]##这是因为系统的python工具中有menuconfig这个包, 而rt-thread也提供了menuconfig.py文件,这让脚本SConstruct不知道该如何选择, 所以生成了空文件, 在第二次使用make init前如果没有将这些空文件删除, 就会被脚本认为已经完成了make init操作而不会重现报错. 这样的结果就是在make ARCH=native run时, 由于rtconfig.h是空文件导致了一堆的报错, 正常情况向rtconfig.h应该存在和.config中相似的内容.##::
+我们需要修改SConstruct文件, 在 *import sys* 之后插入 *sys.path.insert(0, '/home/yunhai/ysyx-workbench/Templates/rt-thread-am/tools')* 这告诉脚本, 优先在项目提供的文件中寻找对应的包.
