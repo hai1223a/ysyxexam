@@ -216,7 +216,7 @@ static void ftracer_log(Decode *s, int name)
   static uint32_t p_stack = 0;
 
   // 识别 call 调用函数
-  if(name == jal || jalr)
+  if(name == jal || name == jalr)
   {
     for(int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
     {
