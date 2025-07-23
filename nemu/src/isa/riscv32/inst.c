@@ -205,7 +205,10 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 // FTRACER部分内容
 //===============================================
 #ifdef CONFIG_FTRACE
-int FUNC_stack[1024] = {0};
+struct {
+  word_t ret_addr;
+  uint8_t num;
+}FUNC_stack[1024] = {0};
 static void ftracer_log(Decode *s, int name)
 {
   static uint32_t p_stack = 0;
@@ -236,7 +239,9 @@ static void ftracer_log(Decode *s, int name)
           }
           ftracer_write("0x%8x %u C [%s @ 0x%8x]\n",s->pc, p_stack, FUNC_FTRACER[i].func_name, s->dnpc);
           FUNC_FTRACER[i].if_call = true;
-          FUNC_stack[p_stack++] = i;
+          FUNC_stack[p_stack].num = i;
+          FUNC_stack[p_stack].ret_addr = s->snpc;
+          p_stack++;
         }
       }
     }
@@ -245,10 +250,21 @@ static void ftracer_log(Decode *s, int name)
   if(s->isa.inst == 0x00008067)
   {
     if(p_stack <= ARRLEN(FUNC_stack)) {
-      Assert(p_stack > 0, "ftracer 的返回函数堆栈为空\n");
-      p_stack--;
-      ftracer_write("0x%8x %u R [%s @ 0x%8x]\n",s->pc, p_stack, FUNC_FTRACER[FUNC_stack[p_stack]].func_name, Reg(1));
-      FUNC_FTRACER[FUNC_stack[p_stack]].if_ret = true;
+      bool good_ret = false;
+      uint32_t p_stack_init = p_stack;
+      while (p_stack--)
+      {
+        if(Reg(1) == FUNC_stack[p_stack].ret_addr) {
+          good_ret = true;
+          break;
+        }
+      }
+      if(good_ret) {
+        ftracer_write("0x%8x %u R [%s @ 0x%8x]\n",s->pc, p_stack, FUNC_FTRACER[FUNC_stack[p_stack].num].func_name, Reg(1));
+        FUNC_FTRACER[FUNC_stack[p_stack].num].if_ret = true;
+      } else {
+        p_stack = p_stack_init;
+      }
     }
   }
 }
