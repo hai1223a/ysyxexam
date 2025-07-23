@@ -211,7 +211,7 @@ extern struct FUNC_FTRACE{
   word_t addr;
   char func_name[16];
 } FUNC_FTRACER[128];
-int FUNC_stack[1024] = {0};
+int FUNC_stack[4] = {0};
 
 static void ftracer_log(Decode *s, int name)
 {
@@ -246,10 +246,12 @@ static void ftracer_log(Decode *s, int name)
   // 识别 ret 返回函数
   if(s->isa.inst == 0x00008067)
   {
-    Assert(p_stack > 0, "ftracer 的返回函数堆栈为空\n");
-    p_stack--;
-    ftracer_write("0x%8x %u R [%s @ 0x%8x]\n",s->pc, p_stack, FUNC_FTRACER[FUNC_stack[p_stack]].func_name, Reg(1));
-    FUNC_FTRACER[FUNC_stack[p_stack]].if_ret = true;
+    if(p_stack <= ARRLEN(FUNC_stack)) {
+      Assert(p_stack > 0, "ftracer 的返回函数堆栈为空\n");
+      p_stack--;
+      ftracer_write("0x%8x %u R [%s @ 0x%8x]\n",s->pc, p_stack, FUNC_FTRACER[FUNC_stack[p_stack]].func_name, Reg(1));
+      FUNC_FTRACER[FUNC_stack[p_stack]].if_ret = true;
+    }
   }
 }
 #endif
