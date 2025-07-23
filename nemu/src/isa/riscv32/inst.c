@@ -208,7 +208,7 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 struct {
   word_t ret_addr;
   uint8_t num;
-}FUNC_stack[1024] = {0};
+}FUNC_stack[8] = {0};
 static void ftracer_log(Decode *s, int name)
 {
   static uint32_t p_stack = 0;
