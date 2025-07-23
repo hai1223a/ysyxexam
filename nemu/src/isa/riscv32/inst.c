@@ -239,6 +239,7 @@ static void ftracer_log(Decode *s, int name)
               );
             }
             p_stack++;
+            break;
           }
           ftracer_write("0x%8x %u C [%s @ 0x%8x]\n",s->pc, p_stack, FUNC_FTRACER[i].func_name, s->dnpc);
           FUNC_FTRACER[i].if_call = true;
