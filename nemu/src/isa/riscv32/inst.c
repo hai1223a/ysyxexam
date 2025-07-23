@@ -227,7 +227,7 @@ static void ftracer_log(Decode *s, int name)
       {
         if(p_stack == ARRLEN(FUNC_stack)) {
           ftracer_write("你正在使用最后一个ftracer堆栈, 停止使用ftracer功能并输出各个调用信息如下:\n");
-          ftracer_write("函数名 地址 被call过 被ret过\n");
+          ftracer_write("\t函数名\t 地址 被call过 被ret过\n");
           for (int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
           {
             if(FUNC_FTRACER[i].addr == 0) break;
