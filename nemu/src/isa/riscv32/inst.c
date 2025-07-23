@@ -231,7 +231,7 @@ static void ftracer_log(Decode *s, int name)
           for (int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
           {
             if(FUNC_FTRACER[i].addr == 0) break;
-            ftracer_write("%s %08x %d %d\n", FUNC_FTRACER[i].func_name, FUNC_FTRACER[i].addr,
+            ftracer_write("%16s %08x %d %d\n", FUNC_FTRACER[i].func_name, FUNC_FTRACER[i].addr,
                                              FUNC_FTRACER[i].if_call, FUNC_FTRACER[i].if_ret);
           }
           p_stack++;
