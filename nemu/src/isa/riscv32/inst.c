@@ -220,29 +220,30 @@ static void ftracer_log(Decode *s, int name)
   // 识别 call 调用函数
   if(name == jal || name == jalr)
   {
-    for(int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
-    {
-      if(FUNC_FTRACER[i].addr == 0) break;
-      if(s->dnpc == FUNC_FTRACER[i].addr)
+    if(p_stack <= ARRLEN(FUNC_stack)) {
+      for(int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
       {
-        if(p_stack == ARRLEN(FUNC_stack)) {
-          ftracer_write("你正在使用最后一个ftracer堆栈, 停止使用ftracer功能并输出各个调用信息如下:\n");
-          ftracer_write("  %-20s %-10s %-8s %-8s\n", "函数名", "地址", "被call过", "被ret过");
-          for (int i = 0; i < ARRLEN(FUNC_FTRACER); i++) {
-            if(FUNC_FTRACER[i].addr == 0) break;
-            ftracer_write("  %-20s %08x    %-8d %-8d\n",
-              FUNC_FTRACER[i].func_name,
-              FUNC_FTRACER[i].addr,
-              FUNC_FTRACER[i].if_call,
-              FUNC_FTRACER[i].if_ret
-            );
+        if(FUNC_FTRACER[i].addr == 0) break;
+        if(s->dnpc == FUNC_FTRACER[i].addr)
+        {
+          if(p_stack == ARRLEN(FUNC_stack)) {
+            ftracer_write("你正在使用最后一个ftracer堆栈, 停止使用ftracer功能并输出各个调用信息如下:\n");
+            ftracer_write("  %-20s %-10s %-8s %-8s\n", "函数名", "地址", "被call过", "被ret过");
+            for (int i = 0; i < ARRLEN(FUNC_FTRACER); i++) {
+              if(FUNC_FTRACER[i].addr == 0) break;
+              ftracer_write("  %-20s %08x    %-8d %-8d\n",
+                FUNC_FTRACER[i].func_name,
+                FUNC_FTRACER[i].addr,
+                FUNC_FTRACER[i].if_call,
+                FUNC_FTRACER[i].if_ret
+              );
+            }
+            p_stack++;
           }
-          p_stack++;
+          ftracer_write("0x%8x %u C [%s @ 0x%8x]\n",s->pc, p_stack, FUNC_FTRACER[i].func_name, s->dnpc);
+          FUNC_FTRACER[i].if_call = true;
+          FUNC_stack[p_stack++] = i;
         }
-        if(p_stack > ARRLEN(FUNC_stack)) {break;}
-        ftracer_write("0x%8x %u C [%s @ 0x%8x]\n",s->pc, p_stack, FUNC_FTRACER[i].func_name, s->dnpc);
-        FUNC_FTRACER[i].if_call = true;
-        FUNC_stack[p_stack++] = i;
       }
     }
   }
