@@ -86,19 +86,26 @@ void init_dtracer_log(const char *dtracer_log_file);
 static char *elf_file = NULL;
 static char *ftracer_log_file = NULL;
 #ifdef CONFIG_FTRACE
-struct FUNC_FTRACE{
-  bool if_call;
-  bool if_ret;
-  word_t addr;
-  char func_name[16];
-} FUNC_FTRACER[128] = {0};
+struct FUNC_FTRACE ELF_FUNC_FTRACER[128] = {0};
+struct FUNC_FTRACE USER_FUNC_FTRACER[16] = {
+  {.addr = 0x800006a0, .func_name = "main"},
+  {.addr = 0x80000474, .func_name = "video_init"},
+  {.addr = 0x800000e4, .func_name = "game_logic_update"},
+  {.addr = 0x80000010, .func_name = "new_char"},
+  {.addr = 0x800001b0, .func_name = "render"},
+  {.addr = 0x80000c9c, .func_name = "printf"},
+  {.addr = 0x800003a8, .func_name = "check_hit"},
+  {.addr = 0x800008b0, .func_name = "halt"},
+};
+struct FUNC_FTRACE *FUNC_FTRACER = ELF_FUNC_FTRACER;
+int FUNC_nums = ARRLEN(ELF_FUNC_FTRACER);
+bool use_user_func = false;
 
 static void load_elf() {
   if (elf_file == NULL) {
     Log("没有elf文件输入\n");
     return; // built-in image size
   }
-
   FILE *file = fopen(elf_file, "rb");
   Assert(file, "无法打开elf文件");
   // 读取 ELF 文件头
@@ -160,9 +167,9 @@ static void load_elf() {
           // 遍历符号表,筛选各个函数名的入口地址
           for (int j = 0, k = 0; j < symtab_entry_count; j++) {
               if (ELF32_ST_TYPE(symtab[j].st_info) == STT_FUNC) {
-                  FUNC_FTRACER[k].addr = symtab[j].st_value;
-                  strncpy(FUNC_FTRACER[k].func_name, &strtab[symtab[j].st_name], sizeof(FUNC_FTRACER[k].func_name) - 1);
-                  FUNC_FTRACER[k].func_name[sizeof(FUNC_FTRACER[k].func_name) - 1] = '\0';
+                  ELF_FUNC_FTRACER[k].addr = symtab[j].st_value;
+                  strncpy(ELF_FUNC_FTRACER[k].func_name, &strtab[symtab[j].st_name], sizeof(ELF_FUNC_FTRACER[k].func_name) - 1);
+                  ELF_FUNC_FTRACER[k].func_name[sizeof(ELF_FUNC_FTRACER[k].func_name) - 1] = '\0';
                   k++;
               }
           }
@@ -174,7 +181,11 @@ static void load_elf() {
   free((void *)strtab);
   free(sh_table);
   fclose(file);
-
+  // 检查是否需要指定追踪的函数
+  if(use_user_func) {
+    FUNC_FTRACER = USER_FUNC_FTRACER;
+    FUNC_nums = ARRLEN(USER_FUNC_FTRACER);
+  }
 }
 
 // 设置 ftracer 的输出

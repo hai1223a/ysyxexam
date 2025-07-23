@@ -205,23 +205,15 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 // FTRACER部分内容
 //===============================================
 #ifdef CONFIG_FTRACE
-extern struct FUNC_FTRACE{
-  bool if_call;
-  bool if_ret;
-  word_t addr;
-  char func_name[16];
-} FUNC_FTRACER[128];
 int FUNC_stack[1024] = {0};
-
 static void ftracer_log(Decode *s, int name)
 {
   static uint32_t p_stack = 0;
-
   // 识别 call 调用函数
   if(name == jal || name == jalr)
   {
     if(p_stack <= ARRLEN(FUNC_stack)) {
-      for(int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
+      for(int i = 0; i < FUNC_nums; i++)
       {
         if(FUNC_FTRACER[i].addr == 0) break;
         if(s->dnpc == FUNC_FTRACER[i].addr)
@@ -230,7 +222,7 @@ static void ftracer_log(Decode *s, int name)
             ftracer_write("你正在使用最后一个ftracer堆栈, 停止使用ftracer功能并输出各个调用信息如下:\n");
             ftracer_write("函数名               地址        被call过  被ret过\n");
             ftracer_write("-------------------------------------------------\n");
-            for (int i = 0; i < ARRLEN(FUNC_FTRACER); i++) {
+            for (int i = 0; i < FUNC_nums; i++) {
               if(FUNC_FTRACER[i].addr == 0) break;
               ftracer_write("%-20s %08x    %-8d %-8d\n",
                 FUNC_FTRACER[i].func_name,
