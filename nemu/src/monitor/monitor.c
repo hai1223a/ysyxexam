@@ -99,7 +99,7 @@ struct FUNC_FTRACE USER_FUNC_FTRACER[16] = {
 };
 struct FUNC_FTRACE *FUNC_FTRACER = ELF_FUNC_FTRACER;
 int FUNC_nums = ARRLEN(ELF_FUNC_FTRACER);
-bool use_user_func = false;
+bool use_user_func = true;
 
 static void load_elf() {
   if (elf_file == NULL) {
