@@ -206,10 +206,12 @@ static void decode_operand(Decode *s, int *rd, word_t *src1, word_t *src2, word_
 //===============================================
 #ifdef CONFIG_FTRACE
 extern struct FUNC_FTRACE{
+  bool if_call;
+  bool if_ret;
   word_t addr;
   char func_name[16];
 } FUNC_FTRACER[128];
-int FUNC_stack[65536] = {0};
+int FUNC_stack[1024] = {0};
 
 static void ftracer_log(Decode *s, int name)
 {
@@ -223,8 +225,20 @@ static void ftracer_log(Decode *s, int name)
       if(FUNC_FTRACER[i].addr == 0) break;
       if(s->dnpc == FUNC_FTRACER[i].addr)
       {
+        if(p_stack == ARRLEN(FUNC_stack)) {
+          ftracer_write("你正在使用最后一个ftracer堆栈, 停止使用ftracer功能并输出各个调用信息如下:\n");
+          ftracer_write("函数名 地址 被call过 被ret过\n");
+          for (int i = 0; i < ARRLEN(FUNC_FTRACER); i++)
+          {
+            if(FUNC_FTRACER[i].addr == 0) break;
+            ftracer_write("%s %08x %d %d\n", FUNC_FTRACER[i].func_name, FUNC_FTRACER[i].addr,
+                                             FUNC_FTRACER[i].if_call, FUNC_FTRACER[i].if_ret);
+          }
+          p_stack++;
+        }
+        if(p_stack > ARRLEN(FUNC_stack)) {break;}
         ftracer_write("0x%8x %u C [%s @ 0x%8x]\n",s->pc, p_stack, FUNC_FTRACER[i].func_name, s->dnpc);
-        Assert(p_stack < ARRLEN(FUNC_stack), "ftracer 的返回函数堆栈溢出\n");
+        FUNC_FTRACER[i].if_call = true;
         FUNC_stack[p_stack++] = i;
       }
     }
@@ -235,6 +249,7 @@ static void ftracer_log(Decode *s, int name)
     Assert(p_stack > 0, "ftracer 的返回函数堆栈为空\n");
     p_stack--;
     ftracer_write("0x%8x %u R [%s @ 0x%8x]\n",s->pc, p_stack, FUNC_FTRACER[FUNC_stack[p_stack]].func_name, Reg(1));
+    FUNC_FTRACER[FUNC_stack[p_stack]].if_ret = true;
   }
 }
 #endif

@@ -87,6 +87,8 @@ static char *elf_file = NULL;
 static char *ftracer_log_file = NULL;
 #ifdef CONFIG_FTRACE
 struct FUNC_FTRACE{
+  bool if_call;
+  bool if_ret;
   word_t addr;
   char func_name[16];
 } FUNC_FTRACER[128] = {0};
