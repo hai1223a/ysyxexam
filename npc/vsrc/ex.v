@@ -49,7 +49,7 @@ module ysyx_25050136_EX
         end
     end
     assign fready_o = fready;
-    assign gpr_wen_o = fvalid_i & rd_en_i;
+    assign gpr_wen_o = (mready_o ? mvalid_i : fvalid_i) & rd_en_i;
     //===================================================
     // ALU
     //===================================================
