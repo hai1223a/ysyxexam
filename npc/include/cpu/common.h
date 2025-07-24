@@ -6,7 +6,7 @@
 #include "Vysyx_25050136_SOC.h"  // 包含Verilog工程的C++模型
 #include "Vysyx_25050136_SOC___024root.h"
 #include <verilated.h>           // Verilator的库
-#include "../generated/autoconf.h"
+#include "autoconf.h"
 #ifdef CONFIG_FST
 #include "verilated_fst_c.h"     // fst波形文件所需要的库
 #endif
