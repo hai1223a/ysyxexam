@@ -231,7 +231,7 @@ static void ftracer_log(Decode *s, int name)
           repeat_count++;
         } else {
           if(repeat_count) {
-            ftracer_write("重复%d次, count = %d", repeat_count/2 + 1, repeat_count);
+            ftracer_write("重复%d次, count = %d\n", repeat_count/2 + 1, repeat_count);
             repeat_count = 0;
           }
           ftracer_write("%s", _buf);
@@ -263,7 +263,7 @@ static void ftracer_log(Decode *s, int name)
           repeat_count++;
         } else {
           if(repeat_count) {
-            ftracer_write("重复%d次, count = %d", repeat_count/2 + 1, repeat_count);
+            ftracer_write("重复%d次, count = %d\n", repeat_count/2 + 1, repeat_count);
             repeat_count = 0;
           }
           ftracer_write("%s", _buf);
