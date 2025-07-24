@@ -209,12 +209,12 @@ struct {
   word_t ret_addr;
   uint8_t num;
 }FUNC_stack[8] = {0};
-// struct {
-//   word_t call_pc;
-//   word_t ret_pc;
-//   word_t func_addr;
-//   uint32_t num;
-// }repeat_FUNC = {0};
+struct {
+  word_t call_pc;
+  word_t ret_pc;
+  word_t func_addr;
+  uint32_t num;
+}repeat_FUNC = {0};
 
 static void ftracer_log(Decode *s, int name)
 {
@@ -227,11 +227,15 @@ static void ftracer_log(Decode *s, int name)
       if(FUNC_FTRACER[i].addr == 0) break;
       if(s->dnpc == FUNC_FTRACER[i].addr)
       {
-        Assert(p_stack < ARRLEN(FUNC_stack), "调用太深, ftracer的堆栈溢出了");
-        ftracer_write("\n0x%8x %u C [%s @ 0x%8x]",s->pc, p_stack, FUNC_FTRACER[i].func_name, s->dnpc);
-        FUNC_stack[p_stack].num = i;
-        FUNC_stack[p_stack].ret_addr = s->snpc;
-        p_stack++;
+        if((s->pc == repeat_FUNC.call_pc) && (s->dnpc == repeat_FUNC.func_addr)) {
+          repeat_FUNC.num++;
+        } else {
+          Assert(p_stack < ARRLEN(FUNC_stack), "调用太深, ftracer的堆栈溢出了");
+          ftracer_write("\n0x%8x %u C [%s @ 0x%8x]",s->pc, p_stack, FUNC_FTRACER[i].func_name, s->dnpc);
+          FUNC_stack[p_stack].num = i;
+          FUNC_stack[p_stack].ret_addr = s->snpc;
+          p_stack++;
+        }
       }
     }
   }
@@ -240,19 +244,28 @@ static void ftracer_log(Decode *s, int name)
   {
     if(p_stack <= ARRLEN(FUNC_stack)) {
       bool good_ret = false;
-      // bool repeat_ret = false;
+      bool repeat_ret = false;
       uint32_t p_stack_init = p_stack;
       while (p_stack--)
       {
         if(Reg(1) == FUNC_stack[p_stack].ret_addr) {
           good_ret = true;
-          // if(Reg(1) == repeat_FUNC.ret_pc)
-          // repeat_ret = true;
+          if(Reg(1) == repeat_FUNC.ret_pc)
+          repeat_ret = true;
           break;
         }
       }
       if(good_ret) {
+        if(repeat_ret) {
+          repeat_FUNC.num++;
+        } else {
+          if(repeat_FUNC.num) ftracer_write("    重复%u次", repeat_FUNC.num/2 + 1);
           ftracer_write("\n0x%8x %u R [%s @ 0x%8x]",s->pc, p_stack, FUNC_FTRACER[FUNC_stack[p_stack].num].func_name, Reg(1));
+          repeat_FUNC.ret_pc = Reg(1);
+          repeat_FUNC.call_pc = Reg(1) - 4;
+          repeat_FUNC.func_addr = FUNC_FTRACER[FUNC_stack[p_stack].num].addr;
+          repeat_FUNC.num = 0;
+        }
       } else {
         p_stack = p_stack_init;
       }
