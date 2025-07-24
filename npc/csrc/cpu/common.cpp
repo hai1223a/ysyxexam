@@ -1,4 +1,4 @@
-#include "../../include/cpu/common.h"
+#include "common.h"
 
 NPCState npcstate = {.state = NPC_RUNNING};
 void set_nemu_state(int state, uint32_t pc, int halt_ret){
