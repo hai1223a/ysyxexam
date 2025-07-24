@@ -268,6 +268,8 @@ static void ftracer_log(Decode *s, int name)
         repeat_FUNC.ret_pc = Reg(1);
         repeat_FUNC.call_pc = Reg(1) - 4;
         repeat_FUNC.func_addr = FUNC_FTRACER[FUNC_stack[p_stack].num].addr;
+        repeat_FUNC.call_num = 0;
+        repeat_FUNC.ret_num = 0;
       } else {
         p_stack = p_stack_init;
       }
