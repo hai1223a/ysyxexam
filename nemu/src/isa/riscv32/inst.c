@@ -213,7 +213,7 @@ struct {
   word_t call_pc;
   word_t ret_pc;
   word_t func_addr;
-  uint32_t num;
+  int num;
 }repeat_FUNC = {0};
 
 static void ftracer_log(Decode *s, int name)
@@ -259,7 +259,7 @@ static void ftracer_log(Decode *s, int name)
         if(repeat_ret) {
           repeat_FUNC.num++;
         } else {
-          if(repeat_FUNC.num) ftracer_write("    重复%u次", repeat_FUNC.num);
+          if(repeat_FUNC.num) ftracer_write("    重复%d次", repeat_FUNC.num + 1);
           ftracer_write("\n0x%8x %u R [%s @ 0x%8x]",s->pc, p_stack, FUNC_FTRACER[FUNC_stack[p_stack].num].func_name, Reg(1));
           repeat_FUNC.ret_pc = Reg(1);
           repeat_FUNC.call_pc = Reg(1) - 4;
