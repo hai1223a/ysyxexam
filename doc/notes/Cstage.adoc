@@ -86,3 +86,31 @@ if (sim_time >= (reset_time + stop_time) && ysyx_25050136_NPC->pc_o != pc__)
 
 == 历史遗留问题
 [green]##1> 有关difftest, 目前NPC涉及到设备访存时, 采用了跳过该指令和其前面或者后面一条指令来解决的, 按理来说这是不正确的, 但是还是这样做了##
+
+== 基础设施
+=== ftracer
+
+C A
+R A
+C A
+R A
+C B
+重复多少次
+R B
+
+C B
+C A
+R A
+C A
+R A
+重复多少次
+R B
+
+C B
+C A
+R A
+R B
+C B
+C A
+
+
