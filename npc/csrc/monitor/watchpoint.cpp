@@ -13,7 +13,7 @@
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
 
-#include "../../include/common.h"
+#include "../include/common.h"
 
 typedef struct watchpoint {
   int NO;

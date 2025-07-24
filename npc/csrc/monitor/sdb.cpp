@@ -1,4 +1,4 @@
-#include "../../include/common.h"
+#include "../include/common.h"
 #include <readline/readline.h>
 #include <readline/history.h>
 

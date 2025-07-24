@@ -12,7 +12,7 @@
 *
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
-#include "../../include/common.h"
+#include "../include/common.h"
 #include <regex.h>
 
 /* We use the POSIX regex functions to process regular expressions.
