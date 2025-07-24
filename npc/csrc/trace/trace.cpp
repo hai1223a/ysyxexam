@@ -60,7 +60,7 @@ void Itrace_log(uint32_t inst_in, uint32_t pc_in, uint32_t inst_num)
     printf("%s\n", itrace_buf);
 }
 // mtrace
-char mtrace_buf[128][4] = {0};
+char mtrace_buf[4][128] = {0};
 
 void add_mtrace(uint32_t addr, int type, uint32_t data, int mask)
 {
