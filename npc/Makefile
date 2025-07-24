@@ -30,7 +30,7 @@ VSRCS = $(wildcard vsrc/*.v)
 # 编译选项
 BFLAGS   += -fsanitize=address
 INC_PATH := $(abspath $(addprefix ../include/, cpu generated memory monitor trace utils))
-CFLAGS   +=  $(BFLAGS) $(addprefix -I, $(INC_PATH) $(NPC_HOME)/obj_dir) 
+CFLAGS   +=  $(BFLAGS) $(addprefix -I, $(INC_PATH)) 
 LDFLAGS  += -lreadline $(BFLAGS)
 # 编译选项
 # --Wno-DECLFILENAME 忽略文件名与模块名不一致的警告
