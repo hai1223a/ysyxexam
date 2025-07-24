@@ -49,6 +49,7 @@ wire [DATA_WIDTH-1:0] ex2if_jump_addr_o;
 wire ex2if_jump_en_o;
 wire ex2id_fready_o;
 wire ex2reg_gpr_wen_o;
+wire ex2if_pc_updata_o;
 //========================================
 // 使用DPI-C实现的取指和访存操作, 以及寻找ebreak
 //========================================
@@ -71,6 +72,7 @@ u_ysyx_25050136_IF(
     .static_npc_o       (if2id_static_npc_o ),
     .pc_o            	(pc_o               ),
     .inst_o             (if2id_inst_o       ),
+    .pc_updata_i        (ex2if_pc_updata_o),
     .fvalid_i           (ivalid_i           ),
     .fready_o           (iready_o           ),
     .bvalid_o           (if2id_bvalid_o     ),
@@ -149,7 +151,8 @@ u_ysyx_25050136_EX(
     .mvalid_i       (mvalid_i            ),
     .mready_o       (mready_o            ),
     .fvalid_i       (id2ex_bvalid_o      ),
-    .fready_o       (ex2id_fready_o      )
+    .fready_o       (ex2id_fready_o      ),
+    .pc_updata_o    (ex2if_pc_updata_o   )
 );
 
 

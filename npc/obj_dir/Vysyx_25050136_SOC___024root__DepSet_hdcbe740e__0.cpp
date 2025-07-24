@@ -116,7 +116,9 @@ VL_INLINE_OPT void Vysyx_25050136_SOC___024root___nba_sequent__TOP__0(Vysyx_2505
         }
         if ((((~ ((0x23U == (0x7fU & vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__rdata_dpic)) 
                   | (0x63U == (0x7fU & vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__rdata_dpic)))) 
-              & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__rvalid)) 
+              & ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mready)
+                  ? (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_RAM__DOT__rvalid)
+                  : (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__rvalid))) 
              & (0U != (0x1fU & (vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__rdata_dpic 
                                 >> 7U))))) {
             __VdlyVal__ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr__v1 

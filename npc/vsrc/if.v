@@ -7,6 +7,7 @@ module ysyx_25050136_IF
          input                                  reset,
          input      [31:0]                     inst_i,
          input                        dynamic_valid_i,
+         input                            pc_update_i,
          input      [DATA_WIDTH-1:0]    dynamic_npc_i,
          output     [DATA_WIDTH-1:0]     static_npc_o,
          output     [DATA_WIDTH-1:0]             pc_o,
@@ -22,7 +23,7 @@ module ysyx_25050136_IF
             pc <= 32'h80000000;
         end
         else begin
-            if(fvalid_i)
+            if(pc_update_i)
                 pc <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
         end
     end
