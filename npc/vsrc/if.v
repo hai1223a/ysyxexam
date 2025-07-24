@@ -22,7 +22,7 @@ module ysyx_25050136_IF
             pc <= 32'h80000000;
         end
         else begin
-            if(bready_i)
+            if(fvalid_i)
                 pc <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
         end
     end
