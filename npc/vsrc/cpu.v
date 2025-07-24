@@ -72,7 +72,7 @@ u_ysyx_25050136_IF(
     .static_npc_o       (if2id_static_npc_o ),
     .pc_o            	(pc_o               ),
     .inst_o             (if2id_inst_o       ),
-    .pc_updata_i        (ex2if_pc_updata_o),
+    .pc_update_i        (ex2if_pc_updata_o),
     .fvalid_i           (ivalid_i           ),
     .fready_o           (iready_o           ),
     .bvalid_o           (if2id_bvalid_o     ),
