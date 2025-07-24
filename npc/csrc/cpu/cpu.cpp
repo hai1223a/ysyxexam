@@ -49,6 +49,11 @@ void cpu_exec(uint32_t inst_num)
       break;
     }
     cpu_exec_once();
+    if (npcstate.state == NPC_END || npcstate.state == NPC_STOP ||
+        npcstate.state == NPC_ABORT)
+    {
+      break;
+    }
     IFDEF(CONFIG_ITRACE, Itrace_log(inst_pre, pc_pre, inst_num));
     IFDEF(CONFIG_FTRACE, ftracer_log(inst_pre, pc_pre));
     IFDEF(CONFIG_DIFFTEST, difftest_step());
