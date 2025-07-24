@@ -259,7 +259,7 @@ static void ftracer_log(Decode *s, int name)
       if(good_ret) {
         if(repeat_FUNC.ret_num) {
           if(repeat_FUNC.ret_num != repeat_FUNC.call_num) {
-            ftracer_write("\n特殊情况");
+            ftracer_write("\n特殊情况: call = %d, ret = %d", repeat_FUNC.call_num, repeat_FUNC.ret_num);
           } else {
             ftracer_write("\n重复%d次", repeat_FUNC.ret_num + 1);
           }
