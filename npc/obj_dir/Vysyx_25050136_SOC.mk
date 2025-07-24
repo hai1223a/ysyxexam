@@ -37,7 +37,7 @@ VM_PREFIX = Vysyx_25050136_SOC
 VM_MODPREFIX = Vysyx_25050136_SOC
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
-	-fsanitize=address -I/home/yunhai/ysyx-workbench/include/cpu -I/home/yunhai/ysyx-workbench/include/generated -I/home/yunhai/ysyx-workbench/include/memory -I/home/yunhai/ysyx-workbench/include/monitor -I/home/yunhai/ysyx-workbench/include/trace -I/home/yunhai/ysyx-workbench/include/utils -I/home/yunhai/ysyx-workbench/npc/obj_dir  \
+	-fsanitize=address -I/home/yunhai/ysyx-workbench/include/cpu -I/home/yunhai/ysyx-workbench/include/generated -I/home/yunhai/ysyx-workbench/include/memory -I/home/yunhai/ysyx-workbench/include/monitor -I/home/yunhai/ysyx-workbench/include/trace -I/home/yunhai/ysyx-workbench/include/utils  \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \
