@@ -89,28 +89,25 @@ if (sim_time >= (reset_time + stop_time) && ysyx_25050136_NPC->pc_o != pc__)
 
 == 基础设施
 === ftracer
+**关键变量** 
 
-C A
-R A
-C A
-R A
-C B
-重复多少次
-R B
+* 可以读取来自ELF文件的最多128个函数
+[source, C]
+struct FUNC_FTRACE ELF_FUNC_FTRACER[128]; 
+* 可以设置自己想要追踪的16个函数
+[source, C]
+struct FUNC_FTRACE USER_FUNC_FTRACER[16];
+* ture表示仅追踪自定义函数, false表示追踪所有函数
+[source, C]
+bool use_user_func;
+* 支持最大8级的调用嵌套深度
+[source, C]
+struct {
+  word_t ret_addr;
+  uint8_t num;
+}FUNC_stack[8] = {0};
 
-C B
-C A
-R A
-C A
-R A
-重复多少次
-R B
+**功能** 
 
-C B
-C A
-R A
-R B
-C B
-C A
-
-
+* 支持仅追踪指定函数
+* 支持对重复函数调用使用计数器简化输出
