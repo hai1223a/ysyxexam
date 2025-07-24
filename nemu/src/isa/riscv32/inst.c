@@ -259,7 +259,7 @@ static void ftracer_log(Decode *s, int name)
         if(repeat_ret) {
           repeat_FUNC.num++;
         } else {
-          if(repeat_FUNC.num) ftracer_write("重复%u次", repeat_FUNC.num/2 + 1);
+          if(repeat_FUNC.num) ftracer_write("\t重复%u次", repeat_FUNC.num/2 + 1);
           ftracer_write("\n0x%8x %u R [%s @ 0x%8x]",s->pc, p_stack, FUNC_FTRACER[FUNC_stack[p_stack].num].func_name, Reg(1));
           repeat_FUNC.ret_pc = Reg(1);
           repeat_FUNC.call_pc = Reg(1) - 4;
