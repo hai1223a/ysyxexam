@@ -29,7 +29,7 @@ CSRCS = $(wildcard csrc/*/*.cpp csrc/*/*.c csrc/*.cpp csrc/*.c)
 VSRCS = $(wildcard vsrc/*.v)
 # 编译选项
 BFLAGS   += -fsanitize=address
-INC_PATH := $(abspath $(addprefix ../include/, cpu generated memory monitor trace utils))
+INC_PATH := $(abspath $(addprefix include/, cpu generated memory monitor trace utils))
 CFLAGS   +=  $(BFLAGS) $(addprefix -I, $(INC_PATH)) 
 LDFLAGS  += -lreadline $(BFLAGS)
 # 编译选项
