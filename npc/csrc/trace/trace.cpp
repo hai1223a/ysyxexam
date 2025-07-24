@@ -67,7 +67,7 @@ void add_mtrace(uint32_t addr, int type, uint32_t data, int mask)
   static size_t ptr = 0;
   char *p = mtrace_buf[ptr];
   size_t buf_len = sizeof(mtrace_buf) / ARRLEN(mtrace_buf);
-  p += snprintf(p, buf_len, "%ld  %08x:  ", ptr, top->rootp->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc);
+  p += snprintf(p, buf_len, "%ld  %08x:  ", ptr, SOC_PC);
   p += snprintf(p, mtrace_buf[ptr] + buf_len - p, "%8x  ", addr);
   if (type == wen)
     p += snprintf(p, mtrace_buf[ptr] + buf_len - p, "write %08x %08x", data, mask);

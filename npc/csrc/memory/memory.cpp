@@ -94,7 +94,7 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
 }
 
 extern "C" void find_ebreak() {
-  set_nemu_state(NPC_END, top->rootp->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc, get_reg(10));
+  set_nemu_state(NPC_END, SOC_PC, get_reg(10));
 }
 
 uint32_t vaddr_read(uint32_t paddr, int len)
