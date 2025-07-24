@@ -3,7 +3,7 @@
 //=====================================================
 // 头文件
 //=====================================================
-#include <Vysyx_25050136_NPC.h>  // 包含Verilog工程的C++模型
+#include "../Vysyx_25050136_NPC.h"  // 包含Verilog工程的C++模型
 #include "Vysyx_25050136_NPC___024root.h"
 #include <verilated.h>           // Verilator的库
 #include "generated/autoconf.h"
