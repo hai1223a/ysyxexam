@@ -4,7 +4,7 @@
 
 # 第一步:检查路径
 ifeq ($(wildcard $(NPC_HOME)/vsrc/soc.v),)
-  $(error NPC_HOME=$(NPC_HOME) is not a NEMU repo)
+  $(error NPC_HOME=$(NPC_HOME) is not a NPC repo)
 endif
 
 # 第二步:检查配置
@@ -29,15 +29,13 @@ CSRCS = $(wildcard csrc/*/*.cpp csrc/*/*.c csrc/*.cpp csrc/*.c)
 VSRCS = $(wildcard vsrc/*.v)
 # 编译选项
 BFLAGS   += -fsanitize=address
-INC_PATH := $(abspath include include/generated)
+INC_PATH := $(abspath ../include ../include/generated)
 CFLAGS   +=  $(BFLAGS) $(addprefix -I, $(INC_PATH)) 
 LDFLAGS  += -lreadline $(BFLAGS)
 # 编译选项
-# --Wno-DECLFILENAME 忽略文件名与模块名不一致的警告
-# -Wno-UNUSEDSIGNAL 忽略存在未使用信号的变量
 VERILATOR_FLAGS += -Wall --cc -exe --build --x-assign fast --x-initial fast \
 				   --top-module $(TOPNAME) \
-				   -Ivsrc\
+				   -Ivsrc --prof-exec\
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
 				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"
 ifdef CONFIG_FST

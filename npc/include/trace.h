@@ -8,7 +8,7 @@ extern char itrace_buf[128];
 void Itrace_log(uint32_t inst_in, uint32_t pc_in, uint32_t inst_num);
 void print_iringbuf();
 // mtrace
-void add_mtrace();
+void add_mtrace(uint32_t addr, int type, uint32_t data, int mask);
 void printf_mtrace();
 // ftrace
 typedef struct
