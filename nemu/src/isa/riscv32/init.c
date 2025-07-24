@@ -20,7 +20,7 @@
 // but it is ok since we do not access the array directly
 static const uint32_t img [] = {
     0x00000297, // auipc t0,0
-    0x01028293, // addi t0,t0,16      // t0 = 指令区首地址+16
+    0x01028293, // addi t0,t0,16      // t0 = 指令区首地址+32
     0x00100513, // li a0,1            // a0 = 1
     0x00a2a023, // sw  a0,0(t0)       // [t0+0] = a0 (把1写到数据区)
     0x0002a503, // lw  a0,0(t0)       // a0 = [t0+0] (从数据区读回a0)
