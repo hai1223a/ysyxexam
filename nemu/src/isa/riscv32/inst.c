@@ -209,16 +209,13 @@ struct {
   word_t ret_addr;
   uint8_t num;
 }FUNC_stack[8] = {0};
-struct {
-  word_t call_pc;
-  word_t ret_pc;
-  word_t func_addr;
-  int call_num;
-  int ret_num;
-}repeat_FUNC = {0};
+
+char repeat_buf[2][128] = {{0}};
+char _buf[128] = {0};
 
 static void ftracer_log(Decode *s, int name)
 {
+  static int repeat_count = 0;
   static uint32_t p_stack = 0;
   // 识别 call 调用函数
   if(name == jal || name == jalr)
@@ -228,15 +225,22 @@ static void ftracer_log(Decode *s, int name)
       if(FUNC_FTRACER[i].addr == 0) break;
       if(s->dnpc == FUNC_FTRACER[i].addr)
       {
-        if((s->pc == repeat_FUNC.call_pc) && (s->dnpc == repeat_FUNC.func_addr)) {
-          repeat_FUNC.call_num++;
+        Assert(p_stack < ARRLEN(FUNC_stack), "调用太深, ftracer的堆栈溢出了");
+        snprintf(_buf, sizeof(_buf), "0x%8x %u C [%s @ 0x%8x]\n", s->pc, p_stack, FUNC_FTRACER[i].func_name, s->dnpc);
+        if(!strcmp(_buf, repeat_buf[1])) {
+          repeat_count++;
         } else {
-          Assert(p_stack < ARRLEN(FUNC_stack), "调用太深, ftracer的堆栈溢出了");
-          ftracer_write("\n0x%8x %u C [%s @ 0x%8x]",s->pc, p_stack, FUNC_FTRACER[i].func_name, s->dnpc);
-          FUNC_stack[p_stack].num = i;
-          FUNC_stack[p_stack].ret_addr = s->snpc;
-          p_stack++;
+          if(repeat_count) {
+            ftracer_write("重复%d次, count = %d", repeat_count/2 + 1, repeat_count);
+            repeat_count = 0;
+          }
+          ftracer_write("%s", _buf);
         }
+        strcpy(repeat_buf[1], repeat_buf[0]);
+        strcpy(repeat_buf[0], _buf);        
+        FUNC_stack[p_stack].num = i;
+        FUNC_stack[p_stack].ret_addr = s->snpc;
+        p_stack++;
       }
     }
   }
@@ -253,23 +257,19 @@ static void ftracer_log(Decode *s, int name)
           break;
         }
       }
-      if(Reg(1) == repeat_FUNC.ret_pc) {
-        repeat_FUNC.ret_num++;
-      }
       if(good_ret) {
-        if(repeat_FUNC.ret_num) {
-          if(repeat_FUNC.ret_num != repeat_FUNC.call_num) {
-            ftracer_write("\n特殊情况: call = %d, ret = %d", repeat_FUNC.call_num, repeat_FUNC.ret_num);
-          } else {
-            ftracer_write("\n重复%d次", repeat_FUNC.ret_num + 1);
+        snprintf(_buf, sizeof(_buf), "0x%8x %u R [%s @ 0x%8x]\n",s->pc, p_stack, FUNC_FTRACER[FUNC_stack[p_stack].num].func_name, Reg(1));
+        if(!strcmp(_buf, repeat_buf[1])) {
+          repeat_count++;
+        } else {
+          if(repeat_count) {
+            ftracer_write("重复%d次, count = %d", repeat_count/2 + 1, repeat_count);
+            repeat_count = 0;
           }
+          ftracer_write("%s", _buf);
         }
-        ftracer_write("\n0x%8x %u R [%s @ 0x%8x]",s->pc, p_stack, FUNC_FTRACER[FUNC_stack[p_stack].num].func_name, Reg(1));
-        repeat_FUNC.ret_pc = Reg(1);
-        repeat_FUNC.call_pc = Reg(1) - 4;
-        repeat_FUNC.func_addr = FUNC_FTRACER[FUNC_stack[p_stack].num].addr;
-        repeat_FUNC.call_num = 0;
-        repeat_FUNC.ret_num = 0;
+        strcpy(repeat_buf[1], repeat_buf[0]);
+        strcpy(repeat_buf[0], _buf);        
       } else {
         p_stack = p_stack_init;
       }
