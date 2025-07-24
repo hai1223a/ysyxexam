@@ -178,6 +178,10 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___stl_sequent__TOP__0(Vysyx_25050
                                                    ((IData)(vlSelfRef.__VdfgRegularize_hd87f99a1_0_3)
                                                      ? 1U
                                                      : 0U)));
+    vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__ex2if_pc_updata_o 
+        = ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mready)
+            ? (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_RAM__DOT__rvalid)
+            : (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__rvalid));
     vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__id2ex_alu_op_o 
         = ((((((((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_ID__DOT____VdfgRegularize_h2f5766ca_0_0) 
                  & (0U == (vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__rdata_dpic 
