@@ -2,7 +2,7 @@
 #include <getopt.h> //,包含解析命令行参数的库函数
 
 VerilatedFstC *tfp = NULL;
-Vysyx_25050136_SOC *ysyx_25050136_SOC = NULL;
+Vysyx_25050136_SOC *top = NULL;
 FILE *log_fp = NULL;
 bool batch_mode = false; // 默认sdb模式
 
@@ -77,14 +77,14 @@ static void init_verilator(int argc, char *argv[])
   // 传递参数给verilator,建议在创建任何模型之前使用
   Verilated::commandArgs(argc, argv);
   // 构建一个名为ysyx_25050136_NPC的仿真模型
-  ysyx_25050136_SOC = new Vysyx_25050136_SOC;
+  top = new Vysyx_25050136_SOC;
 #ifdef CONFIG_FST
   // 创建一个fst波形文件指针
   tfp = new VerilatedFstC;
   // 启用跟踪
   Verilated::traceEverOn(true);
   // 采样深度为5
-  ysyx_25050136_SOC->trace(tfp, 10);
+  top->trace(tfp, 10);
   // 打开波形文件
   tfp->open("waveform.fst");
 #endif
@@ -97,8 +97,8 @@ void cpu_init()
   npcstate.state = NPC_RUNNING;
   stop_time = sim_time;
   pc__ = RESET_VECTOR;
-  ysyx_25050136_SOC->clk = 0;
-  ysyx_25050136_SOC->reset = 1;
+  top->clk = 0;
+  top->reset = 1;
 }
 //=====================================================
 // 用于初始化输出日志
@@ -135,7 +135,7 @@ void npc_end()
   // 关闭波形文件
   IFDEF(CONFIG_FST, tfp->close());
   // 删除指针
-  delete ysyx_25050136_SOC;
+  delete top;
 }
 
 static void welcome()

@@ -67,7 +67,7 @@ void add_mtrace(uint32_t addr, int type, uint32_t data, int mask)
   static size_t ptr = 0;
   char *p = mtrace_buf[ptr];
   size_t buf_len = sizeof(mtrace_buf) / ARRLEN(mtrace_buf);
-  p += snprintf(p, buf_len, "%ld  %08x:  ", ptr, ysyx_25050136_SOC->rootp->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc);
+  p += snprintf(p, buf_len, "%ld  %08x:  ", ptr, top->rootp->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc);
   p += snprintf(p, mtrace_buf[ptr] + buf_len - p, "%8x  ", addr);
   if (type == wen)
     p += snprintf(p, mtrace_buf[ptr] + buf_len - p, "write %08x %08x", data, mask);
@@ -213,9 +213,9 @@ void ftracer_log(uint32_t inst_in, uint32_t pc_in)
     for (int i = 0; i < ARRLEN(func_ftracer); i++)
     {
       if(func_ftracer[i].addr == 0) break;
-      if (ysyx_25050136_SOC->rootp->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc == func_ftracer[i].addr)
+      if (top->rootp->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc == func_ftracer[i].addr)
       {
-        ftracer_write("0x%8x %*scall [%s @ 0x%8x]\n", pc_in, 4 * p_stack, " ", func_ftracer[i].func_name, ysyx_25050136_SOC->rootp->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc);
+        ftracer_write("0x%8x %*scall [%s @ 0x%8x]\n", pc_in, 4 * p_stack, " ", func_ftracer[i].func_name, top->rootp->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc);
         Assert(p_stack < ARRLEN(FUNC_stack), "ftracer 的返回函数堆栈溢出\n");
         FUNC_stack[p_stack++] = i;
       }

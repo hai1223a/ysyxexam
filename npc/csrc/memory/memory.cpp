@@ -37,7 +37,7 @@ extern "C" int pmem_read(int raddr, int rmask)
 {
   uint32_t addr = (uint32_t)raddr;
   uint32_t data;
-  if(!ysyx_25050136_SOC->reset) {
+  if(!top->reset) {
     if (likely(in_pmem(addr)))
     {
       data = *(uint32_t *)guest_to_host(addr);
@@ -82,7 +82,7 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
   else if (addr == CONFIG_SERIAL_BASE)
   {
     Assert(wmask == 0xff, "你写串口的长度不对");
-    if (ysyx_25050136_SOC->clk == 1)
+    if (top->clk == 1)
       putc((char)(wdata), stderr);
   }
 #endif
@@ -94,7 +94,7 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
 }
 
 extern "C" void find_ebreak() {
-  set_nemu_state(NPC_END, ysyx_25050136_SOC->rootp->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc, get_reg(10));
+  set_nemu_state(NPC_END, top->rootp->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc, get_reg(10));
 }
 
 uint32_t vaddr_read(uint32_t paddr, int len)

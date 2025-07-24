@@ -9,30 +9,30 @@ vluint64_t stop_time = 0;     // 暂停时间点
 uint64_t g_timer = 0;         // unit: us
 void reset()
 {
-  ysyx_25050136_SOC->reset = 0;
+  top->reset = 0;
   if (sim_time < (reset_time + stop_time))
-    ysyx_25050136_SOC->reset = 1;
+    top->reset = 1;
 }
 
 void cpu_exec_once()
 {
   while (npcstate.state == NPC_RUNNING)
   {
-    ysyx_25050136_SOC->clk ^= 1;
+    top->clk ^= 1;
     // 复位
     reset();
     // 计算电路状态
-    ysyx_25050136_SOC->eval();
-    // 记录上升沿
+    top->eval();
+    // 记录
     IFDEF(CONFIG_FST, tfp->dump(sim_time));
     // 推动仿真进行
     sim_time++;
     // 指令计算
-    if (sim_time >= (reset_time + stop_time) && ysyx_25050136_SOC->rootp->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc != pc__)
+    if (sim_time >= (reset_time + stop_time) && SOC_PC != pc__)
     {
       pc_pre = pc__;
       inst_pre = *(uint32_t *)(pmem + pc_pre - CONFIG_MBASE);
-      pc__ = ysyx_25050136_SOC->rootp->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc;
+      pc__ = SOC_PC;
       break;
     }
   }
