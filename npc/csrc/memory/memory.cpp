@@ -82,7 +82,7 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
   if (likely(in_pmem(addr)))
   {
     uint32_t *p = (uint32_t *)guest_to_host(addr);
-    *p = (wdata & wmask) | *p & wmask;
+    *p = (wdata & wmask) | *p & ~wmask;
   }
 #ifdef CONFIG_HAS_SERIAL
   else if (addr == CONFIG_SERIAL_BASE)
