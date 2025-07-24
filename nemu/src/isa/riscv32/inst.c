@@ -209,6 +209,13 @@ struct {
   word_t ret_addr;
   uint8_t num;
 }FUNC_stack[8] = {0};
+// struct {
+//   word_t call_pc;
+//   word_t ret_pc;
+//   word_t func_addr;
+//   uint32_t num;
+// }repeat_FUNC = {0};
+
 static void ftracer_log(Decode *s, int name)
 {
   static uint32_t p_stack = 0;
@@ -221,7 +228,7 @@ static void ftracer_log(Decode *s, int name)
       if(s->dnpc == FUNC_FTRACER[i].addr)
       {
         Assert(p_stack < ARRLEN(FUNC_stack), "调用太深, ftracer的堆栈溢出了");
-        ftracer_write("0x%8x %u C [%s @ 0x%8x]\n",s->pc, p_stack, FUNC_FTRACER[i].func_name, s->dnpc);
+        ftracer_write("\n0x%8x %u C [%s @ 0x%8x]",s->pc, p_stack, FUNC_FTRACER[i].func_name, s->dnpc);
         FUNC_stack[p_stack].num = i;
         FUNC_stack[p_stack].ret_addr = s->snpc;
         p_stack++;
@@ -233,17 +240,19 @@ static void ftracer_log(Decode *s, int name)
   {
     if(p_stack <= ARRLEN(FUNC_stack)) {
       bool good_ret = false;
+      // bool repeat_ret = false;
       uint32_t p_stack_init = p_stack;
       while (p_stack--)
       {
         if(Reg(1) == FUNC_stack[p_stack].ret_addr) {
           good_ret = true;
+          // if(Reg(1) == repeat_FUNC.ret_pc)
+          // repeat_ret = true;
           break;
         }
       }
       if(good_ret) {
-        ftracer_write("0x%8x %u R [%s @ 0x%8x]\n",s->pc, p_stack, FUNC_FTRACER[FUNC_stack[p_stack].num].func_name, Reg(1));
-        FUNC_FTRACER[FUNC_stack[p_stack].num].if_ret = true;
+          ftracer_write("\n0x%8x %u R [%s @ 0x%8x]",s->pc, p_stack, FUNC_FTRACER[FUNC_stack[p_stack].num].func_name, Reg(1));
       } else {
         p_stack = p_stack_init;
       }
