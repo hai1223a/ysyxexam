@@ -230,7 +230,10 @@ static void ftracer_log(Decode *s, int name)
         if((s->pc == repeat_FUNC.call_pc) && (s->dnpc == repeat_FUNC.func_addr)) {
           repeat_FUNC.num++;
         } else {
-          if(repeat_FUNC.num) ftracer_write("    重复%d次", repeat_FUNC.num + 1);
+          if(repeat_FUNC.num) {
+            ftracer_write("    重复%d次", repeat_FUNC.num + 1);
+            repeat_FUNC.num = 0;
+          }
           Assert(p_stack < ARRLEN(FUNC_stack), "调用太深, ftracer的堆栈溢出了");
           ftracer_write("\n0x%8x %u C [%s @ 0x%8x]",s->pc, p_stack, FUNC_FTRACER[i].func_name, s->dnpc);
           FUNC_stack[p_stack].num = i;
@@ -254,12 +257,14 @@ static void ftracer_log(Decode *s, int name)
         }
       }
       if(good_ret) {
-                if(repeat_FUNC.num) ftracer_write("    重复%d次", repeat_FUNC.num + 1);
+        if(repeat_FUNC.num) {
+          ftracer_write("    重复%d次", repeat_FUNC.num + 1);
+          repeat_FUNC.num = 0;
+        }
         ftracer_write("\n0x%8x %u R [%s @ 0x%8x]",s->pc, p_stack, FUNC_FTRACER[FUNC_stack[p_stack].num].func_name, Reg(1));
         repeat_FUNC.ret_pc = Reg(1);
         repeat_FUNC.call_pc = Reg(1) - 4;
         repeat_FUNC.func_addr = FUNC_FTRACER[FUNC_stack[p_stack].num].addr;
-        repeat_FUNC.num = 0;
       } else {
         p_stack = p_stack_init;
       }
