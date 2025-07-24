@@ -3,7 +3,7 @@ module ysyx_25050136_LSU
          DATA_WIDTH = 32
      )
      (
-         input      [3:0]                           mem_wmask_i,
+         input      [3:0]                           mem_mask_i,
          input                                     mem_signed_i,
          input      [DATA_WIDTH-1:0]               store_data_i,
          input      [DATA_WIDTH-1:0]                mem_rdata_i,
@@ -12,7 +12,7 @@ module ysyx_25050136_LSU
      );
 
     always @(*) begin
-        case (mem_wmask_i)
+        case (mem_mask_i)
             4'hF:begin
                 load_data_o = mem_rdata_i;
             end

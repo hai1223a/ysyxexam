@@ -1,37 +1,55 @@
-`include "../vsrc/config.v"
+`include "config.v"
 module ysyx_25050136_EX
     #(
          DATA_WIDTH = 32
      )
      (
-         input                                            clk,
-         input                                          reset,
-         input  [31:0]                                   pc_i,
-         input  [`ysyx_25050136_FU_NUM-1:0]              fu_i,
-         input  [`ysyx_25050136_ALU_OP_NUM-1:0]      alu_op_i,
-         input  [`ysyx_25050136_LSU_OP_NUM-1:0]      lsu_op_i,
-         input  [`ysyx_25050136_BQU_OP_NUM-1:0]      bqu_op_i,
-         input  [`ysyx_25050136_CSRU_OP_NUM-1:0]    csru_op_i,
-         input  [DATA_WIDTH-1:0]                   alu_opd1_i,
-         input  [DATA_WIDTH-1:0]                   alu_opd2_i,
-         input  [DATA_WIDTH-1:0]                   bqu_opd1_i,
-         input  [DATA_WIDTH-1:0]                   bqu_opd2_i,
-         input  [DATA_WIDTH-1:0]                   lsu_opd1_i,
-         input  [DATA_WIDTH-1:0]                  csru_opd1_i,
-         input  [11:0]                            csru_opd2_i,
-         input                                     csru_wen_i,
-         input                                     csru_ren_i,
-         input  [3:0]                             mem_wmask_i,
-         input                                   mem_signed_i,
-         input  [DATA_WIDTH-1:0]                  mem_rdata_i,
-         output                                     mem_ren_o,
-         output                                     mem_wen_o,
-         output [DATA_WIDTH-1:0]                  mem_wdata_o,
-         output [DATA_WIDTH-1:0]                   mem_addr_o,
-         output [DATA_WIDTH-1:0]                   gpr_data_o,
-         output                                     jump_en_o,
-         output [DATA_WIDTH-1:0]                  jump_addr_o
-     );
+         input                                                clk,
+         input                                              reset,
+         input      [DATA_WIDTH-1:0]                         pc_i,
+         input                                            rd_en_i,
+         input      [`ysyx_25050136_FU_NUM-1:0]              fu_i,
+         input      [`ysyx_25050136_ALU_OP_NUM-1:0]      alu_op_i,
+         input      [`ysyx_25050136_LSU_OP_NUM-1:0]      lsu_op_i,
+         input      [`ysyx_25050136_BQU_OP_NUM-1:0]      bqu_op_i,
+         input      [`ysyx_25050136_CSRU_OP_NUM-1:0]    csru_op_i,
+         input      [DATA_WIDTH-1:0]                   alu_opd1_i,
+         input      [DATA_WIDTH-1:0]                   alu_opd2_i,
+         input      [DATA_WIDTH-1:0]                   bqu_opd1_i,
+         input      [DATA_WIDTH-1:0]                   bqu_opd2_i,
+         input      [DATA_WIDTH-1:0]                   lsu_opd1_i,
+         input      [DATA_WIDTH-1:0]                  csru_opd1_i,
+         input      [11:0]                            csru_opd2_i,
+         input                                         csru_wen_i,
+         input                                         csru_ren_i,
+         input      [3:0]                             mem_mask_i,
+         input                                       mem_signed_i,
+         input      [DATA_WIDTH-1:0]                  mem_rdata_i,
+         output                                         mem_wen_o,
+         output     [DATA_WIDTH-1:0]                  mem_wdata_o,
+         output     [DATA_WIDTH-1:0]                   mem_addr_o,
+         output                                         gpr_wen_o,
+         output     [DATA_WIDTH-1:0]                   gpr_data_o,
+         output                                         jump_en_o,
+         output     [DATA_WIDTH-1:0]                  jump_addr_o,
+         input                                           mvalid_i,
+         output                                          mready_o,
+         input                                           fvalid_i,
+         output                                          fready_o
+     );    
+     //===================================================
+    // 握手协议
+    //===================================================
+    reg fready;
+    always @(posedge clk) begin
+        if (reset) begin
+            fready <= 1;
+        end else begin
+            fready <= mready_o ? mvalid_i : fvalid_i;
+        end
+    end
+    assign fready_o = fready;
+    assign gpr_wen_o = rd_en_i;
     //===================================================
     // ALU
     //===================================================
@@ -50,12 +68,12 @@ module ysyx_25050136_EX
     //===================================================
     wire lsu_en = fu_i[`ysyx_25050136_LSU];
     wire [DATA_WIDTH-1:0] load_data_o;
-    assign mem_ren_o = lsu_en & lsu_op_i[`ysyx_25050136_LSU_LOAD];
+    assign mready_o = (~fready) & lsu_en & lsu_op_i[`ysyx_25050136_LSU_LOAD];
     assign mem_wen_o = lsu_en & lsu_op_i[`ysyx_25050136_LSU_STORE];
     assign mem_addr_o = alu_out_o;
 
     ysyx_25050136_LSU u_ysyx_25050136_LSU(
-        .mem_wmask_i  	(mem_wmask_i   ),
+        .mem_mask_i  	(mem_mask_i   ),
         .mem_signed_i 	(mem_signed_i  ),
         .store_data_i 	(lsu_opd1_i    ),
         .mem_rdata_i  	(mem_rdata_i   ),

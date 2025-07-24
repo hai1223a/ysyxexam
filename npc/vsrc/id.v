@@ -1,35 +1,40 @@
-`include "../vsrc/config.v"
+`include "config.v"
 module ysyx_25050136_ID
     #(
          ADDR_WIDTH = 5,
          DATA_WIDTH = 32
      )
      (
-         input  [31:0]                                inst_i,
-         input  [31:0]                                  pc_i,
-         input  [31:0]                          static_npc_i,
-         input  [DATA_WIDTH-1:0]                    rdata1_i,
-         output [ADDR_WIDTH-1:0]                    raddr1_o,
-         input  [DATA_WIDTH-1:0]                    rdata2_i,
-         output [ADDR_WIDTH-1:0]                    raddr2_o,
-         output [`ysyx_25050136_FU_NUM-1:0]             fu_o,
-         output [`ysyx_25050136_ALU_OP_NUM-1:0]     alu_op_o,
-         output [`ysyx_25050136_LSU_OP_NUM-1:0]     lsu_op_o,
-         output [`ysyx_25050136_BQU_OP_NUM-1:0]     bqu_op_o,
-         output [`ysyx_25050136_CSRU_OP_NUM-1:0]   csru_op_o,
-         output [DATA_WIDTH-1:0]                  alu_opd1_o,
-         output [DATA_WIDTH-1:0]                  alu_opd2_o,
-         output [DATA_WIDTH-1:0]                  bqu_opd1_o,
-         output [DATA_WIDTH-1:0]                  bqu_opd2_o,
-         output [DATA_WIDTH-1:0]                  lsu_opd1_o,
-         output [DATA_WIDTH-1:0]                 csru_opd1_o,
-         output [11:0]                           csru_opd2_o,
-         output                                   csru_ren_o,
-         output                                   csru_wen_o,
-         output [3:0]                            mem_wmask_o,
-         output                                 mem_signed_o,
-         output [ADDR_WIDTH-1:0]                        rd_o,
-         output                                      rd_en_o
+         input      [31:0]                                inst_i,
+         input      [DATA_WIDTH-1:0]                        pc_i,
+         input      [DATA_WIDTH-1:0]                static_npc_i,
+         input      [DATA_WIDTH-1:0]                    rdata1_i,
+         output     [ADDR_WIDTH-1:0]                    raddr1_o,
+         input      [DATA_WIDTH-1:0]                    rdata2_i,
+         output     [ADDR_WIDTH-1:0]                    raddr2_o,
+         output     [`ysyx_25050136_FU_NUM-1:0]             fu_o,
+         output     [`ysyx_25050136_ALU_OP_NUM-1:0]     alu_op_o,
+         output     [`ysyx_25050136_LSU_OP_NUM-1:0]     lsu_op_o,
+         output     [`ysyx_25050136_BQU_OP_NUM-1:0]     bqu_op_o,
+         output     [`ysyx_25050136_CSRU_OP_NUM-1:0]   csru_op_o,
+         output     [DATA_WIDTH-1:0]                  alu_opd1_o,
+         output     [DATA_WIDTH-1:0]                  alu_opd2_o,
+         output     [DATA_WIDTH-1:0]                  bqu_opd1_o,
+         output     [DATA_WIDTH-1:0]                  bqu_opd2_o,
+         output     [DATA_WIDTH-1:0]                  lsu_opd1_o,
+         output     [DATA_WIDTH-1:0]                 csru_opd1_o,
+         output     [11:0]                           csru_opd2_o,
+         output                                       csru_ren_o,
+         output                                       csru_wen_o,
+         output     [3:0]                            mem_mask_o,
+         output                                     mem_signed_o,
+         output     [ADDR_WIDTH-1:0]                        rd_o,
+         output                                          rd_en_o,
+         output     [DATA_WIDTH-1:0]                        pc_o,    
+         input                                          fvalid_i,
+         output                                         fready_o,
+         input                                          bready_i,
+         output                                         bvalid_o
      );
 
     wire [6:0] opcode = inst_i[6:0];
@@ -180,7 +185,7 @@ module ysyx_25050136_ID
     assign bqu_opd2_o = imm;
     // 选择LSU的操作数
     assign lsu_opd1_o = rdata2_i;
-    assign mem_wmask_o = (inst_lw | inst_sw) ? 4'hF :
+    assign mem_mask_o = (inst_lw | inst_sw) ? 4'hF :
            ((inst_sh | inst_lhu | inst_lh) ? 4'h3 :
             ((inst_sb | inst_lbu | inst_lb) ? 4'h1 : 0));
     assign mem_signed_o = (inst_lhu | inst_lbu) ? 0 : 1;
@@ -193,4 +198,9 @@ module ysyx_25050136_ID
     assign rd_o  = rd;
     assign rd_en_o = (type_store | type_branch) ? 0 : 1;
     //=========================================
+    // 握手协议
+    //========================================= 
+    assign fready_o = bready_i;
+    assign bvalid_o = fvalid_i;
+    assign pc_o = pc_i; 
 endmodule //ysyx_25050136_ID

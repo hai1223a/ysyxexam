@@ -3,7 +3,7 @@
 #**************************************************************************************/
 
 # 第一步:检查路径
-ifeq ($(wildcard $(NPC_HOME)/vsrc/top.v),)
+ifeq ($(wildcard $(NPC_HOME)/vsrc/soc.v),)
   $(error NPC_HOME=$(NPC_HOME) is not a NEMU repo)
 endif
 
@@ -22,20 +22,22 @@ endif
 
 # 第三步:准备用于编译工程的选项
 # 头文件和工具软件
-TOPNAME = ysyx_25050136_NPC
+TOPNAME = ysyx_25050136_SOC
 VERILATOR = verilator
 # 源文件
 CSRCS = $(wildcard csrc/*/*.cpp csrc/*/*.c csrc/*.cpp csrc/*.c)
-VSRCS = $(filter-out vsrc/soc.v, $(wildcard vsrc/*.v))
+VSRCS = $(wildcard vsrc/*.v)
 # 编译选项
 BFLAGS   += -fsanitize=address
-INC_PATH := $(abspath ../include ../include/generated)
+INC_PATH := $(abspath $(addprefix ../include/, cpu generated memory monitor trace utils))
 CFLAGS   +=  $(BFLAGS) $(addprefix -I, $(INC_PATH)) 
 LDFLAGS  += -lreadline $(BFLAGS)
 # 编译选项
+# --Wno-DECLFILENAME 忽略文件名与模块名不一致的警告
+# -Wno-UNUSEDSIGNAL 忽略存在未使用信号的变量
 VERILATOR_FLAGS += -Wall --cc -exe --build --x-assign fast --x-initial fast \
 				   --top-module $(TOPNAME) \
-				   -Ivsrc --prof-exec\
+				   -Ivsrc\
 				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
 				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"
 ifdef CONFIG_FST
