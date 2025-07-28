@@ -5,6 +5,7 @@
 #include "Vysyx_25050136_SOC___024root__DepSet_hbf268986__0.cpp"
 #include "Vysyx_25050136_SOC___024unit__DepSet_h31b68272__0.cpp"
 #include "Vysyx_25050136_SOC__Dpi.cpp"
+#include "Vysyx_25050136_SOC__Trace__0.cpp"
 #include "Vysyx_25050136_SOC__ConstPool_0.cpp"
 #include "Vysyx_25050136_SOC___024root__Slow.cpp"
 #include "Vysyx_25050136_SOC___024root__DepSet_hdcbe740e__0__Slow.cpp"
@@ -12,3 +13,5 @@
 #include "Vysyx_25050136_SOC___024unit__Slow.cpp"
 #include "Vysyx_25050136_SOC___024unit__DepSet_h522e3faa__0__Slow.cpp"
 #include "Vysyx_25050136_SOC__Syms.cpp"
+#include "Vysyx_25050136_SOC__Trace__0__Slow.cpp"
+#include "Vysyx_25050136_SOC__TraceDecls__0__Slow.cpp"
