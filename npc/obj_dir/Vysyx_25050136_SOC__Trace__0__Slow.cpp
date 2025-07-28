@@ -658,7 +658,8 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root__trace_full_0_sub_0(Vysyx_2505013
     bufp->fullBit(oldp+2,(vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_arready_r));
     bufp->fullIData(oldp+3,(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc),32);
     bufp->fullBit(oldp+4,(vlSelfRef.ysyx_25050136_SOC__DOT__inst_rvalid_i));
-    bufp->fullBit(oldp+5,((1U & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__m_rready_r))));
+    bufp->fullBit(oldp+5,((1U & ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__m_rready_r) 
+                                 >> 3U))));
     bufp->fullIData(oldp+6,(vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_rdata_r),32);
     bufp->fullBit(oldp+7,(vlSelfRef.ysyx_25050136_SOC__DOT__mem_awvalid_o));
     bufp->fullBit(oldp+8,(vlSelfRef.ysyx_25050136_SOC__DOT__u_RAM__DOT__s_awready_r));

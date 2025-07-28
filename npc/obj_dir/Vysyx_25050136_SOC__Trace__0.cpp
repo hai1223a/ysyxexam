@@ -29,7 +29,8 @@ void Vysyx_25050136_SOC___024root__trace_chg_0_sub_0(Vysyx_25050136_SOC___024roo
         bufp->chgBit(oldp+1,(vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_arready_r));
         bufp->chgIData(oldp+2,(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc),32);
         bufp->chgBit(oldp+3,(vlSelfRef.ysyx_25050136_SOC__DOT__inst_rvalid_i));
-        bufp->chgBit(oldp+4,((1U & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__m_rready_r))));
+        bufp->chgBit(oldp+4,((1U & ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__m_rready_r) 
+                                    >> 3U))));
         bufp->chgIData(oldp+5,(vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_rdata_r),32);
         bufp->chgBit(oldp+6,(vlSelfRef.ysyx_25050136_SOC__DOT__mem_awvalid_o));
         bufp->chgBit(oldp+7,(vlSelfRef.ysyx_25050136_SOC__DOT__u_RAM__DOT__s_awready_r));
