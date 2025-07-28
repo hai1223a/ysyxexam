@@ -33,6 +33,7 @@ void cpu_exec_once()
       pc_pre = pc__;
       pc__ = SOC_PC;
       if(pc__ != RESET_VECTOR) {
+        printf("sim_time = %lu, pc_ = %08x\n", sim_time, pc__);
         inst_pre = *(uint32_t *)(pmem + pc_pre - CONFIG_MBASE);
         break;
       }
