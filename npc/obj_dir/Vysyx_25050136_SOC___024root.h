@@ -25,14 +25,12 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_SOC___024root final : public V
         CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_awvalid_o;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_wvalid_o;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_bvalid_i;
-        CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_bready_o;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_arvalid_o;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_rvalid_i;
         CData/*5:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__id2ex_csru_op_o;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__id2ex_mem_signed_o;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__id2if_fready_o;
         CData/*3:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__id2ex_mem_mask_o;
-        CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__ex2reg_gpr_wen_o;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__ex2if_pc_updata_o;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__m_awvalid_o;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__m_wvalid_o;
@@ -83,10 +81,10 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_SOC___024root final : public V
         CData/*1:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__u_ysyx_25050136_CSR_File__DOT__mtvec_hit;
         CData/*1:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__u_ysyx_25050136_CSR_File__DOT__mstatus_hit;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ROM__DOT__s_arready_r;
-    };
-    struct {
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ROM__DOT__s_rvalid_r;
         CData/*4:0*/ ysyx_25050136_SOC__DOT__u_ROM__DOT__count_delay;
+    };
+    struct {
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ROM__DOT__s_awready_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ROM__DOT__s_wready_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ROM__DOT__s_bvalid_r;

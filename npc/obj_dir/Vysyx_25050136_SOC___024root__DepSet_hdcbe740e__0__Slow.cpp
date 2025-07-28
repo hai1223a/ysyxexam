@@ -144,7 +144,7 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___stl_sequent__TOP__0(Vysyx_25050
         = ((1U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__count_delay)) 
            | (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_rvalid_r));
     vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__b_fire 
-        = ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mem_bready_o) 
+        = ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_bready_r) 
            & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mem_bvalid_i));
     if (vlSelfRef.ysyx_25050136_SOC__DOT__mem_rvalid_i) {
         Vysyx_25050136_SOC___024unit____Vdpiimwrap_pmem_read_TOP____024unit(vlSelfRef.ysyx_25050136_SOC__DOT__u_RAM__DOT__s_araddr_r, vlSelfRef.__Vfunc_pmem_read__3__Vfuncout);

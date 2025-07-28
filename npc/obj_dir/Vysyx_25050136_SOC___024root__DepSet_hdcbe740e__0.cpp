@@ -119,8 +119,6 @@ VL_INLINE_OPT void Vysyx_25050136_SOC___024root___nba_sequent__TOP__0(Vysyx_2505
     }
     vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_wready_r 
         = (1U & (~ (IData)(vlSelfRef.reset)));
-    vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_bready_r 
-        = ((IData)(vlSelfRef.reset) && (1U & (~ (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__b_fire))));
     vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__fready_r 
         = ((IData)(vlSelfRef.reset) || (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__r_fire));
     if ((1U & (~ (IData)(vlSelfRef.reset)))) {
@@ -178,7 +176,9 @@ VL_INLINE_OPT void Vysyx_25050136_SOC___024root___nba_sequent__TOP__0(Vysyx_2505
                 = ((1U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_RAM__DOT__count_delay))
                     ? 0U : (0x1fU & ((IData)(1U) + (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_RAM__DOT__count_delay))));
         }
-        if (((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__ex2reg_gpr_wen_o) 
+        if ((((~ ((0x23U == (0x7fU & vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_rdata_r)) 
+                  | (0x63U == (0x7fU & vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_rdata_r)))) 
+              & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__id2if_fready_o)) 
              & (0U != (0x1fU & (vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_rdata_r 
                                 >> 7U))))) {
             __VdlyVal__ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr__v1 
@@ -287,7 +287,7 @@ VL_INLINE_OPT void Vysyx_25050136_SOC___024root___nba_sequent__TOP__0(Vysyx_2505
             vlSelfRef.ysyx_25050136_SOC__DOT__u_RAM__DOT__s_bvalid_r = 1U;
         }
         if (((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mem_bvalid_i) 
-             & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mem_bready_o))) {
+             & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_bready_r))) {
             vlSelfRef.ysyx_25050136_SOC__DOT__u_RAM__DOT__s_bvalid_r = 0U;
         }
         if ((1U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_RAM__DOT__count_delay))) {
@@ -371,6 +371,8 @@ VL_INLINE_OPT void Vysyx_25050136_SOC___024root___nba_sequent__TOP__0(Vysyx_2505
     vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__ar_fire 
         = ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_arready_r) 
            & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__m_arvalid_r));
+    vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_bready_r 
+        = ((IData)(vlSelfRef.reset) && (1U & (~ (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__b_fire))));
     vlSelfRef.ysyx_25050136_SOC__DOT__mem_rvalid_i 
         = ((1U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_RAM__DOT__count_delay)) 
            | (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_RAM__DOT__s_rvalid_r));
@@ -478,7 +480,7 @@ VL_INLINE_OPT void Vysyx_25050136_SOC___024root___nba_sequent__TOP__0(Vysyx_2505
     vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_ID__DOT__inst_csrrc 
         = (IData)((0x3073U == (0x707fU & vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_rdata_r)));
     vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__b_fire 
-        = ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mem_bready_o) 
+        = ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_bready_r) 
            & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mem_bvalid_i));
     vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__id2ex_mem_signed_o 
         = (1U & (~ ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_ID__DOT__inst_lhu) 

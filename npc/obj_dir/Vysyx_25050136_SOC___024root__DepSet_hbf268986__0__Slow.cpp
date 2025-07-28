@@ -108,7 +108,6 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___ctor_var_reset(Vysyx_25050136_S
     vlSelf->ysyx_25050136_SOC__DOT__mem_awvalid_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_wvalid_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_bvalid_i = 0;
-    vlSelf->ysyx_25050136_SOC__DOT__mem_bready_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_arvalid_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_rvalid_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__if2id_static_npc_o = 0;
@@ -121,7 +120,6 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___ctor_var_reset(Vysyx_25050136_S
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__id2ex_mem_signed_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__id2if_fready_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__id2ex_mem_mask_o = 0;
-    vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__ex2reg_gpr_wen_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__ex2if_pc_updata_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__m_awvalid_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__m_awaddr_o = 0;
