@@ -93,6 +93,7 @@ module ysyx_25050136_SRAM
     assign ar_fire = s_arvalid_i & s_arready_o;
     assign r_fire = s_rvalid_o & s_rready_i;
     // 写事务
+    localparam IEDL = 2'd0;
     localparam WAIT_DATA = 2'd1;
     localparam WAIT_ADDR = 2'd2;
     localparam GOOD = 2'd3;
@@ -110,11 +111,15 @@ module ysyx_25050136_SRAM
             wstatu <= 0;
         end else begin
             case (wstatu)
-                0: begin
-                    if(aw_fire)
-                        wstatu <= WAIT_DATA;
+                IEDL: begin
                     if(w_fire)
-                        wstatu <= WAIT_ADDR;
+                        if(aw_fire)
+                            wstatu <= GOOD;
+                        else
+                            wstatu <= WAIT_ADDR;
+                    else
+                        if(aw_fire)
+                            wstatu <= WAIT_DATA;    
                 end
                 WAIT_DATA: begin    
                     if(aw_fire)
@@ -124,7 +129,7 @@ module ysyx_25050136_SRAM
                     if(w_fire)
                         wstatu <= GOOD;
                 end
-                GOOD:   wstatu <= 0;
+                GOOD:   wstatu <= IEDL;
             endcase
         end
     end
@@ -140,12 +145,12 @@ module ysyx_25050136_SRAM
             if(aw_fire) begin
                 s_awaddr_r <= s_awaddr_i;
                 if((wstatu == WAIT_DATA) & ~w_fire) begin
-                    s_arready_r <= 0;
+                    s_awready_r <= 0;
                 end else begin
-                    s_arready_r <= 1;                    
+                    s_awready_r <= 1;                    
                 end
             end else begin
-                s_arready_r <= 1;
+                s_awready_r <= 1;
             end
             if(w_fire) begin
                 s_wdata_r <= s_wdata_i;
