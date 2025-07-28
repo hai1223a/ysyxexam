@@ -22,10 +22,11 @@ module ysyx_25050136_IF
          input                               bready_i,
          output                              bvalid_o
      );
-     
+    localparam A = 5;
+    localparam B = 2;
     reg [DATA_WIDTH-1:0] pc;
-    reg [3:0] m_arvalid_r;
-    reg [3:0] m_rready_r;
+    reg [A:0] m_arvalid_r;
+    reg [B:0] m_rready_r;
     reg [31:0] inst_r;
     wire ar_fire, r_fire;
     always @(posedge clk) begin
@@ -35,12 +36,12 @@ module ysyx_25050136_IF
         end
         else begin
             if(bready_i) begin
-                m_arvalid_r <= {m_arvalid_r[2:0], 1'd1};
+                m_arvalid_r <= {m_arvalid_r[A-1:0], 1'd1};  
                 pc <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
             end else if(ar_fire) begin
-                m_arvalid_r <= {m_arvalid_r[2:0], 1'd0};
+                m_arvalid_r <= {m_arvalid_r[A-1:0], 1'd0};  
             end else begin
-                m_arvalid_r <= {m_arvalid_r[2:0], m_arvalid_r[0]};                
+                m_arvalid_r <= {m_arvalid_r[A-1:0], 1'd0};               
             end
         end
     end
@@ -69,7 +70,7 @@ module ysyx_25050136_IF
 
     assign static_npc_o = (pc == 0) ? 32'h80000000 : (pc + 32'h4);
     
-    assign m_arvalid_o = m_arvalid_r[3];
+    assign m_arvalid_o = m_arvalid_r[A];
     assign m_araddr_o = pc;
     assign m_rready_o = m_rready_r[3];
     assign bvalid_o = r_fire & (m_rresp_i == 2'd0);
