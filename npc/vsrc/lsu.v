@@ -101,8 +101,9 @@ module ysyx_25050136_LSU
     assign ar_fire = m_arvalid_o & m_arready_i;
     assign r_fire =m_rvalid_i & m_rready_o;
 
+    localparam A = 3;
     // 写事务
-    reg [3:0] m_awvalid_r;
+    reg [A:0] m_awvalid_r;
     reg [4:0] m_wvalid_r;
     reg m_bready_r;
     wire aw_fire, w_fire, b_fire;
@@ -113,12 +114,12 @@ module ysyx_25050136_LSU
             m_wvalid_r <= 0;
         end else begin
             if(aw_fire) begin
-                m_awvalid_r <= {m_awvalid_r[2:0], 1'd0};                
+                m_awvalid_r <= {m_awvalid_r[A-1:0], 1'd0};                
             end else begin
                 if(fvalid_i & mem_wen_i) begin
-                    m_awvalid_r <= {m_awvalid_r[2:0], 1'd1};     
+                    m_awvalid_r <= {m_awvalid_r[A-1:0], 1'd1};     
                 end else begin
-                    m_awvalid_r <= {m_awvalid_r[2:0], m_awvalid_r[0]}; 
+                    m_awvalid_r <= {m_awvalid_r[A-1:0], m_awvalid_r[0]}; 
                 end
             end
             if(w_fire) begin
