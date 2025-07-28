@@ -107,6 +107,7 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___ctor_var_reset(Vysyx_25050136_S
     vlSelf->ysyx_25050136_SOC__DOT__inst_rvalid_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_awvalid_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_wvalid_o = 0;
+    vlSelf->ysyx_25050136_SOC__DOT__mem_bvalid_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_arvalid_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_rvalid_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__if2id_static_npc_o = 0;
@@ -199,7 +200,6 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___ctor_var_reset(Vysyx_25050136_S
     vlSelf->ysyx_25050136_SOC__DOT__u_ROM__DOT__s_arready_r = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ROM__DOT__s_rvalid_r = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ROM__DOT__s_rdata_r = 0;
-    vlSelf->ysyx_25050136_SOC__DOT__u_ROM__DOT__ar_fire = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ROM__DOT__count_delay = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ROM__DOT__s_awready_r = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ROM__DOT__s_wready_r = 0;
