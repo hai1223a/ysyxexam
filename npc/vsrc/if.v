@@ -4,32 +4,64 @@ module ysyx_25050136_IF
      )
      (
          input                                    clk,
-         input                                  reset,
-         input      [31:0]                     inst_i,
+         input                                 resetn,
+         // 读地址
+         output                           m_arvalid_o,
+         input                            m_arready_i,
+         output     [DATA_WIDTH-1:0]       m_araddr_o,
+         // 读数据
+         input                             m_rvalid_i,
+         output                            m_rready_o,
+         input      [31:0]                  m_rdata_i,
+         input      [1:0]                   m_rresp_i,
+         // 内部
          input                        dynamic_valid_i,
-         input                            pc_update_i,
          input      [DATA_WIDTH-1:0]    dynamic_npc_i,
          output     [DATA_WIDTH-1:0]     static_npc_o,
-         output     [DATA_WIDTH-1:0]             pc_o,
          output     [31:0]                     inst_o,
-         input                               fvalid_i,
-         output                              fready_o,
          input                               bready_i,
          output                              bvalid_o
      );
+     
     reg [DATA_WIDTH-1:0] pc;
+    reg m_arvalid_r;
+    reg m_rready_r;
+    wire ar_fire, r_fire;
     always @(posedge clk) begin
-        if(reset) begin
-            pc <= 32'h80000000;
+        if(!resetn) begin
+            m_arvalid_r <= 0;
+            pc <= 0;
         end
         else begin
-            if(pc_update_i)
+            if(bready_i) begin
+                m_arvalid_r <= 1;
                 pc <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
+            end else if(ar_fire) begin
+                m_arvalid_r <= 0;
+            end
         end
     end
-    assign bvalid_o = fvalid_i;
-    assign fready_o = bready_i;
-    assign static_npc_o = pc + 32'h4;
-    assign pc_o = pc;
-    assign inst_o = inst_i;
+    
+    always @(posedge clk) begin
+        if(!resetn) begin
+            m_rready_r <= 0;
+        end else begin
+            if(r_fire) begin
+                m_rready_r <= 0;
+            end else begin
+                m_rready_r <= 1;
+            end
+        end
+    end
+
+    assign static_npc_o = (pc == 0) ? 32'h80000000 : (pc + 32'h4);
+    
+    assign m_arvalid_o = m_arvalid_r;
+    assign m_araddr_o = pc;
+    assign m_rready_o = m_rready_r;
+    assign bvalid_o = r_fire & (m_rresp_i == 2'd0);
+    assign inst_o = m_rdata_i;
+    assign ar_fire = m_arvalid_o & m_arready_i;
+    assign r_fire = m_rvalid_i & m_rready_o;
+
 endmodule

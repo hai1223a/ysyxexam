@@ -22,36 +22,38 @@ module ysyx_25050136_EX
          input      [11:0]                            csru_opd2_i,
          input                                         csru_wen_i,
          input                                         csru_ren_i,
-         input      [3:0]                             mem_mask_i,
+         // 写地址
+         output                                       m_awvalid_o,
+         input                                        m_awready_i,
+         output     [DATA_WIDTH-1:0]                   m_awaddr_o,
+         // 写数据               
+         output                                        m_wvalid_o,
+         input                                         m_wready_i,
+         output     [DATA_WIDTH-1:0]                    m_wdata_o,
+         output     [3:0]                               m_wstrb_o,
+         // 写响应               
+         input                                         m_bvalid_i,
+         output                                        m_bready_o,
+         input      [1:0]                               m_bresp_i,
+         // 读地址               
+         output                                       m_arvalid_o,
+         input                                        m_arready_i,
+         output     [DATA_WIDTH-1:0]                   m_araddr_o,
+         // 读数据                
+         input                                         m_rvalid_i,
+         output                                        m_rready_o,
+         input      [DATA_WIDTH-1:0]                    m_rdata_i,
+         input      [1:0]                               m_rresp_i,        
+
+         input      [3:0]                              mem_mask_i,
          input                                       mem_signed_i,
-         input      [DATA_WIDTH-1:0]                  mem_rdata_i,
-         output                                         mem_wen_o,
-         output     [DATA_WIDTH-1:0]                  mem_wdata_o,
-         output     [DATA_WIDTH-1:0]                   mem_addr_o,
          output                                         gpr_wen_o,
          output     [DATA_WIDTH-1:0]                   gpr_data_o,
          output                                         jump_en_o,
          output     [DATA_WIDTH-1:0]                  jump_addr_o,
-         input                                           mvalid_i,
-         output                                          mready_o,
          input                                           fvalid_i,
-         output                                          fready_o,
-         output                                       pc_updata_o
+         output                                          fready_o
      );    
-     //===================================================
-    // 握手协议
-    //===================================================
-    reg fready;
-    always @(posedge clk) begin
-        if (reset) begin
-            fready <= 1;
-        end else begin
-            fready <= mready_o ? mvalid_i : fvalid_i;
-        end
-    end
-    assign fready_o = fready;
-    assign pc_updata_o = mready_o ? mvalid_i : fvalid_i;
-    assign gpr_wen_o = pc_updata_o & rd_en_i;
     //===================================================
     // ALU
     //===================================================
@@ -69,19 +71,44 @@ module ysyx_25050136_EX
     // LSU
     //===================================================
     wire lsu_en = fu_i[`ysyx_25050136_LSU];
+    wire mem_ren = lsu_en & lsu_op_i[`ysyx_25050136_LSU_LOAD];
+    wire mem_wen = lsu_en & lsu_op_i[`ysyx_25050136_LSU_LOAD];
     wire [DATA_WIDTH-1:0] load_data_o;
-    assign mready_o = (~fready) & lsu_en & lsu_op_i[`ysyx_25050136_LSU_LOAD];
-    assign mem_wen_o = lsu_en & lsu_op_i[`ysyx_25050136_LSU_STORE];
-    assign mem_addr_o = alu_out_o;
+    wire mem_valid_o;
 
+    // output declaration of module ysyx_25050136_LSU
+    
     ysyx_25050136_LSU u_ysyx_25050136_LSU(
-        .mem_mask_i  	(mem_mask_i   ),
+        .clk          	(clk           ),
+        .resetn       	(~reset        ),
+        .m_awvalid_o  	(m_awvalid_o   ),
+        .m_awready_i  	(m_awready_i   ),
+        .m_awaddr_o   	(m_awaddr_o    ),
+        .m_wvalid_o   	(m_wvalid_o    ),
+        .m_wready_i   	(m_wready_i    ),
+        .m_wdata_o    	(m_wdata_o     ),
+        .m_wstrb_o    	(m_wstrb_o     ),
+        .m_bvalid_i   	(m_bvalid_i    ),
+        .m_bready_o   	(m_bready_o    ),
+        .m_bresp_i    	(m_bresp_i     ),
+        .m_arvalid_o  	(m_arvalid_o   ),
+        .m_arready_i  	(m_arready_i   ),
+        .m_araddr_o   	(m_araddr_o    ),
+        .m_rvalid_i   	(m_rvalid_i    ),
+        .m_rready_o   	(m_rready_o    ),
+        .m_rdata_i    	(m_rdata_i     ),
+        .m_rresp_i    	(m_rresp_i     ),
+        .fvalid_i    	(fvalid_i      ),
+        .mem_ren_i    	(mem_ren       ),
+        .mem_wen_i    	(mem_wen       ),
+        .mem_mask_i   	(mem_mask_i    ),
         .mem_signed_i 	(mem_signed_i  ),
+        .mem_addr_i   	(alu_out_o     ),
         .store_data_i 	(lsu_opd1_i    ),
-        .mem_rdata_i  	(mem_rdata_i   ),
-        .mem_wdata_o  	(mem_wdata_o   ),
-        .load_data_o  	(load_data_o   )
+        .load_data_o  	(load_data_o   ),
+        .mem_valid_o  	(mem_valid_o   )
     );
+    
     //===================================================
     // BQU
     //===================================================
@@ -126,4 +153,16 @@ module ysyx_25050136_EX
                         bqu_op_i[`ysyx_25050136_BQU_JALR] | bqu_op_i[`ysyx_25050136_BQU_JAL] |
                        (bqu_en & |alu_out_o) ;
     assign jump_addr_o = bqu_en ? bqu_out : csru_rdata_o;
+    //===================================================
+    // 握手信号
+    //===================================================
+    reg fready_r;
+    always @(posedge clk) begin
+        if (reset) begin
+            fready_r <= 1;
+        end else begin
+            fready_r <= fvalid_i;
+        end
+    end
+    assign fready_o = lsu_en ? mem_valid_o : fready_r;
 endmodule //ysyx_25050136_EX
