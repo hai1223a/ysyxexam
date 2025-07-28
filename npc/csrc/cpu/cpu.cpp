@@ -28,7 +28,7 @@ void cpu_exec_once()
     // 推动仿真进行
     sim_time++;
     // 指令计算
-    if (sim_time >= (reset_time + stop_time) && SOC_PC != pc__ )
+    if (SOC_PC != pc__ )
     {
       pc_pre = pc__;
       pc__ = SOC_PC;
