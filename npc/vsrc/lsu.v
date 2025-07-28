@@ -58,7 +58,7 @@ module ysyx_25050136_LSU
                 if(fvalid_i & mem_ren_i) begin
                     m_arvalid_r <= {m_arvalid_r[A-1:0], 1'd1};
                 end else begin
-                    m_arvalid_r <= {m_arvalid_r[A-1:0], m_arvalid_r[0]};
+                    m_arvalid_r <= {m_arvalid_r[A-1:0], 1'd0};
                 end
             end
         end
