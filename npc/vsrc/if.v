@@ -22,7 +22,7 @@ module ysyx_25050136_IF
          input                               bready_i,
          output                              bvalid_o
      );
-    localparam A = 5;
+    localparam A = 2;
     localparam B = 2;
     reg [DATA_WIDTH-1:0] pc;
     reg [A:0] m_arvalid_r;
