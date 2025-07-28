@@ -10,17 +10,17 @@ long init_pmem(char *img_file)
   if (!img_file)
   {
     uint32_t *pmem_w = (uint32_t *)pmem;
-    *pmem_w++ = 0x00000297; // auipc t0,0
-    *pmem_w++ = 0x02428293; // addi t0,t0,36      // t0 = 指令区首地址+36
-    *pmem_w++ = 0x00100513; // li a0,1            // a0 = 1
-    *pmem_w++ = 0x00a2a023; // sw  a0,0(t0)       // [t0+0] = a0 (把1写到数据区)
-    *pmem_w++ = 0x0002a503; // lw  a0,0(t0)       // a0 = [t0+0] (从数据区读回a0)
-    *pmem_w++ = 0x0040006f; // jal zero, +4       // 跳转到下一条（演示jal）
-    *pmem_w++ = 0x00128293; // addi t0,t0,1       // t0 = t0 + 1
-    *pmem_w++ = 0xfe529ae3; // bne a0,a1,-4       // 如果a0!=a1, 跳回前面
-    *pmem_w++ = 0x00100073; // ebreak             // 终止
-    *pmem_w++ = 0xdeadbeef; // 数据区内容
-    *pmem_w++ = 0x12345678; // 数据区内容
+   *pmem_w++ = 0x00000297; // auipc t0,0
+   *pmem_w++ = 0x02428293; // addi t0,t0,36      // t0 = 指令区首地址+36
+   *pmem_w++ = 0x00100593; // li a1,1            // a1 = 1
+   *pmem_w++ = 0x00b2a023; // sw  a1,0(t0)       // [t0+0] = a1 (把1写到数据区)
+   *pmem_w++ = 0x0002a583; // lw  a1,0(t0)       // a1 = [t0+0] (从数据区读回a1)
+   *pmem_w++ = 0x0040006f; // jal zero, +4       // 跳转到下一条（演示jal）
+   *pmem_w++ = 0x00128293; // addi t0,t0,1       // t0 = t0 + 1
+   *pmem_w++ = 0xfe529ae3; // bne a0,a1,-4       // 如果a0!=a1, 跳回前面
+   *pmem_w++ = 0x00100073; // ebreak             // 终止
+   *pmem_w++ = 0xdeadbeef; // 数据区内容
+   *pmem_w++ = 0x12345678; // 数据区内容
     Log("没有给源文件, 程序使用了内置的代码.");
     return 20;
   }
