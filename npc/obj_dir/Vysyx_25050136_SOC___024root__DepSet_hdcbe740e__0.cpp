@@ -449,7 +449,7 @@ VL_INLINE_OPT void Vysyx_25050136_SOC___024root___nba_sequent__TOP__0(Vysyx_2505
         = ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__m_rready_r) 
            & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__inst_rvalid_i));
     vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__if2id_inst_o 
-        = ((0U != vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_rdata_r)
+        = ((0U == vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_rdata_r)
             ? vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__inst_r
             : vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_rdata_r);
     vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__b_fire 
