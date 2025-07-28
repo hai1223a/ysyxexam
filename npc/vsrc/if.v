@@ -51,9 +51,9 @@ module ysyx_25050136_IF
             m_rready_r <= 0;
         end else begin
             if(r_fire) begin
-                m_rready_r <= {m_rready_r[2:0], 1'd0};
+                m_rready_r <= {m_rready_r[B-1:0], 1'd0};
             end else begin
-                m_rready_r <= {m_rready_r[2:0], 1'd1};
+                m_rready_r <= {m_rready_r[B-1:0], 1'd1};
             end
         end
     end
@@ -70,9 +70,9 @@ module ysyx_25050136_IF
 
     assign static_npc_o = (pc == 0) ? 32'h80000000 : (pc + 32'h4);
     
-    assign m_arvalid_o = m_arvalid_r[3];
+    assign m_arvalid_o = m_arvalid_r[A];
     assign m_araddr_o = pc;
-    assign m_rready_o = m_rready_r[3];
+    assign m_rready_o = m_rready_r[B];
     assign bvalid_o = r_fire & (m_rresp_i == 2'd0);
     assign inst_o = (m_rdata_i == 0) ? inst_r : m_rdata_i;
     assign ar_fire = m_arvalid_o & m_arready_i;
