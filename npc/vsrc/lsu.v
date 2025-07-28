@@ -103,8 +103,8 @@ module ysyx_25050136_LSU
 
     // 写事务
     reg [3:0] m_awvalid_r;
-    reg [4:0] m_wvalid_r;
-    reg [5:0] m_bready_r;
+    reg m_wvalid_r;
+    reg m_bready_r;
     wire aw_fire, w_fire, b_fire;
 
     always @(posedge clk) begin
