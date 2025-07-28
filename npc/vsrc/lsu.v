@@ -58,7 +58,7 @@ module ysyx_25050136_LSU
                 if(fvalid_i & mem_ren_i) begin
                     m_arvalid_r <= {m_arvalid_r[A-1:0], 1'd1};
                 end else begin
-                    m_arvalid_r <= {m_arvalid_r[A-1:0], 1'd0};
+                    m_arvalid_r <= {m_arvalid_r[A-1:0], m_arvalid_r[0]};
                 end
             end
         end
@@ -123,7 +123,7 @@ module ysyx_25050136_LSU
                 if(fvalid_i & mem_wen_i) begin
                     m_awvalid_r <= {m_awvalid_r[C-1:0], 1'd1};     
                 end else begin
-                    m_awvalid_r <= {m_awvalid_r[C-1:0], 1'd0};  
+                    m_awvalid_r <= {m_awvalid_r[C-1:0], m_awvalid_r[0]};  
                 end
             end
             if(w_fire) begin
@@ -132,7 +132,7 @@ module ysyx_25050136_LSU
                 if(fvalid_i & mem_wen_i) begin
                     m_wvalid_r <= {m_wvalid_r[D-1:0], 1'd1};
                 end else begin
-                    m_wvalid_r <= {m_wvalid_r[D-1:0], 1'd0};    
+                    m_wvalid_r <= {m_wvalid_r[D-1:0], m_wvalid_r[0]};    
                 end
             end
         end

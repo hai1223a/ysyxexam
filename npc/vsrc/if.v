@@ -23,7 +23,7 @@ module ysyx_25050136_IF
          output                              bvalid_o
      );
     localparam A = 5;
-    localparam B = 3;
+    localparam B = 2;
     reg [DATA_WIDTH-1:0] pc;
     reg [A:0] m_arvalid_r;
     reg [B:0] m_rready_r;
@@ -41,7 +41,7 @@ module ysyx_25050136_IF
             end else if(ar_fire) begin
                 m_arvalid_r <= {m_arvalid_r[A-1:0], 1'd0};  
             end else begin
-                m_arvalid_r <= {m_arvalid_r[A-1:0], 1'd0};               
+                m_arvalid_r <= {m_arvalid_r[2:0], m_arvalid_r[0]};                
             end
         end
     end
@@ -70,7 +70,7 @@ module ysyx_25050136_IF
 
     assign static_npc_o = (pc == 0) ? 32'h80000000 : (pc + 32'h4);
     
-    assign m_arvalid_o = m_arvalid_r[A];
+    assign m_arvalid_o = m_arvalid_r[3];
     assign m_araddr_o = pc;
     assign m_rready_o = m_rready_r[3];
     assign bvalid_o = r_fire & (m_rresp_i == 2'd0);
