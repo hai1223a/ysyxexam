@@ -44,7 +44,7 @@ module ysyx_25050136_LSU
     initial lfsr = 8'h1;
     assign lfsr_en = 1; // always enable in this test
 
-    always @(posedge clk or negedge resetn) begin
+    always @(posedge clk) begin
         if (!resetn)
             lfsr <= 8'h1;
         else if (lfsr_en)
