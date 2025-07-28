@@ -103,10 +103,11 @@ module ysyx_25050136_LSU
 
     localparam A = 3;
     localparam B = 5;
+    localparam C = 7;
     // 写事务
     reg [A:0] m_awvalid_r;
     reg [B:0] m_wvalid_r;
-    reg m_bready_r;
+    reg [C:0] m_bready_r;
     wire aw_fire, w_fire, b_fire;
 
     always @(posedge clk) begin
@@ -140,9 +141,9 @@ module ysyx_25050136_LSU
             m_bready_r <= 0;
         end else begin
             if(b_fire) begin
-                m_bready_r <= 0;
+                m_bready_r <= {m_bready_r[C-1:0], 1'd0};
             end else begin
-                m_bready_r <= 1;
+                m_bready_r <= {m_bready_r[C-1:0], 1'd1};
             end
         end
     end
@@ -152,7 +153,7 @@ module ysyx_25050136_LSU
     assign m_wvalid_o = (fvalid_i & mem_wen_i) | m_wvalid_r[B];
     assign m_wdata_o = m_awvalid_o ? store_data_i : 0;
     assign m_wstrb_o = m_awvalid_o ? mem_mask_i : 0;
-    assign m_bready_o = m_bready_r;
+    assign m_bready_o = m_bready_r[C];
     assign aw_fire = m_awvalid_o & m_awready_i;
     assign w_fire = m_wvalid_o & m_wready_i;
     assign b_fire = m_bvalid_i & m_bready_o;
