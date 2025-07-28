@@ -26,6 +26,7 @@ module ysyx_25050136_IF
     reg [DATA_WIDTH-1:0] pc;
     reg m_arvalid_r;
     reg m_rready_r;
+    reg [31:0] inst_r;
     wire ar_fire, r_fire;
     always @(posedge clk) begin
         if(!resetn) begin
@@ -54,13 +55,23 @@ module ysyx_25050136_IF
         end
     end
 
+    always @(posedge clk) begin
+        if(!resetn) begin
+            inst_r <= 0;
+        end else begin
+            if(r_fire) begin
+                inst_r <= m_rdata_i;
+            end
+        end
+    end
+
     assign static_npc_o = (pc == 0) ? 32'h80000000 : (pc + 32'h4);
     
     assign m_arvalid_o = m_arvalid_r;
     assign m_araddr_o = pc;
     assign m_rready_o = m_rready_r;
     assign bvalid_o = r_fire & (m_rresp_i == 2'd0);
-    assign inst_o = m_rdata_i;
+    assign inst_o = inst_r | m_rdata_i;
     assign ar_fire = m_arvalid_o & m_arready_i;
     assign r_fire = m_rvalid_i & m_rready_o;
 
