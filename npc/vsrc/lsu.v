@@ -101,7 +101,8 @@ module ysyx_25050136_LSU
     assign ar_fire = m_arvalid_o & m_arready_i;
     assign r_fire =m_rvalid_i & m_rready_o;
 
-    localparam A = 0;
+    localparam A = 3;
+    localparam B = 5;
     // 写事务
     reg [A:0] m_awvalid_r;
     reg [4:0] m_wvalid_r;
@@ -123,12 +124,12 @@ module ysyx_25050136_LSU
                 end
             end
             if(w_fire) begin
-                m_wvalid_r <= {m_wvalid_r[3:0], 1'd0};                
+                m_wvalid_r <= {m_wvalid_r[B-1:0], 1'd0};                
             end else begin
                 if(fvalid_i & mem_wen_i) begin
-                    m_wvalid_r <= {m_wvalid_r[3:0], 1'd1};
+                    m_wvalid_r <= {m_wvalid_r[B-1:0], 1'd1};
                 end else begin
-                    m_wvalid_r <= {m_wvalid_r[3:0], m_wvalid_r[0]};
+                    m_wvalid_r <= {m_wvalid_r[B-1:0], m_wvalid_r[0]};
                 end
             end
         end
@@ -147,8 +148,8 @@ module ysyx_25050136_LSU
     end
 
     assign m_awaddr_o = m_awvalid_o ? mem_addr_i : 0;
-    assign m_awvalid_o = (fvalid_i & mem_wen_i) | m_awvalid_r[3];
-    assign m_wvalid_o = (fvalid_i & mem_wen_i) | m_wvalid_r[4];
+    assign m_awvalid_o = (fvalid_i & mem_wen_i) | m_awvalid_r[A];
+    assign m_wvalid_o = (fvalid_i & mem_wen_i) | m_wvalid_r[B];
     assign m_wdata_o = m_awvalid_o ? store_data_i : 0;
     assign m_wstrb_o = m_awvalid_o ? mem_mask_i : 0;
     assign m_bready_o = m_bready_r;
