@@ -44,7 +44,7 @@ module ysyx_25050136_LSU
     reg [DATA_WIDTH-1:0] load_data_r;
     wire ar_fire, r_fire;
     always @(posedge clk) begin
-        if(resetn) begin
+        if(!resetn) begin
             m_arvalid_r <= 0;
         end else begin
             if(ar_fire) begin
@@ -108,7 +108,7 @@ module ysyx_25050136_LSU
     wire aw_fire, w_fire, b_fire;
 
     always @(posedge clk) begin
-        if(resetn) begin
+        if(!resetn) begin
             m_awvalid_r <= 0;
             m_wvalid_r <= 0;
         end else begin
@@ -134,7 +134,7 @@ module ysyx_25050136_LSU
     end
 
     always @(posedge clk) begin
-        if(resetn) begin
+        if(!resetn) begin
             m_bready_r <= 0;
         end else begin
             if(b_fire) begin
