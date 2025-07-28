@@ -96,7 +96,7 @@ void cpu_init()
 {
   npcstate.state = NPC_RUNNING;
   stop_time = sim_time;
-  pc__ = RESET_VECTOR;
+  pc__ = 0;
   top->clk = 0;
   top->reset = 1;
 }
