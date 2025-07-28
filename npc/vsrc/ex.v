@@ -146,6 +146,7 @@ module ysyx_25050136_EX
     //===================================================
     assign gpr_data_o = lsu_op_i[`ysyx_25050136_LSU_LOAD] ? load_data_o : 
                         csru_en ? csru_rdata_o : alu_out_o;
+    assign gpr_wen_o = fready_o & rd_en_i;
     //===================================================
     // 跳转路径
     //===================================================

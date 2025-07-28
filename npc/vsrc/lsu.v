@@ -150,6 +150,7 @@ module ysyx_25050136_LSU
     assign m_wvalid_o = (fvalid_i & mem_wen_i) | m_wvalid_r;
     assign m_wdata_o = m_awvalid_o ? store_data_i : 0;
     assign m_wstrb_o = m_awvalid_o ? mem_mask_i : 0;
+    assign m_bready_o = m_bready_r;
     assign aw_fire = m_awvalid_o & m_awready_i;
     assign w_fire = m_wvalid_o & m_wready_i;
     assign b_fire = m_bvalid_i & m_bready_o;
