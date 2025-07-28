@@ -105,7 +105,7 @@ module ysyx_25050136_LSU
     localparam B = 5;
     // 写事务
     reg [A:0] m_awvalid_r;
-    reg [4:0] m_wvalid_r;
+    reg [B:0] m_wvalid_r;
     reg m_bready_r;
     wire aw_fire, w_fire, b_fire;
 
