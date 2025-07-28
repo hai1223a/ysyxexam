@@ -101,7 +101,7 @@ module ysyx_25050136_LSU
     assign ar_fire = m_arvalid_o & m_arready_i;
     assign r_fire =m_rvalid_i & m_rready_o;
 
-    localparam A = 3;
+    localparam A = 23;
     // 写事务
     reg [A:0] m_awvalid_r;
     reg [4:0] m_wvalid_r;
