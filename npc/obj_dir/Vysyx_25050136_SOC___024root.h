@@ -62,6 +62,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_SOC___024root final : public V
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_ID__DOT____VdfgRegularize_h2f5766ca_0_8;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__lsu_en;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__mem_ren;
+        CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__mem_wen;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__csru_en;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__fready_r;
@@ -82,9 +83,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_SOC___024root final : public V
         CData/*1:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__u_ysyx_25050136_CSR_File__DOT__mstatus_hit;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ROM__DOT__s_arready_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ROM__DOT__s_rvalid_r;
-        CData/*4:0*/ ysyx_25050136_SOC__DOT__u_ROM__DOT__count_delay;
     };
     struct {
+        CData/*4:0*/ ysyx_25050136_SOC__DOT__u_ROM__DOT__count_delay;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ROM__DOT__s_awready_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ROM__DOT__s_wready_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ROM__DOT__s_bvalid_r;
