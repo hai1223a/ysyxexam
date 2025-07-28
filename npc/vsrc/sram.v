@@ -181,7 +181,7 @@ module ysyx_25050136_SRAM
     end
     assign wstrb_full = {{8{s_wstrb_r[3]}}, {8{s_wstrb_r[2]}}, {8{s_wstrb_r[1]}}, {8{s_wstrb_r[0]}}};
     assign s_awready_o = s_awready_r;
-    assign s_wreday_o = s_wready_r;
+    assign s_wready_o = s_wready_r;
     assign s_bvalid_o = s_bvalid_r | (wstatu == GOOD);
     assign s_bresp_o = 0;
     assign aw_fire = s_awvalid_i & s_awready_o;

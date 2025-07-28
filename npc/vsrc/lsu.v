@@ -41,7 +41,7 @@ module ysyx_25050136_LSU
     // 读事务
     reg m_arvalid_r;
     reg m_rready_r;
-    reg load_data_r;
+    reg [DATA_WIDTH-1:0] load_data_r;
     wire ar_fire, r_fire;
     always @(posedge clk) begin
         if(resetn) begin

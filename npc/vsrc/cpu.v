@@ -63,7 +63,7 @@ wire [11:0]               id2ex_csru_opd2_o;
 wire [DATA_WIDTH-1:0] id2ex_pc_o;
 wire id2ex_mem_signed_o, id2ex_csru_wen_o, id2ex_csru_ren_o;
 wire id2if_fready_o, id2ex_bvalid_o;
-wire id2ex_mem_mask_o;
+wire [3:0] id2ex_mem_mask_o;
 // REG输出
 wire [DATA_WIDTH-1:0] reg2id_rdata1_o,reg2id_rdata2_o;
 // EX输出
