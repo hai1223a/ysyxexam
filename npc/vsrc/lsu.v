@@ -146,7 +146,7 @@ module ysyx_25050136_LSU
     end
 
     assign m_awaddr_o = m_awvalid_o ? mem_addr_i : 0;
-    assign m_awvalid_o = (fvalid_i & mem_wen_i) | m_awvalid_r;
+    assign m_awvalid_o = (fvalid_i & mem_wen_i) | m_awvalid_r[3];
     assign m_wvalid_o = (fvalid_i & mem_wen_i) | m_wvalid_r;
     assign m_wdata_o = m_awvalid_o ? store_data_i : 0;
     assign m_wstrb_o = m_awvalid_o ? mem_mask_i : 0;
