@@ -1,6 +1,6 @@
 #include "../../include/common.h"
 
-uint32_t pc__ = RESET_VECTOR; // 执行完指令后的PC值
+uint32_t pc__ = 0; // 执行完指令后的PC值
 uint32_t pc_pre = 0;          // 执行的指令的PC值
 uint32_t inst_pre = 0;        // 执行的指令值
 vluint64_t sim_time = 0;      // 记录仿真时间
