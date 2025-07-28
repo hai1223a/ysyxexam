@@ -72,7 +72,7 @@ module ysyx_25050136_EX
     //===================================================
     wire lsu_en = fu_i[`ysyx_25050136_LSU];
     wire mem_ren = lsu_en & lsu_op_i[`ysyx_25050136_LSU_LOAD];
-    wire mem_wen = lsu_en & lsu_op_i[`ysyx_25050136_LSU_LOAD];
+    wire mem_wen = lsu_en & lsu_op_i[`ysyx_25050136_LSU_STORE];
     wire [DATA_WIDTH-1:0] load_data_o;
     wire mem_valid_o;
 
