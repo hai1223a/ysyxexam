@@ -53,7 +53,7 @@ void Vysyx_25050136_SOC___024root___eval_nba(Vysyx_25050136_SOC___024root* vlSel
 
 extern const VlUnpacked<CData/*0:0*/, 32> Vysyx_25050136_SOC__ConstPool__TABLE_h05acd171_0;
 extern const VlUnpacked<CData/*1:0*/, 32> Vysyx_25050136_SOC__ConstPool__TABLE_h1c136612_0;
-extern const VlUnpacked<CData/*5:0*/, 1024> Vysyx_25050136_SOC__ConstPool__TABLE_haf3bd294_0;
+extern const VlUnpacked<CData/*5:0*/, 1024> Vysyx_25050136_SOC__ConstPool__TABLE_h716f4a96_0;
 void Vysyx_25050136_SOC___024unit____Vdpiimwrap_pmem_write_TOP____024unit(IData/*31:0*/ waddr, IData/*31:0*/ wdata, IData/*31:0*/ wmask);
 void Vysyx_25050136_SOC___024unit____Vdpiimwrap_pmem_read_TOP____024unit(IData/*31:0*/ raddr, IData/*31:0*/ &pmem_read__Vfuncrtn);
 void Vysyx_25050136_SOC___024unit____Vdpiimwrap_find_ebreak_TOP____024unit();
@@ -118,7 +118,7 @@ VL_INLINE_OPT void Vysyx_25050136_SOC___024root___nba_sequent__TOP__0(Vysyx_2505
                                               | (1U 
                                                  & (~ (IData)(vlSelfRef.reset))))));
     vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_arvalid_r 
-        = Vysyx_25050136_SOC__ConstPool__TABLE_haf3bd294_0
+        = Vysyx_25050136_SOC__ConstPool__TABLE_h716f4a96_0
         [__Vtableidx1];
     vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_awready_r 
         = (1U & (~ (IData)(vlSelfRef.reset)));
