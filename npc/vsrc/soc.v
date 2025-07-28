@@ -19,7 +19,7 @@ wire [TOP_DATA_WIDTH-1:0]       mem_awaddr_o;
 wire                            mem_wvalid_o;
 wire                            mem_wready_i;
 wire [TOP_DATA_WIDTH-1:0]        mem_wdata_o;
-wire [3:0]                       mem_wstrb_o;            
+wire [3:0]                       mem_wstrb_o;
 wire                            mem_bvalid_i;
 wire                            mem_bready_o;
 wire [1:0]                       mem_bresp_i;           
@@ -64,6 +64,23 @@ u_ysyx_25050136_NPC(
     .mem_rresp_i    	(mem_rresp_i     )
 );
 
+wire                           inst_awvalid_o;
+wire                           inst_awready_i;
+wire [TOP_DATA_WIDTH-1:0]       inst_awaddr_o;
+wire                            inst_wvalid_o;
+wire                            inst_wready_i;
+wire [TOP_DATA_WIDTH-1:0]        inst_wdata_o;
+wire [3:0]                       inst_wstrb_o;
+wire                            inst_bvalid_i;
+wire                            inst_bready_o;
+wire [1:0]                       inst_bresp_i;
+
+assign inst_awvalid_o = 0;
+assign inst_awaddr_o = 0;
+assign inst_wvalid_o = 0;
+assign inst_wdata_o = 0;
+assign inst_wstrb_o = 0;
+assign inst_bready_o = 0;
 ysyx_25050136_SRAM #(
     .ADDR_WIDTH(TOP_DATA_WIDTH),
     .DATA_WIDTH(TOP_DATA_WIDTH)
@@ -71,16 +88,16 @@ ysyx_25050136_SRAM #(
 u_ROM(
     .aclk        	(clk             ),
     .aresetn     	(~reset          ),
-    // .s_awvalid_i 	(0               ),
-    // .s_awready_o 	(               ),
-    // .s_awaddr_i  	(0               ),
-    // .s_wvalid_i  	(0               ),
-    // .s_wready_o  	(               ),
-    // .s_wdata_i   	(0               ),
-    // .s_wstrb_i   	(0               ),
-    // .s_bvalid_o  	(               ),
-    // .s_bready_i  	(0               ),
-    // .s_bresp_o   	(               ),
+    .s_awvalid_i 	(inst_awvalid_o  ),
+    .s_awready_o 	(inst_awready_i  ),
+    .s_awaddr_i  	(inst_awaddr_o   ),
+    .s_wvalid_i  	(inst_wvalid_o   ),
+    .s_wready_o  	(inst_wready_i   ),
+    .s_wdata_i   	(inst_wdata_o    ),
+    .s_wstrb_i   	(inst_wstrb_o    ),
+    .s_bvalid_o  	(inst_bvalid_i   ),
+    .s_bready_i  	(inst_bready_o   ),
+    .s_bresp_o   	(inst_bresp_i    ),
     .s_arvalid_i 	(inst_arvalid_o  ),
     .s_arready_o 	(inst_arready_i  ),
     .s_araddr_i  	(inst_araddr_o   ),
