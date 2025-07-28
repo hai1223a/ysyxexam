@@ -41,7 +41,7 @@ module ysyx_25050136_IF
             end else if(ar_fire) begin
                 m_arvalid_r <= {m_arvalid_r[A-1:0], 1'd0};  
             end else begin
-                m_arvalid_r <= {m_arvalid_r[2:0], m_arvalid_r[0]};                
+                m_arvalid_r <= {m_arvalid_r[A-1:0], m_arvalid_r[0]};                
             end
         end
     end
