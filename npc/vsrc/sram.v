@@ -72,10 +72,10 @@ module ysyx_25050136_SRAM
         if(!aresetn) begin
             s_rvalid_r <= 0;
         end else begin
-            if(count_delay == RAM_DELAY) begin
-                s_rvalid_r <= 1;
-            end else if(r_fire) begin
+            if(r_fire) begin
                 s_rvalid_r <= 0;
+            end else if(count_delay == RAM_DELAY) begin
+                s_rvalid_r <= 1; 
             end
         end
     end
