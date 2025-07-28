@@ -161,8 +161,8 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___stl_sequent__TOP__0(Vysyx_25050
         = ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_rready_r) 
            & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mem_rvalid_i));
     vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__r_fire 
-        = ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__m_rready_r) 
-           & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__inst_rvalid_i));
+        = ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__inst_rvalid_i) 
+           & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__m_rready_r));
     if (vlSelfRef.ysyx_25050136_SOC__DOT__inst_rvalid_i) {
         Vysyx_25050136_SOC___024unit____Vdpiimwrap_pmem_read_TOP____024unit(vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_araddr_r, vlSelfRef.__Vfunc_pmem_read__1__Vfuncout);
         vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_rdata_r 
