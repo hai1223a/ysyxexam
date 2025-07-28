@@ -3,6 +3,7 @@
 uint32_t pc__ = 0; // 执行完指令后的PC值
 uint32_t pc_pre = 0;          // 执行的指令的PC值
 uint32_t inst_pre = 0;        // 执行的指令值
+vluint64_t inst_count = 0;    // 指令数量
 vluint64_t sim_time = 0;      // 记录仿真时间
 vluint64_t reset_time = 10;    // 复位时间
 vluint64_t stop_time = 0;     // 暂停时间点
@@ -36,6 +37,7 @@ void cpu_exec_once()
       if((sim_time >= (reset_time + stop_time)) & pc__ != RESET_VECTOR) {
         printf("sim_time = %lu, pc_ = %08x\n", sim_time, pc__);
         inst_pre = *(uint32_t *)(pmem + pc_pre - CONFIG_MBASE);
+        inst_count++;
         break;
       }
     }
