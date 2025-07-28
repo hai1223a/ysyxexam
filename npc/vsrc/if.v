@@ -71,7 +71,7 @@ module ysyx_25050136_IF
     assign m_araddr_o = pc;
     assign m_rready_o = m_rready_r;
     assign bvalid_o = r_fire & (m_rresp_i == 2'd0);
-    assign inst_o = (m_rdata_i == 0) ? inst_r : m_rdata_i;
+    assign inst_o = m_rdata_i;
     assign ar_fire = m_arvalid_o & m_arready_i;
     assign r_fire = m_rvalid_i & m_rready_o;
 
