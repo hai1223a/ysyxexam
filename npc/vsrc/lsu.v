@@ -38,14 +38,9 @@ module ysyx_25050136_LSU
          output     [DATA_WIDTH-1:0]        load_data_o,
          output                             mem_valid_o
      );
-    localparam A = 5;
-    localparam B = 2;
-    localparam C = 3;
-    localparam D = 5;
-    localparam E = 7;
     // 读事务
-    reg [A:0] m_arvalid_r;
-    reg [B:0] m_rready_r;
+    reg m_arvalid_r;
+    reg m_rready_r;
     reg [DATA_WIDTH-1:0] load_data_r;
     wire ar_fire, r_fire;
     always @(posedge clk) begin
@@ -53,12 +48,12 @@ module ysyx_25050136_LSU
             m_arvalid_r <= 0;
         end else begin
             if(ar_fire) begin
-                m_arvalid_r <= {m_arvalid_r[A-1:0], 1'd0};                
+                m_arvalid_r <= 0;                
             end else begin
                 if(fvalid_i & mem_ren_i) begin
-                    m_arvalid_r <= {m_arvalid_r[A-1:0], 1'd1};
+                    m_arvalid_r <= 1;
                 end else begin
-                    m_arvalid_r <= {m_arvalid_r[A-1:0], m_arvalid_r[0]};
+                    m_arvalid_r <= 0;
                 end
             end
         end
@@ -69,9 +64,9 @@ module ysyx_25050136_LSU
             m_rready_r <= 0;
         end else begin
             if(r_fire) begin
-                m_rready_r <= {m_rready_r[B-1:0], 1'd0};
+                m_rready_r <= 0;
             end else begin
-                m_rready_r <= {m_rready_r[B-1:0], 1'd1};
+                m_rready_r <= 1;
             end
         end
     end
@@ -99,17 +94,17 @@ module ysyx_25050136_LSU
         endcase
     end
     
-    assign m_arvalid_o = (fvalid_i & mem_ren_i) | m_arvalid_r[A];
-    assign m_rready_o = m_rready_r[B];
+    assign m_arvalid_o = (fvalid_i & mem_ren_i) | m_arvalid_r;
+    assign m_rready_o = m_rready_r;
     assign m_araddr_o = m_arvalid_o ? mem_addr_i : 0;
     assign load_data_o = load_data_r;
     assign ar_fire = m_arvalid_o & m_arready_i;
     assign r_fire =m_rvalid_i & m_rready_o;
 
     // 写事务
-    reg [C:0] m_awvalid_r;
-    reg [D:0] m_wvalid_r;
-    reg [E:0] m_bready_r;
+    reg m_awvalid_r;
+    reg m_wvalid_r;
+    reg m_bready_r;
     wire aw_fire, w_fire, b_fire;
 
     always @(posedge clk) begin
@@ -118,21 +113,21 @@ module ysyx_25050136_LSU
             m_wvalid_r <= 0;
         end else begin
             if(aw_fire) begin
-                m_awvalid_r <= {m_awvalid_r[C-1:0], 1'd0};                
+                m_awvalid_r <= 0;                
             end else begin
                 if(fvalid_i & mem_wen_i) begin
-                    m_awvalid_r <= {m_awvalid_r[C-1:0], 1'd1};     
+                    m_awvalid_r <= 1;
                 end else begin
-                    m_awvalid_r <= {m_awvalid_r[C-1:0], m_awvalid_r[0]};  
+                    m_awvalid_r <= 0;
                 end
             end
             if(w_fire) begin
-                m_wvalid_r <= {m_wvalid_r[D-1:0], 1'd0};                
+                m_wvalid_r <= 0;                
             end else begin
                 if(fvalid_i & mem_wen_i) begin
-                    m_wvalid_r <= {m_wvalid_r[D-1:0], 1'd1};
+                    m_wvalid_r <= 1;
                 end else begin
-                    m_wvalid_r <= {m_wvalid_r[D-1:0], m_wvalid_r[0]};    
+                    m_wvalid_r <= 0;
                 end
             end
         end
@@ -143,19 +138,19 @@ module ysyx_25050136_LSU
             m_bready_r <= 0;
         end else begin
             if(b_fire) begin
-                m_bready_r <= {m_bready_r[E-1:0], 1'd0};
+                m_bready_r <= 0;
             end else begin
-                m_bready_r <= {m_bready_r[E-1:0], 1'd1};
+                m_bready_r <= 1;
             end
         end
     end
 
     assign m_awaddr_o = m_awvalid_o ? mem_addr_i : 0;
-    assign m_awvalid_o = (fvalid_i & mem_wen_i) | m_awvalid_r[C];
-    assign m_wvalid_o = (fvalid_i & mem_wen_i) | m_wvalid_r[D];
+    assign m_awvalid_o = (fvalid_i & mem_wen_i) | m_awvalid_r;
+    assign m_wvalid_o = (fvalid_i & mem_wen_i) | m_wvalid_r;
     assign m_wdata_o = m_awvalid_o ? store_data_i : 0;
     assign m_wstrb_o = m_awvalid_o ? mem_mask_i : 0;
-    assign m_bready_o = m_bready_r[E];
+    assign m_bready_o = m_bready_r;
     assign aw_fire = m_awvalid_o & m_awready_i;
     assign w_fire = m_wvalid_o & m_wready_i;
     assign b_fire = m_bvalid_i & m_bready_o;

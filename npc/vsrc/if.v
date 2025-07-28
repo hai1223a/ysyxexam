@@ -19,14 +19,13 @@ module ysyx_25050136_IF
          input      [DATA_WIDTH-1:0]    dynamic_npc_i,
          output     [DATA_WIDTH-1:0]     static_npc_o,
          output     [31:0]                     inst_o,
-         input                               bready_i,
-         output                              bvalid_o
+         input                               bready_i,  // 该信号有EX模块告知可以进行下一条指令了
+         output                              bvalid_o   // 该信号告诉后面的模块新指令来了
      );
-    localparam A = 7;
-    localparam B = 2;
+     
     reg [DATA_WIDTH-1:0] pc;
-    reg [A:0] m_arvalid_r;
-    reg [B:0] m_rready_r;
+    reg m_arvalid_r;
+    reg m_rready_r;
     reg [31:0] inst_r;
     wire ar_fire, r_fire;
     always @(posedge clk) begin
@@ -36,12 +35,10 @@ module ysyx_25050136_IF
         end
         else begin
             if(bready_i) begin
-                m_arvalid_r <= {m_arvalid_r[A-1:0], 1'd1};  
+                m_arvalid_r <= 1;
                 pc <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
             end else if(ar_fire) begin
-                m_arvalid_r <= {m_arvalid_r[A-1:0], 1'd0};  
-            end else begin
-                m_arvalid_r <= {m_arvalid_r[A-1:0], m_arvalid_r[0]};                
+                m_arvalid_r <= 0;
             end
         end
     end
@@ -51,9 +48,9 @@ module ysyx_25050136_IF
             m_rready_r <= 0;
         end else begin
             if(r_fire) begin
-                m_rready_r <= {m_rready_r[B-1:0], 1'd0};
+                m_rready_r <= 0;
             end else begin
-                m_rready_r <= {m_rready_r[B-1:0], 1'd1};
+                m_rready_r <= 1;
             end
         end
     end
@@ -70,9 +67,9 @@ module ysyx_25050136_IF
 
     assign static_npc_o = (pc == 0) ? 32'h80000000 : (pc + 32'h4);
     
-    assign m_arvalid_o = m_arvalid_r[A];
+    assign m_arvalid_o = m_arvalid_r;
     assign m_araddr_o = pc;
-    assign m_rready_o = m_rready_r[B];
+    assign m_rready_o = m_rready_r;
     assign bvalid_o = r_fire & (m_rresp_i == 2'd0);
     assign inst_o = (m_rdata_i == 0) ? inst_r : m_rdata_i;
     assign ar_fire = m_arvalid_o & m_arready_i;
