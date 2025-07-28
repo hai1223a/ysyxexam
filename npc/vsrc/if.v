@@ -39,6 +39,8 @@ module ysyx_25050136_IF
                 pc <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
             end else if(ar_fire) begin
                 m_arvalid_r <= {m_arvalid_r[2:0], 1'd0};
+            end else begin
+                m_arvalid_r <= {m_arvalid_r[2:0], m_arvalid_r[0]};                
             end
         end
     end
