@@ -25,7 +25,7 @@ module ysyx_25050136_IF
      
     reg [DATA_WIDTH-1:0] pc;
     reg [3:0] m_arvalid_r;
-    reg m_rready_r;
+    reg [3:0] m_rready_r;
     reg [31:0] inst_r;
     wire ar_fire, r_fire;
     always @(posedge clk) begin
@@ -50,9 +50,9 @@ module ysyx_25050136_IF
             m_rready_r <= 0;
         end else begin
             if(r_fire) begin
-                m_rready_r <= 0;
+                m_rready_r <= {m_rready_r[2:0], 1'd0};
             end else begin
-                m_rready_r <= 1;
+                m_rready_r <= {m_rready_r[2:0], 1'd1};
             end
         end
     end
