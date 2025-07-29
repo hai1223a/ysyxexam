@@ -38,21 +38,6 @@ module ysyx_25050136_LSU
          output     [DATA_WIDTH-1:0]        load_data_o,
          output                             mem_valid_o
      );
-    // LFSR for random delay
-    reg [7:0] lfsr;
-    wire lfsr_en;
-    initial lfsr = 8'h1;
-    assign lfsr_en = 1; // always enable in this test
-
-    always @(posedge clk) begin
-        if (!resetn)
-            lfsr <= 8'h1;
-        else if (lfsr_en)
-            lfsr <= {lfsr[6:0], lfsr[7] ^ lfsr[5] ^ lfsr[4] ^ lfsr[3]}; // x^8 + x^6 + x^5 + x^4 + 1
-    end
-
-    wire rand_bit = lfsr[0];
-
     // 读事务
     reg m_arvalid_r;
     reg m_rready_r;
@@ -109,13 +94,12 @@ module ysyx_25050136_LSU
         endcase
     end
     
-    // 用LFSR控制valid延迟
-    assign m_arvalid_o = ((fvalid_i & mem_ren_i) | m_arvalid_r) & rand_bit;
-    assign m_rready_o  = m_rready_r & rand_bit;
+    assign m_arvalid_o = (fvalid_i & mem_ren_i) | m_arvalid_r;
+    assign m_rready_o = m_rready_r;
     assign m_araddr_o = m_arvalid_o ? mem_addr_i : 0;
     assign load_data_o = load_data_r;
     assign ar_fire = m_arvalid_o & m_arready_i;
-    assign r_fire = m_rvalid_i & m_rready_o;
+    assign r_fire =m_rvalid_i & m_rready_o;
 
     // 写事务
     reg m_awvalid_r;
@@ -161,13 +145,12 @@ module ysyx_25050136_LSU
         end
     end
 
-    // 用LFSR控制valid/ready延迟
     assign m_awaddr_o = m_awvalid_o ? mem_addr_i : 0;
-    assign m_awvalid_o = ((fvalid_i & mem_wen_i) | m_awvalid_r) & rand_bit;
-    assign m_wvalid_o  = ((fvalid_i & mem_wen_i) | m_wvalid_r) & rand_bit;
+    assign m_awvalid_o = (fvalid_i & mem_wen_i) | m_awvalid_r;
+    assign m_wvalid_o = (fvalid_i & mem_wen_i) | m_wvalid_r;
     assign m_wdata_o = m_awvalid_o ? store_data_i : 0;
     assign m_wstrb_o = m_awvalid_o ? mem_mask_i : 0;
-    assign m_bready_o = m_bready_r & rand_bit;
+    assign m_bready_o = m_bready_r;
     assign aw_fire = m_awvalid_o & m_awready_i;
     assign w_fire = m_wvalid_o & m_wready_i;
     assign b_fire = m_bvalid_i & m_bready_o;

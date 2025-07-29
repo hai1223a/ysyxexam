@@ -11,8 +11,6 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___eval_static(Vysyx_25050136_SOC_
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
     vlSelfRef.__Vtrigprevexpr___TOP__clk__0 = vlSelfRef.clk;
-    vlSelfRef.__Vtrigprevexpr___TOP__ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT____Vcellinp__u_ysyx_25050136_IF__resetn__0 
-        = vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT____Vcellinp__u_ysyx_25050136_IF__resetn;
 }
 
 VL_ATTR_COLD void Vysyx_25050136_SOC___024root___eval_initial__TOP(Vysyx_25050136_SOC___024root* vlSelf);
@@ -75,21 +73,6 @@ VL_ATTR_COLD bool Vysyx_25050136_SOC___024root___eval_phase__stl(Vysyx_25050136_
 }
 
 #ifdef VL_DEBUG
-VL_ATTR_COLD void Vysyx_25050136_SOC___024root___dump_triggers__ico(Vysyx_25050136_SOC___024root* vlSelf) {
-    VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25050136_SOC___024root___dump_triggers__ico\n"); );
-    Vysyx_25050136_SOC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
-    auto& vlSelfRef = std::ref(*vlSelf).get();
-    // Body
-    if ((1U & (~ vlSelfRef.__VicoTriggered.any()))) {
-        VL_DBG_MSGF("         No triggers active\n");
-    }
-    if ((1ULL & vlSelfRef.__VicoTriggered.word(0U))) {
-        VL_DBG_MSGF("         'ico' region trigger index 0 is active: Internal 'ico' trigger - first iteration\n");
-    }
-}
-#endif  // VL_DEBUG
-
-#ifdef VL_DEBUG
 VL_ATTR_COLD void Vysyx_25050136_SOC___024root___dump_triggers__act(Vysyx_25050136_SOC___024root* vlSelf) {
     VL_DEBUG_IF(VL_DBG_MSGF("+    Vysyx_25050136_SOC___024root___dump_triggers__act\n"); );
     Vysyx_25050136_SOC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
@@ -100,9 +83,6 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___dump_triggers__act(Vysyx_250501
     }
     if ((1ULL & vlSelfRef.__VactTriggered.word(0U))) {
         VL_DBG_MSGF("         'act' region trigger index 0 is active: @(posedge clk)\n");
-    }
-    if ((2ULL & vlSelfRef.__VactTriggered.word(0U))) {
-        VL_DBG_MSGF("         'act' region trigger index 1 is active: @(negedge ysyx_25050136_SOC.u_ysyx_25050136_NPC.__Vcellinp__u_ysyx_25050136_IF__resetn)\n");
     }
 }
 #endif  // VL_DEBUG
@@ -119,9 +99,6 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___dump_triggers__nba(Vysyx_250501
     if ((1ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VL_DBG_MSGF("         'nba' region trigger index 0 is active: @(posedge clk)\n");
     }
-    if ((2ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
-        VL_DBG_MSGF("         'nba' region trigger index 1 is active: @(negedge ysyx_25050136_SOC.u_ysyx_25050136_NPC.__Vcellinp__u_ysyx_25050136_IF__resetn)\n");
-    }
 }
 #endif  // VL_DEBUG
 
@@ -132,7 +109,6 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root____Vm_traceActivitySetAll(Vysyx_2
     // Body
     vlSelfRef.__Vm_traceActivity[0U] = 1U;
     vlSelfRef.__Vm_traceActivity[1U] = 1U;
-    vlSelfRef.__Vm_traceActivity[2U] = 1U;
 }
 
 VL_ATTR_COLD void Vysyx_25050136_SOC___024root___ctor_var_reset(Vysyx_25050136_SOC___024root* vlSelf) {
@@ -159,7 +135,6 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___ctor_var_reset(Vysyx_25050136_S
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__id2if_fready_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__id2ex_mem_mask_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__ex2if_pc_updata_o = 0;
-    vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT____Vcellinp__u_ysyx_25050136_IF__resetn = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__m_awvalid_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__m_awaddr_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__m_wvalid_o = 0;
@@ -266,8 +241,7 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___ctor_var_reset(Vysyx_25050136_S
     vlSelf->__Vfunc_pmem_read__1__Vfuncout = 0;
     vlSelf->__Vfunc_pmem_read__3__Vfuncout = 0;
     vlSelf->__Vtrigprevexpr___TOP__clk__0 = 0;
-    vlSelf->__Vtrigprevexpr___TOP__ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT____Vcellinp__u_ysyx_25050136_IF__resetn__0 = 0;
-    for (int __Vi0 = 0; __Vi0 < 3; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = 0;
     }
 }

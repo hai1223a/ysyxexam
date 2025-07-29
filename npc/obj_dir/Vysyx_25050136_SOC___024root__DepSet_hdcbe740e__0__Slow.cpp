@@ -80,8 +80,6 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___stl_sequent__TOP__0(Vysyx_25050
     Vysyx_25050136_SOC__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
-    vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT____Vcellinp__u_ysyx_25050136_IF__resetn 
-        = (1U & (~ (IData)(vlSelfRef.reset)));
     if ((3U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__wstatu))) {
         Vysyx_25050136_SOC___024unit____Vdpiimwrap_pmem_write_TOP____024unit(vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_awaddr_r, vlSelfRef.ysyx_25050136_SOC__DOT__u_ROM__DOT__s_wdata_r, 
                                                                              ((((- (IData)(
