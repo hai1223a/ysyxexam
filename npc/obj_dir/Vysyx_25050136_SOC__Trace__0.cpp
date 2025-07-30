@@ -137,9 +137,7 @@ void Vysyx_25050136_SOC___024root__trace_chg_0_sub_0(Vysyx_25050136_SOC___024roo
                                             : 0U) << 4U) 
                                          >> (7U & VL_SHIFTL_III(3,3,32, (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_id), 2U))))),4);
         bufp->chgBit(oldp+50,(vlSelfRef.ysyx_25050136_SOC__DOT__m_bvalid_i));
-        bufp->chgBit(oldp+51,((0U != ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_master) 
-                                      & ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_bready_r) 
-                                         << 1U)))));
+        bufp->chgBit(oldp+51,(vlSelfRef.ysyx_25050136_SOC__DOT__m_bready_o));
         bufp->chgBit(oldp+52,((0U != ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_master) 
                                       & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__s_arvalid_i)))));
         bufp->chgBit(oldp+53,(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_arready_r));
@@ -152,18 +150,13 @@ void Vysyx_25050136_SOC___024root__trace_chg_0_sub_0(Vysyx_25050136_SOC___024roo
                                          >> (0x3fU 
                                              & VL_SHIFTL_III(6,6,32, (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_id), 5U))))),32);
         bufp->chgBit(oldp+55,(vlSelfRef.ysyx_25050136_SOC__DOT__m_rvalid_i));
-        bufp->chgBit(oldp+56,((0U != ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_master) 
-                                      & (((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_rready_r) 
-                                          << 1U) | (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__m_rready_r))))));
+        bufp->chgBit(oldp+56,(vlSelfRef.ysyx_25050136_SOC__DOT__m_rready_o));
         bufp->chgIData(oldp+57,(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_rdata_r),32);
         bufp->chgIData(oldp+58,(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_araddr_r),32);
         bufp->chgBit(oldp+59,(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_rvalid_r));
         bufp->chgBit(oldp+60,(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__ar_fire));
         bufp->chgBit(oldp+61,(((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__m_rvalid_i) 
-                               & (0U != ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_master) 
-                                         & (((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_rready_r) 
-                                             << 1U) 
-                                            | (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__m_rready_r)))))));
+                               & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__m_rready_o))));
         bufp->chgCData(oldp+62,(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay),5);
         bufp->chgBit(oldp+63,(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_bvalid_r));
         bufp->chgIData(oldp+64,(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_awaddr_r),32);
@@ -190,9 +183,7 @@ void Vysyx_25050136_SOC___024root__trace_chg_0_sub_0(Vysyx_25050136_SOC___024roo
         bufp->chgBit(oldp+69,(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__aw_fire));
         bufp->chgBit(oldp+70,(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__w_fire));
         bufp->chgBit(oldp+71,(((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__m_bvalid_i) 
-                               & (0U != ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_master) 
-                                         & ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_bready_r) 
-                                            << 1U))))));
+                               & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__m_bready_o))));
         bufp->chgCData(oldp+72,(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_master),2);
         bufp->chgCData(oldp+73,(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_id),2);
         bufp->chgCData(oldp+74,(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__master_grand),2);
