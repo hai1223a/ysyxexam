@@ -134,7 +134,7 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___stl_sequent__TOP__0(Vysyx_25050
         = ((0U == vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc)
             ? 0x80000000U : ((IData)(4U) + vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc));
     vlSelfRef.ysyx_25050136_SOC__DOT__m_rvalid_i = 
-        ((3U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay)) 
+        ((1U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay)) 
          | (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_rvalid_r));
     vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__ar_fire 
         = ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__inst_arready_i) 

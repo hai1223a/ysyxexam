@@ -210,7 +210,7 @@ VL_INLINE_OPT void Vysyx_25050136_SOC___024root___nba_sequent__TOP__0(Vysyx_2505
         if (((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__ar_fire) 
              | (0U != (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay)))) {
             __Vdly__ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay 
-                = ((3U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay))
+                = ((1U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay))
                     ? 0U : (0x1fU & ((IData)(1U) + (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay))));
         }
         if (vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__id2if_fready_o) {
@@ -288,7 +288,7 @@ VL_INLINE_OPT void Vysyx_25050136_SOC___024root___nba_sequent__TOP__0(Vysyx_2505
         if (((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__m_rvalid_i) 
              & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__m_rready_o))) {
             vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_rvalid_r = 0U;
-        } else if ((3U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay))) {
+        } else if ((1U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay))) {
             vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_rvalid_r = 1U;
         }
         vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay 
@@ -373,7 +373,7 @@ VL_INLINE_OPT void Vysyx_25050136_SOC___024root___nba_sequent__TOP__0(Vysyx_2505
         ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_bvalid_r) 
          | (3U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__wstatu)));
     vlSelfRef.ysyx_25050136_SOC__DOT__m_rvalid_i = 
-        ((3U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay)) 
+        ((1U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay)) 
          | (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_rvalid_r));
     vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_master 
         = __Vdly__ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_master;
