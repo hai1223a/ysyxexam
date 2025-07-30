@@ -5,7 +5,6 @@ module ysyx_25050136_SOC(
     localparam TOP_ADDR_WIDTH   = 5 ;
     localparam TOP_DATA_WIDTH   = 32;
     localparam TOP_MASTER_NUM   = 2 ;
-    localparam TOP_SLAVER_NUM   = 1 ;
 
     // 主设备信号        
     wire                                inst_arvalid_o ;

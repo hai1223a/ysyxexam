@@ -70,7 +70,7 @@ module ysyx_25050136_ARBITER
         master_id = 0;
         for (integer i = 0; i < MASTER_NUM; i = i + 1) begin
             if(request[i]) begin
-                master_id = i;
+                master_id = i[MASTER_NUM-1:0];
                 master_grand[i] = 1'b1;
                 break; 
             end
