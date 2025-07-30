@@ -29,16 +29,17 @@ void cpu_exec_once()
     // 推动仿真进行
     sim_time++;
     // 指令计算
-    if (SOC_PC != pc__ )
-    {
-      pc_pre = pc__;
-      pc__ = SOC_PC;
-      if((sim_time >= (reset_time + stop_time)) & pc__ != RESET_VECTOR) {
-        inst_pre = *(uint32_t *)(pmem + pc_pre - CONFIG_MBASE);
-        inst_count++;
-        break;
-      }
-    }
+    break;
+    // if (SOC_PC != pc__ )
+    // {
+    //   pc_pre = pc__;
+    //   pc__ = SOC_PC;
+    //   if((sim_time >= (reset_time + stop_time)) & pc__ != RESET_VECTOR) {
+    //     inst_pre = *(uint32_t *)(pmem + pc_pre - CONFIG_MBASE);
+    //     inst_count++;
+    //     break;
+    //   }
+    // }
   }
 }
 
