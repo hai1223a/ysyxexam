@@ -105,7 +105,9 @@ void Vysyx_25050136_SOC___024root__trace_chg_0_sub_0(Vysyx_25050136_SOC___024roo
                                   << 1U) | (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__m_rready_r))),2);
         bufp->chgQData(oldp+41,((((QData)((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mem_rdata_i)) 
                                   << 0x20U) | (QData)((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__inst_rdata_i)))),64);
-        bufp->chgBit(oldp+43,(vlSelfRef.ysyx_25050136_SOC__DOT__m_awvalid_o));
+        bufp->chgBit(oldp+43,((0U != ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_master) 
+                                      & ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mem_awvalid_o) 
+                                         << 1U)))));
         bufp->chgBit(oldp+44,(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_awready_r));
         bufp->chgIData(oldp+45,((IData)((((QData)((IData)(
                                                           ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mem_awvalid_o)
@@ -138,7 +140,8 @@ void Vysyx_25050136_SOC___024root__trace_chg_0_sub_0(Vysyx_25050136_SOC___024roo
         bufp->chgBit(oldp+51,((0U != ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_master) 
                                       & ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_bready_r) 
                                          << 1U)))));
-        bufp->chgBit(oldp+52,(vlSelfRef.ysyx_25050136_SOC__DOT__m_arvalid_o));
+        bufp->chgBit(oldp+52,((0U != ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_master) 
+                                      & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__s_arvalid_i)))));
         bufp->chgBit(oldp+53,(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_arready_r));
         bufp->chgIData(oldp+54,((IData)(((((QData)((IData)(
                                                            ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mem_arvalid_o)

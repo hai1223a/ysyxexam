@@ -773,7 +773,9 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root__trace_full_0_sub_0(Vysyx_2505013
                                << 1U) | (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__m_rready_r))),2);
     bufp->fullQData(oldp+42,((((QData)((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mem_rdata_i)) 
                                << 0x20U) | (QData)((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__inst_rdata_i)))),64);
-    bufp->fullBit(oldp+44,(vlSelfRef.ysyx_25050136_SOC__DOT__m_awvalid_o));
+    bufp->fullBit(oldp+44,((0U != ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_master) 
+                                   & ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mem_awvalid_o) 
+                                      << 1U)))));
     bufp->fullBit(oldp+45,(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_awready_r));
     bufp->fullIData(oldp+46,((IData)((((QData)((IData)(
                                                        ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mem_awvalid_o)
@@ -804,7 +806,8 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root__trace_full_0_sub_0(Vysyx_2505013
     bufp->fullBit(oldp+52,((0U != ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_master) 
                                    & ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_bready_r) 
                                       << 1U)))));
-    bufp->fullBit(oldp+53,(vlSelfRef.ysyx_25050136_SOC__DOT__m_arvalid_o));
+    bufp->fullBit(oldp+53,((0U != ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_master) 
+                                   & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__s_arvalid_i)))));
     bufp->fullBit(oldp+54,(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_arready_r));
     bufp->fullIData(oldp+55,((IData)(((((QData)((IData)(
                                                         ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__mem_arvalid_o)
