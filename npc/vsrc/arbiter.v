@@ -82,8 +82,12 @@ module ysyx_25050136_ARBITER
             current_master <= 0;
             current_id <= 0;
         end else begin
-            current_id <= master_id;
-            current_master <= master_grand;
+            if(current_master == 0 || 
+            (m_bvalid_i && m_bready_o) || 
+            (m_rvalid_i && m_rready_o)) begin
+                current_id <= master_id;
+                current_master <= master_grand;
+            end
         end
     end
 
