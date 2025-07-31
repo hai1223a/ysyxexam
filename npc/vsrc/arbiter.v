@@ -199,13 +199,13 @@ module ysyx_25050136_ARBITER
     assign t_wready = |(m_wready_i & current_slaver);
     // 写响应
     assign t_bvalid = |(m_bvalid_i & current_slaver);
-    assign t_bresp = (current_slaver != 0) ? m_bresp_i[current_slaver_id * 2 +: 2] : 2'b11';
+    assign t_bresp = (current_slaver != 0) ? m_bresp_i[current_slaver_id * 2 +: 2] : 2'b11;
     // 读地址
     assign t_arready = |(m_arready_i & current_slaver);
     // 读数据
     assign t_rvalid = |(m_rvalid_i & current_slaver);
     assign t_rdata = m_rdata_i[current_slaver_id * DATA_WIDTH +: DATA_WIDTH];
-    assign t_rresp = (current_slaver != 0) ? m_rresp_i[current_slaver_id * 2 +: 2] : 2'b11';
+    assign t_rresp = (current_slaver != 0) ? m_rresp_i[current_slaver_id * 2 +: 2] : 2'b11;
 
     genvar j;
     generate
