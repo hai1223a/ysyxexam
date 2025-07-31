@@ -180,7 +180,7 @@ localparam RAM_DELAY = 1;
 
     always @(*) begin
         if(wstatu == GOOD) begin
-            if(s_awaddr_r == 32'ha00003f8 && wstrb_full == 32'hffffffff)
+            if(s_awaddr_r == 32'ha00003f8 && wstrb_full == 32'hff)
                 $write("%c",s_wdata_r[7:0]);
         end
     end
