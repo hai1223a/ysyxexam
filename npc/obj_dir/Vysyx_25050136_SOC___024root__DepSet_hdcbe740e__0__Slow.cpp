@@ -108,27 +108,27 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___stl_sequent__TOP__0(Vysyx_25050
     }
     if ((3U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_UART__DOT__wstatu))) {
         if (VL_UNLIKELY((((0xa00003f8U == vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_UART__DOT__s_awaddr_r) 
-                          & (0xffffffffU == ((((- (IData)(
+                          & (0xffU == ((((- (IData)(
+                                                    (1U 
+                                                     & ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_UART__DOT__s_wstrb_r) 
+                                                        >> 3U)))) 
+                                         << 0x18U) 
+                                        | (0xff0000U 
+                                           & ((- (IData)(
+                                                         (1U 
+                                                          & ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_UART__DOT__s_wstrb_r) 
+                                                             >> 2U)))) 
+                                              << 0x10U))) 
+                                       | ((0xff00U 
+                                           & ((- (IData)(
+                                                         (1U 
+                                                          & ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_UART__DOT__s_wstrb_r) 
+                                                             >> 1U)))) 
+                                              << 8U)) 
+                                          | (0xffU 
+                                             & (- (IData)(
                                                           (1U 
-                                                           & ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_UART__DOT__s_wstrb_r) 
-                                                              >> 3U)))) 
-                                               << 0x18U) 
-                                              | (0xff0000U 
-                                                 & ((- (IData)(
-                                                               (1U 
-                                                                & ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_UART__DOT__s_wstrb_r) 
-                                                                   >> 2U)))) 
-                                                    << 0x10U))) 
-                                             | ((0xff00U 
-                                                 & ((- (IData)(
-                                                               (1U 
-                                                                & ((IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_UART__DOT__s_wstrb_r) 
-                                                                   >> 1U)))) 
-                                                    << 8U)) 
-                                                | (0xffU 
-                                                   & (- (IData)(
-                                                                (1U 
-                                                                 & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_UART__DOT__s_wstrb_r)))))))))))) {
+                                                           & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_UART__DOT__s_wstrb_r)))))))))))) {
             VL_WRITEF_NX("%c",0,8,(0xffU & vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_UART__DOT__s_wdata_r));
         }
     }
