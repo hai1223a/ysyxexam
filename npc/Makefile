@@ -63,7 +63,7 @@ wave: run
 
 clean:
 	rm -rf obj_dir
-	rm *.fst
+	rm -f *.fst
 
 .PHONY: run sim exe wave clean
 include ../Makefile

@@ -79,6 +79,7 @@ module ysyx_25050136_CSR_File
     end
     // 读寄存器
     always @(*) begin
+        csr_rdata_o = 0;
         if(csr_ren_i)
         case (csr_raddr_i)
             MEPC   :
@@ -89,8 +90,6 @@ module ysyx_25050136_CSR_File
                 csr_rdata_o = mtvec;
             MSTATUS:
                 csr_rdata_o = mstatus;
-            default:
-                csr_rdata_o = 0;
         endcase
     end
 endmodule

@@ -1,6 +1,4 @@
-import "DPI-C" function int pmem_read(input int raddr);
-import "DPI-C" function void pmem_write(input int waddr, input int wdata, input int wmask);
-module ysyx_25050136_SRAM
+module ysyx_25050136_UART
     #(
          ADDR_WIDTH = 32,
          DATA_WIDTH = 32
@@ -32,7 +30,8 @@ module ysyx_25050136_SRAM
          output     [DATA_WIDTH-1:0]    s_rdata_o,
          output     [1:0]               s_rresp_o 
      );
-    localparam RAM_DELAY = 1;
+    
+localparam RAM_DELAY = 1;
     // 读事务
     reg [ADDR_WIDTH-1:0] s_araddr_r;
     reg s_arready_r;
@@ -81,14 +80,14 @@ module ysyx_25050136_SRAM
     end
     always @(*) begin
         if(s_rvalid_o) begin
-            s_rdata_r = pmem_read(s_araddr_r);
+            s_rdata_r = 0;
         end else begin
             s_rdata_r = 0;
         end
     end
     assign s_arready_o = s_arready_r;
     assign s_rvalid_o = (count_delay == RAM_DELAY) | s_rvalid_r;
-    assign s_rresp_o = 0;
+    assign s_rresp_o = 2'b10;
     assign s_rdata_o = s_rdata_r;
     assign ar_fire = s_arvalid_i & s_arready_o;
     assign r_fire = s_rvalid_o & s_rready_i;
@@ -181,7 +180,8 @@ module ysyx_25050136_SRAM
 
     always @(*) begin
         if(wstatu == GOOD) begin
-            pmem_write(s_awaddr_r, s_wdata_r, wstrb_full);
+            if(s_awaddr_r == 32'ha00003f8 && wstrb_full == 32'hffffffff)
+                $write("%c",s_wdata_r);
         end
     end
     assign wstrb_full = {{8{s_wstrb_r[3]}}, {8{s_wstrb_r[2]}}, {8{s_wstrb_r[1]}}, {8{s_wstrb_r[0]}}};
@@ -192,4 +192,4 @@ module ysyx_25050136_SRAM
     assign aw_fire = s_awvalid_i & s_awready_o;
     assign w_fire = s_wvalid_i & s_wready_o;
     assign b_fire = s_bvalid_o & s_bready_i;
-endmodule
+endmodule //ysyx_25050136_UART

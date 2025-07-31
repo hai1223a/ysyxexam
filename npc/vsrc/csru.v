@@ -1,4 +1,5 @@
 // CSR读写单元
+`include "../vsrc/config.v"
 module ysyx_25050136_CSRU
     #(
          DATA_WIDTH = 32
