@@ -210,14 +210,14 @@ module ysyx_25050136_ARBITER
     genvar j;
     generate
         for(j = 0; j < SLAVER_NUM; j = j + 1) begin
-            assign m_awvalid_o[j] = t_awvlid & current_salver[j];
+            assign m_awvalid_o[j] = t_awvalid & current_slaver[j];
             assign m_awaddr_o[j*ADDR_WIDTH+:ADDR_WIDTH] = current_slaver[j] ? t_awaddr : 0;
             assign m_wvalid_o[j] = t_wvalid & current_slaver[j];
             assign m_wdata_o[j*DATA_WIDTH+:DATA_WIDTH] = current_slaver[j] ? t_wdata : 0;
             assign m_wstrb_o[j*4+:4] = current_slaver[j] ? t_wstrb : 0;
             assign m_bready_o[j] = t_bready & current_slaver[j];
             assign m_arvalid_o[j] = t_arvalid & current_slaver[j];
-            assign m_araddr[j*ADDR_WIDTH+:ADDR_WIDTH] = current_slaver[j] ? t_araddr : 0;
+            assign m_araddr_o[j*ADDR_WIDTH+:ADDR_WIDTH] = current_slaver[j] ? t_araddr : 0;
             assign m_rready_o[j] = t_rready & current_slaver[j];
         end
     endgenerate
