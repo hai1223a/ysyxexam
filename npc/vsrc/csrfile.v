@@ -90,6 +90,7 @@ module ysyx_25050136_CSR_File
                 csr_rdata_o = mtvec;
             MSTATUS:
                 csr_rdata_o = mstatus;
+            default:;
         endcase
     end
 endmodule
