@@ -71,7 +71,7 @@ module ysyx_25050136_ARBITER
     wire                    t_wready;
     wire [DATA_WIDTH-1:0]   t_wdata;
     wire [3:0]              t_wstrb;
-    wire                    t_bvalid_;i;
+    wire                    t_bvalid;
     wire                    t_bready;
     wire [1:0]              t_bresp;
     wire                    t_arvalid;;
