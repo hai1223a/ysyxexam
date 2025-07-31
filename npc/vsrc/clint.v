@@ -197,7 +197,7 @@ module ysyx_25050136_CLINT
     assign s_awready_o = s_awready_r;
     assign s_wready_o = s_wready_r;
     assign s_bvalid_o = s_bvalid_r | (wstatu == GOOD);
-    assign s_bresp_o = 2'b10';
+    assign s_bresp_o = 2'b10;
     assign aw_fire = s_awvalid_i & s_awready_o;
     assign w_fire = s_wvalid_i & s_wready_o;
     assign b_fire = s_bvalid_o & s_bready_i;
