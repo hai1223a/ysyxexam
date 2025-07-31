@@ -595,7 +595,7 @@ VL_INLINE_OPT void Vysyx_25050136_SOC___024root___nba_sequent__TOP__0(Vysyx_2505
                                                    & (- (IData)(
                                                                 (1U 
                                                                  & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_UART__DOT__s_wstrb_r)))))))))))) {
-            VL_WRITEF_NX("%c",0,32,vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_UART__DOT__s_wdata_r);
+            VL_WRITEF_NX("%c",0,8,(0xffU & vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_UART__DOT__s_wdata_r));
         }
     }
     vlSelfRef.ysyx_25050136_SOC__DOT__uart_bvalid_o 
