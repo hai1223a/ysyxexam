@@ -28,50 +28,52 @@ module ysyx_25050136_IF
     reg m_rready_r;
     reg [31:0] inst_r;
     wire ar_fire, r_fire;
+    localparam READ_IEDL = 2'd0;
+    localparam READ_ADDR = 2'd1;
+    localparam READ_DATA = 2'd2;
+    localparam RESET_PC  = 32'h80000000;
+
+    reg [1:0] state_read;
     always @(posedge clk) begin
-        if(!resetn) begin
-            m_arvalid_r <= 0;
-            pc <= 0;
-        end
-        else begin
-            if(bready_i) begin
-                m_arvalid_r <= 1;
-                pc <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
-            end else if(ar_fire) begin
-                m_arvalid_r <= 0;
-            end
-        end
-    end
-    
-    always @(posedge clk) begin
-        if(!resetn) begin
-            m_rready_r <= 0;
+        if (!resetn) begin
+            state_read   <= READ_IEDL;
+            m_arvalid_r  <= 0;
+            pc           <= 0;
+            m_rready_r   <= 0;
+            inst_r       <= 0;
         end else begin
-            if(r_fire) begin
-                m_rready_r <= 0;
-            end else begin
-                m_rready_r <= 1;
-            end
+            case (state_read)
+                READ_IEDL: begin
+                    m_rready_r <= 1;
+                    if (bready_i) begin
+                        state_read <= READ_ADDR;
+                        pc <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
+                    end
+                end 
+                READ_ADDR: begin
+                    m_rready_r <= 1;
+                    if (ar_fire) begin
+                        state_read <= READ_DATA;                        
+                    end
+                end 
+                READ_DATA: begin
+                    if (r_fire) begin
+                        inst_r     <= m_rdata_i; 
+                        m_rready_r <= 0;
+                        state_read <= READ_IEDL;
+                    end
+                end 
+                default: ;
+            endcase
         end
     end
 
-    always @(posedge clk) begin
-        if(!resetn) begin
-            inst_r <= 0;
-        end else begin
-            if(r_fire) begin
-                inst_r <= m_rdata_i;
-            end
-        end
-    end
-
-    assign static_npc_o = (pc == 0) ? 32'h80000000 : (pc + 32'h4);
-    
-    assign m_arvalid_o = m_arvalid_r;
-    assign m_araddr_o = pc;
+    assign m_arvalid_o = (state_read == READ_ADDR);
+    assign m_araddr_o  = pc;
     assign m_rready_o = m_rready_r;
-    assign bvalid_o = r_fire & (m_rresp_i == 2'd0);
-    assign inst_o = (m_rdata_i == 0) ? inst_r : m_rdata_i;
+    assign static_npc_o = (pc == 0) ? RESET_PC : (pc + 32'h4);
+    assign bvalid_o = (state_read == READ_DATA) && r_fire & (m_rresp_i == 2'd0);
+    assign inst_o = (state_read == READ_DATA) ? m_rdata_i : inst_r;
     assign ar_fire = m_arvalid_o & m_arready_i;
     assign r_fire = m_rvalid_i & m_rready_o;
 

@@ -482,7 +482,7 @@ VL_INLINE_OPT void Vysyx_25050136_SOC___024root___nba_sequent__TOP__0(Vysyx_2505
             __Vdly__ysyx_25050136_SOC__DOT__u_SRAM__DOT__r_state = 1U;
         }
     } else if ((1U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__r_state))) {
-        if ((1U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay))) {
+        if ((0U == (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay))) {
             Vysyx_25050136_SOC___024unit____Vdpiimwrap_pmem_read_TOP____024unit(vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_araddr_r, __Vfunc_pmem_read__1__Vfuncout);
             vlSelfRef.ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_rdata_r 
                 = __Vfunc_pmem_read__1__Vfuncout;
