@@ -71,6 +71,9 @@ always @(posedge aclk) begin
                     r_state <= R_IDLE;
                 end
             end
+            default: begin
+                r_state <= R_IDLE;
+            end
         endcase
     end
 end

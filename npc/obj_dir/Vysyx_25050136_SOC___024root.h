@@ -36,7 +36,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_SOC___024root final : public V
         CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_rvalid_i;
         CData/*1:0*/ ysyx_25050136_SOC__DOT__mem_rresp_i;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__sram_bvalid_o;
-        CData/*0:0*/ ysyx_25050136_SOC__DOT__sram_rvalid_o;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__uart_bvalid_o;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__uart_rvalid_o;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__clint_bvalid_o;
@@ -83,9 +82,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_SOC___024root final : public V
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__fready_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_arvalid_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_rready_r;
+        CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__r_fire;
     };
     struct {
-        CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__r_fire;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_awvalid_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_wvalid_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_bready_r;
@@ -120,9 +119,7 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_SOC___024root final : public V
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT____VdfgExtracted_h31d61774__0;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT____VdfgExtracted_hc2e645a5__0;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT____VdfgExtracted_h5ad72db1__0;
-        CData/*0:0*/ ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_arready_r;
-        CData/*0:0*/ ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_rvalid_r;
-        CData/*0:0*/ ysyx_25050136_SOC__DOT__u_SRAM__DOT__ar_fire;
+        CData/*1:0*/ ysyx_25050136_SOC__DOT__u_SRAM__DOT__r_state;
         CData/*4:0*/ ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_awready_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_wready_r;
@@ -149,11 +146,11 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_SOC___024root final : public V
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__s_awready_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__s_wready_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__s_bvalid_r;
-    };
-    struct {
         CData/*3:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__s_wstrb_r;
         CData/*1:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__wstatu;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__aw_fire;
+    };
+    struct {
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__w_fire;
         CData/*0:0*/ __VdfgRegularize_hd87f99a1_1_0;
         CData/*0:0*/ __VstlFirstIteration;
@@ -206,7 +203,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_SOC___024root final : public V
         IData/*31:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__s_araddr_r;
         IData/*31:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__s_awaddr_r;
         IData/*31:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__s_wdata_r;
-        IData/*31:0*/ __Vfunc_pmem_read__1__Vfuncout;
         IData/*31:0*/ __VactIterCount;
         QData/*63:0*/ ysyx_25050136_SOC__DOT__s_araddr_i;
         QData/*32:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add;
