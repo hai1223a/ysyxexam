@@ -110,19 +110,17 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___ctor_var_reset(Vysyx_25050136_S
     vlSelf->ysyx_25050136_SOC__DOT__inst_rvalid_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__inst_rdata_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__inst_rresp_i = 0;
+    vlSelf->ysyx_25050136_SOC__DOT__mem_awvalid_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_bvalid_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_bresp_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_arready_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_rvalid_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_rdata_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_rresp_i = 0;
-    vlSelf->ysyx_25050136_SOC__DOT__sram_awvalid_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__sram_bvalid_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__sram_rvalid_o = 0;
-    vlSelf->ysyx_25050136_SOC__DOT__uart_awvalid_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__uart_bvalid_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__uart_rvalid_o = 0;
-    vlSelf->ysyx_25050136_SOC__DOT__clint_awvalid_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__clint_bvalid_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__clint_rvalid_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__if2id_static_npc_o = 0;
@@ -188,8 +186,11 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___ctor_var_reset(Vysyx_25050136_S
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__ar_fire = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__r_fire = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_bready_r = 0;
+    vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__aw_en = 0;
+    vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__w_en = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__state_write = 0;
-    vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__b_fire = 0;
+    vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__aw_fire = 0;
+    vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__w_fire = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_BQU__DOT__result_add = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__csr_wdata1 = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__csr_wdata2 = 0;
@@ -212,6 +213,7 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___ctor_var_reset(Vysyx_25050136_S
     }
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__t_awvalid = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__t_awaddr = 0;
+    vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__t_wvalid = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__t_wdata = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__t_wstrb = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__t_bvalid = 0;
