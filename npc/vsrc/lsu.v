@@ -139,7 +139,8 @@ module ysyx_25050136_LSU
     assign m_wvalid_o  = (state_write == WRITE_RUNNING);
     assign m_wdata_o   = store_data_i;
     assign m_wstrb_o   = mem_mask_i;
-    assign b_fire      = m_bvalid_i & m_bready_o;    
+    assign m_bready_o  = m_bready_r;    
+    assign b_fire      = m_bvalid_i & m_bready_o;
     // 内部
     assign mem_valid_o = (r_fire & (m_rresp_i == 0)) | (b_fire & (m_bresp_i == 0));
  endmodule
