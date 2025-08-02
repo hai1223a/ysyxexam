@@ -24,7 +24,6 @@ module ysyx_25050136_IF
      );
      
     reg [DATA_WIDTH-1:0] pc;
-    reg m_arvalid_r;
     reg m_rready_r;
     reg [31:0] inst_r;
     wire ar_fire, r_fire;
@@ -37,7 +36,6 @@ module ysyx_25050136_IF
     always @(posedge clk) begin
         if (!resetn) begin
             state_read   <= READ_IEDL;
-            m_arvalid_r  <= 0;
             pc           <= 0;
             m_rready_r   <= 0;
             inst_r       <= 0;

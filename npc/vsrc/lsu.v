@@ -53,7 +53,6 @@ module ysyx_25050136_LSU
             state_read   <= READ_IEDL;
             m_arvalid_r  <= 0;
             m_rready_r   <= 0;
-            inst_r       <= 0;
         end else begin
             case (state_read)
                 READ_IEDL: begin
