@@ -32,7 +32,7 @@ module ysyx_25050136_SRAM
          output     [DATA_WIDTH-1:0]    s_rdata_o,
          output     [1:0]               s_rresp_o 
      );
-    localparam RAM_DELAY = 1;
+    localparam RAM_DELAY = 0;
     // 读事务
 localparam R_IDLE = 2'd0;
 localparam R_WAIT = 2'd1;

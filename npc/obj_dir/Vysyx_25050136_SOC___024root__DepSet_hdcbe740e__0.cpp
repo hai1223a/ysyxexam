@@ -496,6 +496,8 @@ VL_INLINE_OPT void Vysyx_25050136_SOC___024root___nba_sequent__TOP__0(Vysyx_2505
              & (IData)(vlSelfRef.ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver))) {
             __Vdly__ysyx_25050136_SOC__DOT__u_SRAM__DOT__r_state = 0U;
         }
+    } else {
+        __Vdly__ysyx_25050136_SOC__DOT__u_SRAM__DOT__r_state = 0U;
     }
     if (vlSelfRef.reset) {
         __Vdly__ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT__current_master = 0U;
