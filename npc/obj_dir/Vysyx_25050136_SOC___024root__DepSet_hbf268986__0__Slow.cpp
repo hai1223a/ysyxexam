@@ -123,6 +123,7 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___ctor_var_reset(Vysyx_25050136_S
     vlSelf->ysyx_25050136_SOC__DOT__mem_rdata_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_rresp_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__sram_bvalid_o = 0;
+    vlSelf->ysyx_25050136_SOC__DOT__sram_rvalid_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__uart_bvalid_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__uart_rvalid_o = 0;
     vlSelf->ysyx_25050136_SOC__DOT__clint_bvalid_o = 0;
@@ -160,6 +161,7 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___ctor_var_reset(Vysyx_25050136_S
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__inst_r = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__ar_fire = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__r_fire = 0;
+    vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__state_read = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_ID__DOT__inst_lbu = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_ID__DOT__inst_lhu = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_ID__DOT__inst_srai = 0;
@@ -242,9 +244,11 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___ctor_var_reset(Vysyx_25050136_S
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT____VdfgExtracted_h31d61774__0 = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT____VdfgExtracted_hc2e645a5__0 = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_ARBITER__DOT____VdfgExtracted_h5ad72db1__0 = 0;
-    vlSelf->ysyx_25050136_SOC__DOT__u_SRAM__DOT__r_state = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_araddr_r = 0;
+    vlSelf->ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_arready_r = 0;
+    vlSelf->ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_rvalid_r = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_rdata_r = 0;
+    vlSelf->ysyx_25050136_SOC__DOT__u_SRAM__DOT__ar_fire = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_SRAM__DOT__count_delay = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_awready_r = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_SRAM__DOT__s_wready_r = 0;
@@ -285,6 +289,7 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___ctor_var_reset(Vysyx_25050136_S
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__aw_fire = 0;
     vlSelf->ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__w_fire = 0;
     vlSelf->__VdfgRegularize_hd87f99a1_1_0 = 0;
+    vlSelf->__Vfunc_pmem_read__1__Vfuncout = 0;
     vlSelf->__Vtrigprevexpr___TOP__clk__0 = 0;
     for (int __Vi0 = 0; __Vi0 < 2; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = 0;
