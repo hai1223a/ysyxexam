@@ -34,64 +34,51 @@ module ysyx_25050136_SRAM
      );
     localparam RAM_DELAY = 1;
     // 读事务
-    reg [ADDR_WIDTH-1:0] s_araddr_r;
-    reg s_arready_r;
-    reg s_rvalid_r;
-    reg [DATA_WIDTH-1:0] s_rdata_r;
-    wire ar_fire, r_fire;
-    always @(posedge aclk) begin
-        if(!aresetn) begin
-            s_arready_r <= 0;
-            s_araddr_r <= 0;
-        end else begin
-            if(ar_fire) begin
-                s_araddr_r <= s_araddr_i;
-                s_arready_r <= 0;
-            end else begin
-                s_arready_r <= 1;
-            end
-        end
-    end
+localparam R_IDLE = 2'd0;
+localparam R_WAIT = 2'd1;
+localparam R_RESP = 2'd2;
 
-    reg [4:0] count_delay;
-    always @(posedge aclk) begin
-        if(!aresetn) begin
-            count_delay <= 0;
-        end else begin
-            if(ar_fire | (|count_delay)) begin
-                if(count_delay == RAM_DELAY) begin
+reg [1:0] r_state;
+reg [ADDR_WIDTH-1:0] s_araddr_r;
+reg [DATA_WIDTH-1:0] s_rdata_r;
+reg [4:0] count_delay;
+
+always @(posedge aclk) begin
+    if (!aresetn) begin
+        r_state     <= R_IDLE;
+        s_araddr_r  <= 0;
+        s_rdata_r   <= 0;
+        count_delay <= 0;
+    end else begin
+        case (r_state)
+            R_IDLE: begin
+                if (s_arvalid_i) begin
+                    s_araddr_r  <= s_araddr_i;
                     count_delay <= 0;
+                    r_state     <= R_WAIT;
+                end
+            end
+            R_WAIT: begin
+                if (count_delay == RAM_DELAY) begin
+                    s_rdata_r <= pmem_read(s_araddr_r);
+                    r_state   <= R_RESP;
                 end else begin
                     count_delay <= count_delay + 1;
                 end
             end
-        end
-    end
-
-    always @(posedge aclk) begin
-        if(!aresetn) begin
-            s_rvalid_r <= 0;
-        end else begin
-            if(r_fire) begin
-                s_rvalid_r <= 0;
-            end else if(count_delay == RAM_DELAY) begin
-                s_rvalid_r <= 1; 
+            R_RESP: begin
+                if (s_rready_i) begin
+                    r_state <= R_IDLE;
+                end
             end
-        end
+        endcase
     end
-    always @(*) begin
-        if(s_rvalid_o) begin
-            s_rdata_r = pmem_read(s_araddr_r);
-        end else begin
-            s_rdata_r = 0;
-        end
-    end
-    assign s_arready_o = s_arready_r;
-    assign s_rvalid_o = (count_delay == RAM_DELAY) | s_rvalid_r;
-    assign s_rresp_o = 0;
-    assign s_rdata_o = s_rdata_r;
-    assign ar_fire = s_arvalid_i & s_arready_o;
-    assign r_fire = s_rvalid_o & s_rready_i;
+end
+
+assign s_arready_o = (r_state == R_IDLE);
+assign s_rvalid_o  = (r_state == R_RESP);
+assign s_rdata_o   = s_rdata_r;
+assign s_rresp_o   = 2'b00; // OKAY
     // 写事务
     localparam IEDL = 2'd0;
     localparam WAIT_DATA = 2'd1;
