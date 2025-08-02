@@ -43,33 +43,46 @@ module ysyx_25050136_LSU
     reg m_rready_r;
     reg [DATA_WIDTH-1:0] load_data_r;
     wire ar_fire, r_fire;
+    localparam READ_IEDL = 2'd0;
+    localparam READ_ADDR = 2'd1;
+    localparam READ_DATA = 2'd2;
+
+    reg [1:0] state_read;
     always @(posedge clk) begin
-        if(!resetn) begin
-            m_arvalid_r <= 0;
+        if (!resetn) begin
+            state_read   <= READ_IEDL;
+            m_arvalid_r  <= 0;
+            m_rready_r   <= 0;
         end else begin
-            if(ar_fire) begin
-                m_arvalid_r <= 0;                
-            end else begin
-                if(fvalid_i & mem_ren_i) begin
-                    m_arvalid_r <= 1;
-                end else begin
-                    m_arvalid_r <= 0;
-                end
-            end
+            case (state_read)
+                READ_IEDL: begin
+                    m_rready_r <= 1;
+                    if (fvalid_i & mem_ren_i) begin
+                        state_read <= READ_ADDR;
+                    end
+                end 
+                READ_ADDR: begin
+                    m_rready_r <= 1;
+                    if (ar_fire) begin
+                        state_read <= READ_DATA;                        
+                    end
+                end 
+                READ_DATA: begin
+                    if (r_fire) begin
+                        m_rready_r <= 0;
+                        state_read <= READ_IEDL;
+                    end
+                end 
+                default: ;
+            endcase
         end
     end
 
-    always @(posedge clk) begin
-        if(!resetn) begin
-            m_rready_r <= 0;
-        end else begin
-            if(r_fire) begin
-                m_rready_r <= 0;
-            end else begin
-                m_rready_r <= 1;
-            end
-        end
-    end
+    assign m_arvalid_o = (state_read == READ_ADDR);
+    assign m_araddr_o  = mem_addr_i;
+    assign m_rready_o = m_rready_r;
+    assign ar_fire = m_arvalid_o & m_arready_i;
+    assign r_fire = m_rvalid_i & m_rready_o;
 
     always @(*) begin
         case (mem_mask_i)
@@ -93,13 +106,9 @@ module ysyx_25050136_LSU
             end
         endcase
     end
-    
-    assign m_arvalid_o = (fvalid_i & mem_ren_i) | m_arvalid_r;
-    assign m_rready_o = m_rready_r;
-    assign m_araddr_o = m_arvalid_o ? mem_addr_i : 0;
+
     assign load_data_o = load_data_r;
-    assign ar_fire = m_arvalid_o & m_arready_i;
-    assign r_fire =m_rvalid_i & m_rready_o;
+
 
     // 写事务
     reg m_awvalid_r;
