@@ -26,7 +26,6 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_SOC___024root final : public V
         CData/*0:0*/ ysyx_25050136_SOC__DOT__inst_rvalid_i;
         CData/*1:0*/ ysyx_25050136_SOC__DOT__inst_rresp_i;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_bvalid_i;
-        CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_bready_o;
         CData/*1:0*/ ysyx_25050136_SOC__DOT__mem_bresp_i;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_arready_i;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_rvalid_i;
@@ -83,9 +82,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_SOC___024root final : public V
         CData/*1:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__state_read;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__ar_fire;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__r_fire;
+        CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_bready_r;
     };
     struct {
-        CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_bready_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__state_write;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__b_fire;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__csr_wen1;
@@ -149,9 +148,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_SOC___024root final : public V
         CData/*1:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__wstatu;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__aw_fire;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__w_fire;
+        CData/*0:0*/ __VdfgRegularize_hd87f99a1_1_0;
     };
     struct {
-        CData/*0:0*/ __VdfgRegularize_hd87f99a1_1_0;
         CData/*0:0*/ __VstlFirstIteration;
         CData/*0:0*/ __Vtrigprevexpr___TOP__clk__0;
         CData/*0:0*/ __VactContinue;

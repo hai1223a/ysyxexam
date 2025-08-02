@@ -39,7 +39,7 @@ module ysyx_25050136_LSU
          output                             mem_valid_o
      );
     // 读事务
-    localparam READ_IDEL = 2'd0;
+    localparam READ_IEDL = 2'd0;
     localparam READ_ADDR = 2'd1;
     localparam READ_DATA = 2'd2;
     reg m_arvalid_r;
@@ -50,12 +50,12 @@ module ysyx_25050136_LSU
 
     always @(posedge clk) begin
         if (!resetn) begin
-            state_read   <= READ_IDEL;
+            state_read   <= READ_IEDL;
             m_arvalid_r  <= 0;
             m_rready_r   <= 0;
         end else begin
             case (state_read)
-                READ_IDEL: begin
+                READ_IEDL: begin
                     m_rready_r <= 1;
                     if (fvalid_i & mem_ren_i) begin
                         state_read <= READ_ADDR;
@@ -70,7 +70,7 @@ module ysyx_25050136_LSU
                 READ_DATA: begin
                     if (r_fire) begin
                         m_rready_r <= 0;
-                        state_read <= READ_IDEL;
+                        state_read <= READ_IEDL;
                     end
                 end 
                 default: ;
@@ -108,13 +108,18 @@ module ysyx_25050136_LSU
     assign r_fire = m_rvalid_i & m_rready_o;
     assign load_data_o = load_data_r;
     // 写事务
-    localparam WRITE_IDEL    = 0;
-    localparam WRITE_RUNNING = 1;
+    localparam WRITE_IDEL    = 2'd0;
+    localparam WRITE_RUNNING = 2'd1;
+    localparam WRITE_WAIT    = 2'd2;
     reg m_bready_r;
+    reg aw_en, w_en;
     reg state_write;
-     wire b_fire;
+    wire aw_fire, w_fire, b_fire;
     always @(posedge clk) begin
         if(!resetn) begin
+            m_bready_r  <= 0;
+            aw_en       <= 0;
+            w_en        <= 0;
             state_write <= WRITE_IDEL;
         end else begin
             case (state_write)
@@ -125,18 +130,31 @@ module ysyx_25050136_LSU
                     end
                 end 
                 WRITE_RUNNING: begin
+                    m_bready_r <= 1;
+                    if(aw_fire) begin
+                        aw_en <= 1;
+                    end
+                    if(w_fire) begin
+                        w_en  <= 1;
+                    end
+                    if((aw_fire & w_fire) | (aw_en & w_fire) | (w_en & aw_fire)) begin
+                        state_write <= WRITE_WAIT;
+                    end
+                end
+                WRITE_WAIT: begin
                     if(b_fire) begin
                         m_bready_r  <= 0;
                         state_write <= WRITE_IDEL;
                     end 
                 end
+                default:;    
             endcase
         end
     end
 
-    assign m_awvalid_o = (state_write == WRITE_RUNNING);
+    assign m_awvalid_o = (state_write == WRITE_RUNNING) && ~aw_en;
     assign m_awaddr_o  = mem_addr_i;
-    assign m_wvalid_o  = (state_write == WRITE_RUNNING);
+    assign m_wvalid_o  = (state_write == WRITE_RUNNING) && ~w_en;
     assign m_wdata_o   = store_data_i;
     assign m_wstrb_o   = mem_mask_i;
     assign m_bready_o  = m_bready_r;    
