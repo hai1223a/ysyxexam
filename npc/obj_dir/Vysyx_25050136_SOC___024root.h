@@ -26,6 +26,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_SOC___024root final : public V
         CData/*0:0*/ ysyx_25050136_SOC__DOT__inst_rvalid_i;
         CData/*1:0*/ ysyx_25050136_SOC__DOT__inst_rresp_i;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_awvalid_o;
+        CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_awready_i;
+        CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_wvalid_o;
+        CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_wready_i;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_bvalid_i;
         CData/*1:0*/ ysyx_25050136_SOC__DOT__mem_bresp_i;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__mem_arready_i;
@@ -80,11 +83,11 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_SOC___024root final : public V
         CData/*1:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__state_read;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__ar_fire;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__r_fire;
+    };
+    struct {
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_bready_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__aw_en;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__w_en;
-    };
-    struct {
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__state_write;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__aw_fire;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__w_fire;
@@ -146,11 +149,11 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136_SOC___024root final : public V
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__s_awready_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__s_wready_r;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__s_bvalid_r;
+    };
+    struct {
         CData/*3:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__s_wstrb_r;
         CData/*1:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__wstatu;
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__aw_fire;
-    };
-    struct {
         CData/*0:0*/ ysyx_25050136_SOC__DOT__u_ysyx_25050136_CLINT__DOT__w_fire;
         CData/*0:0*/ __VdfgRegularize_hd87f99a1_1_0;
         CData/*0:0*/ __VstlFirstIteration;

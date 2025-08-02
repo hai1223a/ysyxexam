@@ -111,6 +111,9 @@ VL_ATTR_COLD void Vysyx_25050136_SOC___024root___ctor_var_reset(Vysyx_25050136_S
     vlSelf->ysyx_25050136_SOC__DOT__inst_rdata_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__inst_rresp_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_awvalid_o = 0;
+    vlSelf->ysyx_25050136_SOC__DOT__mem_awready_i = 0;
+    vlSelf->ysyx_25050136_SOC__DOT__mem_wvalid_o = 0;
+    vlSelf->ysyx_25050136_SOC__DOT__mem_wready_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_bvalid_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_bresp_i = 0;
     vlSelf->ysyx_25050136_SOC__DOT__mem_arready_i = 0;

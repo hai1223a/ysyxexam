@@ -113,7 +113,7 @@ module ysyx_25050136_LSU
     localparam WRITE_WAIT    = 2'd2;
     reg m_bready_r;
     reg aw_en, w_en;
-    reg state_write;
+    reg [1:0]state_write;
     wire aw_fire, w_fire, b_fire;
     always @(posedge clk) begin
         if(!resetn) begin
