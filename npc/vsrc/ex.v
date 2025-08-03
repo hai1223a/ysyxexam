@@ -90,7 +90,7 @@ module ysyx_25050136_EX
     
     ysyx_25050136_LSU u_ysyx_25050136_LSU(
         .clk          	(clk           ),
-        .resetn       	(resetn        ),
+        .resetn       	(~reset        ),
         .m_awvalid_o  	(m_awvalid_o   ),
         .m_awready_i  	(m_awready_i   ),
         .m_awaddr_o   	(m_awaddr_o    ),

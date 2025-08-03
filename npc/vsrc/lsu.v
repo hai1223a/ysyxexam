@@ -55,7 +55,7 @@ module ysyx_25050136_LSU
     localparam READ_ADDR = 2'd1;
     localparam READ_DATA = 2'd2;
     reg m_arvalid_r;
-    reg m_arsize_r;
+    reg [2:0] m_arsize_r;
     reg m_rready_r;
     reg [DATA_WIDTH-1:0] load_data_r;
     reg [1:0] state_read;
