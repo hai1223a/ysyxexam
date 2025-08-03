@@ -1173,8 +1173,7 @@ VL_INLINE_OPT void Vysyx_25050136___024root___nba_sequent__TOP__0(Vysyx_25050136
     vlSelfRef.io_master_wlast = (IData)((((IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver) 
                                           >> 1U) & 
                                          (((IData)(vlSelfRef.ysyx_25050136__DOT__mem_wvalid_o) 
-                                           << 1U) >> 
-                                          (1U & (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id)))));
+                                           << 1U) >> (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id))));
     vlSelfRef.ysyx_25050136__DOT__mem_rlast_i = (((IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master) 
                                                   >> 1U) 
                                                  & (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_rlast));

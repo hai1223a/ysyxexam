@@ -160,9 +160,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136___024root final : public Veril
         CData/*1:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_rresp;
         CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_rlast;
         CData/*1:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master;
-        CData/*1:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id;
+        CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id;
         CData/*1:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__master_grand;
-        CData/*1:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__master_id;
+        CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__master_id;
         CData/*1:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver;
         CData/*1:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver_id;
         CData/*1:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__slaver_grand;

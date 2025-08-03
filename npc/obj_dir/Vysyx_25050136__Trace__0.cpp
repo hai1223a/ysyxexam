@@ -491,8 +491,7 @@ void Vysyx_25050136___024root__trace_chg_0_sub_0(Vysyx_25050136___024root* vlSel
                                 & (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver))));
         bufp->chgBit(oldp+215,((1U & ((IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver) 
                                       & (((IData)(vlSelfRef.ysyx_25050136__DOT__mem_wvalid_o) 
-                                          << 1U) >> 
-                                         (1U & (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id)))))));
+                                          << 1U) >> (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id))))));
         bufp->chgBit(oldp+216,(((IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_bready) 
                                 & (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver))));
         bufp->chgBit(oldp+217,(((IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_arvalid) 
@@ -522,15 +521,14 @@ void Vysyx_25050136___024root__trace_chg_0_sub_0(Vysyx_25050136___024root* vlSel
                                        & ((IData)(vlSelfRef.ysyx_25050136__DOT__mem_wvalid_o) 
                                           << 1U)))));
         bufp->chgBit(oldp+230,((1U & (((IData)(vlSelfRef.ysyx_25050136__DOT__mem_wvalid_o) 
-                                       << 1U) >> (1U 
-                                                  & (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id))))));
+                                       << 1U) >> (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id)))));
         bufp->chgBit(oldp+231,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_bready));
         bufp->chgBit(oldp+232,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_arvalid));
         bufp->chgBit(oldp+233,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_rready));
         bufp->chgCData(oldp+234,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master),2);
-        bufp->chgCData(oldp+235,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id),2);
+        bufp->chgBit(oldp+235,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id));
         bufp->chgCData(oldp+236,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__master_grand),2);
-        bufp->chgCData(oldp+237,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__master_id),2);
+        bufp->chgBit(oldp+237,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__master_id));
         bufp->chgCData(oldp+238,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver),2);
         bufp->chgCData(oldp+239,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver_id),2);
         bufp->chgCData(oldp+240,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__request),2);
@@ -778,9 +776,7 @@ void Vysyx_25050136___024root__trace_chg_0_sub_0(Vysyx_25050136___024root* vlSel
                                << 1U) | (1U & ((IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver) 
                                                & (((IData)(vlSelfRef.ysyx_25050136__DOT__mem_wvalid_o) 
                                                    << 1U) 
-                                                  >> 
-                                                  (1U 
-                                                   & (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id))))))),2);
+                                                  >> (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id)))))),2);
     bufp->chgCData(oldp+376,(((IData)(vlSelfRef.io_master_bvalid) 
                               << 1U)),2);
     bufp->chgCData(oldp+377,((((IData)(vlSelfRef.io_master_bready) 

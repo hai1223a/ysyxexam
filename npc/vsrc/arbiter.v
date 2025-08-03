@@ -139,9 +139,9 @@ module ysyx_25050136_ARBITER
             master_grand[0] = 1'b1;
         end
         // 继续添加更多主设备...
-        else if (request[MASTER_NUM-1]) begin
-            master_id = MASTER_NUM-1;
-            master_grand[MASTER_NUM-1] = 1'b1;
+        else if (request[1]) begin
+            master_id = 1;
+            master_grand[1] = 1'b1;
         end
     end
 

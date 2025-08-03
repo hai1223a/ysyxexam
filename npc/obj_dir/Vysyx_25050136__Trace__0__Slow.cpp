@@ -382,9 +382,9 @@ VL_ATTR_COLD void Vysyx_25050136___024root__trace_init_sub__TOP__0(Vysyx_2505013
     tracep->declBus(c+51,0,"for_s_awaddr",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 31,0);
     tracep->declBus(c+52,0,"for_s_araddr",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 31,0);
     tracep->declBus(c+235,0,"current_master",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
-    tracep->declBus(c+236,0,"current_master_id",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
+    tracep->declBus(c+236,0,"current_master_id",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 0,0);
     tracep->declBus(c+237,0,"master_grand",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
-    tracep->declBus(c+238,0,"master_id",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
+    tracep->declBus(c+238,0,"master_id",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 0,0);
     tracep->declBus(c+239,0,"current_slaver",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBus(c+240,0,"current_slaver_id",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBus(c+53,0,"slaver_grand",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
@@ -1462,8 +1462,7 @@ VL_ATTR_COLD void Vysyx_25050136___024root__trace_full_0_sub_0(Vysyx_25050136___
                                         << 1U))) & (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver))));
     bufp->fullBit(oldp+216,((1U & ((IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver) 
                                    & (((IData)(vlSelfRef.ysyx_25050136__DOT__mem_wvalid_o) 
-                                       << 1U) >> (1U 
-                                                  & (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id)))))));
+                                       << 1U) >> (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id))))));
     bufp->fullBit(oldp+217,(((IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_bready) 
                              & (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver))));
     bufp->fullBit(oldp+218,(((IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_arvalid) 
@@ -1493,14 +1492,14 @@ VL_ATTR_COLD void Vysyx_25050136___024root__trace_full_0_sub_0(Vysyx_25050136___
                                     & ((IData)(vlSelfRef.ysyx_25050136__DOT__mem_wvalid_o) 
                                        << 1U)))));
     bufp->fullBit(oldp+231,((1U & (((IData)(vlSelfRef.ysyx_25050136__DOT__mem_wvalid_o) 
-                                    << 1U) >> (1U & (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id))))));
+                                    << 1U) >> (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id)))));
     bufp->fullBit(oldp+232,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_bready));
     bufp->fullBit(oldp+233,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_arvalid));
     bufp->fullBit(oldp+234,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_rready));
     bufp->fullCData(oldp+235,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master),2);
-    bufp->fullCData(oldp+236,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id),2);
+    bufp->fullBit(oldp+236,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id));
     bufp->fullCData(oldp+237,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__master_grand),2);
-    bufp->fullCData(oldp+238,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__master_id),2);
+    bufp->fullBit(oldp+238,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__master_id));
     bufp->fullCData(oldp+239,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver),2);
     bufp->fullCData(oldp+240,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver_id),2);
     bufp->fullCData(oldp+241,(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__request),2);
@@ -1747,9 +1746,7 @@ VL_ATTR_COLD void Vysyx_25050136___024root__trace_full_0_sub_0(Vysyx_25050136___
                                 << 1U) | (1U & ((IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_slaver) 
                                                 & (((IData)(vlSelfRef.ysyx_25050136__DOT__mem_wvalid_o) 
                                                     << 1U) 
-                                                   >> 
-                                                   (1U 
-                                                    & (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id))))))),2);
+                                                   >> (IData)(vlSelfRef.ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__current_master_id)))))),2);
     bufp->fullCData(oldp+377,(((IData)(vlSelfRef.io_master_bvalid) 
                                << 1U)),2);
     bufp->fullCData(oldp+378,((((IData)(vlSelfRef.io_master_bready) 
