@@ -450,25 +450,37 @@ module ysyx_25050136(
     );
     
     ysyx_25050136_CLINT u_ysyx_25050136_CLINT(
-        .aclk        	(clk              ),
+        .aclk        	(clock            ),
         .aresetn     	(~reset           ),
         .s_awvalid_i 	(clint_awvalid_i  ),
         .s_awready_o 	(clint_awready_o  ),
         .s_awaddr_i  	(clint_awaddr_i   ),
+        .s_awid_i    	(clint_awid_i     ),
+        .s_awlen_i   	(clint_awlen_i    ),
+        .s_awsize_i  	(clint_awsize_i   ),
+        .s_awburst_i 	(clint_awburst_i  ),
         .s_wvalid_i  	(clint_wvalid_i   ),
         .s_wready_o  	(clint_wready_o   ),
         .s_wdata_i   	(clint_wdata_i    ),
         .s_wstrb_i   	(clint_wstrb_i    ),
+        .s_wlast_i   	(clint_wlast_i    ),
         .s_bvalid_o  	(clint_bvalid_o   ),
         .s_bready_i  	(clint_bready_i   ),
         .s_bresp_o   	(clint_bresp_o    ),
+        .s_bid_o     	(clint_bid_o      ),
         .s_arvalid_i 	(clint_arvalid_i  ),
         .s_arready_o 	(clint_arready_o  ),
         .s_araddr_i  	(clint_araddr_i   ),
+        .s_arid_i    	(clint_arid_i     ),
+        .s_arlen_i   	(clint_arlen_i    ),
+        .s_arsize_i  	(clint_arsize_i   ),
+        .s_arburst_i 	(clint_arburst_i  ),
         .s_rvalid_o  	(clint_rvalid_o   ),
         .s_rready_i  	(clint_rready_i   ),
         .s_rdata_o   	(clint_rdata_o    ),
-        .s_rresp_o   	(clint_rresp_o    )
+        .s_rresp_o   	(clint_rresp_o    ),
+        .s_rlast_o   	(clint_rlast_o    ),
+        .s_rid_o     	(clint_rid_o      )
     );
-        
+    
 endmodule

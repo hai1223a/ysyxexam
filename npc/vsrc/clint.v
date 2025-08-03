@@ -10,7 +10,7 @@ module ysyx_25050136_CLINT
         input                         s_awvalid_i ,
         output                        s_awready_o ,
         input      [ADDR_WIDTH-1:0]   s_awaddr_i  ,
-        input      [3:0]              s_awid_i    , /* verilator lint_off PINMISSING */
+        input      [3:0]              s_awid_i    , 
         input      [7:0]              s_awlen_i   ,
         input      [2:0]              s_awsize_i  ,
         input      [1:0]              s_awburst_i ,
