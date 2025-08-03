@@ -123,9 +123,9 @@ module ysyx_25050136_ARBITER
     reg [MASTER_NUM-1:0] master_grand;      // 主设备授权
     reg [MASTER_NUM-2:0] master_id;
     reg [SLAVER_NUM-1:0] current_slaver;    // 当前从设备
-    reg [SLAVER_NUM-1:0] current_slaver_id;
+    reg [SLAVER_NUM-2:0] current_slaver_id;
     reg [SLAVER_NUM-1:0] slaver_grand;      // 从设备授权
-    reg [SLAVER_NUM-1:0] slaver_id;
+    reg [SLAVER_NUM-2:0] slaver_id;
     wire [MASTER_NUM-1:0] request;          // 主设备请求
 
     assign request = s_awvalid_i | s_arvalid_i;
