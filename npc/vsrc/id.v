@@ -26,7 +26,7 @@ module ysyx_25050136_ID
          output     [11:0]                           csru_opd2_o,
          output                                       csru_ren_o,
          output                                       csru_wen_o,
-         output     [3:0]                            mem_mask_o,
+         output     [3:0]                             mem_mask_o,
          output                                     mem_signed_o,
          output     [ADDR_WIDTH-1:0]                        rd_o,
          output                                          rd_en_o,

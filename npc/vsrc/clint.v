@@ -4,31 +4,38 @@ module ysyx_25050136_CLINT
          DATA_WIDTH = 32
      )
      (
-         // 通用数据
-         input                                aclk,
-         input                             aresetn,
-         // 写地址
-         input                         s_awvalid_i,
-         output                        s_awready_o,
-         input      [ADDR_WIDTH-1:0]    s_awaddr_i,
-         // 写数据
-         input                          s_wvalid_i,
-         output                         s_wready_o,
-         input      [DATA_WIDTH-1:0]     s_wdata_i,
-         input      [3:0]                s_wstrb_i,
-         // 写响应
-         output                         s_bvalid_o,
-         input                          s_bready_i,
-         output     [1:0]                s_bresp_o,
-         // 读地址
-         input                         s_arvalid_i,
-         output                        s_arready_o,
-         input      [ADDR_WIDTH-1:0]    s_araddr_i,
-         // 读数据 
-         output                        s_rvalid_o,
-         input                         s_rready_i,
-         output     [DATA_WIDTH-1:0]    s_rdata_o,
-         output     [1:0]               s_rresp_o 
+        // 通用数据
+        input                         aclk        ,
+        input                         aresetn     ,
+        input                         s_awvalid_i ,
+        output                        s_awready_o ,
+        input      [ADDR_WIDTH-1:0]   s_awaddr_i  ,
+        input      [3:0]              s_awid_i    ,
+        input      [7:0]              s_awlen_i   ,
+        input      [2:0]              s_awsize_i  ,
+        input      [1:0]              s_awburst_i ,
+        input                         s_wvalid_i  ,
+        output                        s_wready_o  ,
+        input      [DATA_WIDTH-1:0]   s_wdata_i   ,
+        input      [3:0]              s_wstrb_i   ,
+        input                         s_wlast_i   ,
+        output                        s_bvalid_o  ,
+        input                         s_bready_i  ,
+        output     [1:0]              s_bresp_o   ,
+        output     [3:0]              s_bid_o     ,
+        input                         s_arvalid_i ,
+        output                        s_arready_o ,
+        input      [ADDR_WIDTH-1:0]   s_araddr_i  ,
+        input      [3:0]              s_arid_i    ,
+        input      [7:0]              s_arlen_i   ,
+        input      [2:0]              s_arsize_i  ,
+        input      [1:0]              s_arburst_i ,
+        output                        s_rvalid_o  ,
+        input                         s_rready_i  ,
+        output     [DATA_WIDTH-1:0]   s_rdata_o   ,
+        output     [1:0]              s_rresp_o   ,
+        output                        s_rlast_o   ,
+        output     [3:0]              s_rid_o
      );
 
     reg [63:0] mtime;
@@ -40,165 +47,102 @@ module ysyx_25050136_CLINT
         end
     end
 
-    localparam RAM_DELAY = 1;
     // 读事务
+    localparam READ_IDEL = 0;
+    localparam READ_DATA = 1;
     reg [ADDR_WIDTH-1:0] s_araddr_r;
+    reg [ADDR_WIDTH-1:0] s_araddr_align;
+    reg [7:0] s_arlen_r;
+    reg [2:0] s_arsize_r;
+    reg [1:0] s_arburst_r;
     reg s_arready_r;
-    reg s_rvalid_r;
     reg [DATA_WIDTH-1:0] s_rdata_r;
+    reg [3:0] s_rid_r;
+    reg [7:0] rdata_count;
+    reg state_read;
+    wire [ADDR_WIDTH-1:0] align_mask;
     wire ar_fire, r_fire;
     always @(posedge aclk) begin
         if(!aresetn) begin
             s_arready_r <= 0;
             s_araddr_r <= 0;
+            s_araddr_align <= 0;
+            s_arlen_r <= 0;
+            s_arsize_r <= 0;
+            s_arburst_r <= 0;
+            s_rid_r <= 0;
+            rdata_count <= 0;
+            state_read <= READ_IDEL;       
         end else begin
-            if(ar_fire) begin
-                s_araddr_r <= s_araddr_i;
-                s_arready_r <= 0;
-            end else begin
-                s_arready_r <= 1;
-            end
-        end
-    end
-
-    reg [4:0] count_delay;
-    always @(posedge aclk) begin
-        if(!aresetn) begin
-            count_delay <= 0;
-        end else begin
-            if(ar_fire | (|count_delay)) begin
-                if(count_delay == RAM_DELAY) begin
-                    count_delay <= 0;
-                end else begin
-                    count_delay <= count_delay + 1;
+            case (state_read)
+                READ_IDEL: begin
+                    if(ar_fire) begin
+                        s_arready_r <= 0;
+                        s_araddr_align <= s_araddr_i & align_mask;
+                        s_araddr_r <= s_araddr_i;
+                        s_arlen_r <= s_arlen_i;
+                        s_arsize_r <= s_arsize_i;
+                        s_arburst_r <= s_arburst_i;                        
+                        s_rid_r <= s_arid_i;
+                        state_read <= READ_DATA;
+                    end else begin
+                        s_arready_r <= 1;
+                    end
+                end 
+                READ_DATA: begin
+                    s_arready_r <= 1;
+                    if(r_fire) begin
+                        if(rdata_count == s_arlen_r) begin
+                            rdata_count <= 0;
+                            state_read <= READ_IDEL;
+                        end else begin
+                            rdata_count <= rdata_count + 7'd1;
+                            case (s_arburst_r)
+                                2'b01: begin
+                                    s_araddr_r <= s_araddr_align + (1 << s_arsize_r);        
+                                    s_araddr_align <= s_araddr_align + (1 << s_arsize_r);                                            
+                                end 
+                                default: begin
+                                    s_araddr_r <= s_araddr_align;
+                                end 
+                            endcase
+                            state_read <= READ_DATA;
+                        end
+                    end
                 end
-            end
-        end
-    end
-
-    always @(posedge aclk) begin
-        if(!aresetn) begin
-            s_rvalid_r <= 0;
-        end else begin
-            if(r_fire) begin
-                s_rvalid_r <= 0;
-            end else if(count_delay == RAM_DELAY) begin
-                s_rvalid_r <= 1; 
-            end
-        end
-    end
-    always @(*) begin
-        if(s_rvalid_o) begin
-            if(s_araddr_r == 32'ha0000048) begin
-                s_rdata_r = mtime[31:0];
-            end else if(s_araddr_r == 32'ha000004C) begin
-                s_rdata_r = mtime[63:32];
-            end else begin
-                s_rdata_r = 0;
-            end
-        end else begin
-            s_rdata_r = 0;
-        end
-    end
-    assign s_arready_o = s_arready_r;
-    assign s_rvalid_o = (count_delay == RAM_DELAY) | s_rvalid_r;
-    assign s_rresp_o = 0;
-    assign s_rdata_o = s_rdata_r;
-    assign ar_fire = s_arvalid_i & s_arready_o;
-    assign r_fire = s_rvalid_o & s_rready_i;
-    // 写事务
-    localparam IEDL = 2'd0;
-    localparam WAIT_DATA = 2'd1;
-    localparam WAIT_ADDR = 2'd2;
-    localparam GOOD = 2'd3;
-    reg s_awready_r;
-    reg s_wready_r;
-    reg s_bvalid_r;
-    reg [ADDR_WIDTH-1:0] s_awaddr_r;
-    reg [DATA_WIDTH-1:0] s_wdata_r;
-    reg [3:0] s_wstrb_r;
-    reg [1:0] wstatu;
-    wire [DATA_WIDTH-1:0] wstrb_full;
-    wire aw_fire, w_fire, b_fire;
-    always @(posedge aclk) begin
-        if(!aresetn) begin
-            wstatu <= 0;
-        end else begin
-            case (wstatu)
-                IEDL: begin
-                    if(w_fire)
-                        if(aw_fire)
-                            wstatu <= GOOD;
-                        else
-                            wstatu <= WAIT_ADDR;
-                    else
-                        if(aw_fire)
-                            wstatu <= WAIT_DATA;    
-                end
-                WAIT_DATA: begin    
-                    if(aw_fire)
-                        wstatu <= GOOD;
-                end
-                WAIT_ADDR: begin
-                    if(w_fire)
-                        wstatu <= GOOD;
-                end
-                GOOD:   wstatu <= IEDL;
+                default:; 
             endcase
         end
     end
 
-    always @(posedge aclk) begin
-        if(!aresetn) begin
-            s_awready_r <= 0;
-            s_wready_r <= 0;
-            s_awaddr_r <= 0;
-            s_wdata_r <= 0;
-            s_wstrb_r <= 0;
-        end else begin
-            if(aw_fire) begin
-                s_awaddr_r <= s_awaddr_i;
-                if((wstatu == WAIT_DATA) & ~w_fire) begin
-                    s_awready_r <= 0;
-                end else begin
-                    s_awready_r <= 1;                    
-                end
-            end else begin
-                s_awready_r <= 1;
-            end
-            if(w_fire) begin
-                s_wdata_r <= s_wdata_i;
-                s_wstrb_r <= s_wstrb_i;
-                if((wstatu == WAIT_ADDR) & ~w_fire) begin
-                    s_wready_r <= 0; 
-                end else begin
-                    s_wready_r <= 0; 
-                end
-            end else begin
-                s_wready_r <= 1;
-            end
+    always @(*) begin
+        s_rdata_r = 0;
+        if(s_rvalid_o && (s_arsize_r == 3'b010)) begin
+            case (s_araddr_r)
+                32'h20000000: begin
+                    s_rdata_r = mtime[31:0];
+                end 
+                32'h20000004: begin
+                    s_rdata_r = mtime[63:32];                    
+                end 
+                default: ;
+            endcase
         end
     end
 
-    always @(posedge aclk) begin
-        if(!aresetn) begin
-            s_bvalid_r <= 0;
-        end else begin
-            if(wstatu == GOOD) begin
-                s_bvalid_r <= 1;
-            end
-            if(b_fire) begin
-                s_bvalid_r <= 0;
-            end
-        end
-    end
-
-    assign wstrb_full = {{8{s_wstrb_r[3]}}, {8{s_wstrb_r[2]}}, {8{s_wstrb_r[1]}}, {8{s_wstrb_r[0]}}};
-    assign s_awready_o = s_awready_r;
-    assign s_wready_o = s_wready_r;
-    assign s_bvalid_o = s_bvalid_r | (wstatu == GOOD);
-    assign s_bresp_o = 2'b10;
-    assign aw_fire = s_awvalid_i & s_awready_o;
-    assign w_fire = s_wvalid_i & s_wready_o;
-    assign b_fire = s_bvalid_o & s_bready_i;
+    assign s_arready_o = s_arready_r;
+    assign s_rvalid_o = (state_read == READ_DATA);
+    assign s_rlast_o  = (state_read == READ_DATA) & (rdata_count == s_arlen_r);
+    assign s_rresp_o = 0;
+    assign s_rid_o = s_rid_r;
+    assign s_rdata_o = s_rdata_r;
+    assign align_mask = ~((1 << s_arsize_i) - 1);
+    assign ar_fire = s_arvalid_i & s_arready_o;
+    assign r_fire = s_rvalid_o & s_rready_i;
+    // 写事务
+    assign s_awready_o = 1'b0;
+    assign s_wready_o  = 1'b0;
+    assign s_bvalid_o  = 1'b0;
+    assign s_bresp_o   = 2'b00;
+    assign s_bid_o     = 4'b0000;
 endmodule //ysyx_25050136_UART

@@ -9,39 +9,57 @@ module ysyx_25050136_NPC
     input                                     clk,
     input                                   reset,
     // 指令相关
-    // 读地址               
-    output                         inst_arvalid_o,
-    input                          inst_arready_i,
-    output    [DATA_WIDTH-1:0]      inst_araddr_o,
-    // 读数据                
-    input                           inst_rvalid_i,
-    output                          inst_rready_o,
-    input     [DATA_WIDTH-1:0]       inst_rdata_i,
-    input     [1:0]                  inst_rresp_i,
+    // 读地址
+    output                        inst_arvalid_o ,
+    input                         inst_arready_i ,
+    output   [DATA_WIDTH-1:0]     inst_araddr_o  ,
+    output   [3:0]                inst_arid_o    ,
+    output   [7:0]                inst_arlen_o   ,
+    output   [2:0]                inst_arsize_o  ,
+    output   [1:0]                inst_arburst_o ,
+    // 读数据
+    input                         inst_rvalid_i  ,
+    output                        inst_rready_o  ,
+    input    [31:0]               inst_rdata_i   ,
+    input    [1:0]                inst_rresp_i   ,
+    input                         inst_rlast_i   ,
+    input    [3:0]                inst_rid_i     ,
     // 数据相关
-    // 写地址
-    output                          mem_awvalid_o,
-    input                           mem_awready_i,
-    output    [DATA_WIDTH-1:0]       mem_awaddr_o,
-    // 写数据             
-    output                           mem_wvalid_o,
-    input                            mem_wready_i,
-    output    [DATA_WIDTH-1:0]        mem_wdata_o,
-    output    [3:0]                   mem_wstrb_o,
-    // 写响应               
-    input                            mem_bvalid_i,
-    output                           mem_bready_o,
-    input     [1:0]                   mem_bresp_i,
-    // 读地址               
-    output                          mem_arvalid_o,
-    input                           mem_arready_i,
-    output    [DATA_WIDTH-1:0]       mem_araddr_o,
-    // 读数据                 
-    input                            mem_rvalid_i,
-    output                           mem_rready_o,
-    input     [DATA_WIDTH-1:0]        mem_rdata_i,
-    input     [1:0]                   mem_rresp_i
-    );
+    // 写地址                     
+    output                        mem_awvalid_o  ,
+    input                         mem_awready_i  ,
+    output   [DATA_WIDTH-1:0]     mem_awaddr_o   ,
+    output   [3:0]                mem_awid_o     ,
+    output   [7:0]                mem_awlen_o    ,
+    output   [2:0]                mem_awsize_o   ,
+    output   [1:0]                mem_awburst_o  ,
+    // 写数据                      
+    output                        mem_wvalid_o   ,
+    input                         mem_wready_i   ,
+    output   [DATA_WIDTH-1:0]     mem_wdata_o    ,
+    output   [3:0]                mem_wstrb_o    ,
+    output                        mem_wlast_o    ,
+    // 写响应                          
+    input                         mem_bvalid_i   ,
+    output                        mem_bready_o   ,
+    input    [1:0]                mem_bresp_i    ,
+    input    [3:0]                mem_bid_i      ,
+    // 读地址                         
+    output                        mem_arvalid_o  ,
+    input                         mem_arready_i  ,
+    output   [DATA_WIDTH-1:0]     mem_araddr_o   ,
+    output   [3:0]                mem_arid_o     ,
+    output   [7:0]                mem_arlen_o    ,
+    output   [2:0]                mem_arsize_o   ,
+    output   [1:0]                mem_arburst_o  ,
+    // 读数据                         
+    input                         mem_rvalid_i   ,
+    output                        mem_rready_o   ,
+    input    [DATA_WIDTH-1:0]     mem_rdata_i    ,
+    input    [1:0]                mem_rresp_i    ,
+    input                         mem_rlast_i    ,
+    input    [3:0]                mem_rid_i      
+);
 //========================================
 // 顶层信号定义
 //========================================
@@ -92,10 +110,16 @@ u_ysyx_25050136_IF(
     .m_arvalid_o     	(inst_arvalid_o      ),
     .m_arready_i     	(inst_arready_i      ),
     .m_araddr_o      	(inst_araddr_o       ),
+    .m_arid_o        	(inst_arid_o         ),
+    .m_arlen_o       	(inst_arlen_o        ),
+    .m_arsize_o      	(inst_arsize_o       ),
+    .m_arburst_o     	(inst_arburst_o      ),
     .m_rvalid_i      	(inst_rvalid_i       ),
     .m_rready_o      	(inst_rready_o       ),
     .m_rdata_i       	(inst_rdata_i        ),
     .m_rresp_i       	(inst_rresp_i        ),
+    .m_rlast_i       	(inst_rlast_i        ),
+    .m_rid_i         	(inst_rid_i          ),
     .dynamic_valid_i 	(ex2if_jump_en_o     ),
     .dynamic_npc_i   	(ex2if_jump_addr_o   ),
     .static_npc_o    	(if2id_static_npc_o  ),
@@ -103,7 +127,6 @@ u_ysyx_25050136_IF(
     .bready_i        	(id2if_fready_o      ),
     .bvalid_o        	(if2id_bvalid_o      )
 );
-
 
 
 ysyx_25050136_ID #(
@@ -184,20 +207,32 @@ u_ysyx_25050136_EX(
     .m_awvalid_o  	(mem_awvalid_o       ),
     .m_awready_i  	(mem_awready_i       ),
     .m_awaddr_o   	(mem_awaddr_o        ),
+    .m_awid_o     	(mem_awid_o          ),
+    .m_awlen_o    	(mem_awlen_o         ),
+    .m_awsize_o   	(mem_awsize_o        ),
+    .m_awburst_o  	(mem_awburst_o       ),
     .m_wvalid_o   	(mem_wvalid_o        ),
     .m_wready_i   	(mem_wready_i        ),
     .m_wdata_o    	(mem_wdata_o         ),
     .m_wstrb_o    	(mem_wstrb_o         ),
+    .m_wlast_o    	(mem_wlast_o         ),
     .m_bvalid_i   	(mem_bvalid_i        ),
     .m_bready_o   	(mem_bready_o        ),
     .m_bresp_i    	(mem_bresp_i         ),
+    .m_bid_i      	(mem_bid_i           ),
     .m_arvalid_o  	(mem_arvalid_o       ),
     .m_arready_i  	(mem_arready_i       ),
     .m_araddr_o   	(mem_araddr_o        ),
+    .m_arid_o     	(mem_arid_o          ),
+    .m_arlen_o    	(mem_arlen_o         ),
+    .m_arsize_o   	(mem_arsize_o        ),
+    .m_arburst_o  	(mem_arburst_o       ),
     .m_rvalid_i   	(mem_rvalid_i        ),
     .m_rready_o   	(mem_rready_o        ),
     .m_rdata_i    	(mem_rdata_i         ),
     .m_rresp_i    	(mem_rresp_i         ),
+    .m_rlast_i    	(mem_rlast_i         ),
+    .m_rid_i      	(mem_rid_i           ),
     .mem_mask_i   	(id2ex_mem_mask_o    ),
     .mem_signed_i 	(id2ex_mem_signed_o  ),
     .gpr_wen_o    	(ex2reg_gpr_wen_o    ),
@@ -207,6 +242,7 @@ u_ysyx_25050136_EX(
     .fvalid_i     	(id2ex_bvalid_o      ),
     .fready_o     	(ex2id_fready_o      )
 );
+
 
 ysyx_25050136_RegisterFile#(
     .ADDR_WIDTH(ADDR_WIDTH),

@@ -22,7 +22,7 @@ endif
 
 # 第三步:准备用于编译工程的选项
 # 头文件和工具软件
-TOPNAME = ysyx_25050136_SOC
+TOPNAME = ysyx_25050136
 VERILATOR = verilator
 # 源文件
 CSRCS = $(wildcard csrc/*/*.cpp csrc/*/*.c csrc/*.cpp csrc/*.c)
