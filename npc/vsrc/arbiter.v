@@ -119,9 +119,9 @@ module ysyx_25050136_ARBITER
 
     // 目前默认多主多从, 仲裁逻辑为优先级仲裁, 低位优先级最高
     reg [MASTER_NUM-1:0] current_master;    // 当前主设备
-    reg [MASTER_NUM-1:0] current_master_id;
+    reg [MASTER_NUM-2:0] current_master_id;
     reg [MASTER_NUM-1:0] master_grand;      // 主设备授权
-    reg [MASTER_NUM-1:0] master_id;
+    reg [MASTER_NUM-2:0] master_id;
     reg [SLAVER_NUM-1:0] current_slaver;    // 当前从设备
     reg [SLAVER_NUM-1:0] current_slaver_id;
     reg [SLAVER_NUM-1:0] slaver_grand;      // 从设备授权

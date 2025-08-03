@@ -128,9 +128,8 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136___024root final : public Veril
         CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__bqu_en;
         CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__csru_en;
         CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__fready_r;
-        CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__resetn;
         CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_arvalid_r;
-        CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_arsize_r;
+        CData/*2:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_arsize_r;
         CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__m_rready_r;
         CData/*1:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__state_read;
         CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__ar_fire;
@@ -149,9 +148,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136___024root final : public Veril
         CData/*1:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__u_ysyx_25050136_CSR_File__DOT__mcause_hit;
         CData/*1:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__u_ysyx_25050136_CSR_File__DOT__mtvec_hit;
         CData/*1:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__u_ysyx_25050136_CSR_File__DOT__mstatus_hit;
+        CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_bvalid;
     };
     struct {
-        CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_bvalid;
         CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_bready;
         CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_arvalid;
         CData/*0:0*/ ysyx_25050136__DOT__u_ysyx_25050136_ARBITER__DOT__t_arready;
@@ -215,9 +214,9 @@ class alignas(VL_CACHE_LINE_BYTES) Vysyx_25050136___024root final : public Veril
         IData/*31:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__alu_out_o;
         IData/*31:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__csru_rdata_o;
         IData/*31:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__add_sub_op2;
+        IData/*31:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__op1_xor_op2;
     };
     struct {
-        IData/*31:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__op1_xor_op2;
         IData/*31:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_ALU__DOT__out;
         IData/*31:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_LSU__DOT__load_data_r;
         IData/*31:0*/ ysyx_25050136__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__csr_wdata1;
