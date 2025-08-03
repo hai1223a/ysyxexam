@@ -334,6 +334,19 @@ module ysyx_25050136(
     assign io_master_arburst = m_arburst_o[1*2 +: 2];
     assign io_master_rready  = m_rready_o[1];
 
+    // 顶层AXI SLAVER接口
+    assign io_slave_awready = 0;
+    assign io_slave_wready = 0;
+    assign io_slave_bvalid = 0;
+    assign io_slave_bvalid = 0;
+    assign io_slave_bresp = 0; 
+    assign io_slave_bid = 0;   
+    assign io_slave_arready = 0;
+    assign io_slave_rvalid = 0;
+    assign io_slave_rresp = 0; 
+    assign io_slave_rdata = 0; 
+    assign io_slave_rlast = 0; 
+    assign io_slave_rid = 0;
     // NPC模块实例化
     ysyx_25050136_NPC #(
         .ADDR_WIDTH(TOP_ADDR_WIDTH),
