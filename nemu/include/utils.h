@@ -80,8 +80,6 @@ uint64_t get_time();
   } while(0) \
 )
 struct FUNC_FTRACE{
-  bool if_call;
-  bool if_ret;
   word_t addr;
   char func_name[32];
 };

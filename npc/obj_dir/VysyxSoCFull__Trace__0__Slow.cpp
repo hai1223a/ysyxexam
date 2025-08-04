@@ -3475,7 +3475,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_const_0_sub_0(VysyxSoCFull___024
     bufp->fullSData(oldp+1369,(0x300U),12);
     bufp->fullCData(oldp+1370,(1U),2);
     bufp->fullCData(oldp+1371,(2U),2);
-    bufp->fullIData(oldp+1372,(0x80000000U),32);
+    bufp->fullIData(oldp+1372,(0x20000000U),32);
     bufp->fullBit(oldp+1373,(0U));
     bufp->fullBit(oldp+1374,(1U));
     bufp->fullCData(oldp+1375,(4U),3);
