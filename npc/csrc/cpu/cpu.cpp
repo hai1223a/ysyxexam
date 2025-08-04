@@ -19,7 +19,7 @@ void cpu_exec_once()
 {
   while (npcstate.state == NPC_RUNNING)
   {
-    top->clk ^= 1;
+    top->clock ^= 1;
     // 复位
     reset();
     // 计算电路状态
