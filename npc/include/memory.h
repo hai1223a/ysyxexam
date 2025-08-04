@@ -1,7 +1,7 @@
 #ifndef __MEMORY_H__
 #define __MEMORY_H__
 
-#define RESET_VECTOR 0x80000000               // 程序复位地址
+#define RESET_VECTOR 0x20000000               // 程序复位地址
 extern uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096)));// 内存变量
 
 enum {
