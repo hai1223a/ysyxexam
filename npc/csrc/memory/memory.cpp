@@ -99,6 +99,9 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
   }
 }
 
+extern "C" void flash_read(int32_t addr, int32_t *data) { assert(0); }
+extern "C" void mrom_read(int32_t addr, int32_t *data) { assert(0); }
+
 extern "C" void find_ebreak() {
   set_nemu_state(NPC_END, SOC_PC, get_reg(10));
 }
