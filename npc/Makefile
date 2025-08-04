@@ -28,6 +28,11 @@ VERILATOR = verilator
 CSRCS = $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \)) 
 VSRCS = $(shell find vsrc -type f -name "*.v")
 INCSRCS = $(addprefix -I, vsrc vsrc/perip/uart16550/rtl vsrc/perip/spi/rtl)
+# 设置忽略警告
+# PINCONNECTEMPTY: 实例化时有端口未连接, .accept_o(),
+# DECLFILENAME: 模块名与其文件名不一致
+# UNUSEDSIGNAL: 模块定义了未被使用的信号
+A = $(addprefix -Wno-, PINCONNECTEMPTY DECLFILENAME UNUSEDSIGNAL)
 # C/C++编译选项
 BFLAGS   += -fsanitize=address
 INC_PATH := $(abspath ../include ../include/generated)
