@@ -231,7 +231,7 @@ struct {
 char repeat_buf[2][128] = {{0}};
 char _buf[128] = {0};
 
-static void ftracer_log(uint32_t inst_in, uint32_t pc_in)
+void ftracer_log(uint32_t inst_in, uint32_t pc_in)
 {
   static int repeat_count = 0;
   static uint32_t p_stack = 0;
