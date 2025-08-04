@@ -32,7 +32,12 @@ INCSRCS = $(addprefix -I, vsrc vsrc/perip/uart16550/rtl vsrc/perip/spi/rtl)
 # PINCONNECTEMPTY: 实例化时有端口未连接, .accept_o(),
 # DECLFILENAME: 模块名与其文件名不一致
 # UNUSEDSIGNAL: 模块定义了未被使用的信号
-A = $(addprefix -Wno-, PINCONNECTEMPTY DECLFILENAME UNUSEDSIGNAL)
+# ASSIGNDLY: 模块中存在 #1 这类延时语句, 同时又约定了--no-timing忽略延时语句加速仿真
+# UNDRIVEN: 模块中有信号没有被驱动
+# UNUSEDPARAM: 模块定义了未被使用的参数
+# SYNCASYNCNET: 一个复位信号既被用于同步复位, 又被用于异步复位. 目前该报错发生于uart_reg的复位是异步复位, 暂时忽略日后修改
+A = $(addprefix -Wno-, PINCONNECTEMPTY DECLFILENAME UNUSEDSIGNAL ASSIGNDLY \
+	  				   UNDRIVEN UNUSEDPARAM SYNCASYNCNET)
 # C/C++编译选项
 BFLAGS   += -fsanitize=address
 INC_PATH := $(abspath ../include ../include/generated)
