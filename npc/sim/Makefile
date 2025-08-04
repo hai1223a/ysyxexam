@@ -3,7 +3,9 @@ CC      = $(CROSS_COMPILE)gcc
 OBJDUMP = $(CROSS_COMPILE)objdump
 OBJCOPY = $(CROSS_COMPILE)objcopy
 
-CFLAGS = -march=rv32e_zicsr -mabi=ilp32e -nostdlib -ffreestanding
+CFLAGS += -Os -fomit-frame-pointer -nostartfiles
+CFLAGS += -march=rv32e_zicsr -mabi=ilp32e
+LDFLAGS += -nostdlib -Wl,--gc-sections
 
 TARGET := test1
 BIN_TARGET = $(TARGET).bin
@@ -18,7 +20,7 @@ $(BIN_TARGET): $(TARGET)
 	$(OBJCOPY) -O binary -j .text $< $@
 
 $(TARGET): $(SRC) 
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS) 
 
 clean:
-	rm -f $(TARGET) $(TARGET).dump
+	rm -f $(TARGET) $(TARGET).dump $(BIN_TARGET)
