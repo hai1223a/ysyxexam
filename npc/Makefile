@@ -25,8 +25,8 @@ endif
 TOPNAME = ysyxSoCFull
 VERILATOR = verilator
 # 源文件
-CSRCS = $(wildcard csrc/*/*.cpp csrc/*/*.c csrc/*.cpp csrc/*.c)
-VSRCS = $(wildcard vsrc/*.v vsrc/*/*.v)
+CSRCS = $(shell find csrc -type f -name "*.c *.cpp")
+VSRCS = $(shell find vsrc -type f -name "*.v")
 INCSRCS = $(addprefix -I, vsrc vsrc/perip/uart16550/rtl vsrc/perip/spi/rtl)
 # 编译选项
 BFLAGS   += -fsanitize=address
