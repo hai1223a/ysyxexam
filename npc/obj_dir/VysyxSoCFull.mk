@@ -37,7 +37,7 @@ VM_PREFIX = VysyxSoCFull
 VM_MODPREFIX = VysyxSoCFull
 # User CFLAGS (from -CFLAGS on Verilator command line)
 VM_USER_CFLAGS = \
-	-fsanitize=address -I/home/yunhai/ysyx-workbench/include -I/home/yunhai/ysyx-workbench/include/generated  \
+	-fsanitize=address -I/home/yunhai/ysyx-workbench/include -I/home/yunhai/ysyx-workbench/include/generated \
 
 # User LDLIBS (from -LDFLAGS on Verilator command line)
 VM_USER_LDLIBS = \

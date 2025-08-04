@@ -62,7 +62,7 @@
 
 // 外部变量
 extern VerilatedFstC *tfp;
-extern Vysyx_25050136_SOC *top;
+extern VysyxSoCFull *top;
 extern bool batch_mode; // batch模式
 extern FILE *log_fp;
 // 函数声明
