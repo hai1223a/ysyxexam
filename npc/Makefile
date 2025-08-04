@@ -25,10 +25,10 @@ endif
 TOPNAME = ysyxSoCFull
 VERILATOR = verilator
 # 源文件
-CSRCS = $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
+CSRCS = $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \)) 
 VSRCS = $(shell find vsrc -type f -name "*.v")
 INCSRCS = $(addprefix -I, vsrc vsrc/perip/uart16550/rtl vsrc/perip/spi/rtl)
-# 编译选项
+# C/C++编译选项
 BFLAGS   += -fsanitize=address
 INC_PATH := $(abspath ../include ../include/generated)
 CFLAGS   +=  $(BFLAGS) $(addprefix -I, $(INC_PATH)) 
@@ -38,8 +38,9 @@ VERILATOR_FLAGS += -Wall --cc -exe --build --x-assign fast --x-initial fast \
 				   --timescale "1ns/1ns" --no-timing \
 				   --top-module $(TOPNAME) \
 				   $(INCSRCS) --prof-exec\
-				   --Wno-DECLFILENAME -Wno-UNUSEDSIGNAL \
+				   --Wno-DECLFILENAME --Wno-UNUSEDSIGNAL \
 				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"
+
 ifdef CONFIG_FST
 VERILATOR_FLAGS += --trace-fst 
 endif
