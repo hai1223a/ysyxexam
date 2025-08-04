@@ -150,6 +150,8 @@ module ysyx_25050136_LSU
         end else begin
             case (state_write)
                 WRITE_IDEL: begin
+                    aw_en <= 0;
+                    w_en  <= 0;
                     m_bready_r <= 1;
                     if(fvalid_i & mem_wen_i) begin
                         state_write <= WRITE_RUNNING;
