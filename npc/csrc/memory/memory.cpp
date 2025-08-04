@@ -88,7 +88,7 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
   else if (addr == CONFIG_SERIAL_BASE)
   {
     Assert(wmask == 0xff, "你写串口的长度不对");
-    if (top->clk == 1)
+    if (top->clock == 1)
       putc((char)(wdata), stderr);
   }
 #endif
