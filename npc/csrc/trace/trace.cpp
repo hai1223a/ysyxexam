@@ -213,7 +213,7 @@ void ftracer_log(uint32_t inst_in, uint32_t pc_in)
     for (int i = 0; i < ARRLEN(func_ftracer); i++)
     {
       if(func_ftracer[i].addr == 0) break;
-      if (top->rootp->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc == func_ftracer[i].addr)
+      if (SOC_PC == func_ftracer[i].addr)
       {
         ftracer_write("0x%8x %*scall [%s @ 0x%8x]\n", pc_in, 4 * p_stack, " ", func_ftracer[i].func_name, top->rootp->ysyx_25050136_SOC__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_IF__DOT__pc);
         Assert(p_stack < ARRLEN(FUNC_stack), "ftracer 的返回函数堆栈溢出\n");
