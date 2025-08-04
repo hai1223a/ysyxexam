@@ -39,6 +39,7 @@ long init_pmem(char *img_file)
   fclose(fp); 
   return size;
 }
+
 extern "C" int pmem_read(int raddr, int rmask)
 {
   uint32_t addr = (uint32_t)raddr;
@@ -100,7 +101,9 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
 }
 
 extern "C" void flash_read(int32_t addr, int32_t *data) { assert(0); }
-extern "C" void mrom_read(int32_t addr, int32_t *data) { *data = 0x00100073; }
+extern "C" void mrom_read(int32_t addr, int32_t *data) {
+  *data = *(int32_t *)guest_to_host((uint32_t)addr);
+}
 
 extern "C" void find_ebreak() {
   set_nemu_state(NPC_END, SOC_PC, get_reg(10));
