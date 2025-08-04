@@ -51,7 +51,7 @@ LDFLAGS         += -lreadline $(C_SANITIZE)
 VERILATOR_FLAGS += -Wall --cc -exe --build --x-assign fast --x-initial fast \
                    --timescale "1ns/1ns" --no-timing \
                    --top-module $(TOP_MODULE) \
-                   $(VERILATOR_INCS) --autoflush \
+                   $(VERILATOR_INCS) \
                    $(VERILATOR_WNO) \
                    -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"
 
