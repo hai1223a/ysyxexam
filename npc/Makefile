@@ -43,7 +43,7 @@ VERILATOR_FLAGS += -Wall --cc -exe --build --x-assign fast --x-initial fast \
 				   --timescale "1ns/1ns" --no-timing \
 				   --top-module $(TOPNAME) \
 				   $(INCSRCS) --prof-exec\
-				   --Wno-DECLFILENAME --Wno-UNUSEDSIGNAL \
+				   $(A) \
 				   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"
 
 ifdef CONFIG_FST
