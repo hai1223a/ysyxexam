@@ -25,7 +25,7 @@ endif
 TOPNAME = ysyxSoCFull
 VERILATOR = verilator
 # 源文件
-CSRCS = $(shell find csrc -type f -name "*.c *.cpp")
+CSRCS = $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
 VSRCS = $(shell find vsrc -type f -name "*.v")
 INCSRCS = $(addprefix -I, vsrc vsrc/perip/uart16550/rtl vsrc/perip/spi/rtl)
 # 编译选项
