@@ -60,17 +60,17 @@ VERILATOR_FLAGS += --trace-fst
 endif
 
 # 仿真参数
-override SIM_ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
+override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 					 -l $(NPC_HOME)/obj_dir/log/log.txt
 
 include $(NPC_HOME)/scripts/config.mk
 
 # 目标
 run: exe
-	./obj_dir/V$(TOP_MODULE) $(SIM_ARGS)
+	./obj_dir/V$(TOP_MODULE) $(ARGS)
 
 gdb: exe
-	gdb --args obj_dir/V$(TOP_MODULE) $(SIM_ARGS)
+	gdb --args obj_dir/V$(TOP_MODULE) $(ARGS)
 
 exe: $(LIBCAPSTONE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
