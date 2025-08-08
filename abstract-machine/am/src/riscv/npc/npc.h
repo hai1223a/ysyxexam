@@ -1,5 +1,5 @@
-#ifndef NEMU_H__
-#define NEMU_H__
+#ifndef NPC_H__
+#define NPC_H__
 
 #include <klib-macros.h>
 #include <riscv/riscv.h>

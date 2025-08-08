@@ -3,7 +3,7 @@ CC      = $(CROSS_COMPILE)gcc
 OBJDUMP = $(CROSS_COMPILE)objdump
 OBJCOPY = $(CROSS_COMPILE)objcopy
 
-CFLAGS += -Os -fomit-frame-pointer -nostartfiles
+CFLAGS += -Os -fomit-frame-pointer -nostartfiles -fno-pic
 CFLAGS += -march=rv32e_zicsr -mabi=ilp32e
 LDFLAGS += -nostdlib -Wl,--gc-sections
 
