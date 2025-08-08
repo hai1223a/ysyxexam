@@ -61,7 +61,6 @@ endif
 
 # 仿真参数
 override SIM_ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
-        			 -i $(NPC_HOME)/sim/test1.bin \
 					 -l $(NPC_HOME)/obj_dir/log/log.txt
 
 include $(NPC_HOME)/scripts/config.mk
