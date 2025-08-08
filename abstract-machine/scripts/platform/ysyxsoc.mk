@@ -11,8 +11,7 @@ override NPCFLAGS += -l $(shell dirname $(IMAGE).elf)/ysyxsoc-log.txt \
                      -d $(NEMU_HOME)/build/riscv32-nemu-interpreter-so \
                      -p 1234 \
                      -e $(IMAGE).elf \
-                     -g $(shell dirname $(IMAGE).elf)/ysyxsoc-ftracerlog.txt \
-                     -b
+                     -g $(shell dirname $(IMAGE).elf)/ysyxsoc-ftracerlog.txt 
 
 MAINARGS_MAX_LEN = 64
 MAINARGS_PLACEHOLDER = The insert-arg rule in Makefile will insert mainargs here.
