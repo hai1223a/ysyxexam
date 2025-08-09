@@ -99,8 +99,8 @@ void paddr_write(paddr_t addr, int len, word_t data) {
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "write  %d     %x", len, data);
     *p = '\0';
   #endif
-  if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
-  if (in_sram(addr)) { sram_write(addr, len, data); return; }
+  if (likely(in_pmem(addr))) { Log("A");pmem_write(addr, len, data); return; }
+  if (in_sram(addr)) { Log("B");sram_write(addr, len, data); return; }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
 }
