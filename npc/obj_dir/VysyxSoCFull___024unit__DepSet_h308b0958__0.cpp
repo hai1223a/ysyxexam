@@ -14,6 +14,14 @@ VL_INLINE_OPT void VysyxSoCFull___024unit____Vdpiimwrap_find_ebreak_TOP____024un
     find_ebreak();
 }
 
+extern "C" void find_resp();
+
+VL_INLINE_OPT void VysyxSoCFull___024unit____Vdpiimwrap_find_resp_TOP____024unit() {
+    VL_DEBUG_IF(VL_DBG_MSGF("+        VysyxSoCFull___024unit____Vdpiimwrap_find_resp_TOP____024unit\n"); );
+    // Body
+    find_resp();
+}
+
 extern "C" void flash_read(int addr, int* data);
 
 VL_INLINE_OPT void VysyxSoCFull___024unit____Vdpiimwrap_flash_read_TOP____024unit(IData/*31:0*/ addr, IData/*31:0*/ &data) {

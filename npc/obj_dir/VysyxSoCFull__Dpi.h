@@ -18,6 +18,8 @@ extern "C" {
     // DPI IMPORTS
     // DPI import at vsrc/cpu.v:2:30
     extern void find_ebreak();
+    // DPI import at vsrc/cpu.v:3:30
+    extern void find_resp();
     // DPI import at vsrc/perip/flash/flash.v:84:30
     extern void flash_read(int addr, int* data);
     // DPI import at vsrc/ysyxSoCFull.v:5402:30
