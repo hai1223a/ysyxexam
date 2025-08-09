@@ -32,7 +32,7 @@ SECTIONS {
     *(.data)
   } > REGION_DATA
   data_size = SIZEOF(.data);
-  data_load_start = LOADADDR();
+  data_load_start = LOADADDR(.data);
   edata = .;
   _data = .;
   
