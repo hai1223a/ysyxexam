@@ -90,8 +90,6 @@ word_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
-    Log("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
-      addr, PMEM_LEFT, PMEM_RIGHT, cpu.pc);
   #ifdef CONFIG_MTRACE
     char *p = mtrace_buf;
     p += snprintf(p, sizeof(mtrace_buf), FMT_WORD ":  ", cpu.pc);
@@ -99,8 +97,8 @@ void paddr_write(paddr_t addr, int len, word_t data) {
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "write  %d     %x", len, data);
     *p = '\0';
   #endif
-  if (likely(in_pmem(addr))) { Log("A");pmem_write(addr, len, data); return; }
-  if (in_sram(addr)) { Log("B");sram_write(addr, len, data); return; }
+  if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
+  if (in_sram(addr)) { sram_write(addr, len, data); return; }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
 }
