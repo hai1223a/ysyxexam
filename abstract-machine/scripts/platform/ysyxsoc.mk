@@ -2,7 +2,7 @@ AM_SRCS := riscv/ysyxsoc/start.S \
            riscv/ysyxsoc/trm.c \
 
 CFLAGS    += -fdata-sections -ffunction-sections
-LDSCRIPTS += $(AM_HOME)/am/src/riscv/ysyxsoc/linker.ld
+LDSCRIPTS += $(AM_HOME)/scripts/linker_soc.ld
 LDFLAGS   += --defsym=_pmem_start=0x20000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
 IMAGE_NAME = $(basename $(notdir $(IMAGE)))
