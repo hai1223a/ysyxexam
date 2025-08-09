@@ -104,6 +104,7 @@
         "regex": "cpp",
         "elf.h": "c",
         "dlfcn.h": "c",
-        "capstone.h": "c"
+        "capstone.h": "c",
+        "stddef.h": "c"
     }
 }
