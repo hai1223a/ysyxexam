@@ -14,7 +14,6 @@ SECTIONS {
   .rodata : {
     *(.rodata*)
   }
-  . = 0x0f000000;
   .data : {
     *(.data)
   } : data
@@ -26,6 +25,7 @@ SECTIONS {
     *(.sbss*)
     *(.scommon)
   }
+  . = 0x0f000000;
   _stack_top = ALIGN(0x400);
   . = _stack_top + 0x400;
   _stack_pointer = .;

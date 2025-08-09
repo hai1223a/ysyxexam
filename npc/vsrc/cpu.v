@@ -1,5 +1,6 @@
 `include "config.v"
 import "DPI-C" function void find_ebreak();
+import "DPI-C" function void find_resp();
 module ysyx_25050136_NPC
 #(
     ADDR_WIDTH = 5,
@@ -97,6 +98,8 @@ wire ex2if_pc_updata_o;
 always @(*) begin
     if(id2ex_csru_op_o[`ysyx_25050136_CSRU_EBREAK])
         find_ebreak();
+    if(inst_rresp_i | mem_bresp_i | mem_rresp_i)
+        find_resp();
 end
 //========================================
 // 子模块

@@ -109,6 +109,11 @@ extern "C" void find_ebreak() {
   set_nemu_state(NPC_END, SOC_PC, get_reg(10));
 }
 
+extern "C" void find_resp() {
+  Log("NPC抛出Access Fault异常");
+  set_nemu_state(NPC_END, SOC_PC, get_reg(10));
+}
+
 uint32_t vaddr_read(uint32_t paddr, int len)
 {
   if (likely(in_pmem(paddr)))
