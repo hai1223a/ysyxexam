@@ -82,8 +82,8 @@ word_t paddr_read(paddr_t addr, int len) {
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "read  %d", len);
     *p = '\0';
   #endif
-  if (likely(in_pmem(addr))) return pmem_read(addr, len);
-  if (in_sram(addr)) return sram_read(addr, len);
+  if (likely(in_pmem(addr))) { printf("A"); return pmem_read(addr, len)};
+  if (in_sram(addr)) { printf("B"); return sram_read(addr, len)};
   IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
   out_of_bound(addr);
   return 0;
