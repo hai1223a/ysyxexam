@@ -51,7 +51,8 @@ module ysyx_25050136_LSU
          output                        mem_valid_o
      );
     // 内部
-    wire index00,index01,index10,index11;
+    wire [3:0] byte_sel;
+    wire misaligned;
     // 读事务
     localparam READ_IEDL = 2'd0;
     localparam READ_ADDR = 2'd1;
@@ -73,101 +74,47 @@ module ysyx_25050136_LSU
     reg [3:0] m_wstrb_r;
     wire aw_fire, w_fire, b_fire;
     // 内部
-    assign {index00,index01,index10,index11} = {mem_addr_i[1:0] == 2'b00, mem_addr_i[1:0] == 2'b01, 
-                                                mem_addr_i[1:0] == 2'b10, mem_addr_i[1:0] == 2'b11};
-    always @(*) begin
-        m_wdata_r = 0;
-        m_wstrb_r = 0;
-        if(index00) begin
-            m_wstrb_r = mem_mask_i;
-            case (mem_mask_i)
-                4'h1: begin
-                    m_wdata_r = {24'd0, store_data_i[7:0]};
-                end 
-                4'h3: begin
-                    m_wdata_r = {16'd0, store_data_i[15:0]};                    
-                end 
-                4'hf: begin
-                    m_wdata_r = store_data_i;                    
-                end 
-            endcase
-        end
-        if(index01) begin
-            case (mem_mask_i)
-                4'h1: begin
-                    m_wstrb_r = 4'b0010;                    
-                    m_wdata_r = {16'd0, store_data_i[7:0], 8'd0};
-                end 
-            endcase
-        end
-        if(index10) begin
-            case (mem_mask_i)
-                4'h1: begin
-                    m_wstrb_r = 4'b0100; 
-                    m_wdata_r = {8'd0, store_data_i[7:0], 16'd0};
-                end 
-                4'h3: begin
-                    m_wstrb_r = 4'b1100;
-                    m_wdata_r = {store_data_i[15:0], 16'd0};                    
-                end 
-            endcase
-        end
-        if(index11) begin
-            case (mem_mask_i)
-                4'h1: begin
-                    m_wstrb_r = 4'b1000;
-                    m_wdata_r = {store_data_i[7:0], 24'd0};
-                end 
-            endcase
-        end
-    end
+    assign byte_sel = 4'b1 << mem_addr_i[1:0];
 
     always @(*) begin
-        m_arsize_r = 3'b010;
+        // 默认值
+        m_wdata_r = 0;
+        m_wstrb_r = 0;
+        m_arsize_r = 3'b010; // 默认word
         load_data_r = 0;
+        
+        // 统一处理读写
         case (mem_mask_i)
-            4'hF:begin
-                m_arsize_r = 3'b010;
-                if (index00) begin
-                    load_data_r = m_rdata_i;  
-                end
+            4'h1: begin // Byte操作
+                m_wstrb_r = byte_sel;
+                m_wdata_r = store_data_i[7:0] << (8 * mem_addr_i[1:0]);
+                m_arsize_r = 3'b000;
+                load_data_r = mem_signed_i ? 
+                    {{24{m_rdata_i[8*mem_addr_i[1:0] + 7]}}, m_rdata_i[8*mem_addr_i[1:0] +: 8]} :
+                    {24'd0, m_rdata_i[8*mem_addr_i[1:0] +: 8]};
             end
-            4'h3:begin
+            4'h3: begin // Halfword操作
+                m_wstrb_r = byte_sel | (byte_sel << 1);
+                m_wdata_r = store_data_i[15:0] << (8 * mem_addr_i[1:0]);
                 m_arsize_r = 3'b001;
-                if (mem_signed_i)
-                    if(index00)
-                        load_data_r = {{16{m_rdata_i[15]}},m_rdata_i[15:0]};
-                    if(index10)
-                        load_data_r = {{16{m_rdata_i[15]}},m_rdata_i[31:16]};
-                else
-                    if(index00)
-                        load_data_r = {16'd0,m_rdata_i[15:0]};
-                    if(index10)
-                        load_data_r = {16'd0,m_rdata_i[31:16]};
+                load_data_r = mem_signed_i ?
+                    {{16{m_rdata_i[16*mem_addr_i[1] + 15]}}, m_rdata_i[16*mem_addr_i[1] +: 16]} :
+                    {16'd0, m_rdata_i[16*mem_addr_i[1] +: 16]};
             end
-            4'h1:begin
-                m_arsize_r = 0;
-                if (mem_signed_i)
-                    if(index00)
-                        load_data_r = {{24{m_rdata_i[7]}},m_rdata_i[7:0]};
-                    if(index01)
-                        load_data_r = {{24{m_rdata_i[7]}},m_rdata_i[15:7]};
-                    if(index10)
-                        load_data_r = {{24{m_rdata_i[7]}},m_rdata_i[23:16]};
-                    if(index11)
-                        load_data_r = {{24{m_rdata_i[7]}},m_rdata_i[31:24]};
-                else
-                    if(index00)
-                        load_data_r = {24'd0,m_rdata_i[7:0]};
-                    if(index01)
-                        load_data_r = {24'd0,m_rdata_i[15:7]};
-                    if(index10)
-                        load_data_r = {24'd0,m_rdata_i[23:16]};
-                    if(index11)
-                        load_data_r = {24'd0,m_rdata_i[31:24]};
+            4'hF: begin // Word操作
+                m_wstrb_r = 4'b1111;
+                m_wdata_r = store_data_i;
+                m_arsize_r = 3'b010;
+                load_data_r = m_rdata_i;
             end
         endcase
     end
+
+    assign misaligned = 
+        (mem_mask_i == 4'h3) ? mem_addr_i[0] :       // halfword检查bit[0]
+        (mem_mask_i == 4'hF) ? |mem_addr_i[1:0] :    // word检查bit[1:0]
+        1'b0;                                        // byte总是对齐
+
     // 读事务
     always @(posedge clk) begin
         if (!resetn) begin
