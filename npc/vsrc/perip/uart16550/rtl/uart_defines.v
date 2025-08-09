@@ -156,11 +156,11 @@
 // `define UART_HAS_BAUDRATE_OUTPUT
 
 // Register addresses
-`define UART_REG_RB	`UART_ADDR_WIDTH'd2	// receiver buffer
-`define UART_REG_TR  `UART_ADDR_WIDTH'd2	// transmitter
+`define UART_REG_RB	`UART_ADDR_WIDTH'd0	// receiver buffer
+`define UART_REG_TR  `UART_ADDR_WIDTH'd0	// transmitter
 `define UART_REG_IE	`UART_ADDR_WIDTH'd1	// Interrupt enable
-`define UART_REG_II  `UART_ADDR_WIDTH'd0	// Interrupt identification
-`define UART_REG_FC  `UART_ADDR_WIDTH'd0	// FIFO control
+`define UART_REG_II  `UART_ADDR_WIDTH'd2	// Interrupt identification
+`define UART_REG_FC  `UART_ADDR_WIDTH'd2	// FIFO control
 `define UART_REG_LC	`UART_ADDR_WIDTH'd3	// Line Control
 `define UART_REG_MC	`UART_ADDR_WIDTH'd4	// Modem control
 `define UART_REG_LS  `UART_ADDR_WIDTH'd5	// Line status

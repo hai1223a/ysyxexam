@@ -50,6 +50,8 @@ module ysyx_25050136_LSU
          output   [DATA_WIDTH-1:0]     load_data_o  ,
          output                        mem_valid_o
      );
+    // 内部
+    wire index00,index01,index10,index11;
     // 读事务
     localparam READ_IEDL = 2'd0;
     localparam READ_ADDR = 2'd1;
@@ -60,7 +62,113 @@ module ysyx_25050136_LSU
     reg [DATA_WIDTH-1:0] load_data_r;
     reg [1:0] state_read;
     wire ar_fire, r_fire;
+    // 写事务
+    localparam WRITE_IDEL    = 2'd0;
+    localparam WRITE_RUNNING = 2'd1;
+    localparam WRITE_WAIT    = 2'd2;
+    reg m_bready_r;
+    reg aw_en, w_en;
+    reg [1:0] state_write;
+    reg [31:0] m_wdata_r;
+    reg [3:0] m_wstrb_r;
+    wire aw_fire, w_fire, b_fire;
+    // 内部
+    assign {index00,index01,index10,index11} = {mem_addr_i[1:0] == 2'b00, mem_addr_i[1:0] == 2'b01, 
+                                                mem_addr_i[1:0] == 2'b10, mem_addr_i[1:0] == 2'b11};
+    always @(*) begin
+        m_wdata_r = 0;
+        m_wstrb_r = 0;
+        if(index00) begin
+            m_wstrb_r = mem_mask_i;
+            case (mem_mask_i)
+                4'h1: begin
+                    m_wdata_r = {24'd0, store_data_i[7:0]};
+                end 
+                4'h3: begin
+                    m_wdata_r = {16'd0, store_data_i[15:0]};                    
+                end 
+                4'hf: begin
+                    m_wdata_r = store_data_i;                    
+                end 
+            endcase
+        end
+        if(index01) begin
+            case (mem_mask_i)
+                4'h1: begin
+                    m_wstrb_r = 4'b0010;                    
+                    m_wdata_r = {16'd0, store_data_i[7:0], 8'd0};
+                end 
+            endcase
+        end
+        if(index10) begin
+            case (mem_mask_i)
+                4'h1: begin
+                    m_wstrb_r = 4'b0100; 
+                    m_wdata_r = {8'd0, store_data_i[7:0], 16'd0};
+                end 
+                4'h3: begin
+                    m_wstrb_r = 4'b1100;
+                    m_wdata_r = {store_data_i[15:0], 16'd0};                    
+                end 
+            endcase
+        end
+        if(index11) begin
+            case (mem_mask_i)
+                4'h1: begin
+                    m_wstrb_r = 4'b1000;
+                    m_wdata_r = {store_data_i[7:0], 24'd0};
+                end 
+            endcase
+        end
+    end
 
+    always @(*) begin
+        m_arsize_r = 3'b010;
+        load_data_r = 0;
+        case (mem_mask_i)
+            4'hF:begin
+                m_arsize_r = 3'b010;
+                if (index00) begin
+                    load_data_r = m_rdata_i;  
+                end
+            end
+            4'h3:begin
+                m_arsize_r = 3'b001;
+                if (mem_signed_i)
+                    if(index00)
+                        load_data_r = {{16{m_rdata_i[15]}},m_rdata_i[15:0]};
+                    if(index10)
+                        load_data_r = {{16{m_rdata_i[15]}},m_rdata_i[31:16]};
+                else
+                    if(index00)
+                        load_data_r = {16'd0,m_rdata_i[15:0]};
+                    if(index10)
+                        load_data_r = {16'd0,m_rdata_i[31:16]};
+            end
+            4'h1:begin
+                m_arsize_r = 0;
+                if (mem_signed_i)
+                    if(index00)
+                        load_data_r = {{24{m_rdata_i[7]}},m_rdata_i[7:0]};
+                    if(index01)
+                        load_data_r = {{24{m_rdata_i[7]}},m_rdata_i[15:7]};
+                    if(index10)
+                        load_data_r = {{24{m_rdata_i[7]}},m_rdata_i[23:16]};
+                    if(index11)
+                        load_data_r = {{24{m_rdata_i[7]}},m_rdata_i[31:24]};
+                else
+                    if(index00)
+                        load_data_r = {24'd0,m_rdata_i[7:0]};
+                    if(index01)
+                        load_data_r = {24'd0,m_rdata_i[15:7]};
+                    if(index10)
+                        load_data_r = {24'd0,m_rdata_i[23:16]};
+                    if(index11)
+                        load_data_r = {24'd0,m_rdata_i[31:24]};
+            end
+        endcase
+    end
+    // 读事务
     always @(posedge clk) begin
         if (!resetn) begin
             state_read   <= READ_IEDL;
@@ -95,34 +203,6 @@ module ysyx_25050136_LSU
         end
     end
 
-    always @(*) begin
-        case (mem_mask_i)
-            4'hF:begin
-                m_arsize_r = 3'b010;
-                load_data_r = m_rdata_i;
-            end
-            4'h3:begin
-                m_arsize_r = 3'b001;
-                if (mem_signed_i)
-                    load_data_r = {{16{m_rdata_i[15]}},m_rdata_i[15:0]};
-                else
-                    load_data_r = {16'h0,m_rdata_i[15:0]};
-            end
-            4'h1:begin
-                m_arsize_r = 0;
-                if (mem_signed_i)
-                    load_data_r = {{24{m_rdata_i[7]}},m_rdata_i[7:0]};
-                else
-                    load_data_r = {24'h0,m_rdata_i[7:0]};
-            end
-            default:begin
-                m_arsize_r = 3'b010;
-                load_data_r = 0;
-            end
-        endcase
-    end
-
-
     assign m_arvalid_o = (state_read == READ_ADDR);
     assign m_araddr_o  = mem_addr_i;
     assign m_arid_o = 0;
@@ -134,13 +214,6 @@ module ysyx_25050136_LSU
     assign r_fire = m_rvalid_i & m_rready_o;
     assign load_data_o = load_data_r;
     // 写事务
-    localparam WRITE_IDEL    = 2'd0;
-    localparam WRITE_RUNNING = 2'd1;
-    localparam WRITE_WAIT    = 2'd2;
-    reg m_bready_r;
-    reg aw_en, w_en;
-    reg [1:0]state_write;
-    wire aw_fire, w_fire, b_fire;
     always @(posedge clk) begin
         if(!resetn) begin
             m_bready_r  <= 0;
@@ -188,8 +261,8 @@ module ysyx_25050136_LSU
     assign m_awburst_o = 0;
     assign m_wvalid_o  = (state_write == WRITE_RUNNING) && ~w_en;
     assign m_wlast_o   = (state_write == WRITE_RUNNING) && ~w_en;
-    assign m_wdata_o   = store_data_i;
-    assign m_wstrb_o   = mem_mask_i;
+    assign m_wdata_o   = m_wdata_r;
+    assign m_wstrb_o   = m_wstrb_r;
     assign m_bready_o  = m_bready_r;    
     assign aw_fire     = m_awvalid_o & m_awready_i;
     assign w_fire      = m_wvalid_o & m_wready_i;
