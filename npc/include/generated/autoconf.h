@@ -6,6 +6,7 @@
  */
 #define CONFIG_MSIZE 0xffff
 #define CONFIG_ITRACE 1
+#define CONFIG_DIFFTEST 1
 #define CONFIG_FST 1
 #define CONFIG_MBASE 0x20000000
 #define CONFIG_TRACE 1
