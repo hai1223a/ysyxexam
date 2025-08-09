@@ -90,6 +90,8 @@ word_t paddr_read(paddr_t addr, int len) {
 }
 
 void paddr_write(paddr_t addr, int len, word_t data) {
+    Log("address = " FMT_PADDR " is out of bound of pmem [" FMT_PADDR ", " FMT_PADDR "] at pc = " FMT_WORD,
+      addr, PMEM_LEFT, PMEM_RIGHT, cpu.pc);
   #ifdef CONFIG_MTRACE
     char *p = mtrace_buf;
     p += snprintf(p, sizeof(mtrace_buf), FMT_WORD ":  ", cpu.pc);
