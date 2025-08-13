@@ -11,7 +11,6 @@ copy_data:
     
     # 加载 data_size 的值到 t2
     la      t2, data_size        # t2 = data_size 的地址
-    lw      t2, 0(t2)            # t2 = data_size 的实际值
     
     # 如果 data_size == 0，直接返回
     beqz    t2, copy_done
