@@ -20,18 +20,23 @@
 
 #define NPC_REGS_NUM 16
 __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
-  if (direction == DIFFTEST_TO_DUT)
-  {
-    for (size_t i = 0; i < n; i++)
-    {
-      *((uint8_t *)buf + i) = paddr_read(addr + i, 1);
+  // 检查所有参数是否4字节对齐
+  assert((addr & 0x3) == 0 && "Address must be 4-byte aligned");
+  assert(((uintptr_t)buf & 0x3) == 0 && "Buffer must be 4-byte aligned");
+  assert((n & 0x3) == 0 && "Size must be multiple of 4");
+
+  size_t words = n / 4;
+
+  if (direction == DIFFTEST_TO_DUT) {
+    // 直接从addr开始读取，不需要指针转换
+    for (size_t i = 0; i < words; i++) {
+      ((uint32_t *)buf)[i] = paddr_read(addr + i * 4, 4);  // 以4字节为单位读取
     }
-  }
-  if (direction == DIFFTEST_TO_REF)
-  {
-    for (size_t i = 0; i < n; i++)
-    {
-      paddr_write(addr + i, 1, (word_t)*((uint8_t *)buf + i));
+  } 
+  else if (direction == DIFFTEST_TO_REF) {
+    // 直接从addr开始写入，不需要指针转换
+    for (size_t i = 0; i < words; i++) {
+      paddr_write(addr + i * 4, 4, ((uint32_t *)buf)[i]);  // 以4字节为单位写入
     }
   }
 }
