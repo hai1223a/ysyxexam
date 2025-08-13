@@ -114,6 +114,10 @@ extern "C" void find_resp() {
   set_nemu_state(NPC_END, SOC_PC, get_reg(10));
 }
 
+extern "C" void find_addr_0() {
+  Log("你正在对地址0进行读写");
+}
+
 uint32_t vaddr_read(uint32_t paddr, int len)
 {
   if (likely(in_pmem(paddr)))

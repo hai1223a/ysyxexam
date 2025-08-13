@@ -1,3 +1,4 @@
+import "DPI-C" function void find_addr_0();
 module ysyx_25050136(
     input               clock             ,
     input               reset             ,
@@ -74,6 +75,14 @@ module ysyx_25050136(
     output              io_slave_rlast    ,
     output      [3:0]   io_slave_rid
 );
+
+    always @(*) begin
+        if ((io_master_awvalid & io_master_awready & (io_master_awaddr == 0)) |
+            (io_master_arvalid & io_master_arready & (io_master_araddr == 0)) )
+        begin
+            find_addr_0();
+        end
+    end
     localparam TOP_ADDR_WIDTH   = 5 ;
     localparam TOP_DATA_WIDTH   = 32;
     localparam TOP_MASTER_NUM   = 2 ;
