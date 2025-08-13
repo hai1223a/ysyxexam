@@ -1,21 +1,23 @@
 .global copy_data
 copy_data:
-    # 加载 data_start 和 data_load_start 的地址
-    la      t0, data_start       # t0 = 目标地址 (data_start)
-    la      t1, data_load_start  # t1 = 源地址 (data_load_start)
+    # 加载 data_start 的地址（实际上是获取 data_start 的值）
+    la      t0, data_start       # t0 = 目标地址 (data_start 的值)
+    
+    # 加载 data_load_start 的地址（实际上是获取 data_load_start 的值）
+    la      t1, data_load_start  # t1 = 源地址 (data_load_start 的值)
     
     # 比较地址是否相同，如果相同则直接返回
     beq     t0, t1, copy_done
     
-    # 加载 data_size (字节数) 到 t2
-    la      t2, data_size
-    lw      t2, 0(t2)            # t2 = 复制的字节数
+    # 加载 data_size 的值到 t2
+    la      t2, data_size        # t2 = data_size 的地址
+    lw      t2, 0(t2)            # t2 = data_size 的实际值
     
     # 如果 data_size == 0，直接返回
     beqz    t2, copy_done
     
 copy_loop:
-    # 逐字节复制 (RV32E 没有字节加载/存储指令，用 lb/sb)
+    # 逐字节复制
     lb      a2, 0(t1)      # 从源地址加载一个字节
     sb      a2, 0(t0)      # 存储到目标地址
     
