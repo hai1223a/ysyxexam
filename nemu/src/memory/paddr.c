@@ -37,21 +37,25 @@ paddr_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 uint8_t* guest_to_host_sram(paddr_t paddr) { return psram + paddr - CONFIG_SRAM_BASE; }
 
 static word_t pmem_read(paddr_t addr, int len) {
-  word_t ret = host_read(guest_to_host(addr), len);
+  paddr_t align_addr = addr & ~0x3;
+  word_t ret = host_read(guest_to_host(align_addr), len);
   return ret;
 }
 
 static void pmem_write(paddr_t addr, int len, word_t data) {
-  host_write(guest_to_host(addr), len, data);
+  paddr_t align_addr = addr & ~0x3;
+  host_write(guest_to_host(align_addr), len, data);
 }
 
 static word_t sram_read(paddr_t addr, int len) {
-  word_t ret = host_read(guest_to_host_sram(addr), len);
+  paddr_t align_addr = addr & ~0x3;
+  word_t ret = host_read(guest_to_host_sram(align_addr), len);
   return ret;
 }
 
 static void sram_write(paddr_t addr, int len, word_t data) {
-  host_write(guest_to_host_sram(addr), len, data);
+  paddr_t align_addr = addr & ~0x3;
+  host_write(guest_to_host_sram(align_addr), len, data);
 }
 
 static void out_of_bound(paddr_t addr) {
