@@ -1,36 +1,28 @@
 ENTRY(_start)
 
 MEMORY {
-  mrom : ORIGIN = 0x20000000, LENGTH = 4K
   sram : ORIGIN = 0x0f000000, LENGTH = 8K
+  mrom : ORIGIN = 0x20000000, LENGTH = 4K
 }
-
-REGION_ALIAS("REGION_TEXT", mrom);
-REGION_ALIAS("REGION_RODATA", mrom);
-REGION_ALIAS("REGION_DATA", sram);
-REGION_ALIAS("REGION_BSS", sram);
 
 SECTIONS {
   /* _pmem_start and _entry_offset are defined in LDFLAGS */
-  . = ORIGIN(mrom);
   .text : {
     *(entry)
     *(.text*)
-  } > REGION_TEXT
+  } > mrom AT> mrom
   etext = .;
   _etext = .;
 
   .rodata : {
     *(.rodata*)
     rodata_end = .;
-  } > REGION_RODATA
+  } > mrom AT> mrom
 
-  . = ORIGIN(sram);
-  .data : AT(rodata_end)
-  {
+  .data : {
     data_start = .;
     *(.data)
-  } > REGION_DATA
+  } > sram AT> mrom
   data_size = SIZEOF(.data);
   data_load_start = LOADADDR(.data);
   edata = .;
@@ -40,7 +32,7 @@ SECTIONS {
     *(.bss*)
     *(.sbss*)
     *(.scommon)
-  } > REGION_BSS
+  } > sram AT> sram
 
   /* 堆区（动态计算剩余空间） */
   _heap_start = ALIGN(4);  /* 堆起始地址（4字节对齐） */
