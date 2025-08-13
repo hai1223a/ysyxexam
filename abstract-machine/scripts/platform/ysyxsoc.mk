@@ -1,9 +1,10 @@
 AM_SRCS := riscv/ysyxsoc/start.S \
+		   riscv/ysyxsoc/bootloader.S \
            riscv/ysyxsoc/trm.c \
 
 CFLAGS    += -fdata-sections -ffunction-sections
 LDSCRIPTS += $(AM_HOME)/scripts/linker_soc.ld
-LDFLAGS   += --defsym=_pmem_start=0x20000000 --defsym=_entry_offset=0x0
+LDFLAGS   += --defsym=_pmem_start=0x20000000 --defsym=_entry_offset=0x0 --print-map
 LDFLAGS   += --gc-sections -e _start
 IMAGE_NAME = $(basename $(notdir $(IMAGE)))
 override NPCFLAGS += -l $(shell dirname $(IMAGE).elf)/ysyxsoc-log.txt \

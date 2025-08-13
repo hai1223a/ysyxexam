@@ -294,3 +294,14 @@ from menuconfig import mk_rtconfig
 make: *** [Makefile:18: rtconfig.h] Error 2##
 [green]##这是因为系统的python工具中有menuconfig这个包, 而rt-thread也提供了menuconfig.py文件,这让脚本SConstruct不知道该如何选择, 所以生成了空文件, 在第二次使用make init前如果没有将这些空文件删除, 就会被脚本认为已经完成了make init操作而不会重现报错. 这样的结果就是在make ARCH=native run时, 由于rtconfig.h是空文件导致了一堆的报错, 正常情况向rtconfig.h应该存在和.config中相似的内容.##::
 我们需要修改SConstruct文件, 在 *import sys* 之后插入 *sys.path.insert(0, '/home/yunhai/ysyx-workbench/Templates/rt-thread-am/tools')* 这告诉脚本, 优先在项目提供的文件中寻找对应的包.
+
+[[d2025-8-9]]
+== 2025/8/9 实验日志
+=== 今日完成任务
+完成至B2/更实用的Soc/内存访问测试
+
+=== 今日要点
+这次测试的是sram的堆读写功能, sram的大小为8k, 0x0f000000~0x0f002000, 0x0f002000附近1KB的大小为栈, 剩下的空间为堆
+
+* 第一个问题: 因为main函数把所有的堆都重新写了一遍, 所以不能从main函数返回, main函数最后必须halt(0);或者while(1);
+* 第二个问题: 检查读写功能是否正确使用check(A==B)会造成栈溢出, 因为这个check函数规定为了不可内联属性, 所以使用if(A!=B) halt(1);才能好用.

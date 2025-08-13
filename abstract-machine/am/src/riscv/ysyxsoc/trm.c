@@ -3,6 +3,7 @@
 
 extern char _heap_start;
 extern char _heap_end;
+extern void copy_data();
 int main(const char *args);
 
 Area heap = RANGE(&_heap_start, &_heap_end);
@@ -18,6 +19,7 @@ void halt(int code) {
 }
 
 void _trm_init() {
+  copy_data();
   int ret = main(mainargs);
   halt(ret);
 }
