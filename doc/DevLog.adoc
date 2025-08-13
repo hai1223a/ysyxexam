@@ -305,3 +305,103 @@ make: *** [Makefile:18: rtconfig.h] Error 2##
 
 * 第一个问题: 因为main函数把所有的堆都重新写了一遍, 所以不能从main函数返回, main函数最后必须halt(0);或者while(1);
 * 第二个问题: 检查读写功能是否正确使用check(A==B)会造成栈溢出, 因为这个check函数规定为了不可内联属性, 所以使用if(A!=B) halt(1);才能好用.
+
+[[d2025-8-13]]
+== 2025/8/13 实验日志
+=== 今日BUG
+
+* 问题一: 在B2的写入全局变量实验中, 修改了链接脚本, 同时用到了sram和mrom, 两部分存储的地址相差很远,由于链接脚本不正确的写法导致了elf转换得到的bin文件存在大量的**内存空洞**, 即全0, 这样bin文件就太大了. 问题脚本如下, 主要出现在.data段
+
+[source, asm]
+----
+ENTRY(_start)
+
+MEMORY {
+  sram : ORIGIN = 0x0f000000, LENGTH = 8K
+  mrom : ORIGIN = 0x20000000, LENGTH = 4K
+}
+
+SECTIONS {
+    /* ... */
+    rodata_end = .;
+    . = ORIGIN(sram);
+    .data : AT(rodata_end)
+    {
+        data_start = .;
+        *(.data)
+    } > sram
+    data_size = SIZEOF(.data);
+    data_load_start = LOADADDR(.data);
+    /* ... */
+}
+----
+该脚本得到bin文件大小为 285MB
+[source, asm]
+----
+SECTIONS {
+    /* ... */
+    rodata_end = .;
+    .data :
+    {
+        data_start = .;
+        *(.data)
+    } > sram AT > rodata_end
+    data_size = SIZEOF(.data);
+    data_load_start = LOADADDR(.data);
+    /* ... */
+}
+----
+该脚本得到bin文件大小为 532MB
+[source, asm]
+----
+SECTIONS {
+    /* ... */
+    .data :
+    {
+        data_start = .;
+        *(.data)
+    } > sram AT > mrom
+    data_size = SIZEOF(.data);
+    data_load_start = LOADADDR(.data);
+    /* ... */
+}
+----
+该脚本得到bin文件大小为 644B +
+所以问题应该是出现在了我使用rodata_end上
+
+* 问题二: 我发现fib.c定义全局变量ans但是使用选项--print-map时, data_size确实等于0, 导致我没有正确启动bootloader? +
+原因在于启动了选项-fdata-sections, 这个选项将**.data**的每个变量变成了**.data.变量名**这样的子段, 所以我的脚本中的**.data**并没有收集到这两个全局变量, 这两个全局变量子段会被自动链接到**.data**的后面, 所以data_size错误, 修改脚本如下即可
+
+[source, asm]
+----
+SECTIONS {
+    /* ... */
+    .data :
+    {
+        data_start = .;
+        *(.data .data.*)
+    } > sram AT > mrom
+    data_size = SIZEOF(.data);
+    data_load_start = LOADADDR(.data);
+    /* ... */
+}
+----
+
+* 问题三: 程序执行错误, 检查发现对 int ans[0] = 1的四次lb操作, 并未按预想得到1,0,0,0; 而是得到了1,0,1,0这样的错误结果? +
+原因是ysyxsoc的sram使用了地址4字节对齐访问, 而我使用DPI-C实现mrom并没有考虑地址4字节对齐访问, 所以我只需要给mrom添加地址4字节对齐访问即可 +
+错误程序
+
+[source, C++]
+----
+extern "C" void mrom_read(int32_t addr, int32_t *data) {
+  *data = *(int32_t *)guest_to_host((uint32_t)addr);
+}
+----
+正确程序
+[source, C++]
+----
+extern "C" void mrom_read(int32_t addr, int32_t *data) {
+  int32_t raddr = addr & (~0x3);
+  *data = *(int32_t *)guest_to_host((uint32_t)raddr);
+}
+----
