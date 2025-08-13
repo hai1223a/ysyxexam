@@ -6,6 +6,14 @@
 #include "VysyxSoCFull__Syms.h"
 #include "VysyxSoCFull___024unit.h"
 
+extern "C" void find_addr_0();
+
+VL_INLINE_OPT void VysyxSoCFull___024unit____Vdpiimwrap_find_addr_0_TOP____024unit() {
+    VL_DEBUG_IF(VL_DBG_MSGF("+        VysyxSoCFull___024unit____Vdpiimwrap_find_addr_0_TOP____024unit\n"); );
+    // Body
+    find_addr_0();
+}
+
 extern "C" void find_ebreak();
 
 VL_INLINE_OPT void VysyxSoCFull___024unit____Vdpiimwrap_find_ebreak_TOP____024unit() {
