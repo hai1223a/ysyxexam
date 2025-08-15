@@ -1,5 +1,5 @@
-.global copy_data
-copy_data:
+.global bootloader
+bootloader:
     # 加载 data_start 的地址（实际上是获取 data_start 的值）
     la      t0, data_start       # t0 = 目标地址 (data_start 的值)
     

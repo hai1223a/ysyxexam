@@ -3,14 +3,14 @@
 
 extern char _heap_start;
 extern char _heap_end;
-extern void copy_data();
+extern void bootloader();
 int main(const char *args);
 
 Area heap = RANGE(&_heap_start, &_heap_end);
 static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined in CFLAGS
 
 void putch(char ch) {
-  outb(SERIAL_PORT, ch);
+  outb(UART_PORT, ch);
 }
 
 void halt(int code) {
@@ -18,8 +18,16 @@ void halt(int code) {
   while (1);
 }
 
+void _uart_init() {
+  outb(UART_LCR, 0b10000011);
+  outb(UART_DLH, 0);
+  outb(UART_DLL, 54);
+  outb(UART_LCR, 0b00000011);
+}
+
 void _trm_init() {
-  copy_data();
+  bootloader();
+  _uart_init();
   int ret = main(mainargs);
   halt(ret);
 }
