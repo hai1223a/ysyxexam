@@ -30,7 +30,7 @@ void _uart_init() {
 
 void _trm_init() {
   bootloader();
-  // _uart_init();
+  _uart_init();
   int ret = main(mainargs);
   halt(ret);
 }
