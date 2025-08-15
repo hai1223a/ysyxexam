@@ -9,6 +9,8 @@ int main(const char *args);
 Area heap = RANGE(&_heap_start, &_heap_end);
 static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined in CFLAGS
 
+int count = 1;
+
 void putch(char ch) {
   while(1) {
     if(inb(UART_LSR) & 0b00100000) {
