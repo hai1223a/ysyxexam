@@ -1,5 +1,5 @@
 
-// 由于Soc强制4字节地址对齐，导致in_paddr的低两位永远为0，导致对寄存器的读写错误
+// 由于Soc写操作强制4字节地址对齐，导致in_paddr的低两位永远为0，导致对寄存器的读写错误
 // 可以通过利用pstrb来改善这一情况
 module uart_top_apb (
        input   wire        reset
@@ -43,7 +43,7 @@ module uart_top_apb (
    assign in_pslverr = 1'b0;
    assign reg_we  = ~reset & in_psel & ~in_penable &  in_pwrite;
    assign reg_re  = ~reset & in_psel & ~in_penable & ~in_pwrite;
-   assign reg_adr = real_adr[2:0]; //assign adr_o   = real_adr[2:0];
+   assign reg_adr = in_pwrite ? real_adr[2:0] : in_paddr[2:0]; //assign adr_o   = real_adr[2:0];
    assign in_prdata  = (in_psel) ? {4{reg_dat8_r}} : 'h0;
    always @ (real_adr[1:0] or in_pwdata) begin
              case (real_adr[1:0])
