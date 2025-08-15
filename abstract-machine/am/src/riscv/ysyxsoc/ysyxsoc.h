@@ -5,6 +5,8 @@
 #include <riscv/riscv.h>
 
 #define UART_PORT       0x10000000
+#define UART_IER        0x10000001
+#define UART_IIR        0x10000002
 #define UART_LCR        0x10000003
 #define UART_LSR        0x10000005
 #define UART_DLL        0x10000000
