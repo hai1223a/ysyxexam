@@ -21,7 +21,7 @@ void halt(int code) {
 void _uart_init() {
   outb(UART_LCR, 0b10000011);
   outb(UART_DLH, 0);
-  outb(UART_DLL, 60);
+  outb(UART_DLL, 54);
   outb(UART_LCR, 0b00000011);
 }
 
