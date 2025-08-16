@@ -1,7 +1,7 @@
 ENTRY(_start)
 
 MEMORY {
-  sram : ORIGIN = 0x0f000000, LENGTH = 8K
+  sram : ORIGIN = 0x0f000000, LENGTH = 16M
   flash : ORIGIN = 0x30000000, LENGTH = 16M
 }
 
