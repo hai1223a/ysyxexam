@@ -93,7 +93,7 @@ module bitrev (
           if (count == 3'd7) begin
             state <= idle;
             count <= 0;
-            miso <= 1'bz;
+            miso <= 1'b1;
           end
         end
         default: state <= idle;
