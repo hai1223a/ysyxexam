@@ -739,8 +739,8 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull___024root final : public Verilat
         CData/*7:0*/ ysyxSoCFull__DOT__flash__DOT__counter;
         CData/*7:0*/ ysyxSoCFull__DOT__flash__DOT__cmd;
         CData/*7:0*/ ysyxSoCFull__DOT__bitrev__DOT__fifo;
-        CData/*3:0*/ ysyxSoCFull__DOT__bitrev__DOT__count_r;
-        CData/*3:0*/ ysyxSoCFull__DOT__bitrev__DOT__count_w;
+        CData/*2:0*/ ysyxSoCFull__DOT__bitrev__DOT__count_r;
+        CData/*2:0*/ ysyxSoCFull__DOT__bitrev__DOT__count_w;
         CData/*1:0*/ ysyxSoCFull__DOT__bitrev__DOT__state;
         CData/*0:0*/ __VdfgRegularize_hd87f99a1_1_64;
     };

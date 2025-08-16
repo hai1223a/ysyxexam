@@ -2724,8 +2724,8 @@ void VysyxSoCFull___024root__trace_chg_0_sub_0(VysyxSoCFull___024root* vlSelf, V
     bufp->chgCData(oldp+1328,(vlSelfRef.ysyxSoCFull__DOT__asic__DOT__luart__DOT__muart__DOT__Uregs__DOT__receiver__DOT__fifo_rx__DOT__rfifo__DOT__ram
                               [vlSelfRef.ysyxSoCFull__DOT__asic__DOT__luart__DOT__muart__DOT__Uregs__DOT__receiver__DOT__fifo_rx__DOT__bottom]),8);
     bufp->chgCData(oldp+1329,(vlSelfRef.ysyxSoCFull__DOT__asic__DOT__luart__DOT__muart__DOT__Uregs__DOT__transmitter__DOT__tf_data_out),8);
-    bufp->chgCData(oldp+1330,(vlSelfRef.ysyxSoCFull__DOT__bitrev__DOT__count_r),4);
-    bufp->chgCData(oldp+1331,(vlSelfRef.ysyxSoCFull__DOT__bitrev__DOT__count_w),4);
+    bufp->chgCData(oldp+1330,(vlSelfRef.ysyxSoCFull__DOT__bitrev__DOT__count_r),3);
+    bufp->chgCData(oldp+1331,(vlSelfRef.ysyxSoCFull__DOT__bitrev__DOT__count_w),3);
     bufp->chgBit(oldp+1332,((1U & ((IData)(vlSelfRef.ysyxSoCFull__DOT__flash__DOT__reset) 
                                    | ((((2U == (IData)(vlSelfRef.ysyxSoCFull__DOT__flash__DOT__state)) 
                                         & (0U == (IData)(vlSelfRef.ysyxSoCFull__DOT__flash__DOT__counter)))
