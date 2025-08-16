@@ -10,7 +10,7 @@ module bitrev (
   parameter idel  = 2'b00;
   parameter read  = 2'b01;
   parameter write = 2'b10;
-  always@(negedge sck, posedge ss) begin
+  always@(posedge sck, posedge ss) begin
     if (ss) begin
       count_r <= 0;
       count_w <= 0;
