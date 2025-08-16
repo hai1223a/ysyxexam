@@ -161,8 +161,8 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
         vlSelfRef.__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 0U;
     } else if ((0U == (IData)(vlSelfRef.ysyxSoCFull__DOT__bitrev__DOT__state))) {
         vlSelfRef.__Vdly__ysyxSoCFull__DOT__bitrev__DOT__fifo 
-            = ((0xfeU & (IData)(vlSelfRef.ysyxSoCFull__DOT__bitrev__DOT__fifo)) 
-               | (IData)(vlSelfRef.ysyxSoCFull__DOT___asic_spi_mosi));
+            = ((0xfeU & ((IData)(vlSelfRef.ysyxSoCFull__DOT__bitrev__DOT__fifo) 
+                         << 1U)) | (IData)(vlSelfRef.ysyxSoCFull__DOT___asic_spi_mosi));
         vlSelfRef.__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 1U;
     } else if ((1U == (IData)(vlSelfRef.ysyxSoCFull__DOT__bitrev__DOT__state))) {
         __Vdly__ysyxSoCFull__DOT__bitrev__DOT__count_r 
@@ -171,15 +171,16 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__1(VysyxSoCFull___0
             vlSelfRef.__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 2U;
         } else {
             vlSelfRef.__Vdly__ysyxSoCFull__DOT__bitrev__DOT__fifo 
-                = ((0xfeU & (IData)(vlSelfRef.ysyxSoCFull__DOT__bitrev__DOT__fifo)) 
-                   | (IData)(vlSelfRef.ysyxSoCFull__DOT___asic_spi_mosi));
+                = ((0xfeU & ((IData)(vlSelfRef.ysyxSoCFull__DOT__bitrev__DOT__fifo) 
+                             << 1U)) | (IData)(vlSelfRef.ysyxSoCFull__DOT___asic_spi_mosi));
             vlSelfRef.__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 1U;
         }
     } else if ((2U == (IData)(vlSelfRef.ysyxSoCFull__DOT__bitrev__DOT__state))) {
         __Vdly__ysyxSoCFull__DOT__bitrev__DOT__count_w 
             = (7U & ((IData)(1U) + (IData)(vlSelfRef.ysyxSoCFull__DOT__bitrev__DOT__count_w)));
         vlSelfRef.__Vdly__ysyxSoCFull__DOT__bitrev__DOT__fifo 
-            = (0x7fU & (IData)(vlSelfRef.ysyxSoCFull__DOT__bitrev__DOT__fifo));
+            = (0x7fU & ((IData)(vlSelfRef.ysyxSoCFull__DOT__bitrev__DOT__fifo) 
+                        >> 1U));
         vlSelfRef.__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state 
             = ((7U == (IData)(vlSelfRef.ysyxSoCFull__DOT__bitrev__DOT__count_w))
                 ? 0U : 2U);
