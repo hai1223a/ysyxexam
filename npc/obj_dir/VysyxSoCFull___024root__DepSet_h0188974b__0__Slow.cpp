@@ -21,6 +21,8 @@ VL_ATTR_COLD void VysyxSoCFull___024root___eval_static(VysyxSoCFull___024root* v
         = vlSelfRef.ysyxSoCFull__DOT___asic_spi_sck;
     vlSelfRef.__Vtrigprevexpr___TOP__ysyxSoCFull__DOT__flash__DOT__reset__0 
         = vlSelfRef.ysyxSoCFull__DOT__flash__DOT__reset;
+    vlSelfRef.__Vtrigprevexpr___TOP__ysyxSoCFull__DOT____Vcellinp__bitrev__ss__0 
+        = vlSelfRef.ysyxSoCFull__DOT____Vcellinp__bitrev__ss;
 }
 
 VL_ATTR_COLD void VysyxSoCFull___024root___eval_static__TOP(VysyxSoCFull___024root* vlSelf) {
@@ -161,6 +163,9 @@ VL_ATTR_COLD void VysyxSoCFull___024root___dump_triggers__act(VysyxSoCFull___024
     if ((8ULL & vlSelfRef.__VactTriggered.word(0U))) {
         VL_DBG_MSGF("         'act' region trigger index 3 is active: @(posedge ysyxSoCFull.flash.reset)\n");
     }
+    if ((0x10ULL & vlSelfRef.__VactTriggered.word(0U))) {
+        VL_DBG_MSGF("         'act' region trigger index 4 is active: @(posedge ysyxSoCFull.__Vcellinp__bitrev__ss)\n");
+    }
 }
 #endif  // VL_DEBUG
 
@@ -185,6 +190,9 @@ VL_ATTR_COLD void VysyxSoCFull___024root___dump_triggers__nba(VysyxSoCFull___024
     if ((8ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VL_DBG_MSGF("         'nba' region trigger index 3 is active: @(posedge ysyxSoCFull.flash.reset)\n");
     }
+    if ((0x10ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
+        VL_DBG_MSGF("         'nba' region trigger index 4 is active: @(posedge ysyxSoCFull.__Vcellinp__bitrev__ss)\n");
+    }
 }
 #endif  // VL_DEBUG
 
@@ -200,6 +208,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root____Vm_traceActivitySetAll(VysyxSoCFull_
     vlSelfRef.__Vm_traceActivity[4U] = 1U;
     vlSelfRef.__Vm_traceActivity[5U] = 1U;
     vlSelfRef.__Vm_traceActivity[6U] = 1U;
+    vlSelfRef.__Vm_traceActivity[7U] = 1U;
 }
 
 VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root* vlSelf) {
@@ -232,6 +241,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->ysyxSoCFull__DOT___asic_spi_sck = 0;
     vlSelf->ysyxSoCFull__DOT___asic_spi_ss = 0;
     vlSelf->ysyxSoCFull__DOT___asic_spi_mosi = 0;
+    vlSelf->ysyxSoCFull__DOT____Vcellinp__bitrev__ss = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4frag_auto_in_bid = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4frag_auto_in_rid = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4frag_auto_out_awid = 0;
@@ -1057,6 +1067,10 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->ysyxSoCFull__DOT__flash__DOT__data = 0;
     vlSelf->ysyxSoCFull__DOT__flash__DOT__rdata = 0;
     vlSelf->ysyxSoCFull__DOT__flash__DOT__data_bswap = 0;
+    vlSelf->ysyxSoCFull__DOT__bitrev__DOT__fifo = 0;
+    vlSelf->ysyxSoCFull__DOT__bitrev__DOT__count_r = 0;
+    vlSelf->ysyxSoCFull__DOT__bitrev__DOT__count_w = 0;
+    vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state = 0;
     vlSelf->__VdfgRegularize_hd87f99a1_1_64 = 0;
     vlSelf->__VdfgRegularize_hd87f99a1_1_68 = 0;
     vlSelf->__VdfgRegularize_hd87f99a1_1_69 = 0;
@@ -1072,11 +1086,14 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd = 0;
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__addr = 0;
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__data = 0;
+    vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__fifo = 0;
+    vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 0;
     vlSelf->__Vtrigprevexpr___TOP__clock__0 = 0;
     vlSelf->__Vtrigprevexpr___TOP__reset__0 = 0;
     vlSelf->__Vtrigprevexpr___TOP__ysyxSoCFull__DOT___asic_spi_sck__0 = 0;
     vlSelf->__Vtrigprevexpr___TOP__ysyxSoCFull__DOT__flash__DOT__reset__0 = 0;
-    for (int __Vi0 = 0; __Vi0 < 7; ++__Vi0) {
+    vlSelf->__Vtrigprevexpr___TOP__ysyxSoCFull__DOT____Vcellinp__bitrev__ss__0 = 0;
+    for (int __Vi0 = 0; __Vi0 < 8; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = 0;
     }
 }

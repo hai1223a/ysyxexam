@@ -5,7 +5,7 @@ module bitrev (
   output miso
 );
   reg [7:0] fifo;
-  reg [3:0] count_r, count_w;
+  reg [2:0] count_r, count_w;
   reg [1:0] state;
   parameter idel  = 2'b00;
   parameter read  = 2'b01;
