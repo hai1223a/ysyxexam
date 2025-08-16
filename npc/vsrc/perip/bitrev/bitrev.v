@@ -20,20 +20,20 @@ module bitrev (
       case (state)
           idel: begin
             state <= read;
-            fifo <= {fifo[7:1], mosi};
+            fifo <= {fifo[6:0], mosi};
           end
           read: begin
             count_r <= count_r + 3'd1;
             if (count_r == 3'd7) begin
               state <= write;
             end else begin
-              fifo <= {fifo[7:1], mosi};
+              fifo <= {fifo[6:0], mosi};
               state <= read;
             end
           end
           write: begin
             count_w <= count_w + 3'd1;
-            fifo <= {1'b0, fifo[6:0]};
+            fifo <= {1'b0, fifo[7:1]};
             if (count_w == 3'd7) begin
               state <= idel;
             end else begin
