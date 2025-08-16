@@ -238,7 +238,6 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->externalPins_vga_valid = 0;
     vlSelf->externalPins_uart_rx = 0;
     vlSelf->externalPins_uart_tx = 0;
-    vlSelf->ysyxSoCFull__DOT___bitrev_miso = 0;
     vlSelf->ysyxSoCFull__DOT___asic_spi_sck = 0;
     vlSelf->ysyxSoCFull__DOT___asic_spi_ss = 0;
     vlSelf->ysyxSoCFull__DOT___asic_spi_mosi = 0;
@@ -1069,7 +1068,8 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->ysyxSoCFull__DOT__flash__DOT__rdata = 0;
     vlSelf->ysyxSoCFull__DOT__flash__DOT__data_bswap = 0;
     vlSelf->ysyxSoCFull__DOT__bitrev__DOT__fifo = 0;
-    vlSelf->ysyxSoCFull__DOT__bitrev__DOT__count = 0;
+    vlSelf->ysyxSoCFull__DOT__bitrev__DOT__count_r = 0;
+    vlSelf->ysyxSoCFull__DOT__bitrev__DOT__count_w = 0;
     vlSelf->ysyxSoCFull__DOT__bitrev__DOT__state = 0;
     vlSelf->__VdfgRegularize_hd87f99a1_1_64 = 0;
     vlSelf->__VdfgRegularize_hd87f99a1_1_68 = 0;
@@ -1086,7 +1086,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__cmd = 0;
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__addr = 0;
     vlSelf->__Vdly__ysyxSoCFull__DOT__flash__DOT__data = 0;
-    vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__count = 0;
+    vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__count_r = 0;
     vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__fifo = 0;
     vlSelf->__Vdly__ysyxSoCFull__DOT__bitrev__DOT__state = 0;
     vlSelf->__Vtrigprevexpr___TOP__clock__0 = 0;
