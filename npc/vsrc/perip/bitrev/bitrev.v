@@ -25,6 +25,7 @@ module bitrev (
           read: begin
             count_r <= count_r + 3'd1;
             if (count_r == 3'd7) begin
+              fifo <= {1'b0, fifo[7:1]};
               state <= write;
             end else begin
               fifo <= {fifo[6:0], mosi};
