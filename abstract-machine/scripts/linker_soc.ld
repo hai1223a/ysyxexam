@@ -2,7 +2,7 @@ ENTRY(_start)
 
 MEMORY {
   sram : ORIGIN = 0x0f000000, LENGTH = 8K
-  mrom : ORIGIN = 0x20000000, LENGTH = 4K
+  flash : ORIGIN = 0x30000000, LENGTH = 16M
 }
 
 SECTIONS {
@@ -10,19 +10,19 @@ SECTIONS {
   .text : {
     *(entry)
     *(.text*)
-  } > mrom AT> mrom
+  } > flash AT> flash
   etext = .;
   _etext = .;
 
   .rodata : {
     *(.rodata*)
     rodata_end = .;
-  } > mrom AT> mrom
+  } > flash AT> flash
 
   .data : {
     data_start = .;
     *(.data .data.*)
-  } > sram AT > mrom
+  } > sram AT > flash
   data_size = SIZEOF(.data);
   data_load_start = LOADADDR(.data);
   edata = .;
@@ -32,7 +32,7 @@ SECTIONS {
     *(.bss*)
     *(.sbss*)
     *(.scommon)
-  } > sram AT> mrom
+  } > sram AT> flash
 
   /* 堆区（动态计算剩余空间） */
   _heap_start = ALIGN(4);  /* 堆起始地址（4字节对齐） */
