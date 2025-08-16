@@ -101,13 +101,12 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
 }
 
 extern "C" void flash_read(int32_t addr, int32_t *data) {
-  *data = 0xff010113;
-  // int32_t raddr = addr & (~0x3);
-  // *data = *(int32_t *)guest_to_host((uint32_t)raddr);
+  uint32_t raddr = addr & (~0x3);
+  *data = *(int32_t *)(pmem + raddr);
 }
 extern "C" void mrom_read(int32_t addr, int32_t *data) {
-  int32_t raddr = addr & (~0x3);
-  *data = *(int32_t *)guest_to_host((uint32_t)raddr);
+  uint32_t raddr = addr & (~0x3);
+  *data = *(int32_t *)guest_to_host(raddr);
 }
 
 extern "C" void find_ebreak() {
