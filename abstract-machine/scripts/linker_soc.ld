@@ -1,8 +1,8 @@
 ENTRY(_start)
 
 MEMORY {
-  sram : ORIGIN = 0x0f000000, LENGTH = 8K
-  flash : ORIGIN = 0x20000000, LENGTH = 4K
+  sram (rwx) : ORIGIN = 0x0f000000, LENGTH = 8K
+  flash (rx): ORIGIN = 0x20000000, LENGTH = 4K
 }
 
 SECTIONS {
