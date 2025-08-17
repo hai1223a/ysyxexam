@@ -47,7 +47,7 @@ extern "C" {
 extern   Area        heap;
 void     putch       (char ch);
 void     halt        (int code) __attribute__((__noreturn__));
-void     spi_config  (uint32_t SS);
+void     spi_config  (uint32_t SS, uint32_t CHAR_LEN);
 uint32_t bitrev_read (uint32_t data);
 
 // -------------------- IOE: Input/Output Devices --------------------
