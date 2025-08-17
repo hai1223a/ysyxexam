@@ -13,6 +13,7 @@
 #define UART_DLH        0x10000001
 #define SPI_TX0         0x10001000
 #define SPI_RX0         0x10001000
+#define SPI_RX1         0x10001004
 #define SPI_CTRL        0x10001010
 #define SPI_DIV         0x10001014
 #define SPI_SS          0x10001018

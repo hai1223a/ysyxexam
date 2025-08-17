@@ -29,7 +29,7 @@ uint32_t flash_read(uint32_t data) {
   while (1)
   {
     if(!(inw(SPI_CTRL) & 0x100)) {
-      return inl(SPI_RX0);
+      return inl(SPI_RX1);
     }
   }
 }
