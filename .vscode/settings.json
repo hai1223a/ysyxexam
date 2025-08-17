@@ -105,6 +105,7 @@
         "elf.h": "c",
         "dlfcn.h": "c",
         "capstone.h": "c",
-        "stddef.h": "c"
+        "stddef.h": "c",
+        "ysyxsoc.h": "c"
     }
 }
