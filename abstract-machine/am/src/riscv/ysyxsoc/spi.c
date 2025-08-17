@@ -2,7 +2,7 @@
 #include "ysyxsoc.h"
 
 void spi_config(uint32_t SS, uint32_t CHAR_LEN) {
-  uint32_t ctrl_statu = 0x2800 | CHAR_LEN;
+  uint32_t ctrl_statu = 0x2000 | CHAR_LEN;
   outw(SPI_DIV, 3);
   outw(SPI_SS, SS);
   outw(SPI_CTRL, ctrl_statu);
