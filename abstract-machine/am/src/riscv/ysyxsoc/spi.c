@@ -10,7 +10,8 @@ void spi_config(uint32_t SS, uint32_t CHAR_LEN) {
 
 uint32_t bitrev_read(uint32_t data) {
   outw(SPI_TX0, data);
-  outw(SPI_CTRL, 0x2910);  
+  uint32_t ctrl_statu = inw(SPI_CTRL) | 0x100;  
+  outw(SPI_CTRL, ctrl_statu);
   while (1)
   {
     if(!(inw(SPI_CTRL) & 0x100)) {
