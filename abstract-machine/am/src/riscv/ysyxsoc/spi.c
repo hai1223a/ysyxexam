@@ -21,8 +21,7 @@ uint32_t bitrev_read(uint32_t data) {
 }
 
 uint32_t flash_read(uint32_t data) {
-  // uint32_t TX_data = 0x3000000 | (data & 0xffffff);
-  uint32_t TX_data = 0x03000004;
+  uint32_t TX_data = 0x3000000 | (data & 0xffffff);
   outl(SPI_TX1, TX_data);
   uint32_t ctrl_statu = inw(SPI_CTRL) | 0x100;  
   outw(SPI_CTRL, ctrl_statu);
