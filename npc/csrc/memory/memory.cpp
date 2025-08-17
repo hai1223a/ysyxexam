@@ -109,7 +109,7 @@ uint32_t pee[] = {
   0x00100073
 };
 extern "C" void flash_read(int32_t addr, int32_t *data) {
-  uint32_t raddr = addr & (~0x3);
+  // uint32_t raddr = addr & (~0x3);
   *data = *(int32_t *)(pee + raddr);
 }
 extern "C" void mrom_read(int32_t addr, int32_t *data) {
