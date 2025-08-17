@@ -1,7 +1,7 @@
 AM_SRCS := riscv/ysyxsoc/start.S \
 		   riscv/ysyxsoc/bootloader.S \
            riscv/ysyxsoc/trm.c \
-		   riscv/ysyxsoc/flash.c \
+		   riscv/ysyxsoc/spi.c \
 
 CFLAGS    += -fdata-sections -ffunction-sections
 LDSCRIPTS += $(AM_HOME)/scripts/linker_soc.ld
