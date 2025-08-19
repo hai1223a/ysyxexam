@@ -13,16 +13,16 @@ int count = 0;
 
 void putch(char ch) {
   while(1) {
-    if(count < 16) {
-      outb(UART_PORT, ch);
-      count++;
-      break;
-    }
-    // if(inb(UART_LSR) & 0b00100000) {
+    // if(count < 16) {
     //   outb(UART_PORT, ch);
-    //   count = 0;
+    //   count++;
     //   break;
-    // } 
+    // }
+    if(inb(UART_LSR) & 0b00100000) {
+      outb(UART_PORT, ch);
+      count = 0;
+      break;
+    } 
   }
 }
 
@@ -47,7 +47,7 @@ void _id_puts() {
       uint8_t nibble = (mvendorid >> (i * 4)) & 0xF;
       putch(nibble < 10 ? '0' + nibble : 'A' + nibble - 10);
   }
-  putch('\n');
+  putch('\n'  );
   for (int i = 7; i >= 0; i--) {  
       uint8_t nibble = (marchid >> (i * 4)) & 0xF;
       putch(nibble < 10 ? '0' + nibble : 'A' + nibble - 10);
