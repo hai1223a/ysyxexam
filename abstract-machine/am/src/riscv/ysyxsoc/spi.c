@@ -3,7 +3,7 @@
 
 void spi_config(uint8_t SS, uint8_t CHAR_LEN) {
   uint32_t ctrl_statu = 0x2000 | CHAR_LEN;
-  outw(SPI_DIV, 3);
+  outw(SPI_DIV, 1);
   outb(SPI_SS, SS);
   outw(SPI_CTRL, ctrl_statu);
 }
