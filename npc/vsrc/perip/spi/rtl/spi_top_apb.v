@@ -126,7 +126,7 @@ always @(posedge clock) begin
           end
         end
         R_GO: begin
-          if(spi_state == SPI_IDLE) begin
+          if((spi_state == SPI_IDLE) && (~wb_dat_o[8])) begin
             state <= R_DATA;
           end
         end 
