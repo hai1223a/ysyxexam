@@ -7,7 +7,7 @@ module bitrev (
   reg [7:0] fifo;
   reg [2:0] count_r, count_w;
   reg [1:0] state;
-  parameter idel  = 2'b00;
+  parameter idle  = 2'b00;
   parameter read  = 2'b01;
   parameter write = 2'b10;
   always@(posedge sck, posedge ss) begin
@@ -15,10 +15,10 @@ module bitrev (
       count_r <= 0;
       count_w <= 0;
       fifo <= 0;
-      state <= idel; 
+      state <= idle; 
     end else begin
       case (state)
-          idel: begin
+          idle: begin
             state <= read;
             fifo <= {fifo[6:0], mosi};
           end
@@ -36,7 +36,7 @@ module bitrev (
             count_w <= count_w + 3'd1;
             fifo <= {1'b0, fifo[7:1]};
             if (count_w == 3'd7) begin
-              state <= idel;
+              state <= idle;
             end else begin
               state <= write;
             end

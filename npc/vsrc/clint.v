@@ -48,7 +48,7 @@ module ysyx_25050136_CLINT
     end
 
     // 读事务
-    localparam READ_IDEL = 0;
+    localparam READ_IDLE = 0;
     localparam READ_DATA = 1;
     reg [ADDR_WIDTH-1:0] s_araddr_r;
     reg [ADDR_WIDTH-1:0] s_araddr_align;
@@ -72,10 +72,10 @@ module ysyx_25050136_CLINT
             s_arburst_r <= 0;
             s_rid_r <= 0;
             rdata_count <= 0;
-            state_read <= READ_IDEL;       
+            state_read <= READ_IDLE;       
         end else begin
             case (state_read)
-                READ_IDEL: begin
+                READ_IDLE: begin
                     if(ar_fire) begin
                         s_arready_r <= 0;
                         s_araddr_align <= s_araddr_i & align_mask;
@@ -94,7 +94,7 @@ module ysyx_25050136_CLINT
                     if(r_fire) begin
                         if(rdata_count == s_arlen_r) begin
                             rdata_count <= 0;
-                            state_read <= READ_IDEL;
+                            state_read <= READ_IDLE;
                         end else begin
                             rdata_count <= rdata_count + 7'd1;
                             case (s_arburst_r)

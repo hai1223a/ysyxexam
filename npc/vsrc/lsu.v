@@ -64,7 +64,7 @@ module ysyx_25050136_LSU
     reg [1:0] state_read;
     wire ar_fire, r_fire;
     // 写事务
-    localparam WRITE_IDEL    = 2'd0;
+    localparam WRITE_IDLE    = 2'd0;
     localparam WRITE_RUNNING = 2'd1;
     localparam WRITE_WAIT    = 2'd2;
     reg m_bready_r;
@@ -167,10 +167,10 @@ module ysyx_25050136_LSU
             m_bready_r  <= 0;
             aw_en       <= 0;
             w_en        <= 0;
-            state_write <= WRITE_IDEL;
+            state_write <= WRITE_IDLE;
         end else begin
             case (state_write)
-                WRITE_IDEL: begin
+                WRITE_IDLE: begin
                     aw_en <= 0;
                     w_en  <= 0;
                     m_bready_r <= 1;
@@ -193,7 +193,7 @@ module ysyx_25050136_LSU
                 WRITE_WAIT: begin
                     if(b_fire) begin
                         m_bready_r  <= 0;
-                        state_write <= WRITE_IDEL;
+                        state_write <= WRITE_IDLE;
                     end 
                 end
                 default:;    
