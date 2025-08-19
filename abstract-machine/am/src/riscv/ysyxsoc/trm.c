@@ -13,16 +13,16 @@ int count = 0;
 
 void putch(char ch) {
   while(1) {
-    // if(count < 16) {
-    //   outb(UART_PORT, ch);
-    //   count++;
-    //   break;
-    // }
-    if(inb(UART_LSR) & 0b00100000) {
+    if(count < 16) {
       outb(UART_PORT, ch);
-      count = 0;
+      count++;
       break;
-    } 
+    }
+    // if(inb(UART_LSR) & 0b00100000) {
+    //   outb(UART_PORT, ch);
+    //   count = 0;
+    //   break;
+    // } 
   }
 }
 
