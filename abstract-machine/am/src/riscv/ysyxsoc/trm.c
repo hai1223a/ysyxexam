@@ -47,6 +47,7 @@ void _id_puts() {
       uint8_t nibble = (mvendorid >> (i * 4)) & 0xF;
       putch(nibble < 10 ? '0' + nibble : 'A' + nibble - 10);
   }
+  putch('\n');
   for (int i = 7; i >= 0; i--) {  
       uint8_t nibble = (marchid >> (i * 4)) & 0xF;
       putch(nibble < 10 ? '0' + nibble : 'A' + nibble - 10);
