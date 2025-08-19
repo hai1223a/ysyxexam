@@ -154,7 +154,7 @@ always @(*) begin
       end
       W_SS: begin
         xip_addr = 5'h18;
-        xip_wdata = 32'h10;
+        xip_wdata = 32'h1;
         xip_strb = 4'b0001;
         xip_write = 1;
       end
