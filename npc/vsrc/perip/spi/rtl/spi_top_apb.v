@@ -87,7 +87,7 @@ always @(posedge clock) begin
   end
 end
 always @(posedge clock) begin
-  if (!reset) begin
+  if (reset) begin
     state <= IDLE;
   end else begin
     case (state)
@@ -189,7 +189,7 @@ always @(*) begin
 end
 
 always @(posedge clock) begin
-  if (!reset) begin
+  if (reset) begin
     spi_state <= 0;
   end else begin
     case (spi_state)
