@@ -88,7 +88,6 @@ always @(posedge clock) begin
 end
 always @(posedge clock) begin
   if (!reset) begin
-    xip_enable <= 0;
     state <= IDLE;
   end else begin
     case (state)
