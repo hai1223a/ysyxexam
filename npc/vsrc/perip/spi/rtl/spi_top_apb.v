@@ -148,7 +148,7 @@ always @(*) begin
   case (state)
       W_DIV: begin
         xip_addr = 5'h14;
-        xip_wdata = 32'h1;
+        xip_wdata = 32'h0;
         xip_strb = 4'b0011;
         xip_write = 1;
       end
