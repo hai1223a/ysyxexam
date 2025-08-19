@@ -63,7 +63,7 @@ wire [31:0] wb_dat_i, wb_dat_o;
 wire [4:0] wb_adr_i;
 wire [3:0] wb_sel_i;
 wire wb_we_i, wb_stb_i, wb_cyc_i, wb_ack_o, wb_err_o;
-wire in_flash = (in_paddr >= flash_addr_start) || (in_paddr <= flash_addr_end);
+wire in_flash = (in_paddr >= flash_addr_start) && (in_paddr <= flash_addr_end);
 wire xip_ready, xip_slverr;
 wire [31:0] xip_rdata;
 reg [31:0] xip_wdata;
