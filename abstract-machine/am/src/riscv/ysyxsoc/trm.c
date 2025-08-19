@@ -18,11 +18,11 @@ void putch(char ch) {
       count++;
       break;
     }
-    // if(inb(UART_LSR) & 0b00100000) {
-    //   outb(UART_PORT, ch);
-    //   count = 0;
-    //   break;
-    // } 
+    if(inb(UART_LSR) & 0b00100000) {
+      outb(UART_PORT, ch);
+      count = 0;
+      break;
+    } 
   }
 }
 
