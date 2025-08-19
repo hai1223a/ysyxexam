@@ -121,8 +121,8 @@ always @(posedge clock) begin
           end
         end
         W_GO: begin
-          if(spi_state == SPI_IDLE) begin
-            state <= R_GO;
+          if((spi_state == SPI_IDLE) && spi_irq_out) begin
+            state <= R_DATA;
           end
         end
         R_GO: begin
