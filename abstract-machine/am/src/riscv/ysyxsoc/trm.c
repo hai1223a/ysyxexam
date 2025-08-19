@@ -39,7 +39,7 @@ void _uart_init() {
   outb(UART_LCR, 0b00000011);
 }
 
-void _id_puts() {
+static void _id_puts() {
   uint32_t mvendorid, marchid;
   asm volatile ("csrr %0, mvendorid" : "=r"(mvendorid));
   asm volatile ("csrr %0, marchid" : "=r"(marchid));
@@ -52,6 +52,7 @@ void _id_puts() {
       uint8_t nibble = (marchid >> (i * 4)) & 0xF;
       putch(nibble < 10 ? '0' + nibble : 'A' + nibble - 10);
   }
+  putch('\n'  );
 }
 
 void _trm_init() {
