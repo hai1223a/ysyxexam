@@ -147,10 +147,10 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__0(VysyxSoCFull___0
     }
 }
 
-extern const VlUnpacked<CData/*0:0*/, 128> VysyxSoCFull__ConstPool__TABLE_h4d1c9502_0;
-extern const VlUnpacked<CData/*1:0*/, 128> VysyxSoCFull__ConstPool__TABLE_h3bbe64c1_0;
-extern const VlUnpacked<CData/*0:0*/, 256> VysyxSoCFull__ConstPool__TABLE_hcbdf5b4b_0;
-extern const VlUnpacked<CData/*2:0*/, 256> VysyxSoCFull__ConstPool__TABLE_h8ed60714_0;
+extern const VlUnpacked<CData/*0:0*/, 128> VysyxSoCFull__ConstPool__TABLE_h12486f4e_0;
+extern const VlUnpacked<CData/*1:0*/, 128> VysyxSoCFull__ConstPool__TABLE_h58430e12_0;
+extern const VlUnpacked<CData/*0:0*/, 256> VysyxSoCFull__ConstPool__TABLE_hd73f64ab_0;
+extern const VlUnpacked<CData/*2:0*/, 256> VysyxSoCFull__ConstPool__TABLE_h132d2dbb_0;
 extern const VlUnpacked<CData/*0:0*/, 128> VysyxSoCFull__ConstPool__TABLE_hfd3df30a_0;
 extern const VlUnpacked<CData/*1:0*/, 128> VysyxSoCFull__ConstPool__TABLE_h9fe525cd_0;
 extern const VlUnpacked<CData/*2:0*/, 256> VysyxSoCFull__ConstPool__TABLE_hd6b5aac4_0;
@@ -2063,9 +2063,9 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__2(VysyxSoCFull___0
                                 << 3U)) | (((IData)(vlSelfRef.ysyxSoCFull__DOT__asic__DOT__lspi__DOT__mspi__DOT__spi_state) 
                                             << 1U) 
                                            | (IData)(vlSelfRef.reset)));
-    if (VysyxSoCFull__ConstPool__TABLE_h4d1c9502_0[__Vtableidx8]) {
+    if (VysyxSoCFull__ConstPool__TABLE_h12486f4e_0[__Vtableidx8]) {
         __Vdly__ysyxSoCFull__DOT__asic__DOT__lspi__DOT__mspi__DOT__spi_state 
-            = VysyxSoCFull__ConstPool__TABLE_h3bbe64c1_0
+            = VysyxSoCFull__ConstPool__TABLE_h58430e12_0
             [__Vtableidx8];
     }
     if (vlSelfRef.ysyxSoCFull__DOT__asic__DOT__axi4xbar_1__DOT__awIn_0__DOT__do_enq) {
@@ -2323,9 +2323,9 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__2(VysyxSoCFull___0
                                            << 4U))) 
                     | (((IData)(vlSelfRef.ysyxSoCFull__DOT__asic__DOT__lspi__DOT__mspi__DOT__state) 
                         << 1U) | (IData)(vlSelfRef.reset)));
-    if (VysyxSoCFull__ConstPool__TABLE_hcbdf5b4b_0[__Vtableidx7]) {
+    if (VysyxSoCFull__ConstPool__TABLE_hd73f64ab_0[__Vtableidx7]) {
         vlSelfRef.ysyxSoCFull__DOT__asic__DOT__lspi__DOT__mspi__DOT__state 
-            = VysyxSoCFull__ConstPool__TABLE_h8ed60714_0
+            = VysyxSoCFull__ConstPool__TABLE_h132d2dbb_0
             [__Vtableidx7];
     }
     __Vtableidx9 = (((((IData)(vlSelfRef.ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__ack_q) 
