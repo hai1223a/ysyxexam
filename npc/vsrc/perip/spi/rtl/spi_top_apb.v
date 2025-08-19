@@ -172,7 +172,7 @@ always @(*) begin
       end
       W_GO: begin
         xip_addr = 5'h10;
-        xip_wdata = 32'h2140;
+        xip_wdata = 32'h3140;
         xip_strb = 4'b0011;
         xip_write = 1;
       end 
