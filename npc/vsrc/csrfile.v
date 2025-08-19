@@ -16,19 +16,23 @@ module ysyx_25050136_CSR_File
          input                                           csr_ren_i,
          output reg [DATA_WIDTH-1:0]                   csr_rdata_o
      );
-    localparam MEPC    = 12'h341;
-    localparam MCAUSE  = 12'h342;
-    localparam MTVEC   = 12'h305;
-    localparam MSTATUS = 12'h300;
+    // 读写CSR
+    localparam MEPC      = 12'h341;
+    localparam MCAUSE    = 12'h342;
+    localparam MTVEC     = 12'h305;
+    localparam MSTATUS   = 12'h300;
+    // 只读CSR
+    localparam MVENDORID = 12'hf11;
+    localparam MARCHID   = 12'hf12;
     reg [DATA_WIDTH-1:0] mepc, mcause, mtvec, mstatus;
     // 两个写端口的选择，以避免multi drive
     reg [1:0] mepc_hit, mcause_hit, mtvec_hit, mstatus_hit;
     wire [DATA_WIDTH-1:0] mepc_din, mcause_din, mtvec_din, mstatus_din;
     always @(*) begin
-        mepc_hit = 0;
-        mcause_hit = 0;
-        mtvec_hit = 0;
-        mstatus_hit = 0;
+        mepc_hit      = 0;
+        mcause_hit    = 0;
+        mtvec_hit     = 0;
+        mstatus_hit   = 0;
         case (csr_waddr1_i)
             MEPC:
                 mepc_hit[0] = csr_wen1_i;
@@ -61,10 +65,10 @@ module ysyx_25050136_CSR_File
     // 写寄存器
     always @(posedge clk) begin
         if(reset) begin
-            mepc    <= 0;
-            mcause  <= 0;
-            mtvec   <= 0;
-            mstatus <= 0;
+            mepc      <= 0;
+            mcause    <= 0;
+            mtvec     <= 0;
+            mstatus   <= 0;
         end
         else begin
             if(|mepc_hit)
@@ -90,6 +94,10 @@ module ysyx_25050136_CSR_File
                 csr_rdata_o = mtvec;
             MSTATUS:
                 csr_rdata_o = mstatus;
+            MVENDORID:
+                csr_rdata_o = 32'h79737978;
+            MARCHID:
+                csr_rdata_o = 32'd25050136;
             default:;
         endcase
     end
