@@ -92,7 +92,7 @@ always @(posedge clock) begin
   end else begin
     case (state)
         IDLE: begin
-          if(in_flash) begin
+          if(in_flash & in_psel) begin
             if(flash_config_good) begin
               state <= W_CMD;
             end else begin
