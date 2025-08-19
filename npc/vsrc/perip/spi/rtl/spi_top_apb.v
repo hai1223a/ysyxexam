@@ -194,7 +194,7 @@ always @(posedge clock) begin
   end else begin
     case (spi_state)
         SPI_IDLE: begin
-          if(state != IDLE) begin
+          if(in_flash & in_psel) begin
             spi_state <= SPI_SETUP;
           end 
         end
