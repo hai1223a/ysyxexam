@@ -77,7 +77,7 @@ always @(posedge clock) begin
   if (reset) begin
     flash_config_good <= 0;  
   end else begin
-    if(in_flash) begin
+    if(in_flash & in_psel) begin
       flash_config_good <= 1;
     end else begin
       if(in_psel && !in_penable) begin
