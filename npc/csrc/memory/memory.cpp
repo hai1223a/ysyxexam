@@ -100,17 +100,10 @@ extern "C" void pmem_write(int waddr, int wdata, int wmask)
   }
 }
 
-uint32_t pee[] = {
-  0x100007b7,
-  0x04100713,
-  0x00e78023,
-  0x00a00713,
-  0x00e78023,
-  0x00100073
-};
+
 extern "C" void flash_read(int32_t addr, int32_t *data) {
-  // uint32_t raddr = addr & (~0x3);
-  *data = *(int32_t *)(pee + addr);
+  uint32_t raddr = addr & (~0x3);
+  *data = *(int32_t *)(pmem + addr);
 }
 extern "C" void mrom_read(int32_t addr, int32_t *data) {
   uint32_t raddr = addr & (~0x3);
