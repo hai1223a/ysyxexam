@@ -57,6 +57,18 @@ extern "C" void mrom_read(int32_t addr, int32_t *data) {
   *data = *(int32_t *)imem_guest_to_host(raddr);
 }
 
+extern "C" void psram_read(int32_t addr, int32_t *data) {
+  uint32_t raddr = addr & (~0x3);
+  Assert((raddr < CONFIG_DMEM_SIZE), "PSRAM模块读地址越界");
+  *data = *(int32_t *)(dmem + raddr);
+}
+
+extern "C" void psram_write(int32_t addr, int32_t data) {
+  uint32_t raddr = addr & (~0x3);
+  Assert((raddr < CONFIG_DMEM_SIZE), "PSRAM模块读地址越界");
+  *(int32_t *)(dmem + raddr) = data;
+}
+
 extern "C" void find_ebreak() {
   set_nemu_state(NPC_END, SOC_PC, get_reg(10));
 }
