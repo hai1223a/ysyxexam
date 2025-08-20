@@ -1,6 +1,6 @@
 
 import "DPI-C" function void psram_read(input int addr, output int data);
-import "DPI-C" function void psram_write(input int addr, output int data);
+import "DPI-C" function void psram_write(input int addr, input int data);
 module psram(
   input sck,
   input ce_n,
@@ -14,7 +14,7 @@ module psram(
 
   reg [7:0] cmd;
   reg [23:0] addr;
-  reg [31:0] rdata, wdata, data;
+  reg [31:0] rdata, data;
   reg [2:0] state;
   reg [3:0] counter;
   wire [3:0] control;
@@ -105,8 +105,7 @@ module psram(
   end
 
   always @(*) begin
-    wdata = data;
-    if(counter == 4'd8 && state == data_t) psram_write({8'd0, addr}, wdata);
+    if(counter == 4'd8 && state == data_t) psram_write({8'd0, addr}, data);
   end
   assign control = (state == data_t && cmd == 8'heb) ? 4'b1111 : 0;
   assign sout = (state == data_t) ? data[31:28] : 0;
