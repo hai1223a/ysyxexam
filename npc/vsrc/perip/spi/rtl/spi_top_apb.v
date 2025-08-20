@@ -71,6 +71,7 @@ reg [4:0] xip_addr;
 reg [3:0] xip_strb;
 reg xip_write, xip_sel, xip_enable;
 reg [2:0] state;
+reg [2:0] pre_state;
 reg [1:0] spi_state;
 reg flash_config_good;
 always @(posedge clock) begin
@@ -190,11 +191,13 @@ end
 
 always @(posedge clock) begin
   if (reset) begin
-    spi_state <= 0;
+    pre_state <= IDLE;
+    spi_state <= SPI_IDLE;
   end else begin
     case (spi_state)
         SPI_IDLE: begin
-          if(in_flash & in_psel) begin
+          if(in_flash & in_psel && (pre_state != state)) begin
+            pre_state <= state;
             spi_state <= SPI_SETUP;
           end 
         end
