@@ -13,7 +13,7 @@ module psram(
   localparam err_t  = 3'b100;
 
   reg [7:0] cmd;
-  reg [24:0] addr;
+  reg [23:0] addr;
   reg [31:0] data;
   reg [2:0] state;
   reg [3:0] counter;
@@ -50,13 +50,13 @@ module psram(
   end
 
   always@(posedge sck or posedge ce_n) begin
-    if (ce_n) counter <= 8'd0;
+    if (ce_n) counter <= 0;
     else begin
       case (state)
-        cmd_t:   counter <= (counter < 4'd7 ) ? counter + 8'd1 : 8'd0;
-        addr_t:  counter <= (counter < 4'd5) ? counter + 8'd1 : 8'd0;
-        wait_t:  counter <= (counter < 4'd5) ? counter + 8'd1 : 8'd0;
-        default: counter <= counter + 8'd1;
+        cmd_t:   counter <= (counter < 4'd7 ) ? counter + 4'd1 : 0;
+        addr_t:  counter <= (counter < 4'd5) ? counter + 4'd1 : 0;
+        wait_t:  counter <= (counter < 4'd5) ? counter + 4'd1 : 0;
+        default: counter <= counter + 4'd1;
       endcase
     end
   end
@@ -87,6 +87,7 @@ module psram(
             if(counter == 4'd8)
               psram_write({8'd0, addr}, data);
           end 
+          default:;
       endcase
     end
   end
