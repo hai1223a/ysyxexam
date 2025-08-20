@@ -83,7 +83,19 @@ module psram(
           data_t: begin
             case (cmd)
                 8'heb: data <= {data[27:0], 4'd0};
-                8'h38: data <= {sin, data[31:4]};
+                8'h38: begin
+                    case (counter)
+                        4'd0: data[7:4]   <= sin; 
+                        4'd1: data[3:0]   <= sin;
+                        4'd2: data[15:12] <= sin;
+                        4'd3: data[11:8]  <= sin;
+                        4'd4: data[23:20] <= sin;
+                        4'd5: data[19:16] <= sin;
+                        4'd6: data[31:28] <= sin;
+                        4'd7: data[27:24] <= sin;
+                      default: ;
+                    endcase
+                  end
               default: ;
             endcase
             if(counter == 4'd8)
