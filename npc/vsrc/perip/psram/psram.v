@@ -98,8 +98,6 @@ module psram(
                   end
               default: ;
             endcase
-            if(counter == 4'd8)
-              psram_write({8'd0, addr}, wdata);
           end 
           default:;
       endcase
@@ -108,6 +106,7 @@ module psram(
 
   always @(*) begin
     wdata = data;
+    if(counter == 4'd8 && state == data_t) psram_write({8'd0, addr}, wdata);
   end
   assign control = (state == data_t && cmd == 8'heb) ? 4'b1111 : 0;
   assign sout = (state == data_t) ? data[31:28] : 0;
