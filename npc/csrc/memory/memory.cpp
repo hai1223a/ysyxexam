@@ -44,7 +44,8 @@ long init_imem(char *img_file)
   fclose(fp); 
   return size;
 }
-
+extern "C" int pmem_read(int raddr) {assert(0);}
+extern "C" void pmem_write(int waddr, int wdata, int wmask) {assert(0);}
 extern "C" void flash_read(int32_t addr, int32_t *data) {
   uint32_t raddr = addr & (~0x3);
   Assert((raddr < CONFIG_IMEM_SIZE), "FLASH模块读地址越界");
