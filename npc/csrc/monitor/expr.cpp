@@ -334,7 +334,7 @@ uint32_t eval(int p, int q){
       case TK_LOGICAND:
         return val1 && val2;
       case TK_POINT:
-        return vaddr_read(val2, 4); 
+        return vaddr_read(val2); 
       default: assert(0);
     }
   }

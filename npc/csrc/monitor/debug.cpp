@@ -166,7 +166,7 @@ void init_main(int argc, char **argv)
   // Verilator 仿真初始化
   init_verilator(argc, argv);
   // 加载内存
-  long size = init_pmem(img_file);
+  long size = init_imem(img_file);
   // CPU初始化
   cpu_init();
   // Difftest
