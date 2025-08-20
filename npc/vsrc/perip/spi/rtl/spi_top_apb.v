@@ -122,8 +122,8 @@ always @(posedge clock) begin
           end
         end
         W_GO: begin
-          if((spi_state == SPI_IDLE) && spi_irq_out) begin
-            state <= R_DATA;
+          if(spi_state == SPI_IDLE) begin
+            state <= R_GO;
           end
         end
         R_GO: begin
@@ -161,7 +161,7 @@ always @(*) begin
       end
       W_CTRL: begin
         xip_addr = 5'h10;
-        xip_wdata = 32'h3040;
+        xip_wdata = 32'h2040;
         xip_strb = 4'b0011;
         xip_write = 1;
       end
@@ -191,13 +191,11 @@ end
 
 always @(posedge clock) begin
   if (reset) begin
-    pre_state <= IDLE;
     spi_state <= SPI_IDLE;
   end else begin
     case (spi_state)
         SPI_IDLE: begin
-          if(in_flash & in_psel && (pre_state != state)) begin
-            pre_state <= state;
+          if(in_flash & in_psel) begin
             spi_state <= SPI_SETUP;
           end 
         end
