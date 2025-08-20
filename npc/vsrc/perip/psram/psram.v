@@ -14,10 +14,9 @@ module psram(
 
   reg [7:0] cmd;
   reg [23:0] addr;
-  reg [31:0] rdata, data;
+  reg [31:0] rdata, wdata, data;
   reg [2:0] state;
   reg [3:0] counter;
-  wire [31:0] wdata;
   wire [3:0] control;
   wire [3:0] sin;
   wire [3:0] sout;
@@ -95,7 +94,9 @@ module psram(
     end
   end
 
-  assign wdata = data;
+  always @(*) begin
+    wdata = data;
+  end
   assign control = (state == data_t && cmd == 8'h38) ? 4'b1111 : 0;
   assign sout = (state == data_t) ? data[31:28] : 0;
   assign dio[0] = control[0] ? sout[0] : 1'bz;
