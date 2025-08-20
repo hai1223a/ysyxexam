@@ -15,7 +15,7 @@ module psram(
   reg [7:0] cmd;
   reg [24:0] addr;
   reg [31:0] data;
-  reg [1:0] state;
+  reg [2:0] state;
   reg [3:0] counter;
   wire [3:0] control;
   wire [3:0] sin;
