@@ -15,11 +15,11 @@ long init_imem(char *img_file)
   if (!img_file)
   {
     uint32_t *imem_w = (uint32_t *)imem;
-   *imem_w++ = 0x12345B97; // auipc t0, 0x12345
-   *imem_w++ = 0x678B8293; // addi t0, t0, 0x678
-   *imem_w++ = 0x80000B37; // lui t1, 0x80000
-   *imem_w++ = 0x005B2023; // sw t0, 0(t1)
-   *imem_w++ = 0x000B2303; // lw t2, 0(t1))
+   *imem_w++ = 0x123452b7; // auipc t0, 0x12345
+   *imem_w++ = 0x67828293; // addi t0, t0, 0x678
+   *imem_w++ = 0x80000337; // lui t1, 0x80000
+   *imem_w++ = 0x00532023; // sw t0, 0(t1)
+   *imem_w++ = 0x00032383; // lw t2, 0(t1))
    *imem_w++ = 0x00100073; // ebreak             // 终止
     Log("没有给源文件, 程序使用了内置的代码.");
     return 20;
