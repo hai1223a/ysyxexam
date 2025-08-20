@@ -1,29 +1,31 @@
 ENTRY(_start)
 
 MEMORY {
-  psram (rwx) : ORIGIN = 0x80000000, LENGTH = 4M
+  mrom (rx): ORIGIN = 0x200000000, LENGTH = 4K
   flash (rx): ORIGIN = 0x30000000, LENGTH = 16M
+  psram (rwx) : ORIGIN = 0x80000000, LENGTH = 4M
 
 }
-
+REGION_ALIAS("ROM", mrom);
+REGION_ALIAS("RAM", psram);
 SECTIONS {
   /* _pmem_start and _entry_offset are defined in LDFLAGS */
   .text : {
     *(entry)
     *(.text*)
-  } > flash AT> flash
+  } > ROM AT> ROM
   etext = .;
   _etext = .;
 
   .rodata : {
     *(.rodata*)
     rodata_end = .;
-  } > flash AT> flash
+  } > ROM AT> ROM
 
   .data : {
     data_start = .;
     *(.data .data.*)
-  } > psram AT > flash
+  } > RAM AT > ROM
   data_size = SIZEOF(.data);
   data_load_start = LOADADDR(.data);
   edata = .;
@@ -33,11 +35,11 @@ SECTIONS {
     *(.bss*)
     *(.sbss*)
     *(.scommon)
-  } > psram AT> flash
+  } > RAM AT> ROM
 
   /* 堆区（动态计算剩余空间） */
   _heap_start = ALIGN(4);  /* 堆起始地址（4字节对齐） */
-  _heap_end = ORIGIN(psram) + LENGTH(psram) - 0x10000;  /* 堆结束地址 = SRAM结束 - 栈大小（64KB） */
+  _heap_end = ORIGIN(RAM) + LENGTH(RAM) - 0x10000;  /* 堆结束地址 = SRAM结束 - 栈大小（64KB） */
 
   _stack_top = .;
   . = . + 0x10000;
