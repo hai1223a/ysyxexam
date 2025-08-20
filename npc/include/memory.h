@@ -8,7 +8,6 @@ enum {
     wen, ren
 };
 
-uint8_t* imem_guest_to_host(uint32_t paddr);
 long init_imem(char *img_file);
 uint32_t vaddr_read(uint32_t paddr);
 
