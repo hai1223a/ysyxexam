@@ -97,7 +97,7 @@ module psram(
   always @(*) begin
     wdata = data;
   end
-  assign control = (state == data_t && cmd == 8'h38) ? 4'b1111 : 0;
+  assign control = (state == data_t && cmd == 8'heb) ? 4'b1111 : 0;
   assign sout = (state == data_t) ? data[31:28] : 0;
   assign dio[0] = control[0] ? sout[0] : 1'bz;
   assign dio[1] = control[1] ? sout[1] : 1'bz;
