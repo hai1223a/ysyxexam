@@ -14,7 +14,7 @@ module psram(
 
   reg [7:0] cmd;
   reg [23:0] addr;
-  reg [31:0] data;
+  reg [31:0] rdata, wdata, data;
   reg [2:0] state;
   reg [3:0] counter;
   wire [3:0] control;
@@ -76,7 +76,9 @@ module psram(
           end
           wait_t: begin
             if(counter == 0)
-              psram_read({8'd0, addr}, data);
+              psram_read({8'd0, addr}, rdata);
+            else if(counter == 4'd1)
+              data <= rdata;
           end
           data_t: begin
             case (cmd)
@@ -85,13 +87,14 @@ module psram(
               default: ;
             endcase
             if(counter == 4'd8)
-              psram_write({8'd0, addr}, data);
+              psram_write({8'd0, addr}, wdata);
           end 
           default:;
       endcase
     end
   end
 
+  assign wdata = data;
   assign control = (state == data_t && cmd == 8'h38) ? 4'b1111 : 0;
   assign sout = (state == data_t) ? data[31:28] : 0;
   assign dio[0] = control[0] ? sout[0] : 1'bz;
@@ -100,3 +103,4 @@ module psram(
   assign dio[3] = control[3] ? sout[3] : 1'bz;
   assign sin = dio;
 endmodule
+
