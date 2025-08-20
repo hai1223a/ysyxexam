@@ -1113,7 +1113,6 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->ysyxSoCFull__DOT__psram__DOT__cmd = 0;
     vlSelf->ysyxSoCFull__DOT__psram__DOT__addr = 0;
     vlSelf->ysyxSoCFull__DOT__psram__DOT__rdata = 0;
-    vlSelf->ysyxSoCFull__DOT__psram__DOT__wdata = 0;
     vlSelf->ysyxSoCFull__DOT__psram__DOT__data = 0;
     vlSelf->ysyxSoCFull__DOT__psram__DOT__state = 0;
     vlSelf->ysyxSoCFull__DOT__psram__DOT__counter = 0;
@@ -1126,7 +1125,6 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->__VdfgRegularize_hd87f99a1_1_69 = 0;
     vlSelf->__VdfgRegularize_hd87f99a1_1_70 = 0;
     vlSelf->__Vtask_ysyxSoCFull__DOT__asic__DOT__lmrom__DOT__mrom__DOT__mrom_read__3__rdata = 0;
-    vlSelf->__Vtask_psram_write__6__data = 0;
     vlSelf->__Vtableidx2 = 0;
     vlSelf->__Vtableidx3 = 0;
     vlSelf->__Vtableidx6 = 0;

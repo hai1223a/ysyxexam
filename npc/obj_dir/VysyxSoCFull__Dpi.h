@@ -33,7 +33,7 @@ extern "C" {
     // DPI import at vsrc/perip/psram/psram.v:2:30
     extern void psram_read(int addr, int* data);
     // DPI import at vsrc/perip/psram/psram.v:3:30
-    extern void psram_write(int addr, int* data);
+    extern void psram_write(int addr, int data);
 
 #ifdef __cplusplus
 }
