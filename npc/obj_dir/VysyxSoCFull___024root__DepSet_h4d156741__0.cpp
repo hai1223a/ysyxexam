@@ -232,8 +232,9 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__2(VysyxSoCFull___0
                            << 4U);
                 } else if ((0x38U == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__cmd))) {
                     __Vdly__ysyxSoCFull__DOT__psram__DOT__data 
-                        = ((vlSelfRef.ysyxSoCFull__DOT__psram__DOT__data 
-                            << 4U) | (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__sin));
+                        = (((IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__sin) 
+                            << 0x1cU) | (vlSelfRef.ysyxSoCFull__DOT__psram__DOT__data 
+                                         >> 4U));
                 }
                 if ((8U == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__counter))) {
                     VysyxSoCFull___024unit____Vdpiimwrap_psram_write_TOP____024unit(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__addr, __Vtask_psram_write__5__data);
