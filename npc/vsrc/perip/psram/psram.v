@@ -14,9 +14,10 @@ module psram(
 
   reg [7:0] cmd;
   reg [23:0] addr;
-  reg [31:0] rdata, wdata, data;
+  reg [31:0] rdata, data;
   reg [2:0] state;
   reg [3:0] counter;
+  wire [31:0] wdata;
   wire [3:0] control;
   wire [3:0] sin;
   wire [3:0] sout;
@@ -83,7 +84,7 @@ module psram(
           data_t: begin
             case (cmd)
                 8'heb: data <= {data[27:0], 4'd0};
-                8'h38: data <= {data[27:0], sin};
+                8'h38: data <= {sin, data[31:4]};
               default: ;
             endcase
             if(counter == 4'd8)
