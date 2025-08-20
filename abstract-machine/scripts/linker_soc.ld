@@ -1,8 +1,8 @@
 ENTRY(_start)
 
 MEMORY {
-  mrom (rx): ORIGIN = 0x200000000, LENGTH = 4K
-  flash (rx): ORIGIN = 0x30000000, LENGTH = 16M
+  mrom  (rx)  : ORIGIN = 0x20000000, LENGTH = 4K
+  flash (rx)  : ORIGIN = 0x30000000, LENGTH = 16M
   psram (rwx) : ORIGIN = 0x80000000, LENGTH = 4M
 
 }
