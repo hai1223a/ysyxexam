@@ -72,7 +72,8 @@ extern "C" void find_addr_0() {
 
 uint32_t vaddr_read(uint32_t paddr)
 {
-  Assert(in_imem(paddr) | in_dmem(paddr), "你使用sdb查看的地址值不合法,addr = 0x%08x\n", paddr);
   if (likely(in_imem(paddr))) return *(uint32_t *)imem_guest_to_host(paddr);
   if (likely(in_dmem(paddr))) return *(uint32_t *)dmem_guest_to_host(paddr);
+  Assert(0, "你使用sdb查看的地址值不合法,addr = 0x%08x\n", paddr);
+  return 0;
 }
