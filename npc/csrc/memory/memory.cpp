@@ -15,17 +15,12 @@ long init_imem(char *img_file)
   if (!img_file)
   {
     uint32_t *imem_w = (uint32_t *)imem;
-   *imem_w++ = 0x00000297; // auipc t0,0
-   *imem_w++ = 0x02428293; // addi t0,t0,36      // t0 = 指令区首地址+36
-   *imem_w++ = 0x00100593; // li a1,1            // a1 = 1
-   *imem_w++ = 0x00b2a023; // sw  a1,0(t0)       // [t0+0] = a1 (把1写到数据区)
-   *imem_w++ = 0x0002a583; // lw  a1,0(t0)       // a1 = [t0+0] (从数据区读回a1)
-   *imem_w++ = 0x0040006f; // jal zero, +4       // 跳转到下一条（演示jal）
-   *imem_w++ = 0x00128293; // addi t0,t0,1       // t0 = t0 + 1
-   *imem_w++ = 0xfe529ae3; // bne a0,a1,-4       // 如果a0!=a1, 跳回前面
+   *imem_w++ = 0x12345B97; // auipc t0, 0x12345
+   *imem_w++ = 0x678B8293; // addi t0, t0, 0x678
+   *imem_w++ = 0x80000B37; // lui t1, 0x80000
+   *imem_w++ = 0x005B2023; // sw t0, 0(t1)
+   *imem_w++ = 0x000B2303; // lw t2, 0(t1))
    *imem_w++ = 0x00100073; // ebreak             // 终止
-   *imem_w++ = 0xdeadbeef; // 数据区内容
-   *imem_w++ = 0x12345678; // 数据区内容
     Log("没有给源文件, 程序使用了内置的代码.");
     return 20;
   }
