@@ -327,6 +327,14 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__2(VysyxSoCFull___0
          & (3U == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__state)))) {
         VysyxSoCFull___024unit____Vdpiimwrap_psram_write_TOP____024unit(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__addr, vlSelfRef.ysyxSoCFull__DOT__psram__DOT__data);
     }
+    if (((8U == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__counter)) 
+         & (3U == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__state)))) {
+        VysyxSoCFull___024unit____Vdpiimwrap_psram_write_TOP____024unit(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__addr, vlSelfRef.ysyxSoCFull__DOT__psram__DOT__data);
+    }
+    if (((8U == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__counter)) 
+         & (3U == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__state)))) {
+        VysyxSoCFull___024unit____Vdpiimwrap_psram_write_TOP____024unit(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__addr, vlSelfRef.ysyxSoCFull__DOT__psram__DOT__data);
+    }
     vlSelfRef.ysyxSoCFull__DOT__psram__DOT____VdfgRegularize_h95f21b40_0_0 
         = ((3U == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__state)) 
            & (0xebU == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__cmd)));

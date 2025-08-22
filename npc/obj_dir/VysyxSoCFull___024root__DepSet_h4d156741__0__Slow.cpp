@@ -66,6 +66,14 @@ VL_ATTR_COLD void VysyxSoCFull___024root___stl_sequent__TOP__0(VysyxSoCFull___02
          & (3U == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__state)))) {
         VysyxSoCFull___024unit____Vdpiimwrap_psram_write_TOP____024unit(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__addr, vlSelfRef.ysyxSoCFull__DOT__psram__DOT__data);
     }
+    if (((8U == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__counter)) 
+         & (3U == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__state)))) {
+        VysyxSoCFull___024unit____Vdpiimwrap_psram_write_TOP____024unit(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__addr, vlSelfRef.ysyxSoCFull__DOT__psram__DOT__data);
+    }
+    if (((8U == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__counter)) 
+         & (3U == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__state)))) {
+        VysyxSoCFull___024unit____Vdpiimwrap_psram_write_TOP____024unit(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__addr, vlSelfRef.ysyxSoCFull__DOT__psram__DOT__data);
+    }
     vlSelfRef.ysyxSoCFull__DOT__asic__DOT____Vcellinp__cpu__reset 
         = ((IData)(vlSelfRef.reset) | (IData)(vlSelfRef.ysyxSoCFull__DOT__asic__DOT__cpu_reset_chain__DOT__output_chain__DOT__sync_0));
     vlSelfRef.ysyxSoCFull__DOT__asic__DOT__luart__DOT__muart__DOT__Uregs__DOT__thre_int 
