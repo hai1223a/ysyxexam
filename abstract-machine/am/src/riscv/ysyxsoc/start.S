@@ -3,9 +3,6 @@
 .type _start, @function
 
 _start:
-  li t0, 0x12345678
-  li t1, 0x80000000
-  sw t0, 0(t1)
-  lh t2, 0(t1)
-  lh t2, 2(t1)
+  mv s0, zero
+  la sp, _stack_pointer
   call _trm_init
