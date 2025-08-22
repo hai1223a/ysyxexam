@@ -1,6 +1,6 @@
 // define this macro to enable fast behavior simulation
 // for flash by skipping SPI transfers
-// `define FAST_FLASH
+`define FAST_FLASH
 
 module spi_top_apb #(
   parameter flash_addr_start = 32'h30000000,
@@ -53,7 +53,7 @@ localparam W_SS   = 3'b010;
 localparam W_CTRL = 3'b011;
 localparam W_CMD  = 3'b100;
 localparam W_GO   = 3'b101;
-localparam WAIT_GO   = 3'b110;
+localparam R_GO   = 3'b110;
 localparam R_DATA = 3'b111;
 localparam SPI_IDLE  = 2'b00;
 localparam SPI_SETUP = 2'b01;
@@ -123,11 +123,11 @@ always @(posedge clock) begin
         end
         W_GO: begin
           if(spi_state == SPI_IDLE) begin
-            state <= WAIT_GO;
+            state <= R_GO;
           end
         end
-        WAIT_GO: begin
-          if((spi_state == SPI_IDLE) && (spi_irq_out)) begin
+        R_GO: begin
+          if((spi_state == SPI_IDLE) && (~wb_dat_o[8])) begin
             state <= R_DATA;
           end
         end 
@@ -177,7 +177,7 @@ always @(*) begin
         xip_strb = 4'b0011;
         xip_write = 1;
       end 
-      WAIT_GO: begin
+      R_GO: begin
         xip_addr = 5'h10;
         xip_write = 0;
       end 
@@ -195,7 +195,7 @@ always @(posedge clock) begin
   end else begin
     case (spi_state)
         SPI_IDLE: begin
-          if(in_flash & in_psel & (state != WAIT_GO)) begin
+          if(in_flash & in_psel) begin
             spi_state <= SPI_SETUP;
           end 
         end
