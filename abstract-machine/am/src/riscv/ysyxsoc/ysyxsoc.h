@@ -19,7 +19,7 @@
 #define SPI_DIV         0x10001014
 #define SPI_SS          0x10001018
 
-#define RTC_ADDR        0x20000000
+#define RTC_ADDR        0x02000000
 
 
 #endif
