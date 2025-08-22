@@ -62,10 +62,22 @@ extern "C" void psram_read(int32_t addr, int32_t *data) {
   *data = *(int32_t *)(dmem + raddr);
 }
 
-extern "C" void psram_write(int32_t addr, int32_t data) {
-  uint32_t raddr = addr & (~0x3);
-  Assert((raddr < CONFIG_DMEM_SIZE), "PSRAM模块读地址越界");
-  *(int32_t *)(dmem + raddr) = data;
+extern "C" void psram_write(int32_t addr, int32_t data, int8_t len) {
+  Assert((addr < CONFIG_DMEM_SIZE), "PSRAM模块写地址越界");
+  switch (len)
+  {
+  case 1:  
+    *(uint8_t *)(dmem + addr) = (uint8_t)data;  
+    break;
+  case 2:  
+    *(uint16_t *)(dmem + addr) = (uint16_t)data;  
+    break;
+  case 4:  
+    *(uint32_t *)(dmem + addr) = (uint32_t)data;  
+    break;
+  default:
+    break;
+  }
 }
 
 extern "C" void find_ebreak() {
