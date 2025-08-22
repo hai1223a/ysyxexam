@@ -119,10 +119,10 @@ module ysyx_25050136_CLINT
         s_rdata_r = 0;
         if(s_rvalid_o && (s_arsize_r == 3'b010)) begin
             case (s_araddr_r)
-                32'h20000000: begin
+                32'h2000000: begin
                     s_rdata_r = mtime[31:0];
                 end 
-                32'h20000004: begin
+                32'h2000004: begin
                     s_rdata_r = mtime[63:32];                    
                 end 
                 default: ;
