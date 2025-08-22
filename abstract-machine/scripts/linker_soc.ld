@@ -7,7 +7,7 @@ MEMORY {
   psram (rwx) : ORIGIN = 0x80000000, LENGTH = 4M
 
 }
-REGION_ALIAS("ROM", mrom);
+REGION_ALIAS("ROM", flash);
 REGION_ALIAS("RAM", sram);
 SECTIONS {
   /* _pmem_start and _entry_offset are defined in LDFLAGS */
