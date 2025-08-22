@@ -1,13 +1,13 @@
 ENTRY(_start)
 
 MEMORY {
-  sram  (rwx) : ORIGIN = 0x0f000000, LENGTH = 8K
   mrom  (rx)  : ORIGIN = 0x20000000, LENGTH = 4K
   flash (rx)  : ORIGIN = 0x30000000, LENGTH = 16M
+  sram  (rwx) : ORIGIN = 0x0f000000, LENGTH = 8K
   psram (rwx) : ORIGIN = 0x80000000, LENGTH = 4M
 
 }
-REGION_ALIAS("ROM", mrom);
+REGION_ALIAS("ROM", flash);
 REGION_ALIAS("RAM", sram);
 SECTIONS {
   /* _pmem_start and _entry_offset are defined in LDFLAGS */
