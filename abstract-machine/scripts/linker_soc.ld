@@ -1,6 +1,7 @@
 ENTRY(_start)
 
 MEMORY {
+  sram  (rwx) : ORIGIN = 0x0f000000, LENGTH = 8K
   mrom  (rx)  : ORIGIN = 0x20000000, LENGTH = 4K
   flash (rx)  : ORIGIN = 0x30000000, LENGTH = 16M
   psram (rwx) : ORIGIN = 0x80000000, LENGTH = 4M
@@ -39,10 +40,10 @@ SECTIONS {
 
   /* 堆区（动态计算剩余空间） */
   _heap_start = ALIGN(4);  /* 堆起始地址（4字节对齐） */
-  _heap_end = ORIGIN(RAM) + LENGTH(RAM) - 0x10000;  /* 堆结束地址 = SRAM结束 - 栈大小（64KB） */
+  _heap_end = ORIGIN(RAM) + LENGTH(RAM) - 0x1000;  /* 堆结束地址 = SRAM结束 - 栈大小（4KB） */
 
   _stack_top = .;
-  . = . + 0x10000;
+  . = . + 0x1000;
   _stack_pointer = .;
   end = .;
   _end = .;  
