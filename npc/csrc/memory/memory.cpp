@@ -20,8 +20,8 @@ long init_imem(char *img_file)
    *imem_w++ = 0x80000337; // lui t1, 0x80000
    *imem_w++ = 0x00532023; // sw t0, 0(t1)
    *imem_w++ = 0x00032383; // lw t2, 0(t1))
-   *imem_w++ = 0x00531223; // sh	t0,4(t1) 
-   *imem_w++ = 0x00431383; // lh	t2,4(t1)
+   *imem_w++ = 0x00531323; // sh	t0,4(t1) 
+   *imem_w++ = 0x00631383; // lh	t2,4(t1)
    *imem_w++ = 0x00530423; // sb	t0,8(t1)
    *imem_w++ = 0x00830383; // lb	t2,8(t1)
    *imem_w++ = 0x00100073; // ebreak             // 终止

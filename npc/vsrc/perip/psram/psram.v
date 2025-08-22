@@ -119,7 +119,14 @@ module psram(
   always @(*) begin
     if(counter == 4'd8 && state == data_t) psram_write({8'd0, addr}, data);
   end
-
+  always @(*) begin
+    if(counter == 4'd8 && state == data_t) psram_write({8'd0, addr}, data);
+  end
+  always @(*) begin
+    if(counter == 4'd8 && state == data_t) psram_write({8'd0, addr}, data);
+  end
+    
+  
   assign control = (state == data_t && cmd == 8'heb) ? 4'b1111 : 0;
   assign dio[0] = control[0] ? sout[0] : 1'bz;
   assign dio[1] = control[1] ? sout[1] : 1'bz;
