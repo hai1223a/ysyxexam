@@ -3429,9 +3429,9 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBus(c+10,0,"data",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 31,0);
     tracep->declBus(c+11,0,"state",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
     tracep->declBus(c+12,0,"counter",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
-    tracep->declBus(c+13,0,"control",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
+    tracep->declBus(c+13,0,"sout",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
+    tracep->declBus(c+14,0,"control",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->declBus(c+1343,0,"sin",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
-    tracep->declBus(c+14,0,"sout",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->popPrefix();
     tracep->pushPrefix("sdram", VerilatedTracePrefixType::SCOPE_MODULE);
     tracep->declBit(c+1344,0,"clk",-1, VerilatedTraceSigDirection::INPUT, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1);
@@ -3611,11 +3611,9 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_full_0_sub_0(VysyxSoCFull___024r
     bufp->fullIData(oldp+10,(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__data),32);
     bufp->fullCData(oldp+11,(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__state),3);
     bufp->fullCData(oldp+12,(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__counter),4);
-    bufp->fullCData(oldp+13,(((IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT____VdfgRegularize_h95f21b40_0_1)
+    bufp->fullCData(oldp+13,(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__sout),4);
+    bufp->fullCData(oldp+14,(((IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT____VdfgRegularize_h95f21b40_0_0)
                                ? 0xfU : 0U)),4);
-    bufp->fullCData(oldp+14,(((3U == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__state))
-                               ? (vlSelfRef.ysyxSoCFull__DOT__psram__DOT__data 
-                                  >> 0x1cU) : 0U)),4);
     bufp->fullBit(oldp+15,(vlSelfRef.ysyxSoCFull__DOT__asic__DOT___axi42apb_auto_out_psel));
     bufp->fullBit(oldp+16,((1U == (IData)(vlSelfRef.ysyxSoCFull__DOT__asic__DOT__axi42apb__DOT__state))));
     bufp->fullBit(oldp+17,(vlSelfRef.ysyxSoCFull__DOT__asic__DOT___axi42apb_auto_out_pwrite));

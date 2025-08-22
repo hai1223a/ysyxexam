@@ -40,11 +40,9 @@ void VysyxSoCFull___024root__trace_chg_0_sub_0(VysyxSoCFull___024root* vlSelf, V
         bufp->chgIData(oldp+9,(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__data),32);
         bufp->chgCData(oldp+10,(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__state),3);
         bufp->chgCData(oldp+11,(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__counter),4);
-        bufp->chgCData(oldp+12,(((IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT____VdfgRegularize_h95f21b40_0_1)
+        bufp->chgCData(oldp+12,(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__sout),4);
+        bufp->chgCData(oldp+13,(((IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT____VdfgRegularize_h95f21b40_0_0)
                                   ? 0xfU : 0U)),4);
-        bufp->chgCData(oldp+13,(((3U == (IData)(vlSelfRef.ysyxSoCFull__DOT__psram__DOT__state))
-                                  ? (vlSelfRef.ysyxSoCFull__DOT__psram__DOT__data 
-                                     >> 0x1cU) : 0U)),4);
     }
     if (VL_UNLIKELY((vlSelfRef.__Vm_traceActivity[3U]))) {
         bufp->chgBit(oldp+14,(vlSelfRef.ysyxSoCFull__DOT__asic__DOT___axi42apb_auto_out_psel));
