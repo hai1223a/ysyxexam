@@ -19,6 +19,7 @@
 #define SPI_DIV         0x10001014
 #define SPI_SS          0x10001018
 
-#define RTC_ADDR        (MMIO_BASE + 0x0000048)
+#define RTC_ADDR        0x20000000
+
 
 #endif
