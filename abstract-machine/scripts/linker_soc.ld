@@ -8,7 +8,7 @@ MEMORY {
 
 }
 REGION_ALIAS("ROM", mrom);
-REGION_ALIAS("RAM", psram);
+REGION_ALIAS("RAM", sram);
 SECTIONS {
   /* _pmem_start and _entry_offset are defined in LDFLAGS */
   .text : {
