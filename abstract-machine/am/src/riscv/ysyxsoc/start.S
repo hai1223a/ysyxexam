@@ -5,10 +5,7 @@
 _start:
   li t0, 0x12345678
   li t1, 0x80000000
-  sh t0, 6(t1)
-  sh t0, 4(t1)
-  sb t0, 8(t1)
-  sb t0, 9(t1)
-  sb t0, 10(t1)
-  sb t0, 11(t1)
+  sw t0, 0(t1)
+  lh t2, 0(t1)
+  lh t2, 2(t1)
   call _trm_init

@@ -18,12 +18,12 @@ long init_imem(char *img_file)
    *imem_w++ = 0x123452b7; // auipc t0, 0x12345
    *imem_w++ = 0x67828293; // addi t0, t0, 0x678
    *imem_w++ = 0x80000337; // lui t1, 0x80000
-  //  *imem_w++ = 0x00532023; // sw t0, 0(t1)
+   *imem_w++ = 0x00532023; // sw t0, 0(t1)
   //  *imem_w++ = 0x00032383; // lw t2, 0(t1))
-   *imem_w++ = 0x00531323;
-   *imem_w++ = 0x00531223;
-  //  *imem_w++ = 0x00530423;
-  //  *imem_w++ = 0x005304a3;
+  //  *imem_w++ = 0x00531323;
+  //  *imem_w++ = 0x00531223;
+   *imem_w++ = 0x00031383;
+   *imem_w++ = 0x00231383;
   //  *imem_w++ = 0x00530523;
   //  *imem_w++ = 0x005305a3; // sh	t0,4(t1) 
   //  *imem_w++ = 0x00631383; // lh	t2,4(t1)
