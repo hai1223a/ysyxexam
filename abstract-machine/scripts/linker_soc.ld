@@ -8,7 +8,8 @@ MEMORY {
 
 }
 REGION_ALIAS("ROM", flash);
-REGION_ALIAS("RAM", sram);
+REGION_ALIAS("RAM", psram);
+_STACK_SIZE = 0x10000;     /* 栈大小：64KB */
 SECTIONS {
   /* _pmem_start and _entry_offset are defined in LDFLAGS */
   .text : {
@@ -40,10 +41,10 @@ SECTIONS {
 
   /* 堆区（动态计算剩余空间） */
   _heap_start = ALIGN(4);  /* 堆起始地址（4字节对齐） */
-  _heap_end = ORIGIN(RAM) + LENGTH(RAM) - 0x1000;  /* 堆结束地址 = SRAM结束 - 栈大小（4KB） */
+  _heap_end = ORIGIN(RAM) + LENGTH(RAM) - _STACK_SIZE;  /* 堆结束地址 = SRAM结束 - 栈大小（4KB） */
 
   _stack_top = .;
-  . = . + 0x1000;
+  . = . + _STACK_SIZE;
   _stack_pointer = .;
   end = .;
   _end = .;  
