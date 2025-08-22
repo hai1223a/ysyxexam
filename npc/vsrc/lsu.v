@@ -58,8 +58,8 @@ module ysyx_25050136_LSU
     localparam READ_ADDR = 2'd1;
     localparam READ_DATA = 2'd2;
     reg m_arvalid_r;
-    reg [2:0] m_arsize_r;
     reg m_rready_r;
+    reg [2:0] m_arsize_r;
     reg [DATA_WIDTH-1:0] load_data_r;
     reg [1:0] state_read;
     wire ar_fire, r_fire;
@@ -69,6 +69,7 @@ module ysyx_25050136_LSU
     localparam WRITE_WAIT    = 2'd2;
     reg m_bready_r;
     reg aw_en, w_en;
+    reg [2:0] m_awsize_r;
     reg [1:0] state_write;
     reg [31:0] m_wdata_r;
     reg [3:0] m_wstrb_r;
@@ -81,6 +82,7 @@ module ysyx_25050136_LSU
         m_wdata_r = 0;
         m_wstrb_r = 0;
         m_arsize_r = 3'b010; // 默认word
+        m_awsize_r = 3'b010; // 默认word
         load_data_r = 0;
         
         // 统一处理读写
@@ -89,6 +91,7 @@ module ysyx_25050136_LSU
                 m_wstrb_r = byte_sel;
                 m_wdata_r = {24'd0, {store_data_i[7:0]}} << (8 * mem_addr_i[1:0]);
                 m_arsize_r = 3'b000;
+                m_awsize_r = 3'b000;
                 load_data_r = mem_signed_i ? 
                     {{24{m_rdata_i[8*mem_addr_i[1:0] + 7]}}, m_rdata_i[8*mem_addr_i[1:0] +: 8]} :
                     {24'd0, m_rdata_i[8*mem_addr_i[1:0] +: 8]};
@@ -97,6 +100,7 @@ module ysyx_25050136_LSU
                 m_wstrb_r = byte_sel | (byte_sel << 1);
                 m_wdata_r = {16'd0, store_data_i[15:0]} << (8 * mem_addr_i[1:0]);
                 m_arsize_r = 3'b001;
+                m_awsize_r = 3'b001;
                 load_data_r = mem_signed_i ?
                     {{16{m_rdata_i[16*mem_addr_i[1] + 15]}}, m_rdata_i[16*mem_addr_i[1] +: 16]} :
                     {16'd0, m_rdata_i[16*mem_addr_i[1] +: 16]};
@@ -105,6 +109,7 @@ module ysyx_25050136_LSU
                 m_wstrb_r = 4'b1111;
                 m_wdata_r = store_data_i;
                 m_arsize_r = 3'b010;
+                m_awsize_r = 3'b010;            
                 load_data_r = m_rdata_i;
             end
             default;
@@ -205,7 +210,7 @@ module ysyx_25050136_LSU
     assign m_awaddr_o  = mem_addr_i;
     assign m_awid_o    = 0;
     assign m_awlen_o   = 0;
-    assign m_awsize_o  = 3'b010;
+    assign m_awsize_o  = m_awsize_r;
     assign m_awburst_o = 0;
     assign m_wvalid_o  = (state_write == WRITE_RUNNING) && ~w_en;
     assign m_wlast_o   = (state_write == WRITE_RUNNING) && ~w_en;
