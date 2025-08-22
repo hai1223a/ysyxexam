@@ -62,7 +62,7 @@ extern "C" void psram_read(int32_t addr, int32_t *data) {
   *data = *(int32_t *)(dmem + raddr);
 }
 
-extern "C" void psram_write(int32_t addr, int32_t data, int8_t len) {
+extern "C" void psram_write(int32_t addr, int32_t data, int32_t len) {
   Assert((addr < CONFIG_DMEM_SIZE), "PSRAM模块写地址越界");
   switch (len)
   {

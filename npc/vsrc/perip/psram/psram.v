@@ -1,6 +1,6 @@
 
 import "DPI-C" function void psram_read(input int addr, output int data);
-import "DPI-C" function void psram_write(input int addr, input int data, input char len);
+import "DPI-C" function void psram_write(input int addr, input int data, input int len);
 module psram(
   input sck,
   input ce_n,
