@@ -49,7 +49,6 @@ void     putch       (char ch);
 void     halt        (int code) __attribute__((__noreturn__));
 void     spi_config  (uint8_t SS, uint8_t CHAR_LEN);
 uint32_t bitrev_read (uint32_t data);
-uint32_t flash_read  (uint32_t data);
 
 
 // -------------------- IOE: Input/Output Devices --------------------
