@@ -4,6 +4,8 @@ AM_SRCS := riscv/ysyxsoc/start.S \
            riscv/ysyxsoc/ioe/timer.c \
 		   riscv/ysyxsoc/mpe.c \
 		   riscv/ysyxsoc/vme.c \
+           riscv/ysyxsoc/cte.c \
+           riscv/ysyxsoc/trap.S \
            riscv/ysyxsoc/trm.c \
 		   riscv/ysyxsoc/spi.c \
 
