@@ -77,7 +77,7 @@ module ysyx_25050136_IF
     end
     assign static_npc_o = (pc == 0) ? RESET_PC : (pc + 32'h4);
     assign bvalid_o = (state_read == READ_DATA) && r_fire & m_rlast_i & (m_rresp_i == 2'd0);
-    assign inst_o = (state_read == READ_DATA) ? m_rdata_i : inst_r;
+    assign inst_o = (state_read == READ_IEDL) ? inst_r : m_rdata_i;
     assign m_arvalid_o = (state_read == READ_ADDR);
     assign m_araddr_o  = pc;
     assign m_arid_o = 0;
