@@ -96,7 +96,10 @@ extern "C" void find_resp() {
 
 extern "C" void find_addr_0() {
   Log("你正在对地址0进行读写");
-    set_nemu_state(NPC_END, SOC_PC, 3);
+  set_nemu_state(NPC_END, SOC_PC, 3);
+}
+extern "C" void find_diff_skip() {
+  if_skip = true;
 }
 
 uint32_t vaddr_read(uint32_t paddr)

@@ -86,10 +86,22 @@ static void checkregs(CPU_state *ref)
   }
 }
 
+bool if_skip = false;
 void difftest_step()
 {
-  CPU_state ref_r;
-  ref_difftest_exec(1);
-  ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
-  checkregs(&ref_r);
+  if (if_skip) {
+    CPU_state dut_r;
+    for (size_t i = 0; i < REG_NUM; i++)
+    {
+      dut_r.gpr[i] = get_reg[i];
+    }
+    dut_r.pc = SOC_PC;
+    ref_difftest_regcpy(&dut_r, DIFFTEST_TO_REF);
+  } else {
+    CPU_state ref_r;
+    ref_difftest_exec(1);
+    ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
+    checkregs(&ref_r);
+  }
+  if_skip = false;
 }

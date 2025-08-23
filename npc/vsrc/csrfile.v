@@ -16,6 +16,7 @@ module ysyx_25050136_CSR_File
          input                                           csr_ren_i,
          output reg [DATA_WIDTH-1:0]                   csr_rdata_o
      );
+
     // 读写CSR
     localparam MEPC      = 12'h341;
     localparam MCAUSE    = 12'h342;
