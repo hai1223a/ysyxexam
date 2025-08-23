@@ -8,6 +8,6 @@ typedef struct {
   char name[16];
 } riscv_csr;
 
-extern riscv_csr csrs[4];
+extern riscv_csr csrs[6];
 
 #endif
