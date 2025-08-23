@@ -1,55 +1,67 @@
 .global bootloader
 bootloader:
-    # 加载 data_start 的地址（SRAM中的目标地址）
-    la      a0, data_start
+    # 加载地址和大小
+    la      a0, data_start       # x10 - 目标地址
+    la      a1, data_load_start  # x11 - 源地址
+    la      a2, data_size        # x12 - 总字节数
     
-    # 加载 data_load_start 的地址（MROM中的源地址）
-    la      a1, data_load_start
-    
-    # 比较地址是否相同，如果相同则直接返回
+    # 检查是否需要复制
     beq     a0, a1, copy_done
-    
-    # 加载 data_size 的值到 a2
-    la      a2, data_size
-    
-    # 如果 data_size == 0，直接返回
     beqz    a2, copy_done
     
-    # 计算需要拷贝的4字节字数
-    srli    a3, a2, 2      # a3 = data_size / 4 (字数量)
-    andi    a4, a2, 0x3    # a4 = data_size % 4 (剩余字节数)
+    # 计算8字节块的数量和剩余字节
+    srli    a3, a2, 3           # a3 = data_size / 8 (8字节块数) x13
+    andi    a4, a2, 0x7         # a4 = data_size % 8 (剩余字节数) x14
     
-    # 如果字数量为0，跳转到字节拷贝
-    beqz    a3, copy_bytes
+    # 如果8字节块数为0，跳转到小数据拷贝
+    beqz    a3, copy_small_data
     
-copy_words:
-    # 以4字节为单位拷贝
-    lw      a5, 0(a1)      # 从源地址加载一个字(4字节)
-    sw      a5, 0(a0)      # 存储到目标地址
+copy_8bytes:
+    # 一次拷贝8字节（2个寄存器）
+    lw      t0, 0(a1)           # x5 - 第一个字
+    lw      t1, 4(a1)           # x6 - 第二个字
+    
+    sw      t0, 0(a0)
+    sw      t1, 4(a0)
     
     # 更新指针和计数器
-    addi    a0, a0, 4      # 目标地址 += 4
-    addi    a1, a1, 4      # 源地址 += 4
-    addi    a3, a3, -1     # 字计数器--
+    addi    a0, a0, 8
+    addi    a1, a1, 8
+    addi    a3, a3, -1
     
-    # 如果字计数器 != 0，继续循环
-    bnez    a3, copy_words
+    # 继续循环
+    bnez    a3, copy_8bytes
     
-    # 如果还有剩余字节需要拷贝
+    # 处理剩余字节
+    beqz    a4, copy_done
+
+copy_small_data:
+    # 计算剩余4字节字数和单个字节数
+    srli    a3, a4, 2           # 剩余4字节字数
+    andi    a4, a4, 0x3         # 剩余单个字节数
+    
+    beqz    a3, copy_remaining_bytes
+    
+copy_4bytes:
+    # 拷贝剩余4字节字
+    lw      a5, 0(a1)           # x15
+    sw      a5, 0(a0)
+    addi    a0, a0, 4
+    addi    a1, a1, 4
+    addi    a3, a3, -1
+    bnez    a3, copy_4bytes
+    
+copy_remaining_bytes:
     beqz    a4, copy_done
     
-copy_bytes:
-    # 拷贝剩余字节（0-3个字节）
-    lb      a5, 0(a1)      # 从源地址加载一个字节
-    sb      a5, 0(a0)      # 存储到目标地址
-    
-    # 更新指针和计数器
-    addi    a0, a0, 1      # 目标地址++
-    addi    a1, a1, 1      # 源地址++
-    addi    a4, a4, -1     # 字节计数器--
-    
-    # 如果还有剩余字节，继续循环
-    bnez    a4, copy_bytes
+copy_1byte:
+    # 拷贝剩余单个字节
+    lb      a5, 0(a1)
+    sb      a5, 0(a0)
+    addi    a0, a0, 1
+    addi    a1, a1, 1
+    addi    a4, a4, -1
+    bnez    a4, copy_1byte
     
 copy_done:
     ret
