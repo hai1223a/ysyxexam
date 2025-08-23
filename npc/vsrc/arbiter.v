@@ -165,15 +165,17 @@ module ysyx_25050136_ARBITER
     always @(*) begin
         slaver_grand = 0;
         slaver_id = 0;
-        if(for_s_awaddr >= s0_Laddr && for_s_awaddr <= s0_Raddr ||
-           for_s_araddr >= s0_Laddr && for_s_araddr <= s0_Raddr) begin
-                slaver_grand[0] = 1;
-                slaver_id = 0;
-            end
-        else begin
-                slaver_grand[1] = 1;
-                slaver_id = 1;
-            end
+        if(|request) begin
+            if(for_s_awaddr >= s0_Laddr && for_s_awaddr <= s0_Raddr ||
+            for_s_araddr >= s0_Laddr && for_s_araddr <= s0_Raddr) begin
+                    slaver_grand[0] = 1;
+                    slaver_id = 0;
+                end
+            else begin
+                    slaver_grand[1] = 1;
+                    slaver_id = 1;
+                end
+        end
     end
 
     always @(posedge aclk) begin

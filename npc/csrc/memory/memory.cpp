@@ -28,7 +28,7 @@ long init_imem(char *img_file)
    *imem_w++ = 0x020007b7; // lui	a5,0x2000
    *imem_w++ = 0x02000737; // lui	a4,0x2000
    *imem_w++ = 0x0047a603; // lw	a2,4(a5) # 2000004
-   *imem_w++ = 0x00072583; // lw	a1,0(a4) # 2000000
+   *imem_w++ = 0x00072583; // lw	a1,0(a4) # 2000000 
     Log("没有给源文件, 程序使用了内置的代码.");
     return 20;
   }
