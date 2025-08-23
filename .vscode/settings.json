@@ -106,6 +106,7 @@
         "dlfcn.h": "c",
         "capstone.h": "c",
         "stddef.h": "c",
-        "ysyxsoc.h": "c"
+        "ysyxsoc.h": "c",
+        "amtest.h": "c"
     }
 }
