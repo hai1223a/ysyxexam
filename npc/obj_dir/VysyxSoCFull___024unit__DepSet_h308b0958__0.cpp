@@ -68,6 +68,14 @@ VL_INLINE_OPT void VysyxSoCFull___024unit____Vdpiimwrap_psram_write_TOP____024un
     psram_write(addr__Vcvt, data__Vcvt, len__Vcvt);
 }
 
+extern "C" void find_diff_skip();
+
+VL_INLINE_OPT void VysyxSoCFull___024unit____Vdpiimwrap_find_diff_skip_TOP____024unit() {
+    VL_DEBUG_IF(VL_DBG_MSGF("+        VysyxSoCFull___024unit____Vdpiimwrap_find_diff_skip_TOP____024unit\n"); );
+    // Body
+    find_diff_skip();
+}
+
 extern "C" int pmem_read(int raddr);
 
 VL_INLINE_OPT void VysyxSoCFull___024unit____Vdpiimwrap_pmem_read_TOP____024unit(IData/*31:0*/ raddr, IData/*31:0*/ &pmem_read__Vfuncrtn) {

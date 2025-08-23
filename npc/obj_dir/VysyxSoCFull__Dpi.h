@@ -18,6 +18,8 @@ extern "C" {
     // DPI IMPORTS
     // DPI import at vsrc/soc.v:1:30
     extern void find_addr_0();
+    // DPI import at vsrc/lsu.v:1:30
+    extern void find_diff_skip();
     // DPI import at vsrc/cpu.v:2:30
     extern void find_ebreak();
     // DPI import at vsrc/cpu.v:3:30
