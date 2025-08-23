@@ -93,7 +93,7 @@ void difftest_step()
     CPU_state dut_r;
     for (size_t i = 0; i < REG_NUM; i++)
     {
-      dut_r.gpr[i] = get_reg[i];
+      dut_r.gpr[i] = get_reg(i);
     }
     dut_r.pc = SOC_PC;
     ref_difftest_regcpy(&dut_r, DIFFTEST_TO_REF);
