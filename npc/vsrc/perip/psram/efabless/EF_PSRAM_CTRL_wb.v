@@ -178,7 +178,7 @@ module EF_PSRAM_CTRL_wb (
     );
 
     PSRAM_QPIENABLE MQ(
-        .clk    	(clk        ),
+        .clk    	(clk_i      ),
         .rst_n  	(~rst_i     ),
         .wr     	(mq_wr      ),
         .done   	(mq_done    ),
