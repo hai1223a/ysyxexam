@@ -66,14 +66,14 @@ module EF_PSRAM_CTRL_wb (
     wire mq_ce_n;
     wire [3:0] mq_din, mq_dout;
     wire mq_doe;
-    reg if_qpi;
+    reg qpi_noset;
 
 
     always @(posedge clk_i) begin
         if (rst_i) begin
-            if_qpi <= 1;
+            qpi_noset <= 1;
         end else if(mq_done) begin
-            if_qpi <= 0;
+            qpi_noset <= 0;
         end            
     end
 
@@ -94,13 +94,13 @@ module EF_PSRAM_CTRL_wb (
     always @* begin
         case(state)
             ST_IDLE :
-                if(wb_valid | if_qpi)
+                if(wb_valid | qpi_noset)
                     nstate = ST_WAIT;
                 else
                     nstate = ST_IDLE;
 
             ST_WAIT :
-                if((mw_done & wb_we) | (mr_done & wb_re) | (mq_done & if_qpi))
+                if((mw_done & wb_we) | (mr_done & wb_re) | (mq_done & qpi_noset))
                     nstate = ST_IDLE;
                 else
                     nstate = ST_WAIT;
@@ -144,7 +144,7 @@ module EF_PSRAM_CTRL_wb (
 
     assign mr_rd    = ( (state==ST_IDLE ) & wb_re );
     assign mw_wr    = ( (state==ST_IDLE ) & wb_we );
-    assign mq_wr    = ( (state==ST_IDLE ) & if_qpi );
+    assign mq_wr    = ( (state==ST_IDLE ) & qpi_noset );
 
     PSRAM_READER MR (
         .clk(clk_i),
@@ -190,10 +190,10 @@ module EF_PSRAM_CTRL_wb (
     );
     
 
-    assign sck  = if_qpi ? mq_sck : (wb_we ? mw_sck  : mr_sck);
-    assign ce_n = if_qpi ? mq_ce_n : (wb_we ? mw_ce_n : mr_ce_n);
-    assign dout = if_qpi ? mq_dout : (wb_we ? mw_dout : mr_dout);
-    assign douten  = if_qpi ? {4{mq_doe}} : (wb_we ? {4{mw_doe}}  : {4{mr_doe}});
+    assign sck  = qpi_noset ? mq_sck : (wb_we ? mw_sck  : mr_sck);
+    assign ce_n = qpi_noset ? mq_ce_n : (wb_we ? mw_ce_n : mr_ce_n);
+    assign dout = qpi_noset ? mq_dout : (wb_we ? mw_dout : mr_dout);
+    assign douten  = qpi_noset ? {4{mq_doe}} : (wb_we ? {4{mw_doe}}  : {4{mr_doe}});
 
     assign mw_din = din;
     assign mr_din = din;

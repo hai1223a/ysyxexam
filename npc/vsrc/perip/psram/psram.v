@@ -18,8 +18,10 @@ module psram(
   reg [2:0] state;
   reg [3:0] counter;
   reg [3:0] sout;
+  reg is_qpi;
   wire [3:0] control;
   wire [3:0] sin;
+
   always @(posedge sck or posedge ce_n) begin
     if (ce_n) begin
       state <= cmd_t;
@@ -61,6 +63,11 @@ module psram(
     end
   end
 
+  always @(posedge sck) begin
+    if(cmd == 8'h1a & sin[0])
+      is_qpi <= 1;
+  end
+  
   always @(posedge sck or posedge ce_n) begin
     if (ce_n) begin
       cmd  <= 0;
@@ -122,7 +129,6 @@ module psram(
     if(counter == 4'd8 && state == data_t) psram_write({8'd0, addr}, data, 4);
   end
     
-  
   assign control = (state == data_t && cmd == 8'heb) ? 4'b1111 : 0;
   assign dio[0] = control[0] ? sout[0] : 1'bz;
   assign dio[1] = control[1] ? sout[1] : 1'bz;
