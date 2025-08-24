@@ -12,6 +12,7 @@ module psram(
   localparam data_t = 3'b011;
   localparam err_t  = 3'b100;
 
+
   reg [7:0] cmd;
   reg [23:0] addr;
   reg [31:0] rdata, data;
@@ -21,6 +22,7 @@ module psram(
   reg is_qpi;
   wire [3:0] control;
   wire [3:0] sin;
+  wire [3:0] cmd_count;
 
   always @(posedge sck or posedge ce_n) begin
     if (ce_n) begin
@@ -28,7 +30,7 @@ module psram(
     end else begin
       case (state)
           cmd_t: begin
-            state <= (counter == 4'd7) ? addr_t : state;
+            state <= (counter == cmd_count) ? addr_t : state;
           end
           addr_t: begin
             case (cmd)
@@ -55,7 +57,7 @@ module psram(
     if (ce_n) counter <= 0;
     else begin
       case (state)
-        cmd_t:   counter <= (counter < 4'd7 ) ? counter + 4'd1 : 0;
+        cmd_t:   counter <= (counter < cmd_count ) ? counter + 4'd1 : 0;
         addr_t:  counter <= (counter < 4'd5) ? counter + 4'd1 : 0;
         wait_t:  counter <= (counter < 4'd5) ? counter + 4'd1 : 0;
         default: counter <= counter + 4'd1;
@@ -76,7 +78,11 @@ module psram(
     end else begin
       case (state)
           cmd_t: begin
-            cmd <= { cmd[6:0], sin[0] };
+            if (is_qpi) begin
+              cmd <= { cmd[3:0], sin };
+            end else begin
+              cmd <= { cmd[6:0], sin[0] };  
+            end
           end
           addr_t: begin
             addr <= { addr[19:0], sin };
@@ -130,6 +136,7 @@ module psram(
   end
     
   assign control = (state == data_t && cmd == 8'heb) ? 4'b1111 : 0;
+  assign cmd_count = is_qpi ? 4'd1 : 4'd7;
   assign dio[0] = control[0] ? sout[0] : 1'bz;
   assign dio[1] = control[1] ? sout[1] : 1'bz;
   assign dio[2] = control[2] ? sout[2] : 1'bz;
