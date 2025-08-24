@@ -60,7 +60,22 @@ module EF_PSRAM_CTRL_wb (
     wire        mw_wr;
     wire        mw_done;
 
-    //wire        doe;
+    // QPI
+    wire mq_wr, mq_done;
+    wire mq_sck;
+    wire mq_ce_n;
+    wire [3:0] mq_din, mq_dout;
+    wire mq_doe;
+    reg if_qpi;
+
+
+    always @(posedge clk_i) begin
+        if (rst_i) begin
+            if_qpi <= 1;
+        end else if(mq_done) begin
+            if_qpi <= 0;
+        end            
+    end
 
     // WB Control Signals
     wire        wb_valid        =   cyc_i & stb_i;
@@ -79,13 +94,13 @@ module EF_PSRAM_CTRL_wb (
     always @* begin
         case(state)
             ST_IDLE :
-                if(wb_valid)
+                if(wb_valid | if_qpi)
                     nstate = ST_WAIT;
                 else
                     nstate = ST_IDLE;
 
             ST_WAIT :
-                if((mw_done & wb_we) | (mr_done & wb_re))
+                if((mw_done & wb_we) | (mr_done & wb_re) | (mq_done & if_qpi))
                     nstate = ST_IDLE;
                 else
                     nstate = ST_WAIT;
@@ -129,6 +144,7 @@ module EF_PSRAM_CTRL_wb (
 
     assign mr_rd    = ( (state==ST_IDLE ) & wb_re );
     assign mw_wr    = ( (state==ST_IDLE ) & wb_we );
+    assign mq_wr    = ( (state==ST_IDLE ) & if_qpi );
 
     PSRAM_READER MR (
         .clk(clk_i),
@@ -161,12 +177,26 @@ module EF_PSRAM_CTRL_wb (
         .douten(mw_doe)
     );
 
-    assign sck  = wb_we ? mw_sck  : mr_sck;
-    assign ce_n = wb_we ? mw_ce_n : mr_ce_n;
-    assign dout = wb_we ? mw_dout : mr_dout;
-    assign douten  = wb_we ? {4{mw_doe}}  : {4{mr_doe}};
+    PSRAM_QPIENABLE MQ(
+        .clk    	(clk        ),
+        .rst_n  	(~rst_i     ),
+        .wr     	(mq_wr      ),
+        .done   	(mq_done    ),
+        .sck    	(mq_sck     ),
+        .ce_n   	(mq_ce_n    ),
+        .din    	(mq_din     ),
+        .dout   	(mq_dout    ),
+        .douten 	(mq_doe     )
+    );
+    
+
+    assign sck  = if_qpi ? mq_sck : (wb_we ? mw_sck  : mr_sck);
+    assign ce_n = if_qpi ? mq_ce_n : (wb_we ? mw_ce_n : mr_ce_n);
+    assign dout = if_qpi ? mq_dout : (wb_we ? mw_dout : mr_dout);
+    assign douten  = if_qpi ? {4{mq_doe}} : (wb_we ? {4{mw_doe}}  : {4{mr_doe}});
 
     assign mw_din = din;
     assign mr_din = din;
+    assign mq_din = din;
     assign ack_o = wb_we ? mw_done :mr_done ;
 endmodule
