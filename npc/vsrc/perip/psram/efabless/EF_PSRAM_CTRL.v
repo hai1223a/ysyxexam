@@ -119,8 +119,8 @@ module PSRAM_READER (
             if(sck)
                 data[byte_index] <= {data[byte_index][3:0], din}; // Optimize!
 
-    assign dout     =   (counter == 0)  ?   CMD_EBH[3:0]        :
-                        (counter == 1)  ?   CMD_EBH[7:4]        :
+    assign dout     =   (counter == 0)  ?   CMD_EBH[7:4]        :
+                        (counter == 1)  ?   CMD_EBH[3:0]        :
                         (counter == 2)  ?   saddr[23:20]        :
                         (counter == 3)  ?   saddr[19:16]        :
                         (counter == 4)  ?   saddr[15:12]        :
@@ -213,8 +213,8 @@ module PSRAM_WRITER (
         else if((state == IDLE) && wr)
             saddr <= addr;
 
-    assign dout     =   (counter == 0)  ?   CMD_38H[3:0]        :
-                        (counter == 1)  ?   CMD_38H[7:4]        :
+    assign dout     =   (counter == 0)  ?   CMD_38H[7:4]        :
+                        (counter == 1)  ?   CMD_38H[3:0]        :
                         (counter == 2)  ?   saddr[23:20]        :
                         (counter == 3)  ?   saddr[19:16]        :
                         (counter == 4)  ?   saddr[15:12]        :
