@@ -18,6 +18,7 @@ _bootf_4bytes:
     addi    a1, a1, 4
     addi    a3, a3, -1
     bnez    a3, _bootf_4bytes
+    beqz    a4, _boot_end
 
 _bootf_1bytes:
     lb      a5, 0(a1)
