@@ -89,6 +89,7 @@ _start:
 _boots_32pre:
     srli    a3, a2, 5               # 计算32字节块数
     andi    a4, a2, 0x1f            # 计算剩余字节数
+    beqz    a3, _boots_8pre
     
 _boots_32bytes:
     # 32字节块复制
@@ -121,6 +122,7 @@ _boots_32bytes:
 _boots_8pre:
     srli    a3, a4, 3               # 计算8字节块数
     andi    a4, a4, 0x7             # 计算剩余字节数
+    beqz    a3, _boots_1pre
 
 _boots_8bytes:
     # 8字节块复制
@@ -135,6 +137,9 @@ _boots_8bytes:
     bnez    a3, _boots_8bytes
     beqz    a4, _boots_copy_ret
 
+_boots_1pre:
+    mv      a3, a4
+
 _boots_1bytes:
     # 单字节复制
     lb      t0, 0(a1)
@@ -142,8 +147,8 @@ _boots_1bytes:
 
     addi    a0, a0, 1
     addi    a1, a1, 1
-    addi    a4, a4, -1
-    bnez    a4, _boots_1bytes
+    addi    a3, a3, -1
+    bnez    a3, _boots_1bytes
 
 _boots_copy_ret:
     jr      ra                      # 返回
@@ -152,6 +157,7 @@ _boots_copy_ret:
 _boots_32pre_bss:
     srli    a3, a2, 5               # 计算32字节块数
     andi    a4, a2, 0x1f            # 计算剩余字节数
+    beqz    a3, _boots_8pre_bss
     
 _boots_32bytes_bss:
     # 32字节清零
@@ -172,6 +178,7 @@ _boots_32bytes_bss:
 _boots_8pre_bss:
     srli    a3, a4, 3               # 计算8字节块数
     andi    a4, a4, 0x7             # 计算剩余字节数
+    beqz    a3, _boots_1pre_bss
 
 _boots_8bytes_bss:
     # 8字节清零
@@ -183,13 +190,16 @@ _boots_8bytes_bss:
     bnez    a3, _boots_8bytes_bss
     beqz    a4, _boots_copy_bss_ret
 
+_boots_1pre_bss:
+    mv      a3, a4
+
 _boots_1bytes_bss:
     # 单字节清零
     sb      zero, 0(a0)
 
     addi    a0, a0, 1
-    addi    a4, a4, -1
-    bnez    a4, _boots_1bytes_bss
+    addi    a3, a3, -1
+    bnez    a3, _boots_1bytes_bss
 
 _boots_copy_bss_ret:
     jr      ra                      # 返回
