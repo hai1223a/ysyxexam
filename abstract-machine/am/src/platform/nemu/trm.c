@@ -3,7 +3,7 @@
 
 extern char _heap_start;
 extern char _heap_end;
-extern void copy_data();
+extern void bootloader();
 int main(const char *args);
 Area heap = RANGE(&_heap_start, &_heap_end);
 static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined in CFLAGS
@@ -20,7 +20,7 @@ void halt(int code) {
 }
 
 void _trm_init() {
-  copy_data();
+  bootloader();
   int ret = main(mainargs);
   halt(ret);
 }
