@@ -3,7 +3,6 @@
 
 extern char _heap_start;
 extern char _heap_end;
-extern void bootloader();
 int main(const char *args);
 
 Area heap = RANGE(&_heap_start, &_heap_end);
@@ -56,7 +55,6 @@ static void _id_puts() {
 }
 
 void _trm_init() {
-  bootloader();
   _uart_init();
   _id_puts();
   int ret = main(mainargs);
