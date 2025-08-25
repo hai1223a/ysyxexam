@@ -1,3 +1,4 @@
+/* 这个脚本把栈放在sram上, 适合更小 的栈*/
 ENTRY(_boot_fsbl)
 
 MEMORY {
@@ -11,7 +12,7 @@ REGION_ALIAS("ROM", flash);
 REGION_ALIAS("RAM", psram);
 REGION_ALIAS("SRAM", sram);
 
-_STACK_SIZE = 0x10000;     /* 栈大小：64KB */
+_STACK_SIZE = 0x800;     /* 栈大小 2KB */
 SECTIONS {
   /* _pmem_start and _entry_offset are defined in LDFLAGS */
   .entry : {
@@ -28,16 +29,23 @@ SECTIONS {
   .text : {
     text_start = .;
     *(.text*)
-  } > SRAM AT> ROM
+  } > ROM AT> ROM
   text_size = SIZEOF(.text);
   text_load_start = LOADADDR(.text);
 
   .rodata : {
     rodata_start = .;
     *(.rodata*)
-  } > SRAM AT> ROM
+  } > ROM AT> ROM
   rodata_size = SIZEOF(.rodata);
   rodata_load_start = LOADADDR(.rodata);
+
+  .stack (NOLOAD) : {
+    . = ORIGIN(SRAM) + LENGTH(SRAM) - _STACK_SIZE;
+    _stack_top = .;
+    . = . + _STACK_SIZE;
+    _stack_pointer = .;
+  } > SRAM
 
   .data : {
     data_start = .;
@@ -57,11 +65,8 @@ SECTIONS {
 
   /* 堆区（动态计算剩余空间） */
   _heap_start = ALIGN(4);  /* 堆起始地址（4字节对齐） */
-  _heap_end = ORIGIN(RAM) + LENGTH(RAM) - _STACK_SIZE;  /* 堆结束地址 = SRAM结束 - 栈大小（4KB） */
+  _heap_end = ORIGIN(RAM) + LENGTH(RAM);
 
-  _stack_top = .;
-  . = . + _STACK_SIZE;
-  _stack_pointer = .;
   end = .;
   _end = .;  
 }

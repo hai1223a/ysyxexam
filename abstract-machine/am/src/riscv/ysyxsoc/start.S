@@ -42,6 +42,8 @@ _boot_ssbl:
     la      a0, text_start
     la      a1, text_load_start
     la      a2, text_size
+    beq     a0, a1, _boot_ssbl_rodata 
+    beqz    a2, _boot_ssbl_rodata
     jal     _boots_32pre
   
 _boot_ssbl_rodata:
