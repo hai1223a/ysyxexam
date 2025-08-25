@@ -1,4 +1,4 @@
-ENTRY(_start)
+ENTRY(_boot_fsbl)
 
 MEMORY {
   mrom  (rx)  : ORIGIN = 0x20000000, LENGTH = 4K
@@ -9,20 +9,35 @@ MEMORY {
 }
 REGION_ALIAS("ROM", flash);
 REGION_ALIAS("RAM", psram);
+REGION_ALIAS("SRAM", sram);
+
 _STACK_SIZE = 0x10000;     /* 栈大小：64KB */
 SECTIONS {
   /* _pmem_start and _entry_offset are defined in LDFLAGS */
-  .text : {
+  .entry : {
     *(entry)
-    *(.text*)
   } > ROM AT> ROM
-  etext = .;
-  _etext = .;
+  
+  .boot : {
+    boot_start = .;
+    *(boot)
+  } > SRAM AT> ROM
+  boot_size = SIZEOF(.boot);
+  boot_load_start = LOADADDR(.boot);
+
+  .text : {
+    text_start = .;
+    *(.text*)
+  } > SRAM AT> ROM
+  text_size = SIZEOF(.text);
+  text_load_start = LOADADDR(.text);
 
   .rodata : {
+    rodata_start = .;
     *(.rodata*)
-    rodata_end = .;
-  } > ROM AT> ROM
+  } > SRAM AT> ROM
+  rodata_size = SIZEOF(.rodata);
+  rodata_load_start = LOADADDR(.rodata);
 
   .data : {
     data_start = .;
@@ -31,8 +46,6 @@ SECTIONS {
   } > RAM AT > ROM
   data_size = SIZEOF(.data);
   data_load_start = LOADADDR(.data);
-  edata = .;
-  _data = .;
   
   .bss : {
     bss_start = .;
