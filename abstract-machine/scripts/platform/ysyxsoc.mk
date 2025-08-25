@@ -1,5 +1,5 @@
 AM_SRCS := riscv/ysyxsoc/start.S \
-		   riscv/ysyxsoc/bootloader.S \
+		   riscv/ysyxsoc/bootloader.c \
            riscv/ysyxsoc/ioe/ioe.c \
            riscv/ysyxsoc/ioe/timer.c \
 		   riscv/ysyxsoc/mpe.c \
