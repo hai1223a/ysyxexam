@@ -4,8 +4,8 @@
 ENTRY(_start)
 
 MEMORY {
-  flash (rx)  : ORIGIN = 0x30000000, LENGTH = 16M
   psram (rwx) : ORIGIN = 0x80000000, LENGTH = 4M
+  flash (rx)  : ORIGIN = 0x30000000, LENGTH = 16M
 
 }
 REGION_ALIAS("ROM", flash);
@@ -13,7 +13,7 @@ REGION_ALIAS("RAM", psram);
 
 _STACK_SIZE = 0x10000;     /* 栈大小：64KB */
 SECTIONS {
-    .entry : {
+  .entry : {
     *(entry)
   } > ROM AT> ROM
   
@@ -34,9 +34,35 @@ SECTIONS {
   .rodata : {
     rodata_start = .;
     *(.rodata*)
+    *(.srodata*)
   } > ROM AT> ROM
   rodata_size = SIZEOF(.rodata);
   rodata_load_start = LOADADDR(.rodata);
+
+  /* ===== 在这里添加rtthread的特殊段 ===== */
+  .data.extra : {
+    __fsymtab_start = .;
+    KEEP(*(FSymTab))
+    __fsymtab_end = .;
+    . = ALIGN(8);
+    __vsymtab_start = .;
+    KEEP(*(VSymTab))
+    __vsymtab_end = .;
+    . = ALIGN(8);
+    __rt_init_start = .;
+    KEEP(*(SORT(.rti_fn*)))
+    __rt_init_end = .;
+    . = ALIGN(8);
+    __rt_utest_tc_tab_start = .;
+    KEEP(*(UtestTcTab))
+    __rt_utest_tc_tab_end = .;
+    . = ALIGN(8);
+    __am_apps_data_start = .;
+    *(__am_apps.data*)
+    *(__am_apps.sdata*)
+    __am_apps_data_end = .;
+    . = ALIGN(8);
+  } > RAM AT > ROM
 
   .data : {
     data_start = .;
@@ -46,17 +72,27 @@ SECTIONS {
   data_size = SIZEOF(.data);
   data_load_start = LOADADDR(.data);
   
+  .bss.extra (NOLOAD) : {
+    . = ALIGN(8);
+    __am_apps_bss_start = .;
+    *(__am_apps.bss*)
+    *(__am_apps.sbss*)
+    *(__am_apps.scommon*)
+    __am_apps_bss_end = .;
+    . = ALIGN(8);
+  } > RAM
+  
   .bss : {
     bss_start = .;
     *(.bss*)
     *(.sbss*)
     *(.scommon)
-  } > RAM AT> ROM
+  } > RAM
   bss_size = SIZEOF(.bss);
 
   /* 堆区（动态计算剩余空间） */
   _heap_start = ALIGN(4);  /* 堆起始地址（4字节对齐） */
-  _heap_end = ORIGIN(RAM) + LENGTH(RAM) - _STACK_SIZE;  /* 堆结束地址 = SRAM结束 - 栈大小（4KB） */
+  _heap_end = ORIGIN(RAM) + LENGTH(RAM) - _STACK_SIZE; 
 
   . = _heap_end;
   _stack_top = .;

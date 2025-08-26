@@ -4,8 +4,8 @@
 ENTRY(_start)
 
 MEMORY {
-  flash (rx)  : ORIGIN = 0x30000000, LENGTH = 16M
   psram (rwx) : ORIGIN = 0x80000000, LENGTH = 4M
+  flash (rx)  : ORIGIN = 0x30000000, LENGTH = 16M
 
 }
 REGION_ALIAS("ROM", flash);
@@ -13,7 +13,7 @@ REGION_ALIAS("RAM", psram);
 
 _STACK_SIZE = 0x10000;     /* 栈大小：64KB */
 SECTIONS {
-    .entry : {
+  .entry : {
     *(entry)
   } > ROM AT> ROM
   
@@ -34,6 +34,7 @@ SECTIONS {
   .rodata : {
     rodata_start = .;
     *(.rodata*)
+    *(.srodata*)
   } > ROM AT> ROM
   rodata_size = SIZEOF(.rodata);
   rodata_load_start = LOADADDR(.rodata);
