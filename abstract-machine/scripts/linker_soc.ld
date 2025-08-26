@@ -2,7 +2,7 @@
 .boot段包含了复制用的bootloader代码, 将.text和.rodata复制到SRAM中,
 将.data和.bss复制到RAM中, 然后程序将从SRAM中执行.
 
-同时设置了2K的栈放在SRAM尾端, 适合较小的程序运行. */
+同时设置了64K的栈放在RAM尾端, 适合较小的, 但需要更大的栈的程序运行. */
 ENTRY(_start)
 
 MEMORY {
@@ -14,7 +14,7 @@ REGION_ALIAS("ROM", flash);
 REGION_ALIAS("RAM", psram);
 REGION_ALIAS("SRAM", sram);
 
-_STACK_SIZE = 0x800;     /* 栈大小 2KB */
+_STACK_SIZE = 0x10000;     /* 栈大小 64KB */
 SECTIONS {
   /* _pmem_start and _entry_offset are defined in LDFLAGS */
   .entry : {
@@ -42,13 +42,6 @@ SECTIONS {
   rodata_size = SIZEOF(.rodata);
   rodata_load_start = LOADADDR(.rodata);
 
-  .stack (NOLOAD) : {
-    . = ORIGIN(SRAM) + LENGTH(SRAM) - _STACK_SIZE;
-    _stack_top = .;
-    . = . + _STACK_SIZE;
-    _stack_pointer = .;
-  } > SRAM
-
   .data : {
     data_start = .;
     *(.data*)
@@ -69,6 +62,10 @@ SECTIONS {
   _heap_start = ALIGN(4);  /* 堆起始地址（4字节对齐） */
   _heap_end = ORIGIN(RAM) + LENGTH(RAM);
 
+  . = _heap_end;
+  _stack_top = .;
+  . = . + _STACK_SIZE;
+  _stack_pointer = .;
   end = .;
   _end = .;  
 }
