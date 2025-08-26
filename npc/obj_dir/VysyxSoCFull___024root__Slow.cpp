@@ -10,21 +10,6 @@ void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root* vlSelf);
 
 VysyxSoCFull___024root::VysyxSoCFull___024root(VysyxSoCFull__Syms* symsp, const char* v__name)
     : VerilatedModule{v__name}
-    , __Vm_mtaskstate_7(1U)
-    , __Vm_mtaskstate_8(1U)
-    , __Vm_mtaskstate_19(1U)
-    , __Vm_mtaskstate_22(1U)
-    , __Vm_mtaskstate_24(1U)
-    , __Vm_mtaskstate_30(1U)
-    , __Vm_mtaskstate_5(2U)
-    , __Vm_mtaskstate_4(2U)
-    , __Vm_mtaskstate_10(1U)
-    , __Vm_mtaskstate_9(2U)
-    , __Vm_mtaskstate_20(1U)
-    , __Vm_mtaskstate_23(1U)
-    , __Vm_mtaskstate_28(1U)
-    , __Vm_mtaskstate_26(1U)
-    , __Vm_mtaskstate_final__0nba(2U)
     , vlSymsp{symsp}
  {
     // Reset structure values

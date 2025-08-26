@@ -9,10 +9,8 @@
 VysyxSoCFull::VysyxSoCFull(VerilatedContext* _vcontextp__, const char* _vcname__)
     : VerilatedModel{*_vcontextp__}
     , vlSymsp{new VysyxSoCFull__Syms(contextp(), _vcname__, this)}
-    , reset{vlSymsp->TOP.reset}
-    , externalPins_uart_tx{vlSymsp->TOP.externalPins_uart_tx}
-    , externalPins_uart_rx{vlSymsp->TOP.externalPins_uart_rx}
     , clock{vlSymsp->TOP.clock}
+    , reset{vlSymsp->TOP.reset}
     , externalPins_gpio_seg_0{vlSymsp->TOP.externalPins_gpio_seg_0}
     , externalPins_gpio_seg_1{vlSymsp->TOP.externalPins_gpio_seg_1}
     , externalPins_gpio_seg_2{vlSymsp->TOP.externalPins_gpio_seg_2}
@@ -29,6 +27,8 @@ VysyxSoCFull::VysyxSoCFull(VerilatedContext* _vcontextp__, const char* _vcname__
     , externalPins_vga_hsync{vlSymsp->TOP.externalPins_vga_hsync}
     , externalPins_vga_vsync{vlSymsp->TOP.externalPins_vga_vsync}
     , externalPins_vga_valid{vlSymsp->TOP.externalPins_vga_valid}
+    , externalPins_uart_rx{vlSymsp->TOP.externalPins_uart_rx}
+    , externalPins_uart_tx{vlSymsp->TOP.externalPins_uart_tx}
     , externalPins_gpio_out{vlSymsp->TOP.externalPins_gpio_out}
     , externalPins_gpio_in{vlSymsp->TOP.externalPins_gpio_in}
     , __PVT____024unit{vlSymsp->TOP.__PVT____024unit}
@@ -111,8 +111,8 @@ VL_ATTR_COLD void VysyxSoCFull::final() {
 
 const char* VysyxSoCFull::hierName() const { return vlSymsp->name(); }
 const char* VysyxSoCFull::modelName() const { return "VysyxSoCFull"; }
-unsigned VysyxSoCFull::threads() const { return 2; }
+unsigned VysyxSoCFull::threads() const { return 1; }
 void VysyxSoCFull::prepareClone() const { contextp()->prepareClone(); }
 void VysyxSoCFull::atClone() const {
-    vlSymsp->__Vm_threadPoolp = static_cast<VlThreadPool*>(contextp()->threadPoolpOnClone());
+    contextp()->threadPoolpOnClone();
 }
