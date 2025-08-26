@@ -1,7 +1,7 @@
 /* 这个脚本使用了两个内存区域, 程序从_boot_fsbl执行, 将.data和.bss复制到RAM中, 然后程序将从ROM中执行.
 
 同时设置了64K的栈放在RAM尾端, 适合较大的, 需要更大的栈的程序运行. */
-ENTRY(_start)
+ENTRY(_starts)
 
 MEMORY {
   flash (rx)  : ORIGIN = 0x30000000, LENGTH = 16M

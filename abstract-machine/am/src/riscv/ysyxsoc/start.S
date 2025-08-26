@@ -1,11 +1,13 @@
 .section entry, "ax"
-.globl _boot_fsbl
+.globl _start
 # 第一级引导加载程序
-_boot_fsbl:
+_start:
     la      a0, boot_start          # 目标地址
     la      a1, boot_load_start     # 源地址
     la      a2, boot_size           # 大小
 
+    beq     a0, a1, _boot_end 
+    beqz    a2, _boot_end
     # 计算4字节块数和剩余字节
     srli    a3, a2, 2
     andi    a4, a2, 0x3
@@ -33,8 +35,8 @@ _boot_end:
     jr      t0                # 跳转
 
 .section boot, "ax"
-.globl _start
-.type _start, @function
+.globl _real_start
+
 
 # 第二级引导加载程序
 _boot_ssbl:
@@ -68,11 +70,11 @@ _boot_ssbl_bss:
     # 初始化.bss段
     la      a0, bss_start
     la      a2, bss_size
-    beqz    a2, _start
+    beqz    a2, _real_start
     jal     _boots_32pre_bss
 
 # 程序入口点
-_start:
+_real_start:
     # 清零寄存器
     mv      ra, zero
     mv      s0, zero
