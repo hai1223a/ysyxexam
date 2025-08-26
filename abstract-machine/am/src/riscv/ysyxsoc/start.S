@@ -2,17 +2,24 @@
 .globl _start
 # 第一级引导加载程序
 _start:
-    la      a0, boot_start          # 目标地址
-    la      a1, boot_load_start     # 源地址
-    la      a2, boot_size           # 大小
+    #la      a0, boot_start          # 目标地址
+    #la      a1, boot_load_start     # 源地址
+    #la      a2, boot_size           # 大小
+#
+    #beq     a0, a1, _boot_end 
+    #beqz    a2, _boot_end
+    ## 计算4字节块数和剩余字节
+    #srli    a3, a2, 2
+    #andi    a4, a2, 0x3
+    #beqz    a3, _bootf_1bytes
 
-    beq     a0, a1, _boot_end 
-    beqz    a2, _boot_end
-    # 计算4字节块数和剩余字节
-    srli    a3, a2, 2
-    andi    a4, a2, 0x3
-    beqz    a3, _bootf_1bytes
+    # 写入操作
+    li t0, 0xa0000000        # 将地址0xa0000000加载到寄存器t0
+    li t1, 0x12345678        # 将立即数0x12345678加载到寄存器t1
+    sw t1, 0(t0)             # 将t1的值存储到t0指向的地址
 
+    # 读取操作
+    lw t2, 0(t0)             # 从t0指向的地址加载值到寄存器t2
 _bootf_4bytes:
     lw      a5, 0(a1)
     sw      a5, 0(a0)
