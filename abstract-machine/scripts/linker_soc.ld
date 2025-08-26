@@ -39,8 +39,11 @@ SECTIONS {
   rodata_size = SIZEOF(.rodata);
   rodata_load_start = LOADADDR(.rodata);
 
-  /* ===== 在这里添加rtthread的特殊段 ===== */
-  .data.extra : {
+  .data : {
+    data_start = .;
+    *(.data*)
+    *(.sdata*)
+        /* section information for finsh shell */
     __fsymtab_start = .;
     KEEP(*(FSymTab))
     __fsymtab_end = .;
@@ -49,13 +52,18 @@ SECTIONS {
     KEEP(*(VSymTab))
     __vsymtab_end = .;
     . = ALIGN(8);
+
+    /* section information for initial. */
+    . = ALIGN(8);
     __rt_init_start = .;
     KEEP(*(SORT(.rti_fn*)))
     __rt_init_end = .;
     . = ALIGN(8);
+
     __rt_utest_tc_tab_start = .;
     KEEP(*(UtestTcTab))
     __rt_utest_tc_tab_end = .;
+
     . = ALIGN(8);
     __am_apps_data_start = .;
     *(__am_apps.data*)
@@ -63,16 +71,14 @@ SECTIONS {
     __am_apps_data_end = .;
     . = ALIGN(8);
   } > RAM AT > ROM
-
-  .data : {
-    data_start = .;
-    *(.data*)
-    *(.sdata*)
-  } > RAM AT > ROM
   data_size = SIZEOF(.data);
   data_load_start = LOADADDR(.data);
   
-  .bss.extra (NOLOAD) : {
+  .bss : {
+    bss_start = .;
+    *(.bss*)
+    *(.sbss*)
+    *(.scommon)
     . = ALIGN(8);
     __am_apps_bss_start = .;
     *(__am_apps.bss*)
@@ -80,14 +86,7 @@ SECTIONS {
     *(__am_apps.scommon*)
     __am_apps_bss_end = .;
     . = ALIGN(8);
-  } > RAM
-  
-  .bss : {
-    bss_start = .;
-    *(.bss*)
-    *(.sbss*)
-    *(.scommon)
-  } > RAM
+  } > RAM AT> ROM
   bss_size = SIZEOF(.bss);
 
   /* 堆区（动态计算剩余空间） */
