@@ -56,7 +56,7 @@ SECTIONS {
 
   /* 堆区（动态计算剩余空间） */
   _heap_start = ALIGN(4);  /* 堆起始地址（4字节对齐） */
-  _heap_end = ORIGIN(RAM) + LENGTH(RAM) - _STACK_SIZE;  /* 堆结束地址 = SRAM结束 - 栈大小（4KB） */
+  _heap_end = ORIGIN(RAM) + LENGTH(RAM) - _STACK_SIZE; 
 
   _stack_top = .;
   . = . + _STACK_SIZE;
