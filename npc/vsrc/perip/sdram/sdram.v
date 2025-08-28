@@ -214,7 +214,7 @@ module sdram(
     .wmask    	(~dqm          ),
     .rdata    	(dq_out_1      )
   );
-  mem_8192x512x16 u0(
+  mem_8192x512x16 u2(
     .clk      	(clk           ),
     .en       	(bank_sel[2]   ),
     .wen      	(wen           ),
@@ -225,7 +225,7 @@ module sdram(
     .wmask    	(~dqm          ),
     .rdata    	(dq_out_2      )
   );
-  mem_8192x512x16 u0(
+  mem_8192x512x16 u3(
     .clk      	(clk           ),
     .en       	(bank_sel[3]   ),
     .wen      	(wen           ),
