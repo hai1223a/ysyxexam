@@ -1822,7 +1822,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__4(VysyxSoCFull___0
             if ((1U & (IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__state))) {
                 if (((IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__count) 
                      == ((IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__count_r) 
-                         - (IData)(1U)))) {
+                         - (IData)(2U)))) {
                     __Vdly__ysyxSoCFull__DOT__sdram__DOT__state = 4U;
                 }
             } else {
