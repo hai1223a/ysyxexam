@@ -104,6 +104,7 @@ module sdram(
   end
   
   always @(*) begin
+    dq_en = 0;
     col_real_addr = 0;
     wen = 0;
     ren = 0;
@@ -119,13 +120,16 @@ module sdram(
         end
         READ_WAIT: begin
           count_r = cas_latency;
+          dq_en = 1;
         end 
         READ_00: begin
           col_real_addr = col_addr;
+          dq_en = 1;
           ren = 1;
         end
         READ_01: begin
           col_real_addr = col_addr + 9'd1;
+          dq_en = 1;
           ren = 1;
         end
       default: ;

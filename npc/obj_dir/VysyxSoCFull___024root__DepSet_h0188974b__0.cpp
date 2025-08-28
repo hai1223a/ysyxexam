@@ -1883,12 +1883,15 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__4(VysyxSoCFull___0
                 }
             }
         }
+        vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata 
+            = vlSelfRef.ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_data_in_w;
     } else {
         __Vdly__ysyxSoCFull__DOT__sdram__DOT__count = 0U;
         __Vdly__ysyxSoCFull__DOT__sdram__DOT__state = 0U;
         vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__burst_len = 0U;
         vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__cas_latency = 0U;
         vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_addr = 0U;
+        vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata = 0U;
         vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__bank_sel = 0U;
         vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr = 0U;
     }
@@ -2282,19 +2285,6 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_comb__TOP__1(VysyxSoCFull___024r
                 ? 0U : 0xffffU)) | ((IData)(vlSelfRef.ysyxSoCFull__DOT___dq_wire__strong__out7) 
                                     & ((IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__dq_en)
                                         ? 0xffffU : 0U)));
-    vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata = 0U;
-    if ((1U & (~ ((IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__state) 
-                  >> 2U)))) {
-        if ((2U & (IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__state))) {
-            if ((1U & (~ (IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__state)))) {
-                vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata 
-                    = vlSelfRef.ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_data_in_w;
-            }
-        } else if ((1U & (IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__state))) {
-            vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata 
-                = vlSelfRef.ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_data_in_w;
-        }
-    }
 }
 
 VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__9(VysyxSoCFull___024root* vlSelf) {
