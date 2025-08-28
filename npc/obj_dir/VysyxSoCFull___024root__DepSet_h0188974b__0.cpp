@@ -1875,8 +1875,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__4(VysyxSoCFull___0
                 = (0x1ffU & (vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__test_counter 
                              >> 0xcU));
             vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata 
-                = (vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__test_counter 
-                   >> 0x10U);
+                = (0xffffU & vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__test_counter);
             __Vdly__ysyxSoCFull__DOT__sdram__DOT__test_counter 
                 = ((IData)(1U) + vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__test_counter);
             if ((0x64U == vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__test_counter)) {
