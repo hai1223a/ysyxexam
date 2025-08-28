@@ -33,7 +33,8 @@ long init_imem(char *img_file)
       *imem_w++ = 0xa00002b7; // lui	t0,0xa0000
       *imem_w++ = 0x12345337; // lui	t1,0x12345
       *imem_w++ = 0x67830313; // addi	t1,t1,1656
-      *imem_w++ = 0x00629123; // sh	t1,2(t0) 
+      *imem_w++ = 0x00629123; // sh	t1,2(t0)
+      *imem_w++ = 0x00629123; // sh	t1,2(t0)  
       *imem_w++ = 0x00629223; // sh	t1,4(t0)
       *imem_w++ = 0x00229503; // lh	a0,2(t0)
       *imem_w++ = 0x00429583; // lh	a1,4(t0)
