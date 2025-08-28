@@ -1105,6 +1105,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->ysyxSoCFull__DOT__psram__DOT____VdfgRegularize_h95f21b40_0_0 = 0;
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_en = 0;
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__wdata = 0;
+    vlSelf->ysyxSoCFull__DOT__sdram__DOT__wmask = 0;
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__wen = 0;
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__ren = 0;
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__count = 0;
