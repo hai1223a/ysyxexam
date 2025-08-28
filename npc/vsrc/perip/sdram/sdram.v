@@ -73,11 +73,11 @@ module sdram(
           bank_sel <= 4'd1 << ba;       
         end
         CMD_READ: begin
-          col_addr <= a[9:1];          
+          col_addr <= {a[8:1], 1'b0};          
           bank_sel <= 4'd1 << ba;      
         end
         CMD_WRITE: begin
-          col_addr <= a[9:1];      
+          col_addr <= {a[8:1], 1'b0};      
           bank_sel <= 4'd1 << ba;  
         end
         CMD_LOAD_MODE: begin
