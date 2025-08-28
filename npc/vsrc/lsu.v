@@ -52,7 +52,6 @@ module ysyx_25050136_LSU
          output                        mem_valid_o
      );
     // 内部
-    wire [3:0] byte_sel;
     wire misaligned;
     // 读事务
     localparam READ_IEDL = 2'd0;
@@ -76,7 +75,6 @@ module ysyx_25050136_LSU
     reg [3:0] m_wstrb_r;
     wire aw_fire, w_fire, b_fire;
     // 内部
-    assign byte_sel = 4'b1 << mem_addr_i[1:0];
     always @(*) begin
         if ((!((mem_addr_i >= 32'ha0000000) & (mem_addr_i < 32'ha2000000))) & (mem_wen_i | mem_ren_i))
         begin
@@ -94,22 +92,22 @@ module ysyx_25050136_LSU
         // 统一处理读写
         case (mem_mask_i)
             4'h1: begin // Byte操作
-                m_wstrb_r = byte_sel;
-                m_wdata_r = {24'd0, {store_data_i[7:0]}} << (8 * mem_addr_i[1:0]);
+                m_wstrb_r = 4'b0001;
+                m_wdata_r = {24'd0, {store_data_i[7:0]}};
                 m_arsize_r = 3'b000;
                 m_awsize_r = 3'b000;
                 load_data_r = mem_signed_i ? 
-                    {{24{m_rdata_i[8*mem_addr_i[1:0] + 7]}}, m_rdata_i[8*mem_addr_i[1:0] +: 8]} :
-                    {24'd0, m_rdata_i[8*mem_addr_i[1:0] +: 8]};
+                    {{24{m_rdata_i[8]}}, m_rdata_i[7:0]} :
+                    {24'd0, m_rdata_i[7:0]};
             end
             4'h3: begin // Halfword操作
-                m_wstrb_r = byte_sel | (byte_sel << 1);
-                m_wdata_r = {16'd0, store_data_i[15:0]} << (8 * mem_addr_i[1:0]);
+                m_wstrb_r = 4'b0011;
+                m_wdata_r = {16'd0, store_data_i[15:0]};
                 m_arsize_r = 3'b001;
                 m_awsize_r = 3'b001;
                 load_data_r = mem_signed_i ?
-                    {{16{m_rdata_i[16*mem_addr_i[1] + 15]}}, m_rdata_i[16*mem_addr_i[1] +: 16]} :
-                    {16'd0, m_rdata_i[16*mem_addr_i[1] +: 16]};
+                    {{16{m_rdata_i[16]}}, m_rdata_i[15:0]} :
+                    {16'd0, m_rdata_i[15:0]};
             end
             4'hF: begin // Word操作
                 m_wstrb_r = 4'b1111;
