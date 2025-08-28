@@ -13,10 +13,10 @@ _start:
     # beqz    a3, _bootf_1bytes
     li  t0, 0xa0000000
     li  t1, 0x12345678
-    sw  t1, 2(t0)
-    sw  t1, 4(t0)
-    sw  a0, 2(t0)
-    sw  a1, 4(t0)
+    sh  t1, 2(t0)
+    sh  t1, 4(t0)
+    lh  a0, 2(t0)
+    lh  a1, 4(t0)
 _bootf_4bytes:
     lw      a5, 0(a1)
     sw      a5, 0(a0)

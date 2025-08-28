@@ -30,16 +30,13 @@ long init_imem(char *img_file)
   //  *imem_w++ = 0x0047a603; // lw	a2,4(a5) # 2000004
   //  *imem_w++ = 0x00072583; // lw	a1,0(a4) # 2000000 
   //  *imem_w++ = 0x00100073; // ebreak 
-      *imem_w++ = 0xa00012b7; // lui	t0,0xa0001
-      *imem_w++ = 0x11428293; // addi	t0,t0,276 
+      *imem_w++ = 0xa00002b7; // lui	t0,0xa0000
       *imem_w++ = 0x12345337; // lui	t1,0x12345
       *imem_w++ = 0x67830313; // addi	t1,t1,1656
-      *imem_w++ = 0x0062a023; // sw	t1,0(t0)
-      *imem_w++ = 0x00629023; // sh	t1,0(t0)
-      *imem_w++ = 0x00628023; // sb	t1,0(t0)
-      *imem_w++ = 0x0002a383; // lw	t2,0(t0)
-      *imem_w++ = 0x00029383; // lh	t2,0(t0)
-      *imem_w++ = 0x00028383; // lb	t2,0(t0)
+      *imem_w++ = 0x00629123; // sh	t1,2(t0) 
+      *imem_w++ = 0x00629223; // sh	t1,4(t0)
+      *imem_w++ = 0x00229503; // lh	a0,2(t0)
+      *imem_w++ = 0x00429583; // lh	a1,4(t0)
       *imem_w++ = 0x00100073; // ebreak 
       Log("没有给源文件, 程序使用了内置的代码.");
     return 20;
