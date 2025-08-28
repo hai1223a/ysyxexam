@@ -88,7 +88,7 @@ module sdram(
             state <= IDLE;
           end 
           READ_WAIT: begin
-            if(count == count_r - 1) begin
+            if(count == count_r - 2) begin
               state <= READ_00;
             end
           end
