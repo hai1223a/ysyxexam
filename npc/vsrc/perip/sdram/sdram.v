@@ -27,7 +27,7 @@ module sdram(
   wire [15:0] dq_in;
   wire [15:0] dq_out;
   wire [15:0] dq_out_0, dq_out_1, dq_out_2, dq_out_3; 
-  reg [31:0] wdata;
+  reg [15:0] wdata;
   reg wen, ren;
   reg [1:0] count, count_r;
   reg [2:0] state;
