@@ -202,7 +202,7 @@ module mem_8192x512x16(
   input   [ 1:0]  wmask    ,
   output  [15:0]  rdata    
 );  
-  /*verilator public*/  reg [15:0] mem [0:8191][0:511];
+  /*verilator public*/ reg [15:0] mem [0:8191][0:511]; // 添加元注释
   
   always @(posedge clk) begin
     if(en & wen) begin
