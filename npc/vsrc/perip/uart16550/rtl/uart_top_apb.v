@@ -55,7 +55,7 @@ module uart_top_apb (
   //  end
    always @ (in_pstrb or in_pwdata) begin
              reg_dat8_w = #1 0;
-             case (in_paddr)
+             case (in_pstrb)
              `ifdef ENDIAN_BIG
              4'b0001: reg_dat8_w = #1 in_pwdata[31:24];
              4'b0010: reg_dat8_w = #1 in_pwdata[23:16];
