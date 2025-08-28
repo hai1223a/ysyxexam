@@ -78,7 +78,7 @@ module ysyx_25050136_LSU
     // 内部
     assign byte_sel = 4'b1 << mem_addr_i[1:0];
     always @(*) begin
-        if ((!((mem_addr_i >= 32'h80000000) & (mem_addr_i < 32'h80400000))) & (mem_wen_i | mem_ren_i))
+        if ((!((mem_addr_i >= 32'ha0000000) & (mem_addr_i < 32'ha2000000))) & (mem_wen_i | mem_ren_i))
         begin
             find_diff_skip();
         end
