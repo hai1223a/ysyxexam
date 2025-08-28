@@ -31,6 +31,7 @@ long init_imem(char *img_file)
   //  *imem_w++ = 0x00072583; // lw	a1,0(a4) # 2000000 
   //  *imem_w++ = 0x00100073; // ebreak 
       *imem_w++ = 0xa00002b7; // lui	t0,0xa0000
+      *imem_w++ = 0x00428293; // addi	t0,t0,4
       *imem_w++ = 0x12345337; // lui	t1,0x12345
       *imem_w++ = 0x67830313; // addi	t1,t1,1656 # 12345678 
       *imem_w++ = 0x0062a023; // sw	t1,0(t0) # a0000000 
