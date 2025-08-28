@@ -143,11 +143,10 @@ void VysyxSoCFull___024root___eval_nba(VysyxSoCFull___024root* vlSelf) {
     }
     if ((0x43ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull___024root___nba_comb__TOP__1(vlSelf);
-        vlSelfRef.__Vm_traceActivity[0xaU] = 1U;
     }
     if ((0xcULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull___024root___nba_sequent__TOP__9(vlSelf);
-        vlSelfRef.__Vm_traceActivity[0xbU] = 1U;
+        vlSelfRef.__Vm_traceActivity[0xaU] = 1U;
     }
     if ((0x30ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull___024root___nba_sequent__TOP__10(vlSelf);
@@ -157,11 +156,11 @@ void VysyxSoCFull___024root___eval_nba(VysyxSoCFull___024root* vlSelf) {
     }
     if ((1ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull___024root___nba_sequent__TOP__11(vlSelf);
-        vlSelfRef.__Vm_traceActivity[0xcU] = 1U;
+        vlSelfRef.__Vm_traceActivity[0xbU] = 1U;
     }
     if ((3ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull___024root___nba_comb__TOP__3(vlSelf);
-        vlSelfRef.__Vm_traceActivity[0xdU] = 1U;
+        vlSelfRef.__Vm_traceActivity[0xcU] = 1U;
     }
     if ((0x33ULL & vlSelfRef.__VnbaTriggered.word(0U))) {
         VysyxSoCFull___024root___nba_comb__TOP__4(vlSelf);
@@ -1713,7 +1712,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__4(VysyxSoCFull___0
                          ? vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u0__DOT__mem
                         [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
                         [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr]
-                         : vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata));
+                         : (IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata)));
         __VdlyDim0__ysyxSoCFull__DOT__sdram__DOT__u0__DOT__mem__v0 
             = vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr;
         __VdlyDim1__ysyxSoCFull__DOT__sdram__DOT__u0__DOT__mem__v0 
@@ -1724,7 +1723,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__4(VysyxSoCFull___0
                          ? (vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u0__DOT__mem
                             [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
                             [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr] 
-                            >> 8U) : (vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata 
+                            >> 8U) : ((IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata) 
                                       >> 8U)));
         __VdlyDim0__ysyxSoCFull__DOT__sdram__DOT__u0__DOT__mem__v1 
             = vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr;
@@ -1738,7 +1737,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__4(VysyxSoCFull___0
                          ? vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u1__DOT__mem
                         [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
                         [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr]
-                         : vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata));
+                         : (IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata)));
         __VdlyDim0__ysyxSoCFull__DOT__sdram__DOT__u1__DOT__mem__v0 
             = vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr;
         __VdlyDim1__ysyxSoCFull__DOT__sdram__DOT__u1__DOT__mem__v0 
@@ -1749,7 +1748,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__4(VysyxSoCFull___0
                          ? (vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u1__DOT__mem
                             [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
                             [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr] 
-                            >> 8U) : (vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata 
+                            >> 8U) : ((IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata) 
                                       >> 8U)));
         __VdlyDim0__ysyxSoCFull__DOT__sdram__DOT__u1__DOT__mem__v1 
             = vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr;
@@ -1763,7 +1762,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__4(VysyxSoCFull___0
                          ? vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u2__DOT__mem
                         [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
                         [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr]
-                         : vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata));
+                         : (IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata)));
         __VdlyDim0__ysyxSoCFull__DOT__sdram__DOT__u2__DOT__mem__v0 
             = vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr;
         __VdlyDim1__ysyxSoCFull__DOT__sdram__DOT__u2__DOT__mem__v0 
@@ -1774,7 +1773,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__4(VysyxSoCFull___0
                          ? (vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u2__DOT__mem
                             [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
                             [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr] 
-                            >> 8U) : (vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata 
+                            >> 8U) : ((IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata) 
                                       >> 8U)));
         __VdlyDim0__ysyxSoCFull__DOT__sdram__DOT__u2__DOT__mem__v1 
             = vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr;
@@ -1788,7 +1787,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__4(VysyxSoCFull___0
                          ? vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u3__DOT__mem
                         [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
                         [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr]
-                         : vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata));
+                         : (IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata)));
         __VdlyDim0__ysyxSoCFull__DOT__sdram__DOT__u3__DOT__mem__v0 
             = vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr;
         __VdlyDim1__ysyxSoCFull__DOT__sdram__DOT__u3__DOT__mem__v0 
@@ -1799,7 +1798,7 @@ VL_INLINE_OPT void VysyxSoCFull___024root___nba_sequent__TOP__4(VysyxSoCFull___0
                          ? (vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u3__DOT__mem
                             [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
                             [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr] 
-                            >> 8U) : (vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata 
+                            >> 8U) : ((IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__wdata) 
                                       >> 8U)));
         __VdlyDim0__ysyxSoCFull__DOT__sdram__DOT__u3__DOT__mem__v1 
             = vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr;

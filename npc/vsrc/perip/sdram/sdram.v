@@ -108,17 +108,14 @@ module sdram(
     wen = 0;
     ren = 0;
     count_r = 0;
-    wdata = 0;
     case (state)
         WRITE_00: begin
           col_real_addr = col_addr;
           wen = 1;
-          wdata = dq_in;
         end
         WRITE_01: begin
           col_real_addr = col_addr + 9'd1;
           wen = 1;
-          wdata = dq_in;
         end
         READ_WAIT: begin
           count_r = cas_latency;
@@ -137,8 +134,10 @@ module sdram(
 
   always @(posedge clk) begin
     if(!cke) begin
+      wdata <= 0;
       count <= 0;
     end else begin
+      wdata <= dq_in;
       if (count != count_r) begin
           count <= count + 1;
       end
