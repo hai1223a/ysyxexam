@@ -10,18 +10,19 @@ module sdram(
   input [ 1:0] dqm,
   inout [15:0] dq
 );
+  // 命令识别
   localparam CMD_ACTIVE        = 4'b0011;
   localparam CMD_READ          = 4'b0101;
   localparam CMD_WRITE         = 4'b0100;
   localparam CMD_LOAD_MODE     = 4'b0000;
-
+  // 状态机
   localparam IDLE = 3'b000;
   localparam WRITE_00 = 3'b001;
   localparam WRITE_01 = 3'b010;
   localparam READ_WAIT = 3'b011;
   localparam READ_00 = 3'b100;
   localparam READ_01 = 3'b101;
-
+  // 数据接口
   reg dq_en;
   wire [15:0] dq_in;
   wire [15:0] dq_out;
@@ -36,6 +37,7 @@ module sdram(
   reg [8:0] col_real_addr;
   reg [3:0] bank_sel;
   wire [3:0] cmd = {cs, ras, cas, we};
+  
   always @(posedge clk) begin
     if (!cke) begin
         burst_len <= 0;
@@ -61,9 +63,7 @@ module sdram(
           cas_latency <= a[5:4];
           burst_len <= 3'd1 << a[1:0];
         end
-        default: begin
-          
-        end
+        default: ;
       endcase
     end
   end
@@ -103,6 +103,10 @@ module sdram(
   end
   
   always @(*) begin
+    col_real_addr = 0;
+    wen = 0;
+    ren = 0;
+    count_r = 0;
     case (state)
         WRITE_00: begin
           col_real_addr = col_addr;
@@ -115,6 +119,14 @@ module sdram(
         READ_WAIT: begin
           count_r = cas_latency;
         end 
+        READ_00: begin
+          col_real_addr = col_addr;
+          ren = 1;
+        end
+        READ_01: begin
+          col_real_addr = col_addr + 9'd1;
+          ren = 1;
+        end
       default: ;
     endcase
   end
@@ -128,6 +140,7 @@ module sdram(
       end
     end 
   end
+
   assign dq_out = bank_sel[0] ? dq_out_0 : (bank_sel[1] ? dq_out_1 : (bank_sel[2] ? dq_out_2 : (bank_sel[3] ? dq_out_3 : 0)));
   assign dq = dq_en ? dq_out : 16'bz;
   assign dq_in = dq;
