@@ -2505,10 +2505,9 @@ void VysyxSoCFull___024root__trace_chg_0_sub_0(VysyxSoCFull___024root* vlSelf, V
                                                ? (((IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__bank_sel) 
                                                    & (IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__ren))
                                                    ? 
-                                                  (0xffffU 
-                                                   & vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u0__DOT__mem
-                                                   [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
-                                                   [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr])
+                                                  vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u0__DOT__mem
+                                                  [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
+                                                  [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr]
                                                    : 0U)
                                                : ((2U 
                                                    & (IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__bank_sel))
@@ -2517,10 +2516,9 @@ void VysyxSoCFull___024root__trace_chg_0_sub_0(VysyxSoCFull___024root* vlSelf, V
                                                      >> 1U) 
                                                     & (IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__ren))
                                                     ? 
-                                                   (0xffffU 
-                                                    & vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u1__DOT__mem
-                                                    [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
-                                                    [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr])
+                                                   vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u1__DOT__mem
+                                                   [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
+                                                   [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr]
                                                     : 0U)
                                                    : 
                                                   ((4U 
@@ -2530,10 +2528,9 @@ void VysyxSoCFull___024root__trace_chg_0_sub_0(VysyxSoCFull___024root* vlSelf, V
                                                       >> 2U) 
                                                      & (IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__ren))
                                                      ? 
-                                                    (0xffffU 
-                                                     & vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u2__DOT__mem
-                                                     [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
-                                                     [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr])
+                                                    vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u2__DOT__mem
+                                                    [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
+                                                    [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr]
                                                      : 0U)
                                                     : 
                                                    ((8U 
@@ -2543,10 +2540,9 @@ void VysyxSoCFull___024root__trace_chg_0_sub_0(VysyxSoCFull___024root* vlSelf, V
                                                        >> 3U) 
                                                       & (IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__ren))
                                                       ? 
-                                                     (0xffffU 
-                                                      & vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u3__DOT__mem
-                                                      [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
-                                                      [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr])
+                                                     vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__u3__DOT__mem
+                                                     [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__row_addr]
+                                                     [vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__col_real_addr]
                                                       : 0U)
                                                      : 0U)))))),16);
         bufp->chgSData(oldp+1191,((((IData)(vlSelfRef.ysyxSoCFull__DOT__sdram__DOT__bank_sel) 
