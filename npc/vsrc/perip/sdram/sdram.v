@@ -254,7 +254,7 @@ module sdram(
           ren <= 1'b0;
           row_addr <= test_counter[12:0]; // 使用计数器作为地址
           col_addr <= test_counter[20:12];
-          wdata <= test_counter[31:16];   // 使用计数器高位作为数据
+          wdata <= test_counter[15:0];   // 使用计数器高位作为数据
           wmask <= 2'b11;                 // 写所有位
 
           test_counter <= test_counter + 1;
