@@ -12,6 +12,7 @@ _start:
     #srli    a3, a2, 2
     #andi    a4, a2, 0x3
     #beqz    a3, _bootf_1bytes
+    j _start
 
     # 写入操作
     li t0, 0xa0000004        # 将地址0xa0000000加载到寄存器t0
