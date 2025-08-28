@@ -274,6 +274,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->ysyxSoCFull__DOT___asic_spi_sck = 0;
     vlSelf->ysyxSoCFull__DOT___asic_psram_sck = 0;
     vlSelf->ysyxSoCFull__DOT___asic_psram_ce_n = 0;
+    vlSelf->ysyxSoCFull__DOT___dq_wire__strong__out7 = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4frag_auto_in_bid = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4frag_auto_in_rid = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4frag_auto_out_awid = 0;
@@ -1111,7 +1112,9 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__state = 0;
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__cas_latency = 0;
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__burst_len = 0;
-    vlSelf->ysyxSoCFull__DOT__sdram__DOT__row_addr = 0;
+    for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
+        vlSelf->ysyxSoCFull__DOT__sdram__DOT__row_addr[__Vi0] = 0;
+    }
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__col_addr = 0;
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__col_real_addr = 0;
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__bank_sel = 0;

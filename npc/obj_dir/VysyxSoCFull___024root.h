@@ -775,6 +775,7 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull___024root final : public Verilat
         CData/*0:0*/ __VactContinue;
         VL_OUT16(externalPins_gpio_out,15,0);
         VL_IN16(externalPins_gpio_in,15,0);
+        SData/*15:0*/ ysyxSoCFull__DOT___dq_wire__strong__out7;
         SData/*14:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__u_ysyx_25050136_NPC__DOT__id2ex_alu_op_o;
         SData/*11:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__csr_waddr1;
         SData/*11:0*/ ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_EX__DOT__u_ysyx_25050136_CSRU__DOT__csr_waddr2;
@@ -795,7 +796,6 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull___024root final : public Verilat
         SData/*8:0*/ ysyxSoCFull__DOT__asic__DOT__axi4frag__DOT__w_todo;
         SData/*15:0*/ ysyxSoCFull__DOT__asic__DOT__axi4frag__DOT__unnamedblk1__DOT__unnamedblk2__DOT___GEN_2;
         SData/*15:0*/ ysyxSoCFull__DOT__sdram__DOT__wdata;
-        SData/*12:0*/ ysyxSoCFull__DOT__sdram__DOT__row_addr;
         SData/*8:0*/ ysyxSoCFull__DOT__sdram__DOT__col_addr;
         SData/*8:0*/ ysyxSoCFull__DOT__sdram__DOT__col_real_addr;
         IData/*31:0*/ ysyxSoCFull__DOT__asic__DOT___axi4frag_auto_out_awaddr;
@@ -908,6 +908,7 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull___024root final : public Verilat
         VlUnpacked<CData/*5:0*/, 2> ysyxSoCFull__DOT__asic__DOT__axi4buf__DOT__nodeIn_bdeq_q__DOT__ram_ext__DOT__Memory;
         VlUnpacked<QData/*46:0*/, 2> ysyxSoCFull__DOT__asic__DOT__axi4buf__DOT__nodeOut_ardeq_q__DOT__ram_ext__DOT__Memory;
         VlUnpacked<QData/*38:0*/, 2> ysyxSoCFull__DOT__asic__DOT__axi4buf__DOT__nodeIn_rdeq_q__DOT__ram_ext__DOT__Memory;
+        VlUnpacked<SData/*12:0*/, 4> ysyxSoCFull__DOT__sdram__DOT__row_addr;
         VlUnpacked<VlUnpacked<SData/*15:0*/, 512>, 8192> ysyxSoCFull__DOT__sdram__DOT__u0__DOT__mem;
         VlUnpacked<VlUnpacked<SData/*15:0*/, 512>, 8192> ysyxSoCFull__DOT__sdram__DOT__u1__DOT__mem;
         VlUnpacked<VlUnpacked<SData/*15:0*/, 512>, 8192> ysyxSoCFull__DOT__sdram__DOT__u2__DOT__mem;

@@ -34,7 +34,8 @@ module sdram(
   wire [15:0] dq_out_0, dq_out_1, dq_out_2, dq_out_3; // 各Bank数据输出
   
   // 控制信号
-  reg [15:0]  wdata;          
+  reg [15:0]  wdata;
+  reg [1:0]   wmask;          
   reg         wen;            
   reg         ren;            
   reg [1:0]   count;          
@@ -162,10 +163,12 @@ module sdram(
   // ==================== 时序逻辑 ====================
   always @(posedge clk) begin
     if (!cke) begin
-      wdata <= 0;   
+      wdata <= 0;
+      wmask <= 0;   
       count <= 0;  
     end else begin
-      wdata <= dq_in;  
+      wdata <= dq_in;
+      wmask <= ~dqm; 
       if (count != count_r) begin
         count <= count + 1; 
       end
@@ -191,7 +194,7 @@ module sdram(
     .row_addr 	(row_addr[0]   ),
     .col_addr 	(col_real_addr ),
     .wdata    	(wdata         ),
-    .wmask    	(~dqm          ),
+    .wmask    	(wmask         ),
     .rdata    	(dq_out_0      )
   );
   mem_8192x512x16 u1(
@@ -202,7 +205,7 @@ module sdram(
     .row_addr 	(row_addr[1]   ),
     .col_addr 	(col_real_addr ),
     .wdata    	(wdata         ),
-    .wmask    	(~dqm          ),
+    .wmask    	(wmask         ),
     .rdata    	(dq_out_1      )
   );
   mem_8192x512x16 u2(
@@ -213,7 +216,7 @@ module sdram(
     .row_addr 	(row_addr[2]   ),
     .col_addr 	(col_real_addr ),
     .wdata    	(wdata         ),
-    .wmask    	(~dqm          ),
+    .wmask    	(wmask        ),
     .rdata    	(dq_out_2      )
   );
   mem_8192x512x16 u3(
@@ -224,7 +227,7 @@ module sdram(
     .row_addr 	(row_addr[3]   ),
     .col_addr 	(col_real_addr ),
     .wdata    	(wdata         ),
-    .wmask    	(~dqm          ),
+    .wmask    	(wmask         ),
     .rdata    	(dq_out_3      )
   );
 endmodule
