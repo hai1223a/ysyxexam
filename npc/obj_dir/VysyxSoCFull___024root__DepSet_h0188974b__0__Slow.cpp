@@ -241,6 +241,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root____Vm_traceActivitySetAll(VysyxSoCFull_
     vlSelfRef.__Vm_traceActivity[9U] = 1U;
     vlSelfRef.__Vm_traceActivity[0xaU] = 1U;
     vlSelfRef.__Vm_traceActivity[0xbU] = 1U;
+    vlSelfRef.__Vm_traceActivity[0xcU] = 1U;
 }
 
 VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root* vlSelf) {
@@ -273,6 +274,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->ysyxSoCFull__DOT___asic_spi_sck = 0;
     vlSelf->ysyxSoCFull__DOT___asic_psram_sck = 0;
     vlSelf->ysyxSoCFull__DOT___asic_psram_ce_n = 0;
+    vlSelf->ysyxSoCFull__DOT___dq_wire__strong__out7 = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4frag_auto_in_bid = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4frag_auto_in_rid = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4frag_auto_out_awid = 0;
@@ -810,6 +812,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__bank_q = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__data_buffer_q = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__dqm_buffer_q = 0;
+    vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__sdram_data_in_w = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__refresh_q = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT__lsdram_apb__DOT__msdram__DOT__u_sdram_ctrl__DOT__row_open_q = 0;
     for (int __Vi0 = 0; __Vi0 < 4; ++__Vi0) {
@@ -1100,19 +1103,36 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->ysyxSoCFull__DOT__psram__DOT__dio__out__strong__out0 = 0;
     vlSelf->ysyxSoCFull__DOT__psram__DOT__dio__out__strong__out1 = 0;
     vlSelf->ysyxSoCFull__DOT__psram__DOT____VdfgRegularize_h95f21b40_0_0 = 0;
-    vlSelf->ysyxSoCFull__DOT__sdram__DOT__en = 0;
+    vlSelf->ysyxSoCFull__DOT__sdram__DOT__dq_en = 0;
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__wen = 0;
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__ren = 0;
+    vlSelf->ysyxSoCFull__DOT__sdram__DOT__count = 0;
+    vlSelf->ysyxSoCFull__DOT__sdram__DOT__count_r = 0;
+    vlSelf->ysyxSoCFull__DOT__sdram__DOT__state = 0;
+    vlSelf->ysyxSoCFull__DOT__sdram__DOT__cas_latency = 0;
+    vlSelf->ysyxSoCFull__DOT__sdram__DOT__burst_len = 0;
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__row_addr = 0;
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__col_addr = 0;
-    vlSelf->ysyxSoCFull__DOT__sdram__DOT__wdata = 0;
-    vlSelf->ysyxSoCFull__DOT__sdram__DOT__wmask = 0;
-    vlSelf->ysyxSoCFull__DOT__sdram__DOT__test_state = 0;
-    vlSelf->ysyxSoCFull__DOT__sdram__DOT__test_counter = 0;
-    vlSelf->ysyxSoCFull__DOT__sdram__DOT__expected_data = 0;
+    vlSelf->ysyxSoCFull__DOT__sdram__DOT__col_real_addr = 0;
+    vlSelf->ysyxSoCFull__DOT__sdram__DOT__bank_sel = 0;
     for (int __Vi0 = 0; __Vi0 < 8192; ++__Vi0) {
         for (int __Vi1 = 0; __Vi1 < 512; ++__Vi1) {
-            vlSelf->ysyxSoCFull__DOT__sdram__DOT__u_mem__DOT__mem[__Vi0][__Vi1] = 0;
+            vlSelf->ysyxSoCFull__DOT__sdram__DOT__u0__DOT__mem[__Vi0][__Vi1] = 0;
+        }
+    }
+    for (int __Vi0 = 0; __Vi0 < 8192; ++__Vi0) {
+        for (int __Vi1 = 0; __Vi1 < 512; ++__Vi1) {
+            vlSelf->ysyxSoCFull__DOT__sdram__DOT__u1__DOT__mem[__Vi0][__Vi1] = 0;
+        }
+    }
+    for (int __Vi0 = 0; __Vi0 < 8192; ++__Vi0) {
+        for (int __Vi1 = 0; __Vi1 < 512; ++__Vi1) {
+            vlSelf->ysyxSoCFull__DOT__sdram__DOT__u2__DOT__mem[__Vi0][__Vi1] = 0;
+        }
+    }
+    for (int __Vi0 = 0; __Vi0 < 8192; ++__Vi0) {
+        for (int __Vi1 = 0; __Vi1 < 512; ++__Vi1) {
+            vlSelf->ysyxSoCFull__DOT__sdram__DOT__u3__DOT__mem[__Vi0][__Vi1] = 0;
         }
     }
     vlSelf->__VdfgRegularize_hd87f99a1_1_64 = 0;
@@ -1134,7 +1154,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->__Vtrigprevexpr___TOP__ysyxSoCFull__DOT__flash__DOT__reset__0 = 0;
     vlSelf->__Vtrigprevexpr___TOP__ysyxSoCFull__DOT___asic_psram_ce_n__0 = 0;
     vlSelf->__Vtrigprevexpr___TOP__ysyxSoCFull__DOT___asic_psram_sck__0 = 0;
-    for (int __Vi0 = 0; __Vi0 < 12; ++__Vi0) {
+    for (int __Vi0 = 0; __Vi0 < 13; ++__Vi0) {
         vlSelf->__Vm_traceActivity[__Vi0] = 0;
     }
 }

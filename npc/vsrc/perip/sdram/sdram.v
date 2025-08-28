@@ -27,6 +27,7 @@ module sdram(
   wire [15:0] dq_in;
   wire [15:0] dq_out;
   wire [15:0] dq_out_0, dq_out_1, dq_out_2, dq_out_3; 
+  reg [31:0] wdata;
   reg wen, ren;
   reg [1:0] count, count_r;
   reg [2:0] state;
@@ -107,14 +108,17 @@ module sdram(
     wen = 0;
     ren = 0;
     count_r = 0;
+    wdata = 0;
     case (state)
         WRITE_00: begin
           col_real_addr = col_addr;
           wen = 1;
+          wdata = dq_in;
         end
         WRITE_01: begin
           col_real_addr = col_addr + 9'd1;
           wen = 1;
+          wdata = dq_in;
         end
         READ_WAIT: begin
           count_r = cas_latency;
@@ -152,7 +156,7 @@ module sdram(
     .ren      	(ren         ),
     .row_addr 	(row_addr    ),
     .col_addr 	(col_real_addr    ),
-    .wdata    	(dq_in       ),
+    .wdata    	(wdata       ),
     .wmask    	(~dqm       ),
     .rdata    	(dq_out_0       )
   );
@@ -163,7 +167,7 @@ module sdram(
     .ren      	(ren         ),
     .row_addr 	(row_addr    ),
     .col_addr 	(col_real_addr    ),
-    .wdata    	(dq_in       ),
+    .wdata    	(wdata       ),
     .wmask    	(~dqm       ),
     .rdata    	(dq_out_1       )
   );
@@ -174,7 +178,7 @@ module sdram(
     .ren      	(ren         ),
     .row_addr 	(row_addr    ),
     .col_addr 	(col_real_addr    ),
-    .wdata    	(dq_in       ),
+    .wdata    	(wdata       ),
     .wmask    	(~dqm       ),
     .rdata    	(dq_out_2       )
   );
@@ -185,7 +189,7 @@ module sdram(
     .ren      	(ren         ),
     .row_addr 	(row_addr    ),
     .col_addr 	(col_real_addr    ),
-    .wdata    	(dq_in       ),
+    .wdata    	(wdata       ),
     .wmask    	(~dqm       ),
     .rdata    	(dq_out_3       )
   );
