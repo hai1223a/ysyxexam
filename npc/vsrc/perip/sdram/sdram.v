@@ -46,7 +46,7 @@ module sdram(
   reg [3:0]   burst_len;     
   
   // 地址信号
-  reg [12:0]  row_addr;       
+  reg [12:0]  row_addr [0:3];       
   reg [8:0]   col_addr;       
   reg [8:0]   col_real_addr;  
   reg [3:0]   bank_sel;       
@@ -59,13 +59,16 @@ module sdram(
     if (!cke) begin
       burst_len   <= 0;
       cas_latency <= 0;
-      row_addr    <= 0;
+      row_addr[0] <= 0;
+      row_addr[1] <= 0;
+      row_addr[2] <= 0;
+      row_addr[3] <= 0;
       col_addr    <= 0;
       bank_sel    <= 0;
     end else begin
       case (cmd)
         CMD_ACTIVE: begin
-          row_addr <= a;                
+          row_addr[ba] <= a;                
           bank_sel <= 4'd1 << ba;       
         end
         CMD_READ: begin
@@ -98,29 +101,23 @@ module sdram(
             state <= READ_WAIT; 
           end            
         end
-        
         WRITE_00: begin
           state <= WRITE_01;   
         end
-        
         WRITE_01: begin
           state <= IDLE;        
         end 
-        
         READ_WAIT: begin
           if (count == count_r - 2) begin
             state <= READ_00;   
           end
         end
-        
         READ_00: begin
           state <= READ_01;     
         end
-        
         READ_01: begin
           state <= IDLE;        
         end
-        
         default: state <= IDLE; 
       endcase
     end
@@ -140,29 +137,24 @@ module sdram(
         col_real_addr = col_addr;  
         wen           = 1;         
       end
-      
       WRITE_01: begin
         col_real_addr = col_addr + 9'd1;
         wen           = 1;               
       end
-      
       READ_WAIT: begin
         count_r = cas_latency;  
         dq_en   = 1;            
       end 
-      
       READ_00: begin
         col_real_addr = col_addr; 
         dq_en         = 1;        
         ren           = 1;        
       end
-      
       READ_01: begin
         col_real_addr = col_addr + 9'd1;
         dq_en         = 1;              
         ren           = 1;              
       end
-      
       default: ; 
     endcase
   end
@@ -174,7 +166,6 @@ module sdram(
       count <= 0;  
     end else begin
       wdata <= dq_in;  
-      
       if (count != count_r) begin
         count <= count + 1; 
       end
@@ -197,7 +188,7 @@ module sdram(
     .en       	(bank_sel[0]   ),
     .wen      	(wen           ),
     .ren      	(ren           ),
-    .row_addr 	(row_addr      ),
+    .row_addr 	(row_addr[0]   ),
     .col_addr 	(col_real_addr ),
     .wdata    	(wdata         ),
     .wmask    	(~dqm          ),
@@ -208,7 +199,7 @@ module sdram(
     .en       	(bank_sel[1]   ),
     .wen      	(wen           ),
     .ren      	(ren           ),
-    .row_addr 	(row_addr      ),
+    .row_addr 	(row_addr[1]   ),
     .col_addr 	(col_real_addr ),
     .wdata    	(wdata         ),
     .wmask    	(~dqm          ),
@@ -219,7 +210,7 @@ module sdram(
     .en       	(bank_sel[2]   ),
     .wen      	(wen           ),
     .ren      	(ren           ),
-    .row_addr 	(row_addr      ),
+    .row_addr 	(row_addr[2]   ),
     .col_addr 	(col_real_addr ),
     .wdata    	(wdata         ),
     .wmask    	(~dqm          ),
@@ -230,7 +221,7 @@ module sdram(
     .en       	(bank_sel[3]   ),
     .wen      	(wen           ),
     .ren      	(ren           ),
-    .row_addr 	(row_addr      ),
+    .row_addr 	(row_addr[3]   ),
     .col_addr 	(col_real_addr ),
     .wdata    	(wdata         ),
     .wmask    	(~dqm          ),
