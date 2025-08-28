@@ -274,7 +274,6 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->ysyxSoCFull__DOT___asic_spi_sck = 0;
     vlSelf->ysyxSoCFull__DOT___asic_psram_sck = 0;
     vlSelf->ysyxSoCFull__DOT___asic_psram_ce_n = 0;
-    vlSelf->ysyxSoCFull__DOT___dq_wire__strong__out7 = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4frag_auto_in_bid = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4frag_auto_in_rid = 0;
     vlSelf->ysyxSoCFull__DOT__asic__DOT___axi4frag_auto_out_awid = 0;
@@ -1115,26 +1114,6 @@ VL_ATTR_COLD void VysyxSoCFull___024root___ctor_var_reset(VysyxSoCFull___024root
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__col_addr = 0;
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__col_real_addr = 0;
     vlSelf->ysyxSoCFull__DOT__sdram__DOT__bank_sel = 0;
-    for (int __Vi0 = 0; __Vi0 < 8192; ++__Vi0) {
-        for (int __Vi1 = 0; __Vi1 < 512; ++__Vi1) {
-            vlSelf->ysyxSoCFull__DOT__sdram__DOT__u0__DOT__mem[__Vi0][__Vi1] = 0;
-        }
-    }
-    for (int __Vi0 = 0; __Vi0 < 8192; ++__Vi0) {
-        for (int __Vi1 = 0; __Vi1 < 512; ++__Vi1) {
-            vlSelf->ysyxSoCFull__DOT__sdram__DOT__u1__DOT__mem[__Vi0][__Vi1] = 0;
-        }
-    }
-    for (int __Vi0 = 0; __Vi0 < 8192; ++__Vi0) {
-        for (int __Vi1 = 0; __Vi1 < 512; ++__Vi1) {
-            vlSelf->ysyxSoCFull__DOT__sdram__DOT__u2__DOT__mem[__Vi0][__Vi1] = 0;
-        }
-    }
-    for (int __Vi0 = 0; __Vi0 < 8192; ++__Vi0) {
-        for (int __Vi1 = 0; __Vi1 < 512; ++__Vi1) {
-            vlSelf->ysyxSoCFull__DOT__sdram__DOT__u3__DOT__mem[__Vi0][__Vi1] = 0;
-        }
-    }
     vlSelf->__VdfgRegularize_hd87f99a1_1_64 = 0;
     vlSelf->__VdfgRegularize_hd87f99a1_1_68 = 0;
     vlSelf->__Vtask_ysyxSoCFull__DOT__asic__DOT__lmrom__DOT__mrom__DOT__mrom_read__5__rdata = 0;

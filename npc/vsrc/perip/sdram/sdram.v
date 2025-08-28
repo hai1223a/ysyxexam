@@ -202,7 +202,7 @@ module mem_8192x512x16(
   input   [ 1:0]  wmask    ,
   output  [15:0]  rdata    
 );  
-  reg [15:0] mem [0:8191][0:511];
+  /*verilator public*/  reg [15:0] mem [0:8191][0:511];
   
   always @(posedge clk) begin
     if(en & wen) begin
@@ -211,7 +211,6 @@ module mem_8192x512x16(
     end
   end
 
-  // assign rdata = (en & ren) ? mem[row_addr][col_addr] : 0;
-  assign rdata = 16'h1234;
+  assign rdata = (en & ren) ? mem[row_addr][col_addr] : 0;
 
 endmodule
