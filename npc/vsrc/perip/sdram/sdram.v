@@ -211,6 +211,7 @@ module mem_8192x512x16(
     end
   end
 
-  assign rdata = (en & ren) ? mem[row_addr][col_addr] : 0;
+  // assign rdata = (en & ren) ? mem[row_addr][col_addr] : 0;
+  assign rdata = 16'h1234;
 
 endmodule
