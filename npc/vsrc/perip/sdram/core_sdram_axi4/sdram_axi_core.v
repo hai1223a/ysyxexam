@@ -131,7 +131,7 @@ wire [ 31:0]  ram_write_data_w = inport_write_data_i;
 wire [ 31:0]  ram_read_data_w;
 wire          ram_ack_w;
 
-wire          ram_req_w = (ram_wr_w != 4'b0) | ram_rd_w;
+wire             = (ram_wr_w != 4'b0) | ram_rd_w;
 
 assign inport_ack_o       = ram_ack_w;
 assign inport_read_data_o = ram_read_data_w;
