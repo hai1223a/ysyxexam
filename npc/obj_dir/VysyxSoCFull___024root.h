@@ -756,7 +756,7 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull___024root final : public Verilat
         CData/*0:0*/ ysyxSoCFull__DOT__sdram0_0__DOT__ren;
         CData/*1:0*/ ysyxSoCFull__DOT__sdram0_0__DOT__count;
         CData/*1:0*/ ysyxSoCFull__DOT__sdram0_0__DOT__count_r;
-        CData/*1:0*/ ysyxSoCFull__DOT__sdram0_0__DOT__state;
+        CData/*2:0*/ ysyxSoCFull__DOT__sdram0_0__DOT__state;
         CData/*1:0*/ ysyxSoCFull__DOT__sdram0_0__DOT__cas_latency;
         CData/*3:0*/ ysyxSoCFull__DOT__sdram0_0__DOT__burst_len;
         CData/*3:0*/ ysyxSoCFull__DOT__sdram0_0__DOT__bank_sel;
@@ -767,7 +767,7 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull___024root final : public Verilat
         CData/*0:0*/ ysyxSoCFull__DOT__sdram0_1__DOT__ren;
         CData/*1:0*/ ysyxSoCFull__DOT__sdram0_1__DOT__count;
         CData/*1:0*/ ysyxSoCFull__DOT__sdram0_1__DOT__count_r;
-        CData/*1:0*/ ysyxSoCFull__DOT__sdram0_1__DOT__state;
+        CData/*2:0*/ ysyxSoCFull__DOT__sdram0_1__DOT__state;
         CData/*1:0*/ ysyxSoCFull__DOT__sdram0_1__DOT__cas_latency;
         CData/*3:0*/ ysyxSoCFull__DOT__sdram0_1__DOT__burst_len;
         CData/*3:0*/ ysyxSoCFull__DOT__sdram0_1__DOT__bank_sel;
@@ -777,7 +777,7 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull___024root final : public Verilat
         CData/*0:0*/ ysyxSoCFull__DOT__sdram1_0__DOT__ren;
         CData/*1:0*/ ysyxSoCFull__DOT__sdram1_0__DOT__count;
         CData/*1:0*/ ysyxSoCFull__DOT__sdram1_0__DOT__count_r;
-        CData/*1:0*/ ysyxSoCFull__DOT__sdram1_0__DOT__state;
+        CData/*2:0*/ ysyxSoCFull__DOT__sdram1_0__DOT__state;
         CData/*1:0*/ ysyxSoCFull__DOT__sdram1_0__DOT__cas_latency;
         CData/*3:0*/ ysyxSoCFull__DOT__sdram1_0__DOT__burst_len;
         CData/*3:0*/ ysyxSoCFull__DOT__sdram1_0__DOT__bank_sel;
@@ -788,7 +788,7 @@ class alignas(VL_CACHE_LINE_BYTES) VysyxSoCFull___024root final : public Verilat
         CData/*0:0*/ ysyxSoCFull__DOT__sdram1_1__DOT__ren;
         CData/*1:0*/ ysyxSoCFull__DOT__sdram1_1__DOT__count;
         CData/*1:0*/ ysyxSoCFull__DOT__sdram1_1__DOT__count_r;
-        CData/*1:0*/ ysyxSoCFull__DOT__sdram1_1__DOT__state;
+        CData/*2:0*/ ysyxSoCFull__DOT__sdram1_1__DOT__state;
         CData/*1:0*/ ysyxSoCFull__DOT__sdram1_1__DOT__cas_latency;
         CData/*3:0*/ ysyxSoCFull__DOT__sdram1_1__DOT__burst_len;
         CData/*3:0*/ ysyxSoCFull__DOT__sdram1_1__DOT__bank_sel;
