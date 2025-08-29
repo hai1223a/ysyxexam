@@ -691,8 +691,7 @@ begin
     STATE_ACTIVATE    : dbg_state = "ACTIVATE";
     STATE_READ        : dbg_state = "READ";
     STATE_READ_WAIT   : dbg_state = "READ_WAIT";
-    STATE_WRITE0      : dbg_state = "WRITE0";
-    STATE_WRITE1      : dbg_state = "WRITE1";
+    STATE_WRITE       : dbg_state = "WRITE";
     STATE_PRECHARGE   : dbg_state = "PRECHARGE";
     STATE_REFRESH     : dbg_state = "REFRESH";
     default           : dbg_state = "UNKNOWN";
