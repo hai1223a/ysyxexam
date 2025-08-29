@@ -27,7 +27,7 @@ module sdram_top_apb (
   wire sdram_dout_en;
   wire [15:0] sdram_dout;
   assign sdram_dq = sdram_dout_en ? {2{sdram_dout}} : 32'bz;
-
+  assign sdram_dqm[3:2] = sdram_dqm[1:0];
   typedef enum [1:0] { ST_IDLE, ST_WAIT_ACCEPT, ST_WAIT_ACK } state_t;
   reg [1:0] state;
   wire req_accept;
