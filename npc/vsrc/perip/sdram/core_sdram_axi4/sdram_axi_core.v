@@ -57,7 +57,7 @@ module sdram_axi_core
     ,output          sdram_we_o
     ,output [  3:0]  sdram_dqm_o
     ,output [ 12:0]  sdram_addr_o
-    ,output [  1:0]  sdram_ba_o
+    ,output [  2:0]  sdram_ba_o
     ,output [ 31:0]  sdram_data_output_o
     ,output          sdram_data_out_en_o
 );
@@ -75,7 +75,7 @@ parameter SDRAM_READ_LATENCY     = 2;
 //-----------------------------------------------------------------
 // Defines / Local params
 //-----------------------------------------------------------------
-localparam SDRAM_BANK_W          = 2;
+localparam SDRAM_BANK_W          = 3;
 localparam SDRAM_DQM_W           = 4;
 localparam SDRAM_BANKS           = 2 ** SDRAM_BANK_W;
 localparam SDRAM_ROW_W           = SDRAM_ADDR_W - SDRAM_COL_W - SDRAM_BANK_W;
