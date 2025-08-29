@@ -150,6 +150,14 @@ assign inport_accept_o    = ram_accept_w;
 //synthesis attribute IOB of bank_q is "TRUE"
 //synthesis attribute IOB of data_q is "TRUE"
 
+reg [3:0]              ram_wr_w_r;
+always @(posedge clk_i) begin
+    if(rst_i)
+        ram_wr_w_r <= 0;
+    else if(ram_wr_w != 4'b0)
+        ram_wr_w_r <= ram_wr_w;
+end
+
 reg [CMD_W-1:0]        command_q;
 reg [SDRAM_ROW_W-1:0]  addr_q;
 reg [SDRAM_DATA_W-1:0] data_q;
@@ -611,7 +619,7 @@ begin
         addr_q[AUTO_PRECHARGE]  <= 1'b0;
 
         // Write mask
-        dqm_q           <= ~ram_wr_w;
+        dqm_q           <= ~ram_wr_w_r;
 
         data_rd_en_q    <= 1'b0;
     end
