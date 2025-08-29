@@ -53,7 +53,7 @@ module sdram_top_apb (
   ) u_sdram_ctrl(
     .clk_i(clock),
     .rst_i(reset),
-    .inport_wr_i(is_write ? in_pstrb : 4'b0),
+    .inport_wr_i(in_pstrb),
     .inport_rd_i(is_read),
     .inport_len_i(0),
     .inport_addr_i(in_paddr),
