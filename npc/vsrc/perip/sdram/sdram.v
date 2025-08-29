@@ -19,12 +19,10 @@ module sdram(
   localparam CMD_LOAD_MODE = 4'b0000;  
 
   // ==================== 状态机状态定义 ====================
-  localparam IDLE      = 3'b000; 
-  localparam WRITE_00  = 3'b001; 
-  localparam WRITE_01  = 3'b010; 
-  localparam READ_WAIT = 3'b011; 
-  localparam READ_00   = 3'b100; 
-  localparam READ_01   = 3'b101; 
+  localparam IDLE      = 2'b00; 
+  localparam WRITE     = 2'b01; 
+  localparam READ_WAIT = 2'b10; 
+  localparam READ      = 2'b11; 
 
   // ==================== 内部信号声明 ====================
   // 数据接口信号
@@ -40,7 +38,7 @@ module sdram(
   reg         ren;            
   reg [1:0]   count;          
   reg [1:0]   count_r;        
-  reg [2:0]   state;          
+  reg [1:0]   state;          
   
   // SDRAM配置参数
   reg [1:0]   cas_latency;   
@@ -97,26 +95,20 @@ module sdram(
       case (state)
         IDLE: begin
           if (cmd == CMD_WRITE) begin
-            state <= WRITE_00;  
+            state <= WRITE;  
           end else if (cmd == CMD_READ) begin
             state <= READ_WAIT; 
           end            
         end
-        WRITE_00: begin
-          state <= WRITE_01;   
-        end
-        WRITE_01: begin
+        WRITE: begin
           state <= IDLE;        
         end 
         READ_WAIT: begin
           if (count == count_r - 2) begin
-            state <= READ_00;   
+            state <= READ;   
           end
         end
-        READ_00: begin
-          state <= READ_01;     
-        end
-        READ_01: begin
+        READ: begin
           state <= IDLE;        
         end
         default: state <= IDLE; 
@@ -134,27 +126,18 @@ module sdram(
     count_r       = 0;
     
     case (state)
-      WRITE_00: begin
+      WRITE: begin
         col_real_addr = col_addr;  
         wen           = 1;         
-      end
-      WRITE_01: begin
-        col_real_addr = col_addr + 9'd1;
-        wen           = 1;               
       end
       READ_WAIT: begin
         count_r = cas_latency;  
         dq_en   = 1;            
       end 
-      READ_00: begin
+      READ: begin
         col_real_addr = col_addr; 
         dq_en         = 1;        
         ren           = 1;        
-      end
-      READ_01: begin
-        col_real_addr = col_addr + 9'd1;
-        dq_en         = 1;              
-        ren           = 1;              
       end
       default: ; 
     endcase
