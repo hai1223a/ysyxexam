@@ -4,7 +4,7 @@
 
 #include "verilated.h"
 
-extern const VlUnpacked<VlWide<3>/*79:0*/, 16> VysyxSoCFull__ConstPool__TABLE_h126f45c6_0 = {{
+extern const VlUnpacked<VlWide<3>/*79:0*/, 16> VysyxSoCFull__ConstPool__TABLE_h06fe895f_0 = {{
     {{ // VlWide 0
         0x494e4954, 0x00000000, 0x00000000
     }},
@@ -24,10 +24,10 @@ extern const VlUnpacked<VlWide<3>/*79:0*/, 16> VysyxSoCFull__ConstPool__TABLE_h1
         0x57414954, 0x4541445f, 0x00000052
     }},
     {{ // VlWide 6
-        0x49544530, 0x00005752, 0x00000000
+        0x52495445, 0x00000057, 0x00000000
     }},
     {{ // VlWide 7
-        0x49544531, 0x00005752, 0x00000000
+        0x4e4f574e, 0x00554e4b, 0x00000000
     }},
     {{ // VlWide 8
         0x41524745, 0x52454348, 0x00000050
