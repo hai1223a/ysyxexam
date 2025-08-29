@@ -44,24 +44,20 @@ void VysyxSoCFull___024root___eval_triggers__act(VysyxSoCFull___024root* vlSelf)
     VysyxSoCFull__Syms* const __restrict vlSymsp VL_ATTR_UNUSED = vlSelf->vlSymsp;
     auto& vlSelfRef = std::ref(*vlSelf).get();
     // Body
-    vlSelfRef.__VactTriggered.setBit(0U, ((IData)(vlSelfRef.ysyxSoCFull__DOT___asic_sdram_dqm) 
-                                          != (IData)(vlSelfRef.__Vtrigprevexpr___TOP__ysyxSoCFull__DOT___asic_sdram_dqm__1)));
-    vlSelfRef.__VactTriggered.setBit(1U, ((IData)(vlSelfRef.clock) 
+    vlSelfRef.__VactTriggered.setBit(0U, ((IData)(vlSelfRef.clock) 
                                           & (~ (IData)(vlSelfRef.__Vtrigprevexpr___TOP__clock__0))));
-    vlSelfRef.__VactTriggered.setBit(2U, ((IData)(vlSelfRef.reset) 
+    vlSelfRef.__VactTriggered.setBit(1U, ((IData)(vlSelfRef.reset) 
                                           & (~ (IData)(vlSelfRef.__Vtrigprevexpr___TOP__reset__0))));
-    vlSelfRef.__VactTriggered.setBit(3U, ((IData)(vlSelfRef.ysyxSoCFull__DOT___asic_spi_sck) 
+    vlSelfRef.__VactTriggered.setBit(2U, ((IData)(vlSelfRef.ysyxSoCFull__DOT___asic_spi_sck) 
                                           & (~ (IData)(vlSelfRef.__Vtrigprevexpr___TOP__ysyxSoCFull__DOT___asic_spi_sck__0))));
-    vlSelfRef.__VactTriggered.setBit(4U, ((IData)(vlSelfRef.ysyxSoCFull__DOT__flash__DOT__reset) 
+    vlSelfRef.__VactTriggered.setBit(3U, ((IData)(vlSelfRef.ysyxSoCFull__DOT__flash__DOT__reset) 
                                           & (~ (IData)(vlSelfRef.__Vtrigprevexpr___TOP__ysyxSoCFull__DOT__flash__DOT__reset__0))));
-    vlSelfRef.__VactTriggered.setBit(5U, ((IData)(vlSelfRef.ysyxSoCFull__DOT___asic_psram_ce_n) 
+    vlSelfRef.__VactTriggered.setBit(4U, ((IData)(vlSelfRef.ysyxSoCFull__DOT___asic_psram_ce_n) 
                                           & (~ (IData)(vlSelfRef.__Vtrigprevexpr___TOP__ysyxSoCFull__DOT___asic_psram_ce_n__0))));
-    vlSelfRef.__VactTriggered.setBit(6U, ((IData)(vlSelfRef.ysyxSoCFull__DOT___asic_psram_sck) 
+    vlSelfRef.__VactTriggered.setBit(5U, ((IData)(vlSelfRef.ysyxSoCFull__DOT___asic_psram_sck) 
                                           & (~ (IData)(vlSelfRef.__Vtrigprevexpr___TOP__ysyxSoCFull__DOT___asic_psram_sck__0))));
-    vlSelfRef.__VactTriggered.setBit(7U, ((~ (IData)(vlSelfRef.clock)) 
+    vlSelfRef.__VactTriggered.setBit(6U, ((~ (IData)(vlSelfRef.clock)) 
                                           & (IData)(vlSelfRef.__Vtrigprevexpr___TOP__clock__0)));
-    vlSelfRef.__Vtrigprevexpr___TOP__ysyxSoCFull__DOT___asic_sdram_dqm__1 
-        = vlSelfRef.ysyxSoCFull__DOT___asic_sdram_dqm;
     vlSelfRef.__Vtrigprevexpr___TOP__clock__0 = vlSelfRef.clock;
     vlSelfRef.__Vtrigprevexpr___TOP__reset__0 = vlSelfRef.reset;
     vlSelfRef.__Vtrigprevexpr___TOP__ysyxSoCFull__DOT___asic_spi_sck__0 
@@ -72,10 +68,6 @@ void VysyxSoCFull___024root___eval_triggers__act(VysyxSoCFull___024root* vlSelf)
         = vlSelfRef.ysyxSoCFull__DOT___asic_psram_ce_n;
     vlSelfRef.__Vtrigprevexpr___TOP__ysyxSoCFull__DOT___asic_psram_sck__0 
         = vlSelfRef.ysyxSoCFull__DOT___asic_psram_sck;
-    if (VL_UNLIKELY(((1U & (~ (IData)(vlSelfRef.__VactDidInit)))))) {
-        vlSelfRef.__VactDidInit = 1U;
-        vlSelfRef.__VactTriggered.setBit(0U, 1U);
-    }
 #ifdef VL_DEBUG
     if (VL_UNLIKELY(vlSymsp->_vm_contextp__->debug())) {
         VysyxSoCFull___024root___dump_triggers__act(vlSelf);

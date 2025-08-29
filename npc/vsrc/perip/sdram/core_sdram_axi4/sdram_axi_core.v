@@ -76,7 +76,7 @@ parameter SDRAM_READ_LATENCY     = 2;
 // Defines / Local params
 //-----------------------------------------------------------------
 localparam SDRAM_BANK_W          = 2;
-localparam SDRAM_DQM_W           = 2;
+localparam SDRAM_DQM_W           = 4;
 localparam SDRAM_BANKS           = 2 ** SDRAM_BANK_W;
 localparam SDRAM_ROW_W           = SDRAM_ADDR_W - SDRAM_COL_W - SDRAM_BANK_W;
 localparam SDRAM_REFRESH_CNT     = 2 ** SDRAM_ROW_W;
