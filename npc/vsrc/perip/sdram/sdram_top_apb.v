@@ -73,7 +73,7 @@ module sdram_top_apb (
     .sdram_dqm_o(sdram_dqm[1:0]),
     .sdram_addr_o(sdram_a),
     .sdram_ba_o(sdram_ba),
-    .sdram_data_input_i(sdram_dq),
+    .sdram_data_input_i(sdram_dq[15:0]),
     .sdram_data_output_o(sdram_dout[15:0]),
     .sdram_data_out_en_o(sdram_dout_en)
   );
