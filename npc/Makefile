@@ -110,6 +110,8 @@ $(BIN): $(V_SRCS) $(C_SRCS) $(NVBOARD_ARCHIVE)
 
 nvboard: $(BIN)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	rm -rf build
+	rm -f $(WAVE_DIR)/*.fst
 	@$^ $(ARGS)
 #
 run: exe
