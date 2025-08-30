@@ -74,6 +74,8 @@ override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 #================第四步:NVBOARD========================
 
 include $(NPC_HOME)/scripts/config.mk
+$(shell rm -rf build)	
+$(shell rm -f $(WAVE_DIR)/*.fst)
 $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
 # rules for NVBoard 
@@ -110,8 +112,6 @@ $(BIN): $(V_SRCS) $(C_SRCS) $(NVBOARD_ARCHIVE)
 
 nvboard: $(BIN)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	rm -rf build
-	rm -f $(WAVE_DIR)/*.fst
 	@$^ $(ARGS)
 #
 run: exe
