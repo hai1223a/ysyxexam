@@ -67,8 +67,8 @@ override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 
 # 编译目录
 BUILD_DIR = $(NPC_HOME)/build
+WAVE_DIR = $(NPC_HOME)/wave
 OBJ_DIR = $(BUILD_DIR)/obj_dir
-WAVE_DIR = $(BUILD_DIR)/wave
 LOG_DIR = $(BUILD_DIR)/log
 
 include $(NPC_HOME)/scripts/config.mk
@@ -91,7 +91,7 @@ wave: run
 
 clean:
 	rm -rf build
-	rm -f *.fst
+	rm -f $(WAVE_DIR)/*.fst
 
 .PHONY: run sim exe wave clean
 

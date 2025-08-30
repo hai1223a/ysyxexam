@@ -86,7 +86,7 @@ static void init_verilator(int argc, char *argv[])
   // 采样深度为5
   top->trace(tfp, 10);
   // 打开波形文件
-  tfp->open("build/wave/waveform.fst");
+  tfp->open("wave/waveform.fst");
 #endif
 }
 //=====================================================
