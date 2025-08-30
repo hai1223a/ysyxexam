@@ -25,7 +25,7 @@ module gpio_top_apb(
 );
   reg [15:0] gpio_x0_16, gpio_x4_16;
   reg [31:0] gpio_x8_32;
-  reg [31:0] wdata;
+  reg [31:0] wdata, rdata;
   reg ready;
   wire [63:0] gpio_seg;
   wire valid = in_psel & !in_penable;
