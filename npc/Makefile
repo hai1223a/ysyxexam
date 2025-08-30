@@ -84,7 +84,7 @@ gdb: exe
 
 exe: $(LIBCAPSTONE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@mkdir -p $(LOG_DIR) 
+# 	@mkdir -p $(LOG_DIR) 
 	$(VERILATOR_BIN) $(VERILATOR_FLAGS) $(V_SRCS) $(C_SRCS)
 
 wave: run
