@@ -111,7 +111,7 @@ $(BIN): $(V_SRCS) $(C_SRCS) $(NVBOARD_ARCHIVE)
 
 nvboard: $(BIN)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@$^
+	@$^ $(ARGS)
 #
 run: exe
 	./build/obj_dir/V$(TOP_MODULE) $(ARGS)
