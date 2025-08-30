@@ -67,6 +67,8 @@ override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 
 include $(NPC_HOME)/scripts/config.mk
 
+$(shell mkdir -p $(NPC_HOME)/build)
+
 # 目标
 run: exe
 	./obj_dir/V$(TOP_MODULE) $(ARGS)
