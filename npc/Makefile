@@ -2,12 +2,12 @@
 # NPC 仿真工程 Makefile
 #**************************************************************************************/
 
-# 第一步:检查路径
+#================第一步:检查路径==========================
 ifeq ($(wildcard $(NPC_HOME)/vsrc/soc.v),)
 	$(error NPC_HOME=$(NPC_HOME) is not a NPC repo)
 endif
 
-# 第二步:检查配置
+#================第二步:检查配置===========================
 -include $(NPC_HOME)/include/config/auto.conf
 -include $(NPC_HOME)/include/config/auto.conf.cmd
 
@@ -20,10 +20,16 @@ $(LIBCAPSTONE):
 	$(MAKE) -C $(CAPSTONE_PATH)
 endif
 
-# 第三步:编译选项准备
+#================第三步:编译选项准备========================
 # 顶层模块和工具
 TOP_MODULE      := ysyxSoCFull
 VERILATOR_BIN   := verilator
+
+# 编译目录
+BUILD_DIR = $(NPC_HOME)/build
+WAVE_DIR = $(NPC_HOME)/wave
+OBJ_DIR = $(BUILD_DIR)/obj_dir
+LOG_DIR = $(BUILD_DIR)/log
 
 # 源文件
 C_SRCS          := $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
@@ -65,17 +71,45 @@ override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 					 -l $(NPC_HOME)/build/log/log.txt \
 #         			 -i $(NPC_HOME)/sim/test1.bin \
 
-# 编译目录
-BUILD_DIR = $(NPC_HOME)/build
-WAVE_DIR = $(NPC_HOME)/wave
-OBJ_DIR = $(BUILD_DIR)/obj_dir
-LOG_DIR = $(BUILD_DIR)/log
+#================第四步:NVBOARD========================
 
-include $(NPC_HOME)/scripts/config.mk
+# rules for NVBoard
+INC_PATH ?=
+NXDC_FILES = constr/top.nxdc
+BIN = $(BUILD_DIR)/$(TOP_MODULE)
 
-$(shell mkdir -p $(WAVE_DIR) $(LOG_DIR))
+# constraint file
+SRC_AUTO_BIND = $(abspath $(BUILD_DIR)/auto_bind.cpp)
+$(SRC_AUTO_BIND): $(NXDC_FILES)
+	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
 
-# 目标
+CSRCS += $(SRC_AUTO_BIND)
+
+include $(NVBOARD_HOME)/scripts/nvboard.mk
+
+INCFLAGS = $(addprefix -I, $(INC_PATH))
+CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOP_MODULE)\"" $(CFLAGS)
+
+VERILATOR_RUN_FLAGS += -MMD --build -cc \
+					   --timescale "1ns/1ns" --no-timing --autoflush \
+					   -O3 --x-assign fast --x-initial fast --noassert \
+					   --top-module $(TOP_MODULE) \
+					   $(VERILATOR_INCS) \
+					   --Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN)) \
+					   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CXXFLAGS)"
+
+ifdef CONFIG_FST
+VERILATOR_RUN_FLAGS += --trace-fst 
+endif
+
+$(BIN): $(V_SRCS) $(C_SRCS) $(NVBOARD_ARCHIVE)
+	$(VERILATOR_BIN) $(VERILATOR_RUN_FLAGS) \
+		--top-module $(TOP_MODULE) $^ \
+
+nvboard: $(BIN)
+	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	@$^
+#
 run: exe
 	./build/obj_dir/V$(TOP_MODULE) $(ARGS)
 
