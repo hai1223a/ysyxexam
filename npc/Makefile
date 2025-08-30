@@ -73,7 +73,7 @@ LOG_DIR = $(BUILD_DIR)/log
 
 include $(NPC_HOME)/scripts/config.mk
 
-$(shell mkdir -m rwx $(NPC_HOME)/build)
+$(shell mkdir -m -p $(WAVE_DIR) $(LOG_DIR))
 
 # 目标
 run: exe
@@ -84,11 +84,10 @@ gdb: exe
 
 exe: $(LIBCAPSTONE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-# 	@mkdir -p $(LOG_DIR) 
 	$(VERILATOR_BIN) $(VERILATOR_FLAGS) $(V_SRCS) $(C_SRCS)
 
 wave: run
-	gtkwave waveform.fst
+	gtkwave $(WAVE_DIR)/waveform.fst
 
 clean:
 	rm -rf build
