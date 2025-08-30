@@ -53,7 +53,7 @@ VERILATOR_FLAGS += -Wall --cc -exe --build --x-assign fast --x-initial fast\
                    --top-module $(TOP_MODULE) \
                    $(VERILATOR_INCS) \
                    $(VERILATOR_WNO) \
-				   --Mdir ./build/obj_dir \
+				   --Mdir $(NPC_HOME)/build/obj_dir \
                    -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"
 
 ifdef CONFIG_FST
