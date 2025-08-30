@@ -85,7 +85,7 @@ wave: run
 	gtkwave waveform.fst
 
 clean:
-	rm -rf obj_dir
+	rm -rf build
 	rm -f *.fst
 
 .PHONY: run sim exe wave clean
