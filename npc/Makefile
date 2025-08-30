@@ -76,8 +76,7 @@ override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 include $(NPC_HOME)/scripts/config.mk
 $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
-# rules for NVBoard
-INC_PATH ?=
+# rules for NVBoard 
 NXDC_FILES = constr/top.nxdc
 BIN = $(BUILD_DIR)/$(TOP_MODULE)
 
