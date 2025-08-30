@@ -65,9 +65,15 @@ override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 					 -l $(NPC_HOME)/build/log/log.txt \
 #         			 -i $(NPC_HOME)/sim/test1.bin \
 
+# 编译目录
+BUILD_DIR = $(NPC_HOME)/build
+OBJ_DIR = $(BUILD_DIR)/obj_dir
+WAVE_DIR = $(BUILD_DIR)/wave
+LOG_DIR = $(BUILD_DIR)/log
+
 include $(NPC_HOME)/scripts/config.mk
 
-$(shell mkdir -p $(NPC_HOME)/build)
+$(shell mkdir -m rwx $(NPC_HOME)/build)
 
 # 目标
 run: exe
@@ -78,7 +84,7 @@ gdb: exe
 
 exe: $(LIBCAPSTONE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@mkdir -p $(NPC_HOME)/build/log
+	@mkdir -p $(LOG_DIR) 
 	$(VERILATOR_BIN) $(VERILATOR_FLAGS) $(V_SRCS) $(C_SRCS)
 
 wave: run
