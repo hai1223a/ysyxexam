@@ -28,6 +28,7 @@ void cpu_exec_once()
     IFDEF(CONFIG_FST, tfp->dump(sim_time));
     // 推动仿真进行
     sim_time++;
+    nvboard_update();
     // 指令计算
     // break;
     if (SOC_PC != pc__ )

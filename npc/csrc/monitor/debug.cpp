@@ -72,6 +72,8 @@ static int parse_args(int argc, char *argv[])
 //=====================================================
 // 用于初始化verilator仿真
 //=====================================================
+// 函数声明
+	void nvboard_bind_all_pins(VysyxSoCFull* top);
 static void init_verilator(int argc, char *argv[])
 {
   // 传递参数给verilator,建议在创建任何模型之前使用
@@ -88,6 +90,8 @@ static void init_verilator(int argc, char *argv[])
   // 打开波形文件
   tfp->open("wave/waveform.fst");
 #endif
+  nvboard_bind_all_pins(top);
+  nvboard_init();
 }
 //=====================================================
 // 用于初始化cpu
