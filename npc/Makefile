@@ -71,10 +71,10 @@ $(shell mkdir -p $(NPC_HOME)/build)
 
 # 目标
 run: exe
-	./obj_dir/V$(TOP_MODULE) $(ARGS)
+	./build/obj_dir/V$(TOP_MODULE) $(ARGS)
 
 gdb: exe
-	gdb --args obj_dir/V$(TOP_MODULE) $(ARGS)
+	gdb --args build/obj_dir/V$(TOP_MODULE) $(ARGS)
 
 exe: $(LIBCAPSTONE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
