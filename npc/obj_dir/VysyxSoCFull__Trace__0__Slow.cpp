@@ -3373,12 +3373,10 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBus(c+1527,0,"CMD_READ",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->declBus(c+1528,0,"CMD_WRITE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->declBus(c+1481,0,"CMD_LOAD_MODE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
-    tracep->declBus(c+1482,0,"IDLE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1469,0,"WRITE_00",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1489,0,"WRITE_01",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1552,0,"READ_WAIT",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1521,0,"READ_00",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1553,0,"READ_01",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
+    tracep->declBus(c+1483,0,"IDLE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
+    tracep->declBus(c+1514,0,"WRITE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
+    tracep->declBus(c+1515,0,"READ_WAIT",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
+    tracep->declBus(c+1554,0,"READ",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBit(c+1197,0,"dq_en",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1);
     tracep->declBus(c+1356,0,"dq_in",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 15,0);
     tracep->declBus(c+1198,0,"dq_out",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 15,0);
@@ -3392,7 +3390,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBit(c+1206,0,"ren",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1);
     tracep->declBus(c+1207,0,"count",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBus(c+1208,0,"count_r",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
-    tracep->declBus(c+1209,0,"state",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
+    tracep->declBus(c+1209,0,"state",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBus(c+1210,0,"cas_latency",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBus(c+1211,0,"burst_len",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->pushPrefix("row_addr", VerilatedTracePrefixType::ARRAY_UNPACKED);
@@ -3464,12 +3462,10 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBus(c+1527,0,"CMD_READ",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->declBus(c+1528,0,"CMD_WRITE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->declBus(c+1481,0,"CMD_LOAD_MODE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
-    tracep->declBus(c+1482,0,"IDLE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1469,0,"WRITE_00",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1489,0,"WRITE_01",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1552,0,"READ_WAIT",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1521,0,"READ_00",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1553,0,"READ_01",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
+    tracep->declBus(c+1483,0,"IDLE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
+    tracep->declBus(c+1514,0,"WRITE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
+    tracep->declBus(c+1515,0,"READ_WAIT",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
+    tracep->declBus(c+1554,0,"READ",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBit(c+1227,0,"dq_en",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1);
     tracep->declBus(c+1357,0,"dq_in",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 15,0);
     tracep->declBus(c+1228,0,"dq_out",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 15,0);
@@ -3483,7 +3479,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBit(c+1236,0,"ren",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1);
     tracep->declBus(c+1237,0,"count",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBus(c+1238,0,"count_r",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
-    tracep->declBus(c+1239,0,"state",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
+    tracep->declBus(c+1239,0,"state",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBus(c+1240,0,"cas_latency",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBus(c+1241,0,"burst_len",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->pushPrefix("row_addr", VerilatedTracePrefixType::ARRAY_UNPACKED);
@@ -3555,12 +3551,10 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBus(c+1527,0,"CMD_READ",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->declBus(c+1528,0,"CMD_WRITE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->declBus(c+1481,0,"CMD_LOAD_MODE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
-    tracep->declBus(c+1482,0,"IDLE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1469,0,"WRITE_00",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1489,0,"WRITE_01",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1552,0,"READ_WAIT",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1521,0,"READ_00",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1553,0,"READ_01",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
+    tracep->declBus(c+1483,0,"IDLE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
+    tracep->declBus(c+1514,0,"WRITE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
+    tracep->declBus(c+1515,0,"READ_WAIT",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
+    tracep->declBus(c+1554,0,"READ",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBit(c+1257,0,"dq_en",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1);
     tracep->declBus(c+1356,0,"dq_in",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 15,0);
     tracep->declBus(c+1258,0,"dq_out",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 15,0);
@@ -3574,7 +3568,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBit(c+1266,0,"ren",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1);
     tracep->declBus(c+1267,0,"count",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBus(c+1268,0,"count_r",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
-    tracep->declBus(c+1269,0,"state",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
+    tracep->declBus(c+1269,0,"state",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBus(c+1270,0,"cas_latency",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBus(c+1271,0,"burst_len",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->pushPrefix("row_addr", VerilatedTracePrefixType::ARRAY_UNPACKED);
@@ -3646,12 +3640,10 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBus(c+1527,0,"CMD_READ",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->declBus(c+1528,0,"CMD_WRITE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->declBus(c+1481,0,"CMD_LOAD_MODE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
-    tracep->declBus(c+1482,0,"IDLE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1469,0,"WRITE_00",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1489,0,"WRITE_01",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1552,0,"READ_WAIT",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1521,0,"READ_00",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
-    tracep->declBus(c+1553,0,"READ_01",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
+    tracep->declBus(c+1483,0,"IDLE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
+    tracep->declBus(c+1514,0,"WRITE",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
+    tracep->declBus(c+1515,0,"READ_WAIT",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
+    tracep->declBus(c+1554,0,"READ",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::PARAMETER, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBit(c+1287,0,"dq_en",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1);
     tracep->declBus(c+1357,0,"dq_in",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 15,0);
     tracep->declBus(c+1288,0,"dq_out",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::WIRE, VerilatedTraceSigType::LOGIC, false,-1, 15,0);
@@ -3665,7 +3657,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_init_sub__TOP__0(VysyxSoCFull___
     tracep->declBit(c+1296,0,"ren",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1);
     tracep->declBus(c+1297,0,"count",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBus(c+1298,0,"count_r",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
-    tracep->declBus(c+1299,0,"state",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 2,0);
+    tracep->declBus(c+1299,0,"state",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBus(c+1300,0,"cas_latency",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 1,0);
     tracep->declBus(c+1301,0,"burst_len",-1, VerilatedTraceSigDirection::NONE, VerilatedTraceSigKind::VAR, VerilatedTraceSigType::LOGIC, false,-1, 3,0);
     tracep->pushPrefix("row_addr", VerilatedTracePrefixType::ARRAY_UNPACKED);
@@ -3854,6 +3846,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_const_0_sub_0(VysyxSoCFull___024
     bufp->fullIData(oldp+1551,(0x10U),32);
     bufp->fullCData(oldp+1552,(3U),3);
     bufp->fullCData(oldp+1553,(5U),3);
+    bufp->fullCData(oldp+1554,(3U),2);
 }
 
 VL_ATTR_COLD void VysyxSoCFull___024root__trace_full_0_sub_0(VysyxSoCFull___024root* vlSelf, VerilatedFst::Buffer* bufp);
@@ -6362,7 +6355,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_full_0_sub_0(VysyxSoCFull___024r
     bufp->fullBit(oldp+1206,(vlSelfRef.ysyxSoCFull__DOT__sdram0_0__DOT__ren));
     bufp->fullCData(oldp+1207,(vlSelfRef.ysyxSoCFull__DOT__sdram0_0__DOT__count),2);
     bufp->fullCData(oldp+1208,(vlSelfRef.ysyxSoCFull__DOT__sdram0_0__DOT__count_r),2);
-    bufp->fullCData(oldp+1209,(vlSelfRef.ysyxSoCFull__DOT__sdram0_0__DOT__state),3);
+    bufp->fullCData(oldp+1209,(vlSelfRef.ysyxSoCFull__DOT__sdram0_0__DOT__state),2);
     bufp->fullCData(oldp+1210,(vlSelfRef.ysyxSoCFull__DOT__sdram0_0__DOT__cas_latency),2);
     bufp->fullCData(oldp+1211,(vlSelfRef.ysyxSoCFull__DOT__sdram0_0__DOT__burst_len),4);
     bufp->fullSData(oldp+1212,(vlSelfRef.ysyxSoCFull__DOT__sdram0_0__DOT__row_addr[0]),13);
@@ -6468,7 +6461,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_full_0_sub_0(VysyxSoCFull___024r
     bufp->fullBit(oldp+1236,(vlSelfRef.ysyxSoCFull__DOT__sdram0_1__DOT__ren));
     bufp->fullCData(oldp+1237,(vlSelfRef.ysyxSoCFull__DOT__sdram0_1__DOT__count),2);
     bufp->fullCData(oldp+1238,(vlSelfRef.ysyxSoCFull__DOT__sdram0_1__DOT__count_r),2);
-    bufp->fullCData(oldp+1239,(vlSelfRef.ysyxSoCFull__DOT__sdram0_1__DOT__state),3);
+    bufp->fullCData(oldp+1239,(vlSelfRef.ysyxSoCFull__DOT__sdram0_1__DOT__state),2);
     bufp->fullCData(oldp+1240,(vlSelfRef.ysyxSoCFull__DOT__sdram0_1__DOT__cas_latency),2);
     bufp->fullCData(oldp+1241,(vlSelfRef.ysyxSoCFull__DOT__sdram0_1__DOT__burst_len),4);
     bufp->fullSData(oldp+1242,(vlSelfRef.ysyxSoCFull__DOT__sdram0_1__DOT__row_addr[0]),13);
@@ -6574,7 +6567,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_full_0_sub_0(VysyxSoCFull___024r
     bufp->fullBit(oldp+1266,(vlSelfRef.ysyxSoCFull__DOT__sdram1_0__DOT__ren));
     bufp->fullCData(oldp+1267,(vlSelfRef.ysyxSoCFull__DOT__sdram1_0__DOT__count),2);
     bufp->fullCData(oldp+1268,(vlSelfRef.ysyxSoCFull__DOT__sdram1_0__DOT__count_r),2);
-    bufp->fullCData(oldp+1269,(vlSelfRef.ysyxSoCFull__DOT__sdram1_0__DOT__state),3);
+    bufp->fullCData(oldp+1269,(vlSelfRef.ysyxSoCFull__DOT__sdram1_0__DOT__state),2);
     bufp->fullCData(oldp+1270,(vlSelfRef.ysyxSoCFull__DOT__sdram1_0__DOT__cas_latency),2);
     bufp->fullCData(oldp+1271,(vlSelfRef.ysyxSoCFull__DOT__sdram1_0__DOT__burst_len),4);
     bufp->fullSData(oldp+1272,(vlSelfRef.ysyxSoCFull__DOT__sdram1_0__DOT__row_addr[0]),13);
@@ -6680,7 +6673,7 @@ VL_ATTR_COLD void VysyxSoCFull___024root__trace_full_0_sub_0(VysyxSoCFull___024r
     bufp->fullBit(oldp+1296,(vlSelfRef.ysyxSoCFull__DOT__sdram1_1__DOT__ren));
     bufp->fullCData(oldp+1297,(vlSelfRef.ysyxSoCFull__DOT__sdram1_1__DOT__count),2);
     bufp->fullCData(oldp+1298,(vlSelfRef.ysyxSoCFull__DOT__sdram1_1__DOT__count_r),2);
-    bufp->fullCData(oldp+1299,(vlSelfRef.ysyxSoCFull__DOT__sdram1_1__DOT__state),3);
+    bufp->fullCData(oldp+1299,(vlSelfRef.ysyxSoCFull__DOT__sdram1_1__DOT__state),2);
     bufp->fullCData(oldp+1300,(vlSelfRef.ysyxSoCFull__DOT__sdram1_1__DOT__cas_latency),2);
     bufp->fullCData(oldp+1301,(vlSelfRef.ysyxSoCFull__DOT__sdram1_1__DOT__burst_len),4);
     bufp->fullSData(oldp+1302,(vlSelfRef.ysyxSoCFull__DOT__sdram1_1__DOT__row_addr[0]),13);

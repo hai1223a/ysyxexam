@@ -5,12 +5,13 @@ AM_SRCS := riscv/ysyxsoc/start.S \
            riscv/ysyxsoc/trap.S \
            riscv/ysyxsoc/trm.c \
 		   riscv/ysyxsoc/spi.c \
+		   riscv/ysyxsoc/gpio.c \
            platform/dummy/vme.c \
            platform/dummy/mpe.c
 
 CFLAGS    += -fdata-sections -ffunction-sections
 LDSCRIPTS += $(AM_HOME)/scripts/linker_soc.ld
-LDFLAGS   += --defsym=_pmem_start=0x30000000 --defsym=_entry_offset=0x0 --print-map
+LDFLAGS   += --defsym=_pmem_start=0x30000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
 IMAGE_NAME = $(basename $(notdir $(IMAGE)))
 override NPCFLAGS += -l $(shell dirname $(IMAGE).elf)/ysyxsoc-log.txt \
