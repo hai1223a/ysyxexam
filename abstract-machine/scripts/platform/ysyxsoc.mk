@@ -35,7 +35,7 @@ image: image-dep
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 run: insert-arg
-	@$(MAKE) -C $(NPC_HOME) nvboard ARGS="$(NPCFLAGS)"
+	@$(MAKE) -C $(NPC_HOME) run ARGS="$(NPCFLAGS)"
 
 nvboard: insert-arg
 	@$(MAKE) -C $(NPC_HOME) nvboard ARGS="$(NPCFLAGS)"
