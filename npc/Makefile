@@ -73,7 +73,7 @@ LOG_DIR = $(BUILD_DIR)/log
 
 include $(NPC_HOME)/scripts/config.mk
 
-$(shell mkdir -m -p $(WAVE_DIR) $(LOG_DIR))
+$(shell mkdir -p $(WAVE_DIR) $(LOG_DIR))
 
 # 目标
 run: exe
