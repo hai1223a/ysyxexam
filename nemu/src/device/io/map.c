@@ -52,11 +52,32 @@ void init_map() {
   p_space = io_space;
 }
 
+#ifdef CONFIG_DTRACE
+  char D_name_buf[10];
+  int  D_count;
+  void dtrace_log(IOMap *map) {
+    if(!strcmp(D_name_buf, "")) {
+      strcpy(D_name_buf, map->name);
+      dtracer_write("调用的设备列表如下:\n");
+      D_count = 1;
+    }
+    if(!strcmp(D_name_buf, map->name)) {
+      D_count++;
+    }
+    else {
+      strcpy(D_name_buf, map->name);
+      dtracer_write("调用 %s , 次数为 %d\n", D_name_buf, D_count);
+      D_count = 1;
+    }
+  }
+#endif
+
 word_t map_read(paddr_t addr, int len, IOMap *map) {
   assert(len >= 1 && len <= 8);
   check_bound(map, addr);
   paddr_t offset = addr - map->low;
   invoke_callback(map->callback, offset, len, false); // prepare data to read
+  IFDEF(CONFIG_DTRACE, dtrace_log(map));
   word_t ret = host_read(map->space + offset, len);
   return ret;
 }
@@ -67,4 +88,5 @@ void map_write(paddr_t addr, int len, word_t data, IOMap *map) {
   paddr_t offset = addr - map->low;
   host_write(map->space + offset, len, data);
   invoke_callback(map->callback, offset, len, true);
+  IFDEF(CONFIG_DTRACE, dtrace_log(map));
 }

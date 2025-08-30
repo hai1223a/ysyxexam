@@ -27,14 +27,19 @@ void init_disasm();
 
 static void welcome() {
   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  Log("ITrace: %s", MUXDEF(CONFIG_ITRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  Log("MTrace: %s", MUXDEF(CONFIG_MTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  Log("FTrace: %s", MUXDEF(CONFIG_FTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  Log("DTrace: %s", MUXDEF(CONFIG_DTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  Log("ETrace: %s", MUXDEF(CONFIG_ETRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  Log("Watchpoint: %s", MUXDEF(CONFIG_WATCHPOINT, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  // Log("DTrace: %s", MUXDEF(CONFIG_DTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
   IFDEF(CONFIG_TRACE, Log("If trace is enabled, a log file will be generated "
         "to record the trace. This may lead to a large log file. "
         "If it is not necessary, you can disable it in menuconfig"));
   Log("Build time: %s, %s", __TIME__, __DATE__);
   printf("Welcome to %s-NEMU!\n", ANSI_FMT(str(__GUEST_ISA__), ANSI_FG_YELLOW ANSI_BG_RED));
   printf("For help, type \"help\"\n");
-  // Log("Exercise: Please remove me in the source code and compile NEMU again.");
-  // assert(0);
 }
 
 #ifndef CONFIG_TARGET_AM
@@ -69,22 +74,38 @@ static long load_img() {
   return size;
 }
 
+// 写入 DTACER 文件
+//==================================================
+static char *dtracer_log_file = NULL;
+#ifdef CONFIG_DTRACE
+void init_dtracer_log(const char *dtracer_log_file);
+#endif
+//==================================================
 // 加载elf文件和写入ftracer
 //==================================================
 static char *elf_file = NULL;
 static char *ftracer_log_file = NULL;
 #ifdef CONFIG_FTRACE
-struct FUNC_FTRACE{
-  word_t addr;
-  char func_name[16];
-} FUNC_FTRACER[10] = {0};
+struct FUNC_FTRACE ELF_FUNC_FTRACER[128] = {0};
+struct FUNC_FTRACE USER_FUNC_FTRACER[16] = {
+  {.addr = 0x800006a0, .func_name = "main"},
+  {.addr = 0x80000474, .func_name = "video_init"},
+  {.addr = 0x800000e4, .func_name = "game_logic_update"},
+  {.addr = 0x80000010, .func_name = "new_char"},
+  {.addr = 0x800001b0, .func_name = "render"},
+  {.addr = 0x80000c9c, .func_name = "printf"},
+  {.addr = 0x800003a8, .func_name = "check_hit"},
+  {.addr = 0x800008b0, .func_name = "halt"},
+};
+struct FUNC_FTRACE *FUNC_FTRACER = ELF_FUNC_FTRACER;
+int FUNC_nums = ARRLEN(ELF_FUNC_FTRACER);
+bool use_user_func = false;
 
 static void load_elf() {
   if (elf_file == NULL) {
     Log("没有elf文件输入\n");
     return; // built-in image size
   }
-
   FILE *file = fopen(elf_file, "rb");
   Assert(file, "无法打开elf文件");
   // 读取 ELF 文件头
@@ -146,9 +167,9 @@ static void load_elf() {
           // 遍历符号表,筛选各个函数名的入口地址
           for (int j = 0, k = 0; j < symtab_entry_count; j++) {
               if (ELF32_ST_TYPE(symtab[j].st_info) == STT_FUNC) {
-                  FUNC_FTRACER[k].addr = symtab[j].st_value;
-                  strncpy(FUNC_FTRACER[k].func_name, &strtab[symtab[j].st_name], sizeof(FUNC_FTRACER[k].func_name) - 1);
-                  FUNC_FTRACER[k].func_name[sizeof(FUNC_FTRACER[k].func_name) - 1] = '\0';
+                  ELF_FUNC_FTRACER[k].addr = symtab[j].st_value;
+                  strncpy(ELF_FUNC_FTRACER[k].func_name, &strtab[symtab[j].st_name], sizeof(ELF_FUNC_FTRACER[k].func_name) - 1);
+                  ELF_FUNC_FTRACER[k].func_name[sizeof(ELF_FUNC_FTRACER[k].func_name) - 1] = '\0';
                   k++;
               }
           }
@@ -160,6 +181,11 @@ static void load_elf() {
   free((void *)strtab);
   free(sh_table);
   fclose(file);
+  // 检查是否需要指定追踪的函数
+  if(use_user_func) {
+    FUNC_FTRACER = USER_FUNC_FTRACER;
+    FUNC_nums = ARRLEN(USER_FUNC_FTRACER);
+  }
 }
 
 // 设置 ftracer 的输出
@@ -170,17 +196,18 @@ void init_ftracer_log(const char *ftracer_log_file);
 
 static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
-    {"batch"    , no_argument      , NULL, 'b'},
-    {"log"      , required_argument, NULL, 'l'},
-    {"diff"     , required_argument, NULL, 'd'},
-    {"port"     , required_argument, NULL, 'p'},
-    {"elf"      , required_argument, NULL, 'e'},  // 读取elf文件
-    {"elf-log"  , required_argument, NULL, 'g'},  // 写入ftracer的内容
-    {"help"     , no_argument      , NULL, 'h'},
-    {0          , 0                , NULL,  0 },
+    {"batch"      , no_argument      , NULL, 'b'},
+    {"log"        , required_argument, NULL, 'l'},
+    {"diff"       , required_argument, NULL, 'd'},
+    {"port"       , required_argument, NULL, 'p'},
+    {"elf"        , required_argument, NULL, 'e'},  // 读取elf文件
+    {"elf-log"    , required_argument, NULL, 'g'},  // 写入ftracer的内容
+    {"dtrace-log" , required_argument, NULL, 'k'},  // 写入DTRACE的内容
+    {"help"       , no_argument      , NULL, 'h'},
+    {0            , 0                , NULL,  0 },
   };
   int o;
-  while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:g:", table, NULL)) != -1) {
+  while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:g:k:", table, NULL)) != -1) {
     switch (o) {
       case 'b': sdb_set_batch_mode(); break;
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
@@ -188,15 +215,17 @@ static int parse_args(int argc, char *argv[]) {
       case 'd': diff_so_file = optarg; break;
       case 'e': elf_file = optarg; break;
       case 'g': ftracer_log_file = optarg; break;
+      case 'k': dtracer_log_file = optarg; break;
       case 1: img_file = optarg; return 0;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
-        printf("\t-b,--batch                run with batch mode\n");
-        printf("\t-l,--log=FILE             output log to FILE\n");
-        printf("\t-d,--diff=REF_SO          run DiffTest with reference REF_SO\n");
-        printf("\t-p,--port=PORT            run DiffTest with port PORT\n");
-        printf("\t-e,--elf=ELF_FILE         load elf file for ftrace\n");
-        printf("\t-g,--elf-log=FTRACER_FILE ftracer output log to FTRACER_FILE\n");
+        printf("\t-b,--batch                     run with batch mode\n");
+        printf("\t-l,--log=FILE                  output log to FILE\n");
+        printf("\t-d,--diff=REF_SO               run DiffTest with reference REF_SO\n");
+        printf("\t-p,--port=PORT                 run DiffTest with port PORT\n");
+        printf("\t-e,--elf=ELF_FILE              load elf file for ftrace\n");
+        printf("\t-g,--elf-log=FTRACER_FILE      ftracer output log to FTRACER_FILE\n");
+        printf("\t-k,--dtrace-log=DTRACER_FILE   ftracer output log to DTRACER_FILE\n");
         printf("\n");
         exit(0);
     }
@@ -209,6 +238,7 @@ void init_monitor(int argc, char *argv[]) {
 
   /* Parse arguments. */
   parse_args(argc, argv);
+
 
   /* Set random seed. */
   init_rand();
@@ -241,6 +271,9 @@ void init_monitor(int argc, char *argv[]) {
 
   /* 打开ftracer的输出日志 */
   IFDEF(CONFIG_FTRACE, init_ftracer_log(ftracer_log_file));
+
+  /* 打开ftracer的输出日志 */
+  IFDEF(CONFIG_DTRACE, init_dtracer_log(dtracer_log_file));
 
   /* Display welcome message. */
   welcome();

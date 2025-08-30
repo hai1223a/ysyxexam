@@ -77,6 +77,7 @@ static int cmd_info(char *args) {
   }
   else if (!strcmp(args, "w"))
   {
+    IFNDEF(CONFIG_WATCHPOINT, Log("你没有启动监视点的配置\n"));
     watchpoint_display();
   }
   
@@ -112,9 +113,10 @@ static int cmd_p(char *args){
 static int cmd_w(char *args) {
   if (!args)
   {
-    printf("请输入要监控的表达式\n");
+    printf("请输入要监视的表达式\n");
     return 0;
   }
+  IFNDEF(CONFIG_WATCHPOINT, Log("你没有启动监视点的配置\n"));
   add_watchpoint(args);
   return 0;
 }
@@ -122,10 +124,11 @@ static int cmd_w(char *args) {
 static int cmd_d(char *args) {
   if (!args)
   {
-    printf("请输入要删除的监控点序号\n");
+    printf("请输入要删除的监视点序号\n");
     return 0;
   }
   int number = 0;
+  IFNDEF(CONFIG_WATCHPOINT, Log("你没有启动监视点的配置\n"));
   if(sscanf(args, "%d", &number) == 1)  delete_watchpoint(number);
   else  printf("你打的监视点序号表达式不对\n");
   return 0;

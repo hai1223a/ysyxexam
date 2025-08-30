@@ -3,36 +3,41 @@
 //=====================================================
 // 头文件
 //=====================================================
-#include "Vysyx_25050136_NPC.h"  // 包含Verilog工程的C++模型
-#include "Vysyx_25050136_NPC___024root.h"
+#include "VysyxSoCFull.h"  // 包含Verilog工程的C++模型
+#include "VysyxSoCFull___024root.h"
 #include <verilated.h>           // Verilator的库
+#include "generated/autoconf.h"
+#ifdef CONFIG_FST
 #include "verilated_fst_c.h"     // fst波形文件所需要的库
-#include <readline/readline.h>   // 
-#include <readline/history.h>
-#include <getopt.h>              // 包含解析命令行参数的库函数
-#include <regex.h>
+#endif
 #include "reg.h"
 #include "sdb.h"
 #include "cpu.h"
 #include "expr.h"
 #include "memory.h"
+#include "debug.h"
+#include "disasm.h"
+#include "watchpoint.h"
+#include "trace.h"
+#include "dut.h"
 #include "macro.h"
+#include "timer.h"
 //=====================================================
-// 全局变量和宏定义
+// 状态
 //=====================================================
-#define CONFIG_MSIZE 0x8000000                // 内存大小
-#define CONFIG_MBASE 0x80000000               // 内存基地址
+enum { NPC_RUNNING, NPC_STOP, NPC_END, NPC_ABORT };
 
-#define CONFIG_ITRACE
+typedef struct {
+  int state;
+  uint32_t halt_pc;
+  int halt_ret;
+} NPCState;
+extern NPCState npcstate;       
 
-extern bool cpu_run;                                           // CPU仿真运行状态
-extern vluint64_t sim_time;                                    // 记录仿真时间
-extern vluint64_t reset_time;                                  // 复位时间
-extern vluint64_t stop_time;                                   // 暂停时间点
-extern uint32_t pc_pre;                                        // 用于单步执行程序
-extern char *img_file;                                         // 程序源文件指针
-extern bool batch_mode;                                        // sdb模式
-extern uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096)));// 内存变量
-extern const char *regs[];
+void set_nemu_state(int state, uint32_t pc, int halt_ret);
+bool is_ebreak(uint32_t inst_i);
+bool is_jal(uint32_t inst_i);
+bool is_jalr(uint32_t inst_i);
+bool is_ret(uint32_t inst_i);
 
 #endif

@@ -48,6 +48,23 @@ void init_ftracer_log(const char *ftracer_log_file) {
   }
   Log("Ftracer log is written to %s", ftracer_log_file ? ftracer_log_file : "stdout");
 }
-//=========================================
 #endif
+//=========================================
+
+// dtracer 部分内容
+//=========================================
+#ifdef CONFIG_DTRACE
+FILE *dtracer_log_fp = NULL;
+void init_dtracer_log(const char *dtracer_log_file) {
+  dtracer_log_fp = stdout;
+  if (dtracer_log_file != NULL) {
+    FILE *fp = fopen(dtracer_log_file, "w");
+    Assert(fp, "Can not open '%s'", dtracer_log_file);
+    dtracer_log_fp = fp;
+  }
+  Log("Ftracer log is written to %s", dtracer_log_file ? dtracer_log_file : "stdout");
+}
+#endif
+//=========================================
+
 #endif

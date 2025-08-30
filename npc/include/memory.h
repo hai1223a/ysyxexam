@@ -1,9 +1,15 @@
 #ifndef __MEMORY_H__
 #define __MEMORY_H__
 
-void pmem_init();
-void inst_read(Vysyx_25050136_NPC *ysyx_25050136_NPC);
-void pmem_read_write(Vysyx_25050136_NPC *ysyx_25050136_NPC);
-uint32_t vaddr_read(uint32_t paddr, int len);
+#define RESET_VECTOR CONFIG_IMEM_BASE              // 程序复位地址
+extern uint8_t imem[CONFIG_IMEM_SIZE] __attribute((aligned(4096))); // 程序存储变量
+
+enum {
+    wen, ren
+};
+
+long init_imem(char *img_file);
+uint32_t vaddr_read(uint32_t paddr);
+
 
 #endif

@@ -26,11 +26,42 @@ enum {
   reg_count,
   nr_reg
 };
+static int sbuf_rpos = 0;
 
 static uint8_t *sbuf = NULL;
 static uint32_t *audio_base = NULL;
 
+static void audio_play(void *userdata, Uint8 *stream, int len) {
+  int play_len = len;
+  int count = audio_base[reg_count];
+  if(play_len > count) play_len = count;
+  memcpy(stream, sbuf + sbuf_rpos, play_len);
+  if(len > play_len) memset(stream + play_len, 0, len - play_len);
+  sbuf_rpos += play_len;
+  if (sbuf_rpos >= CONFIG_SB_SIZE) sbuf_rpos -= CONFIG_SB_SIZE;
+  audio_base[reg_count] -= play_len;
+  // printf("len = %d, play_len = %d, len - play_len = %d\n", len, play_len, len - play_len);
+}
+
 static void audio_io_handler(uint32_t offset, int len, bool is_write) {
+  if(offset == 12) {
+    audio_base[reg_sbuf_size] = CONFIG_SB_SIZE;
+  }
+  if(offset == 16 && is_write) {
+    SDL_AudioSpec sound = {};
+    sound.freq = audio_base[reg_freq];
+    sound.channels = audio_base[reg_channels];
+    sound.samples = audio_base[reg_samples];
+    sound.format = AUDIO_S16SYS;
+    sound.callback = audio_play;
+    sound.userdata = NULL;
+
+    int ret = SDL_InitSubSystem(SDL_INIT_AUDIO);
+    if (ret == 0) {
+      SDL_OpenAudio(&sound, NULL);
+      SDL_PauseAudio(0);
+    }
+  }
 }
 
 void init_audio() {

@@ -19,12 +19,18 @@
 // this is not consistent with uint8_t
 // but it is ok since we do not access the array directly
 static const uint32_t img [] = {
-  0x00000297,  // auipc t0,0 
-  0x00028823,  // sb  zero,16(t0)
-  0x0102c503,  // lbu a0,16(t0)
-  0x00100073,  // ebreak (used as nemu_trap)
-  0xdeadbeef  // some data
-};
+    0xa00002b7, // auipc t0,0
+    0x12345337, // addi t0,t0,36     // t0 = 指令区首地址+36
+    0x67830313, // li a0,1            // a0 = 1
+    0x00629123, // sw  a0,0(t0)       // [t0+0] = a0 (把1写到数据区)
+    0x00629123, // lw  a0,0(t0)       // a0 = [t0+0] (从数据区读回a0)
+    0x00629223, // jal zero, +4       // 跳转到下一条（演示jal）
+    0x00229503, // addi t0,t0,1       // t0 = t0 + 1
+    0x00429583, // bne a0,a1,-4       // 如果a0!=a1, 跳回前面
+    0x00100073, // ebreak             // 终止
+    0xdeadbeef, // 数据区内容
+    0x12345678, // 数据区内容
+  };
 
 static void restart() {
   /* Set the initial program counter. */

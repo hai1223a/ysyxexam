@@ -18,20 +18,59 @@
 #include <difftest-def.h>
 #include <memory/paddr.h>
 
+#define NPC_REGS_NUM 16
 __EXPORT void difftest_memcpy(paddr_t addr, void *buf, size_t n, bool direction) {
-  assert(0);
+  size_t word = n / 4;
+  size_t word_n = n - word * 4;
+  if (direction == DIFFTEST_TO_DUT) {
+    // 直接从addr开始读取，不需要指针转换
+    for (size_t i = 0; i < word; i++) {
+      ((uint32_t *)buf)[i] = paddr_read(addr + i * 4, 4);  // 以4字节为单位读取
+    }
+    if(word_n) {
+      for (size_t i = 0; i < word_n; i++) {
+        ((uint8_t *)buf)[word * 4 + i] = (uint8_t)paddr_read(addr + word * 4 + i, 1);  // 以4字节为单位读取
+      }
+    }
+  } 
+  else if (direction == DIFFTEST_TO_REF) {
+    // 直接从addr开始写入，不需要指针转换
+    for (size_t i = 0; i < word; i++) {
+      paddr_write(addr + i * 4, 4, ((uint32_t *)buf)[i]);  // 以4字节为单位写入
+    }
+    if(word_n) {
+      for (size_t i = 0; i < word_n; i++) {
+        paddr_write(addr + word * 4 + i, 1, ((uint8_t *)buf)[word * 4 + i]);
+      }
+    }
+  }
 }
 
 __EXPORT void difftest_regcpy(void *dut, bool direction) {
-  assert(0);
+  if (direction == DIFFTEST_TO_DUT)
+  {
+    for (size_t i = 0; i < NPC_REGS_NUM; i++)
+    {
+      *((word_t *)dut + i) = cpu.gpr[i];
+    }
+    *((word_t *)dut + NPC_REGS_NUM) = cpu.pc;
+  }
+  if (direction == DIFFTEST_TO_REF)
+  {
+    for (size_t i = 0; i < NPC_REGS_NUM; i++)
+    {
+      cpu.gpr[i] = *((word_t *)dut + i) ;
+    }
+    cpu.pc = *((word_t *)dut + NPC_REGS_NUM);
+  }
 }
 
 __EXPORT void difftest_exec(uint64_t n) {
-  assert(0);
+  cpu_exec(n);
 }
 
 __EXPORT void difftest_raise_intr(word_t NO) {
-  assert(0);
+  // assert(0);
 }
 
 __EXPORT void difftest_init(int port) {

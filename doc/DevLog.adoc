@@ -277,4 +277,139 @@ typedef struct inf {
 == 2025/5/21 实验日志
 === 今日完成任务
 * 使用native测试了kib的string.h中的函数以及printf函数完成了nemu和spike的DiffTest
-* 完成npc第一条指令addi
+* 完成npc第一条指令addi 
+
+[[d2025-6-29]]
+== 2025/6/29 实验日志
+=== 今日要点
+我错误地认为risc-v使用a0传递参数,使用a1传递返回值.实际上risc-v使用a0-a8以及栈来传递参数,
+使用a0,a1以及栈来传递返回值.
+
+=== 今日BUG
+[green]##在完成PA4.1 git rt-thread时, 我发现make init## + 
+[red]##ImportError: cannot import name 'mk_rtconfig' from 'menuconfig' (/usr/lib/python3/dist-packages/menuconfig.py):
+File "/home/yunhai/ysyx-workbench/Templates/rt-thread-am/bsp/abstract-machine/SConstruct", line 28:objs = PrepareBuilding(env, RTT_ROOT, has_libcpu = True)
+File "/home/yunhai/ysyx-workbench/Templates/rt-thread-am/bsp/abstract-machine/../../tools/building.py", line 362:
+from menuconfig import mk_rtconfig
+make: *** [Makefile:18: rtconfig.h] Error 2##
+[green]##这是因为系统的python工具中有menuconfig这个包, 而rt-thread也提供了menuconfig.py文件,这让脚本SConstruct不知道该如何选择, 所以生成了空文件, 在第二次使用make init前如果没有将这些空文件删除, 就会被脚本认为已经完成了make init操作而不会重现报错. 这样的结果就是在make ARCH=native run时, 由于rtconfig.h是空文件导致了一堆的报错, 正常情况向rtconfig.h应该存在和.config中相似的内容.##::
+我们需要修改SConstruct文件, 在 *import sys* 之后插入 *sys.path.insert(0, '/home/yunhai/ysyx-workbench/Templates/rt-thread-am/tools')* 这告诉脚本, 优先在项目提供的文件中寻找对应的包.
+
+[[d2025-8-9]]
+== 2025/8/9 实验日志
+=== 今日完成任务
+完成至B2/更实用的Soc/内存访问测试
+
+=== 今日要点
+这次测试的是sram的堆读写功能, sram的大小为8k, 0x0f000000~0x0f002000, 0x0f002000附近1KB的大小为栈, 剩下的空间为堆
+
+* 第一个问题: 因为main函数把所有的堆都重新写了一遍, 所以不能从main函数返回, main函数最后必须halt(0);或者while(1);
+* 第二个问题: 检查读写功能是否正确使用check(A==B)会造成栈溢出, 因为这个check函数规定为了不可内联属性, 所以使用if(A!=B) halt(1);才能好用.
+
+[[d2025-8-13]]
+== 2025/8/13 实验日志
+=== 今日BUG
+
+* 问题一: 在B2的写入全局变量实验中, 修改了链接脚本, 同时用到了sram和mrom, 两部分存储的地址相差很远,由于链接脚本不正确的写法导致了elf转换得到的bin文件存在大量的**内存空洞**, 即全0, 这样bin文件就太大了. 问题脚本如下, 主要出现在.data段
+
+[source, asm]
+----
+ENTRY(_start)
+
+MEMORY {
+  sram : ORIGIN = 0x0f000000, LENGTH = 8K
+  mrom : ORIGIN = 0x20000000, LENGTH = 4K
+}
+
+SECTIONS {
+    /* ... */
+    rodata_end = .;
+    . = ORIGIN(sram);
+    .data : AT(rodata_end)
+    {
+        data_start = .;
+        *(.data)
+    } > sram
+    data_size = SIZEOF(.data);
+    data_load_start = LOADADDR(.data);
+    /* ... */
+}
+----
+该脚本得到bin文件大小为 285MB
+[source, asm]
+----
+SECTIONS {
+    /* ... */
+    rodata_end = .;
+    .data :
+    {
+        data_start = .;
+        *(.data)
+    } > sram AT > rodata_end
+    data_size = SIZEOF(.data);
+    data_load_start = LOADADDR(.data);
+    /* ... */
+}
+----
+该脚本得到bin文件大小为 532MB
+[source, asm]
+----
+SECTIONS {
+    /* ... */
+    .data :
+    {
+        data_start = .;
+        *(.data)
+    } > sram AT > mrom
+    data_size = SIZEOF(.data);
+    data_load_start = LOADADDR(.data);
+    /* ... */
+}
+----
+该脚本得到bin文件大小为 644B +
+所以问题应该是出现在了我使用rodata_end上
+
+* 问题二: 我发现fib.c定义全局变量ans但是使用选项--print-map时, data_size确实等于0, 导致我没有正确启动bootloader? +
+原因在于启动了选项-fdata-sections, 这个选项将**.data**的每个变量变成了**.data.变量名**这样的子段, 所以我的脚本中的**.data**并没有收集到这两个全局变量, 这两个全局变量子段会被自动链接到**.data**的后面, 所以data_size错误, 修改脚本如下即可
+
+[source, asm]
+----
+SECTIONS {
+    /* ... */
+    .data :
+    {
+        data_start = .;
+        *(.data .data.*)
+    } > sram AT > mrom
+    data_size = SIZEOF(.data);
+    data_load_start = LOADADDR(.data);
+    /* ... */
+}
+----
+
+* 问题三: 程序执行错误, 检查发现对 int ans[0] = 1的四次lb操作, 并未按预想得到1,0,0,0; 而是得到了1,0,1,0这样的错误结果? +
+原因是ysyxsoc的sram使用了地址4字节对齐访问, 而我使用DPI-C实现mrom并没有考虑地址4字节对齐访问, 所以我只需要给mrom添加地址4字节对齐访问即可 +
+错误程序
+
+[source, C++]
+----
+extern "C" void mrom_read(int32_t addr, int32_t *data) {
+  *data = *(int32_t *)guest_to_host((uint32_t)addr);
+}
+----
+正确程序
+[source, C++]
+----
+extern "C" void mrom_read(int32_t addr, int32_t *data) {
+  int32_t raddr = addr & (~0x3);
+  *data = *(int32_t *)guest_to_host((uint32_t)raddr);
+}
+----
+
+[[d2025-8-18]]
+== 2025/8/18 实验日志
+=== 今日完成任务
+完成至B2/从flash中取指
+
+=== 今日BUG
+* 这里我CPU从mrom执行跳转到了sram执行, 但是执行时候报了读权限错误. 这是因为我的npc的cpu.cpp中用来记录执行指令时, 使用了 `inst_pre = *(uint32_t *)(pmem + pc_pre - CONFIG_MBASE);` ,这就意味着我的PC值不应该超出pmem的范围
