@@ -34,7 +34,7 @@ void _uart_init() {
   outb(UART_IER, 0b00000010);
   outb(UART_LCR, 0b10000011);
   outb(UART_DLH, 0);
-  outb(UART_DLL, 1);
+  outb(UART_DLL, 2);
   outb(UART_LCR, 0b00000011);
 }
 
