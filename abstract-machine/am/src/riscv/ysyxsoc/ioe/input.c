@@ -58,7 +58,7 @@ void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
   } else {
     kbd->keydown = true;
   }
-  if(shift) {
+  if(1) {
     kbd->keyname = ps2_scancode_to_ascii_shift[kbd->keycode];
   } else {
     kbd->keyname = ps2_scancode_to_ascii[kbd->keycode];
