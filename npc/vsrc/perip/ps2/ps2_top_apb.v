@@ -75,6 +75,6 @@ module ps2_top_apb(
       ack <= valid;
   end
   assign in_pready = ack;
-  assign in_pslverr = overflow;
+  assign in_pslverr = 0;
   assign in_prdata = {24'd0, data};
 endmodule
