@@ -1,7 +1,7 @@
 #include <am.h>
 #include <riscv/ysyxsoc/ysyxsoc.h>
 
-const int ps2_scancode_to_amkey[256] = {
+const int ps2_scancode_to_amkey[144] = {
     // 0x00 - 0x0F
     0, AM_KEY_F9, 0, AM_KEY_F5, 
     AM_KEY_F3, AM_KEY_F1, AM_KEY_F2, AM_KEY_F12,
@@ -51,36 +51,6 @@ const int ps2_scancode_to_amkey[256] = {
     0, 0, AM_KEY_F11, 0,
     // 0x80 - 0x8F
     0, 0, 0, AM_KEY_F7,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    // 0x90 - 0x9F
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    // 0xa0 - 0xaF
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    // 0xc0 - 0xcF
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    // 0xd0 - 0xdF
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    // 0xe0 - 0xeF
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    0, 0, 0, 0,
-    // 0xf0 - 0xfF
-    0, 0, 0, 0,
     0, 0, 0, 0,
     0, 0, 0, 0,
     0, 0, 0, 0,
