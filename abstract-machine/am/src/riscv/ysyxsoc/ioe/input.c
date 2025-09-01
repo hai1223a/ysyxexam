@@ -104,7 +104,29 @@ void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
     kbd->keydown = true;
   }
   if(extend) {
+    switch (kbd->keycode)
+    {
+    case 0x11: kbd->keyname = AM_KEY_RALT; break;
+    case 0x14: kbd->keyname = AM_KEY_RCTRL; break;
+    case 0x70: kbd->keyname = AM_KEY_INSERT; break;
+    case 0x71: kbd->keyname = AM_KEY_DELETE; break;
+    case 0x6c: kbd->keyname = AM_KEY_HOME; break;
+    case 0x69: kbd->keyname = AM_KEY_END; break;
+    case 0x7d: kbd->keyname = AM_KEY_PAGEUP; break;
+    case 0x7a: kbd->keyname = AM_KEY_PAGEDOWN; break;
+    case 0x75: kbd->keyname = AM_KEY_PAGEDOWN; break;
+    case 0x7a: kbd->keyname = AM_KEY_PAGEDOWN; break;
+    case 0x7a: kbd->keyname = AM_KEY_PAGEDOWN; break;
+    case 0x7a: kbd->keyname = AM_KEY_PAGEDOWN; break;
+    case 0x7a: kbd->keyname = AM_KEY_PAGEDOWN; break;
+
+
+      /* code */
+      break;
     
+    default:
+      break;
+    }
   } else {
     kbd->keyname = ps2_scancode_to_amkey[kbd->keycode];
   }
