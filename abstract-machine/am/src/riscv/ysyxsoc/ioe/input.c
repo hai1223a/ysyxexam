@@ -114,16 +114,10 @@ void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
     case 0x69: kbd->keyname = AM_KEY_END; break;
     case 0x7d: kbd->keyname = AM_KEY_PAGEUP; break;
     case 0x7a: kbd->keyname = AM_KEY_PAGEDOWN; break;
-    case 0x75: kbd->keyname = AM_KEY_PAGEDOWN; break;
-    case 0x7a: kbd->keyname = AM_KEY_PAGEDOWN; break;
-    case 0x7a: kbd->keyname = AM_KEY_PAGEDOWN; break;
-    case 0x7a: kbd->keyname = AM_KEY_PAGEDOWN; break;
-    case 0x7a: kbd->keyname = AM_KEY_PAGEDOWN; break;
-
-
-      /* code */
-      break;
-    
+    case 0x75: kbd->keyname = AM_KEY_UP; break;
+    case 0x72: kbd->keyname = AM_KEY_DOWN; break;
+    case 0x6b: kbd->keyname = AM_KEY_LEFT; break;
+    case 0x74: kbd->keyname = AM_KEY_RIGHT; break;
     default:
       break;
     }
