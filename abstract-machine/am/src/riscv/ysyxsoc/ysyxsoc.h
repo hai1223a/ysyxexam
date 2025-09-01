@@ -24,6 +24,7 @@
 #define GPIO_SW         0x10002004
 #define GPIO_SEG        0x10002008
 
+#define PS2_ADDR        0x10011000
 #define RTC_ADDR        0x02000000
 
 
