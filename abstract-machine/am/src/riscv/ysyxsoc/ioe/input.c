@@ -69,10 +69,7 @@ void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
   }
 
   if(caps) {
-    // if(kbd->keyname > 'a' && kbd->keyname < 'z')
-    //   kbd->keyname -= 32;
-    // if(kbd->keyname > 'A' && kbd->keyname < 'Z')
-    //   kbd->keyname += 32;  
-      kbd->keyname = 'c';  
+    if(kbd->keyname > 'a' && kbd->keyname < 'z')  kbd->keyname = kbd->keyname - 32;
+    if(kbd->keyname > 'A' && kbd->keyname < 'Z')  kbd->keyname = kbd->keyname + 32;  
   }
 }
