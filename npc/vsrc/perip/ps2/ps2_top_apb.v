@@ -20,10 +20,10 @@ module ps2_top_apb(
 
   wire sampling;
   reg [9:0] buffer;
-  reg [7:0] fifo [0:7];
+  reg [7:0] fifo [0:15];
   reg [2:0] ps2_clk_d;
   reg [3:0] count;
-  reg [2:0] w_ptr,r_ptr;
+  reg [3:0] w_ptr,r_ptr;
   reg overflow;
   reg [7:0] data;
   reg ack;
@@ -47,7 +47,7 @@ module ps2_top_apb(
           if (valid) begin
             if (r_ptr != w_ptr) begin
               data <= fifo[r_ptr];
-              r_ptr <= r_ptr + 3'b1;
+              r_ptr <= r_ptr + 4'b1;
             end else begin
               data <= 0;
             end
@@ -55,9 +55,9 @@ module ps2_top_apb(
           if (sampling) begin
             if (count == 4'd10) begin
                 if (!buffer[0] && ps2_data && ^buffer[9:1]) begin
-                    w_ptr <= w_ptr + 3'd1;
+                    w_ptr <= w_ptr + 4'b1;
                     fifo[w_ptr] <= buffer[8:1];
-                    overflow <= overflow | (r_ptr == (w_ptr + 3'b1));
+                    overflow <= overflow | (r_ptr == (w_ptr + 4'b1));
                 end
                 count <= 0;
             end else begin
