@@ -47,9 +47,11 @@ void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
   if(kbd->keycode == 0x58) {
     caps = !caps;
   }
+
   if(kbd->keycode == 0x12) {
     shift = true;
   }
+
   if(kbd->keycode == 0xf0) {
     kbd->keycode = inb(PS2_ADDR);
     if(kbd->keycode == 0x12) {
@@ -59,15 +61,18 @@ void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
   } else {
     kbd->keydown = true;
   }
+
   if(shift) {
     kbd->keyname = ps2_scancode_to_ascii_shift[kbd->keycode];
   } else {
     kbd->keyname = ps2_scancode_to_ascii[kbd->keycode];
   }
+
   if(caps) {
-    if(kbd->keyname > 'a' && kbd->keyname < 'z')
-      kbd->keyname -= 32;
-    if(kbd->keyname > 'A' && kbd->keyname < 'Z')
-      kbd->keyname += 32;  
+    // if(kbd->keyname > 'a' && kbd->keyname < 'z')
+    //   kbd->keyname -= 32;
+    // if(kbd->keyname > 'A' && kbd->keyname < 'Z')
+    //   kbd->keyname += 32;  
+      kbd->keyname = 'c';  
   }
 }
