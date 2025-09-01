@@ -52,7 +52,7 @@ C_SANITIZE      := -fsanitize=address
 # C_SANITIZE		:= 
 INC_PATHS       := $(abspath ../include ../include/generated)
 CFLAGS          += $(addprefix -I, $(INC_PATHS))
-LDFLAGS         += -lreadline $(C_SANITIZE)
+LDFLAGS         += -lreadline
 
 # Verilator编译选项
 VERILATOR_FLAGS += -Wall --cc -exe --build --x-assign fast --x-initial fast\
@@ -100,16 +100,16 @@ VERILATOR_RUN_FLAGS += -MMD --build -cc \
 					   -O3 --x-assign fast --x-initial fast --noassert \
 					   --top-module $(TOP_MODULE) \
 					   $(VERILATOR_INCS) \
+					   -CFLAGS "$(CXXFLAGS)" -LDFLAGS "$(LDFLAGS)"\
 					   --Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN)) \
-					   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CXXFLAGS)"
 
 ifdef CONFIG_FST
 VERILATOR_RUN_FLAGS += --trace-fst 
 endif
 
 $(BIN): $(V_SRCS) $(C_SRCS) $(NVBOARD_ARCHIVE)
-	$(VERILATOR_BIN) $(VERILATOR_RUN_FLAGS) \
-		--top-module $(TOP_MODULE) $^ \
+	$(VERILATOR_BIN) $^ $(VERILATOR_RUN_FLAGS) \
+		--top-module $(TOP_MODULE)  \
 
 nvboard: $(BIN)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
