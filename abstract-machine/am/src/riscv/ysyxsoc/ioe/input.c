@@ -1,77 +1,62 @@
 #include <am.h>
 #include <riscv/ysyxsoc/ysyxsoc.h>
 
-const static uint8_t ps2_scancode_to_ascii[128] = {
+const int ps2_scancode_to_amkey[128] = {
     // 0x00 - 0x0F
-    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   '`', 0,
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE, 
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE,
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE, 
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_GRAVE, AM_KEY_NONE,
+    
     // 0x10 - 0x1F
-    0,   0,   0,   0,   0,   'q', '1', 0,   0,   0,   'z', 's', 'a', 'w', '2', 0,
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE,
+    AM_KEY_NONE, AM_KEY_Q,    AM_KEY_1,    AM_KEY_NONE,
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_Z,    AM_KEY_S,
+    AM_KEY_A,    AM_KEY_W,    AM_KEY_2,    AM_KEY_NONE,
+    
     // 0x20 - 0x2F
-    0,   'c', 'x', 'd', 'e', '4', '3', 0,   0,   ' ', 'v', 'f', 't', 'r', '5', 0,
+    AM_KEY_NONE, AM_KEY_C,    AM_KEY_X,    AM_KEY_D,
+    AM_KEY_E,    AM_KEY_4,    AM_KEY_3,    AM_KEY_NONE,
+    AM_KEY_NONE, AM_KEY_SPACE,AM_KEY_V,    AM_KEY_F,
+    AM_KEY_T,    AM_KEY_R,    AM_KEY_5,    AM_KEY_NONE,
+    
     // 0x30 - 0x3F
-    0,   'n', 'b', 'h', 'g', 'y', '6', 0,   0,   0,   'm', 'j', 'u', '7', '8', 0,
+    AM_KEY_NONE, AM_KEY_N,    AM_KEY_B,    AM_KEY_H,
+    AM_KEY_G,    AM_KEY_Y,    AM_KEY_6,    AM_KEY_NONE,
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_M,    AM_KEY_J,
+    AM_KEY_U,    AM_KEY_7,    AM_KEY_8,    AM_KEY_NONE,
+    
     // 0x40 - 0x4F
-    0,   ',', 'k', 'i', 'o', '0', '9', 0,   0,   '.', '/', 'l', ';', 'p', '-', 0,
+    AM_KEY_NONE, AM_KEY_COMMA,AM_KEY_K,    AM_KEY_I,
+    AM_KEY_O,    AM_KEY_0,    AM_KEY_9,    AM_KEY_NONE,
+    AM_KEY_NONE, AM_KEY_PERIOD,AM_KEY_SLASH,AM_KEY_L,
+    AM_KEY_SEMICOLON, AM_KEY_P, AM_KEY_MINUS, AM_KEY_NONE,
+    
     // 0x50 - 0x5F
-    0,   0,   '\'',0,   '[', '=', 0,   0,   0,   0,   '\n',']', 0,   '\\',0,   0,
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_APOSTROPHE, AM_KEY_NONE,
+    AM_KEY_LEFTBRACKET, AM_KEY_EQUALS, AM_KEY_NONE, AM_KEY_NONE,
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_RETURN, AM_KEY_RIGHTBRACKET,
+    AM_KEY_NONE, AM_KEY_BACKSLASH, AM_KEY_NONE, AM_KEY_NONE,
+    
     // 0x60 - 0x6F
-    0,   0,   0,   0,   0,   0,   '\b',0,   0,   '1', 0,   '4', '7', 0,   0,   0,
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE,
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_BACKSPACE, AM_KEY_NONE,
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE,
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE,
+    
     // 0x70 - 0x7F
-    '0', '.', '2', '5', '6', '8', 0,   0,   0,   '+', '3', '-', '*', '9', 0,   0
-};
-// 带Shift键的映射表
-const static uint8_t ps2_scancode_to_ascii_shift[128] = {
-    // 0x00 - 0x0F
-    0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   0,   '~', 0,
-    // 0x10 - 0x1F
-    0,   0,   0,   0,   0,   'Q', '!', 0,   0,   0,   'Z', 'S', 'A', 'W', '@', 0,
-    // 0x20 - 0x2F
-    0,   'C', 'X', 'D', 'E', '$', '#', 0,   0,   ' ', 'V', 'F', 'T', 'R', '%', 0,
-    // 0x30 - 0x3F
-    0,   'N', 'B', 'H', 'G', 'Y', '^', 0,   0,   0,   'M', 'J', 'U', '&', '*', 0,
-    // 0x40 - 0x4F
-    0,   '<', 'K', 'I', 'O', ')', '(', 0,   0,   '>', '?', 'L', ':', 'P', '_', 0,
-    // 0x50 - 0x5F
-    0,   0,   '\"',0,   '{', '+', 0,   0,   0,   0,   '\n','}', 0,   '|', 0,   0,
-    // 0x60 - 0x6F
-    0,   0,   0,   0,   0,   0,   '\b',0,   0,   '1', 0,   '4', '7', 0,   0,   0,
-    // 0x70 - 0x7F
-    '0', '.', '2', '5', '6', '8', 0,   0,   0,   '+', '3', '-', '*', '9', 0,   0
-};
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE,
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE,
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE,
+    AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE, AM_KEY_NONE };
 
 void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
-  static bool caps = false;
-  static bool shift = false;
-
   kbd->keycode = inb(PS2_ADDR);
-  if(kbd->keycode == 0x58) {
-    caps = !caps;
-  }
-
-  if(kbd->keycode == 0x12) {
-    shift = true;
-  }
-
   if(kbd->keycode == 0xf0) {
     kbd->keycode = inb(PS2_ADDR);
-    if(kbd->keycode == 0x12) {
-      shift = false;
-    }
     kbd->keydown = false;
   } else {
     kbd->keydown = true;
   }
-
-  if(shift) {
-    kbd->keyname = ps2_scancode_to_ascii_shift[kbd->keycode];
-  } else {
-    kbd->keyname = ps2_scancode_to_ascii[kbd->keycode];
-  }
-
-    // 应用Caps Lock
-    if (caps && kbd->keyname >= 'a' && kbd->keyname <= 'z') {
-        kbd->keyname = kbd->keyname - 32; // 小写转大写
-    } else if (caps && kbd->keyname >= 'A' && kbd->keyname <= 'Z') {
-        kbd->keyname = kbd->keyname + 32; // 大写转小写
-    }
+  kbd->keyname = ps2_scancode_to_amkey[kbd->keycode];
 }
