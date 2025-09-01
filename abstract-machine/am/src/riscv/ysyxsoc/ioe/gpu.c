@@ -14,7 +14,7 @@ void __am_gpu_config(AM_GPU_CONFIG_T *cfg) {
 void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   int width = 640;
   uint32_t *fb = (uint32_t *)(uintptr_t)VGA_BUFFER;
-  // uint32_t *pb = (uint32_t *)ctl->pixels;
+  uint32_t *pb = (uint32_t *)ctl->pixels;
   int x = ctl->x;
   int y = ctl->y;
   int h = ctl->h;
@@ -23,7 +23,7 @@ void __am_gpu_fbdraw(AM_GPU_FBDRAW_T *ctl) {
   int i,j;
   for (i = 0; i < h; i++) 
     for (j = 0; j < w; j++) {
-      fb[point + i * width + j] = 0x00ff0000;
+      fb[point + i * width + j] = pb[i * w + j];
     }
 }
 
