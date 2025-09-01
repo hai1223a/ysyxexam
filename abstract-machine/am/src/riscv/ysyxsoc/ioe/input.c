@@ -6,11 +6,11 @@ const int ps2_scancode_to_amkey[256] = {
     0, AM_KEY_F9, 0, AM_KEY_F5, 
     AM_KEY_F3, AM_KEY_F1, AM_KEY_F2, AM_KEY_F12,
     0, AM_KEY_F10, AM_KEY_F8, AM_KEY_F6, 
-    AM_KEY_F4, 0, AM_KEY_GRAVE, 0,
+    AM_KEY_F4, AM_KEY_TAB, AM_KEY_GRAVE, 0,
     
     // 0x10 - 0x1F
-    0, 0, 0, 0,
-    0, AM_KEY_Q,    AM_KEY_1,    0,
+    0, AM_KEY_LALT, AM_KEY_LSHIFT, 0,
+    AM_KEY_LCTRL, AM_KEY_Q,    AM_KEY_1,    0,
     0, 0, AM_KEY_Z,    AM_KEY_S,
     AM_KEY_A,    AM_KEY_W,    AM_KEY_2,    0,
     
@@ -35,7 +35,7 @@ const int ps2_scancode_to_amkey[256] = {
     // 0x50 - 0x5F
     0, 0, AM_KEY_APOSTROPHE, 0,
     AM_KEY_LEFTBRACKET, AM_KEY_EQUALS, 0, 0,
-    0, 0, AM_KEY_RETURN, AM_KEY_RIGHTBRACKET,
+    AM_KEY_CAPSLOCK, AM_KEY_RSHIFT, AM_KEY_RETURN, AM_KEY_RIGHTBRACKET,
     0, AM_KEY_BACKSLASH, 0, 0,
     
     // 0x60 - 0x6F
@@ -48,7 +48,7 @@ const int ps2_scancode_to_amkey[256] = {
     0, 0, 0, 0,
     0, 0, AM_KEY_ESCAPE, 0,
     AM_KEY_F11, 0, 0, 0,
-    0, 0, 0, 0,
+    0, 0, AM_KEY_F11, 0,
     // 0x80 - 0x8F
     0, 0, 0, AM_KEY_F7,
     0, 0, 0, 0,
@@ -87,12 +87,25 @@ const int ps2_scancode_to_amkey[256] = {
    };
 
 void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
+  bool extend = false;
   kbd->keycode = inb(PS2_ADDR);
+  if(kbd->keycode == 0xe0) {
+    extend = true;
+    kbd->keycode = inb(PS2_ADDR);
+  }
   if(kbd->keycode == 0xf0) {
     kbd->keycode = inb(PS2_ADDR);
+  if(kbd->keycode == 0xe0) {
+    extend = true;
+    kbd->keycode = inb(PS2_ADDR);
+  }
     kbd->keydown = false;
   } else {
     kbd->keydown = true;
   }
-  kbd->keyname = ps2_scancode_to_amkey[kbd->keycode];
+  if(extend) {
+    
+  } else {
+    kbd->keyname = ps2_scancode_to_amkey[kbd->keycode];
+  }
 }
