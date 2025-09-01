@@ -68,8 +68,10 @@ void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
     kbd->keyname = ps2_scancode_to_ascii[kbd->keycode];
   }
 
-  if(caps) {
-    if(kbd->keyname >= 'a' && kbd->keyname <= 'z')  kbd->keyname = kbd->keyname - 32;
-    if(kbd->keyname >= 'A' && kbd->keyname <= 'Z')  kbd->keyname = kbd->keyname + 32;  
-  }
+    // 应用Caps Lock
+    if (caps && kbd->keyname >= 'a' && kbd->keyname <= 'z') {
+        kbd->keyname = kbd->keyname - 32; // 小写转大写
+    } else if (caps && kbd->keyname >= 'A' && kbd->keyname <= 'Z') {
+        kbd->keyname = kbd->keyname + 32; // 大写转小写
+    }
 }
