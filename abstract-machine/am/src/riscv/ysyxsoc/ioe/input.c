@@ -41,24 +41,25 @@ const static uint8_t ps2_scancode_to_ascii_shift[128] = {
 
 void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
   static bool caps = false;
-  static bool caps_count = false;
   static bool shift = false;
 
   kbd->keycode = inb(PS2_ADDR);
   if(kbd->keycode == 0x58) {
-    if(!caps_count) {caps = !caps;}
-    caps_count = !caps_count;
+    caps = !caps;
   }
   if(kbd->keycode == 0x12) {
-    shift = !shift;
+    shift = true;
   }
   if(kbd->keycode == 0xf0) {
     kbd->keycode = inb(PS2_ADDR);
+    if(kbd->keycode == 0x12) {
+      shift = false;
+    }
     kbd->keydown = false;
   } else {
     kbd->keydown = true;
   }
-  if(1) {
+  if(shift) {
     kbd->keyname = ps2_scancode_to_ascii_shift[kbd->keycode];
   } else {
     kbd->keyname = ps2_scancode_to_ascii[kbd->keycode];
