@@ -49,6 +49,7 @@ VERILATOR_WNO   := $(addprefix -Wno-, PINCONNECTEMPTY DECLFILENAME UNUSEDSIGNAL 
 
 # C/C++编译选项
 C_SANITIZE      := -fsanitize=address
+# C_SANITIZE		:= 
 INC_PATHS       := $(abspath ../include ../include/generated)
 CFLAGS          += $(C_SANITIZE) $(addprefix -I, $(INC_PATHS))
 LDFLAGS         += -lreadline $(C_SANITIZE)
