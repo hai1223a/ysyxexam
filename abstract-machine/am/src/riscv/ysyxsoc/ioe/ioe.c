@@ -2,6 +2,7 @@
 #include <klib-macros.h>
 
 void __am_timer_init();
+void __am_gpu_init();
 void __am_timer_rtc(AM_TIMER_RTC_T *);
 void __am_timer_uptime(AM_TIMER_UPTIME_T *);
 void __am_uart_rx(AM_UART_RX_T *);

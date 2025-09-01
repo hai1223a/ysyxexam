@@ -33,7 +33,7 @@ module vga_top_apb(
         if (in_pwrite) begin
           vga_buffer[in_paddr[20:2]] <= in_pwdata[23:0];
         end else begin
-          rdata = {8'd0, vga_buffer[in_paddr[20:2]]};
+          rdata <= {8'd0, vga_buffer[in_paddr[20:2]]};
         end
       end
     end
@@ -43,7 +43,7 @@ module vga_top_apb(
   assign in_prdata = rdata;
 
   wire [9:0] h_addr, v_addr;
-  wire [19:0] buffer_addr = h_addr + v_addr * 640;
+  wire [19:0] buffer_addr = v_addr * 20'd640 + {10'b0, h_addr};
     vga_ctrl u_vga_ctrl(
     .pclk     	(clock                  ),
     .reset    	(reset                  ),
