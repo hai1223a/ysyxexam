@@ -59,7 +59,7 @@ module ysyx_25050136_LSU
     localparam READ_ADDR = 2'd1;
     localparam READ_DATA = 2'd2;
     reg m_rready_r;
-    reg [2:0] m_arsize_r;
+    reg [2:0] m_arsize_r, m_arsize_q;
     reg [DATA_WIDTH-1:0] load_data_r;
     reg [31:0] m_araddr_r;
     reg [1:0] state_read;
@@ -70,7 +70,7 @@ module ysyx_25050136_LSU
     localparam WRITE_WAIT    = 2'd2;
     reg m_bready_r;
     reg aw_en, w_en;
-    reg [2:0] m_awsize_r;
+    reg [2:0] m_awsize_r, m_awsize_q;
     reg [1:0] state_write;
     reg [31:0] m_awaddr_r;
     reg [31:0] m_wdata_r;
@@ -134,6 +134,7 @@ module ysyx_25050136_LSU
             state_read   <= READ_IEDL;
             m_rready_r   <= 0;
             m_araddr_r   <= 0;
+            m_arsize_q   <= 0;
         end else begin
             case (state_read)
                 READ_IEDL: begin
@@ -141,6 +142,7 @@ module ysyx_25050136_LSU
                     if (fvalid_i & mem_ren_i) begin
                         state_read <= READ_ADDR;
                         m_araddr_r <= mem_addr_i;
+                        m_arsize_q <= m_arsize_r;
                     end
                 end 
                 READ_ADDR: begin
@@ -168,7 +170,7 @@ module ysyx_25050136_LSU
     assign m_araddr_o  = m_araddr_r;
     assign m_arid_o = 0;
     assign m_arlen_o = 0;
-    assign m_arsize_o = m_arsize_r;
+    assign m_arsize_o = m_arsize_q;
     assign m_arburst_o = 0;
     assign m_rready_o = m_rready_r;
     assign ar_fire = m_arvalid_o & m_arready_i;
@@ -178,6 +180,7 @@ module ysyx_25050136_LSU
     always @(posedge clk) begin
         if(!resetn) begin
             m_awaddr_r  <= 0;
+            m_awsize_q  <= 0;
             m_bready_r  <= 0;
             aw_en       <= 0;
             w_en        <= 0;
@@ -191,6 +194,7 @@ module ysyx_25050136_LSU
                     if(fvalid_i & mem_wen_i) begin
                         state_write <= WRITE_RUNNING;
                         m_awaddr_r  <= mem_addr_i;
+                        m_awsize_q <= m_awsize_r;
                     end
                 end 
                 WRITE_RUNNING: begin
@@ -220,7 +224,7 @@ module ysyx_25050136_LSU
     assign m_awaddr_o  = m_awaddr_r;
     assign m_awid_o    = 0;
     assign m_awlen_o   = 0;
-    assign m_awsize_o  = m_awsize_r;
+    assign m_awsize_o  = m_awsize_q;
     assign m_awburst_o = 0;
     assign m_wvalid_o  = (state_write == WRITE_RUNNING) && ~w_en;
     assign m_wlast_o   = (state_write == WRITE_RUNNING) && ~w_en;
