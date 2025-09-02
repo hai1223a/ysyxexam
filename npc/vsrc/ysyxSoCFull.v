@@ -30084,14 +30084,14 @@ module APBSDRAM(	// home/yunhai/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:87
     .in_prdata  (auto_in_prdata),
     .sdram_clk  (sdram_bundle_clk),
     .sdram_cke  (sdram_bundle_cke),
-    .sdram_cs   (sdram_bundle_cs),
-    .sdram_ras  (sdram_bundle_ras),
-    .sdram_cas  (sdram_bundle_cas),
-    .sdram_we   (sdram_bundle_we),
+    .sdram_cs   ({2{sdram_bundle_cs}}),
+    .sdram_ras  ({2{sdram_bundle_ras}}),
+    .sdram_cas  ({2{sdram_bundle_cas}}),
+    .sdram_we   ({2{sdram_bundle_we}}),
     .sdram_a    (sdram_bundle_a),
     .sdram_ba   (sdram_bundle_ba),
-    .sdram_dqm  (sdram_bundle_dqm),
-    .sdram_dq   (sdram_bundle_dq)
+    .sdram_dqm  ({2{sdram_bundle_dqm}}),
+    .sdram_dq   ({2{sdram_bundle_dq}})
   );	// home/yunhai/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:91:24
 endmodule
 
