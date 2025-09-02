@@ -116,13 +116,13 @@ extern "C" void find_diff_skip() {
   if_skip = true;
 }
 
-uint64_t ifu_count = 0;
-uint64_t lsu_count = 0;
-uint64_t exu_count = 0;
-uint64_t ifu_count = 0;
-extern "C" void perform_counter(int32_t type) {
+// uint64_t ifu_count = 0;
+// uint64_t lsu_count = 0;
+// uint64_t exu_count = 0;
+// uint64_t ifu_count = 0;
+// extern "C" void perform_counter(int32_t type) {
 
-}
+// }
 
 uint32_t vaddr_read(uint32_t paddr)
 {
