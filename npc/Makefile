@@ -24,6 +24,7 @@ endif
 # 顶层模块和工具
 TOP_MODULE      := ysyxSoCFull
 VERILATOR_BIN   := verilator
+BIN = $(BUILD_DIR)/$(TOP_MODULE)
 
 # 编译目录
 BUILD_DIR = $(NPC_HOME)/build
@@ -48,23 +49,27 @@ VERILATOR_WNO   := $(addprefix -Wno-, PINCONNECTEMPTY DECLFILENAME UNUSEDSIGNAL 
       				   UNDRIVEN UNUSEDPARAM SYNCASYNCNET)
 
 # C/C++编译选项
-C_SANITIZE      := -fsanitize=address
-# C_SANITIZE		:= 
 INC_PATHS       := $(abspath ../include ../include/generated)
 CFLAGS          += $(addprefix -I, $(INC_PATHS))
 LDFLAGS         += -lreadline
 
 # Verilator编译选项
-VERILATOR_FLAGS += -Wall --cc -exe --build --x-assign fast --x-initial fast\
+VERILATOR_FLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
                    --timescale "1ns/1ns" --no-timing --autoflush\
                    --top-module $(TOP_MODULE) \
                    $(VERILATOR_INCS) \
-                   $(VERILATOR_WNO) \
 				   --Mdir $(NPC_HOME)/build/obj_dir \
-                   -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"
+
 
 ifdef CONFIG_FST
 VERILATOR_FLAGS += --trace-fst 
+endif
+ifdef CONFIG_WALL
+VERILATOR_FLAGS += -Wall $(VERILATOR_WNO)
+endif
+ifdef CONFIG_CC_ASAN
+CFLAGS += -fsanitize=address
+LDFLAGS += -fsanitize=address
 endif
 
 # 仿真参数
@@ -73,57 +78,38 @@ override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 #         			 -i $(NPC_HOME)/sim/test1.bin \
 
 #================第四步:NVBOARD========================
-
-include $(NPC_HOME)/scripts/config.mk
-$(shell rm -rf build)	
-$(shell rm -f $(WAVE_DIR)/*.fst)
-$(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
-
+-include $(NVBOARD_HOME)/scripts/nvboard.mk
 # rules for NVBoard 
 NXDC_FILES = constr/top.nxdc
-BIN = $(BUILD_DIR)/$(TOP_MODULE)
-
 # constraint file
 SRC_AUTO_BIND = $(abspath $(BUILD_DIR)/auto_bind.cpp)
 $(SRC_AUTO_BIND): $(NXDC_FILES)
 	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
 
-C_SRCS += $(SRC_AUTO_BIND)
 
-include $(NVBOARD_HOME)/scripts/nvboard.mk
+$(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
+NV_INC_PATHS = $(addprefix -I, $(INC_PATH))
 
-INCFLAGS = $(addprefix -I, $(INC_PATH))
-CXXFLAGS += $(INCFLAGS) -DTOP_NAME="\"V$(TOP_MODULE)\"" $(CFLAGS)
+#=================第五步:目标===========================
+-include $(NPC_HOME)/scripts/config.mk
 
-VERILATOR_RUN_FLAGS += -MMD --build -cc \
-					   --timescale "1ns/1ns" --no-timing --autoflush \
-					   -O3 --x-assign fast --x-initial fast --noassert \
-					   --top-module $(TOP_MODULE) \
-					   $(VERILATOR_INCS) \
-					   -CFLAGS "$(CXXFLAGS)" -LDFLAGS "$(LDFLAGS)"\
-					   --Mdir $(OBJ_DIR) --exe -o $(abspath $(BIN)) \
-
-ifdef CONFIG_FST
-VERILATOR_RUN_FLAGS += --trace-fst 
-endif
-
-$(BIN): $(V_SRCS) $(C_SRCS) $(NVBOARD_ARCHIVE)
-	$(VERILATOR_BIN) $^ $(VERILATOR_RUN_FLAGS) \
-		--top-module $(TOP_MODULE)  \
-
-nvboard: $(BIN)
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@$^ $(ARGS)
-#
-run: exe
-	./build/obj_dir/V$(TOP_MODULE) $(ARGS)
-
-gdb: exe
-	gdb --args build/obj_dir/V$(TOP_MODULE) $(ARGS)
+nv_exe: $(SRC_AUTO_BIND) $(NVBOARD_ARCHIVE) $(LIBCAPSTONE)
+	$(VERILATOR_BIN) $(V_SRCS) $(C_SRCS) $(SRC_AUTO_BIND) $(NVBOARD_ARCHIVE) $(VERILATOR_FLAGS) \
+					 -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS) $(NV_INC_PATHS) -DTOP_NAME="\"V$(TOPNAME)\"""--noassert -O3 \
 
 exe: $(LIBCAPSTONE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(VERILATOR_BIN) $(VERILATOR_FLAGS) $(V_SRCS) $(C_SRCS)
+	$(VERILATOR_BIN)  $(V_SRCS) $(C_SRCS) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"
+
+nvboard: nv_exe
+	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	@$(BIN) $(ARGS)
+
+run: exe
+	@$(BIN) $(ARGS)
+
+gdb: exe
+	gdb --args @$(BIN) $(ARGS)
 
 wave: run
 	gtkwave $(WAVE_DIR)/waveform.fst
@@ -132,6 +118,6 @@ clean:
 	rm -rf build
 	rm -f $(WAVE_DIR)/*.fst
 
-.PHONY: run sim exe wave clean
+.PHONY: run sim exe wave clean nv_exe nvboard
 
 include ../Makefile
