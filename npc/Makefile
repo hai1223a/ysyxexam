@@ -59,6 +59,7 @@ VERILATOR_FLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
                    --top-module $(TOP_MODULE) \
                    $(VERILATOR_INCS) \
 				   --Mdir $(NPC_HOME)/build/obj_dir \
+				   $(V_SRCS) $(C_SRCS) \
 
 
 ifdef CONFIG_FST
@@ -78,7 +79,7 @@ override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 #         			 -i $(NPC_HOME)/sim/test1.bin \
 
 #================第四步:NVBOARD========================
--include $(NVBOARD_HOME)/scripts/nvboard.mk
+CONFIG_TARGET_NVBOARD=y
 # rules for NVBoard 
 NXDC_FILES = constr/top.nxdc
 # constraint file
@@ -86,18 +87,20 @@ SRC_AUTO_BIND = $(abspath $(BUILD_DIR)/auto_bind.cpp)
 $(SRC_AUTO_BIND): $(NXDC_FILES)
 	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
 
-
-
-NV_CFLAGS = $(addprefix -I, $(INC_PATH)) -DTOP_NAME="\"V$(TOPNAME)\""
+ifdef CONFIG_TARGET_NVBOARD
+-include $(NVBOARD_HOME)/scripts/nvboard.mk
+CFLAGS += $(addprefix -I, $(INC_PATH)) -DTOP_NAME="\"V$(TOPNAME)\""
+C_SRCS += $(SRC_AUTO_BIND)
+VERILATOR_FLAGS += --noassert -O3 $(NVBOARD_ARCHIVE)
+endif
 
 #=================第五步:目标===========================
 -include $(NPC_HOME)/scripts/config.mk
 
 $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
-nv_exe: $(SRC_AUTO_BIND) $(NVBOARD_ARCHIVE) $(LIBCAPSTONE)
-	$(VERILATOR_BIN) $(V_SRCS) $(C_SRCS) $(SRC_AUTO_BIND) $(NVBOARD_ARCHIVE) $(VERILATOR_FLAGS) \
-					 -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS) $(NV_CFLAGS) "--noassert -O3 \
+nv_exe: $(LIBCAPSTONE)
+	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"
 
 exe: $(LIBCAPSTONE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
