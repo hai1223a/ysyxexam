@@ -61,7 +61,6 @@ VERILATOR_FLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
 				   --Mdir $(NPC_HOME)/build/obj_dir \
 				   $(V_SRCS) $(C_SRCS) \
 
-
 ifdef CONFIG_FST
 VERILATOR_FLAGS += --trace-fst 
 endif
@@ -72,7 +71,8 @@ ifdef CONFIG_CC_ASAN
 CFLAGS += -fsanitize=address
 LDFLAGS += -fsanitize=address
 endif
-
+# 依赖关系
+EXE_DEPEND += $(LIBCAPSTONE)
 # 仿真参数
 override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 					 -l $(NPC_HOME)/build/log/log.txt \
@@ -92,6 +92,7 @@ ifdef CONFIG_TARGET_NVBOARD
 CFLAGS += $(addprefix -I, $(INC_PATH)) -DTOP_NAME="\"V$(TOPNAME)\""
 C_SRCS += $(SRC_AUTO_BIND)
 VERILATOR_FLAGS += --noassert -O3 $(NVBOARD_ARCHIVE)
+EXE_DEPEND += $(SRC_AUTO_BIND) $(NVBOARD_ARCHIVE)
 endif
 
 #=================第五步:目标===========================
@@ -99,8 +100,8 @@ endif
 
 $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
-nv_exe: $(LIBCAPSTONE)
-	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"
+nv_exe: $(EXE_DEPEND)
+	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"	
 
 exe: $(LIBCAPSTONE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
