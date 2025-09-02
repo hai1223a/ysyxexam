@@ -24,7 +24,7 @@ endif
 # 顶层模块和工具
 TOP_MODULE      := ysyxSoCFull
 VERILATOR_BIN   := verilator
-BIN = $(BUILD_DIR)/V$(TOP_MODULE)
+BIN = $(OBJ_DIR)/V$(TOP_MODULE)
 
 # 编译目录
 BUILD_DIR = $(NPC_HOME)/build
