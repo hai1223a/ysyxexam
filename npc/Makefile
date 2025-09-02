@@ -54,7 +54,7 @@ CFLAGS          += $(addprefix -I, $(INC_PATHS))
 LDFLAGS         += -lreadline
 
 # Verilator编译选项
-VERILATOR_FLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast -O3 --noassert\
+VERILATOR_FLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
                    --timescale "1ns/1ns" --no-timing --autoflush\
                    --top-module $(TOP_MODULE) \
                    $(VERILATOR_INCS) \
@@ -79,7 +79,6 @@ override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 #         			 -i $(NPC_HOME)/sim/test1.bin \
 
 #================第四步:NVBOARD========================
-CONFIG_TARGET_NVBOARD=y
 # rules for NVBoard 
 NXDC_FILES = constr/top.nxdc
 # constraint file
