@@ -6,8 +6,8 @@ MEMORY {
   flash (rx)  : ORIGIN = 0x0f000000, LENGTH = 8K
 
 }
-REGION_ALIAS("ROM", flash);
-REGION_ALIAS("RAM", sdram);
+REGION_ALIAS("RAM", flash);
+REGION_ALIAS("ROM", sdram);
 
 _STACK_SIZE = 0x100;     /* 栈大小：64KB */
 SECTIONS {
