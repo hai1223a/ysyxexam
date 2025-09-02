@@ -127,7 +127,7 @@ module ysyx_25050136_LSU
         (mem_mask_i == 4'hF) ? |mem_addr_i[1:0] :    // word检查bit[1:0]
         1'b0;                                        // byte总是对齐
 
-    wire [31:0] m_araddr_r;
+    reg [31:0] m_araddr_r;
     // 读事务
     always @(posedge clk) begin
         if (!resetn) begin
