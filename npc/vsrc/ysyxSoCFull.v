@@ -30069,30 +30069,30 @@ module APBSDRAM(	// home/yunhai/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:87
   inout  [15:0] sdram_bundle_dq	// home/yunhai/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:89:26
 );
 
-  sdram_top_apb msdram (	// home/yunhai/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:91:24
-    .clock      (clock),
-    .reset      (reset),
-    .in_psel    (auto_in_psel),
-    .in_penable (auto_in_penable),
-    .in_pwrite  (auto_in_pwrite),
-    .in_paddr   (auto_in_paddr),
-    .in_pprot   (auto_in_pprot),
-    .in_pwdata  (auto_in_pwdata),
-    .in_pstrb   (auto_in_pstrb),
-    .in_pready  (auto_in_pready),
-    .in_pslverr (auto_in_pslverr),
-    .in_prdata  (auto_in_prdata),
-    .sdram_clk  (sdram_bundle_clk),
-    .sdram_cke  (sdram_bundle_cke),
-    .sdram_cs   ({2{sdram_bundle_cs}}),
-    .sdram_ras  ({2{sdram_bundle_ras}}),
-    .sdram_cas  ({2{sdram_bundle_cas}}),
-    .sdram_we   ({2{sdram_bundle_we}}),
-    .sdram_a    (sdram_bundle_a),
-    .sdram_ba   (sdram_bundle_ba),
-    .sdram_dqm  ({2{sdram_bundle_dqm}}),
-    .sdram_dq   ({sdram_bundle_dq, sdram_bundle_dq})
-  );	// home/yunhai/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:91:24
+  // sdram_top_apb msdram (	// home/yunhai/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:91:24
+  //   .clock      (clock),
+  //   .reset      (reset),
+  //   .in_psel    (auto_in_psel),
+  //   .in_penable (auto_in_penable),
+  //   .in_pwrite  (auto_in_pwrite),
+  //   .in_paddr   (auto_in_paddr),
+  //   .in_pprot   (auto_in_pprot),
+  //   .in_pwdata  (auto_in_pwdata),
+  //   .in_pstrb   (auto_in_pstrb),
+  //   .in_pready  (auto_in_pready),
+  //   .in_pslverr (auto_in_pslverr),
+  //   .in_prdata  (auto_in_prdata),
+  //   .sdram_clk  (sdram_bundle_clk),
+  //   .sdram_cke  (sdram_bundle_cke),
+  //   .sdram_cs   ({2{sdram_bundle_cs}}),
+  //   .sdram_ras  ({2{sdram_bundle_ras}}),
+  //   .sdram_cas  ({2{sdram_bundle_cas}}),
+  //   .sdram_we   ({2{sdram_bundle_we}}),
+  //   .sdram_a    (sdram_bundle_a),
+  //   .sdram_ba   (sdram_bundle_ba),
+  //   .sdram_dqm  ({2{sdram_bundle_dqm}}),
+  //   .sdram_dq   ({sdram_bundle_dq, sdram_bundle_dq})
+  // );	// home/yunhai/ysyx-workbench/ysyxSoC/src/device/SDRAM.scala:91:24
 endmodule
 
 module AXI4ToAPB(	// home/yunhai/ysyx-workbench/ysyxSoC/src/amba/AXI4ToAPB.scala:45:25
