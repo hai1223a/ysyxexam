@@ -2679,7 +2679,7 @@ module CPU(	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:33:9
   output        slave_rlast	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:36:19
 );
 
-  ysyx_00000000 cpu (	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:38:21
+  ysyx_25050136 cpu (	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:38:21
     .clock                   (clock),
     .reset                   (reset),
     .io_interrupt            (interrupt),
