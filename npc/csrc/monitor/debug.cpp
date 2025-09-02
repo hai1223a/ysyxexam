@@ -90,8 +90,12 @@ static void init_verilator(int argc, char *argv[])
   // 打开波形文件
   tfp->open("wave/waveform.fst");
 #endif
+#ifdef CONFIG_TARGET_NVBOARD
+  // NVBOARD初始化引脚
   nvboard_bind_all_pins(top);
+  // NVBOARD初始化
   nvboard_init();
+#endif
 }
 //=====================================================
 // 用于初始化cpu
@@ -134,7 +138,8 @@ void printf_statu()
 
 void npc_end()
 {
-  nvboard_quit();
+  
+  IFDEF(CONFIG_TARGET_NVBOARD, nvboard_quit(););
   IFDEF(CONFIG_ITRACE, print_iringbuf());
   // 输出完成状态
   printf_statu();

@@ -35,7 +35,7 @@ LOG_DIR = $(BUILD_DIR)/log
 # 源文件
 C_SRCS          := $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
 V_SRCS          := $(shell find vsrc -type f -name "*.v")
-VERILATOR_INCS  := $(addprefix -I, vsrc vsrc/perip/uart16550/rtl vsrc/perip/spi/rtl)
+VERILATOR_INCS  := $(addprefix -I, vsrc vsrc/perip/uart16550/rtl vsrc/perip/spi/rtl)          
 
 # Verilator警告抑制选项
 # PINCONNECTEMPTY: 实例化时有端口未连接, .accept_o(),
@@ -100,16 +100,9 @@ endif
 
 $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
-nv_exe: $(EXE_DEPEND)
+exe: $(EXE_DEPEND)
+	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"	
-
-exe: $(LIBCAPSTONE)
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(VERILATOR_BIN)  $(V_SRCS) $(C_SRCS) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"
-
-nvboard: nv_exe
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	@$(BIN) $(ARGS)
 
 run: exe
 	@$(BIN) $(ARGS)
@@ -124,6 +117,6 @@ clean:
 	rm -rf build
 	rm -f $(WAVE_DIR)/*.fst
 
-.PHONY: run sim exe wave clean nv_exe nvboard
+.PHONY: run sim exe wave clean
 
 include ../Makefile
