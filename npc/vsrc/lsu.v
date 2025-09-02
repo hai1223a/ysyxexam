@@ -127,16 +127,13 @@ module ysyx_25050136_LSU
         (mem_mask_i == 4'hF) ? |mem_addr_i[1:0] :    // word检查bit[1:0]
         1'b0;                                        // byte总是对齐
 
-    reg [31:0] m_araddr_r;
     // 读事务
     always @(posedge clk) begin
         if (!resetn) begin
             state_read   <= READ_IEDL;
             m_arvalid_r  <= 0;
             m_rready_r   <= 0;
-            m_araddr_r   <= 0;
         end else begin
-            m_araddr_r <= mem_addr_i;
             case (state_read)
                 READ_IEDL: begin
                     m_rready_r <= 1;
@@ -166,7 +163,7 @@ module ysyx_25050136_LSU
     end
 
     assign m_arvalid_o = (state_read == READ_ADDR);
-    assign m_araddr_o  = m_araddr_r;
+    assign m_araddr_o  = (state_read == READ_ADDR) ? mem_addr_i : 0;
     assign m_arid_o = 0;
     assign m_arlen_o = 0;
     assign m_arsize_o = m_arsize_r;
@@ -216,7 +213,7 @@ module ysyx_25050136_LSU
     end
 
     assign m_awvalid_o = (state_write == WRITE_RUNNING) && ~aw_en;
-    assign m_awaddr_o  = m_araddr_r;
+    assign m_awaddr_o  = ((state_write == WRITE_RUNNING) && ~aw_en) ? mem_addr_i : 0;
     assign m_awid_o    = 0;
     assign m_awlen_o   = 0;
     assign m_awsize_o  = m_awsize_r;
