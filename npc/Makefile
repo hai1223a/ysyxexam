@@ -87,15 +87,17 @@ $(SRC_AUTO_BIND): $(NXDC_FILES)
 	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
 
 
-$(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
-NV_INC_PATHS = $(addprefix -I, $(INC_PATH))
+
+NV_CFLAGS = $(addprefix -I, $(INC_PATH)) -DTOP_NAME="\"V$(TOPNAME)\""
 
 #=================第五步:目标===========================
 -include $(NPC_HOME)/scripts/config.mk
 
+$(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
+
 nv_exe: $(SRC_AUTO_BIND) $(NVBOARD_ARCHIVE) $(LIBCAPSTONE)
 	$(VERILATOR_BIN) $(V_SRCS) $(C_SRCS) $(SRC_AUTO_BIND) $(NVBOARD_ARCHIVE) $(VERILATOR_FLAGS) \
-					 -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS) $(NV_INC_PATHS) -DTOP_NAME="\"V$(TOPNAME)\"""--noassert -O3 \
+					 -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS) $(NV_CFLAGS) "--noassert -O3 \
 
 exe: $(LIBCAPSTONE)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
