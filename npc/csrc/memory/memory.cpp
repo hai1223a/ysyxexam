@@ -57,13 +57,17 @@ long init_imem(char *img_file)
   fclose(fp); 
   return size;
 }
+
 extern "C" int pmem_read(int raddr) {assert(0);}
+
 extern "C" void pmem_write(int waddr, int wdata, int wmask) {assert(0);}
+
 extern "C" void flash_read(int32_t addr, int32_t *data) {
   uint32_t raddr = addr & (~0x3);
   Assert((raddr < CONFIG_IMEM_SIZE), "FLASH模块读地址越界");
   *data = *(int32_t *)(imem + raddr);
 }
+
 extern "C" void mrom_read(int32_t addr, int32_t *data) {
   uint32_t raddr = addr & (~0x3);
   Assert(in_imem(raddr), "MROM模块读地址越界");
@@ -107,8 +111,17 @@ extern "C" void find_addr_0() {
   Log("你正在对地址0进行读写");
   set_nemu_state(NPC_END, SOC_PC, 3);
 }
+
 extern "C" void find_diff_skip() {
   if_skip = true;
+}
+
+uint64_t ifu_count = 0;
+uint64_t lsu_count = 0;
+uint64_t exu_count = 0;
+uint64_t ifu_count = 0;
+extern "C" void perform_counter(int32_t type) {
+
 }
 
 uint32_t vaddr_read(uint32_t paddr)
