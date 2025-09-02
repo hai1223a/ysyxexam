@@ -2,14 +2,14 @@
 ENTRY(_start)
 
 MEMORY {
-  sdram (rwx) : ORIGIN = 0xa0000000, LENGTH = 64M
-  flash (rx)  : ORIGIN = 0x30000000, LENGTH = 16M
+  sdram (rwx) : ORIGIN = 0x20000000, LENGTH = 4K
+  flash (rx)  : ORIGIN = 0x0f000000, LENGTH = 8K
 
 }
 REGION_ALIAS("ROM", flash);
 REGION_ALIAS("RAM", sdram);
 
-_STACK_SIZE = 0x10000;     /* 栈大小：64KB */
+_STACK_SIZE = 0x100;     /* 栈大小：64KB */
 SECTIONS {
   .entry : {
     *(entry)

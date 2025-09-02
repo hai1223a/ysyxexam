@@ -54,7 +54,7 @@ CFLAGS          += $(addprefix -I, $(INC_PATHS))
 LDFLAGS         += -lreadline
 
 # Verilator编译选项
-VERILATOR_FLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast --noassert -O3\
+VERILATOR_FLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
                    --timescale "1ns/1ns" --no-timing --autoflush\
                    --top-module $(TOP_MODULE) \
                    $(VERILATOR_INCS) \
