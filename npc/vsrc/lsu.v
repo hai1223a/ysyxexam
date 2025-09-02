@@ -216,7 +216,7 @@ module ysyx_25050136_LSU
     end
 
     assign m_awvalid_o = (state_write == WRITE_RUNNING) && ~aw_en;
-    assign m_awaddr_o  = mem_addr_i;
+    assign m_awaddr_o  = m_araddr_r;
     assign m_awid_o    = 0;
     assign m_awlen_o   = 0;
     assign m_awsize_o  = m_awsize_r;
