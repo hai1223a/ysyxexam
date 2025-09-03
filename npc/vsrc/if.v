@@ -64,6 +64,7 @@ module ysyx_25050136_IF
                 READ_ADDR: begin
                     m_rready_r <= 1;
                     if (ar_fire) begin
+                        m_araddr_r <= 0;
                         state_read <= READ_DATA;                        
                     end
                 end 
@@ -73,7 +74,6 @@ module ysyx_25050136_IF
                         `ifdef VERILATOR_DPIC
                             ifu_get();
                         `endif
-                            m_araddr_r <= 0;
                             state_read <= READ_IEDL;
                         end
                         inst_r <= m_rdata_i; 
