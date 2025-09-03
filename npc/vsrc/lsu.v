@@ -148,6 +148,8 @@ module ysyx_25050136_LSU
                 READ_ADDR: begin
                     m_rready_r <= 1;
                     if (ar_fire) begin
+                        m_araddr_r <= 0;
+                        m_arsize_q <= 0;
                         state_read <= READ_DATA;                        
                     end
                 end 
@@ -200,6 +202,8 @@ module ysyx_25050136_LSU
                 WRITE_RUNNING: begin
                     m_bready_r <= 1;
                     if(aw_fire) begin
+                        m_awaddr_r  <= 0;
+                        m_awsize_q <= 0;
                         aw_en <= 1;
                     end
                     if(w_fire) begin
