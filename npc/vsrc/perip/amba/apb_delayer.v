@@ -47,7 +47,7 @@ module apb_delayer(
       end else begin
         if(!active && apb_start) begin
           active <= 1;
-          count_q <= count_q + 16'd3;
+          count_q <= count_q + 16'd2;
           count <= count + R_S;
         end else if(active) begin
           if(apb_end) begin
@@ -80,8 +80,8 @@ module apb_delayer(
   assign out_pwdata  = in_pwdata;
   assign out_pstrb   = in_pstrb;
 
-  assign in_pready   = (count == 0) ? in_pready_r : 0;
-  assign in_prdata   = (count == 0) ? in_prdata_r : 0;
-  assign in_pslverr  = (count == 0) ? in_pslverr_r : 0;
+  assign in_pready   = (count == 1) ? in_pready_r : 0;
+  assign in_prdata   = (count == 1) ? in_prdata_r : 0;
+  assign in_pslverr  = (count == 1) ? in_pslverr_r : 0;
 
 endmodule
