@@ -1,7 +1,14 @@
 `include "config.v"
 `ifdef VERILATOR_DPIC
 import "DPI-C" function void find_addr_0(); 
+import "DPI-C" function void find_ebreak();
+import "DPI-C" function void find_resp();
+import "DPI-C" function void lsu_get();
+import "DPI-C" function void bqu_get();
+import "DPI-C" function void csru_get();
+import "DPI-C" function void alu_get();
 `endif
+
 module ysyx_25050136(
     input               clock             ,
     input               reset             ,

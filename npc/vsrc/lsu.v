@@ -1,7 +1,3 @@
-`ifdef VERILATOR_DPIC
-import "DPI-C" function void find_diff_skip();
-import "DPI-C" function void lsu_get();
-`endif
 module ysyx_25050136_LSU
     #(
          DATA_WIDTH = 32
@@ -161,9 +157,6 @@ module ysyx_25050136_LSU
                 READ_DATA: begin
                     if (r_fire) begin
                         if(m_rlast_i) begin
-                        `ifdef VERILATOR_DPIC
-                            lsu_get();
-                        `endif
                             state_read <= READ_IEDL;
                         end
                         m_rready_r <= 0;
@@ -223,9 +216,6 @@ module ysyx_25050136_LSU
                 end
                 WRITE_WAIT: begin
                     if(b_fire) begin
-                        `ifdef VERILATOR_DPIC
-                            lsu_get();
-                        `endif
                         m_bready_r  <= 0;
                         state_write <= WRITE_IDLE;
                     end 
