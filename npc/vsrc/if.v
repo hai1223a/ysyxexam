@@ -1,5 +1,5 @@
 `ifdef VERILATOR_DPIC
-import "DPI-C" function void perform_counter(int input type);
+import "DPI-C" function void ifu_get();
 `endif
 module ysyx_25050136_IF
     #(
@@ -67,7 +67,7 @@ module ysyx_25050136_IF
                     if (r_fire) begin
                         if(m_rlast_i) begin
                         `ifdef VERILATOR_DPIC
-                            perform_counter(0);
+                            ifu_get();
                         `endif
                             state_read <= READ_IEDL;
                         end
