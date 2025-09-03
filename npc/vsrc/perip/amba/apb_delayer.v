@@ -47,7 +47,7 @@ module apb_delayer(
       end else begin
         if(!active && apb_start) begin
           active <= 1;
-          count_q <= count_q + 16'd2;
+          count_q <= count_q + 16'd1;
           count <= count + R_S;
         end else if(active) begin
           if(apb_end) begin
