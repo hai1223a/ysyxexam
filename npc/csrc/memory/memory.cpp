@@ -132,7 +132,7 @@ NPC_perforcount npc_perC = {0};
 extern "C" void ifu_get()  {npc_perC.ifu_count++;}
 extern "C" void lsu_get()  {npc_perC.lsu_count++;}
 extern "C" void bqu_get()  {npc_perC.bqu_count++;}
-extern "C" void csru_get() {npc_perC.csr_count++;}
+extern "C" void csru_get() {npc_perC.csru_count++;}
 extern "C" void alu_get()  {npc_perC.alu_count++;}
 
 uint32_t vaddr_read(uint32_t paddr)
