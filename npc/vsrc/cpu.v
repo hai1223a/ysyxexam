@@ -2,6 +2,11 @@
 `ifdef VERILATOR_DPIC
 import "DPI-C" function void find_ebreak();
 import "DPI-C" function void find_resp();
+
+import "DPI-C" function void lsu_get();
+import "DPI-C" function void bqu_get();
+import "DPI-C" function void csru_get();
+import "DPI-C" function void alu_get();
 `endif
 module ysyx_25050136_NPC
 #(
@@ -102,6 +107,21 @@ always @(*) begin
     if(|(inst_rresp_i | mem_bresp_i | mem_rresp_i))
         find_resp();
 end
+always @(posedge clk) begin
+    if(!reset) begin
+        if(if2ex_bvalid_o) begin
+            if(id2ex_fu_o[`ysyx_25050136_CSRU]) begin
+                csru_get();
+            end else if(id2ex_fu_o[`ysyx_25050136_LSU]) begin
+                lsu_get();
+            end else if(id2ex_fu_o[`ysyx_25050136_BQU]) begin
+                bqu_get();
+            end else if(id2ex_fu_o[`ysyx_25050136_ALU]) begin
+                alu_get();
+            end
+        end
+    end
+end
 `endif
 //========================================
 // 子模块
@@ -111,7 +131,7 @@ ysyx_25050136_IF #(
 )
 u_ysyx_25050136_IF(
     .clk             	(clk                 ),
-    .resetn          	(~reset              ),
+    .reset          	(reset               ),
     .m_arvalid_o     	(inst_arvalid_o      ),
     .m_arready_i     	(inst_arready_i      ),
     .m_araddr_o      	(inst_araddr_o       ),

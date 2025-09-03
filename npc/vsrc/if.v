@@ -7,7 +7,7 @@ module ysyx_25050136_IF
      )
      (
          input                      clk             ,
-         input                      resetn          ,
+         input                      reset          ,
          // 读地址
          output                     m_arvalid_o     ,
          input                      m_arready_i     ,
@@ -45,7 +45,7 @@ module ysyx_25050136_IF
 
     reg [1:0] state_read;
     always @(posedge clk) begin
-        if (!resetn) begin
+        if (reset) begin
             state_read   <= READ_IEDL;
             pc           <= 0;
             m_rready_r   <= 0;

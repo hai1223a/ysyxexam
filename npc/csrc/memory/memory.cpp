@@ -116,7 +116,7 @@ extern "C" void find_diff_skip() {
   if_skip = true;
 }
 
-NPC_perforcount npc_perforcount = {0};
+NPC_perforcount npc_perC = {0};
 // uint64_t alu_instr_cnt = 0;
 // uint64_t load_instr_cnt = 0;
 // uint64_t store_instr_cnt = 0;
@@ -129,8 +129,11 @@ NPC_perforcount npc_perforcount = {0};
 // uint64_t branch_cycle_sum = 0;
 // uint64_t csr_cycle_sum = 0;
 
-extern "C" void ifu_get() {npc_perforcount.ifu_count++;}
-extern "C" void lsu_get() {npc_perforcount.lsu_count++;}
+extern "C" void ifu_get()  {npc_perC.ifu_count++;}
+extern "C" void lsu_get()  {npc_perC.lsu_count++;}
+extern "C" void bqu_get()  {npc_perC.bqu_count++;}
+extern "C" void csru_get() {npc_perC.csr_count++;}
+extern "C" void alu_get()  {npc_perC.alu_count++;}
 
 uint32_t vaddr_read(uint32_t paddr)
 {
