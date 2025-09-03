@@ -63,6 +63,7 @@ wire [31:0] wb_dat_i, wb_dat_o;
 wire [4:0] wb_adr_i;
 wire [3:0] wb_sel_i;
 wire wb_we_i, wb_stb_i, wb_cyc_i, wb_ack_o, wb_err_o;
+wire apb_start = in_psel & !in_penable;
 wire in_flash = (in_paddr >= flash_addr_start) && (in_paddr <= flash_addr_end);
 wire xip_ready, xip_slverr;
 wire [31:0] xip_rdata;
@@ -78,10 +79,10 @@ always @(posedge clock) begin
   if (reset) begin
     flash_config_good <= 0;  
   end else begin
-    if(in_flash & in_psel) begin
+    if(in_flash & apb_start) begin
       flash_config_good <= 1;
     end else begin
-      if(in_psel && !in_penable) begin
+      if(apb_start) begin
         flash_config_good <= 0;  
       end
     end
@@ -93,7 +94,7 @@ always @(posedge clock) begin
   end else begin
     case (state)
         IDLE: begin
-          if(in_flash & in_psel) begin
+          if(in_flash & apb_start) begin
             if(flash_config_good) begin
               state <= W_CMD;
             end else begin
@@ -195,7 +196,7 @@ always @(posedge clock) begin
   end else begin
     case (spi_state)
         SPI_IDLE: begin
-          if(in_flash & in_psel) begin
+          if(in_flash & in_penable) begin
             spi_state <= SPI_SETUP;
           end 
         end
