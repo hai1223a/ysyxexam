@@ -26,6 +26,7 @@ module ysyx_25050136_IF
          // 内部 
          input                      dynamic_valid_i ,
          input    [DATA_WIDTH-1:0]  dynamic_npc_i   ,
+         output   [DATA_WIDTH-1:0]  pc_o            ,
          output   [DATA_WIDTH-1:0]  static_npc_o    ,
          output   [31:0]            inst_o          ,
          input                      bready_i        ,   // 该信号有EX模块告知可以进行下一条指令了
@@ -35,6 +36,7 @@ module ysyx_25050136_IF
     reg [DATA_WIDTH-1:0] pc;
     reg m_rready_r;
     reg [31:0] inst_r;
+    reg [DATA_WIDTH-1:0] m_araddr_r;
     wire ar_fire, r_fire;
     localparam READ_IEDL = 2'd0;
     localparam READ_ADDR = 2'd1;
@@ -48,12 +50,14 @@ module ysyx_25050136_IF
             pc           <= 0;
             m_rready_r   <= 0;
             inst_r       <= 0;
+            m_araddr_r   <= 0;
         end else begin
             case(state_read)
                 READ_IEDL: begin
                     m_rready_r <= 1;
                     if (bready_i) begin
                         state_read <= READ_ADDR;
+                        m_araddr_r <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
                         pc <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
                     end
                 end 
@@ -69,6 +73,7 @@ module ysyx_25050136_IF
                         `ifdef VERILATOR_DPIC
                             ifu_get();
                         `endif
+                            m_araddr_r <= 0;
                             state_read <= READ_IEDL;
                         end
                         inst_r <= m_rdata_i; 
@@ -84,8 +89,9 @@ module ysyx_25050136_IF
     assign static_npc_o = (pc == 0) ? RESET_PC : (pc + 32'h4);
     assign bvalid_o = (state_read == READ_DATA) && r_fire & m_rlast_i & (m_rresp_i == 2'd0);
     assign inst_o = (state_read == READ_IEDL) ? inst_r : m_rdata_i;
+    assign pc_o = pc;
     assign m_arvalid_o = (state_read == READ_ADDR);
-    assign m_araddr_o  = pc;
+    assign m_araddr_o  = m_araddr_r;
     assign m_arid_o = 0;
     assign m_arlen_o = 0;
     assign m_arsize_o = 3'b010;
