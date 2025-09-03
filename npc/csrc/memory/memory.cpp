@@ -119,9 +119,37 @@ extern "C" void find_diff_skip() {
 // uint64_t ifu_count = 0;
 // uint64_t lsu_count = 0;
 // uint64_t exu_count = 0;
-// uint64_t ifu_count = 0;
-// extern "C" void perform_counter(int32_t type) {
 
+// uint64_t alu_instr_cnt = 0;
+// uint64_t load_instr_cnt = 0;
+// uint64_t store_instr_cnt = 0;
+// uint64_t branch_instr_cnt = 0;
+// uint64_t csr_instr_cnt = 0;
+
+// uint64_t alu_cycle_sum = 0;
+// uint64_t load_cycle_sum = 0;
+// uint64_t store_cycle_sum = 0;
+// uint64_t branch_cycle_sum = 0;
+// uint64_t csr_cycle_sum = 0;
+
+// extern "C" void perform_counter(int32_t type) {
+//   switch (type)
+//   {
+//   case 0:  ifu_count++;        break;
+//   case 1:  lsu_count++;        break;
+//   case 2:  exu_count++;        break;
+//   case 3:  alu_instr_cnt++;    break;
+//   case 4:  load_instr_cnt++;   break;
+//   case 5:  store_instr_cnt++;  break;
+//   case 6:  branch_instr_cnt++; break;
+//   case 7:  csr_instr_cnt++;    break;
+//   case 8:  alu_cycle_sum++;    break;
+//   case 9:  load_cycle_sum++;   break;
+//   case 10: store_cycle_sum++;  break;
+//   case 11: branch_cycle_sum++; break;
+//   case 12: csr_cycle_sum++;    break;
+//   default:                     break;
+//   }
 // }
 
 uint32_t vaddr_read(uint32_t paddr)
