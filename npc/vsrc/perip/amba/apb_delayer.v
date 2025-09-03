@@ -58,7 +58,7 @@ module apb_delayer(
             count <= (count >> S) - {16'd0, count_q}; 
             count_q <= 0;
           end else begin
-            count_q <= count_q + 8'd1;
+            count_q <= count_q + 16'd1;
             count <= count + R_S;
           end
         end else if(!active) begin
