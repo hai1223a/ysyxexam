@@ -1,6 +1,6 @@
 `ifdef VERILATOR_DPIC
 import "DPI-C" function void find_diff_skip();
-import "DPI-C" function lsu_get();
+import "DPI-C" function void lsu_get();
 `endif
 module ysyx_25050136_LSU
     #(
