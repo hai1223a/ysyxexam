@@ -1,3 +1,4 @@
+`include "config.v"
 `ifdef VERILATOR_DPIC
 import "DPI-C" function void find_addr_0(); 
 `endif
@@ -79,13 +80,11 @@ module ysyx_25050136(
 );
 `ifdef VERILATOR_DPIC
     always @(*) begin
-        // if ((io_master_awvalid & io_master_awready & (io_master_awaddr == 0)) |
-        //     (io_master_arvalid & io_master_arready & (io_master_araddr == 0)) )
-        // begin
-        //     find_addr_0();
-        // end
-        if(!reset)
+        if ((io_master_awvalid & io_master_awready & (io_master_awaddr == 0)) |
+            (io_master_arvalid & io_master_arready & (io_master_araddr == 0)) )
+        begin
             find_addr_0();
+        end
     end
 `endif
     localparam TOP_ADDR_WIDTH   = 5 ;

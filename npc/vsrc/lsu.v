@@ -1,4 +1,7 @@
+`ifdef VERILATOR_DPIC
 import "DPI-C" function void find_diff_skip();
+import "DPI-C" function perform_counter(input int type);
+`endif
 module ysyx_25050136_LSU
     #(
          DATA_WIDTH = 32
@@ -78,12 +81,14 @@ module ysyx_25050136_LSU
     wire aw_fire, w_fire, b_fire;
     // 内部
     assign byte_sel = 4'b1 << mem_addr_i[1:0];
+`ifdef VERILATOR_DPIC
     always @(*) begin
         if ((!((mem_addr_i >= 32'ha0000000) & (mem_addr_i < 32'ha2000000))) & (mem_wen_i | mem_ren_i))
         begin
             find_diff_skip();
         end
     end
+`endif
     always @(*) begin
         // 默认值
         m_wdata_r = 0;
@@ -156,6 +161,9 @@ module ysyx_25050136_LSU
                 READ_DATA: begin
                     if (r_fire) begin
                         if(m_rlast_i) begin
+                        `ifdef VERILATOR_DPIC
+                            perform_counter(1);
+                        `endif
                             state_read <= READ_IEDL;
                         end
                         m_rready_r <= 0;
@@ -215,6 +223,9 @@ module ysyx_25050136_LSU
                 end
                 WRITE_WAIT: begin
                     if(b_fire) begin
+                        `ifdef VERILATOR_DPIC
+                            perform_counter(1);
+                        `endif
                         m_bready_r  <= 0;
                         state_write <= WRITE_IDLE;
                     end 

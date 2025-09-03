@@ -1,6 +1,6 @@
-// `ifdef VERILATOR_DPIC
-// import "DPI-C" function perform_counter(input int type);
-// `endif
+`ifdef VERILATOR_DPIC
+import "DPI-C" function perform_counter(input int type);
+`endif
 module ysyx_25050136_IF
     #(
          DATA_WIDTH = 32
@@ -66,7 +66,9 @@ module ysyx_25050136_IF
                 READ_DATA: begin
                     if (r_fire) begin
                         if(m_rlast_i) begin
-                            // perform_counter(0);
+                        `ifdef VERILATOR_DPIC
+                            perform_counter(0);
+                        `endif
                             state_read <= READ_IEDL;
                         end
                         inst_r <= m_rdata_i; 
