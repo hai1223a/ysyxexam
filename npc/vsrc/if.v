@@ -1,5 +1,5 @@
 `ifdef VERILATOR_DPIC
-import "DPI-C" function perform_counter(input int type);
+import "DPI-C" function void perform_counter(int type);
 `endif
 module ysyx_25050136_IF
     #(
