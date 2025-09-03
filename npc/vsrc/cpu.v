@@ -67,7 +67,7 @@ module ysyx_25050136_NPC
 // 顶层信号定义
 //========================================
 // IF输出
-wire [DATA_WIDTH-1:0] if2id_static_npc_o;
+wire [DATA_WIDTH-1:0] if2id_static_npc_o, if2id_ex_pc_o;
 wire [31:0] if2id_inst_o;
 wire if2ex_bvalid_o;
 // ID输出
@@ -129,6 +129,7 @@ u_ysyx_25050136_IF(
     .dynamic_npc_i   	(ex2if_jump_addr_o   ),
     .static_npc_o    	(if2id_static_npc_o  ),
     .inst_o          	(if2id_inst_o        ),
+    .pc_o               (if2id_ex_pc_o       ),
     .bready_i        	(ex2if_fready_o      ),
     .bvalid_o        	(if2ex_bvalid_o      )
 );
@@ -140,7 +141,7 @@ ysyx_25050136_ID #(
 )
 u_ysyx_25050136_ID(
     .inst_i   	    (if2id_inst_o         ),
-    .pc_i           (inst_araddr_o        ),
+    .pc_i           (if2id_ex_pc_o        ),
     .static_npc_i   (if2id_static_npc_o   ),
     .rdata1_i 	    (reg2id_rdata1_o      ),
     .raddr1_o 	    (id2reg_raddr1_o      ),
@@ -188,7 +189,7 @@ ysyx_25050136_EX #(
 u_ysyx_25050136_EX(
     .clk          	(clk                 ),
     .reset        	(reset               ),
-    .pc_i         	(inst_araddr_o       ),
+    .pc_i         	(if2id_ex_pc_o       ),
     .rd_en_i      	(id2reg_rd_en_o      ),
     .fu_i         	(id2ex_fu_o          ),
     .alu_op_i     	(id2ex_alu_op_o      ),
