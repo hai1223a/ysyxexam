@@ -4,7 +4,7 @@ module ysyx_25050136_IF
      )
      (
          input                      clk             ,
-         input                      reset          ,
+         input                      reset           ,
          // 读地址
          output                     m_arvalid_o     ,
          input                      m_arready_i     ,
