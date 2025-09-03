@@ -155,7 +155,7 @@ u_ysyx_25050136_IF(
     .dynamic_npc_i   	(ex2if_jump_addr_o   ),
     .static_npc_o    	(if2id_static_npc_o  ),
     .inst_o          	(if2id_inst_o        ),
-    .pc_o               (id2ex_pc_o          ),
+    .pc_o               (if2id_pc_o          ),
     .bready_i        	(ex2if_fready_o      ),
     .bvalid_o        	(if2ex_bvalid_o      )
 );
