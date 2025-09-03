@@ -8,6 +8,8 @@ import "DPI-C" function void lsu_get();
 import "DPI-C" function void bqu_get();
 import "DPI-C" function void csru_get();
 import "DPI-C" function void alu_get();
+import "DPI-C" function void if_cycle_get();
+import "DPI-C" function void lsu_cycle_get();
 `endif
 
 module ysyx_25050136(
