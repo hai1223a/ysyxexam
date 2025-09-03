@@ -218,7 +218,7 @@ ysyx_25050136_EX #(
 u_ysyx_25050136_EX(
     .clk          	(clk                 ),
     .reset        	(reset               ),
-    .pc_i         	(if2id_ex_pc_o       ),
+    .pc_i         	(id2ex_pc_o          ),
     .rd_en_i      	(id2reg_rd_en_o      ),
     .fu_i         	(id2ex_fu_o          ),
     .alu_op_i     	(id2ex_alu_op_o      ),
