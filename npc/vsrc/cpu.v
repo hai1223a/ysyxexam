@@ -123,8 +123,8 @@ always @(posedge clk) begin
         if(inst_rvalid_i) if_wait <= 0;
         if(mem_awvalid_o | mem_arvalid_o) lsu_wait <= 1;
         if(mem_bvalid_i | mem_bvalid_i) lsu_wait <= 0;
-        if(if_wait) if_cycle_get();
-        if(lsu_wait) lsu_cycle_get();
+        if(if_wait | inst_arvalid_o) if_cycle_get();
+        if(lsu_wait | mem_awvalid_o | mem_arvalid_o) lsu_cycle_get();
     end
 end
 `endif
