@@ -278,6 +278,8 @@ module ysyx_25050136_ID
     //         pc_r         <= 0;            
     //     end
     // end
+    assign pc_t = pc_i;
+
     assign      raddr1_o =     raddr1_t;
     assign      raddr2_o =     raddr2_t;
     assign          fu_o =         fu_t;
