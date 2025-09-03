@@ -1,6 +1,3 @@
-`ifdef VERILATOR_DPIC
-import "DPI-C" function void ifu_get();
-`endif
 module ysyx_25050136_IF
     #(
          DATA_WIDTH = 32

@@ -4,6 +4,7 @@ import "DPI-C" function void find_addr_0();
 import "DPI-C" function void find_ebreak();
 import "DPI-C" function void find_resp();
 import "DPI-C" function void find_diff_skip(); 
+import "DPI-C" function void ifu_get();
 import "DPI-C" function void lsu_get();
 import "DPI-C" function void bqu_get();
 import "DPI-C" function void csru_get();
