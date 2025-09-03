@@ -55,7 +55,7 @@ module apb_delayer(
             in_pslverr_r <= out_pslverr;
             in_prdata_r  <= out_prdata;
             active <= 0;
-            count <= (count >> S) - count_q; 
+            count <= (count >> S) - {16'd0, count_q}; 
             count_q <= 0;
           end else begin
             count_q <= count_q + 8'd1;
