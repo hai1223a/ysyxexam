@@ -69,7 +69,7 @@ module ysyx_25050136_NPC
 // IF输出
 wire [DATA_WIDTH-1:0] if2id_static_npc_o;
 wire [31:0] if2id_inst_o;
-wire if2id_bvalid_o;
+wire if2ex_bvalid_o;
 // ID输出
 wire [ADDR_WIDTH-1:0] id2reg_raddr1_o,id2reg_raddr2_o,id2reg_rd_o;
 wire id2reg_rd_en_o;
@@ -81,9 +81,7 @@ wire [`ysyx_25050136_CSRU_OP_NUM-1:0] id2ex_csru_op_o;
 wire [DATA_WIDTH-1:0] id2ex_alu_opd1_o, id2ex_alu_opd2_o, id2ex_lsu_opd1_o,
                           id2ex_bqu_opd1_o, id2ex_bqu_opd2_o, id2ex_csru_opd1_o;
 wire [11:0]               id2ex_csru_opd2_o;
-wire [DATA_WIDTH-1:0] id2ex_pc_o;
 wire id2ex_mem_signed_o, id2ex_csru_wen_o, id2ex_csru_ren_o;
-wire id2if_fready_o, id2ex_bvalid_o;
 wire [3:0] id2ex_mem_mask_o;
 // REG输出
 wire [DATA_WIDTH-1:0] reg2id_rdata1_o,reg2id_rdata2_o;
@@ -91,7 +89,7 @@ wire [DATA_WIDTH-1:0] reg2id_rdata1_o,reg2id_rdata2_o;
 wire [DATA_WIDTH-1:0] ex2reg_gpr_data_o;
 wire [DATA_WIDTH-1:0] ex2if_jump_addr_o;
 wire ex2if_jump_en_o;
-wire ex2id_fready_o;
+wire ex2if_fready_o;
 wire ex2reg_gpr_wen_o;
 wire ex2if_pc_updata_o;
 //========================================
@@ -131,8 +129,8 @@ u_ysyx_25050136_IF(
     .dynamic_npc_i   	(ex2if_jump_addr_o   ),
     .static_npc_o    	(if2id_static_npc_o  ),
     .inst_o          	(if2id_inst_o        ),
-    .bready_i        	(id2if_fready_o      ),
-    .bvalid_o        	(if2id_bvalid_o      )
+    .bready_i        	(ex2if_fready_o      ),
+    .bvalid_o        	(if2ex_bvalid_o      )
 );
 
 
@@ -165,12 +163,7 @@ u_ysyx_25050136_ID(
     .mem_mask_o   	(id2ex_mem_mask_o     ),
     .mem_signed_o  	(id2ex_mem_signed_o   ),
     .rd_o          	(id2reg_rd_o          ),
-    .rd_en_o       	(id2reg_rd_en_o       ),
-    .pc_o           (id2ex_pc_o           ),
-    .fvalid_i       (if2id_bvalid_o       ),
-    .fready_o       (id2if_fready_o       ),
-    .bvalid_o       (id2ex_bvalid_o       ),
-    .bready_i       (ex2id_fready_o       )
+    .rd_en_o       	(id2reg_rd_en_o       )
 );
 
 // output declaration of module ysyx_25050136_EX
@@ -195,7 +188,7 @@ ysyx_25050136_EX #(
 u_ysyx_25050136_EX(
     .clk          	(clk                 ),
     .reset        	(reset               ),
-    .pc_i         	(id2ex_pc_o          ),
+    .pc_i         	(inst_araddr_o       ),
     .rd_en_i      	(id2reg_rd_en_o      ),
     .fu_i         	(id2ex_fu_o          ),
     .alu_op_i     	(id2ex_alu_op_o      ),
@@ -246,8 +239,8 @@ u_ysyx_25050136_EX(
     .gpr_data_o   	(ex2reg_gpr_data_o   ),
     .jump_en_o    	(ex2if_jump_en_o     ),
     .jump_addr_o  	(ex2if_jump_addr_o   ),
-    .fvalid_i     	(id2ex_bvalid_o      ),
-    .fready_o     	(ex2id_fready_o      )
+    .fvalid_i     	(if2ex_bvalid_o      ),
+    .fready_o     	(ex2if_fready_o      )
 );
 
 

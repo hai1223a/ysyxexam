@@ -29,12 +29,7 @@ module ysyx_25050136_ID
          output     [3:0]                             mem_mask_o,
          output                                     mem_signed_o,
          output     [ADDR_WIDTH-1:0]                        rd_o,
-         output                                          rd_en_o,
-         output     [DATA_WIDTH-1:0]                        pc_o,    
-         input                                          fvalid_i,
-         output                                         fready_o,
-         input                                          bready_i,
-         output                                         bvalid_o
+         output                                          rd_en_o
      );
 
     wire [6:0] opcode = inst_i[6:0];
@@ -197,10 +192,4 @@ module ysyx_25050136_ID
     // 写回寄存器地址
     assign rd_o  = rd;
     assign rd_en_o = (type_store | type_branch) ? 0 : 1;
-    //=========================================
-    // 握手协议
-    //========================================= 
-    assign fready_o = bready_i;
-    assign bvalid_o = fvalid_i;
-    assign pc_o = pc_i; 
 endmodule //ysyx_25050136_ID

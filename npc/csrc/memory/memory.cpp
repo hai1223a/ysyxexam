@@ -132,7 +132,7 @@ uint64_t store_cycle_sum = 0;
 uint64_t branch_cycle_sum = 0;
 uint64_t csr_cycle_sum = 0;
 
-extern "C" void perform_counter(int32_t type) {
+extern "C" void perform_counter() {
   switch (type)
   {
   case 0:  ifu_count++;        break;
