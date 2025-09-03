@@ -63,11 +63,12 @@ module ysyx_25050136_NPC
 // 顶层信号定义
 //========================================
 // IF输出
-wire [DATA_WIDTH-1:0] if2id_static_npc_o, if2id_ex_pc_o;
+wire [DATA_WIDTH-1:0] if2id_static_npc_o, if2id_pc_o;
 wire [31:0] if2id_inst_o;
 wire if2ex_bvalid_o;
 // ID输出
 wire [ADDR_WIDTH-1:0] id2reg_raddr1_o,id2reg_raddr2_o,id2reg_rd_o;
+wire [DATA_WIDTH-1:0] id2ex_pc_o;
 wire id2reg_rd_en_o;
 wire [`ysyx_25050136_FU_NUM-1:0] id2ex_fu_o;
 wire [`ysyx_25050136_ALU_OP_NUM-1:0]  id2ex_alu_op_o;
@@ -165,8 +166,10 @@ ysyx_25050136_ID #(
     .DATA_WIDTH(DATA_WIDTH)
 )
 u_ysyx_25050136_ID(
+    .clk            (clk                 ),
+    .reset          (reset               ),
     .inst_i   	    (if2id_inst_o         ),
-    .pc_i           (if2id_ex_pc_o        ),
+    .pc_i           (if2id_pc_o           ),
     .static_npc_i   (if2id_static_npc_o   ),
     .rdata1_i 	    (reg2id_rdata1_o      ),
     .raddr1_o 	    (id2reg_raddr1_o      ),
@@ -189,7 +192,8 @@ u_ysyx_25050136_ID(
     .mem_mask_o   	(id2ex_mem_mask_o     ),
     .mem_signed_o  	(id2ex_mem_signed_o   ),
     .rd_o          	(id2reg_rd_o          ),
-    .rd_en_o       	(id2reg_rd_en_o       )
+    .rd_en_o       	(id2reg_rd_en_o       ),
+    .pc_o           (id2ex_pc_o           )
 );
 
 // output declaration of module ysyx_25050136_EX

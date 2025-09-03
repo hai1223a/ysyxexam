@@ -4,6 +4,7 @@ module ysyx_25050136_EX
          DATA_WIDTH = 32
      )
      (
+         // 内部
          input                                      clk          ,
          input                                      reset        ,
          input    [DATA_WIDTH-1:0]                  pc_i         ,
@@ -22,6 +23,14 @@ module ysyx_25050136_EX
          input    [11:0]                            csru_opd2_i  ,
          input                                      csru_wen_i   ,
          input                                      csru_ren_i   ,
+         input    [3:0]                             mem_mask_i   ,
+         input                                      mem_signed_i ,
+         input                                      fvalid_i     ,
+         output                                     gpr_wen_o    ,
+         output   [DATA_WIDTH-1:0]                  gpr_data_o   ,
+         output                                     jump_en_o    ,
+         output   [DATA_WIDTH-1:0]                  jump_addr_o  ,
+         output                                     fready_o     ,
          // 写地址                     
          output                                     m_awvalid_o  ,
          input                                      m_awready_i  ,
@@ -55,16 +64,7 @@ module ysyx_25050136_EX
          input    [DATA_WIDTH-1:0]                  m_rdata_i    ,
          input    [1:0]                             m_rresp_i    ,
          input                                      m_rlast_i    ,
-         input    [3:0]                             m_rid_i      ,     
-         // 内部
-         input    [3:0]                             mem_mask_i   ,
-         input                                      mem_signed_i ,
-         output                                     gpr_wen_o    ,
-         output   [DATA_WIDTH-1:0]                  gpr_data_o   ,
-         output                                     jump_en_o    ,
-         output   [DATA_WIDTH-1:0]                  jump_addr_o  ,
-         input                                      fvalid_i     ,
-         output                                     fready_o
+         input    [3:0]                             m_rid_i      
      );    
     //===================================================
     // ALU
@@ -188,4 +188,6 @@ module ysyx_25050136_EX
         end
     end
     assign fready_o = lsu_en ? mem_valid_o : fready_r;
+
+
 endmodule //ysyx_25050136_EX
