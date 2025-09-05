@@ -100,7 +100,7 @@ endif
 $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
 exe: $(EXE_DEPEND)
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	$(call git_commit, "我试一下这个功能  详细不告诉你") # DO NOT REMOVE THIS LINE!!!
 	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"	
 
 run: exe
