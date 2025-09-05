@@ -19,7 +19,17 @@ $(LIBCAPSTONE):
 	$(MAKE) -C $(CAPSTONE_PATH)
 endif
 #================第三步:共同配置==============
+
+# 编译目录
+BUILD_DIR = $(NPC_HOME)/build
+WAVE_DIR = $(NPC_HOME)/wave
+OBJ_DIR = $(BUILD_DIR)/obj_dir
+LOG_DIR = $(BUILD_DIR)/log
+$(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
+
 COMMON_VSRC = $(wildcard vsrc/*.v)
+COMMON_CSRC = $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
+
 #================第三步:NPC专用配置==============
 NPC_VSRC = $(wildcard vsrc/npc_only/*.v) 
 NPC_RESET = 32'h80000000
@@ -38,11 +48,6 @@ TOP_MODULE      := ysyxSoCFull
 VERILATOR_BIN   := verilator
 BIN = $(OBJ_DIR)/V$(TOP_MODULE)
 
-# 编译目录
-BUILD_DIR = $(NPC_HOME)/build
-WAVE_DIR = $(NPC_HOME)/wave
-OBJ_DIR = $(BUILD_DIR)/obj_dir
-LOG_DIR = $(BUILD_DIR)/log
 
 # 源文件
 C_SRCS          := $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
@@ -62,7 +67,7 @@ VERILATOR_WNO   := $(addprefix -Wno-, PINCONNECTEMPTY DECLFILENAME UNUSEDSIGNAL 
 
 # C/C++编译选项
 INC_PATHS       := $(abspath ../include ../include/generated)
-CFLAGS          += $(addprefix -I, $(INC_PATHS))
+CFLAGS          += $(addprefix -I, $(INC_PATHS)) -DTOP_NAME="\"V$(TOP_MODULE)\""
 LDFLAGS         += -lreadline
 
 # Verilator编译选项
