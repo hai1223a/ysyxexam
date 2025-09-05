@@ -2,7 +2,7 @@
 #include <getopt.h> //,包含解析命令行参数的库函数
 
 VerilatedFstC *tfp = NULL;
-TOP_NAME *top = NULL;
+VysyxSoCFull *top = NULL;
 FILE *log_fp = NULL;
 bool batch_mode = false; // 默认sdb模式
 
@@ -73,13 +73,13 @@ static int parse_args(int argc, char *argv[])
 // 用于初始化verilator仿真
 //=====================================================
 // 函数声明
-	void nvboard_bind_all_pins(TOP_NAME* top);
+	void nvboard_bind_all_pins(VysyxSoCFull* top);
 static void init_verilator(int argc, char *argv[])
 {
   // 传递参数给verilator,建议在创建任何模型之前使用
   Verilated::commandArgs(argc, argv);
   // 构建一个名为ysyx_25050136_NPC的仿真模型
-  top = new TOP_NAME;
+  top = new VysyxSoCFull;
 #ifdef CONFIG_FST
   // 创建一个fst波形文件指针
   tfp = new VerilatedFstC;

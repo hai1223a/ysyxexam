@@ -29,19 +29,19 @@ $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
 COMMON_VSRC = $(wildcard vsrc/*.v)
 COMMON_CSRC = $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
-
+$(shell cat $(COMMON_CSRC) $(wildcard vsrc/soc_only/*.v) > $(BUILD_DIR)/ysyx_25050136.v)
 #================第三步:NPC专用配置==============
 NPC_VSRC = $(wildcard vsrc/npc_only/*.v) 
 NPC_RESET = 32'h80000000
+NPC_TOP := ysyx_25050136 
 
 
 
 #================第三步:SOC专用配置=================
 SOC_VSRC = $(wildcard vsrc/soc_only/*.v) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v
 SOC_RESET = 32'h30000000
-$(info $(COMMON_VSRC))
-$(info $(NPC_VSRC))
-$(info $(SOC_VSRC))
+SOC_TOP := ysyxSoCFull 
+
 
 # 顶层模块和工具
 TOP_MODULE      := ysyxSoCFull
