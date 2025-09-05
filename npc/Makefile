@@ -27,7 +27,7 @@ NPC_RESET = 32'h80000000
 
 
 #================第三步:SOC专用配置=================
-SOC_VSRC = $(wildcard vscr/soc_only/*.v) $(shell find -type f ../ysyxSoC/perip -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v
+SOC_VSRC = $(wildcard vscr/soc_only/*.v) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v
 SOC_RESET = 32'h30000000
 $(info $(COMMON_VSRC))
 $(info $(NPC_VSRC))
