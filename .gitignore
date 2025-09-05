@@ -17,5 +17,5 @@
 !.gitignore
 !init.sh
 /fceux-am
-/am-kernels
+
 /Templates/rt-thread-am//nvboard

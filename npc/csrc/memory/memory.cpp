@@ -117,17 +117,6 @@ extern "C" void find_diff_skip() {
 }
 
 NPC_perforcount npc_perC = {0};
-// uint64_t alu_instr_cnt = 0;
-// uint64_t load_instr_cnt = 0;
-// uint64_t store_instr_cnt = 0;
-// uint64_t branch_instr_cnt = 0;
-// uint64_t csr_instr_cnt = 0;
-
-// uint64_t alu_cycle_sum = 0;
-// uint64_t load_cycle_sum = 0;
-// uint64_t store_cycle_sum = 0;
-// uint64_t branch_cycle_sum = 0;
-// uint64_t csr_cycle_sum = 0;
 
 extern "C" void ifu_get()  {npc_perC.ifu_count++;}
 extern "C" void lsu_get()  {npc_perC.lsu_count++;}
