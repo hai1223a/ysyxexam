@@ -116,23 +116,23 @@ perf: $(EXE_DEPEND)
 	$(call git_commit, "make perf") # DO NOT REMOVE THIS LINE!!!
 	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"	
 	@$(BIN) $(ARGS) -i $(NPC_HOME)/sim/microbench-riscv32e-ysyxsoc.bin
-# 	@$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
-#            DESIGN=ysyx_25050136 \
-#            CLK_FREQ_MHZ=500 CLK_PORT_NAME=clock \
-#            RTL_FILES="/home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/csru.v    \
-#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/bqu.v \
-#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/config.v\
-#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/alu.v\
-#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/csrfile.v\
-#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/ex.v\
-#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/id.v\
-#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/soc.v\
-#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/cpu.v\
-#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/if.v\
-#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/regfile.v\
-#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/lsu.v\
-#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/arbiter.v \
-#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/clint.v"
+	@$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
+           DESIGN=ysyx_25050136 \
+           CLK_FREQ_MHZ=500 CLK_PORT_NAME=clock \
+           RTL_FILES="$(NPC_HOME)/vsrc/csru.v    \
+                      $(NPC_HOME)/vsrc/bqu.v \
+                      $(NPC_HOME)/vsrc/config.v\
+                      $(NPC_HOME)/vsrc/alu.v\
+                      $(NPC_HOME)/vsrc/csrfile.v\
+                      $(NPC_HOME)/vsrc/ex.v\
+                      $(NPC_HOME)/vsrc/id.v\
+                      $(NPC_HOME)/vsrc/soc.v\
+                      $(NPC_HOME)/vsrc/cpu.v\
+                      $(NPC_HOME)/vsrc/if.v\
+                      $(NPC_HOME)/vsrc/regfile.v\
+                      $(NPC_HOME)/vsrc/lsu.v\
+                      $(NPC_HOME)/vsrc/arbiter.v \
+                      $(NPC_HOME)/vsrc/clint.v"
 
 
 clean:
