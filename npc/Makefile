@@ -118,7 +118,7 @@ perf: $(EXE_DEPEND)
 	@$(BIN) $(ARGS) -i $(NPC_HOME)/sim/microbench-riscv32e-ysyxsoc.bin
 	@$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
            DESIGN=ysyx_25050136 \
-           CLK_FREQ_MHZ=500 CLK_PORT_NAME=clock \
+           CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clock \
            RTL_FILES="$(NPC_HOME)/vsrc/csru.v    \
                       $(NPC_HOME)/vsrc/bqu.v \
                       $(NPC_HOME)/vsrc/config.v\
