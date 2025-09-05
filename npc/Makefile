@@ -29,7 +29,7 @@ $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
 COMMON_VSRC = $(wildcard vsrc/*.v)
 COMMON_CSRC = $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
-$(shell cat $(COMMON_CSRC) $(wildcard vsrc/soc_only/*.v) > $(BUILD_DIR)/ysyx_25050136.v)
+$(shell cat $(COMMON_VSRC) $(wildcard vsrc/soc_only/*.v) > $(BUILD_DIR)/ysyx_25050136.v)
 #================第三步:NPC专用配置==============
 NPC_VSRC = $(wildcard vsrc/npc_only/*.v) 
 NPC_RESET = 32'h80000000
