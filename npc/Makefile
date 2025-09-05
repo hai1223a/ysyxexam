@@ -59,7 +59,7 @@ VERILATOR_FLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
                    --top-module $(TOP_MODULE) \
                    $(VERILATOR_INCS) \
 				   --Mdir $(NPC_HOME)/build/obj_dir \
-				   $(V_SRCS) $(C_SRCS) \
+				   $(V_SRCS) $(C_SRCS) +define+VERILATOR_DPIC\
 
 ifdef CONFIG_FST
 VERILATOR_FLAGS += --trace-fst 
@@ -114,6 +114,23 @@ wave: run
 
 perf: exe
 	@$(BIN) $(ARGS) -i $(NPC_HOME)/sim/microbench-riscv32e-ysyxsoc.bin
+# 	@$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
+#            DESIGN=ysyx_25050136 \
+#            CLK_FREQ_MHZ=500 CLK_PORT_NAME=clock \
+#            RTL_FILES="/home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/csru.v    \
+#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/bqu.v \
+#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/config.v\
+#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/alu.v\
+#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/csrfile.v\
+#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/ex.v\
+#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/id.v\
+#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/soc.v\
+#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/cpu.v\
+#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/if.v\
+#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/regfile.v\
+#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/lsu.v\
+#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/arbiter.v \
+#                       /home/yunhai/tools/Vivado/project/NPC01/NPC01.srcs/sources_1/imports/vsrc/clint.v"
 
 
 clean:

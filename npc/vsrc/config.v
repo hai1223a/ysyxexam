@@ -38,6 +38,3 @@
 `define ysyx_25050136_CSRU_MRET   3
 `define ysyx_25050136_CSRU_ECALL  4
 `define ysyx_25050136_CSRU_EBREAK 5
-
-// 综合时注释
-`define VERILATOR_DPIC 
