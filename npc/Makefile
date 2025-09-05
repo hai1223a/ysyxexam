@@ -24,7 +24,7 @@ endif
 # NPC_VSRCS = $(shell )
 # NPC_RESET = 32'h80000000
 
-# SOC_RESET = 32'h30000000
+SOC_RESET = 32'h30000000
 
 #================第三步:编译选项准备========================
 # 顶层模块和工具
@@ -65,7 +65,7 @@ VERILATOR_FLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
                    --top-module $(TOP_MODULE) \
                    $(VERILATOR_INCS) \
 				   --Mdir $(NPC_HOME)/build/obj_dir \
-				   $(V_SRCS) $(C_SRCS) +define+ysyx_25050136_RESET_PC="$(NPC_RESET)"+ysyx_25050136_VERILATOR_DPIC\
+				   $(V_SRCS) $(C_SRCS) +define+ysyx_25050136_RESET_PC="$(SOC_RESET)"+ysyx_25050136_VERILATOR_DPIC\
 
 ifdef CONFIG_FST
 VERILATOR_FLAGS += --trace-fst 
