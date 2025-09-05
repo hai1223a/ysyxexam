@@ -10,3 +10,7 @@
 !.gitignore
 !README.md
 build/
+!Kconfig
+!*.gtkw
+!vsrc/
+!vsrc/**

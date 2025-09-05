@@ -1,0 +1,59 @@
+[*]
+[*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
+[*] Mon Sep  1 08:42:35 2025
+[*]
+[dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
+[dumpfile_mtime] "Mon Sep  1 08:39:43 2025"
+[dumpfile_size] 62879198
+[savefile] "/home/yunhai/ysyx-workbench/npc/wave/ps2.gtkw"
+[timestart] 6523450
+[size] 1858 1001
+[pos] -151 -151
+*-12.300000 6538282 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] TOP.
+[treeopen] TOP.ysyxSoCFull.
+[treeopen] TOP.ysyxSoCFull.asic.
+[treeopen] TOP.ysyxSoCFull.asic.cpu.
+[treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.
+[treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.
+[treeopen] TOP.ysyxSoCFull.asic.lkeyboard.
+[sst_width] 486
+[signals_width] 322
+[sst_expanded] 1
+[sst_vpaned_height] 563
+@28
+TOP.ysyxSoCFull.asic.cpu.cpu.clock
+@22
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_IF.pc[31:0]
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_araddr[31:0]
+@28
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_arvalid
+@22
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_rdata[31:0]
+@28
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_rvalid
+@22
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+@28
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_awvalid
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_bvalid
+@200
+-
+@22
+TOP.ysyxSoCFull.asic.lkeyboard.mps2.fifo[0][7:0]
+TOP.ysyxSoCFull.asic.lkeyboard.mps2.fifo[1][7:0]
+TOP.ysyxSoCFull.asic.lkeyboard.mps2.fifo[2][7:0]
+TOP.ysyxSoCFull.asic.lkeyboard.mps2.fifo[3][7:0]
+TOP.ysyxSoCFull.asic.lkeyboard.mps2.fifo[4][7:0]
+TOP.ysyxSoCFull.asic.lkeyboard.mps2.fifo[5][7:0]
+TOP.ysyxSoCFull.asic.lkeyboard.mps2.fifo[6][7:0]
+TOP.ysyxSoCFull.asic.lkeyboard.mps2.fifo[7][7:0]
+@29
+TOP.ysyxSoCFull.asic.lkeyboard.mps2.ps2_clk
+@24
+TOP.ysyxSoCFull.asic.lkeyboard.mps2.w_ptr[3:0]
+TOP.ysyxSoCFull.asic.lkeyboard.mps2.r_ptr[3:0]
+@28
+TOP.ysyxSoCFull.asic.lkeyboard.mps2.valid
+[pattern_trace] 1
+[pattern_trace] 0
