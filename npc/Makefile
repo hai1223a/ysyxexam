@@ -76,7 +76,7 @@ EXE_DEPEND += $(LIBCAPSTONE)
 # 仿真参数
 override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 					 -l $(NPC_HOME)/build/log/log.txt \
-#         			 -i $(NPC_HOME)/sim/test1.bin \
+#         			 -i $(NPC_HOME)/sim/microbench-riscv32e-ysyxsoc.bin \
 
 #================第四步:NVBOARD========================
 # rules for NVBoard 
@@ -100,7 +100,7 @@ endif
 $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
 exe: $(EXE_DEPEND)
-	$(call git_commit, "我试一下这个功能  详细不告诉你") # DO NOT REMOVE THIS LINE!!!
+	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
 	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"	
 
 run: exe
@@ -111,6 +111,10 @@ gdb: exe
 
 wave: run
 	gtkwave $(WAVE_DIR)/waveform.fst
+
+perf: exe
+	@$(BIN) $(ARGS) -i $(NPC_HOME)/sim/microbench-riscv32e-ysyxsoc.bin
+
 
 clean:
 	rm -rf build
