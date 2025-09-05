@@ -104,7 +104,7 @@ exe: $(EXE_DEPEND)
 	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)" +define+VERILATOR_DPIC
 
 run: exe
-	@$(BIN) $(ARGS)
+	@$(BIN) $(ARGS) -i $(NPC_HOME)/sim/microbench-riscv32e-ysyxsoc.bin
 
 gdb: exe
 	gdb --args @$(BIN) $(ARGS)
