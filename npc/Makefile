@@ -18,11 +18,21 @@ LIBCAPSTONE   := tools/capstone/repo/libcapstone.so.5
 $(LIBCAPSTONE):
 	$(MAKE) -C $(CAPSTONE_PATH)
 endif
+#================第三步:共同配置==============
+COMMON_VSRC = $(wildcard vscr/*.v)
+#================第三步:NPC专用配置==============
+NPC_VSRC = $(wildcard vscr/npc_only/*.v) 
+NPC_RESET = 32'h80000000
 
-#================第三步:NPC和YSYXSOC的不同配置==============
-NPC_RESET = 32'h30000000
 
-#================第三步:编译选项准备========================
+
+#================第三步:SOC专用配置=================
+SOC_VSRC = $(wildcard vscr/soc_only/*.v) $(shell find -type f ../ysyxSoC/perip -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v
+SOC_RESET = 32'h30000000
+$(info $(COMMON_VSRC))
+$(info $(NPC_VSRC))
+$(info $(SOC_VSRC))
+
 # 顶层模块和工具
 TOP_MODULE      := ysyxSoCFull
 VERILATOR_BIN   := verilator
