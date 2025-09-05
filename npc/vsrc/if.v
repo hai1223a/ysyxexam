@@ -38,7 +38,7 @@ module ysyx_25050136_IF
     localparam READ_IEDL = 2'd0;
     localparam READ_ADDR = 2'd1;
     localparam READ_DATA = 2'd2;
-    localparam RESET_PC  = 32'h30000000;
+    localparam RESET_PC  = `ysyx_25050136_RESET_PC;
 
     reg [1:0] state_read;
     always @(posedge clk) begin

@@ -20,6 +20,9 @@ $(LIBCAPSTONE):
 	$(MAKE) -C $(CAPSTONE_PATH)
 endif
 
+#================第三步:NPC和YSYXSOC的不同配置==============
+NPC_RESET = 32'h30000000
+
 #================第三步:编译选项准备========================
 # 顶层模块和工具
 TOP_MODULE      := ysyxSoCFull
@@ -59,7 +62,7 @@ VERILATOR_FLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
                    --top-module $(TOP_MODULE) \
                    $(VERILATOR_INCS) \
 				   --Mdir $(NPC_HOME)/build/obj_dir \
-				   $(V_SRCS) $(C_SRCS) \
+				   $(V_SRCS) $(C_SRCS) +define+ysyx_25050136_RESET_PC=$(NPC_RESET)\
 
 ifdef CONFIG_FST
 VERILATOR_FLAGS += --trace-fst 
