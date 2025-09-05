@@ -101,7 +101,7 @@ $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
 exe: $(EXE_DEPEND)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"	
+	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)" +define+VERILATOR_DPIC
 
 run: exe
 	@$(BIN) $(ARGS)
@@ -112,7 +112,9 @@ gdb: exe
 wave: run
 	gtkwave $(WAVE_DIR)/waveform.fst
 
-perf: exe
+perf: $(EXE_DEPEND)
+	$(call git_commit, "make perf") # DO NOT REMOVE THIS LINE!!!
+	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"	
 	@$(BIN) $(ARGS) -i $(NPC_HOME)/sim/microbench-riscv32e-ysyxsoc.bin
 # 	@$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
 #            DESIGN=ysyx_25050136 \
