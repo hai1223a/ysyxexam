@@ -19,15 +19,15 @@ $(LIBCAPSTONE):
 	$(MAKE) -C $(CAPSTONE_PATH)
 endif
 #================第三步:共同配置==============
-COMMON_VSRC = $(wildcard vscr/*.v)
+COMMON_VSRC = $(wildcard vsrc/*.v)
 #================第三步:NPC专用配置==============
-NPC_VSRC = $(wildcard vscr/npc_only/*.v) 
+NPC_VSRC = $(wildcard vsrc/npc_only/*.v) 
 NPC_RESET = 32'h80000000
 
 
 
 #================第三步:SOC专用配置=================
-SOC_VSRC = $(wildcard vscr/soc_only/*.v) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v
+SOC_VSRC = $(wildcard vsrc/soc_only/*.v) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v
 SOC_RESET = 32'h30000000
 $(info $(COMMON_VSRC))
 # $(info $(NPC_VSRC))
