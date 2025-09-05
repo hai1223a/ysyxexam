@@ -29,7 +29,7 @@ $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
 COMMON_VSRC = $(wildcard vsrc/*.v)
 COMMON_CSRC = $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
-$(shell cat $(COMMON_VSRC) $(wildcard vsrc/soc_only/*.v) > $(BUILD_DIR)/ysyx_25050136.v)
+# $(shell cat $(COMMON_VSRC) $(wildcard vsrc/soc_only/*.v) > $(BUILD_DIR)/ysyx_25050136.v)
 #================第三步:NPC专用配置==============
 NPC_VSRC = $(wildcard vsrc/npc_only/*.v) 
 NPC_RESET = 32'h80000000
@@ -52,6 +52,7 @@ BIN = $(OBJ_DIR)/V$(TOP_MODULE)
 # 源文件
 C_SRCS          := $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
 V_SRCS          := $(shell find vsrc -type f -name "*.v")
+$(shell cat $(V_SRCS) > $(BUILD_DIR)/ysyx_25050136.v)
 VERILATOR_INCS  := $(addprefix -I, vsrc vsrc/perip/uart16550/rtl vsrc/perip/spi/rtl)          
 
 # Verilator警告抑制选项
@@ -76,7 +77,7 @@ VERILATOR_FLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
                    --top-module $(TOP_MODULE) \
                    $(VERILATOR_INCS) \
 				   --Mdir $(NPC_HOME)/build/obj_dir \
-				   $(V_SRCS) $(C_SRCS) +define+ysyx_25050136_RESET_PC="$(NPC_RESET)"+VERILATOR_DPIC\
+				   $(BUILD_DIR)/ysyx_25050136.v $(C_SRCS) +define+ysyx_25050136_RESET_PC="$(NPC_RESET)"+VERILATOR_DPIC\
 
 ifdef CONFIG_FST
 VERILATOR_FLAGS += --trace-fst 
