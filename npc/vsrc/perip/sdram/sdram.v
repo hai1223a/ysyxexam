@@ -1,5 +1,68 @@
-// SDRAM控制器模块
+// SDRAM颗粒
 module sdram(
+  input        clk,      // 时钟信号
+  input        cke,      // 时钟使能
+  input [ 1:0] cs,       // 片选
+  input [ 1:0] ras,      // 行地址选通
+  input [ 1:0] cas,      // 列地址选通
+  input [ 1:0] we,       // 写使能
+  input [12:0] a,        // 地址总线
+  input [ 1:0] ba,       // Bank地址
+  input [ 3:0] dqm,      // 数据掩码
+  inout [31:0] dq        // 数据总线
+);
+  
+  sdram_only sdram0_0 (	
+    .clk (clk      ),	
+    .cke (cke      ),
+    .cs  (cs[0]    ),	
+    .ras (ras[0]   ),	
+    .cas (cas[0]   ),	
+    .we  (we[0]    ),	
+    .a   (a        ),	
+    .ba  (ba       ),	
+    .dqm (dqm[1:0] ),	
+    .dq  (dq[15:0] )
+  );	
+  sdram_only sdram0_1 (	
+    .clk (clk      ),	
+    .cke (cke      ),
+    .cs  (cs[0]    ),	
+    .ras (ras[0]   ),	
+    .cas (cas[0]   ),	
+    .we  (we[0]    ),	
+    .a   (a        ),	
+    .ba  (ba       ),	
+    .dqm (dqm[3:2] ),	
+    .dq  (dq[31:16] )
+  );	
+  sdram_only sdram1_0 (	
+    .clk (clk      ),	
+    .cke (cke      ),
+    .cs  (cs[1]    ),	
+    .ras (ras[1]   ),	
+    .cas (cas[1]   ),	
+    .we  (we[1]    ),	
+    .a   (a        ),	
+    .ba  (ba       ),	
+    .dqm (dqm[1:0] ),	
+    .dq  (dq[15:0] )
+  );	
+  sdram_only sdram1_1 (	
+    .clk (clk      ),	
+    .cke (cke      ),
+    .cs  (cs[1]    ),	
+    .ras (ras[1]   ),	
+    .cas (cas[1]   ),	
+    .we  (we[1]    ),	
+    .a   (a        ),	
+    .ba  (ba       ),	
+    .dqm (dqm[3:2] ),	
+    .dq  (dq[31:16] )
+  );	
+endmodule //sdram
+
+module sdram_only(
   input        clk,      // 时钟信号
   input        cke,      // 时钟使能
   input        cs,       // 片选
