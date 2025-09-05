@@ -112,6 +112,9 @@ gdb: exe
 wave: run
 	gtkwave $(WAVE_DIR)/waveform.fst
 
+perf_commit:
+	$(call git_commit, "性能测试提交-第一次测试-详见sim性能测试文件") # DO NOT REMOVE THIS LINE!!!
+
 perf: $(EXE_DEPEND)
 	$(call git_commit, "make perf") # DO NOT REMOVE THIS LINE!!!
 	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)"	
