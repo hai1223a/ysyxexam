@@ -30,8 +30,8 @@ NPC_RESET = 32'h80000000
 SOC_VSRC = $(wildcard vsrc/soc_only/*.v) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v
 SOC_RESET = 32'h30000000
 $(info $(COMMON_VSRC))
-# $(info $(NPC_VSRC))
-# $(info $(SOC_VSRC))
+$(info $(NPC_VSRC))
+$(info $(SOC_VSRC))
 
 # 顶层模块和工具
 TOP_MODULE      := ysyxSoCFull
