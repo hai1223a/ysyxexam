@@ -59,7 +59,7 @@ VERILATOR_FLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
                    --top-module $(TOP_MODULE) \
                    $(VERILATOR_INCS) \
 				   --Mdir $(NPC_HOME)/build/obj_dir \
-				   $(V_SRCS) $(C_SRCS) +define+VERILATOR_DPIC\
+				   $(V_SRCS) $(C_SRCS) \
 
 ifdef CONFIG_FST
 VERILATOR_FLAGS += --trace-fst 
