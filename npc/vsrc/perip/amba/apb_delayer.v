@@ -25,7 +25,7 @@ module apb_delayer(
 );
   // y = (r * k) << S
   localparam S   = 32'd4;
-  localparam R_S = 32'd82;
+  localparam R_S = 32'd105;
 
   reg [31:0] count;
   reg [15:0] count_q;
