@@ -127,9 +127,11 @@ void init_log(const char *log_file)
 //=====================================================
 void printf_statu()
 {
-  Log("NPC的性能计数器如下: ifu_c = %ld, lsu_c = %ld, csru_c = %ld, bqu_c = %ld, alu_c = %ld\n平均延迟 = %ld, 平均取指延迟 = %ld, 平均访存延迟 =%ld",
-     npc_perC.ifu_count, npc_perC.lsu_count, npc_perC.csru_count, npc_perC.bqu_count, npc_perC.alu_count,
-    ((sim_time - 1) / 2) / npc_perC.ifu_count, npc_perC.if_cycle / npc_perC.ifu_count, npc_perC.lsu_cycle / npc_perC.lsu_count);
+  Log("NPC的性能计数器如下: ifu_c = %ld, lsu_c = %ld, csru_c = %ld, bqu_c = %ld, alu_c = %ld\n平均延迟 = %ld, 平均取指延迟 = %ld, 平均访存延迟 = %ld",
+       npc_perC.ifu_count, npc_perC.lsu_count, npc_perC.csru_count, npc_perC.bqu_count, npc_perC.alu_count,
+       (npc_perC.ifu_count == 0) ? 0 : ((sim_time - 1) / 2) / npc_perC.ifu_count,
+       (npc_perC.ifu_count == 0) ? 0 : npc_perC.if_cycle / npc_perC.ifu_count,
+       (npc_perC.lsu_count == 0) ? 0 : npc_perC.lsu_cycle / npc_perC.lsu_count);
   Log("PC = 0x%08x, halt = %d, NPC 的结束状态是%s", npcstate.halt_pc, npcstate.halt_ret,
       (npcstate.state == NPC_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) : 
       (npcstate.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : 
