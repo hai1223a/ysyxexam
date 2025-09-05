@@ -3,10 +3,9 @@
 #**************************************************************************************/
 
 #================第一步:检查路径==========================
-ifeq ($(wildcard $(NPC_HOME)/vsrc/soc.v),)
-	$(error NPC_HOME=$(NPC_HOME) is not a NPC repo)
+ifeq ($(wildcard $(NPC_HOME)/vsrc/cpu.v),)
+ $(error NPC_HOME=$(NPC_HOME) is not a NPC repo)
 endif
-
 #================第二步:检查配置===========================
 -include $(NPC_HOME)/include/config/auto.conf
 -include $(NPC_HOME)/include/config/auto.conf.cmd
@@ -21,10 +20,7 @@ $(LIBCAPSTONE):
 endif
 
 #================第三步:NPC和YSYXSOC的不同配置==============
-# NPC_VSRCS = $(shell )
-# NPC_RESET = 32'h80000000
-
-SOC_RESET = 32'h30000000
+NPC_RESET = 32'h30000000
 
 #================第三步:编译选项准备========================
 # 顶层模块和工具
@@ -65,7 +61,7 @@ VERILATOR_FLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
                    --top-module $(TOP_MODULE) \
                    $(VERILATOR_INCS) \
 				   --Mdir $(NPC_HOME)/build/obj_dir \
-				   $(V_SRCS) $(C_SRCS) +define+ysyx_25050136_RESET_PC="$(SOC_RESET)"+ysyx_25050136_VERILATOR_DPIC\
+				   $(V_SRCS) $(C_SRCS) +define+ysyx_25050136_RESET_PC="$(NPC_RESET)"+VERILATOR_DPIC\
 
 ifdef CONFIG_FST
 VERILATOR_FLAGS += --trace-fst 
@@ -107,7 +103,7 @@ $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
 exe: $(EXE_DEPEND)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)" +define+ysyx_25050136_VERILATOR_DPIC
+	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)" +define+VERILATOR_DPIC
 
 run: exe
 	@$(BIN) $(ARGS) -i $(NPC_HOME)/sim/microbench-riscv32e-ysyxsoc.bin
