@@ -1,5 +1,5 @@
 `include "config.v"
-`ifdef VERILATOR_DPIC
+`ifdef ysyx_25050136_VERILATOR_DPIC
 import "DPI-C" function void find_addr_0(); 
 import "DPI-C" function void find_ebreak();
 import "DPI-C" function void find_resp();
@@ -89,7 +89,7 @@ module ysyx_25050136(
     output              io_slave_rlast    ,
     output      [3:0]   io_slave_rid
 );
-`ifdef VERILATOR_DPIC
+`ifdef ysyx_25050136_VERILATOR_DPIC
     always @(*) begin
         if ((io_master_awvalid & io_master_awready & (io_master_awaddr == 0)) |
             (io_master_arvalid & io_master_arready & (io_master_araddr == 0)) )

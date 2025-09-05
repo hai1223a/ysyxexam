@@ -92,7 +92,7 @@ wire ex2if_pc_updata_o;
 //========================================
 // 使用DPI-C实现的取指和访存操作, 以及寻找ebreak
 //========================================
-`ifdef VERILATOR_DPIC
+`ifdef ysyx_25050136_VERILATOR_DPIC
 always @(*) begin
     if(id2ex_csru_op_o[`ysyx_25050136_CSRU_EBREAK])
         find_ebreak();

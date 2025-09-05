@@ -68,7 +68,7 @@ module ysyx_25050136_IF
                 READ_DATA: begin
                     if (r_fire) begin
                         if(m_rlast_i) begin
-                        `ifdef VERILATOR_DPIC
+                        `ifdef ysyx_25050136_VERILATOR_DPIC
                             ifu_get();
                         `endif
                             state_read <= READ_IEDL;
