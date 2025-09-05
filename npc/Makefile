@@ -62,7 +62,7 @@ VERILATOR_FLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
                    --top-module $(TOP_MODULE) \
                    $(VERILATOR_INCS) \
 				   --Mdir $(NPC_HOME)/build/obj_dir \
-				   $(V_SRCS) $(C_SRCS) -Dysyx_25050136_RESET_PC="$(NPC_RESET)"\
+				   $(V_SRCS) $(C_SRCS) +define+ysyx_25050136_RESET_PC="$(NPC_RESET)"+VERILATOR_DPIC\
 
 ifdef CONFIG_FST
 VERILATOR_FLAGS += --trace-fst 
