@@ -101,7 +101,7 @@ VERILATOR_WNO   := $(addprefix -Wno-, PINCONNECTEMPTY DECLFILENAME UNUSEDSIGNAL 
 
 # C/C++编译选项
 INC_PATHS       := $(abspath ../include ../include/generated)
-CFLAGS          += $(addprefix -I, $(INC_PATHS)) -DTOP_NAME="\"V$(TOP_MODULE)\""
+CFLAGS          += $(addprefix -I, $(INC_PATHS))
 LDFLAGS         += -lreadline
 
 # Verilator编译选项
