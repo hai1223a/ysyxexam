@@ -18,6 +18,7 @@ long init_imem(char *img_file)
       
       *imem_w++ = 0xa0000537; 
       *imem_w++ = 0x00052603; 
+      *imem_w++ = 0x00052603; 
       *imem_w++ = 0x00100073; // ebreak 
       Log("没有给源文件, 程序使用了内置的代码.");
     return 20;
