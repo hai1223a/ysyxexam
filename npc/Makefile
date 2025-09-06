@@ -19,7 +19,6 @@ $(LIBCAPSTONE):
 	$(MAKE) -C $(CAPSTONE_PATH)
 endif
 #================第三步:共同配置==============
-
 # 编译目录
 BUILD_DIR = $(NPC_HOME)/build
 WAVE_DIR = $(NPC_HOME)/wave
@@ -27,21 +26,56 @@ OBJ_DIR = $(BUILD_DIR)/obj_dir
 LOG_DIR = $(BUILD_DIR)/log
 $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
+# 编译工具
+VERILATOR_BIN   := verilator
+
+# 共同源文件与用于SOC的CPU文件
 COMMON_VSRC = $(wildcard vsrc/*.v)
 COMMON_CSRC = $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
-# $(shell cat $(COMMON_VSRC) $(wildcard vsrc/soc_only/*.v) > $(BUILD_DIR)/ysyx_25050136.v)
+COMMON_CPU_VSRC = $(BUILD_DIR)/ysyx_25050136.v
+$(shell cat $(COMMON_VSRC) $(wildcard vsrc/soc_only/*.v) > $(COMMON_CPU_VSRC))
+
+# Verilator编译选项
+COMMON_VERFLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
+				   --timescale "1ns/1ns" --no-timing --autoflush\
+				   --Mdir $(OBJ_DIR) 
+ifdef CONFIG_FST
+COMMON_VERFLAGS += --trace-fst 
+endif
+# Verilator警告抑制选项
+# PINCONNECTEMPTY: 实例化时有端口未连接, .accept_o(),
+# DECLFILENAME: 模块名与其文件名不一致
+# UNUSEDSIGNAL: 模块定义了未被使用的信号
+# ASSIGNDLY: 模块中存在 #1 这类延时语句, 同时又约定了--no-timing忽略延时语句加速仿真
+# UNDRIVEN: 模块中有信号没有被驱动
+# UNUSEDPARAM: 模块定义了未被使用的参数
+# SYNCASYNCNET: 一个复位信号既被用于同步复位, 又被用于异步复位. 目前该报错发生于uart_reg的复位是异步复位, 暂时忽略日后修改
+COMMON_VERWNO := $(addprefix -Wno-, PINCONNECTEMPTY DECLFILENAME UNUSEDSIGNAL ASSIGNDLY \
+      				   UNDRIVEN UNUSEDPARAM SYNCASYNCNET)
+ifdef CONFIG_WALL
+COMMON_VERFLAGS += -Wall $(COMMON_VERWNO)
+endif
+
+COMMON_CFLAGS += 
+COMMON_LDFLAGS += -lreadline
+ifdef CONFIG_CC_ASAN
+COMMON_CFLAGS += -fsanitize=address
+COMMON_LDFLAGS += -fsanitize=address
+endif
 #================第三步:NPC专用配置==============
-NPC_VSRC = $(wildcard vsrc/npc_only/*.v) 
+NPC_VSRC := $(COMMON_VSRC) $(wildcard vsrc/npc_only/*.v) 
+NPC_CSRC := $(COMMON_CSRC)
 NPC_RESET = 32'h80000000
 NPC_TOP := ysyx_25050136 
-
-
+NPC_INC := $(addprefix -I, vsrc)
+NPC_VERFLAGS += $(COMMON_VERFLAGS) --top-module $(NPC_TOP) $(NPC_VSRC) $(NPC_CSRC) \
+			    +define+ysyx_25050136_RESET_PC="$(NPC_RESET)"+ysyx_25050136_VERILATOR_DPIC \
 
 #================第三步:SOC专用配置=================
-SOC_VSRC = $(wildcard vsrc/soc_only/*.v) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v
+SOC_VSRC = $(COMMON_CPU_VSRC) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v 
 SOC_RESET = 32'h30000000
 SOC_TOP := ysyxSoCFull 
-
+SOC_INC := $(addprefix -I, ../ysyxSoC/uart16550/rtl ../ysyxSoC/perip/spi/rtl)
 
 # 顶层模块和工具
 TOP_MODULE      := ysyxSoCFull
@@ -52,7 +86,6 @@ BIN = $(OBJ_DIR)/V$(TOP_MODULE)
 # 源文件
 C_SRCS          := $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
 V_SRCS          := $(shell find vsrc -type f -name "*.v")
-$(shell cat $(V_SRCS) > $(BUILD_DIR)/ysyx_25050136.v)
 VERILATOR_INCS  := $(addprefix -I, vsrc vsrc/perip/uart16550/rtl vsrc/perip/spi/rtl)          
 
 # Verilator警告抑制选项
@@ -77,7 +110,7 @@ VERILATOR_FLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
                    --top-module $(TOP_MODULE) \
                    $(VERILATOR_INCS) \
 				   --Mdir $(NPC_HOME)/build/obj_dir \
-				   $(BUILD_DIR)/ysyx_25050136.v $(C_SRCS) +define+ysyx_25050136_RESET_PC="$(NPC_RESET)"+VERILATOR_DPIC\
+				   $(V_SRCS) $(C_SRCS) +define+ysyx_25050136_RESET_PC="$(NPC_RESET)"+ysyx_25050136_VERILATOR_DPIC\
 
 ifdef CONFIG_FST
 VERILATOR_FLAGS += --trace-fst 
@@ -119,7 +152,7 @@ $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
 exe: $(EXE_DEPEND)
 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)" +define+VERILATOR_DPIC
+	$(VERILATOR_BIN) $(VERILATOR_FLAGS) -LDFLAGS "$(LDFLAGS)" -CFLAGS "$(CFLAGS)" +define+ysyx_25050136_VERILATOR_DPIC
 
 run: exe
 	@$(BIN) $(ARGS) -i $(NPC_HOME)/sim/microbench-riscv32e-ysyxsoc.bin
