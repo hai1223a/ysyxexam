@@ -30,7 +30,7 @@ $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 VERILATOR_BIN   := verilator
 
 # 共同源文件与用于SOC的CPU文件
-COMMON_VSRC = vsrc/define.v $(filter-out vsrc/define.v,$(wildcard vsrc/*.v))
+COMMON_VSRC = vsrc/config.v $(filter-out vsrc/config.v,$(wildcard vsrc/*.v))
 COMMON_CSRC = $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
 
 # Verilator编译选项
@@ -84,7 +84,7 @@ SOC_VSRC := $(SOC_CPU_VSRC) $(shell find ../ysyxSoC/perip -type f -name "*.v") .
 SOC_CSRC := $(COMMON_CSRC)
 SOC_RESET = 32'h30000000
 SOC_TOP := ysyxSoCFull 
-SOC_INC := $(addprefix -I, ../ysyxSoC/uart16550/rtl ../ysyxSoC/perip/spi/rtl)
+SOC_INC := $(addprefix -I, ../ysyxSoC/perip/uart16550/rtl ../ysyxSoC/perip/spi/rtl)
 SOC_CPATHS := $(abspath ../include ../include/generated)
 SOC_CFLAGS := $(COMMON_CFLAGS) $(addprefix -I, $(SOC_CPATHS))
 SOC_LDFLAGS := $(COMMON_LDFLAGS)
