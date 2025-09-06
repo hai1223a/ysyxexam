@@ -1,7 +1,7 @@
 module ysyx_25050136_ARBITER
     #(
         MASTER_NUM = 2,
-        SLAVER_NUM = 2,
+        SLAVER_NUM = 4,
         DATA_WIDTH = 32,
         ADDR_WIDTH = 32
      )
@@ -83,6 +83,10 @@ module ysyx_25050136_ARBITER
 
     localparam s0_Laddr = 32'h02000000;
     localparam s0_Raddr = 32'h0200ffff;
+    localparam s1_Laddr = 32'h80000000;
+    localparam s1_Raddr = 32'h8f000000;
+    localparam s2_Laddr = 32'ha0000000;
+    localparam s2_Raddr = 32'ha1000000;
 
     // AXI4-Full中间信号
     wire                    t_awvalid;
@@ -171,9 +175,20 @@ module ysyx_25050136_ARBITER
                     slaver_grand[0] = 1;
                     slaver_id = 0;
                 end
-            else begin
+            else if(for_s_awaddr >= s1_Laddr && for_s_awaddr <= s1_Raddr ||
+            for_s_araddr >= s1_Laddr && for_s_araddr <= s1_Raddr) begin
                     slaver_grand[1] = 1;
                     slaver_id = 1;
+                end
+            else if(for_s_awaddr >= s2_Laddr && for_s_awaddr <= s2_Raddr ||
+            for_s_araddr >= s2_Laddr && for_s_araddr <= s2_Raddr) begin
+                    slaver_grand[2] = 1;
+                    slaver_id = 2;
+                end
+            else
+                begin
+                    slaver_grand[3] = 1;
+                    slaver_id = 3;
                 end
         end
     end

@@ -249,6 +249,66 @@ module ysyx_25050136(
     wire [1:0]                           clint_rresp_o   ;
     wire                                 clint_rlast_o   ;
     wire [3:0]                           clint_rid_o     ;
+
+    wire                                 sram_awvalid_i ;
+    wire                                 sram_awready_o ;
+    wire [TOP_DATA_WIDTH-1:0]            sram_awaddr_i  ;
+    wire [3:0]                           sram_awid_i    ;
+    wire [7:0]                           sram_awlen_i   ;
+    wire [2:0]                           sram_awsize_i  ;
+    wire [1:0]                           sram_awburst_i ;
+    wire                                 sram_wvalid_i  ;
+    wire                                 sram_wready_o  ;
+    wire [TOP_DATA_WIDTH-1:0]            sram_wdata_i   ;
+    wire [3:0]                           sram_wstrb_i   ;
+    wire                                 sram_wlast_i   ;
+    wire                                 sram_bvalid_o  ;
+    wire                                 sram_bready_i  ;
+    wire [1:0]                           sram_bresp_o   ;
+    wire [3:0]                           sram_bid_o     ;
+    wire                                 sram_arvalid_i ;
+    wire                                 sram_arready_o ;
+    wire [TOP_DATA_WIDTH-1:0]            sram_araddr_i  ;
+    wire [3:0]                           sram_arid_i    ;
+    wire [7:0]                           sram_arlen_i   ;
+    wire [2:0]                           sram_arsize_i  ;
+    wire [1:0]                           sram_arburst_i ;
+    wire                                 sram_rvalid_o  ;
+    wire                                 sram_rready_i  ;
+    wire [TOP_DATA_WIDTH-1:0]            sram_rdata_o   ;
+    wire [1:0]                           sram_rresp_o   ;
+    wire                                 sram_rlast_o   ;
+    wire [3:0]                           sram_rid_o     ;
+
+    wire                                 uart_awvalid_i ;
+    wire                                 uart_awready_o ;
+    wire [TOP_DATA_WIDTH-1:0]            uart_awaddr_i  ;
+    wire [3:0]                           uart_awid_i    ;
+    wire [7:0]                           uart_awlen_i   ;
+    wire [2:0]                           uart_awsize_i  ;
+    wire [1:0]                           uart_awburst_i ;
+    wire                                 uart_wvalid_i  ;
+    wire                                 uart_wready_o  ;
+    wire [TOP_DATA_WIDTH-1:0]            uart_wdata_i   ;
+    wire [3:0]                           uart_wstrb_i   ;
+    wire                                 uart_wlast_i   ;
+    wire                                 uart_bvalid_o  ;
+    wire                                 uart_bready_i  ;
+    wire [1:0]                           uart_bresp_o   ;
+    wire [3:0]                           uart_bid_o     ;
+    wire                                 uart_arvalid_i ;
+    wire                                 uart_arready_o ;
+    wire [TOP_DATA_WIDTH-1:0]            uart_araddr_i  ;
+    wire [3:0]                           uart_arid_i    ;
+    wire [7:0]                           uart_arlen_i   ;
+    wire [2:0]                           uart_arsize_i  ;
+    wire [1:0]                           uart_arburst_i ;
+    wire                                 uart_rvalid_o  ;
+    wire                                 uart_rready_i  ;
+    wire [TOP_DATA_WIDTH-1:0]            uart_rdata_o   ;
+    wire [1:0]                           uart_rresp_o   ;
+    wire                                 uart_rlast_o   ;
+    wire [3:0]                           uart_rid_o     ;
     // 指令端口默认连接
     assign inst_awvalid_o   = 0 ;
     assign inst_awaddr_o    = 0 ;
@@ -307,17 +367,17 @@ module ysyx_25050136(
     assign mem_rid_i      = s_rid_o[7:4]   ;
 
     // 从设备到仲裁器信号连接
-    assign m_awready_i  = {io_master_awready, clint_awready_o };
-    assign m_wready_i   = {io_master_wready,  clint_wready_o  };
-    assign m_bvalid_i   = {io_master_bvalid,  clint_bvalid_o  };
-    assign m_bresp_i    = {io_master_bresp,   clint_bresp_o   };
-    assign m_bid_i      = {io_master_bid,     clint_bid_o     };
-    assign m_arready_i  = {io_master_arready, clint_arready_o };
-    assign m_rvalid_i   = {io_master_rvalid,  clint_rvalid_o  };
-    assign m_rdata_i    = {io_master_rdata,   clint_rdata_o   };
-    assign m_rresp_i    = {io_master_rresp,   clint_rresp_o   };
-    assign m_rlast_i    = {io_master_rlast,   clint_rlast_o   };
-    assign m_rid_i      = {io_master_rid,     clint_rid_o     };
+    assign m_awready_i  = {io_master_awready, uart_awready_o , sram_awready_o , clint_awready_o};
+    assign m_wready_i   = {io_master_wready,  uart_wready_o  , sram_wready_o  , clint_wready_o };
+    assign m_bvalid_i   = {io_master_bvalid,  uart_bvalid_o  , sram_bvalid_o  , clint_bvalid_o };
+    assign m_bresp_i    = {io_master_bresp,   uart_bresp_o   , sram_bresp_o   , clint_bresp_o  };
+    assign m_bid_i      = {io_master_bid,     uart_bid_o     , sram_bid_o     , clint_bid_o    };
+    assign m_arready_i  = {io_master_arready, uart_arready_o , sram_arready_o , clint_arready_o};
+    assign m_rvalid_i   = {io_master_rvalid,  uart_rvalid_o  , sram_rvalid_o  , clint_rvalid_o };
+    assign m_rdata_i    = {io_master_rdata,   uart_rdata_o   , sram_rdata_o   , clint_rdata_o  };
+    assign m_rresp_i    = {io_master_rresp,   uart_rresp_o   , sram_rresp_o   , clint_rresp_o  };
+    assign m_rlast_i    = {io_master_rlast,   uart_rlast_o   , sram_rlast_o   , clint_rlast_o  };
+    assign m_rid_i      = {io_master_rid,     uart_rid_o     , sram_rid_o     , clint_rid_o    };
 
     // 仲裁器到从设备信号连接
     assign clint_awvalid_i   = m_awvalid_o[0];
@@ -338,24 +398,63 @@ module ysyx_25050136(
     assign clint_arsize_i    = m_arsize_o[0*3 +: 3];
     assign clint_arburst_i   = m_arburst_o[0*2 +: 2];
     assign clint_rready_i    = m_rready_o[0];
-    assign io_master_awvalid = m_awvalid_o[1];
-    assign io_master_awaddr  = m_awaddr_o[1*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
-    assign io_master_awid    = m_awid_o[1*4 +: 4];
-    assign io_master_awlen   = m_awlen_o[1*8 +: 8];
-    assign io_master_awsize  = m_awsize_o[1*3 +: 3];
-    assign io_master_awburst = m_awburst_o[1*2 +: 2];
-    assign io_master_wvalid  = m_wvalid_o[1];
-    assign io_master_wdata   = m_wdata_o[1*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
-    assign io_master_wstrb   = m_wstrb_o[1*4 +: 4];
-    assign io_master_wlast   = m_wlast_o[1];
-    assign io_master_bready  = m_bready_o[1];
-    assign io_master_arvalid = m_arvalid_o[1];
-    assign io_master_araddr  = m_araddr_o[1*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
-    assign io_master_arid    = m_arid_o[1*4 +: 4];
-    assign io_master_arlen   = m_arlen_o[1*8 +: 8];
-    assign io_master_arsize  = m_arsize_o[1*3 +: 3];
-    assign io_master_arburst = m_arburst_o[1*2 +: 2];
-    assign io_master_rready  = m_rready_o[1];
+
+    assign sram_awvalid_i   = m_awvalid_o[1];
+    assign sram_awaddr_i    = m_awaddr_o[1*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
+    assign sram_awid_i      = m_awid_o[1*4 +: 4];
+    assign sram_awlen_i     = m_awlen_o[1*8 +: 8];
+    assign sram_awsize_i    = m_awsize_o[1*3 +: 3];
+    assign sram_awburst_i   = m_awburst_o[1*2 +: 2];
+    assign sram_wvalid_i    = m_wvalid_o[1];
+    assign sram_wdata_i     = m_wdata_o[1*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
+    assign sram_wstrb_i     = m_wstrb_o[1*4 +: 4];
+    assign sram_wlast_i     = m_wlast_o[1];
+    assign sram_bready_i    = m_bready_o[1];
+    assign sram_arvalid_i   = m_arvalid_o[1];
+    assign sram_araddr_i    = m_araddr_o[1*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
+    assign sram_arid_i      = m_arid_o[1*4 +: 4];
+    assign sram_arlen_i     = m_arlen_o[1*8 +: 8];
+    assign sram_arsize_i    = m_arsize_o[1*3 +: 3];
+    assign sram_arburst_i   = m_arburst_o[1*2 +: 2];
+    assign sram_rready_i    = m_rready_o[1];
+
+    assign uart_awvalid_i   = m_awvalid_o[2];
+    assign uart_awaddr_i    = m_awaddr_o[2*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
+    assign uart_awid_i      = m_awid_o[2*4 +: 4];
+    assign uart_awlen_i     = m_awlen_o[2*8 +: 8];
+    assign uart_awsize_i    = m_awsize_o[2*3 +: 3];
+    assign uart_awburst_i   = m_awburst_o[2*2 +: 2];
+    assign uart_wvalid_i    = m_wvalid_o[2];
+    assign uart_wdata_i     = m_wdata_o[2*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
+    assign uart_wstrb_i     = m_wstrb_o[2*4 +: 4];
+    assign uart_wlast_i     = m_wlast_o[2];
+    assign uart_bready_i    = m_bready_o[2];
+    assign uart_arvalid_i   = m_arvalid_o[2];
+    assign uart_araddr_i    = m_araddr_o[2*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
+    assign uart_arid_i      = m_arid_o[2*4 +: 4];
+    assign uart_arlen_i     = m_arlen_o[2*8 +: 8];
+    assign uart_arsize_i    = m_arsize_o[2*3 +: 3];
+    assign uart_arburst_i   = m_arburst_o[2*2 +: 2];
+    assign uart_rready_i    = m_rready_o[2];
+    
+    assign io_master_awvalid = m_awvalid_o[3];
+    assign io_master_awaddr  = m_awaddr_o[3*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
+    assign io_master_awid    = m_awid_o[3*4 +: 4];
+    assign io_master_awlen   = m_awlen_o[3*8 +: 8];
+    assign io_master_awsize  = m_awsize_o[3*3 +: 3];
+    assign io_master_awburst = m_awburst_o[3*2 +: 2];
+    assign io_master_wvalid  = m_wvalid_o[3];
+    assign io_master_wdata   = m_wdata_o[3*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
+    assign io_master_wstrb   = m_wstrb_o[3*4 +: 4];
+    assign io_master_wlast   = m_wlast_o[3];
+    assign io_master_bready  = m_bready_o[3];
+    assign io_master_arvalid = m_arvalid_o[3];
+    assign io_master_araddr  = m_araddr_o[3*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
+    assign io_master_arid    = m_arid_o[3*4 +: 4];
+    assign io_master_arlen   = m_arlen_o[3*8 +: 8];
+    assign io_master_arsize  = m_arsize_o[3*3 +: 3];
+    assign io_master_arburst = m_arburst_o[3*2 +: 2];
+    assign io_master_rready  = m_rready_o[3];
 
     // 顶层AXI SLAVER接口
     assign io_slave_awready = 0;
@@ -519,4 +618,47 @@ module ysyx_25050136(
         .s_rid_o     	(clint_rid_o      )
     );
     
+    ysyx_25050136_SRAM u_ysyx_25050136_SRAM(
+        .aclk        	(clock            ),
+        .aresetn     	(~reset           ),
+        .s_awvalid_i 	(sram_awvalid_i  ),
+        .s_awready_o 	(sram_awready_o  ),
+        .s_awaddr_i  	(sram_awaddr_i   ),
+        .s_wvalid_i  	(sram_wvalid_i   ),
+        .s_wready_o  	(sram_wready_o   ),
+        .s_wdata_i   	(sram_wdata_i    ),
+        .s_wstrb_i   	(sram_wstrb_i    ),
+        .s_bvalid_o  	(sram_bvalid_o   ),
+        .s_bready_i  	(sram_bready_i   ),
+        .s_bresp_o   	(sram_bresp_o    ),
+        .s_arvalid_i 	(sram_arvalid_i  ),
+        .s_arready_o 	(sram_arready_o  ),
+        .s_araddr_i  	(sram_araddr_i   ),
+        .s_rvalid_o  	(sram_rvalid_o   ),
+        .s_rready_i  	(sram_rready_i   ),
+        .s_rdata_o   	(sram_rdata_o    ),
+        .s_rresp_o   	(sram_rresp_o    )
+    );
+    
+    ysyx_25050136_UART u_ysyx_25050136_UART(
+        .aclk        	(clock            ),
+        .aresetn     	(~reset           ),
+        .s_awvalid_i 	(uart_awvalid_i  ),
+        .s_awready_o 	(uart_awready_o  ),
+        .s_awaddr_i  	(uart_awaddr_i   ),
+        .s_wvalid_i  	(uart_wvalid_i   ),
+        .s_wready_o  	(uart_wready_o   ),
+        .s_wdata_i   	(uart_wdata_i    ),
+        .s_wstrb_i   	(uart_wstrb_i    ),
+        .s_bvalid_o  	(uart_bvalid_o   ),
+        .s_bready_i  	(uart_bready_i   ),
+        .s_bresp_o   	(uart_bresp_o    ),
+        .s_arvalid_i 	(uart_arvalid_i  ),
+        .s_arready_o 	(uart_arready_o  ),
+        .s_araddr_i  	(uart_araddr_i   ),
+        .s_rvalid_o  	(uart_rvalid_o   ),
+        .s_rready_i  	(uart_rready_i   ),
+        .s_rdata_o   	(uart_rdata_o    ),
+        .s_rresp_o   	(uart_rresp_o    )
+    );
 endmodule
