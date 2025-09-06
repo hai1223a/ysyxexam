@@ -203,7 +203,7 @@ clean:
 # endif
 
 # #=================第五步:目标===========================
-# -include $(NPC_HOME)/scripts/config.mk
+-include $(NPC_HOME)/scripts/config.mk
 
 # $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
