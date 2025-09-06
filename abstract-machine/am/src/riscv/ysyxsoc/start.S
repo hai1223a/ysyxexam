@@ -12,11 +12,8 @@ _start:
 #    srli    a3, a2, 2
 #    andi    a4, a2, 0x3
 #    beqz    a3, _bootf_1bytes
-    li      a0, 0x02000000
-    li      a1, 0x12345678
-    sw      a1, 0(a0)
+    li      a0, 0xa0000000
     lw      a2, 0(a0)
-    lw      a3, 4(a0)
 _bootf_4bytes:
     lw      a5, 0(a1)
     sw      a5, 0(a0)

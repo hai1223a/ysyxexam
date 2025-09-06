@@ -172,9 +172,9 @@ module ysyx_25050136_LSU
     assign m_arvalid_o = (state_read == READ_ADDR);
     assign m_araddr_o  = m_araddr_r;
     assign m_arid_o = 0;
-    assign m_arlen_o = 0;
+    assign m_arlen_o = 8'd1;
     assign m_arsize_o = m_arsize_q;
-    assign m_arburst_o = 0;
+    assign m_arburst_o = 2'd1;
     assign m_rready_o = m_rready_r;
     assign ar_fire = m_arvalid_o & m_arready_i;
     assign r_fire = m_rvalid_i & m_rready_o;
