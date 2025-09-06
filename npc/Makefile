@@ -50,8 +50,7 @@ endif
 # UNDRIVEN: 模块中有信号没有被驱动
 # UNUSEDPARAM: 模块定义了未被使用的参数
 # SYNCASYNCNET: 一个复位信号既被用于同步复位, 又被用于异步复位. 目前该报错发生于uart_reg的复位是异步复位, 暂时忽略日后修改
-COMMON_VERWNO := $(addprefix -Wno-, PINCONNECTEMPTY DECLFILENAME UNUSEDSIGNAL ASSIGNDLY \
-      				   UNDRIVEN UNUSEDPARAM SYNCASYNCNET)
+COMMON_VERWNO := $(addprefix -Wno-, PINCONNECTEMPTY DECLFILENAME UNUSEDSIGNAL ASSIGNDLY UNDRIVEN UNUSEDPARAM SYNCASYNCNET)
 ifdef CONFIG_WALL
 COMMON_VERFLAGS += -Wall $(COMMON_VERWNO)
 endif
@@ -62,20 +61,39 @@ ifdef CONFIG_CC_ASAN
 COMMON_CFLAGS += -fsanitize=address
 COMMON_LDFLAGS += -fsanitize=address
 endif
+
+COMMON_VERDEFINE := +ysyx_25050136_VERILATOR_DPIC
 #================第三步:NPC专用配置==============
 NPC_VSRC := $(COMMON_VSRC) $(wildcard vsrc/npc_only/*.v) 
 NPC_CSRC := $(COMMON_CSRC)
-NPC_RESET = 32'h80000000
+NPC_RESET := 32'h80000000
 NPC_TOP := ysyx_25050136 
 NPC_INC := $(addprefix -I, vsrc)
+NPC_CFLAGS := $(COMMON_CFLAGS)
+NPC_LDFLAGS := $(COMMON_LDFLAGS)   
+NPC_VERDEFINE := $(COMMON_VERDEFINE)+ysyx_25050136_RESET_PC="$(NPC_RESET)"+TOP_NAME="V$(NPC_TOP)"
 NPC_VERFLAGS += $(COMMON_VERFLAGS) --top-module $(NPC_TOP) $(NPC_VSRC) $(NPC_CSRC) \
-			    +define+ysyx_25050136_RESET_PC="$(NPC_RESET)"+ysyx_25050136_VERILATOR_DPIC \
+			    $(NPC_INC) +define$(NPC_VERDEFINE) \
 
 #================第三步:SOC专用配置=================
-SOC_VSRC = $(COMMON_CPU_VSRC) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v 
+SOC_VSRC := $(COMMON_CPU_VSRC) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v 
+SOC_CSRC := $(COMMON_CSRC)
 SOC_RESET = 32'h30000000
 SOC_TOP := ysyxSoCFull 
 SOC_INC := $(addprefix -I, ../ysyxSoC/uart16550/rtl ../ysyxSoC/perip/spi/rtl)
+SOC_CPATHS := $(abspath ../include ../include/generated)
+SOC_CFLAGS := $(COMMON_CFLAGS) $(addprefix -I, $(SOC_CPATHS))
+SOC_LDFLAGS := $(COMMON_LDFLAGS)
+SOC_VERDEFINE := $(COMMON_VERDEFINE)+ysyx_25050136_RESET_PC="$(SOC_RESET)"+TOP_NAME="V$(SOC_TOP)"
+SOC_VERFLAGS += $(COMMON_VERFLAGS) --top-module $(SOC_TOP) $(SOC_VSRC) $(SOC_CSRC) \
+			    $(SOC_INC) +define$(NPC_VERDEFINE) 
+SOC_DEPEMD += $(LIBCAPSTONE)
+SOC_BIN := $(OBJ_DIR)/V$(SOC_TOP) 
+soc_exe: $(SOC_DEPEMD)
+	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	$(VERILATOR_BIN) $(SOC_VERFLAGS) -LDFLAGS "$(SOC_LDFLAGS)" -CFLAGS "$(SOC_CFLAGS)"
+soc_run: soc_exe
+	@$(SOC_BIN) $(ARGS) -i $(NPC_HOME)/sim/microbench-riscv32e-ysyxsoc.bin	
 
 # 顶层模块和工具
 TOP_MODULE      := ysyxSoCFull
