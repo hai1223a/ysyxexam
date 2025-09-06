@@ -79,7 +79,7 @@ NPC_VERFLAGS += $(COMMON_VERFLAGS) --top-module $(NPC_TOP) $(NPC_VSRC) $(NPC_CSR
 #================第三步:SOC专用配置=================
 SOC_CPU_VSRC = $(BUILD_DIR)/ysyx_25050136.v
 $(shell cat $(COMMON_VSRC) $(wildcard vsrc/soc_only/*.v) > $(SOC_CPU_VSRC))
-
+$(info $(COMMON_VSRC) $(wildcard vsrc/soc_only/*.v))
 SOC_VSRC := $(SOC_CPU_VSRC) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v 
 SOC_CSRC := $(COMMON_CSRC)
 SOC_RESET = 32'h30000000
