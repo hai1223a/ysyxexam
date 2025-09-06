@@ -30,7 +30,7 @@ $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 VERILATOR_BIN   := verilator
 
 # 共同源文件与用于SOC的CPU文件
-COMMON_VSRC = $(wildcard vsrc/*.v)
+COMMON_VSRC = vsrc/define.v $(filter-out vsrc/define.v,$(wildcard vsrc/*.v))
 COMMON_CSRC = $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
 
 # Verilator编译选项
