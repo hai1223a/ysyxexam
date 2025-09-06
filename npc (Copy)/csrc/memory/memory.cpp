@@ -1,4 +1,4 @@
-#include "../../include/common.h"
+#include "../../include_npc/common.h"
 #include <stdio.h>
 
 uint8_t pmem[CONFIG_MSIZE] __attribute((aligned(4096))) = {}; // 内存变量

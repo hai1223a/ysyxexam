@@ -1,4 +1,4 @@
-#include "../../include_npc/common.h"
+#include "../../include/common.h"
 #include <readline/readline.h>
 #include <readline/history.h>
 
@@ -96,7 +96,7 @@ static int cmd_x(char *args)
   printf("Address  Data\n");
   for (int i = 0; i < num_word; i++)
   {
-    printf("%08x:0x%08x\n", result, vaddr_read(result, 4));
+    printf("%08x:0x%08x\n", result, vaddr_read(result));
     result += 4;
   }
   return 0;

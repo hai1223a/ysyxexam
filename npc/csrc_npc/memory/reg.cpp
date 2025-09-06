@@ -1,4 +1,4 @@
-#include "../../include_npc/common.h"
+#include "../../include/common.h"
 
 const char *regs[] = {
   "$0", "ra", "sp", "gp", "tp", "t0", "t1", "t2",
@@ -7,7 +7,7 @@ const char *regs[] = {
 
 uint32_t get_reg(int i)
 {
-  return ysyx_25050136_NPC->rootp->ysyx_25050136_NPC__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr[i];
+  return SOC_GPR[i];
 }
 
 void printf_regs()
@@ -17,7 +17,7 @@ void printf_regs()
   {
     printf("%s : 0x%8x\n", regs[i], get_reg(i));
   }
-  printf("pc : 0x%8x\n", ysyx_25050136_NPC->pc_o);
+  printf("pc : 0x%8x\n", SOC_PC);
 }
 
 uint32_t reg_str2val(const char *s, bool *success)
@@ -34,7 +34,7 @@ uint32_t reg_str2val(const char *s, bool *success)
   }
   const char *reg = "$pc";
   if (!strcmp(s, reg))
-    return ysyx_25050136_NPC->pc_o;
+    return SOC_PC;
   *success = false;
   return 0;
 }
@@ -46,7 +46,7 @@ bool isa_difftest_checkregs(CPU_state *ref)
     if (ref->gpr[i] != get_reg(i))
       return false;
   }
-  if (ref->pc != ysyx_25050136_NPC->pc_o)
+  if (ref->pc != SOC_PC)
     return false;
   return true;
 }

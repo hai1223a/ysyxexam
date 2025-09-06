@@ -14,7 +14,7 @@
  ***************************************************************************************/
 
 #include <dlfcn.h>
-#include "../../include_npc/common.h"
+#include "../../include/common.h"
 
 enum
 {
@@ -62,7 +62,7 @@ void init_difftest(char *ref_so_file, long img_size, int port)
       "你可以在common.h中去关闭这个功能. ", ref_so_file);
 
   ref_difftest_init(port);
-  ref_difftest_memcpy(RESET_VECTOR, guest_to_host(RESET_VECTOR), img_size, DIFFTEST_TO_REF);
+  ref_difftest_memcpy(RESET_VECTOR, imem, img_size, DIFFTEST_TO_REF);
   ref_difftest_regcpy(&cpu, DIFFTEST_TO_REF);
 }
 
@@ -86,30 +86,22 @@ static void checkregs(CPU_state *ref)
   }
 }
 
-bool is_skip_ref = false;
-uint8_t skip_insts_ref = 0;
-void difftest_skip_ref(uint8_t num) {
-  is_skip_ref = true;
-  skip_insts_ref = num;
-}
-
+bool if_skip = false;
 void difftest_step()
 {
-  CPU_state ref_r;
-  if(is_skip_ref) {
+  if (if_skip) {
+    CPU_state dut_r;
     for (size_t i = 0; i < REG_NUM; i++)
     {
-      ref_r.gpr[i] = get_reg(i);
+      dut_r.gpr[i] = get_reg(i);
     }
-    ref_r.pc = ysyx_25050136_NPC->pc_o;
-    ref_difftest_regcpy(&ref_r, DIFFTEST_TO_REF);
-    if(skip_insts_ref == 0)
-      is_skip_ref = false;
-    else
-      skip_insts_ref--;
-    return;
+    dut_r.pc = SOC_PC;
+    ref_difftest_regcpy(&dut_r, DIFFTEST_TO_REF);
+  } else {
+    CPU_state ref_r;
+    ref_difftest_exec(1);
+    ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
+    checkregs(&ref_r);
   }
-  ref_difftest_exec(1);
-  ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
-  checkregs(&ref_r);
+  if_skip = false;
 }

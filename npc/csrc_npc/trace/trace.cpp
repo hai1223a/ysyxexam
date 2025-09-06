@@ -1,4 +1,4 @@
-#include "../../include_npc/common.h"
+#include "../../include/common.h"
 #include <elf.h>
 // itrace
 char itrace_buf[128] = {0};
@@ -60,33 +60,54 @@ void Itrace_log(uint32_t inst_in, uint32_t pc_in, uint32_t inst_num)
     printf("%s\n", itrace_buf);
 }
 // mtrace
-char mtrace_buf[128] = {0};
+char mtrace_buf[4][128] = {0};
 
-void add_mtrace()
+void add_mtrace(uint32_t addr, int type, uint32_t data, int mask)
 {
-  char *p = mtrace_buf;
-  p += snprintf(p, sizeof(mtrace_buf), "0x%08x:  ", ysyx_25050136_NPC->pc_o);
-  p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "%8x  ", ysyx_25050136_NPC->mem_addr_o);
-  if (ysyx_25050136_NPC->mem_wen_o)
-    p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "write  %04x     %x", ysyx_25050136_NPC->mem_wmask_o, ysyx_25050136_NPC->mem_wdata_o);
-  else if (ysyx_25050136_NPC->mem_ren_o)
-    p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "read  %04x", ysyx_25050136_NPC->mem_wmask_o);
+  static size_t ptr = 0;
+  char *p = mtrace_buf[ptr];
+  size_t buf_len = sizeof(mtrace_buf) / ARRLEN(mtrace_buf);
+  p += snprintf(p, buf_len, "%ld  %08x:  ", ptr, SOC_PC);
+  p += snprintf(p, mtrace_buf[ptr] + buf_len - p, "%8x  ", addr);
+  if (type == wen)
+    p += snprintf(p, mtrace_buf[ptr] + buf_len - p, "write %08x %08x", data, mask);
+  else if (type == ren)
+    p += snprintf(p, mtrace_buf[ptr] + buf_len - p, "read  %08x %08x", data, mask);
   *p = '\0';
+  if(ptr == ARRLEN(mtrace_buf) - 1) 
+    ptr = 0;
+  else
+    ptr += 1; 
 }
 
 void printf_mtrace()
 {
   printf(ANSI_FMT("mtrace 访存出错报告\n", ANSI_FG_MAGENTA));
-  printf(ANSI_FMT("PC值         访存地址  操作   字节掩码  写入数据\n", ANSI_FG_MAGENTA));
-  puts(mtrace_buf);
+  printf(ANSI_FMT("PC值         访存地址  操作  写入数据/读出数据 \n", ANSI_FG_MAGENTA));
+  for(int i = 0; i < ARRLEN(mtrace_buf); i++) 
+  {
+    puts(mtrace_buf[i]);
+  }
 }
 
-// ftrace
-FUNC_FTRACE func_ftracer[128] = {0};
-int FUNC_stack[4096] = {0};
-char space[10] = {0};
 
-// 修改 load_elf 函数
+// ftrace
+FUNC_FTRACE ELF_FUNC_FTRACER[128] = {0};
+FUNC_FTRACE USER_FUNC_FTRACER[16] = {
+  {.addr = 0x800006a0, .func_name = "main"},
+  {.addr = 0x80000474, .func_name = "video_init"},
+  {.addr = 0x800000e4, .func_name = "game_logic_update"},
+  {.addr = 0x80000010, .func_name = "new_char"},
+  {.addr = 0x800001b0, .func_name = "render"},
+  {.addr = 0x80000c9c, .func_name = "printf"},
+  {.addr = 0x800003a8, .func_name = "check_hit"},
+  {.addr = 0x800008b0, .func_name = "halt"},
+};
+FUNC_FTRACE *FUNC_FTRACER = ELF_FUNC_FTRACER;
+int FUNC_nums = ARRLEN(ELF_FUNC_FTRACER);
+bool use_user_func = false;
+
+// 读取elf文件
 void load_elf(const std::string &elf_file)
 {
   if (elf_file.empty())
@@ -167,9 +188,9 @@ void load_elf(const std::string &elf_file)
       {
         if (ELF32_ST_TYPE(symtab[j].st_info) == STT_FUNC)
         {
-          func_ftracer[k].addr = symtab[j].st_value;
-          strncpy(func_ftracer[k].func_name, &strtab[symtab[j].st_name], sizeof(func_ftracer[k].func_name) - 1);
-          func_ftracer[k].func_name[sizeof(func_ftracer[k].func_name) - 1] = '\0';
+          ELF_FUNC_FTRACER[k].addr = symtab[j].st_value;
+          strncpy(ELF_FUNC_FTRACER[k].func_name, &strtab[symtab[j].st_name], sizeof(ELF_FUNC_FTRACER[k].func_name) - 1);
+          ELF_FUNC_FTRACER[k].func_name[sizeof(ELF_FUNC_FTRACER[k].func_name) - 1] = '\0';
           k++;
         }
       }
@@ -179,44 +200,97 @@ void load_elf(const std::string &elf_file)
 
   // 清理资源
   fclose(file);
+  // 检查是否需要指定追踪的函数
+  if(use_user_func) {
+    FUNC_FTRACER = USER_FUNC_FTRACER;
+    FUNC_nums = ARRLEN(USER_FUNC_FTRACER);
+  }
 }
 
 FILE *ftracer_log_fp = NULL;
 void init_ftracer_log(const char *ftrace_log_file)
 {
-  ftracer_log_fp = stdout;
   if (ftrace_log_file != NULL)
   {
     FILE *fp = fopen(ftrace_log_file, "w");
     Assert(fp, "无法打开日志文件 '%s'", ftrace_log_file);
     ftracer_log_fp = fp;
+    Log("Ftracer 日志被输出到了 %s", ftrace_log_file);
   }
-  Log("Ftracer 日志被输出到了 %s", ftrace_log_file ? ftrace_log_file : "stdout");
+  else 
+  {
+    Log("Ftracer 日志没有输出");
+  }
 }
+
+struct {
+  uint32_t ret_addr;
+  uint8_t num;
+}FUNC_stack[8] = {0};
+
+char repeat_buf[2][128] = {{0}};
+char _buf[128] = {0};
 
 void ftracer_log(uint32_t inst_in, uint32_t pc_in)
 {
-  static int p_stack = 0;
-
+  static int repeat_count = 0;
+  static uint32_t p_stack = 0;
   // 识别 call 调用函数
-  if (is_jal(inst_in) || is_jalr(inst_in))
+  if(is_jal(inst_in) || is_jalr(inst_in))
   {
-    for (int i = 0; i < ARRLEN(func_ftracer); i++)
+    for(int i = 0; i < FUNC_nums; i++)
     {
-      if(func_ftracer[i].addr == 0) break;
-      if (ysyx_25050136_NPC->pc_o == func_ftracer[i].addr)
+      if(FUNC_FTRACER[i].addr == 0) break;
+      if(SOC_PC == FUNC_FTRACER[i].addr)
       {
-        ftracer_write("0x%8x %*scall [%s @ 0x%8x]\n", pc_in, 4 * p_stack, " ", func_ftracer[i].func_name, ysyx_25050136_NPC->pc_o);
-        Assert(p_stack < ARRLEN(FUNC_stack), "ftracer 的返回函数堆栈溢出\n");
-        FUNC_stack[p_stack++] = i;
+        Assert(p_stack < ARRLEN(FUNC_stack), "调用太深, ftracer的堆栈溢出了");
+        snprintf(_buf, sizeof(_buf), "0x%8x %u C [%s @ 0x%8x]\n", pc_in, p_stack, FUNC_FTRACER[i].func_name, SOC_PC);
+        if(!strcmp(_buf, repeat_buf[1])) {
+          repeat_count++;
+        } else {
+          if(repeat_count) {
+            ftracer_write("重复%d次, count = %d\n", repeat_count/2 + 1, repeat_count);
+            repeat_count = 0;
+          }
+          ftracer_write("%s", _buf);
+        }
+        strcpy(repeat_buf[1], repeat_buf[0]);
+        strcpy(repeat_buf[0], _buf);        
+        FUNC_stack[p_stack].num = i;
+        FUNC_stack[p_stack].ret_addr = pc_in + 4;
+        p_stack++;
       }
     }
   }
   // 识别 ret 返回函数
-  if (is_ret(inst_in))
+  if(is_ret(inst_in))
   {
-    Assert(p_stack > 0, "ftracer 的返回函数堆栈为空\n");
-    p_stack--;
-    ftracer_write("0x%8x %*sret [%s @ 0x%8x]\n", pc_in, 4 * p_stack, " ", func_ftracer[FUNC_stack[p_stack]].func_name, get_reg(1));
+    if(p_stack <= ARRLEN(FUNC_stack)) {
+      bool good_ret = false;
+      uint32_t p_stack_init = p_stack;
+      while (p_stack--)
+      {
+        if(get_reg(1) == FUNC_stack[p_stack].ret_addr) {
+          good_ret = true;
+          break;
+        }
+      }
+      if(good_ret) {
+        snprintf(_buf, sizeof(_buf), "0x%8x %u R [%s @ 0x%8x]\n",pc_in, p_stack, FUNC_FTRACER[FUNC_stack[p_stack].num].func_name, get_reg(1));
+        if(!strcmp(_buf, repeat_buf[1])) {
+          repeat_count++;
+        } else {
+          if(repeat_count) {
+            ftracer_write("重复%d次, count = %d\n", repeat_count/2 + 1, repeat_count);
+            repeat_count = 0;
+          }
+          ftracer_write("%s", _buf);
+        }
+        strcpy(repeat_buf[1], repeat_buf[0]);
+        strcpy(repeat_buf[0], _buf);        
+      } else {
+        p_stack = p_stack_init;
+      }
+    }
   }
 }

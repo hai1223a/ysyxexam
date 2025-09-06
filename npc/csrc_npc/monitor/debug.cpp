@@ -1,8 +1,8 @@
-#include "../../include_npc/common.h"
+#include "../../include/common.h"
 #include <getopt.h> //,包含解析命令行参数的库函数
 
 VerilatedFstC *tfp = NULL;
-Vysyx_25050136_NPC *ysyx_25050136_NPC = NULL;
+VysyxSoCFull *top = NULL;
 FILE *log_fp = NULL;
 bool batch_mode = false; // 默认sdb模式
 
@@ -72,21 +72,29 @@ static int parse_args(int argc, char *argv[])
 //=====================================================
 // 用于初始化verilator仿真
 //=====================================================
+// 函数声明
+	void nvboard_bind_all_pins(VysyxSoCFull* top);
 static void init_verilator(int argc, char *argv[])
 {
   // 传递参数给verilator,建议在创建任何模型之前使用
   Verilated::commandArgs(argc, argv);
   // 构建一个名为ysyx_25050136_NPC的仿真模型
-  ysyx_25050136_NPC = new Vysyx_25050136_NPC;
+  top = new VysyxSoCFull;
 #ifdef CONFIG_FST
   // 创建一个fst波形文件指针
   tfp = new VerilatedFstC;
   // 启用跟踪
   Verilated::traceEverOn(true);
   // 采样深度为5
-  ysyx_25050136_NPC->trace(tfp, 10);
+  top->trace(tfp, 10);
   // 打开波形文件
-  tfp->open("waveform.fst");
+  tfp->open("wave/waveform.fst");
+#endif
+#ifdef CONFIG_TARGET_NVBOARD
+  // NVBOARD初始化引脚
+  nvboard_bind_all_pins(top);
+  // NVBOARD初始化
+  nvboard_init();
 #endif
 }
 //=====================================================
@@ -96,9 +104,9 @@ void cpu_init()
 {
   npcstate.state = NPC_RUNNING;
   stop_time = sim_time;
-  pc__ = RESET_VECTOR;
-  ysyx_25050136_NPC->clk = 0;
-  ysyx_25050136_NPC->reset = 1;
+  pc__ = 0;
+  top->clock = 0;
+  top->reset = 1;
 }
 //=====================================================
 // 用于初始化输出日志
@@ -119,23 +127,31 @@ void init_log(const char *log_file)
 //=====================================================
 void printf_statu()
 {
+  Log("NPC的性能计数器如下: ifu_c = %ld, lsu_c = %ld, csru_c = %ld, bqu_c = %ld, alu_c = %ld\n平均延迟 = %ld, 平均取指延迟 = %ld, 平均访存延迟 = %ld",
+       npc_perC.ifu_count, npc_perC.lsu_count, npc_perC.csru_count, npc_perC.bqu_count, npc_perC.alu_count,
+       (npc_perC.ifu_count == 0) ? 0 : ((sim_time - 1) / 2) / npc_perC.ifu_count,
+       (npc_perC.ifu_count == 0) ? 0 : npc_perC.if_cycle / npc_perC.ifu_count,
+       (npc_perC.lsu_count == 0) ? 0 : npc_perC.lsu_cycle / npc_perC.lsu_count);
   Log("PC = 0x%08x, halt = %d, NPC 的结束状态是%s", npcstate.halt_pc, npcstate.halt_ret,
       (npcstate.state == NPC_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) : 
       (npcstate.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : 
       ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))));
   Log("仿真时间为 %lu 次, 仿真周期为 %lu 个", sim_time - 1, (sim_time - 1) / 2);
+  Log("指令数量为 %lu 条", inst_count);
   Log("程序时间 = %ld us", g_timer);
 }
 
 void npc_end()
 {
+  
+  IFDEF(CONFIG_TARGET_NVBOARD, nvboard_quit(););
   IFDEF(CONFIG_ITRACE, print_iringbuf());
   // 输出完成状态
   printf_statu();
   // 关闭波形文件
   IFDEF(CONFIG_FST, tfp->close());
   // 删除指针
-  delete ysyx_25050136_NPC;
+  delete top;
 }
 
 static void welcome()
@@ -165,7 +181,7 @@ void init_main(int argc, char **argv)
   // Verilator 仿真初始化
   init_verilator(argc, argv);
   // 加载内存
-  long size = init_pmem(img_file);
+  long size = init_imem(img_file);
   // CPU初始化
   cpu_init();
   // Difftest

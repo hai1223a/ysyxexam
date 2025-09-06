@@ -12,7 +12,7 @@
 *
 * See the Mulan PSL v2 for more details.
 ***************************************************************************************/
-#include "../../include_npc/common.h"
+#include "../../include/common.h"
 #include <regex.h>
 
 /* We use the POSIX regex functions to process regular expressions.
@@ -334,7 +334,7 @@ uint32_t eval(int p, int q){
       case TK_LOGICAND:
         return val1 && val2;
       case TK_POINT:
-        return vaddr_read(val2, 4); 
+        return vaddr_read(val2); 
       default: assert(0);
     }
   }

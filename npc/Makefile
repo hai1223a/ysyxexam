@@ -36,7 +36,6 @@ VERILATOR_BIN   := verilator
 
 # 共同源文件与用于SOC的CPU文件
 COMMON_VSRC = vsrc/config.v $(filter-out vsrc/config.v,$(wildcard vsrc/*.v))
-COMMON_CSRC = $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
 
 # Verilator编译选项
 COMMON_VERFLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
@@ -87,20 +86,42 @@ override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 NPC_CPU_VSRC = $(BUILD_DIR)/ysyx_25050136_cpu.v
 $(NPC_CPU_VSRC): 
 	cat $(COMMON_VSRC) $(wildcard vsrc/npc_only/*.v) > $@
-
 NPC_VSRC := $(NPC_CPU_VSRC) 
-NPC_CSRC := $(COMMON_CSRC)
+NPC_CSRC := $(shell find csrc_npc -type f \( -name "*.c" -o -name "*.cpp" \))
+
+# NPC的配置
 NPC_RESET := 32'h80000000
 NPC_TOP := ysyx_25050136 
-NPC_INC := $(addprefix -I, vsrc)
-NPC_CFLAGS := $(COMMON_CFLAGS)
-NPC_LDFLAGS := $(COMMON_LDFLAGS)   
+
+NPC_CPATHS := $(abspath ../include_npc ../include/generated)
+NPC_CFLAGS := $(COMMON_CFLAGS) $(addprefix -I, $(NPC_CPATHS))
+NPC_LDFLAGS := $(COMMON_LDFLAGS)
+
+# NPC Verilator宏定义
 NPC_VERDEFINE := $(COMMON_VERDEFINE)+ysyx_25050136_RESET_PC="$(NPC_RESET)"+TOP_NAME="V$(NPC_TOP)"
+
+# NPC Verilator编译选项
 NPC_VERFLAGS += $(COMMON_VERFLAGS) --top-module $(NPC_TOP) $(NPC_VSRC) $(NPC_CSRC) \
-			    $(NPC_INC) +define$(NPC_VERDEFINE) \
+			    +define$(NPC_VERDEFINE) \
+
+# NPC依赖文件
+NPC_DEPEMD += $(LIBCAPSTONE) $(NPC_CPU_VSRC)
+NPC_BIN := $(OBJ_DIR)/V$(NPC_TOP)
 
 #================第六步: NPC专用配置 ====================
 
+npc_exe: $(NPC_DEPEMD)
+	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+	$(VERILATOR_BIN) $(NPC_VERFLAGS) -LDFLAGS "$(NPC_LDFLAGS)" -CFLAGS "$(NPC_CFLAGS)"
+
+npc_run: npc_exe
+	@$(NPC_BIN) $(ARGS)	
+
+npc_gdb: npc_exe
+	gdb --args @$(NPC_BIN) $(ARGS)
+
+npc_wave: npc_run
+	gtkwave $(WAVE_DIR)/waveform.fst
 
 #================第七步: SoC专用配置 ====================
 # SoC模式源文件
@@ -109,7 +130,7 @@ $(SOC_CPU_VSRC):
 	rm -f $@
 	cat $(COMMON_VSRC) $(wildcard vsrc/soc_only/*.v) > $@
 SOC_VSRC = $(SOC_CPU_VSRC) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v 
-SOC_CSRC := $(COMMON_CSRC)
+SOC_CSRC := $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
 
 # SoC的配置
 SOC_RESET := 32'h30000000
@@ -180,6 +201,6 @@ perf: $(SOC_DEPEMD)
            CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clock \
            RTL_FILES="$(SOC_CPU_VSRC)"
 
-.PHONY: run sim exe wave clean
+.PHONY: soc_exe soc_run soc_gdb soc_wave clean perf_commit perf
 
 include ../Makefile
