@@ -137,13 +137,6 @@ module ysyx_25050136_CLINT
     assign align_mask = ~((1 << s_arsize_i) - 1);
     assign ar_fire = s_arvalid_i & s_arready_o;
     assign r_fire = s_rvalid_o & s_rready_i;
-    // 写事务
-    assign s_awready_o = 1'b0;
-    assign s_wready_o  = 1'b0;
-    assign s_bvalid_o  = 1'b0;
-    assign s_bresp_o   = 2'b00;
-    assign s_bid_o     = 4'b0000;
-
     // ==================== 写事务状态机 ====================
     // 写事务状态定义
     localparam WRITE_IDLE = 2'd0;

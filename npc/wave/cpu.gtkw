@@ -1,21 +1,20 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Wed Sep  3 14:53:30 2025
+[*] Sat Sep  6 08:05:29 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Wed Sep  3 14:49:34 2025"
-[dumpfile_size] 17003723
+[dumpfile_mtime] "Sat Sep  6 08:03:17 2025"
+[dumpfile_size] 29342766
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/cpu.gtkw"
-[timestart] 3131390
+[timestart] 0
 [size] 1858 1001
 [pos] -101 -101
-*-12.000000 169858 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-11.100000 8430 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
 [treeopen] TOP.ysyxSoCFull.asic.cpu.
 [treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.
-[treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.
 [sst_width] 409
 [signals_width] 257
 [sst_expanded] 1
@@ -47,7 +46,6 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ID.fu_o[3:0]
 -group_end
 @28
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.if_wait
-@29
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.lsu_wait
 @200
 -
@@ -93,5 +91,11 @@ TOP.ysyxSoCFull.asic.apbdelay_delayer.in_penable
 TOP.ysyxSoCFull.asic.apbdelay_delayer.in_pready
 @22
 TOP.ysyxSoCFull.asic.apbdelay_delayer.out_prdata[31:0]
+@200
+-
+@28
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_CLINT.s_awvalid_i
+@29
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_CLINT.s_awready_o
 [pattern_trace] 1
 [pattern_trace] 0
