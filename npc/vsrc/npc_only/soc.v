@@ -1,4 +1,3 @@
-`include "config.v"
 `ifdef ysyx_25050136_VERILATOR_DPIC
 import "DPI-C" function void find_addr_0(); 
 import "DPI-C" function void find_ebreak();

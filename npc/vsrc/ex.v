@@ -1,4 +1,3 @@
-`include "config.v"
 module ysyx_25050136_EX
     #(
          DATA_WIDTH = 32

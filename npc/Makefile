@@ -32,8 +32,6 @@ VERILATOR_BIN   := verilator
 # 共同源文件与用于SOC的CPU文件
 COMMON_VSRC = $(wildcard vsrc/*.v)
 COMMON_CSRC = $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
-COMMON_CPU_VSRC = $(BUILD_DIR)/ysyx_25050136.v
-$(shell cat $(COMMON_VSRC) $(wildcard vsrc/soc_only/*.v) > $(COMMON_CPU_VSRC))
 
 # Verilator编译选项
 COMMON_VERFLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
@@ -64,7 +62,10 @@ endif
 
 COMMON_VERDEFINE := +ysyx_25050136_VERILATOR_DPIC
 #================第三步:NPC专用配置==============
-NPC_VSRC := $(COMMON_VSRC) $(wildcard vsrc/npc_only/*.v) 
+NPC_CPU_VSRC = $(BUILD_DIR)/ysyx_25050136_cpu.v
+$(shell cat $(COMMON_VSRC) $(wildcard vsrc/npc_only/*.v) > $(NPC_CPU_VSRC))
+
+NPC_VSRC := $(NPC_CPU_VSRC) 
 NPC_CSRC := $(COMMON_CSRC)
 NPC_RESET := 32'h80000000
 NPC_TOP := ysyx_25050136 
@@ -76,7 +77,10 @@ NPC_VERFLAGS += $(COMMON_VERFLAGS) --top-module $(NPC_TOP) $(NPC_VSRC) $(NPC_CSR
 			    $(NPC_INC) +define$(NPC_VERDEFINE) \
 
 #================第三步:SOC专用配置=================
-SOC_VSRC := $(COMMON_CPU_VSRC) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v 
+SOC_CPU_VSRC = $(BUILD_DIR)/ysyx_25050136.v
+$(shell cat $(COMMON_VSRC) $(wildcard vsrc/soc_only/*.v) > $(SOC_CPU_VSRC))
+
+SOC_VSRC := $(SOC_CPU_VSRC) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v 
 SOC_CSRC := $(COMMON_CSRC)
 SOC_RESET = 32'h30000000
 SOC_TOP := ysyxSoCFull 
