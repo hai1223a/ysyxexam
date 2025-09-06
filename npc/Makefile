@@ -170,7 +170,7 @@ clean:
 perf_commit:
 	$(call git_commit, "性能测试提交-第一次测试-详见sim性能测试文件") # DO NOT REMOVE THIS LINE!!!
 
-perf: $(EXE_DEPEND)
+perf: $(SOC_DEPEMD)
 	$(call git_commit, "make perf") # DO NOT REMOVE THIS LINE!!!
 	$(VERILATOR_BIN) $(SOC_VERFLAGS) -LDFLAGS "$(SOC_LDFLAGS)" -CFLAGS "$(SOC_CFLAGS)"	
 	@$(SOC_BIN) $(ARGS)
