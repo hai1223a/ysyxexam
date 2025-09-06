@@ -3,8 +3,8 @@
 //=====================================================
 // 头文件
 //=====================================================
-#include "VysyxSoCFull.h"  // 包含Verilog工程的C++模型
-#include "VysyxSoCFull___024root.h"
+#include "Vysyx_25050136.h"  // 包含Verilog工程的C++模型
+#include "Vysyx_25050136___024root.h"
 #include <verilated.h>           // Verilator的库
 #include "generated/autoconf.h"
 #ifdef CONFIG_FST
