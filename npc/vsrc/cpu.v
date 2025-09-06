@@ -1,7 +1,7 @@
 module ysyx_25050136_NPC
 #(
-    ADDR_WIDTH = 5,
-    DATA_WIDTH = 32
+    parameter ADDR_WIDTH = 5,
+    parameter DATA_WIDTH = 32
 )
 (
     input                                     clk,

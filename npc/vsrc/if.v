@@ -1,6 +1,6 @@
 module ysyx_25050136_IF
     #(
-         DATA_WIDTH = 32
+        parameter DATA_WIDTH = 32
      )
      (
          input                      clk             ,

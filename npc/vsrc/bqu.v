@@ -1,6 +1,6 @@
 module ysyx_25050136_BQU
     #(
-         DATA_WIDTH = 32
+        parameter DATA_WIDTH = 32
      )
      (
          input  [DATA_WIDTH-1:0]                      op1_i,

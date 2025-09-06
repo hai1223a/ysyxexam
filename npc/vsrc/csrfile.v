@@ -1,7 +1,7 @@
 // CSR文件
 module ysyx_25050136_CSR_File
     #(
-         DATA_WIDTH = 32
+        parameter DATA_WIDTH = 32
      )
      (
          input                                                 clk,

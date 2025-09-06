@@ -1,7 +1,7 @@
 module ysyx_25050136_CLINT
     #(
-         ADDR_WIDTH = 32,
-         DATA_WIDTH = 32
+        parameter ADDR_WIDTH = 32,
+        parameter DATA_WIDTH = 32
      )
      (
         // 通用数据

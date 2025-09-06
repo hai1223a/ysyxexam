@@ -1,9 +1,9 @@
 module ysyx_25050136_ARBITER
     #(
-        MASTER_NUM = 2,
-        SLAVER_NUM = 2,
-        DATA_WIDTH = 32,
-        ADDR_WIDTH = 32
+        parameter MASTER_NUM = 2,
+        parameter SLAVER_NUM = 2,
+        parameter DATA_WIDTH = 32,
+        parameter ADDR_WIDTH = 32
      )
      (
         // 通用数据

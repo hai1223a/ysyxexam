@@ -1,7 +1,7 @@
 // CSR读写单元
 module ysyx_25050136_CSRU
     #(
-         DATA_WIDTH = 32
+        parameter DATA_WIDTH = 32
      )
      (
          input                                              clk,

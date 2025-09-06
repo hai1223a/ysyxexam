@@ -2,8 +2,8 @@ import "DPI-C" function int pmem_read(input int raddr);
 import "DPI-C" function void pmem_write(input int waddr, input int wdata, input int wmask);
 module ysyx_25050136_SRAM
     #(
-         ADDR_WIDTH = 32,
-         DATA_WIDTH = 32
+         parameter ADDR_WIDTH = 32,
+         parameter DATA_WIDTH = 32
      )
      (
          // 通用数据
