@@ -9,6 +9,8 @@ ifeq ($(wildcard $(NPC_HOME)/vsrc/cpu.v),)
  $(error NPC_HOME=$(NPC_HOME) is not a NPC repo)
 endif
 
+defualt: soc_run
+
 # 加载自动生成的配置
 -include $(NPC_HOME)/include/config/auto.conf
 -include $(NPC_HOME)/include/config/auto.conf.cmd
