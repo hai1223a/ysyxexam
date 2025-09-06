@@ -106,6 +106,7 @@ NPC_VERFLAGS += $(COMMON_VERFLAGS) --top-module $(NPC_TOP) $(NPC_VSRC) $(NPC_CSR
 # SoC模式源文件
 SOC_CPU_VSRC = $(BUILD_DIR)/ysyx_25050136.v
 $(SOC_CPU_VSRC):
+	rm -f $@
 	cat $(COMMON_VSRC) $(wildcard vsrc/soc_only/*.v) > $@
 SOC_VSRC = $(SOC_CPU_VSRC) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v 
 SOC_CSRC := $(COMMON_CSRC)
