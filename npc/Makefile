@@ -79,49 +79,49 @@ COMMON_VERDEFINE := +ysyx_25050136_VERILATOR_DPIC
 # 默认仿真参数
 override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 				 -l $(NPC_HOME)/build/log/log.txt \
-# 				 -i $(NPC_HOME)/sim/microbench-riscv32e-ysyxsoc.bin
+				 -i $(NPC_HOME)/sim/microbench-riscv32e-ysyxsoc.bin
 
 #================第五步: NPC专用配置 ====================
 # NPC模式Verilog源文件（合并config.v和其他文件，确保config.v在最前面）
-NPC_CPU_VSRC = $(BUILD_DIR)/ysyx_25050136_cpu.v
-$(NPC_CPU_VSRC): 
-	cat $(COMMON_VSRC) $(wildcard vsrc/npc_only/*.v) > $@
-NPC_VSRC := $(NPC_CPU_VSRC) 
-NPC_CSRC := $(shell find csrc_npc -type f \( -name "*.c" -o -name "*.cpp" \))
+# NPC_CPU_VSRC = $(BUILD_DIR)/ysyx_25050136_cpu.v
+# $(NPC_CPU_VSRC): 
+# 	cat $(COMMON_VSRC) $(wildcard vsrc/npc_only/*.v) > $@
+# NPC_VSRC := $(NPC_CPU_VSRC) 
+# NPC_CSRC := $(shell find csrc_npc -type f \( -name "*.c" -o -name "*.cpp" \))
 
-# NPC的配置
-NPC_RESET := 32'h80000000
-NPC_TOP := ysyx_25050136 
+# # NPC的配置
+# NPC_RESET := 32'h80000000
+# NPC_TOP := ysyx_25050136 
 
-NPC_CPATHS := $(abspath ../include_npc ../include/generated)
-NPC_CFLAGS := $(COMMON_CFLAGS) $(addprefix -I, $(NPC_CPATHS))
-NPC_LDFLAGS := $(COMMON_LDFLAGS)
+# NPC_CPATHS := $(abspath ../include_npc ../include/generated)
+# NPC_CFLAGS := $(COMMON_CFLAGS) $(addprefix -I, $(NPC_CPATHS))
+# NPC_LDFLAGS := $(COMMON_LDFLAGS)
 
-# NPC Verilator宏定义
-NPC_VERDEFINE := $(COMMON_VERDEFINE)+ysyx_25050136_RESET_PC="$(NPC_RESET)"+TOP_NAME="V$(NPC_TOP)"
+# # NPC Verilator宏定义
+# NPC_VERDEFINE := $(COMMON_VERDEFINE)+ysyx_25050136_RESET_PC="$(NPC_RESET)"+TOP_NAME="V$(NPC_TOP)"
 
-# NPC Verilator编译选项
-NPC_VERFLAGS += $(COMMON_VERFLAGS) --top-module $(NPC_TOP) $(NPC_VSRC) $(NPC_CSRC) \
-			    +define$(NPC_VERDEFINE) \
+# # NPC Verilator编译选项
+# NPC_VERFLAGS += $(COMMON_VERFLAGS) --top-module $(NPC_TOP) $(NPC_VSRC) $(NPC_CSRC) \
+# 			    +define$(NPC_VERDEFINE) \
 
-# NPC依赖文件
-NPC_DEPEMD += $(LIBCAPSTONE) $(NPC_CPU_VSRC)
-NPC_BIN := $(OBJ_DIR)/V$(NPC_TOP)
+# # NPC依赖文件
+# NPC_DEPEMD += $(LIBCAPSTONE) $(NPC_CPU_VSRC)
+# NPC_BIN := $(OBJ_DIR)/V$(NPC_TOP)
 
-#================第六步: NPC专用配置 ====================
+# #================第六步: NPC专用配置 ====================
 
-npc_exe: $(NPC_DEPEMD)
-	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
-	$(VERILATOR_BIN) $(NPC_VERFLAGS) -LDFLAGS "$(NPC_LDFLAGS)" -CFLAGS "$(NPC_CFLAGS)"
+# npc_exe: $(NPC_DEPEMD)
+# 	$(call git_commit, "sim RTL") # DO NOT REMOVE THIS LINE!!!
+# 	$(VERILATOR_BIN) $(NPC_VERFLAGS) -LDFLAGS "$(NPC_LDFLAGS)" -CFLAGS "$(NPC_CFLAGS)"
 
-npc_run: npc_exe
-	@$(NPC_BIN) $(ARGS)	
+# npc_run: npc_exe
+# 	@$(NPC_BIN) $(ARGS)	
 
-npc_gdb: npc_exe
-	gdb --args @$(NPC_BIN) $(ARGS)
+# npc_gdb: npc_exe
+# 	gdb --args @$(NPC_BIN) $(ARGS)
 
-npc_wave: npc_run
-	gtkwave $(WAVE_DIR)/waveform.fst
+# npc_wave: npc_run
+# 	gtkwave $(WAVE_DIR)/waveform.fst
 
 #================第七步: SoC专用配置 ====================
 # SoC模式源文件
