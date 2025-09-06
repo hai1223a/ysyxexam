@@ -15,29 +15,7 @@ long init_imem(char *img_file)
   if (!img_file)
   {
     uint32_t *imem_w = (uint32_t *)imem;
-  //  *imem_w++ = 0x123452b7; // auipc t0, 0x12345
-  //  *imem_w++ = 0x67828293; // addi t0, t0, 0x678
-  //  *imem_w++ = 0x80000337; // lui t1, 0x80000
-  //  *imem_w++ = 0x00532023; // sw t0, 0(t1)
-  //  *imem_w++ = 0x00032283; // lw t2, 0(t1))
-  //  *imem_w++ = 0x00531323; // sh	t0,6(t1) 
-  //  *imem_w++ = 0x00631383; // lh	t2,6(t1)
-  //  *imem_w++ = 0x005302a3; // sb	t0,5(t1)
-  //  *imem_w++ = 0x00530383; // lb	t2,5(t1)
-  //  *imem_w++ = 0x00100073; // ebreak 
-  //  *imem_w++ = 0x020007b7; // lui	a5,0x2000
-  //  *imem_w++ = 0x02000737; // lui	a4,0x2000
-  //  *imem_w++ = 0x0047a603; // lw	a2,4(a5) # 2000004
-  //  *imem_w++ = 0x00072583; // lw	a1,0(a4) # 2000000 
-  //  *imem_w++ = 0x00100073; // ebreak 
-      *imem_w++ = 0xa00002b7; // lui	t0,0xa0000
-      *imem_w++ = 0x12345337; // lui	t1,0x12345
-      *imem_w++ = 0x67830313; // addi	t1,t1,1656
-      *imem_w++ = 0x00629123; // sh	t1,2(t0)
-      *imem_w++ = 0x00629123; // sh	t1,2(t0)  
-      *imem_w++ = 0x00629223; // sh	t1,4(t0)
-      *imem_w++ = 0x00229503; // lh	a0,2(t0)
-      *imem_w++ = 0x00429583; // lh	a1,4(t0)
+      
       *imem_w++ = 0x00100073; // ebreak 
       Log("没有给源文件, 程序使用了内置的代码.");
     return 20;

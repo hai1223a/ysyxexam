@@ -2,16 +2,21 @@
 .globl _start
 # 第一级引导加载程序
 _start:
-    la      a0, boot_start          # 目标地址
-    la      a1, boot_load_start     # 源地址
-    la      a2, boot_size           # 大小
-
-    beq     a0, a1, _boot_end 
-    beqz    a2, _boot_end
-    # 计算4字节块数和剩余字节
-    srli    a3, a2, 2
-    andi    a4, a2, 0x3
-    beqz    a3, _bootf_1bytes
+#    la      a0, boot_start          # 目标地址
+#    la      a1, boot_load_start     # 源地址
+#    la      a2, boot_size           # 大小
+#
+#    beq     a0, a1, _boot_end 
+#    beqz    a2, _boot_end
+#    # 计算4字节块数和剩余字节
+#    srli    a3, a2, 2
+#    andi    a4, a2, 0x3
+#    beqz    a3, _bootf_1bytes
+    li      a0, 0x02000000
+    li      a1, 0x12345678
+    sw      a1, 0(a0)
+    lw      a2, 0(a0)
+    lw      a3, 4(a0)
 _bootf_4bytes:
     lw      a5, 0(a1)
     sw      a5, 0(a0)
