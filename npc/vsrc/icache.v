@@ -36,8 +36,8 @@ module ysyx_25050136_ICACHE
    localparam INCACHE   = 2'd1;
    localparam CACHEMISS = 2'd2;
 
-   reg [LINE_WIDTH-1:0] cache_data [0:INDEX_SIZE];
-   reg [TAG_WIDTH-1 :0] cache_tag [0:INDEX_SIZE];
+   reg [LINE_WIDTH-1:0] cache_data [0:INDEX_SIZE-1];
+   reg [TAG_WIDTH-1 :0] cache_tag [0:INDEX_SIZE-1];
    reg [INDEX_SIZE-1:0] cache_valid ;
 
    reg [1:0] state;

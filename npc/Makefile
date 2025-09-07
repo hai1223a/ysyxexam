@@ -128,8 +128,8 @@ override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 #================第七步: SoC专用配置 ====================
 # SoC模式源文件
 SOC_CPU_VSRC = $(BUILD_DIR)/ysyx_25050136.v
+$(shell rm -f $(SOC_CPU_VSRC))
 $(SOC_CPU_VSRC):
-	rm -f $@
 	cat $(COMMON_VSRC) $(wildcard vsrc/soc_only/*.v) > $@
 SOC_VSRC = $(SOC_CPU_VSRC) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v 
 SOC_CSRC := $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
