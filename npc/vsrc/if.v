@@ -47,6 +47,8 @@ module ysyx_25050136_IF
             end
         end
     end
+    assign req_addr_o = req_addr_r;
+    assign req_valid_o = req_valid_r;
     assign static_npc_o = (pc == 0) ? RESET_PC : (pc + 32'h4);
     assign bvalid_o = req_ready_i;
     assign inst_o = req_valid_r ? req_rdata_i : inst_r;
