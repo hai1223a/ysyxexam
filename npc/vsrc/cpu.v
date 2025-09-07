@@ -66,14 +66,12 @@ module ysyx_25050136_NPC
     reg if_wait, lsu_wait;
     always @(posedge clk) begin
         if(reset) begin
-            if_wait <= 0;
             lsu_wait <= 0;
         end else begin
-            if(inst_arvalid_o) if_wait <= 1;
-            if(inst_rvalid_i) if_wait <= 0;
             if(mem_awvalid_o | mem_arvalid_o) lsu_wait <= 1;
             if(mem_bvalid_i | mem_rvalid_i) lsu_wait <= 0;
-            if(if_wait | inst_arvalid_o) if_cycle_get();
+            if(inst_req_valid & !inst_req_ready) if_cycle_get();
+            if(inst_req_valid & inst_req_ready) ifu_get();
             if(lsu_wait | mem_awvalid_o | mem_arvalid_o) lsu_cycle_get();
         end
     end
