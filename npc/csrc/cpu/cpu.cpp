@@ -30,17 +30,17 @@ void cpu_exec_once()
     sim_time++;
     IFDEF(CONFIG_TARGET_NVBOARD, nvboard_update());
     // 指令计算
-    break;
-    // if (SOC_PC != pc__ )
-    // {
-    //   pc_pre = pc__;
-    //   pc__ = SOC_PC;
-    //   if((sim_time >= (reset_time + stop_time)) & pc__ != RESET_VECTOR) {
-    //     inst_pre = *(uint32_t *)(imem + pc_pre - CONFIG_IMEM_BASE);
-    //     inst_count++;
-    //     break;
-    //   }
-    // }
+    // break;
+    if (SOC_PC != pc__ )
+    {
+      pc_pre = pc__;
+      pc__ = SOC_PC;
+      if((sim_time >= (reset_time + stop_time)) & pc__ != RESET_VECTOR) {
+        inst_pre = *(uint32_t *)(imem + pc_pre - CONFIG_IMEM_BASE);
+        inst_count++;
+        break;
+      }
+    }
   }
 }
 
