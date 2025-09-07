@@ -16,6 +16,7 @@ typedef struct {
   uint64_t alu_count;
   uint64_t if_cycle;
   uint64_t lsu_cycle;
+  uint64_t icache_hit;
 } NPC_perforcount;
 
 extern NPC_perforcount npc_perC;

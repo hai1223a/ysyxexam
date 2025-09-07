@@ -73,6 +73,9 @@ module ysyx_25050136_ICACHE
             end 
             INCACHE: begin
                if(cache_valid[addr_index] && (cache_tag[addr_index] == addr_tag)) begin
+`ifdef ysyx_25050136_VERILATOR_DPIC
+                  icache_hit();
+`endif 
                   state <= IDLE;
                end else begin
                   state <= CACHEMISS;
