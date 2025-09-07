@@ -35,6 +35,7 @@ module ysyx_25050136_ICACHE
    localparam IDLE      = 2'd0;
    localparam INCACHE   = 2'd1;
    localparam CACHEMISS = 2'd2;
+   localparam MISSIN    = 2'd3;
 
    reg [LINE_WIDTH-1:0] cache_data [0:INDEX_SIZE-1];
    reg [TAG_WIDTH-1 :0] cache_tag [0:INDEX_SIZE-1];
@@ -52,6 +53,7 @@ module ysyx_25050136_ICACHE
    localparam READ_IEDL = 2'd0;
    localparam READ_ADDR = 2'd1;
    localparam READ_DATA = 2'd2;
+
 
    reg [1:0] state_read;
    reg m_rready_r;
@@ -83,10 +85,12 @@ module ysyx_25050136_ICACHE
             end
             CACHEMISS: begin
                if(r_fire && m_rlast_i && (m_rresp_i == 2'd0)) begin
-                  state <= INCACHE;
+                  state <= MISSIN;
                end
             end
-            default: ;
+            MISSIN: begin
+               state <= IDLE;
+            end
          endcase
       end
    end
@@ -101,12 +105,10 @@ module ysyx_25050136_ICACHE
                req_ready_r = 1;               
             end
          end 
-         // CACHEMISS: begin
-         //    if(cache_valid[addr_index] && (cache_tag[addr_index] == addr_tag)) begin
-         //       req_rdata_r = cache_data[addr_index];
-         //       req_ready_r = 1;               
-         //    end
-         // end
+         MISSIN: begin
+            req_rdata_r = cache_data[addr_index];
+            req_ready_r = 1;               
+         end
          default: ;
       endcase
    end
