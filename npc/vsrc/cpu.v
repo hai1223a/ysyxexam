@@ -58,6 +58,26 @@ module ysyx_25050136_NPC
     input                         mem_rlast_i    ,
     input    [3:0]                mem_rid_i      
 );
+`ifdef ysyx_25050136_VERILATOR_DPIC
+    always @(*) begin
+        if(|(inst_rresp_i | mem_bresp_i | mem_rresp_i))
+            find_resp();
+    end
+    reg if_wait, lsu_wait;
+    always @(posedge clk) begin
+        if(reset) begin
+            if_wait <= 0;
+            lsu_wait <= 0;
+        end else begin
+            if(inst_arvalid_o) if_wait <= 1;
+            if(inst_rvalid_i) if_wait <= 0;
+            if(mem_awvalid_o | mem_arvalid_o) lsu_wait <= 1;
+            if(mem_bvalid_i | mem_rvalid_i) lsu_wait <= 0;
+            if(if_wait | inst_arvalid_o) if_cycle_get();
+            if(lsu_wait | mem_awvalid_o | mem_arvalid_o) lsu_cycle_get();
+        end
+    end
+`endif
     wire [31:0] inst_req_addr;
     wire [31:0] inst_req_rdata;
     wire inst_req_ready;

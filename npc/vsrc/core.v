@@ -81,12 +81,6 @@ wire ex2if_pc_updata_o;
 // 使用DPI-C实现的取指和访存操作, 以及寻找ebreak
 //========================================
 `ifdef ysyx_25050136_VERILATOR_DPIC
-always @(*) begin
-    if(id2ex_csru_op_o[`ysyx_25050136_CSRU_EBREAK])
-        find_ebreak();
-    if(|(inst_rresp_i | mem_bresp_i | mem_rresp_i))
-        find_resp();
-end
 always @(posedge clk) begin
     if(!reset) begin
         if(if2ex_bvalid_o) begin
@@ -100,20 +94,6 @@ always @(posedge clk) begin
                 alu_get();
             end
         end
-    end
-end
-reg if_wait, lsu_wait;
-always @(posedge clk) begin
-    if(reset) begin
-        if_wait <= 0;
-        lsu_wait <= 0;
-    end else begin
-        if(inst_arvalid_o) if_wait <= 1;
-        if(inst_rvalid_i) if_wait <= 0;
-        if(mem_awvalid_o | mem_arvalid_o) lsu_wait <= 1;
-        if(mem_bvalid_i | mem_rvalid_i) lsu_wait <= 0;
-        if(if_wait | inst_arvalid_o) if_cycle_get();
-        if(lsu_wait | mem_awvalid_o | mem_arvalid_o) lsu_cycle_get();
     end
 end
 `endif
