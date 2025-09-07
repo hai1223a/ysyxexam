@@ -101,6 +101,12 @@ module ysyx_25050136_ICACHE
                req_ready_r = 1;               
             end
          end 
+         CACHEMISS: begin
+            if(cache_valid[addr_index] && (cache_tag[addr_index] == addr_tag)) begin
+               req_rdata_r = cache_data[addr_index];
+               req_ready_r = 1;               
+            end
+         end
          default: ;
       endcase
    end
