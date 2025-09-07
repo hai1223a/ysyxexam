@@ -5,21 +5,11 @@ module ysyx_25050136_IF
      (
          input                      clk             ,
          input                      reset           ,
-         // 读地址
-         output                     m_arvalid_o     ,
-         input                      m_arready_i     ,
-         output   [DATA_WIDTH-1:0]  m_araddr_o      ,
-         output   [3:0]             m_arid_o        ,
-         output   [7:0]             m_arlen_o       ,
-         output   [2:0]             m_arsize_o      ,
-         output   [1:0]             m_arburst_o     ,
-         // 读数据
-         input                      m_rvalid_i      ,
-         output                     m_rready_o      ,
-         input    [31:0]            m_rdata_i       ,
-         input    [1:0]             m_rresp_i       ,
-         input                      m_rlast_i       ,
-         input    [3:0]             m_rid_i         ,
+         // 与icache握手信号
+         input    [31:0]            req_rdata_i     ,
+         input                      req_ready_i     ,
+         output   [31:0]            req_addr_o      ,
+         output                     req_valid_o     ,
          // 内部 
          input                      dynamic_valid_i ,
          input    [DATA_WIDTH-1:0]  dynamic_npc_i   ,
@@ -30,75 +20,33 @@ module ysyx_25050136_IF
          output                     bvalid_o            // 该信号告诉后面的模块新指令来了
      );
      
-    reg [DATA_WIDTH-1:0] pc;
-    reg m_rready_r;
-    reg [31:0] inst_r;
-    reg [DATA_WIDTH-1:0] m_araddr_r;
-    wire ar_fire, r_fire;
-    localparam READ_IEDL = 2'd0;
-    localparam READ_ADDR = 2'd1;
-    localparam READ_DATA = 2'd2;
 `ifdef ysyx_25050136_RESET_PC
     localparam RESET_PC = `ysyx_25050136_RESET_PC;
 `else
     localparam RESET_PC = 32'h80000000;  // 默认复位地址
 `endif
 
-    reg [1:0] state_read;
+    reg req_valid_r;
+    reg [31:0] req_addr_r;
+    reg [31:0] inst_r;
     always @(posedge clk) begin
         if (reset) begin
-            state_read   <= READ_IEDL;
-            pc           <= 0;
-            m_rready_r   <= 0;
-            inst_r       <= 0;
-            m_araddr_r   <= 0;
+            req_addr_r <= 0;
+            req_valid_r <= 0;
         end else begin
-            case(state_read)
-                READ_IEDL: begin
-                    m_rready_r <= 1;
-                    if (bready_i) begin
-                        state_read <= READ_ADDR;
-                        m_araddr_r <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
-                        pc <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
-                    end
-                end 
-                READ_ADDR: begin
-                    m_rready_r <= 1;
-                    if (ar_fire) begin
-                        m_araddr_r <= 0;
-                        state_read <= READ_DATA;                        
-                    end
-                end 
-                READ_DATA: begin
-                    if (r_fire) begin
-                        if(m_rlast_i) begin
-                        `ifdef ysyx_25050136_VERILATOR_DPIC
-                            ifu_get();
-                        `endif
-                            state_read <= READ_IEDL;
-                        end
-                        inst_r <= m_rdata_i; 
-                        m_rready_r <= 0;
-                    end else begin
-                        m_rready_r <= 1;                        
-                    end
-                end 
-                default: ;
-            endcase
+            if(bready_i) begin
+                req_addr_r <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
+                req_valid_r <= 1;
+            end
+            if(req_ready_i) begin
+                req_valid_r <= 0;
+                inst_r <= req_rdata_i;
+            end
         end
     end
-    assign static_npc_o = (pc == 0) ? RESET_PC : (pc + 32'h4);
-    assign bvalid_o = (state_read == READ_DATA) && r_fire & m_rlast_i & (m_rresp_i == 2'd0);
-    assign inst_o = (state_read == READ_IEDL) ? inst_r : m_rdata_i;
-    assign pc_o = pc;
-    assign m_arvalid_o = (state_read == READ_ADDR);
-    assign m_araddr_o  = m_araddr_r;
-    assign m_arid_o = 0;
-    assign m_arlen_o = 0;
-    assign m_arsize_o = 3'b010;
-    assign m_arburst_o = 0;
-    assign m_rready_o = m_rready_r;
-    assign ar_fire = m_arvalid_o & m_arready_i;
-    assign r_fire = m_rvalid_i & m_rready_o;
+    assign static_npc_o = (req_addr_r == 0) ? RESET_PC : (req_addr_r + 32'h4);
+    assign bvalid_o = req_ready_i;
+    assign inst_o = req_valid_r ? req_rdata_i : inst_r;
+    assign pc_o = req_addr_r;
 
 endmodule
