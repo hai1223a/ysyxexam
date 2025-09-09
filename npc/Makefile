@@ -198,10 +198,14 @@ perf: $(SOC_DEPEMD)
 	$(call git_commit, "make perf") # DO NOT REMOVE THIS LINE!!!
 	$(VERILATOR_BIN) $(SOC_VERFLAGS) -LDFLAGS "$(SOC_LDFLAGS)" -CFLAGS "$(SOC_CFLAGS)"	
 	@$(SOC_BIN) $(ARGS)
-	@$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
-           DESIGN=ysyx_25050136 \
-           CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clock \
-           RTL_FILES="$(SOC_CPU_VSRC)"
+	@read -p "Do you want to continue with STA analysis? [y/N] " -n 1 -r; \
+	echo; \
+	if [[ $$REPLY =~ ^[Yy]$$ ]]; then \
+		$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
+			DESIGN=ysyx_25050136 \
+			CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clock \
+			RTL_FILES="$(SOC_CPU_VSRC)"; \
+	fi
 
 .PHONY: soc_exe soc_run soc_gdb soc_wave clean perf_commit perf
 
