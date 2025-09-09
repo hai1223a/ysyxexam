@@ -36,6 +36,12 @@ static void serial_io_handler(uint32_t offset, int len, bool is_write) {
       if (is_write) serial_putc(serial_base[0]);
       else panic("do not support read");
       break;
+    case 1:
+    case 2:
+    case 3:
+    case 4:
+    case 5:
+        break;
     default: panic("do not support offset = %d", offset);
   }
 }
