@@ -203,6 +203,7 @@ static int parse_args(int argc, char *argv[]) {
     {"elf"        , required_argument, NULL, 'e'},  // 读取elf文件
     {"elf-log"    , required_argument, NULL, 'g'},  // 写入ftracer的内容
     {"dtrace-log" , required_argument, NULL, 'k'},  // 写入DTRACE的内容
+    {"image"      , required_argument, NULL, 'i'},
     {"help"       , no_argument      , NULL, 'h'},
     {0            , 0                , NULL,  0 },
   };
@@ -216,7 +217,7 @@ static int parse_args(int argc, char *argv[]) {
       case 'e': elf_file = optarg; break;
       case 'g': ftracer_log_file = optarg; break;
       case 'k': dtracer_log_file = optarg; break;
-      case 1: img_file = optarg; return 0;
+      case 'i': img_file = optarg; break;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
         printf("\t-b,--batch                     run with batch mode\n");
@@ -226,6 +227,7 @@ static int parse_args(int argc, char *argv[]) {
         printf("\t-e,--elf=ELF_FILE              load elf file for ftrace\n");
         printf("\t-g,--elf-log=FTRACER_FILE      ftracer output log to FTRACER_FILE\n");
         printf("\t-k,--dtrace-log=DTRACER_FILE   ftracer output log to DTRACER_FILE\n");
+        printf("\t-i,--image=IMG_FILE       load program from IMG_FILE\n");
         printf("\n");
         exit(0);
     }

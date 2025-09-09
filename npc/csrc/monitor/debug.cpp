@@ -62,7 +62,7 @@ static int parse_args(int argc, char *argv[])
       printf("\t-p,--port=PORT            run DiffTest with port PORT\n");
       printf("\t-e,--elf=ELF_FILE         load elf file for ftrace\n");
       printf("\t-g,--elf-log=FTRACER_FILE ftracer output log to FTRACER_FILE\n");
-      printf("\t-i,--image=FTRACER_FILE ftracer output log to FTRACER_FILE\n");
+      printf("\t-i,--image=IMG_FILE       load program from IMG_FILE\n");
       printf("\n");
       exit(0);
     }
