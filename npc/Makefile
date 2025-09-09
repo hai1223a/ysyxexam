@@ -199,7 +199,7 @@ perf: $(SOC_DEPEMD)
 	$(VERILATOR_BIN) $(SOC_VERFLAGS) -LDFLAGS "$(SOC_LDFLAGS)" -CFLAGS "$(SOC_CFLAGS)"	
 	@$(SOC_BIN) $(ARGS)
 	@echo "暂停执行，按任意键继续..."
-	@read
+	@read a
 	@$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
            DESIGN=ysyx_25050136 \
            CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clock \
