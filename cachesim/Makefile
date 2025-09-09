@@ -6,8 +6,10 @@ BINARY := $(BUILD_DIR)/$(NAME)
 CXX := g++
 LD := $(CXX)
 CXXSRC += $(shell find src -type f -name "*.cpp" )
+INC_PATH := include
+INCLUDES = $(addprefix -I, $(INC_PATH))
 OBJS := $(CXXSRC:%.cpp=$(OBJ_DIR)/%.o)
-CXXFLAGS := -O2 -MMD -Wall -Werror
+CXXFLAGS := -O2 -MMD -Wall -Werror $(INCLUDES)
 
 override ARGS ?= 
 
@@ -25,3 +27,6 @@ $(BINARY):: $(OBJS)
 
 run: $(BINARY)
 	@$(BINARY) $(ARGS)
+
+clean: 
+	rm -rf $(BUILD_DIR)
