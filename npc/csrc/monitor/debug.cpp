@@ -133,7 +133,7 @@ void printf_statu()
        (npc_perC.ifu_count == 0) ? 0 : npc_perC.if_cycle / npc_perC.ifu_count,
        (npc_perC.lsu_count == 0) ? 0 : npc_perC.lsu_cycle / npc_perC.lsu_count);
   Log("icache: 命中次数 = %ld, AMAT = %ld",
-       npc_perC.icache_hit, ((npc_perC.ifu_count == 0)) ? 0 :1+944*(npc_perC.ifu_count-npc_perC.icache_hit)/npc_perC.ifu_count);
+       npc_perC.icache_hit, ((npc_perC.ifu_count == 0)) ? 0 :1+926*(npc_perC.ifu_count-npc_perC.icache_hit)/npc_perC.ifu_count);
   Log("PC = 0x%08x, halt = %d, NPC 的结束状态是%s", npcstate.halt_pc, npcstate.halt_ret,
       (npcstate.state == NPC_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) : 
       (npcstate.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : 
