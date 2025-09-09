@@ -192,7 +192,7 @@ clean:
 	rm -f $(WAVE_DIR)/*.fst
 
 perf_commit:
-	$(call git_commit, "性能测试提交-第一次测试-详见sim性能测试文件") # DO NOT REMOVE THIS LINE!!!
+	$(call git_commit, "性能测试提交-添加icache-详见sim性能测试文件") # DO NOT REMOVE THIS LINE!!!
 
 perf: $(SOC_DEPEMD)
 	$(call git_commit, "make perf") # DO NOT REMOVE THIS LINE!!!
