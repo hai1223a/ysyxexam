@@ -40,8 +40,9 @@ static void serial_io_handler(uint32_t offset, int len, bool is_write) {
     case 2:
     case 3:
     case 4:
-    case 5:
         break;
+    case 5:
+        if(!is_write) serial_base[5] = 0b00100000;
     default: panic("do not support offset = %d", offset);
   }
 }
