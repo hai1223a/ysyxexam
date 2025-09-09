@@ -138,6 +138,7 @@ static void exec_once(Decode *s, vaddr_t pc) {
 static void execute(uint64_t n) {
   Decode s;
   for (;n > 0; n --) {
+    IFDEF(CONFIG_ITRACE, itrace_write(&cpu.pc));
     exec_once(&s, cpu.pc);
     g_nr_guest_inst ++;
     trace_and_difftest(&s, cpu.pc);
@@ -160,6 +161,7 @@ void assert_fail_msg() {
   // 下面这里是IRINGBUF
   //===============================================
   IFDEF(CONFIG_ITRACE,print_iringbuf());
+  IFDEF(CONFIG_ITRACE,extern FILE* itracebin_fp;fclose(itracebin_fp));
   //===============================================
   isa_reg_display();
   statistic();

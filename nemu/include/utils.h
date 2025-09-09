@@ -103,6 +103,14 @@ extern int FUNC_nums;
 #endif
 //=========================================
 
+// itrace 部分内容
+//=========================================
+#ifdef CONFIG_ITRACE
+#define itrace_write(...) do {extern FILE* itracebin_fp; \
+    fwrite(__VA_ARGS__, 4, 1, itracebin_fp); \
+} while(0)
+#endif
+//=========================================
 #define _Log(...) \
   do { \
     printf(__VA_ARGS__); \

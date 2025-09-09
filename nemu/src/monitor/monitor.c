@@ -50,6 +50,7 @@ void sdb_set_batch_mode();
 static char *log_file = NULL;
 static char *diff_so_file = NULL;
 static char *img_file = NULL;
+
 static int difftest_port = 1234;
 
 static long load_img() {
@@ -74,6 +75,18 @@ static long load_img() {
   return size;
 }
 
+static char *itrace_file = NULL;
+// itrace bin内容
+//==================================================
+#ifdef CONFIG_ITRACE
+FILE *itracebin_fp = NULL;
+void init_itracebin() {
+    Assert(itrace_file, "你需要给一个bin文件的地址,用于记录itracebin");
+    itracebin_fp = fopen(itrace_file, "wb");
+    Assert(itracebin_fp, "打不开文件 '%s'", itrace_file);
+}
+#endif
+//==================================================
 // 写入 DTACER 文件
 //==================================================
 static char *dtracer_log_file = NULL;
@@ -198,6 +211,7 @@ static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
     {"batch"      , no_argument      , NULL, 'b'},
     {"log"        , required_argument, NULL, 'l'},
+    {"itracebin"  , required_argument, NULL, 't'},
     {"diff"       , required_argument, NULL, 'd'},
     {"port"       , required_argument, NULL, 'p'},
     {"elf"        , required_argument, NULL, 'e'},  // 读取elf文件
@@ -208,7 +222,7 @@ static int parse_args(int argc, char *argv[]) {
     {0            , 0                , NULL,  0 },
   };
   int o;
-  while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:g:k:i:", table, NULL)) != -1) {
+  while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:g:k:i:t:", table, NULL)) != -1) {
     switch (o) {
       case 'b': sdb_set_batch_mode(); break;
       case 'p': sscanf(optarg, "%d", &difftest_port); break;
@@ -218,6 +232,7 @@ static int parse_args(int argc, char *argv[]) {
       case 'g': ftracer_log_file = optarg; break;
       case 'k': dtracer_log_file = optarg; break;
       case 'i': img_file = optarg; break;
+      case 't': itrace_file = optarg; break;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
         printf("\t-b,--batch                     run with batch mode\n");
@@ -227,7 +242,8 @@ static int parse_args(int argc, char *argv[]) {
         printf("\t-e,--elf=ELF_FILE              load elf file for ftrace\n");
         printf("\t-g,--elf-log=FTRACER_FILE      ftracer output log to FTRACER_FILE\n");
         printf("\t-k,--dtrace-log=DTRACER_FILE   ftracer output log to DTRACER_FILE\n");
-        printf("\t-i,--image=IMG_FILE       load program from IMG_FILE\n");
+        printf("\t-i,--image=IMG_FILE            load program from IMG_FILE\n");
+        printf("\t-t,--itrace=ITRACE_FILE        itrace bin for cachesim\n");
         printf("\n");
         exit(0);
     }
@@ -266,6 +282,7 @@ void init_monitor(int argc, char *argv[]) {
   /* Initialize the simple debugger. */
   init_sdb();
 
+  IFDEF(CONFIG_ITRACE, init_itracebin());
   IFDEF(CONFIG_ITRACE, init_disasm());
 
   /* 初始化 ftracer */
