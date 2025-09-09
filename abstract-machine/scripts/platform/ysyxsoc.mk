@@ -46,4 +46,7 @@ gdb: insert-arg
 wave: insert-arg
 	@$(MAKE) -C $(NPC_HOME) soc_wave ARGS="$(NPCFLAGS)"
 
+nemu: insert-arg
+	@$(MAKE) -C $(NEMU_HOME) run ARGS="$(NPCFLAGS)"
+
 .PHONY: insert-arg
