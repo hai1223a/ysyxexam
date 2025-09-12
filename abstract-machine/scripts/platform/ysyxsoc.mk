@@ -23,7 +23,7 @@ override NPCFLAGS += -l $(shell dirname $(IMAGE).elf)/ysyxsoc-log.txt \
                      -p 1234 \
                      -e $(IMAGE).elf \
                      -g $(shell dirname $(IMAGE).elf)/ysyxsoc-ftracerlog.txt \
-# 					 -b 
+					 -b 
 
 MAINARGS_MAX_LEN = 64
 MAINARGS_PLACEHOLDER = The insert-arg rule in Makefile will insert mainargs here.
@@ -47,6 +47,6 @@ wave: insert-arg
 	@$(MAKE) -C $(NPC_HOME) soc_wave ARGS="$(NPCFLAGS)"
 
 nemu: insert-arg
-	@$(MAKE) -C $(NEMU_HOME) run ARGS="$(NPCFLAGS)"
+	@$(MAKE) -C $(NEMU_HOME) run ARGS="$(NPCFLAGS) -t $(shell dirname $(IMAGE).elf)/$(IMAGE)_itrace.bin"
 
 .PHONY: insert-arg
