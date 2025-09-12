@@ -24,8 +24,8 @@ $(BINARY):: compile_git
 
 # Some convenient rules
 
-override ARGS ?= --log=$(BUILD_DIR)/nemu-log.txt 
-override ARGS += $(ARGS_DIFF) --itracebin=$(BUILD_DIR)/itrace.bin
+override ARGS ?= --log=$(BUILD_DIR)/nemu-log.txt -t $(BUILD_DIR)/itrace.bin
+override ARGS += $(ARGS_DIFF) 
 
 # Command to execute NEMU
 IMG ?=
