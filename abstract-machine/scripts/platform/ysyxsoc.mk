@@ -47,6 +47,6 @@ wave: insert-arg
 	@$(MAKE) -C $(NPC_HOME) soc_wave ARGS="$(NPCFLAGS)"
 
 nemu: insert-arg
-	@$(MAKE) -C $(NEMU_HOME) run ARGS="$(NPCFLAGS) -t $(shell dirname $(IMAGE).elf)/$(IMAGE)_itrace.bin"
+	@$(MAKE) -C $(NEMU_HOME) run ARGS="$(NPCFLAGS) -t $(IMAGE)_itrace.bin"
 
 .PHONY: insert-arg
