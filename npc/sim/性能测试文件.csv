@@ -1,4 +1,4 @@
 序号	说明	程序存储	数据存储	负载程序	指令数	仿真周期数	IPC	综合频率 (MHz)	综合面积	LSU_C	CSR_C	BQU_C	ALU_C	取指平均延迟	平均访存延迟	icache命中率	AMAT
 1	第一次性能测试	Flash	SDRAM	microbench-test	10000	7,826,169	0.000012	659	18610	2608	2	1398	5992	942	223		
 2	添加icache	Flash	SDRAM	microbench-test	500000	212446520	0.002353	593	25936	111602	2	119748	268648	400	100	53.19%	434
-																	
+3	通过bootloader改变程序存储介质	SDRAM	SDRAM	microbench-test	500000	19326385	0.025872	593	25936	123759	2	114517	261722	17	79	53.79%	17
