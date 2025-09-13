@@ -40,6 +40,7 @@ void cpu_exec_once()
         inst_count++;
         break;
       }
+      printf("pc_pre = %08x, pc__ = %08x, SOC_PC = %08x", pc_pre, pc__, SOC_PC);
     }
   }
 }
