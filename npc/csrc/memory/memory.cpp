@@ -15,11 +15,14 @@ long init_imem(char *img_file)
   if (!img_file)
   {
     uint32_t *imem_w = (uint32_t *)imem;
-      
-      *imem_w++ = 0x00000297; 
-      *imem_w++ = 0x00028293; 
-      *imem_w++ = 0x00028067; // ebreak 
-      Log("没有给源文件, 程序使用了内置的代码.");
+    *imem_w++ = 0xa10002b7;
+    *imem_w++ = 0x00828293;
+    *imem_w++ = 0x12345337;
+    *imem_w++ = 0x67830313;
+    *imem_w++ = 0x0062a023;
+    *imem_w++ = 0x0002a383;
+    *imem_w++ = 0x00028067; // ebreak 
+    Log("没有给源文件, 程序使用了内置的代码.");
     return 20;
   }
   FILE *fp = fopen(img_file, "rb");
