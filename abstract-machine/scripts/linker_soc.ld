@@ -5,8 +5,8 @@ ENTRY(_start)
 
 MEMORY {
     sram  (rwx)      : ORIGIN = 0x0f000000, LENGTH = 8K
-    sdram_text (rx) : ORIGIN = 0xa0000000, LENGTH = 16M
-    sdram_data (rw) : ORIGIN = 0xa1000000, LENGTH = 48M
+    sdram_text (rx)  : ORIGIN = 0xa0000000, LENGTH = 16M
+    sdram_data (rw)  : ORIGIN = 0xa1000000, LENGTH = 48M
     flash (rx)       : ORIGIN = 0x30000000, LENGTH = 32M
 }
 
@@ -35,10 +35,12 @@ SECTIONS {
   text_size = SIZEOF(.text);
   text_load_start = LOADADDR(.text);
 
+
   .rodata : {
     rodata_start = .;
     *(.rodata*)
     *(.srodata*)
+    . = ALIGN(8);
   } > TRAM AT> ROM
   rodata_size = SIZEOF(.rodata);
   rodata_load_start = LOADADDR(.rodata);
