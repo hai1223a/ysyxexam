@@ -1,13 +1,19 @@
-/* 没法处理rttread的extra.ld脚本, 这个脚本就是rttread的专门的脚本, 用之前需要把extra.ld的内容都删除 */
+/* 该脚本使用两级bootloader, 第一级引导加载程序将第二级引导加载程序加载到sram中, 跳转至sram中执行,
+第二级引导加载程序将程序和数据加载到sdram中, 跳转至sdram中执行, 栈使用sram, 堆使用sdram. */
+
 ENTRY(_start)
 
 MEMORY {
-  sdram (rwx) : ORIGIN = 0x30000000, LENGTH = 32M
-  flash (rx)  : ORIGIN = 0xa0000000, LENGTH = 64M
-
+    sram  (rwx)      : ORIGIN = 0x0f000000, LENGTH = 8K
+    sdram_text (rx) : ORIGIN = 0xa0000000, LENGTH = 16M
+    sdram_data (rw) : ORIGIN = 0xa1000000, LENGTH = 48M
+    flash (rx)       : ORIGIN = 0x30000000, LENGTH = 32M
 }
-REGION_ALIAS("RAM", flash);
-REGION_ALIAS("ROM", sdram);
+
+REGION_ALIAS("SRAM", sram);
+REGION_ALIAS("TRAM", sdram_text);
+REGION_ALIAS("DRAM", sdram_data);
+REGION_ALIAS("ROM", flash);
 
 _STACK_SIZE = 0x10000;     /* 栈大小：64KB */
 SECTIONS {
@@ -18,14 +24,14 @@ SECTIONS {
   .boot : {
     boot_start = .;
     *(boot)
-  } > ROM AT> ROM
+  } > SRAM AT> ROM
   boot_size = SIZEOF(.boot);
   boot_load_start = LOADADDR(.boot);
 
   .text : {
     text_start = .;
     *(.text*)
-  } > ROM AT> ROM
+  } > TRAM AT> ROM
   text_size = SIZEOF(.text);
   text_load_start = LOADADDR(.text);
 
@@ -33,7 +39,7 @@ SECTIONS {
     rodata_start = .;
     *(.rodata*)
     *(.srodata*)
-  } > ROM AT> ROM
+  } > TRAM AT> ROM
   rodata_size = SIZEOF(.rodata);
   rodata_load_start = LOADADDR(.rodata);
 
@@ -68,7 +74,7 @@ SECTIONS {
     *(__am_apps.sdata*)
     __am_apps_data_end = .;
     . = ALIGN(8);
-  } > RAM AT > ROM
+  } > DRAM AT > ROM
   data_size = SIZEOF(.data);
   data_load_start = LOADADDR(.data);
   
@@ -84,17 +90,17 @@ SECTIONS {
     *(__am_apps.scommon*)
     __am_apps_bss_end = .;
     . = ALIGN(8);
-  } > RAM AT> ROM
+  } > DRAM AT> ROM
   bss_size = SIZEOF(.bss);
 
   /* 堆区（动态计算剩余空间） */
   _heap_start = ALIGN(4);  /* 堆起始地址（4字节对齐） */
-  _heap_end = ORIGIN(RAM) + LENGTH(RAM) - _STACK_SIZE; 
-
-  . = _heap_end;
-  _stack_top = .;
-  . = . + _STACK_SIZE;
-  _stack_pointer = .;
+  _heap_end = ORIGIN(DRAM) + LENGTH(DRAM); 
+  . = _heap_end;   
   end = .;
   _end = .;  
+  
+  _stack_top = ORIGIN(SRAM);
+  _stack_pointer = ORIGIN(SRAM) + LENGTH(SRAM);
 }
+

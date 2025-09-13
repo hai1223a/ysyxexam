@@ -3,14 +3,22 @@
 #include <cassert>
 
 int main(int argc, char *argv[]) {
-    if (argc < 2) {
-        cerr << "用法: " << argv[0] << " <压缩文件路径>" << endl;
+    if (argc < 6) {
+        cerr << "用法: "<< endl
+        << "argv[1]" << " <压缩文件路径> " << endl
+        << "argv[2]" << " <OFFSET BITS> " << endl
+        << "argv[3]" << " <INDEX BITS> " << endl
+        << "argv[4]" << " <NUM OF WAYS> " << endl
+        << "argv[5]" << " <MODE OF REPLACE: 0(RANDOM), 1(LRU)> " << endl;
         return 1;
     }
     string file_path = argv[1];
     string command = "bzcat " + file_path;
-    CACHE top(2, 5, 4);
-    top.printTagSram();
+    int offset = atoi(argv[2]);
+    int index = atoi(argv[3]);
+    int way = atoi(argv[4]);
+    int mode = atoi(argv[5]);
+    CACHE top(offset, index, way, mode);
     uint32_t buffer[1024];
     size_t count;
     FILE *fp = popen(command.c_str(), "r");
@@ -21,8 +29,6 @@ int main(int argc, char *argv[]) {
         }
     }
     pclose(fp);
-    top.printTagSram();
-    
-    cout << top.c_pc << " " << top.c_reach << endl;
+    cout << "总数量 " << top.c_pc << " " << "命中数量 " << top.c_reach << " " << "命中率" << (double)top.c_reach / (double)top.c_pc << endl; 
     return 0;
 }
