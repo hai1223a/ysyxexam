@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Sun Sep 14 15:07:14 2025
+[*] Mon Sep 15 08:44:51 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Sun Sep 14 14:48:50 2025"
-[dumpfile_size] 184593
+[dumpfile_mtime] "Sun Sep 14 15:07:25 2025"
+[dumpfile_size] 184823
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/sdram.gtkw"
-[timestart] 20233
+[timestart] 23633
 [size] 1858 1001
 [pos] -101 -101
-*-3.300000 20266 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-4.800000 23727 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
@@ -35,13 +35,25 @@ TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_axi.ram_read_data_i[31:0]
 TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_axi.ram_write_data_o[31:0]
 @200
 -
--
-@23
-TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_core.next_state_r[3:0]
 @22
+TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_core.next_state_r[3:0]
 TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_core.target_state_r[3:0]
 TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_core.state_q[3:0]
 @820
 TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_core.dbg_state[79:0]
+@200
+-
+@28
+TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_axi.axi_awvalid_i
+TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_axi.axi_awready_o
+TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_axi.axi_bvalid_o
+TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_axi.axi_bready_i
+@200
+-
+@28
+TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_axi.axi_arvalid_i
+TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_axi.axi_arready_o
+@29
+TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_axi.axi_rvalid_o
 [pattern_trace] 1
 [pattern_trace] 0
