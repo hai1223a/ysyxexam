@@ -84,7 +84,7 @@ module ysyx_25050136_ICACHE
     wire [OFFSET_WIDTH-1:0] addr_offset = req_addr_r[OFFSET_WIDTH-1:0];
 
     // ====================axi信号定义================================
-    localparam READ_IEDL = 2'd0;
+    localparam READ_IDLE = 2'd0;
     localparam READ_ADDR = 2'd1;
     localparam READ_DATA = 2'd2;
     // axi读请求信号
@@ -100,7 +100,7 @@ module ysyx_25050136_ICACHE
     integer i,j;
     always @(posedge clk) begin
         if (reset) begin
-            state <= IDLE;
+            state <= READ_IDLE;
             req_addr_r <= 0;
             way_hit <= 0;
             way_valid <= 0;
