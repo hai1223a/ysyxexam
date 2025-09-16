@@ -206,7 +206,7 @@ module ysyx_25050136_ICACHE
                     axi_read_cnt <= axi_read_cnt + 1;
                     cache_data[replace_way_use][addr_index][32*axi_read_cnt +: 32] <= m_rdata_i;
                     if(m_rlast_i) begin
-                        state_read <= READ_IEDL;
+                        state_read <= READ_IDLE;
                         cache_tag[replace_way_use][addr_index] <= addr_tag;
                         cache_valid[replace_way_use][addr_index] <= 1'b1;
                     end
