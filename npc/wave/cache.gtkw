@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Sun Sep  7 10:57:48 2025
+[*] Tue Sep 16 15:16:35 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Sun Sep  7 10:57:01 2025"
-[dumpfile_size] 51303
+[dumpfile_mtime] "Tue Sep 16 15:14:30 2025"
+[dumpfile_size] 30080
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/cache.gtkw"
-[timestart] 2086
+[timestart] 48
 [size] 1858 1001
 [pos] -51 -51
-*-2.400000 2097 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-1.999549 54 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
@@ -42,34 +42,14 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.bvalid_o
 @200
 -
-@c00022
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
 @28
-(0)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-(1)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-(2)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-(3)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-(4)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-(5)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-(6)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-(7)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-(8)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-(9)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-(10)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-(11)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-(12)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-(13)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-(14)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-(15)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.cache_valid[15:0]
-@1401200
--group_end
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.state[1:0]
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.way_hit[0]
+@29
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.way_valid[0]
 @200
 -
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.if_wait
-@29
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.m_rvalid_i
+@820
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.dbg_cache_state[79:0]
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.dbg_axi_state[79:0]
 [pattern_trace] 1
 [pattern_trace] 0

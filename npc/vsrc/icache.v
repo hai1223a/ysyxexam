@@ -182,7 +182,7 @@ module ysyx_25050136_ICACHE
             READ_IDLE: begin
                 m_rready_r <= 1;
                 axi_read_cnt <= 0;
-                if ((state == INCACHE) && (way_valid == 0) || (way_hit == 0)) begin
+                if ((state == INCACHE) && ((way_valid == 0) || (way_hit == 0))) begin
                     state_read <= READ_ADDR;
                     m_araddr_r <= {req_addr_r[31:OFFSET_WIDTH], {OFFSET_WIDTH{1'b0}}};
                     m_arlen_r <= BURST_NUM; // 4字节为一个beat
