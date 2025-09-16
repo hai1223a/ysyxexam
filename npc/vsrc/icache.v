@@ -138,6 +138,7 @@ module ysyx_25050136_ICACHE
                 end
             end
             MISSIN: begin
+                cache_data[replace_way_use][addr_index] <= cache_data_temp;
                 state <= IDLE;
             end
             endcase
@@ -155,7 +156,6 @@ module ysyx_25050136_ICACHE
             end
             end 
             MISSIN: begin
-                cache_data[replace_way_use][addr_index] = cache_data_temp;
                 req_rdata_r = cache_data_temp[addr_offset*8 +: 32];
                 req_ready_r = 1;               
             end
