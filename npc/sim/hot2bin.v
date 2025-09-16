@@ -1,16 +1,16 @@
 module hot2bin_wrapper 
 #(
-    parameter  ONE_HOT_WIDTH    = 4
+    parameter  ONE_HOT_WIDTH    = 1
 )
 (
     input clk,
     input reset,
     input [ONE_HOT_WIDTH-1 : 0] one_hot_code,
-    output [$clog2(ONE_HOT_WIDTH)-1 : 0] bin_code
+    output [(ONE_HOT_WIDTH>1?$clog2(ONE_HOT_WIDTH):1)-1:0] bin_code
 );
     reg [ONE_HOT_WIDTH-1 : 0] one_hot_code_r;
-    reg [$clog2(ONE_HOT_WIDTH)-1 : 0] bin_code_r;
-    wire [$clog2(ONE_HOT_WIDTH)-1 : 0] bin_code_c;
+    reg [(ONE_HOT_WIDTH>1?$clog2(ONE_HOT_WIDTH):1)-1:0] bin_code_r;
+    wire [(ONE_HOT_WIDTH>1?$clog2(ONE_HOT_WIDTH):1)-1:0] bin_code_c;
     
     always @(posedge clk) begin
         if (reset) begin
@@ -22,7 +22,7 @@ module hot2bin_wrapper
         end
     end
 
-    hot2bin_0 #(.ONE_HOT_WIDTH(ONE_HOT_WIDTH)) u_hot2bin_1 (
+    hot2bin_2 #(.ONE_HOT_WIDTH(ONE_HOT_WIDTH)) u_hot2bin_1 (
         .one_hot_code(one_hot_code_r),
         .bin_code(bin_code_c)
     );
@@ -35,7 +35,7 @@ module hot2bin_0
 )
 (
     input[ONE_HOT_WIDTH-1 : 0]               one_hot_code,
-    output reg [$clog2(ONE_HOT_WIDTH)-1 : 0]      bin_code
+    output reg [(ONE_HOT_WIDTH>1?$clog2(ONE_HOT_WIDTH):1)-1:0]      bin_code
 );
     always @(*) begin
         case (1'b1)
@@ -54,7 +54,7 @@ module hot2bin_1
 )
 (
     input[ONE_HOT_WIDTH-1 : 0]               one_hot_code,
-    output reg [$clog2(ONE_HOT_WIDTH)-1 : 0]      bin_code
+    output reg [(ONE_HOT_WIDTH>1?$clog2(ONE_HOT_WIDTH):1)-1:0]      bin_code
 );
     always @(*) begin
         case (one_hot_code)
@@ -73,11 +73,11 @@ module hot2bin_2
 )
 (
     input   [ONE_HOT_WIDTH-1 : 0]               one_hot_code,
-    output  [$clog2(ONE_HOT_WIDTH)-1 : 0]       bin_code
+    output  [(ONE_HOT_WIDTH>1?$clog2(ONE_HOT_WIDTH):1)-1:0]       bin_code
 );
 
-    wire [$clog2(ONE_HOT_WIDTH)-1 : 0] temp1 [ONE_HOT_WIDTH-1 : 0];
-	wire [ONE_HOT_WIDTH-1 : 0] 		  temp2 [$clog2(ONE_HOT_WIDTH)-1 : 0];
+    wire [(ONE_HOT_WIDTH>1?$clog2(ONE_HOT_WIDTH):1)-1:0] temp1 [ONE_HOT_WIDTH-1 : 0];
+	wire [ONE_HOT_WIDTH-1 : 0] 		  temp2 [(ONE_HOT_WIDTH>1?$clog2(ONE_HOT_WIDTH):1)-1:0];
 		
 	genvar i,j,k;
 	generate

@@ -228,15 +228,17 @@ module ysyx_25050136_ICACHE
 
 module ysyx_25050136_hot2bin
 #(
-    parameter  ONE_HOT_WIDTH    = 4
+    parameter  ONE_HOT_WIDTH = 4,
+    parameter  PRIVATE_TEMP0 = $clog2(ONE_HOT_WIDTH),
+    parameter  PRIVATE_TEMP1 = (ONE_HOT_WIDTH>1?PRIVATE_TEMP0:1)    
 )
 (
     input   [ONE_HOT_WIDTH-1 : 0]               one_hot_code,
-    output  [$clog2(ONE_HOT_WIDTH)-1 : 0]       bin_code
+    output  [PRIVATE_TEMP1-1 : 0]       bin_code
 );
 
-    wire [$clog2(ONE_HOT_WIDTH)-1 : 0] temp1 [ONE_HOT_WIDTH-1 : 0];
-	wire [ONE_HOT_WIDTH-1 : 0] 		  temp2 [$clog2(ONE_HOT_WIDTH)-1 : 0];
+    wire [PRIVATE_TEMP1-1 : 0] temp1 [ONE_HOT_WIDTH-1 : 0];
+	wire [ONE_HOT_WIDTH-1 : 0] temp2 [PRIVATE_TEMP1-1 : 0];
 		
 	genvar i,j,k;
 	generate
@@ -246,13 +248,13 @@ module ysyx_25050136_hot2bin
 	endgenerate
 	generate
 		for(i = 0; i < ONE_HOT_WIDTH; i = i+1)begin : temp_ch1
-			for(j = 0; j < $clog2(ONE_HOT_WIDTH); j = j+1)begin  : temp_ch2
+			for(j = 0; j < PRIVATE_TEMP1; j = j+1)begin  : temp_ch2
 				assign temp2[j][i] = temp1[i][j];
 			end
 		end
 	endgenerate
 	generate
-		for(j = 0; j < $clog2(ONE_HOT_WIDTH); j = j+1)begin : temp2_loop
+		for(j = 0; j < PRIVATE_TEMP1; j = j+1)begin : temp2_loop
 			assign bin_code[j] = |temp2[j];
 		end
 	endgenerate
@@ -261,11 +263,13 @@ endmodule //hot2bin
 
 module ysyx_25050136_encoder
 #(
-    parameter WIDTH = 4
+    parameter WIDTH = 4,
+    parameter PRIVATE_TEMP0 = $clog2(WIDTH),
+    parameter PRIVATE_TEMP1 = (WIDTH>1?PRIVATE_TEMP0:1)  
 )
 (
     input   [WIDTH-1 : 0]           in_code,
-    output  [$clog2(WIDTH)-1 : 0]   out_code,
+    output  [PRIVATE_TEMP1-1 : 0]   out_code,
     output                          valid
 );
     integer i;
