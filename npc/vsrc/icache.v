@@ -55,8 +55,8 @@ module ysyx_25050136_ICACHE
     wire [WAY_WIDTH-1:0] bin_hit;
     ysyx_25050136_hot2bin #(.ONE_HOT_WIDTH(NUM_WAY))
         hot2bin_hit (
-            .hot_hit(hot_hit),
-            .bin_hit(bin_hit)
+            .one_hot_code(hot_hit),
+            .bin_code(bin_hit)
         );
     // 替换索引生成逻辑(随机替换) 
     reg [WAY_WIDTH-1:0] replace_way;
