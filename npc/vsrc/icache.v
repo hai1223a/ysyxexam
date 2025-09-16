@@ -169,7 +169,7 @@ module ysyx_25050136_ICACHE
     // axi读请求状态机
     always @(posedge clk) begin
         if (reset) begin
-            state_read      <= READ_IEDL;
+            state_read      <= READ_IDLE;
             replace_way_use <= 0;
             axi_read_cnt    <= 0;
             m_araddr_r      <= 0;
