@@ -43,6 +43,7 @@ module ysyx_25050136_ICACHE
     reg [LINE_WIDTH-1:0] cache_data  [0:NUM_WAY-1][0:NUM_SET-1];
     reg [TAG_WIDTH-1 :0] cache_tag   [0:NUM_WAY-1][0:NUM_SET-1];
     reg                  cache_valid [0:NUM_WAY-1][0:NUM_SET-1];
+    reg [LINE_WIDTH-1:0] cache_data_temp;
     // icache与CPU交互信号
     reg [1:0] state;
     reg [31:0] req_addr_r;
@@ -154,10 +155,9 @@ module ysyx_25050136_ICACHE
             end
             end 
             MISSIN: begin
-            if(hot_hit != 0) begin
-                req_rdata_r = cache_data[bin_hit][addr_index][addr_offset*8 +: 32];
+                cache_data[replace_way_use][addr_index] = cache_data_temp;
+                req_rdata_r = cache_data_temp[addr_offset*8 +: 32];
                 req_ready_r = 1;               
-            end
             end
             default: ;
         endcase
@@ -170,6 +170,7 @@ module ysyx_25050136_ICACHE
     always @(posedge clk) begin
         if (reset) begin
             state_read      <= READ_IDLE;
+            cache_data_temp <= 0;
             replace_way_use <= 0;
             axi_read_cnt    <= 0;
             m_araddr_r      <= 0;
@@ -204,7 +205,7 @@ module ysyx_25050136_ICACHE
             READ_DATA: begin
                 if (r_fire) begin
                     axi_read_cnt <= axi_read_cnt + 1;
-                    cache_data[replace_way_use][addr_index][32*axi_read_cnt +: 32] <= m_rdata_i;
+                    cache_data_temp[32*axi_read_cnt +: 32] <= m_rdata_i;
                     if(m_rlast_i) begin
                         state_read <= READ_IDLE;
                         cache_tag[replace_way_use][addr_index] <= addr_tag;
