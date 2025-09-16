@@ -199,7 +199,7 @@ module ysyx_25050136_ICACHE
             end 
             READ_DATA: begin
                 if (r_fire) begin
-                    cache_data[replace_way_use][addr_index] <= {m_rdata_i, cache_data[replace_way_use][addr_index][LINE_WIDTH-1:32]};
+                    cache_data[replace_way_use][addr_index] <= {m_rdata_i, cache_data[replace_way_use][addr_index][LINE_WIDTH-1-:LINE_WIDTH-32]};
                     if(m_rlast_i) begin
                         state_read <= READ_IEDL;
                         cache_tag[replace_way_use][addr_index] <= addr_tag;
