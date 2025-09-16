@@ -243,7 +243,7 @@ module ysyx_25050136_hot2bin
 	genvar i,j,k;
 	generate
 		for(i = 0; i < ONE_HOT_WIDTH; i = i+1)begin : temp1_loop
-			assign temp1[i] = one_hot_code[i]? i[PRIVATE_TEMP0-1:0] : 'b0;
+			assign temp1[i] = one_hot_code[i]? i[PRIVATE_TEMP1-1:0] : 'b0;
 		end
 	endgenerate
 	generate
