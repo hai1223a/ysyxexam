@@ -229,7 +229,28 @@ module ysyx_25050136_ICACHE
     assign m_rready_o = m_rready_r;
     assign ar_fire = m_arvalid_o & m_arready_i;
     assign r_fire = m_rvalid_i & m_rready_o;
-    endmodule //ysyx_25050136_ICACHE
+
+// ========================Simulation only====================================
+`ifdef verilator
+reg [79:0] dbg_cache_state;
+reg [79:0] dbg_axi_state;
+always @(*) begin
+    case (state)
+        IDLE        : dbg_cache_state = "IDLE";
+        INCACHE     : dbg_cache_state = "INCACHE";
+        CACHEMISS   : dbg_cache_state = "CACHEMISS";
+        MISSIN      : dbg_cache_state = "MISSIN";
+        default     : dbg_cache_state = "UNKNOW";
+    endcase
+    case (state_read)
+        READ_IDLE   : dbg_axi_state = "READ_IDLE";
+        READ_ADDR   : dbg_axi_state = "READ_ADDR";
+        READ_DATA   : dbg_axi_state = "READ_DATA";
+        default     : dbg_axi_state = "UNKNOW";
+    endcase
+end
+`endif
+endmodule //ysyx_25050136_ICACHE
 
 module ysyx_25050136_hot2bin
 #(
