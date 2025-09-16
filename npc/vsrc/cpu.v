@@ -81,8 +81,9 @@ module ysyx_25050136_NPC
     wire inst_req_ready;
     wire inst_req_valid;
     ysyx_25050136_ICACHE #(
-        .OFFSET_WIDTH 	(2),
-        .INDEX_WIDTH  	(4)
+        .OFFSET_WIDTH 	(3),
+        .INDEX_WIDTH  	(4),
+        .NUM_WAY     	(1)
     )
     u_ysyx_25050136_ICACHE(
         .clk         	(clk          ),
