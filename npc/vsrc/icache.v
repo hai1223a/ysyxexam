@@ -76,6 +76,8 @@ module ysyx_25050136_ICACHE
             .out_code(replace_way_dirty),
             .valid(replace_way_dirty_valid)
         );
+    // axi读请求计数
+    reg [7:0] axi_read_cnt;
     // 地址解析
     wire [INDEX_WIDTH-1:0] addr_index = req_addr_r[OFFSET_WIDTH+INDEX_WIDTH-1:OFFSET_WIDTH];
     wire [TAG_WIDTH-1:0] addr_tag = req_addr_r[31:OFFSET_WIDTH+INDEX_WIDTH];
@@ -169,6 +171,7 @@ module ysyx_25050136_ICACHE
         if (reset) begin
             state_read      <= READ_IEDL;
             replace_way_use <= 0;
+            axi_read_cnt    <= 0;
             m_araddr_r      <= 0;
             m_arlen_r       <= 0;   
             m_arsize_r      <= 0;
@@ -176,8 +179,9 @@ module ysyx_25050136_ICACHE
             m_rready_r      <= 0;
         end else begin
             case(state_read)
-            READ_IEDL: begin
+            READ_IDLE: begin
                 m_rready_r <= 1;
+                axi_read_cnt <= 0;
                 if ((state == INCACHE) && (way_valid == 0) || (way_hit == 0)) begin
                     state_read <= READ_ADDR;
                     m_araddr_r <= {req_addr_r[31:OFFSET_WIDTH], {OFFSET_WIDTH{1'b0}}};
@@ -199,11 +203,8 @@ module ysyx_25050136_ICACHE
             end 
             READ_DATA: begin
                 if (r_fire) begin
-if (LINE_WIDTH == 32) begin
-            cache_data[replace_way_use][addr_index] <= m_rdata_i;
-        end else if (LINE_WIDTH > 32) begin
-            cache_data[replace_way_use][addr_index] <= {m_rdata_i, cache_data[replace_way_use][addr_index][LINE_WIDTH-1-:LINE_WIDTH-32]};
-        end
+                    axi_read_cnt <= axi_read_cnt + 1;
+                    cache_data[replace_way_use][addr_index][32*axi_read_cnt +: 32] <= m_rdata_i;
                     if(m_rlast_i) begin
                         state_read <= READ_IEDL;
                         cache_tag[replace_way_use][addr_index] <= addr_tag;
