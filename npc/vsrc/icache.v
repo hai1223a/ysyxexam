@@ -278,7 +278,7 @@ module ysyx_25050136_encoder
         valid = 'b0;
         for(i = 0; i < WIDTH; i = i+1) begin
             if(in_code[i]) begin
-                out_code = i;
+                out_code = i[PRIVATE_TEMP0-1:0];
                 valid = 'b1;
             end
         end
