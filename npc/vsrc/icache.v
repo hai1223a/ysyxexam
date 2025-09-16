@@ -32,7 +32,7 @@ module ysyx_25050136_ICACHE
     parameter LINE_WIDTH = 8 * 2 ** OFFSET_WIDTH;
     parameter TAG_WIDTH = 32 - OFFSET_WIDTH - INDEX_WIDTH;
     parameter NUM_SET = 2 ** INDEX_WIDTH;
-    parameter WAY_WIDTH = $clog2(NUM_WAY);
+    parameter WAY_WIDTH = NUM_WAY>1?$clog2(NUM_WAY):1;
     parameter BURST_NUM = 2 ** (OFFSET_WIDTH - 2) - 1;
     // icache状态机
     localparam IDLE      = 2'd0;
@@ -243,7 +243,7 @@ module ysyx_25050136_hot2bin
 	genvar i,j,k;
 	generate
 		for(i = 0; i < ONE_HOT_WIDTH; i = i+1)begin : temp1_loop
-			assign temp1[i] = one_hot_code[i]? i:'b0;
+			assign temp1[i] = one_hot_code[i]? i[PRIVATE_TEMP0-1:0] : 'b0;
 		end
 	endgenerate
 	generate
