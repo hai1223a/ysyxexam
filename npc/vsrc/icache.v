@@ -268,9 +268,9 @@ module ysyx_25050136_encoder
     parameter PRIVATE_TEMP1 = (WIDTH>1?PRIVATE_TEMP0:1)  
 )
 (
-    input   [WIDTH-1 : 0]           in_code,
-    output  [PRIVATE_TEMP1-1 : 0]   out_code,
-    output                          valid
+    input   [WIDTH-1 : 0]             in_code,
+    output  reg [PRIVATE_TEMP1-1 : 0] out_code,
+    output  reg                       valid
 );
     integer i;
     always @(*) begin
