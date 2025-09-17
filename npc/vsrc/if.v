@@ -32,6 +32,7 @@ module ysyx_25050136_IF
     reg [31:0] req_addr_r;
     reg [31:0] inst_r;
     reg [31:0] pc;
+    wire [31:0] next_pc;
     always @(posedge clk) begin
         if (reset) begin
             pc          <= 0;
@@ -40,11 +41,11 @@ module ysyx_25050136_IF
             req_use_r   <= 0;
         end else begin
             if(bready_i) begin
-                req_addr_r <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
-                pc <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
+                req_addr_r <= next_pc;
+                pc <= next_pc;
                 req_valid_r <= 1;
-                req_use_r   <= ((dynamic_valid_i ? dynamic_npc_i : static_npc_o) >= 32'ha000_0000) &&
-                               ((dynamic_valid_i ? dynamic_npc_i : static_npc_o) < 32'ha400_0000);
+                req_use_r   <= ((next_pc) >= 32'ha000_0000) &&
+                               ((next_pc) < 32'ha400_0000);
             end
             if(req_ready_i) begin
                 req_use_r   <= 0;
@@ -53,6 +54,8 @@ module ysyx_25050136_IF
             end
         end
     end
+    assign next_pc = dynamic_valid_i ? dynamic_npc_i : static_npc_o;
+    assign req_use_o = req_use_r;
     assign req_addr_o = req_addr_r;
     assign req_valid_o = req_valid_r;
     assign static_npc_o = (pc == 0) ? RESET_PC : (pc + 32'h4);

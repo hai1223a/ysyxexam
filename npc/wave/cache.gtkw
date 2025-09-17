@@ -1,10 +1,10 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Wed Sep 17 08:48:19 2025
+[*] Wed Sep 17 08:48:27 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Wed Sep 17 08:45:19 2025"
-[dumpfile_size] 2231405
+[dumpfile_mtime] "Wed Sep 17 08:48:26 2025"
+[dumpfile_size] 330
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/cache.gtkw"
 [timestart] 296583
 [size] 1858 1001
