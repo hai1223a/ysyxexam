@@ -10,6 +10,7 @@ module ysyx_25050136_IF
          input                      req_ready_i     ,
          output   [31:0]            req_addr_o      ,
          output                     req_valid_o     ,
+         output                     req_use_o       ,     
          // 内部 
          input                      dynamic_valid_i ,
          input    [DATA_WIDTH-1:0]  dynamic_npc_i   ,
@@ -27,6 +28,7 @@ module ysyx_25050136_IF
 `endif
 
     reg req_valid_r;
+    reg req_use_r;
     reg [31:0] req_addr_r;
     reg [31:0] inst_r;
     reg [31:0] pc;
@@ -35,13 +37,17 @@ module ysyx_25050136_IF
             pc          <= 0;
             req_addr_r  <= 0;
             req_valid_r <= 0;
+            req_use_r   <= 0;
         end else begin
             if(bready_i) begin
                 req_addr_r <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
                 pc <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
                 req_valid_r <= 1;
+                req_use_r   <= ((dynamic_valid_i ? dynamic_npc_i : static_npc_o) >= 32'ha0000000) &&
+                               ((dynamic_valid_i ? dynamic_npc_i : static_npc_o) < 32'ha4000000);
             end
             if(req_ready_i) begin
+                req_use_r   <= 0;
                 req_valid_r <= 0;
                 inst_r <= req_rdata_i;
             end

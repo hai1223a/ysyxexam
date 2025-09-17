@@ -11,6 +11,7 @@ module ysyx_25050136_NPCCORE
     input                        inst_req_ready_i,
     output  [31:0]               inst_req_addr_o ,
     output                       inst_req_valid_o,
+    output                       inst_req_use_o  , 
     // 数据相关
     // 写地址                     
     output                        mem_awvalid_o  ,
@@ -115,6 +116,7 @@ u_ysyx_25050136_IF(
     .req_rdata_i        (inst_req_rdata_i    ),
     .req_ready_i        (inst_req_ready_i    ),
     .req_valid_o        (inst_req_valid_o    ),
+    .req_use_o          (inst_req_use_o      ),
     .dynamic_valid_i 	(ex2if_jump_en_o     ),
     .dynamic_npc_i   	(ex2if_jump_addr_o   ),
     .static_npc_o    	(if2id_static_npc_o  ),

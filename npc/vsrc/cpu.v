@@ -80,6 +80,7 @@ module ysyx_25050136_NPC
     wire [31:0] inst_req_rdata;
     wire inst_req_ready;
     wire inst_req_valid;
+    wire inst_req_use;
     ysyx_25050136_ICACHE #(
         .OFFSET_WIDTH 	(3),
         .INDEX_WIDTH  	(4),
@@ -103,6 +104,7 @@ module ysyx_25050136_NPC
         .m_rid_i     	(inst_rid_i      ),
         .req_addr_i  	(inst_req_addr   ),
         .req_valid_i 	(inst_req_valid  ),
+        .req_use_i      (inst_req_use    ),
         .req_rdata_o 	(inst_req_rdata  ),
         .req_ready_o 	(inst_req_ready  )
     );
@@ -118,6 +120,7 @@ module ysyx_25050136_NPC
         .inst_req_ready_i   (inst_req_ready  ),
         .inst_req_addr_o    (inst_req_addr   ),
         .inst_req_valid_o   (inst_req_valid  ),
+        .inst_req_use_o     (inst_req_use_o  ),
         .mem_awvalid_o  	(mem_awvalid_o   ),
         .mem_awready_i  	(mem_awready_i   ),
         .mem_awaddr_o   	(mem_awaddr_o    ),

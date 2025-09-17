@@ -25,6 +25,7 @@ module ysyx_25050136_ICACHE
     // 内部
     input    [31:0]                            req_addr_i   ,
     input                                      req_valid_i  ,
+    input                                      req_use_i    ,
     output   [31:0]                            req_rdata_o  ,                           
     output                                     req_ready_o  
 );
@@ -79,6 +80,9 @@ module ysyx_25050136_ICACHE
         );
     // axi读请求计数
     reg [7:0] axi_read_cnt;
+    // axi状态机判断信号
+    reg axi_start1; // ifu取指直接使用axi
+    reg axi_start2; // ifu取指在cache未命中使用axi
     // 地址解析
     wire [INDEX_WIDTH-1:0] addr_index = req_addr_r[OFFSET_WIDTH+INDEX_WIDTH-1:OFFSET_WIDTH];
     wire [TAG_WIDTH-1:0] addr_tag = req_addr_r[31:OFFSET_WIDTH+INDEX_WIDTH];
@@ -114,7 +118,11 @@ module ysyx_25050136_ICACHE
             case (state)
             IDLE: begin
                 if(req_valid_i) begin
-                    state <= INCACHE;
+                    if (req_use_i) begin
+                        state <= INCACHE;
+                    end else begin
+                        state <= CACHEMISS;                            
+                    end
                     req_addr_r <= req_addr_i;
                 end         
             end 
@@ -124,9 +132,9 @@ module ysyx_25050136_ICACHE
                     way_hit[i] <= (cache_tag[i][addr_index] == addr_tag);
                 end
                 if(hot_hit != 0) begin
-    `ifdef ysyx_25050136_VERILATOR_DPIC
+`ifdef ysyx_25050136_VERILATOR_DPIC
                     icache_hit();
-    `endif 
+`endif
                     state <= IDLE;
                 end else begin
                     state <= CACHEMISS;
@@ -138,25 +146,42 @@ module ysyx_25050136_ICACHE
                 end
             end
             MISSIN: begin
-                cache_data[replace_way_use][addr_index] <= cache_data_temp;
+                if(req_use_i) begin
+                    cache_data[replace_way_use][addr_index] <= cache_data_temp;
+                    cache_tag[replace_way_use][addr_index] <= addr_tag;
+                    cache_valid[replace_way_use][addr_index] <= 1'b1;
+                end
                 state <= IDLE;
             end
             endcase
         end
     end
-    // cache读数据输出逻辑
+    
     always @(*) begin
         req_rdata_r = 0;
         req_ready_r = 0;
+        axi_start1 = 0;
+        axi_start2 = 0;
         case (state)
+            IDLE: begin
+                if(req_valid_i & ~req_use_i) begin
+                    axi_start1 = 1;
+                end
+            end
             INCACHE: begin
             if(hot_hit != 0) begin
                 req_rdata_r = cache_data[bin_hit][addr_index][addr_offset*8 +: 32];
                 req_ready_r = 1;               
+            end else begin
+                axi_start2 = 1;
             end
             end 
             MISSIN: begin
-                req_rdata_r = cache_data_temp[addr_offset*8 +: 32];
+                if(req_use_i) begin
+                    req_rdata_r = cache_data_temp[addr_offset*8 +: 32];
+                end else begin
+                    req_rdata_r = cache_data_temp[31:0];
+                end
                 req_ready_r = 1;               
             end
             default: ;
@@ -183,12 +208,19 @@ module ysyx_25050136_ICACHE
             READ_IDLE: begin
                 m_rready_r <= 1;
                 axi_read_cnt <= 0;
-                if ((state == INCACHE) && ((way_valid == 0) || (way_hit == 0))) begin
+                if (axi_start1 | axi_start2) begin
                     state_read <= READ_ADDR;
-                    m_araddr_r <= {req_addr_r[31:OFFSET_WIDTH], {OFFSET_WIDTH{1'b0}}};
-                    m_arlen_r <= BURST_NUM; // 4字节为一个beat
-                    m_arsize_r <= 3'b010; // 4字节
-                    m_arburst_r <= 2'b01; // 增量式
+                    // 默认赋值（单次读）
+                    m_araddr_r  <= req_addr_r;
+                    m_arlen_r   <= 0;
+                    m_arsize_r  <= 3'b010;
+                    m_arburst_r <= 2'b00;
+                    // 若为cache miss触发的burst读，覆盖相关参数
+                    if (axi_start2) begin
+                        m_araddr_r  <= {req_addr_r[31:OFFSET_WIDTH], {OFFSET_WIDTH{1'b0}}};
+                        m_arlen_r   <= BURST_NUM;      // burst长度
+                        m_arburst_r <= 2'b01;          // 增量式
+                    end
                 end
             end 
             READ_ADDR: begin
@@ -208,8 +240,6 @@ module ysyx_25050136_ICACHE
                     cache_data_temp[32*axi_read_cnt +: 32] <= m_rdata_i;
                     if(m_rlast_i) begin
                         state_read <= READ_IDLE;
-                        cache_tag[replace_way_use][addr_index] <= addr_tag;
-                        cache_valid[replace_way_use][addr_index] <= 1'b1;
                     end
                     m_rready_r <= 0;
                 end else begin
