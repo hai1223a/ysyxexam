@@ -211,7 +211,7 @@ module ysyx_25050136_ICACHE
                 if (axi_start1 | axi_start2) begin
                     state_read <= READ_ADDR;
                     // 默认赋值（单次读）
-                    m_araddr_r  <= req_addr_r;
+                    m_araddr_r  <= req_addr_i;
                     m_arlen_r   <= 0;
                     m_arsize_r  <= 3'b010;
                     m_arburst_r <= 2'b00;
