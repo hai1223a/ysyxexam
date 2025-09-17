@@ -1,10 +1,10 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Wed Sep 17 15:27:32 2025
+[*] Wed Sep 17 15:31:39 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Wed Sep 17 15:23:19 2025"
-[dumpfile_size] 6015409
+[dumpfile_mtime] "Wed Sep 17 15:28:06 2025"
+[dumpfile_size] 6013847
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/sdram.gtkw"
 [timestart] 295278
 [size] 1858 1001
@@ -64,9 +64,8 @@ TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_axi.axi_rvalid_o
 TOP.ysyxSoCFull.sdram.dq[31:0]
 @28
 TOP.ysyxSoCFull.sdram.sdram0_0.clk
-@821
-TOP.ysyxSoCFull.sdram.sdram0_0.dbg_state[79:0]
 @820
+TOP.ysyxSoCFull.sdram.sdram0_0.dbg_state[79:0]
 TOP.ysyxSoCFull.sdram.sdram0_0.dbg_cmd[119:0]
 @28
 TOP.ysyxSoCFull.sdram.sdram0_0.wen
@@ -78,12 +77,28 @@ TOP.ysyxSoCFull.sdram.sdram0_0.wmask[1:0]
 -
 @28
 TOP.ysyxSoCFull.sdram.sdram0_0.ren
+@c00022
+TOP.ysyxSoCFull.sdram.sdram0_0.read_cnt[3:0]
+@28
+(0)TOP.ysyxSoCFull.sdram.sdram0_0.read_cnt[3:0]
+(1)TOP.ysyxSoCFull.sdram.sdram0_0.read_cnt[3:0]
+(2)TOP.ysyxSoCFull.sdram.sdram0_0.read_cnt[3:0]
+(3)TOP.ysyxSoCFull.sdram.sdram0_0.read_cnt[3:0]
+@1401200
+-group_end
 @22
 TOP.ysyxSoCFull.sdram.sdram0_0.dq_out[15:0]
 @200
 -
 @22
 TOP.ysyxSoCFull.sdram.sdram0_0.bank_sel_real[3:0]
+@23
+TOP.ysyxSoCFull.sdram.sdram0_0.col_addr[8:0]
+@22
+TOP.ysyxSoCFull.sdram.sdram0_0.read_col_fifo.mem[0][8:0]
+TOP.ysyxSoCFull.sdram.sdram0_0.read_col_fifo.mem[1][8:0]
+TOP.ysyxSoCFull.sdram.sdram0_0.read_col_fifo.mem[2][8:0]
+TOP.ysyxSoCFull.sdram.sdram0_0.col_addr_read[8:0]
 TOP.ysyxSoCFull.sdram.sdram0_0.col_addr_real[8:0]
 @1000200
 -sdram
