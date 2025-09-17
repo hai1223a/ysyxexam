@@ -82,7 +82,7 @@ module ysyx_25050136_NPC
     wire inst_req_valid;
     wire inst_req_use;
     ysyx_25050136_ICACHE #(
-        .OFFSET_WIDTH 	(3),
+        .OFFSET_WIDTH 	(2),
         .INDEX_WIDTH  	(4),
         .NUM_WAY     	(1)
     )
