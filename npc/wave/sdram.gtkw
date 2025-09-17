@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Wed Sep 17 13:31:49 2025
+[*] Wed Sep 17 13:59:03 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Wed Sep 17 13:29:09 2025"
-[dumpfile_size] 165238
+[dumpfile_mtime] "Wed Sep 17 13:32:46 2025"
+[dumpfile_size] 6013005
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/sdram.gtkw"
-[timestart] 20867
+[timestart] 295280
 [size] 1858 1001
 [pos] -51 -51
-*-2.700000 20888 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-2.700000 295295 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
@@ -71,7 +71,17 @@ TOP.ysyxSoCFull.sdram.sdram0_0.bank_sel[3:0]
 TOP.ysyxSoCFull.sdram.sdram0_0.count[1:0]
 TOP.ysyxSoCFull.sdram.sdram0_0.count_r[1:0]
 TOP.ysyxSoCFull.sdram.sdram0_0.cas_latency[1:0]
-@23
+@22
 TOP.ysyxSoCFull.sdram.sdram0_0.dq_out[15:0]
+@28
+TOP.ysyxSoCFull.sdram.sdram0_0.ren
+@29
+TOP.ysyxSoCFull.sdram.sdram0_0.dq_en
+@200
+-
+@28
+TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_core.inport_rd_i
+@22
+TOP.ysyxSoCFull.sdram.sdram0_0.dq[15:0]
 [pattern_trace] 1
 [pattern_trace] 0
