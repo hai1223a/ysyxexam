@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Wed Sep 17 08:45:07 2025
+[*] Wed Sep 17 08:48:19 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Wed Sep 17 08:40:16 2025"
-[dumpfile_size] 1800021
+[dumpfile_mtime] "Wed Sep 17 08:45:19 2025"
+[dumpfile_size] 2231405
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/cache.gtkw"
-[timestart] 255285
+[timestart] 296583
 [size] 1858 1001
 [pos] -101 -101
-*-3.844637 255319 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-6.244637 296736 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
@@ -42,6 +42,8 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_
 @28
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.bready_i
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.bvalid_o
+@23
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.req_addr_r[31:0]
 @200
 -
 @22
@@ -84,7 +86,7 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_bvalid_i
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_awvalid_o
 @200
 -
-@23
+@22
 TOP.ysyxSoCFull.asic.lsdram_axi.msdram.sdram_dq[31:0]
 [pattern_trace] 1
 [pattern_trace] 0

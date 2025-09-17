@@ -43,8 +43,8 @@ module ysyx_25050136_IF
                 req_addr_r <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
                 pc <= dynamic_valid_i ? dynamic_npc_i : static_npc_o;
                 req_valid_r <= 1;
-                req_use_r   <= ((dynamic_valid_i ? dynamic_npc_i : static_npc_o) >= 32'ha0000000) &&
-                               ((dynamic_valid_i ? dynamic_npc_i : static_npc_o) < 32'ha4000000);
+                req_use_r   <= ((dynamic_valid_i ? dynamic_npc_i : static_npc_o) >= 32'ha000_0000) &&
+                               ((dynamic_valid_i ? dynamic_npc_i : static_npc_o) < 32'ha400_0000);
             end
             if(req_ready_i) begin
                 req_use_r   <= 0;
