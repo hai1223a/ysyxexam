@@ -120,7 +120,7 @@ module ysyx_25050136_NPC
         .inst_req_ready_i   (inst_req_ready  ),
         .inst_req_addr_o    (inst_req_addr   ),
         .inst_req_valid_o   (inst_req_valid  ),
-        .inst_req_use_o     (inst_req_use_o  ),
+        .inst_req_use_o     (inst_req_use    ),
         .mem_awvalid_o  	(mem_awvalid_o   ),
         .mem_awready_i  	(mem_awready_i   ),
         .mem_awaddr_o   	(mem_awaddr_o    ),
