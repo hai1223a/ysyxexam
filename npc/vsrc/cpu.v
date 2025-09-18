@@ -152,16 +152,16 @@ module ysyx_25050136_NPC
         .m_rresp_i   	(mem_rresp_i      ),
         .m_rlast_i   	(mem_rlast_i      ),
         .m_rid_i     	(mem_rid_i        ),
-        .req_addr_i  	(mem_req_addr_i   ),
-        .req_valid_i 	(mem_req_valid_i  ),
-        .req_ren_i   	(mem_req_ren_i    ),
-        .req_wen_i   	(mem_req_wen_i    ),
-        .req_mask_i  	(mem_req_mask_i   ),
-        .req_size_i  	(mem_req_size_i   ),
-        .req_use_i   	(mem_req_use_i    ),
-        .req_wdata_i 	(mem_req_wdata_i  ),
-        .req_rdata_o 	(mem_req_rdata_o  ),
-        .req_ready_o 	(mem_req_ready_o  )
+        .req_addr_i  	(mem_req_addr     ),
+        .req_valid_i 	(mem_req_valid    ),
+        .req_ren_i   	(mem_req_ren      ),
+        .req_wen_i   	(mem_req_wen      ),
+        .req_mask_i  	(mem_req_mask     ),
+        .req_size_i  	(mem_req_size     ),
+        .req_use_i   	(mem_req_use      ),
+        .req_wdata_i 	(mem_req_wdata    ),
+        .req_rdata_o 	(mem_req_rdata    ),
+        .req_ready_o 	(mem_req_ready    )
     );
     
     ysyx_25050136_NPCCORE #(
