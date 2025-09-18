@@ -81,6 +81,16 @@ module ysyx_25050136_NPC
     wire inst_req_ready;
     wire inst_req_valid;
     wire inst_req_use;
+    wire [31:0] mem_req_addr;
+    wire [31:0] mem_req_rdata;
+    wire mem_req_ready;
+    wire mem_req_valid;
+    wire mem_req_ren;
+    wire mem_req_wen;
+    wire [3:0]  mem_req_mask;
+    wire [2:0]  mem_req_size;
+    wire mem_req_use;
+    wire [31:0] mem_req_wdata;
     ysyx_25050136_ICACHE #(
         .OFFSET_WIDTH 	(2),
         .INDEX_WIDTH  	(4),
@@ -109,6 +119,51 @@ module ysyx_25050136_NPC
         .req_ready_o 	(inst_req_ready  )
     );
     
+    ysyx_25050136_DCACHE 
+    u_ysyx_25050136_DCACHE(
+        .clk         	(clk              ),
+        .reset       	(reset            ),
+        .m_awvalid_o 	(mem_awvalid_o    ),
+        .m_awready_i 	(mem_awready_i    ),
+        .m_awaddr_o  	(mem_awaddr_o     ),
+        .m_awid_o    	(mem_awid_o       ),
+        .m_awlen_o   	(mem_awlen_o      ),
+        .m_awsize_o  	(mem_awsize_o     ),
+        .m_awburst_o 	(mem_awburst_o    ),
+        .m_wvalid_o  	(mem_wvalid_o     ),
+        .m_wready_i  	(mem_wready_i     ),
+        .m_wdata_o   	(mem_wdata_o      ),
+        .m_wstrb_o   	(mem_wstrb_o      ),
+        .m_wlast_o   	(mem_wlast_o      ),
+        .m_bvalid_i  	(mem_bvalid_i     ),
+        .m_bready_o  	(mem_bready_o     ),
+        .m_bresp_i   	(mem_bresp_i      ),
+        .m_bid_i     	(mem_bid_i        ),
+        .m_arvalid_o 	(mem_arvalid_o    ),
+        .m_arready_i 	(mem_arready_i    ),
+        .m_araddr_o  	(mem_araddr_o     ),
+        .m_arid_o    	(mem_arid_o       ),
+        .m_arlen_o   	(mem_arlen_o      ),
+        .m_arsize_o  	(mem_arsize_o     ),
+        .m_arburst_o 	(mem_arburst_o    ),
+        .m_rvalid_i  	(mem_rvalid_i     ),
+        .m_rready_o  	(mem_rready_o     ),
+        .m_rdata_i   	(mem_rdata_i      ),
+        .m_rresp_i   	(mem_rresp_i      ),
+        .m_rlast_i   	(mem_rlast_i      ),
+        .m_rid_i     	(mem_rid_i        ),
+        .req_addr_i  	(mem_req_addr_i   ),
+        .req_valid_i 	(mem_req_valid_i  ),
+        .req_ren_i   	(mem_req_ren_i    ),
+        .req_wen_i   	(mem_req_wen_i    ),
+        .req_mask_i  	(mem_req_mask_i   ),
+        .req_size_i  	(mem_req_size_i   ),
+        .req_use_i   	(mem_req_use_i    ),
+        .req_wdata_i 	(mem_req_wdata_i  ),
+        .req_rdata_o 	(mem_req_rdata_o  ),
+        .req_ready_o 	(mem_req_ready_o  )
+    );
+    
     ysyx_25050136_NPCCORE #(
         .ADDR_WIDTH 	(ADDR_WIDTH   ),
         .DATA_WIDTH 	(DATA_WIDTH   )
@@ -121,35 +176,16 @@ module ysyx_25050136_NPC
         .inst_req_addr_o    (inst_req_addr   ),
         .inst_req_valid_o   (inst_req_valid  ),
         .inst_req_use_o     (inst_req_use    ),
-        .mem_awvalid_o  	(mem_awvalid_o   ),
-        .mem_awready_i  	(mem_awready_i   ),
-        .mem_awaddr_o   	(mem_awaddr_o    ),
-        .mem_awid_o     	(mem_awid_o      ),
-        .mem_awlen_o    	(mem_awlen_o     ),
-        .mem_awsize_o   	(mem_awsize_o    ),
-        .mem_awburst_o  	(mem_awburst_o   ),
-        .mem_wvalid_o   	(mem_wvalid_o    ),
-        .mem_wready_i   	(mem_wready_i    ),
-        .mem_wdata_o    	(mem_wdata_o     ),
-        .mem_wstrb_o    	(mem_wstrb_o     ),
-        .mem_wlast_o    	(mem_wlast_o     ),
-        .mem_bvalid_i   	(mem_bvalid_i    ),
-        .mem_bready_o   	(mem_bready_o    ),
-        .mem_bresp_i    	(mem_bresp_i     ),
-        .mem_bid_i      	(mem_bid_i       ),
-        .mem_arvalid_o  	(mem_arvalid_o   ),
-        .mem_arready_i  	(mem_arready_i   ),
-        .mem_araddr_o   	(mem_araddr_o    ),
-        .mem_arid_o     	(mem_arid_o      ),
-        .mem_arlen_o    	(mem_arlen_o     ),
-        .mem_arsize_o   	(mem_arsize_o    ),
-        .mem_arburst_o  	(mem_arburst_o   ),
-        .mem_rvalid_i   	(mem_rvalid_i    ),
-        .mem_rready_o   	(mem_rready_o    ),
-        .mem_rdata_i    	(mem_rdata_i     ),
-        .mem_rresp_i    	(mem_rresp_i     ),
-        .mem_rlast_i    	(mem_rlast_i     ),
-        .mem_rid_i      	(mem_rid_i       )
+        .mem_req_rdata_i    (mem_req_rdata   ),
+        .mem_req_ready_i    (mem_req_ready   ),
+        .mem_req_addr_o     (mem_req_addr    ),
+        .mem_req_valid_o    (mem_req_valid   ),
+        .mem_req_ren_o      (mem_req_ren     ),
+        .mem_req_wen_o      (mem_req_wen     ),
+        .mem_req_mask_o     (mem_req_mask    ),
+        .mem_req_size_o     (mem_req_size    ),
+        .mem_req_use_o      (mem_req_use     ),
+        .mem_req_wdata_o    (mem_req_wdata   )
     );
     
 
