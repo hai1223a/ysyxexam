@@ -127,7 +127,7 @@ module ysyx_25050136_LSU
     end
 
     assign req_addr_o = mem_addr_i | req_addr_r;
-    assign req_valid_o = fvalid_i | req_valid_r;
+    assign req_valid_o = is_clint ? fvalid_i | req_valid_r;
     assign req_ren_o = mem_ren_i | req_ren_r;
     assign req_wen_o = mem_wen_i | req_wen_r;
     assign req_mask_o = mem_strb_r | req_mask_r;
