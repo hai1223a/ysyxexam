@@ -98,6 +98,7 @@ extern "C" void find_addr_0() {
 
 extern "C" void find_diff_skip() {
   if_skip = true;
+    Log("AA");
 }
 
 NPC_perforcount npc_perC = {0};

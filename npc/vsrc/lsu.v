@@ -83,6 +83,7 @@ module ysyx_25050136_LSU
              ((mem_addr_i >= 32'h1000_0000) && (mem_addr_i < 32'h1000_1000))) && (mem_wen_i | mem_ren_i))
         begin
             find_diff_skip();
+            
         end
     end
 `endif
