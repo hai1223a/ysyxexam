@@ -66,7 +66,7 @@ module ysyx_25050136_LSU
             req_wdata_r <= 0;
             req_addr_r  <= 0;
         end else begin
-            if (fvalid_i) begin
+            if (fvalid_i & (mem_ren_i | mem_wen_i)) begin
                 req_valid_r <= 1'b1;
                 req_ren_r   <= mem_ren_i;
                 req_wen_r   <= mem_wen_i;
