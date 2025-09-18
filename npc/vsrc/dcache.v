@@ -197,6 +197,8 @@ module ysyx_25050136_DCACHE
     always @(posedge clk) begin
         if(reset) begin
             state_write <= WRITE_IDLE;
+            aw_en       <= 0;
+            w_en        <= 0;
             m_awaddr_r  <= 0;
             m_awlen_r   <= 0;
             m_awsize_r  <= 0;
@@ -209,6 +211,8 @@ module ysyx_25050136_DCACHE
             case (state_write)
                 WRITE_IDLE: begin
                     m_bready_r <= 1;
+                    aw_en <= 0;
+                    w_en  <= 0;
                     if((state == IDLE) && wen) begin
                         state_write <= WRITE_DATA_ADDR;
                         m_awaddr_r  <= req_addr_i;
