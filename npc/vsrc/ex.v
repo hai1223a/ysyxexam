@@ -63,7 +63,8 @@ module ysyx_25050136_EX
     wire mem_wen = lsu_en & lsu_op_i[`ysyx_25050136_LSU_STORE];
     wire [DATA_WIDTH-1:0] load_data_o;
     wire mem_valid_o;
-    
+    wire [31:0] clint_raddr;
+    wire [31:0] clint_rdata;
     ysyx_25050136_LSU #(
         .DATA_WIDTH 	(32  ))
     u_ysyx_25050136_LSU(
@@ -79,15 +80,24 @@ module ysyx_25050136_EX
         .req_size_o   	(req_size_o    ),
         .req_use_o    	(req_use_o     ),
         .req_wdata_o  	(req_wdata_o   ),
+        .clint_addr_o 	(clint_raddr   ),
+        .clint_rdata_i	(clint_rdata   ),
         .fvalid_i     	(fvalid_i      ),
         .mem_ren_i    	(mem_ren       ),
         .mem_wen_i    	(mem_wen       ),
         .mem_mask_i   	(mem_mask_i    ),
         .mem_signed_i 	(mem_signed_i  ),
-        .mem_addr_i   	(alu_out_o    ),
-        .store_data_i 	(lsu_opd1_i  ),
+        .mem_addr_i   	(alu_out_o     ),
+        .store_data_i 	(lsu_opd1_i    ),
         .load_data_o  	(load_data_o   ),
         .mem_valid_o  	(mem_valid_o   )
+    );
+    
+    clint u_clint(
+        .clk    	(clk          ),
+        .reset  	(reset        ),
+        .addr_i 	(clint_raddr  ),
+        .data_o 	(clint_rdata  )
     );
     
     //===================================================

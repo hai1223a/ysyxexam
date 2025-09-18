@@ -108,8 +108,8 @@ ysyx_25050136_ID #(
     .DATA_WIDTH(DATA_WIDTH)
 )
 u_ysyx_25050136_ID(
-    .clk            (clk                 ),
-    .reset          (reset               ),
+    .clk            (clk                  ),
+    .reset          (reset                ),
     .inst_i   	    (if2id_inst_o         ),
     .pc_i           (if2id_pc_o           ),
     .static_npc_i   (if2id_static_npc_o   ),

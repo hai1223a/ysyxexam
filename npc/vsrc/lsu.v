@@ -16,9 +16,9 @@ module ysyx_25050136_LSU
         output   [2:0]                req_size_o   ,
         output                        req_use_o    ,
         output   [31:0]               req_wdata_o  ,
-        // // 与clint握手信号
-        // input    [31:0]               clint_rdata_i,
-        // output   [31:0]               clint_addr_o , 
+        // 与clint握手信号
+        input    [31:0]               clint_rdata_i,
+        output   [31:0]               clint_addr_o , 
         // 内部
         input                         fvalid_i     ,
         input                         mem_ren_i    ,
@@ -71,7 +71,7 @@ module ysyx_25050136_LSU
             req_wdata_r <= 0;
             req_addr_r  <= 0;
         end else begin
-            if (fvalid_i & (mem_ren_i | mem_wen_i)) begin
+            if (fvalid_i & (mem_ren_i | mem_wen_i) & (!is_clint)) begin
                 req_valid_r <= 1'b1;
                 req_ren_r   <= mem_ren_i;
                 req_wen_r   <= mem_wen_i;
@@ -134,7 +134,7 @@ module ysyx_25050136_LSU
     assign req_size_o = mem_size_r | req_size_r;
     assign req_use_o = 1'b1;
     assign req_wdata_o = mem_wdata_r | req_wdata_r;
-    // assign clint_addr_o = mem_addr_i;
-    assign mem_valid_o = req_ready_i;
-    assign load_data_o = mem_rdata_r;
+    assign clint_addr_o = mem_addr_i;
+    assign mem_valid_o = is_clint ? fvalid_i : req_ready_i;
+    assign load_data_o = is_clint ? clint_rdata_i : mem_rdata_r;
  endmodule
