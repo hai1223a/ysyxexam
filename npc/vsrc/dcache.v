@@ -90,7 +90,7 @@ module ysyx_25050136_DCACHE
     reg [2:0] m_awsize_r;
     reg [1:0] m_awburst_r;
     reg [31:0] m_wdata_r;
-    reg [31:0] m_wstrb_r;
+    reg [3:0] m_wstrb_r;
     reg m_wlast_r;
     reg aw_en, w_en;
     wire aw_fire, w_fire, b_fire;
