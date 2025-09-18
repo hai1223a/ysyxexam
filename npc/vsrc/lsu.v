@@ -16,10 +16,13 @@ module ysyx_25050136_LSU
         output   [2:0]                req_size_o   ,
         output                        req_use_o    ,
         output   [31:0]               req_wdata_o  ,
-        // 内部                             
+        // 与clint握手信号
+        input    [31:0]               clint_rdata_i,
+        output   [31:0]               clint_addr_o , 
+        // 内部
         input                         fvalid_i     ,
         input                         mem_ren_i    ,
-        input                         mem_wen_i    ,                      
+        input                         mem_wen_i    ,             
         input    [3:0]                mem_mask_i   ,
         input                         mem_signed_i ,
         input    [DATA_WIDTH-1:0]     mem_addr_i   ,
@@ -126,10 +129,11 @@ module ysyx_25050136_LSU
     assign req_ren_o = mem_ren_i | req_ren_r;
     assign req_wen_o = mem_wen_i | req_wen_r;
     assign req_mask_o = mem_strb_r | req_mask_r;
-    
     assign req_size_o = mem_size_r | req_size_r;
     assign req_use_o = 1'b1;
     assign req_wdata_o = mem_wdata_r | req_wdata_r;
+    assign clint_addr_o = mem_addr_i;
+    
     assign mem_valid_o = req_ready_i;
     assign load_data_o = mem_rdata_r;
  endmodule
