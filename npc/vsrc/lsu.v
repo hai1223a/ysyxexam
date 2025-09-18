@@ -79,8 +79,8 @@ module ysyx_25050136_LSU
     assign byte_sel = 4'b1 << mem_addr_i[1:0];
 `ifdef VERILATOR_DPIC
     always @(*) begin
-        if ((((mem_addr_i >= 32'h0200_0000) && (men_addr_i < 32'h0201_0000)) ||
-             ((mem_addr_i >= 32'h1000_0000) && (men_addr_i < 32'h1000_1000))) && (mem_wen_i | mem_ren_i))
+        if ((((mem_addr_i >= 32'h0200_0000) && (mem_addr_i < 32'h0201_0000)) ||
+             ((mem_addr_i >= 32'h1000_0000) && (mem_addr_i < 32'h1000_1000))) && (mem_wen_i | mem_ren_i))
         begin
             find_diff_skip();
         end
