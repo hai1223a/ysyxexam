@@ -69,7 +69,9 @@ module ysyx_25050136_ICACHE
         if (reset) begin
             replace_way <= 0;
         end else begin
-            replace_way <= replace_way + 1;
+            if(NUM_WAY > 1) begin
+                replace_way <= replace_way + 1;
+            end
         end
     end
     ysyx_25050136_encoder #(.WIDTH(NUM_WAY))
