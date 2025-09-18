@@ -87,8 +87,8 @@ module ysyx_25050136_NPC
         .NUM_WAY     	(1)
     )
     u_ysyx_25050136_ICACHE(
-        .clk         	(clk          ),
-        .reset       	(reset        ),
+        .clk         	(clk             ),
+        .reset       	(reset           ),
         .m_arvalid_o 	(inst_arvalid_o  ),
         .m_arready_i 	(inst_arready_i  ),
         .m_araddr_o  	(inst_araddr_o   ),

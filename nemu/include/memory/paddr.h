@@ -35,6 +35,10 @@ static inline bool in_sram(paddr_t addr) {
   return (addr - CONFIG_SRAM_BASE < CONFIG_SRAM_SIZE);
 }
 
+static inline bool in_sdram(paddr_t addr) {
+  return (addr - CONFIG_SDRAM_BASE < CONFIG_SDRAM_SIZE);
+}
+
 word_t paddr_read(paddr_t addr, int len);
 void paddr_write(paddr_t addr, int len, word_t data);
 
