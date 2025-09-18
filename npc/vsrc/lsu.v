@@ -78,12 +78,12 @@ module ysyx_25050136_LSU
     // 内部
     assign byte_sel = 4'b1 << mem_addr_i[1:0];
 `ifdef VERILATOR_DPIC
+    wire is_mmio = ((mem_addr_i >= 32'h0200_0000) && (mem_addr_i < 32'h0201_0000)) ||
+                   ((mem_addr_i >= 32'h1000_0000) && (mem_addr_i < 32'h1000_1000));
+    wire is_memop = mem_wen_i | mem_ren_i;
     always @(*) begin
-        if ((((mem_addr_i >= 32'h0200_0000) && (mem_addr_i < 32'h0201_0000)) ||
-             ((mem_addr_i >= 32'h1000_0000) && (mem_addr_i < 32'h1000_1000))) && (mem_wen_i | mem_ren_i))
-        begin
+        if (is_mmio && is_memop) begin
             find_diff_skip();
-            
         end
     end
 `endif
