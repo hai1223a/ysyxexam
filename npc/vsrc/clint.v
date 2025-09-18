@@ -151,6 +151,8 @@ module clint(
     input            clk   ,
     input            reset ,
     input   [31:0]   addr_i,
+    input           valid_i,
+    output          ready_o,
     output  [31:0]   data_o
 );
     reg [63:0] mtime;
@@ -161,6 +163,19 @@ module clint(
             mtime <= mtime + 64'd1;
         end
     end
+    reg ready_r;
+    always @(posedge clk) begin
+        if (reset) begin
+            ready_r <= 0;
+        end else begin
+            if (valid_i) begin
+                ready_r <= 1;
+            end else begin
+                ready_r <= 0;
+            end
+        end
+    end
+    assign ready_o = ready_r;
     assign data_o = (addr_i == 32'h0200_0000) ? mtime[31:0] :
                     (addr_i == 32'h0200_0004) ? mtime[63:32] : 32'b0;
 endmodule

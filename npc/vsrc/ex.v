@@ -65,6 +65,8 @@ module ysyx_25050136_EX
     wire mem_valid_o;
     wire [31:0] clint_raddr;
     wire [31:0] clint_rdata;
+    wire clint_valid;
+    wire clint_ready;
     ysyx_25050136_LSU #(
         .DATA_WIDTH 	(32  ))
     u_ysyx_25050136_LSU(
@@ -82,6 +84,8 @@ module ysyx_25050136_EX
         .req_wdata_o  	(req_wdata_o   ),
         .clint_addr_o 	(clint_raddr   ),
         .clint_rdata_i	(clint_rdata   ),
+        .clint_valid_o  (clint_valid   ), 
+        .clint_ready_i  (clint_ready   ),
         .fvalid_i     	(fvalid_i      ),
         .mem_ren_i    	(mem_ren       ),
         .mem_wen_i    	(mem_wen       ),
@@ -96,6 +100,8 @@ module ysyx_25050136_EX
     clint u_clint(
         .clk    	(clk          ),
         .reset  	(reset        ),
+        .valid_i	(clint_valid  ),
+        .ready_o    (clint_ready  ),
         .addr_i 	(clint_raddr  ),
         .data_o 	(clint_rdata  )
     );
