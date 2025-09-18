@@ -150,7 +150,7 @@ module ysyx_25050136_DCACHE
             case (state_read)
                 READ_IDLE: begin
                     m_rready_r <= 1;
-                    if (ren) begin
+                    if ((state == IDLE) && ren) begin
                         state_read  <= READ_ADDR;
                         m_araddr_r  <= req_addr_i;
                         m_arlen_r   <= 0;
