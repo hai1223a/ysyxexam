@@ -16,9 +16,9 @@ module ysyx_25050136_LSU
         output   [2:0]                req_size_o   ,
         output                        req_use_o    ,
         output   [31:0]               req_wdata_o  ,
-        // 与clint握手信号
-        input    [31:0]               clint_rdata_i,
-        output   [31:0]               clint_addr_o , 
+        // // 与clint握手信号
+        // input    [31:0]               clint_rdata_i,
+        // output   [31:0]               clint_addr_o , 
         // 内部
         input                         fvalid_i     ,
         input                         mem_ren_i    ,
@@ -35,6 +35,8 @@ module ysyx_25050136_LSU
     wire misaligned = (mem_mask_i == 4'h3) ? mem_addr_i[0] :       // halfword检查bit[0]
                       (mem_mask_i == 4'hF) ? |mem_addr_i[1:0] :    // word检查bit[1:0]
                       1'b0;                                        // byte总是对齐
+    // 从设备选择
+    wire is_clint = (mem_addr_i >= 32'h0200_0000) && (mem_addr_i < 32'h0201_0000);
     // DEBUG
 `ifdef ysyx_25050136_VERILATOR_DPIC
     wire is_mmio = ((mem_addr_i >= 32'h0200_0000) && (mem_addr_i < 32'h0201_0000)) ||
@@ -132,8 +134,7 @@ module ysyx_25050136_LSU
     assign req_size_o = mem_size_r | req_size_r;
     assign req_use_o = 1'b1;
     assign req_wdata_o = mem_wdata_r | req_wdata_r;
-    assign clint_addr_o = mem_addr_i;
-    
+    // assign clint_addr_o = mem_addr_i;
     assign mem_valid_o = req_ready_i;
     assign load_data_o = mem_rdata_r;
  endmodule
