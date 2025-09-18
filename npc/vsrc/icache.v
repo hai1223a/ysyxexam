@@ -50,11 +50,21 @@ module ysyx_25050136_ICACHE
     reg [31:0] req_addr_r;
     reg [31:0] req_rdata_r;
     reg req_ready_r;
+    // 地址解析
+    wire [INDEX_WIDTH-1:0] addr_index = req_addr_r[OFFSET_WIDTH+INDEX_WIDTH-1:OFFSET_WIDTH];
+    wire [TAG_WIDTH-1:0] addr_tag = req_addr_r[31:OFFSET_WIDTH+INDEX_WIDTH];
+    wire [OFFSET_WIDTH-1:0] addr_offset = req_addr_r[OFFSET_WIDTH-1:0];
     // 命中信号
-    reg [NUM_WAY-1:0] way_hit;
-    reg [NUM_WAY-1:0] way_valid;
+    wire [NUM_WAY-1:0] way_hit;
+    wire [NUM_WAY-1:0] way_valid;
     wire [NUM_WAY-1:0] hot_hit = way_hit & way_valid;
     wire [WAY_WIDTH-1:0] bin_hit;
+    generate
+        for (genvar i = 0; i < NUM_WAY; i = i + 1) begin
+            assign way_valid[i] = cache_valid[i][addr_index];
+            assign way_hit[i] = (cache_tag[i][addr_index] == addr_tag);
+        end
+    endgenerate
     ysyx_25050136_hot2bin #(.ONE_HOT_WIDTH(NUM_WAY))
         hot2bin_hit (
             .one_hot_code(hot_hit),
@@ -85,10 +95,7 @@ module ysyx_25050136_ICACHE
     // axi状态机判断信号
     reg axi_start1; // ifu取指直接使用axi
     reg axi_start2; // ifu取指在cache未命中使用axi
-    // 地址解析
-    wire [INDEX_WIDTH-1:0] addr_index = req_addr_r[OFFSET_WIDTH+INDEX_WIDTH-1:OFFSET_WIDTH];
-    wire [TAG_WIDTH-1:0] addr_tag = req_addr_r[31:OFFSET_WIDTH+INDEX_WIDTH];
-    wire [OFFSET_WIDTH-1:0] addr_offset = req_addr_r[OFFSET_WIDTH-1:0];
+
 
     // ====================axi信号定义================================
     localparam READ_IDLE = 2'd0;
@@ -109,8 +116,6 @@ module ysyx_25050136_ICACHE
         if (reset) begin
             state <= READ_IDLE;
             req_addr_r <= 0;
-            way_hit <= 0;
-            way_valid <= 0;
             for (i = 0; i < NUM_WAY; i = i + 1) begin
                 for (j = 0; j < NUM_SET; j = j + 1) begin
                     cache_valid[i][j] <= 0;
@@ -129,10 +134,6 @@ module ysyx_25050136_ICACHE
                 end         
             end 
             INCACHE: begin
-                for (i = 0; i < NUM_WAY ; i = i + 1) begin
-                    way_valid[i] <= cache_valid[i][addr_index];
-                    way_hit[i] <= (cache_tag[i][addr_index] == addr_tag);
-                end
                 if(hot_hit != 0) begin
 `ifdef ysyx_25050136_VERILATOR_DPIC
                     icache_hit();
