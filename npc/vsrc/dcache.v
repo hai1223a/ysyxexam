@@ -135,6 +135,8 @@ module ysyx_25050136_DCACHE
             req_ready_r = 1;
         end
     end
+    assign req_rdata_o = req_rdata_r;
+    assign req_ready_o = req_ready_r;
     // ==================== AXI读操作 ==============================
     always @(posedge clk) begin
         if (reset) begin
