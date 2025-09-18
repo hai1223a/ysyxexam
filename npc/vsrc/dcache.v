@@ -209,7 +209,7 @@ module ysyx_25050136_DCACHE
             case (state_write)
                 WRITE_IDLE: begin
                     m_bready_r <= 1;
-                    if(wen) begin
+                    if((state == IDLE) && wen) begin
                         state_write <= WRITE_DATA_ADDR;
                         m_awaddr_r  <= req_addr_i;
                         m_awlen_r   <= 0;
