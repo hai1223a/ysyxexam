@@ -9,15 +9,15 @@ enum {
 };
 
 typedef struct {
-  uint64_t ifu_count;
-  uint64_t lsu_count;
-  uint64_t bqu_count;
-  uint64_t csru_count;
-  uint64_t alu_count;
-  uint64_t icache_count;
-  uint64_t if_cycle;
-  uint64_t lsu_cycle;
-  uint64_t icache_hit;
+  uint64_t ifu_count;       // 取指数量
+  uint64_t lsu_count;       // 访存操作数量
+  uint64_t bqu_count;       // 跳转操作数量
+  uint64_t csru_count;      // CSR操作数量
+  uint64_t alu_count;       // 其他操作数量
+  uint64_t icache_count;    // icache取指数量
+  uint64_t if_cycle;        // 取指总周期
+  uint64_t lsu_cycle;       // 访存总周期
+  uint64_t icache_hit;      // icache命中数量
 } NPC_perforcount;
 
 extern NPC_perforcount npc_perC;
