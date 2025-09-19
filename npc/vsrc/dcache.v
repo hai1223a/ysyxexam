@@ -222,7 +222,7 @@ module ysyx_25050136_DCACHE
                     if((state == IDLE) && wen) begin
                         state_write <= WRITE_DATA_ADDR;
                         m_awaddr_r  <= req_addr_i;
-                        m_awid_r    <= 4'1001;
+                        m_awid_r    <= 4'b1001;
                         m_awlen_r   <= 0;
                         m_awsize_r  <= req_size_i;
                         m_awburst_r <= 0;
