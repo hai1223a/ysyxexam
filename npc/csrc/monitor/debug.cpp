@@ -127,20 +127,21 @@ void init_log(const char *log_file)
 //=====================================================
 void printf_statu()
 {
-  Log("NPC的性能计数器如下: ifu_c = %ld, lsu_c = %ld, csru_c = %ld, bqu_c = %ld, alu_c = %ld\n平均延迟 = %ld, 平均取指延迟 = %ld, 平均访存延迟 = %ld",
-       npc_perC.ifu_count, npc_perC.lsu_count, npc_perC.csru_count, npc_perC.bqu_count, npc_perC.alu_count,
-       (npc_perC.ifu_count == 0) ? 0 : ((sim_time - 1) / 2) / npc_perC.ifu_count,
-       (npc_perC.ifu_count == 0) ? 0 : npc_perC.if_cycle / npc_perC.ifu_count,
-       (npc_perC.lsu_count == 0) ? 0 : npc_perC.lsu_cycle / npc_perC.lsu_count);
-  Log("icache: 命中次数 = %ld, AMAT = %ld",
-       npc_perC.icache_hit, ((npc_perC.ifu_count == 0)) ? 0 :1+35*(npc_perC.ifu_count-npc_perC.icache_hit)/npc_perC.ifu_count);
-  Log("PC = 0x%08x, halt = %d, NPC 的结束状态是%s", npcstate.halt_pc, npcstate.halt_ret,
-      (npcstate.state == NPC_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) : 
-      (npcstate.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : 
-      ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))));
-  Log("仿真时间为 %lu 次, 仿真周期为 %lu 个", sim_time - 1, (sim_time - 1) / 2);
-  Log("指令数量为 %lu 条", inst_count);
-  Log("程序时间 = %ld us", g_timer);
+    uint64_t icache_hit_rate = (npc_perC.icache_count == 0) ? 0 : (npc_perC.icache_hit * 100 / npc_perC.icache_count);
+    uint64_t icache_amat = (npc_perC.icache_count == 0) ? 0 : 1 + 35 * ((npc_perC.icache_count - npc_perC.icache_hit) / npc_perC.icache_count);
+    Log("NPC的性能计数器如下: ifu_c = %ld, lsu_c = %ld, csru_c = %ld, bqu_c = %ld, alu_c = %ld\n平均延迟 = %ld, 平均取指延迟 = %ld, 平均访存延迟 = %ld",
+        npc_perC.ifu_count, npc_perC.lsu_count, npc_perC.csru_count, npc_perC.bqu_count, npc_perC.alu_count,
+        (npc_perC.ifu_count == 0) ? 0 : ((sim_time - 1) / 2) / npc_perC.ifu_count,
+        (npc_perC.ifu_count == 0) ? 0 : npc_perC.if_cycle / npc_perC.ifu_count,
+        (npc_perC.lsu_count == 0) ? 0 : npc_perC.lsu_cycle / npc_perC.lsu_count);
+    Log("icache: 访问次数 = %ld, 命中次数 = %ld, 命中率 = %ld, AMAT = %ld", npc_perC.icache_count, npc_perC.icache_hit, icache_hit_rate, icache_amat);
+    Log("PC = 0x%08x, halt = %d, NPC 的结束状态是%s", npcstate.halt_pc, npcstate.halt_ret,
+        (npcstate.state == NPC_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) : 
+        (npcstate.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : 
+        ANSI_FMT("HIT BAD TRAP", ANSI_FG_RED))));
+    Log("仿真时间为 %lu 次, 仿真周期为 %lu 个", sim_time - 1, (sim_time - 1) / 2);
+    Log("指令数量为 %lu 条", inst_count);
+    Log("程序时间 = %ld us", g_timer);
 }
 
 void npc_end()
