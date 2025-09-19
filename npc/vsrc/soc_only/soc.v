@@ -101,8 +101,8 @@ module ysyx_25050136(
     localparam TOP_ADDR_WIDTH   = 5 ;
     localparam TOP_DATA_WIDTH   = 32;
     localparam TOP_MASTER_NUM   = 2 ;
-    localparam TOP_SLAVER_NUM   = 2 ;
 
+    // 仲裁器信号
     wire [TOP_MASTER_NUM-1:0]                s_awvalid_i ;
     wire [TOP_MASTER_NUM-1:0]                s_awready_o ;
     wire [TOP_MASTER_NUM*TOP_DATA_WIDTH-1:0] s_awaddr_i  ;
@@ -132,35 +132,7 @@ module ysyx_25050136(
     wire [TOP_MASTER_NUM*2-1:0]              s_rresp_o   ;
     wire [TOP_MASTER_NUM-1:0]                s_rlast_o   ;
     wire [TOP_MASTER_NUM*4-1:0]              s_rid_o     ;
-    wire [TOP_SLAVER_NUM-1:0]                m_awvalid_o ;
-    wire [TOP_SLAVER_NUM-1:0]                m_awready_i ;
-    wire [TOP_SLAVER_NUM*TOP_DATA_WIDTH-1:0] m_awaddr_o  ;
-    wire [TOP_SLAVER_NUM*4-1:0]              m_awid_o    ;
-    wire [TOP_SLAVER_NUM*8-1:0]              m_awlen_o   ;
-    wire [TOP_SLAVER_NUM*3-1:0]              m_awsize_o  ;
-    wire [TOP_SLAVER_NUM*2-1:0]              m_awburst_o ;
-    wire [TOP_SLAVER_NUM-1:0]                m_wvalid_o  ;
-    wire [TOP_SLAVER_NUM-1:0]                m_wready_i  ;
-    wire [TOP_SLAVER_NUM*TOP_DATA_WIDTH-1:0] m_wdata_o   ;
-    wire [TOP_SLAVER_NUM*4-1:0]              m_wstrb_o   ;
-    wire [TOP_SLAVER_NUM-1:0]                m_wlast_o   ;
-    wire [TOP_SLAVER_NUM-1:0]                m_bvalid_i  ;
-    wire [TOP_SLAVER_NUM-1:0]                m_bready_o  ;
-    wire [TOP_SLAVER_NUM*2-1:0]              m_bresp_i   ;
-    wire [TOP_SLAVER_NUM*4-1:0]              m_bid_i     ;
-    wire [TOP_SLAVER_NUM-1:0]                m_arvalid_o ;
-    wire [TOP_SLAVER_NUM-1:0]                m_arready_i ;
-    wire [TOP_SLAVER_NUM*TOP_DATA_WIDTH-1:0] m_araddr_o  ;
-    wire [TOP_SLAVER_NUM*4-1:0]              m_arid_o    ;
-    wire [TOP_SLAVER_NUM*8-1:0]              m_arlen_o   ;
-    wire [TOP_SLAVER_NUM*3-1:0]              m_arsize_o  ;
-    wire [TOP_SLAVER_NUM*2-1:0]              m_arburst_o ;
-    wire [TOP_SLAVER_NUM-1:0]                m_rvalid_i  ;
-    wire [TOP_SLAVER_NUM-1:0]                m_rready_o  ;
-    wire [TOP_SLAVER_NUM*TOP_DATA_WIDTH-1:0] m_rdata_i   ;
-    wire [TOP_SLAVER_NUM*2-1:0]              m_rresp_i   ;
-    wire [TOP_SLAVER_NUM-1:0]                m_rlast_i   ;
-    wire [TOP_SLAVER_NUM*4-1:0]              m_rid_i     ;
+
     // 主设备信号        
     wire                                  inst_arvalid_o ;
     wire                                  inst_arready_i ;
@@ -220,36 +192,7 @@ module ysyx_25050136(
     wire [1:0]                            mem_rresp_i    ;
     wire                                  mem_rlast_i    ;
     wire [3:0]                            mem_rid_i      ;
-    // 从设备信号
-    wire                                 clint_awvalid_i ;         
-    wire                                 clint_awready_o ;         
-    wire [TOP_DATA_WIDTH-1:0]            clint_awaddr_i  ;         
-    wire [3:0]                           clint_awid_i    ;
-    wire [7:0]                           clint_awlen_i   ;
-    wire [2:0]                           clint_awsize_i  ;
-    wire [1:0]                           clint_awburst_i ;
-    wire                                 clint_wvalid_i  ;         
-    wire                                 clint_wready_o  ;         
-    wire [TOP_DATA_WIDTH-1:0]            clint_wdata_i   ;         
-    wire [3:0]                           clint_wstrb_i   ;         
-    wire                                 clint_wlast_i   ;
-    wire                                 clint_bvalid_o  ;         
-    wire                                 clint_bready_i  ;         
-    wire [1:0]                           clint_bresp_o   ;         
-    wire [3:0]                           clint_bid_o     ;
-    wire                                 clint_arvalid_i ;         
-    wire                                 clint_arready_o ;         
-    wire [TOP_DATA_WIDTH-1:0]            clint_araddr_i  ;         
-    wire [3:0]                           clint_arid_i    ;
-    wire [7:0]                           clint_arlen_i   ;
-    wire [2:0]                           clint_arsize_i  ;
-    wire [1:0]                           clint_arburst_i ;
-    wire                                 clint_rvalid_o  ;         
-    wire                                 clint_rready_i  ;         
-    wire [TOP_DATA_WIDTH-1:0]            clint_rdata_o   ;         
-    wire [1:0]                           clint_rresp_o   ;
-    wire                                 clint_rlast_o   ;
-    wire [3:0]                           clint_rid_o     ;
+
     // 指令端口默认连接
     assign inst_awvalid_o   = 0 ;
     assign inst_awaddr_o    = 0 ;
@@ -306,57 +249,6 @@ module ysyx_25050136(
     assign mem_rresp_i    = s_rresp_o[3:2] ;
     assign mem_rlast_i    = s_rlast_o[1]   ;
     assign mem_rid_i      = s_rid_o[7:4]   ;
-
-    // 从设备到仲裁器信号连接
-    assign m_awready_i  = {io_master_awready, clint_awready_o };
-    assign m_wready_i   = {io_master_wready,  clint_wready_o  };
-    assign m_bvalid_i   = {io_master_bvalid,  clint_bvalid_o  };
-    assign m_bresp_i    = {io_master_bresp,   clint_bresp_o   };
-    assign m_bid_i      = {io_master_bid,     clint_bid_o     };
-    assign m_arready_i  = {io_master_arready, clint_arready_o };
-    assign m_rvalid_i   = {io_master_rvalid,  clint_rvalid_o  };
-    assign m_rdata_i    = {io_master_rdata,   clint_rdata_o   };
-    assign m_rresp_i    = {io_master_rresp,   clint_rresp_o   };
-    assign m_rlast_i    = {io_master_rlast,   clint_rlast_o   };
-    assign m_rid_i      = {io_master_rid,     clint_rid_o     };
-
-    // 仲裁器到从设备信号连接
-    assign clint_awvalid_i   = m_awvalid_o[0];
-    assign clint_awaddr_i    = m_awaddr_o[0*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
-    assign clint_awid_i      = m_awid_o[0*4 +: 4];
-    assign clint_awlen_i     = m_awlen_o[0*8 +: 8];
-    assign clint_awsize_i    = m_awsize_o[0*3 +: 3];
-    assign clint_awburst_i   = m_awburst_o[0*2 +: 2];
-    assign clint_wvalid_i    = m_wvalid_o[0];
-    assign clint_wdata_i     = m_wdata_o[0*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
-    assign clint_wstrb_i     = m_wstrb_o[0*4 +: 4];
-    assign clint_wlast_i     = m_wlast_o[0];
-    assign clint_bready_i    = m_bready_o[0];
-    assign clint_arvalid_i   = m_arvalid_o[0];
-    assign clint_araddr_i    = m_araddr_o[0*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
-    assign clint_arid_i      = m_arid_o[0*4 +: 4];
-    assign clint_arlen_i     = m_arlen_o[0*8 +: 8];
-    assign clint_arsize_i    = m_arsize_o[0*3 +: 3];
-    assign clint_arburst_i   = m_arburst_o[0*2 +: 2];
-    assign clint_rready_i    = m_rready_o[0];
-    assign io_master_awvalid = m_awvalid_o[1];
-    assign io_master_awaddr  = m_awaddr_o[1*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
-    assign io_master_awid    = m_awid_o[1*4 +: 4];
-    assign io_master_awlen   = m_awlen_o[1*8 +: 8];
-    assign io_master_awsize  = m_awsize_o[1*3 +: 3];
-    assign io_master_awburst = m_awburst_o[1*2 +: 2];
-    assign io_master_wvalid  = m_wvalid_o[1];
-    assign io_master_wdata   = m_wdata_o[1*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
-    assign io_master_wstrb   = m_wstrb_o[1*4 +: 4];
-    assign io_master_wlast   = m_wlast_o[1];
-    assign io_master_bready  = m_bready_o[1];
-    assign io_master_arvalid = m_arvalid_o[1];
-    assign io_master_araddr  = m_araddr_o[1*TOP_DATA_WIDTH +: TOP_DATA_WIDTH];
-    assign io_master_arid    = m_arid_o[1*4 +: 4];
-    assign io_master_arlen   = m_arlen_o[1*8 +: 8];
-    assign io_master_arsize  = m_arsize_o[1*3 +: 3];
-    assign io_master_arburst = m_arburst_o[1*2 +: 2];
-    assign io_master_rready  = m_rready_o[1];
 
     // 顶层AXI SLAVER接口
     assign io_slave_awready = 0;
@@ -423,101 +315,72 @@ module ysyx_25050136(
     );
     
     // 仲裁器模块实例化
-    ysyx_25050136_ARBITER u_ysyx_25050136_ARBITER(
-        .aclk        	(clock        ),
-        .aresetn     	(~reset       ),
-        .s_awvalid_i 	(s_awvalid_i  ),
-        .s_awready_o 	(s_awready_o  ),
-        .s_awaddr_i  	(s_awaddr_i   ),
-        .s_awid_i    	(s_awid_i     ),
-        .s_awlen_i   	(s_awlen_i    ),
-        .s_awsize_i  	(s_awsize_i   ),
-        .s_awburst_i 	(s_awburst_i  ),
-        .s_wvalid_i  	(s_wvalid_i   ),
-        .s_wready_o  	(s_wready_o   ),
-        .s_wdata_i   	(s_wdata_i    ),
-        .s_wstrb_i   	(s_wstrb_i    ),
-        .s_wlast_i   	(s_wlast_i    ),
-        .s_bvalid_o  	(s_bvalid_o   ),
-        .s_bready_i  	(s_bready_i   ),
-        .s_bresp_o   	(s_bresp_o    ),
-        .s_bid_o     	(s_bid_o      ),
-        .s_arvalid_i 	(s_arvalid_i  ),
-        .s_arready_o 	(s_arready_o  ),
-        .s_araddr_i  	(s_araddr_i   ),
-        .s_arid_i    	(s_arid_i     ),
-        .s_arlen_i   	(s_arlen_i    ),
-        .s_arsize_i  	(s_arsize_i   ),
-        .s_arburst_i 	(s_arburst_i  ),
-        .s_rvalid_o  	(s_rvalid_o   ),
-        .s_rready_i  	(s_rready_i   ),
-        .s_rdata_o   	(s_rdata_o    ),
-        .s_rresp_o   	(s_rresp_o    ),
-        .s_rlast_o   	(s_rlast_o    ),
-        .s_rid_o     	(s_rid_o      ),
-        .m_awvalid_o 	(m_awvalid_o  ),
-        .m_awready_i 	(m_awready_i  ),
-        .m_awaddr_o  	(m_awaddr_o   ),
-        .m_awid_o    	(m_awid_o     ),
-        .m_awlen_o   	(m_awlen_o    ),
-        .m_awsize_o  	(m_awsize_o   ),
-        .m_awburst_o 	(m_awburst_o  ),
-        .m_wvalid_o  	(m_wvalid_o   ),
-        .m_wready_i  	(m_wready_i   ),
-        .m_wdata_o   	(m_wdata_o    ),
-        .m_wstrb_o   	(m_wstrb_o    ),
-        .m_wlast_o   	(m_wlast_o    ),
-        .m_bvalid_i  	(m_bvalid_i   ),
-        .m_bready_o  	(m_bready_o   ),
-        .m_bresp_i   	(m_bresp_i    ),
-        .m_bid_i     	(m_bid_i      ),
-        .m_arvalid_o 	(m_arvalid_o  ),
-        .m_arready_i 	(m_arready_i  ),
-        .m_araddr_o  	(m_araddr_o   ),
-        .m_arid_o    	(m_arid_o     ),
-        .m_arlen_o   	(m_arlen_o    ),
-        .m_arsize_o  	(m_arsize_o   ),
-        .m_arburst_o 	(m_arburst_o  ),
-        .m_rvalid_i  	(m_rvalid_i   ),
-        .m_rready_o  	(m_rready_o   ),
-        .m_rdata_i   	(m_rdata_i    ),
-        .m_rresp_i   	(m_rresp_i    ),
-        .m_rlast_i   	(m_rlast_i    ),
-        .m_rid_i     	(m_rid_i      )
-    );
-    
-    ysyx_25050136_CLINT u_ysyx_25050136_CLINT(
-        .aclk        	(clock            ),
-        .aresetn     	(~reset           ),
-        .s_awvalid_i 	(clint_awvalid_i  ),
-        .s_awready_o 	(clint_awready_o  ),
-        .s_awaddr_i  	(clint_awaddr_i   ),
-        .s_awid_i    	(clint_awid_i     ),
-        .s_awlen_i   	(clint_awlen_i    ),
-        .s_awsize_i  	(clint_awsize_i   ),
-        .s_awburst_i 	(clint_awburst_i  ),
-        .s_wvalid_i  	(clint_wvalid_i   ),
-        .s_wready_o  	(clint_wready_o   ),
-        .s_wdata_i   	(clint_wdata_i    ),
-        .s_wstrb_i   	(clint_wstrb_i    ),
-        .s_wlast_i   	(clint_wlast_i    ),
-        .s_bvalid_o  	(clint_bvalid_o   ),
-        .s_bready_i  	(clint_bready_i   ),
-        .s_bresp_o   	(clint_bresp_o    ),
-        .s_bid_o     	(clint_bid_o      ),
-        .s_arvalid_i 	(clint_arvalid_i  ),
-        .s_arready_o 	(clint_arready_o  ),
-        .s_araddr_i  	(clint_araddr_i   ),
-        .s_arid_i    	(clint_arid_i     ),
-        .s_arlen_i   	(clint_arlen_i    ),
-        .s_arsize_i  	(clint_arsize_i   ),
-        .s_arburst_i 	(clint_arburst_i  ),
-        .s_rvalid_o  	(clint_rvalid_o   ),
-        .s_rready_i  	(clint_rready_i   ),
-        .s_rdata_o   	(clint_rdata_o    ),
-        .s_rresp_o   	(clint_rresp_o    ),
-        .s_rlast_o   	(clint_rlast_o    ),
-        .s_rid_o     	(clint_rid_o      )
+    ysyx_25050136_ARBITER #(
+        .MASTER_NUM(TOP_MASTER_NUM),
+        .DATA_WIDTH(TOP_DATA_WIDTH),
+        .ADDR_WIDTH(TOP_DATA_WIDTH)
+    )
+    u_ysyx_25050136_ARBITER(
+        .clk        	(clock              ),
+        .reset      	(reset              ),
+        .s_awvalid_i 	(s_awvalid_i        ),
+        .s_awready_o 	(s_awready_o        ),
+        .s_awaddr_i  	(s_awaddr_i         ),
+        .s_awid_i    	(s_awid_i           ),
+        .s_awlen_i   	(s_awlen_i          ),
+        .s_awsize_i  	(s_awsize_i         ),
+        .s_awburst_i 	(s_awburst_i        ),
+        .s_wvalid_i  	(s_wvalid_i         ),
+        .s_wready_o  	(s_wready_o         ),
+        .s_wdata_i   	(s_wdata_i          ),
+        .s_wstrb_i   	(s_wstrb_i          ),
+        .s_wlast_i   	(s_wlast_i          ),
+        .s_bvalid_o  	(s_bvalid_o         ),
+        .s_bready_i  	(s_bready_i         ),
+        .s_bresp_o   	(s_bresp_o          ),
+        .s_bid_o     	(s_bid_o            ),
+        .s_arvalid_i 	(s_arvalid_i        ),
+        .s_arready_o 	(s_arready_o        ),
+        .s_araddr_i  	(s_araddr_i         ),
+        .s_arid_i    	(s_arid_i           ),
+        .s_arlen_i   	(s_arlen_i          ),
+        .s_arsize_i  	(s_arsize_i         ),
+        .s_arburst_i 	(s_arburst_i        ),
+        .s_rvalid_o  	(s_rvalid_o         ),
+        .s_rready_i  	(s_rready_i         ),
+        .s_rdata_o   	(s_rdata_o          ),
+        .s_rresp_o   	(s_rresp_o          ),
+        .s_rlast_o   	(s_rlast_o          ),
+        .s_rid_o     	(s_rid_o            ),
+        .m_awvalid_o 	(io_master_awvalid  ),
+        .m_awready_i 	(io_master_awready  ),
+        .m_awaddr_o  	(io_master_awaddr   ),
+        .m_awid_o    	(io_master_awid     ),
+        .m_awlen_o   	(io_master_awlen    ),
+        .m_awsize_o  	(io_master_awsize   ),
+        .m_awburst_o 	(io_master_awburst  ),
+        .m_wvalid_o  	(io_master_wvalid   ),
+        .m_wready_i  	(io_master_wready   ),
+        .m_wdata_o   	(io_master_wdata    ),
+        .m_wstrb_o   	(io_master_wstrb    ),
+        .m_wlast_o   	(io_master_wlast    ),
+        .m_bvalid_i  	(io_master_bvalid   ),
+        .m_bready_o  	(io_master_bready   ),
+        .m_bresp_i   	(io_master_bresp    ),
+        .m_bid_i     	(io_master_bid      ),
+        .m_arvalid_o 	(io_master_arvalid  ),
+        .m_arready_i 	(io_master_arready  ),
+        .m_araddr_o  	(io_master_araddr   ),
+        .m_arid_o    	(io_master_arid     ),
+        .m_arlen_o   	(io_master_arlen    ),
+        .m_arsize_o  	(io_master_arsize   ),
+        .m_arburst_o 	(io_master_arburst  ),
+        .m_rvalid_i  	(io_master_rvalid   ),
+        .m_rready_o  	(io_master_rready   ),
+        .m_rdata_i   	(io_master_rdata    ),
+        .m_rresp_i   	(io_master_rresp    ),
+        .m_rlast_i   	(io_master_rlast    ),
+        .m_rid_i     	(io_master_rid      )
     );
     
 endmodule

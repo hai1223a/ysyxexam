@@ -1,14 +1,23 @@
+//----------------------------------------------------------
+// 多主设备单从设备AXI仲裁器
+// 目前配置: 2个主设备, 1个从设备
+//         m0: 指令访问  id范围 4'b0000 ~ 4'b0111
+//         m1: 数据访问  id范围 4'b1000 ~ 4'b1111
+// 实现细节: 读写通道分开仲裁
+//         AR, R通道纯组合逻辑
+//         AW, B通道纯组合逻辑
+//         W通道为保持突发写操作数据完整性, 使用时序逻辑   
+// 优先级配置: m0 > m1
+//----------------------------------------------------------
 module ysyx_25050136_ARBITER
     #(
         parameter MASTER_NUM = 2,
-        parameter SLAVER_NUM = 2,
         parameter DATA_WIDTH = 32,
         parameter ADDR_WIDTH = 32
      )
      (
-        // 通用数据
-        input                                   aclk        ,
-        input                                   aresetn     ,
+        input                                   clk         ,
+        input                                   reset       ,
         // 来自主设备的AXI信号
         // 写地址
         input     [MASTER_NUM-1:0]              s_awvalid_i ,
@@ -46,235 +55,175 @@ module ysyx_25050136_ARBITER
         output    [MASTER_NUM*4-1:0]            s_rid_o     ,
         // 来自从设备的AXI信号
         // 写地址
-        output    [SLAVER_NUM-1:0]              m_awvalid_o ,
-        input     [SLAVER_NUM-1:0]              m_awready_i ,
-        output    [SLAVER_NUM*ADDR_WIDTH-1:0]   m_awaddr_o  ,
-        output    [SLAVER_NUM*4-1:0]            m_awid_o    ,
-        output    [SLAVER_NUM*8-1:0]            m_awlen_o   ,
-        output    [SLAVER_NUM*3-1:0]            m_awsize_o  ,
-        output    [SLAVER_NUM*2-1:0]            m_awburst_o ,
+        output                                  m_awvalid_o ,
+        input                                   m_awready_i ,
+        output    [ADDR_WIDTH-1:0]              m_awaddr_o  ,
+        output    [3:0]                         m_awid_o    ,
+        output    [7:0]                         m_awlen_o   ,
+        output    [2:0]                         m_awsize_o  ,
+        output    [1:0]                         m_awburst_o ,
         // 写数据
-        output    [SLAVER_NUM-1:0]              m_wvalid_o  ,
-        input     [SLAVER_NUM-1:0]              m_wready_i  ,
-        output    [SLAVER_NUM*DATA_WIDTH-1:0]   m_wdata_o   ,
-        output    [SLAVER_NUM*4-1:0]            m_wstrb_o   ,
-        output    [SLAVER_NUM-1:0]              m_wlast_o   ,
+        output                                  m_wvalid_o  ,
+        input                                   m_wready_i  ,
+        output    [DATA_WIDTH-1:0]              m_wdata_o   ,
+        output    [3:0]                         m_wstrb_o   ,
+        output                                  m_wlast_o   ,
         // 写响应
-        input     [SLAVER_NUM-1:0]              m_bvalid_i  ,
-        output    [SLAVER_NUM-1:0]              m_bready_o  ,
-        input     [SLAVER_NUM*2-1:0]            m_bresp_i   ,
-        input     [SLAVER_NUM*4-1:0]            m_bid_i     ,
+        input                                   m_bvalid_i  ,
+        output                                  m_bready_o  ,
+        input     [3:0]                         m_bid_i     ,
+        input     [1:0]                         m_bresp_i   ,
         // 读地址
-        output    [SLAVER_NUM-1:0]              m_arvalid_o ,
-        input     [SLAVER_NUM-1:0]              m_arready_i ,
-        output    [SLAVER_NUM*ADDR_WIDTH-1:0]   m_araddr_o  ,
-        output    [SLAVER_NUM*4-1:0]            m_arid_o    ,
-        output    [SLAVER_NUM*8-1:0]            m_arlen_o   ,
-        output    [SLAVER_NUM*3-1:0]            m_arsize_o  ,
-        output    [SLAVER_NUM*2-1:0]            m_arburst_o ,
+        output                                  m_arvalid_o ,
+        input                                   m_arready_i ,
+        output    [ADDR_WIDTH-1:0]              m_araddr_o  ,
+        output    [3:0]                         m_arid_o    ,
+        output    [7:0]                         m_arlen_o   ,
+        output    [2:0]                         m_arsize_o  ,
+        output    [1:0]                         m_arburst_o ,
         // 读数据
-        input     [SLAVER_NUM-1:0]              m_rvalid_i  ,
-        output    [SLAVER_NUM-1:0]              m_rready_o  ,
-        input     [SLAVER_NUM*DATA_WIDTH-1:0]   m_rdata_i   ,
-        input     [SLAVER_NUM*2-1:0]            m_rresp_i   ,
-        input     [SLAVER_NUM-1:0]              m_rlast_i   ,
-        input     [SLAVER_NUM*4-1:0]            m_rid_i
+        input                                   m_rvalid_i  ,
+        output                                  m_rready_o  ,
+        input     [DATA_WIDTH-1:0]              m_rdata_i   ,
+        input     [1:0]                         m_rresp_i   ,
+        input                                   m_rlast_i   ,
+        input     [3:0]                         m_rid_i
      );
-
-    localparam s0_Laddr = 32'h02000000;
-    localparam s0_Raddr = 32'h0200ffff;
-
-    // AXI4-Full中间信号
-    wire                    t_awvalid;
-    wire                    t_awready;
-    wire [ADDR_WIDTH-1:0]   t_awaddr;
-    wire [3:0]              t_awid;
-    wire [7:0]              t_awlen;
-    wire [2:0]              t_awsize;
-    wire [1:0]              t_awburst;
-    wire                    t_wvalid;
-    wire                    t_wready;
-    wire [DATA_WIDTH-1:0]   t_wdata;
-    wire [3:0]              t_wstrb;
-    wire                    t_wlast;
-    wire                    t_bvalid;
-    wire                    t_bready;
-    wire [1:0]              t_bresp;
-    wire [3:0]              t_bid;
-    wire                    t_arvalid;
-    wire                    t_arready;
-    wire [ADDR_WIDTH-1:0]   t_araddr;
-    wire [3:0]              t_arid;
-    wire [7:0]              t_arlen;
-    wire [2:0]              t_arsize;
-    wire [1:0]              t_arburst;
-    wire                    t_rvalid;
-    wire                    t_rready;
-    wire [DATA_WIDTH-1:0]   t_rdata;
-    wire [1:0]              t_rresp;
-    wire                    t_rlast;
-    wire [3:0]              t_rid; 
-    wire [DATA_WIDTH-1:0]   for_s_awaddr;
-    wire [DATA_WIDTH-1:0]   for_s_araddr;
-
-    // 目前默认多主多从, 仲裁逻辑为优先级仲裁, 低位优先级最高
-    reg [MASTER_NUM-1:0] current_master;    // 当前主设备
-    reg [MASTER_NUM-2:0] current_master_id;
-    reg [MASTER_NUM-1:0] master_grand;      // 主设备授权
-    reg [MASTER_NUM-2:0] master_id;
-    reg [SLAVER_NUM-1:0] current_slaver;    // 当前从设备
-    reg [SLAVER_NUM-2:0] current_slaver_id;
-    reg [SLAVER_NUM-1:0] slaver_grand;      // 从设备授权
-    reg [SLAVER_NUM-2:0] slaver_id;
-    wire [MASTER_NUM-1:0] request;          // 主设备请求
-
-    assign request = s_awvalid_i | s_arvalid_i;
-    
+    // ========================读通道仲裁器===========================
+    // AR通道
+    reg [MASTER_NUM-1:0] AR_hot;
+    reg [$clog2(MASTER_NUM)-1:0] AR_bin;
     always @(*) begin
-        master_grand = 0;
-        master_id = 0;
-        // 优先级编码器
-        if (request[0]) begin
-            master_id = 0;
-            master_grand[0] = 1'b1;
-        end
-        // 继续添加更多主设备...
-        else if (request[1]) begin
-            master_id = 1;
-            master_grand[1] = 1'b1;
+        AR_hot = 0;
+        AR_bin = 0;
+        if (s_arvalid_i[0]) begin
+            AR_hot[0] = 1;
+            AR_bin = 0;
+        end else if (s_arvalid_i[1]) begin
+            AR_hot[1] = 1;
+            AR_bin = 1;
         end
     end
-
-    always @(posedge aclk) begin
-        if (!aresetn) begin
-            current_master <= 0;
-            current_master_id <= 0;
-        end else begin
-            if(current_master == 0 || 
-            (t_bvalid && t_bready) || 
-            (t_rvalid && t_rready)) begin
-                current_master_id <= master_id;
-                current_master <= master_grand;
-            end
-        end
-    end
-    // 这里设置了不同从设备的地址空间
-    
-    assign for_s_awaddr = s_awaddr_i[master_id * ADDR_WIDTH +: ADDR_WIDTH];
-    assign for_s_araddr = s_araddr_i[master_id * ADDR_WIDTH +: ADDR_WIDTH];
-    always @(*) begin
-        slaver_grand = 0;
-        slaver_id = 0;
-        if(|request) begin
-            if(for_s_awaddr >= s0_Laddr && for_s_awaddr <= s0_Raddr ||
-            for_s_araddr >= s0_Laddr && for_s_araddr <= s0_Raddr) begin
-                    slaver_grand[0] = 1;
-                    slaver_id = 0;
-                end
-            else begin
-                    slaver_grand[1] = 1;
-                    slaver_id = 1;
-                end
-        end
-    end
-
-    always @(posedge aclk) begin
-        if (!aresetn) begin
-            current_slaver <= 0;
-            current_slaver_id <= 0;
-        end else begin
-            if(current_slaver == 0 || 
-            (t_bvalid && t_bready) || 
-            (t_rvalid && t_rready)) begin
-                current_slaver_id <= slaver_id;
-                current_slaver <= slaver_grand;
-            end
-        end
-    end
-
-    // 从设备与仲裁器
-    // 写地址
-    assign t_awvalid = |(s_awvalid_i & current_master);
-    assign t_awaddr  = s_awaddr_i[current_master_id * ADDR_WIDTH +: ADDR_WIDTH];
-    assign t_awid    = s_awid_i[current_master_id * 4 +: 4];
-    assign t_awlen   = s_awlen_i[current_master_id * 8 +: 8];
-    assign t_awsize  = s_awsize_i[current_master_id * 3 +: 3];
-    assign t_awburst = s_awburst_i[current_master_id * 2 +: 2];
-    // 写数据
-    assign t_wvalid  = |(s_wvalid_i & current_master);
-    assign t_wdata   = s_wdata_i[current_master_id * DATA_WIDTH +: DATA_WIDTH];
-    assign t_wstrb   = s_wstrb_i[current_master_id * 4 +: 4];
-    assign t_wlast   = s_wlast_i[current_master_id];
-    // 写响应
-    assign t_bready  = |(s_bready_i & current_master);
-    // 读地址
-    assign t_arvalid = |(s_arvalid_i & current_master);
-    assign t_araddr  = s_araddr_i[current_master_id * ADDR_WIDTH +: ADDR_WIDTH];
-    assign t_arid    = s_arid_i[current_master_id * 4 +: 4];
-    assign t_arlen   = s_arlen_i[current_master_id * 8 +: 8];
-    assign t_arsize  = s_arsize_i[current_master_id * 3 +: 3];
-    assign t_arburst = s_arburst_i[current_master_id * 2 +: 2];
-    // 读数据
-    assign t_rready  = |(s_rready_i & current_master);
-    
-    // 主设备方向
+    assign m_arvalid_o = |(s_arvalid_i & AR_hot);
+    assign m_araddr_o  = s_araddr_i[AR_bin * ADDR_WIDTH +: ADDR_WIDTH];
+    assign m_arid_o    = s_arid_i[AR_bin * 4 +: 4];
+    assign m_arlen_o   = s_arlen_i[AR_bin * 8 +: 8];
+    assign m_arsize_o  = s_arsize_i[AR_bin * 3 +: 3];
+    assign m_arburst_o = s_arburst_i[AR_bin * 2 +: 2];
     genvar i;
     generate
         for (i = 0; i < MASTER_NUM ; i = i + 1) begin
-            assign s_awready_o[i]    = t_awready & current_master[i];
-            assign s_wready_o[i]     = t_wready & current_master[i];
-            assign s_bvalid_o[i]     = t_bvalid & current_master[i];
-            assign s_bresp_o[i*2+:2] = current_master[i] ? t_bresp : 0;
-            assign s_bid_o[i*4+:4]   = current_master[i] ? t_bid : 0;
-            assign s_arready_o[i]    = t_arready & current_master[i];
-            assign s_rvalid_o[i]     = t_rvalid & current_master[i];
-            assign s_rdata_o[i*DATA_WIDTH+:DATA_WIDTH] = current_master[i] ? t_rdata : 0;
-            assign s_rresp_o[i*2+:2] = current_master[i] ? t_rresp : 0;
-            assign s_rlast_o[i]      = current_master[i] ? t_rlast : 0;
-            assign s_rid_o[i*4+:4]   = current_master[i] ? t_rid : 0;
+            assign s_arready_o[i] = m_arready_i & AR_hot[i];
         end
     endgenerate
-
-    // 主设备与仲裁器
-    // 写地址
-    assign t_awready = |(m_awready_i & current_slaver);
-    // 写数据
-    assign t_wready  = |(m_wready_i & current_slaver);
-    // 写响应
-    assign t_bvalid  = |(m_bvalid_i & current_slaver);
-    assign t_bresp   = m_bresp_i[current_slaver_id * 2 +: 2];
-    assign t_bid     = m_bid_i[current_slaver_id * 4 +: 4];
-    // 读地址
-    assign t_arready = |(m_arready_i & current_slaver);
-    // 读数据
-    assign t_rvalid  = |(m_rvalid_i & current_slaver);
-    assign t_rdata   = m_rdata_i[current_slaver_id * DATA_WIDTH +: DATA_WIDTH];
-    assign t_rresp   = m_rresp_i[current_slaver_id * 2 +: 2];
-    assign t_rlast   = m_rlast_i[current_slaver_id];
-    assign t_rid     = m_rid_i[current_slaver_id * 4 +: 4];
-
-    // 从设备方向
-    genvar j;
+    // R通道
+    reg [MASTER_NUM-1:0] R_hot;
+    reg [$clog2(MASTER_NUM)-1:0] R_bin;
+    always @(*) begin
+        R_hot = 0;
+        R_bin = 0;
+        if (m_rid_i < 4'b1000) begin
+            R_hot[0] = 1;
+            R_bin = 0;
+        end else begin
+            R_hot[1] = 1;
+            R_bin = 1;
+        end
+    end
+    assign m_rready_o = |(s_rready_i & R_hot);
     generate
-        for(j = 0; j < SLAVER_NUM; j = j + 1) begin
-            assign m_awvalid_o[j]      = t_awvalid & current_slaver[j];
-            assign m_awaddr_o[j*ADDR_WIDTH+:ADDR_WIDTH] = current_slaver[j] ? t_awaddr : 0;
-            assign m_awid_o[j*4+:4]    = current_slaver[j] ? t_awid : 0;
-            assign m_awlen_o[j*8+:8]   = current_slaver[j] ? t_awlen : 0;
-            assign m_awsize_o[j*3+:3]  = current_slaver[j] ? t_awsize : 0;
-            assign m_awburst_o[j*2+:2] = current_slaver[j] ? t_awburst : 0;
-            assign m_wvalid_o[j]       = t_wvalid & current_slaver[j];
-            assign m_wdata_o[j*DATA_WIDTH+:DATA_WIDTH] = current_slaver[j] ? t_wdata : 0;
-            assign m_wstrb_o[j*4+:4]   = current_slaver[j] ? t_wstrb : 0;
-            assign m_wlast_o[j]        = current_slaver[j] ? t_wlast : 0;
-            assign m_bready_o[j]       = t_bready & current_slaver[j];
-            assign m_arvalid_o[j]      = t_arvalid & current_slaver[j];
-            assign m_araddr_o[j*ADDR_WIDTH+:ADDR_WIDTH] = current_slaver[j] ? t_araddr : 0;
-            assign m_arid_o[j*4+:4]    = current_slaver[j] ? t_arid : 0;
-            assign m_arlen_o[j*8+:8]   = current_slaver[j] ? t_arlen : 0;
-            assign m_arsize_o[j*3+:3]  = current_slaver[j] ? t_arsize : 0;
-            assign m_arburst_o[j*2+:2] = current_slaver[j] ? t_arburst : 0;
-            assign m_rready_o[j]       = t_rready & current_slaver[j];
+        for (i = 0; i < MASTER_NUM ; i = i + 1) begin
+            assign s_rvalid_o[i] = m_rvalid_i & R_hot[i];
+            assign s_rdata_o[i*DATA_WIDTH+:DATA_WIDTH] = R_hot[i] ? m_rdata_i : 0;
+            assign s_rresp_o[i*2+:2] = R_hot[i] ? m_rresp_i : 0;
+            assign s_rlast_o[i] = m_rlast_i & R_hot[i];
+            assign s_rid_o[i*4+:4] = R_hot[i] ? m_rid_i : 0;
+        end
+    endgenerate
+    // ========================写通道仲裁器===========================
+    // AW通道
+    reg [MASTER_NUM-1:0] AW_hot;
+    reg [$clog2(MASTER_NUM)-1:0] AW_bin;
+    always @(*) begin
+        AW_hot = 0;
+        AW_bin = 0;
+        if (s_awvalid_i[0]) begin
+            AW_hot[0] = 1;
+            AW_bin = 0;
+        end else if (s_awvalid_i[1]) begin
+            AW_hot[1] = 1;
+            AW_bin = 1;
+        end
+    end
+    assign m_awvalid_o = |(s_awvalid_i & AW_hot);
+    assign m_awaddr_o  = s_awaddr_i[AW_bin * ADDR_WIDTH +: ADDR_WIDTH];
+    assign m_awid_o    = s_awid_i[AW_bin * 4 +: 4];
+    assign m_awlen_o   = s_awlen_i[AW_bin * 8 +: 8];
+    assign m_awsize_o  = s_awsize_i[AW_bin * 3 +: 3];
+    assign m_awburst_o = s_awburst_i[AW_bin * 2 +: 2];
+    generate
+        for (i = 0; i < MASTER_NUM ; i = i + 1) begin
+            assign s_awready_o[i] = m_awready_i & AW_hot[i];
+        end
+    endgenerate
+    // W通道
+    reg [MASTER_NUM-1:0] W_keep;
+    reg [MASTER_NUM-1:0] W_hot;
+    reg [$clog2(MASTER_NUM)-1:0] W_bin;
+    integer j;
+    always @(posedge aclk) begin
+        if(reset) begin
+            W_keep <= 0;
+        end else begin
+            for(j = 0; j < MASTER_NUM; j = j + 1) begin
+                if(s_wlast_i[j]) begin
+                    W_keep[j] <= 0;
+                end else if(s_wvalid_i[j]) begin
+                    W_keep[j] <= 1;
+                end
+            end
+        end
+    end
+    always @(*) begin
+        W_hot = 0;
+        W_bin = 0;
+        if (W_keep[0] || s_wvalid_i[0]) begin
+            W_hot[0] = 1;
+            W_bin = 0;
+        end else if (W_keep[1] || s_wvalid_i[1]) begin
+            W_hot[1] = 1;
+            W_bin = 1;
+        end
+    end
+    assign m_wvalid_o = |(s_wvalid_i & W_hot);
+    assign m_wdata_o  = s_wdata_i[W_bin * DATA_WIDTH +: DATA_WIDTH];
+    assign m_wstrb_o  = s_wstrb_i[W_bin * 4 +: 4];
+    assign m_wlast_o  = s_wlast_i[W_bin];
+    generate    
+        for (i = 0; i < MASTER_NUM ; i = i + 1) begin
+            assign s_wready_o[i] = m_wready_i & W_hot[i];
+        end
+    endgenerate
+    // B通道
+    reg [MASTER_NUM-1:0] B_hot;
+    reg [$clog2(MASTER_NUM)-1:0] B_bin;
+    always @(*) begin
+        B_hot = 0;
+        B_bin = 0;
+        if (m_bid_i < 4'b1000) begin
+            B_hot[0] = 1;
+            B_bin = 0;
+        end else begin
+            B_hot[1] = 1;
+            B_bin = 1;
+        end
+    end
+    assign m_bready_o = |(s_bready_i & B_hot);
+    generate
+        for (i = 0; i < MASTER_NUM ; i = i + 1) begin
+            assign s_bvalid_o[i] = m_bvalid_i & B_hot[i];
+            assign s_bresp_o[i*2+:2] = B_hot[i] ? m_bresp_i : 0;
+            assign s_bid_o[i*4+:4] = B_hot[i] ? m_bid_i : 0;
         end
     endgenerate
 endmodule

@@ -1,21 +1,20 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Thu Sep 18 13:14:18 2025
+[*] Fri Sep 19 13:30:18 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Thu Sep 18 13:02:05 2025"
-[dumpfile_size] 4459740
+[dumpfile_mtime] "Thu Sep 18 14:02:43 2025"
+[dumpfile_size] 171963
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/cache.gtkw"
-[timestart] 499055
+[timestart] 20458
 [size] 2498 1361
 [pos] -51 -51
-*-4.500000 499146 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-5.100000 20579 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
 [treeopen] TOP.ysyxSoCFull.asic.cpu.
 [treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.
-[treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.
 [treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.
 [treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.
 [treeopen] TOP.ysyxSoCFull.asic.lsdram_apb.
@@ -31,9 +30,8 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_
 -
 @28
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.u_ysyx_25050136_LSU.fvalid_i
-@29
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.fready_o
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.u_ysyx_25050136_LSU.mem_ren_i
-@28
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.u_ysyx_25050136_LSU.mem_wen_i
 @22
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.u_ysyx_25050136_LSU.mem_addr_i[31:0]
@@ -120,5 +118,10 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_DCACHE.m_bready
 -
 @28
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_DCACHE.state[1:0]
+@22
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.u_clint.mtime[63:0]
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.u_clint.data_o[31:0]
+@200
+-
 [pattern_trace] 1
 [pattern_trace] 0

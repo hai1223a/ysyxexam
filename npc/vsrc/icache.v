@@ -293,7 +293,7 @@ module ysyx_25050136_hot2bin
     parameter  PRIVATE_TEMP1 = (ONE_HOT_WIDTH>1?PRIVATE_TEMP0:1)    
 )
 (
-    input   [ONE_HOT_WIDTH-1 : 0]               one_hot_code,
+    input   [ONE_HOT_WIDTH-1 : 0]       one_hot_code,
     output  [PRIVATE_TEMP1-1 : 0]       bin_code
 );
 
