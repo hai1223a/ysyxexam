@@ -113,6 +113,7 @@ extern "C" void csru_get() {npc_perC.csru_count++;}
 extern "C" void alu_get()  {npc_perC.alu_count++;}
 extern "C" void if_cycle_get() {npc_perC.if_cycle++;}
 extern "C" void lsu_cycle_get() {npc_perC.lsu_cycle++;}
+extern "C" void icache_get() {npc_perC.icache_count++;}
 extern "C" void icache_hit()  {npc_perC.icache_hit++;}
 
 uint32_t vaddr_read(uint32_t paddr)

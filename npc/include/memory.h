@@ -14,6 +14,7 @@ typedef struct {
   uint64_t bqu_count;
   uint64_t csru_count;
   uint64_t alu_count;
+  uint64_t icache_count;
   uint64_t if_cycle;
   uint64_t lsu_cycle;
   uint64_t icache_hit;
