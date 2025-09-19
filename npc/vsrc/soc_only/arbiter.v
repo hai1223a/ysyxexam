@@ -171,7 +171,7 @@ module ysyx_25050136_ARBITER
     reg [MASTER_NUM-1:0] W_hot;
     reg [$clog2(MASTER_NUM)-1:0] W_bin;
     integer j;
-    always @(posedge aclk) begin
+    always @(posedge clk) begin
         if(reset) begin
             W_keep <= 0;
         end else begin
