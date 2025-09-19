@@ -104,6 +104,7 @@ module ysyx_25050136_ICACHE
     // axi读请求信号
     reg [1:0] state_read;
     reg m_rready_r;
+    reg [3:0] m_arid_r;
     reg [31:0] m_araddr_r;
     reg [7:0] m_arlen_r;
     reg [2:0] m_arsize_r;
@@ -202,6 +203,7 @@ module ysyx_25050136_ICACHE
             replace_way_use <= 0;
             axi_read_cnt    <= 0;
             m_araddr_r      <= 0;
+            m_arid_r        <= 0;
             m_arlen_r       <= 0;   
             m_arsize_r      <= 0;
             m_arburst_r     <= 0;
@@ -215,6 +217,7 @@ module ysyx_25050136_ICACHE
                     state_read <= READ_ADDR;
                     // 默认赋值（单次读）
                     m_araddr_r  <= req_addr_i;
+                    m_arid_r    <= 4'b0001;
                     m_arlen_r   <= 0;
                     m_arsize_r  <= 3'b010;
                     m_arburst_r <= 2'b00;
@@ -242,6 +245,7 @@ module ysyx_25050136_ICACHE
                     axi_read_cnt <= axi_read_cnt + 1;
                     cache_data_temp[32*axi_read_cnt +: 32] <= m_rdata_i;
                     if(m_rlast_i) begin
+                        m_arid_r <= 0;
                         state_read <= READ_IDLE;
                     end
                     m_rready_r <= 0;
@@ -256,7 +260,7 @@ module ysyx_25050136_ICACHE
 
     assign m_arvalid_o = (state_read == READ_ADDR);
     assign m_araddr_o  = m_araddr_r;
-    assign m_arid_o = 0;
+    assign m_arid_o = m_arid_r;
     assign m_arlen_o = m_arlen_r;
     assign m_arsize_o = m_arsize_r;
     assign m_arburst_o = m_arburst_r;

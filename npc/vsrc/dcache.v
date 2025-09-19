@@ -74,6 +74,7 @@ module ysyx_25050136_DCACHE
     reg [1:0] state_read;
     reg m_rready_r;
     reg [31:0] m_araddr_r;
+    reg [3:0] m_arid_r;
     reg [7:0] m_arlen_r;
     reg [2:0] m_arsize_r;
     reg [1:0] m_arburst_r;
@@ -86,6 +87,7 @@ module ysyx_25050136_DCACHE
     reg [1:0] state_write;
     reg m_bready_r;
     reg [31:0] m_awaddr_r;
+    reg [3:0] m_awid_r;
     reg [7:0] m_awlen_r;
     reg [2:0] m_awsize_r;
     reg [1:0] m_awburst_r;
@@ -141,11 +143,12 @@ module ysyx_25050136_DCACHE
     always @(posedge clk) begin
         if (reset) begin
             state_read   <= READ_IDLE;
-            m_rready_r   <= 0;
             m_araddr_r   <= 0;
+            m_arid_r     <= 0;
             m_arlen_r    <= 0;
             m_arsize_r   <= 0;
             m_arburst_r  <= 0;
+            m_rready_r   <= 0;
         end else begin
             case (state_read)
                 READ_IDLE: begin
@@ -153,6 +156,7 @@ module ysyx_25050136_DCACHE
                     if ((state == IDLE) && ren) begin
                         state_read  <= READ_ADDR;
                         m_araddr_r  <= req_addr_i;
+                        m_arid_r    <= 4'b1001;
                         m_arlen_r   <= 0;
                         m_arsize_r  <= req_size_i;
                         m_arburst_r <= 0;
@@ -172,6 +176,7 @@ module ysyx_25050136_DCACHE
                     if (r_fire) begin
                         cache_data_temp <= m_rdata_i;
                         if(m_rlast_i) begin
+                            m_arid_r <= 0;
                             state_read <= READ_IDLE;
                         end
                         m_rready_r <= 0;
@@ -186,7 +191,7 @@ module ysyx_25050136_DCACHE
 
     assign m_arvalid_o = (state_read == READ_ADDR);
     assign m_araddr_o  = m_araddr_r;
-    assign m_arid_o = 4'd2;
+    assign m_arid_o = m_arid_r;
     assign m_arlen_o = m_arlen_r;
     assign m_arsize_o = m_arsize_r;
     assign m_arburst_o = m_arburst_r;
@@ -200,6 +205,7 @@ module ysyx_25050136_DCACHE
             aw_en       <= 0;
             w_en        <= 0;
             m_awaddr_r  <= 0;
+            m_awid_r    <= 0;
             m_awlen_r   <= 0;
             m_awsize_r  <= 0;
             m_awburst_r <= 0;
@@ -216,6 +222,7 @@ module ysyx_25050136_DCACHE
                     if((state == IDLE) && wen) begin
                         state_write <= WRITE_DATA_ADDR;
                         m_awaddr_r  <= req_addr_i;
+                        m_awid_r    <= 4'1001;
                         m_awlen_r   <= 0;
                         m_awsize_r  <= req_size_i;
                         m_awburst_r <= 0;
@@ -246,6 +253,7 @@ module ysyx_25050136_DCACHE
                 WRITE_WAIT: begin
                     if(b_fire) begin
                         m_bready_r  <= 0;
+                        m_awid_r    <= 0;
                         state_write <= WRITE_IDLE;
                     end 
                 end
@@ -256,7 +264,7 @@ module ysyx_25050136_DCACHE
 
     assign m_awvalid_o = (state_write == WRITE_DATA_ADDR) && ~aw_en;
     assign m_awaddr_o  = m_awaddr_r;
-    assign m_awid_o    = 4'd2;
+    assign m_awid_o    = m_awid_r;
     assign m_awlen_o   = m_awlen_r;
     assign m_awsize_o  = m_awsize_r;
     assign m_awburst_o = m_awburst_r;
