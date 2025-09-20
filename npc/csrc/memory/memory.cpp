@@ -106,15 +106,20 @@ extern "C" void find_diff_skip() {
 
 NPC_perforcount npc_perC = {0};
 
-extern "C" void ifu_get()  {npc_perC.ifu_count++;}
-extern "C" void lsu_get()  {npc_perC.lsu_count++;}
-extern "C" void bqu_get()  {npc_perC.bqu_count++;}
-extern "C" void csru_get() {npc_perC.csru_count++;}
-extern "C" void alu_get()  {npc_perC.alu_count++;}
-extern "C" void if_cycle_get() {npc_perC.if_cycle++;}
-extern "C" void lsu_cycle_get() {npc_perC.lsu_cycle++;}
-extern "C" void icache_get() {npc_perC.icache_count++;}
-extern "C" void icache_hit()  {npc_perC.icache_hit++;}
+extern "C" void lsu_get()          {npc_perC.lsu_count++;        }
+extern "C" void bqu_get()          {npc_perC.bqu_count++;        }
+extern "C" void csru_get()         {npc_perC.csru_count++;       }
+extern "C" void alu_get()          {npc_perC.alu_count++;        }
+extern "C" void ifu_get()          {npc_perC.ifu_count++;        }
+extern "C" void ifu_cycle()        {npc_perC.ifu_cycle++;        }
+extern "C" void icache_get()       {npc_perC.icache_count++;     }
+extern "C" void icache_hit()       {npc_perC.icache_hit++;       }
+extern "C" void icache_cycle()     {npc_perC.icache_cycle++;     }    
+extern "C" void lsu_noclint_get()  {npc_perC.lsu_noclint_count++;}
+extern "C" void dcache_get()       {npc_perC.dcache_count++;     }
+extern "C" void dcache_hit()       {npc_perC.dcache_hit++;       }
+extern "C" void lsu_noclint_cycle(){npc_perC.lsu_nocint_cycle++; }        
+extern "C" void dcache_cycle()     {npc_perC.dcache_cycle++;     }    
 
 uint32_t vaddr_read(uint32_t paddr)
 {

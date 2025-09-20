@@ -63,18 +63,15 @@ module ysyx_25050136_NPC
         if(|(inst_rresp_i | mem_bresp_i | mem_rresp_i))
             find_resp();
     end
-    reg if_wait, lsu_wait;
     always @(posedge clk) begin
-        if(reset) begin
-            lsu_wait <= 0;
-        end else begin
-            if(mem_awvalid_o | mem_arvalid_o) lsu_wait <= 1;
-            if(mem_bvalid_i | mem_rvalid_i) lsu_wait <= 0;
-            if(inst_req_valid & !inst_req_ready) if_cycle_get();
-            if(inst_req_valid & inst_req_ready) ifu_get();
-            if(inst_req_valid & inst_req_ready & inst_req_use) icache_get();
-            if(lsu_wait | mem_awvalid_o | mem_arvalid_o) lsu_cycle_get();
-        end
+        if(inst_req_valid & inst_req_ready) ifu_get();
+        // if(inst_req_valid & !inst_req_ready) ifu_cycle();
+        if(inst_req_valid & inst_req_ready & inst_req_use) icache_get();
+        // if(inst_req_valid & !inst_req_ready & inst_req_use) icache_cycle();
+        if(mem_req_valid & mem_req_ready) lsu_noclint_get();
+        // if(mem_req_valid & !mem_req_ready) lsu_noclint_cycle();
+        if(mem_req_valid & mem_req_ready & mem_req_use) dcache_get();
+        // if(mem_req_valid & !mem_req_ready & mem_req_use) dcache_cycle();
     end
 `endif
     wire [31:0] inst_req_addr;

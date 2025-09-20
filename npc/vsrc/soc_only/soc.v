@@ -2,16 +2,23 @@
 import "DPI-C" function void find_addr_0(); 
 import "DPI-C" function void find_ebreak();
 import "DPI-C" function void find_resp();
-import "DPI-C" function void find_diff_skip(); 
-import "DPI-C" function void icache_get();
-import "DPI-C" function void ifu_get();
-import "DPI-C" function void lsu_get();
+import "DPI-C" function void find_diff_skip();
+
 import "DPI-C" function void bqu_get();
-import "DPI-C" function void csru_get();
 import "DPI-C" function void alu_get();
-import "DPI-C" function void if_cycle_get();
-import "DPI-C" function void lsu_cycle_get();
+import "DPI-C" function void csru_get();
+import "DPI-C" function void lsu_get();
+
+import "DPI-C" function void ifu_get();
+import "DPI-C" function void ifu_cycle();
+import "DPI-C" function void icache_get();
+import "DPI-C" function void icache_cycle();
 import "DPI-C" function void icache_hit();
+import "DPI-C" function void lsu_noclint_get();
+import "DPI-C" function void lsu_noclint_cycle();
+import "DPI-C" function void dcache_get();
+import "DPI-C" function void dcache_hit();
+import "DPI-C" function void dcache_cycle();
 `endif
 
 module ysyx_25050136(
