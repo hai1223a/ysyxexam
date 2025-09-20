@@ -118,7 +118,7 @@ extern "C" void icache_cycle()     {npc_perC.icache_cycle++;     }
 extern "C" void lsu_noclint_get()  {npc_perC.lsu_noclint_count++;}
 extern "C" void dcache_get()       {npc_perC.dcache_count++;     }
 extern "C" void dcache_hit()       {npc_perC.dcache_hit++;       }
-extern "C" void lsu_noclint_cycle(){npc_perC.lsu_nocint_cycle++; }        
+extern "C" void lsu_noclint_cycle(){npc_perC.lsu_noclint_cycle++; }        
 extern "C" void dcache_cycle()     {npc_perC.dcache_cycle++;     }    
 
 uint32_t vaddr_read(uint32_t paddr)
