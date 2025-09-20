@@ -1,24 +1,26 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Fri Sep 19 13:30:18 2025
+[*] Sat Sep 20 06:18:41 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Thu Sep 18 14:02:43 2025"
-[dumpfile_size] 171963
+[dumpfile_mtime] "Sat Sep 20 06:06:06 2025"
+[dumpfile_size] 15456292
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/cache.gtkw"
-[timestart] 20458
+[timestart] 2739213
 [size] 2498 1361
-[pos] -51 -51
-*-5.100000 20579 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[pos] -101 -101
+*-3.900000 2739186 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
 [treeopen] TOP.ysyxSoCFull.asic.cpu.
 [treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.
+[treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.
 [treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.
 [treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.
-[treeopen] TOP.ysyxSoCFull.asic.lsdram_apb.
-[treeopen] TOP.ysyxSoCFull.asic.lsdram_apb.msdram.
+[treeopen] TOP.ysyxSoCFull.asic.lsdram_axi.
+[treeopen] TOP.ysyxSoCFull.asic.lsdram_axi.msdram.
+[treeopen] TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.
 [sst_width] 407
 [signals_width] 255
 [sst_expanded] 1
@@ -123,5 +125,18 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.u_clint.data_o[31:0]
 @200
 -
+@28
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.clk
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.inst_req_valid
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.inst_req_ready
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.inst_req_use
+@820
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.dbg_cache_state[79:0]
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.dbg_axi_state[79:0]
+@28
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.inst_arvalid_o
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.inst_arready_i
+@821
+TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_core.dbg_state[79:0]
 [pattern_trace] 1
 [pattern_trace] 0
