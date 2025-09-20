@@ -65,7 +65,7 @@ module ysyx_25050136_NPC
     end
     always @(posedge clk) begin
         if(inst_req_valid & inst_req_ready) ifu_get();
-        // if(inst_req_valid & !inst_req_ready) ifu_cycle();
+        if(inst_req_valid & !inst_req_ready) ifu_cycle();
         if(inst_req_valid & inst_req_ready & inst_req_use) icache_get();
         // if(inst_req_valid & !inst_req_ready & inst_req_use) icache_cycle();
         if(mem_req_valid & mem_req_ready) lsu_noclint_get();
