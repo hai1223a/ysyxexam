@@ -90,9 +90,9 @@ module ysyx_25050136_NPC
     wire mem_req_use;
     wire [31:0] mem_req_wdata;
     ysyx_25050136_ICACHE #(
-        .OFFSET_WIDTH 	(3),
-        .INDEX_WIDTH  	(4),
-        .NUM_WAY     	(1)
+        .OFFSET_WIDTH 	(4),
+        .INDEX_WIDTH  	(6),
+        .NUM_WAY     	(2)
     )
     u_ysyx_25050136_ICACHE(
         .clk         	(clk             ),

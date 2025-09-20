@@ -29,6 +29,6 @@ int main(int argc, char *argv[]) {
         }
     }
     pclose(fp);
-    cout << "总数量 " << top.c_pc << " " << "命中数量 " << top.c_reach << " " << "命中率" << (double)top.c_reach / (double)top.c_pc << endl; 
+    cout << "总数量 " << top.c_pc << " " << "命中数量 " << top.c_reach << " " << "命中率" << (double)top.c_reach / (double)top.c_pc << " " << "TMT "<< (top.c_pc - top.c_reach) * top.miss_penalty << endl; 
     return 0;
 }

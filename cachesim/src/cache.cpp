@@ -14,6 +14,7 @@ CACHE::CACHE(int offset, int index, int way, int mode)
         tag_width(32 - offset - index),
         num_set(1 << index),
         num_byte(1 << offset),
+        miss_penalty(6 + (1 << (offset - 1))), 
         c_pc(0),
         c_reach(0) 
 {

@@ -14,7 +14,6 @@ private:
     int tag_width;
     int num_set;
     int num_byte;
-    int miss_penalty;
     struct cache_line {
         bool valid;
         uint32_t tag;
@@ -26,6 +25,7 @@ private:
     vector <vector <uint8_t>> lru_count;
     vector <vector <cache_line>> tag_sram;
 public:
+    int miss_penalty;
     uint64_t c_pc;
     uint64_t c_reach;
     CACHE(int offset = 2, int index = 4, int way = 2, int mode = RANDOM);
