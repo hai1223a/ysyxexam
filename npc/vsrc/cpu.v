@@ -67,11 +67,11 @@ module ysyx_25050136_NPC
         if(inst_req_valid & inst_req_ready) ifu_get();
         if(inst_req_valid & !inst_req_ready) ifu_cycle();
         if(inst_req_valid & inst_req_ready & inst_req_use) icache_get();
-        // if(inst_req_valid & !inst_req_ready & inst_req_use) icache_cycle();
+        if(inst_req_valid & !inst_req_ready & inst_req_use) icache_cycle();
         if(mem_req_valid & mem_req_ready) lsu_noclint_get();
-        // if(mem_req_valid & !mem_req_ready) lsu_noclint_cycle();
+        if(mem_req_valid & !mem_req_ready) lsu_noclint_cycle();
         if(mem_req_valid & mem_req_ready & mem_req_use) dcache_get();
-        // if(mem_req_valid & !mem_req_ready & mem_req_use) dcache_cycle();
+        if(mem_req_valid & !mem_req_ready & mem_req_use) dcache_cycle();
     end
 `endif
     wire [31:0] inst_req_addr;
