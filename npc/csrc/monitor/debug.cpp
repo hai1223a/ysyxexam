@@ -130,9 +130,9 @@ void printf_statu()
     uint64_t icache_hit_rate = (npc_perC.icache_count == 0) ? 0 : (npc_perC.icache_hit * 100 / npc_perC.icache_count);
     uint64_t icache_miss_penalty = (npc_perC.icache_count == npc_perC.icache_hit) ? 0 : (npc_perC.icache_cycle - npc_perC.icache_hit) / (npc_perC.icache_count - npc_perC.icache_hit);
     uint64_t icache_amat = (npc_perC.icache_count == 0) ? 0 : 1 + (npc_perC.icache_cycle - npc_perC.icache_hit) / npc_perC.icache_count;
-    uint64_t dcache_hit_rate = 0;
-    uint64_t dcache_miss_penalty = 0;
-    uint64_t dcache_amat = 0;
+    uint64_t dcache_hit_rate = (npc_perC.dcache_count == 0) ? 0 : (npc_perC.dcache_hit * 100 / npc_perC.dcache_count);
+    uint64_t dcache_miss_penalty = (npc_perC.dcache_count == npc_perC.dcache_hit) ? 0 : (npc_perC.dcache_cycle - npc_perC.dcache_hit) / (npc_perC.dcache_count - npc_perC.dcache_hit);
+    uint64_t dcache_amat = (npc_perC.dcache_count == 0) ? 0 : 1 + (npc_perC.dcache_cycle - npc_perC.dcache_hit) / npc_perC.dcache_count;
     uint64_t all_delay = (npc_perC.ifu_count == 0) ? 0 : (((sim_time - 1) / 2) / npc_perC.ifu_count);
     uint64_t ifu_delay = (npc_perC.ifu_count == 0) ? 0 : (npc_perC.ifu_cycle / npc_perC.ifu_count);
     uint64_t lsu_delay = (npc_perC.lsu_count == 0) ? 0 : ((npc_perC.lsu_noclint_cycle + npc_perC.lsu_count - npc_perC.lsu_noclint_count) / npc_perC.lsu_count);
