@@ -14,6 +14,7 @@ private:
     int tag_width;
     int num_set;
     int num_byte;
+    int miss_penalty;
     struct cache_line {
         bool valid;
         uint32_t tag;
