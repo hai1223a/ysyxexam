@@ -140,8 +140,8 @@ void printf_statu()
     Log("执行平均延迟: %ld, 取指平均延迟: %ld, 访存平均延迟: %ld, noclint访存平均延迟: %ld", all_delay, ifu_delay, lsu_delay, lsu_noclint_delay);
     Log("NPC的性能计数器如下: ifu_c = %ld, lsu_c = %ld, csru_c = %ld, bqu_c = %ld, alu_c = %ld, lsu_noclint_c = %ld",
         npc_perC.ifu_count, npc_perC.lsu_count, npc_perC.csru_count, npc_perC.bqu_count, npc_perC.alu_count, npc_perC.lsu_noclint_count);
-    Log("icache相关:访问次数 = %ld, 命中次数 = %ld, 命中率 = %ld%, 缺失代价: %ld, AMAT = %ld", npc_perC.icache_count, npc_perC.icache_hit, icache_hit_rate, icache_miss_penalty, icache_amat);
-    Log("dcache相关:访问次数 = %ld, 命中次数 = %ld, 命中率 = %ld%, 缺失代价: %ld, AMAT = %ld", npc_perC.dcache_count, npc_perC.dcache_hit, dcache_hit_rate, dcache_miss_penalty, dcache_amat);
+    Log("icache相关:访问次数 = %ld, 命中次数 = %ld, 命中率 = %ld%%, 缺失代价: %ld, AMAT = %ld", npc_perC.icache_count, npc_perC.icache_hit, icache_hit_rate, icache_miss_penalty, icache_amat);
+    Log("dcache相关:访问次数 = %ld, 命中次数 = %ld, 命中率 = %ld%%, 缺失代价: %ld, AMAT = %ld", npc_perC.dcache_count, npc_perC.dcache_hit, dcache_hit_rate, dcache_miss_penalty, dcache_amat);
     Log("PC = 0x%08x, halt = %d, NPC 的结束状态是%s", npcstate.halt_pc, npcstate.halt_ret,
         (npcstate.state == NPC_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) : 
         (npcstate.halt_ret == 0 ? ANSI_FMT("HIT GOOD TRAP", ANSI_FG_GREEN) : 
