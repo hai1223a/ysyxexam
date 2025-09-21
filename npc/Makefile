@@ -205,6 +205,11 @@ perf: $(SOC_DEPEMD)
            CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clock \
            RTL_FILES="$(SOC_CPU_VSRC)"
 
+fuck: $(SOC_DEPEMD)
+	@$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
+           DESIGN=ysyx_25050136_ICACHE \
+           CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clk \
+           RTL_FILES="$(SOC_CPU_VSRC)"
 .PHONY: soc_exe soc_run soc_gdb soc_wave clean perf_commit perf
 
 include ../Makefile
