@@ -192,19 +192,21 @@ module ysyx_25050136_ICACHE
         endcase
     end
 
-    reg [31:0] req_rdata_r2;
-    reg req_ready_r2;
-    always@(posedge clk) begin
-        if(reset) begin
-            req_rdata_r2 <= 0;
-            req_ready_r2 <= 0;
-        end else begin
-            req_rdata_r2 <= req_rdata_r;
-            req_ready_r2 <= req_ready_r;                
-        end
-    end
-    assign req_rdata_o = req_rdata_r2;
-    assign req_ready_o = req_ready_r2;
+    // reg [31:0] req_rdata_r2;
+    // reg req_ready_r2;
+    // always@(posedge clk) begin
+    //     if(reset) begin
+    //         req_addr_r2 <= 0;
+    //         req_ready_r2 <= 0;
+    //     end else begin
+    //         if(req_ready_r) begin
+    //             req_rdata_r <= req_rdata_r;
+    //             req_ready_r <= req_ready_r;                
+    //         end
+    //     end
+    // end
+    assign req_rdata_o = req_rdata_r;
+    assign req_ready_o = req_ready_r;
 
     // axi读请求状态机
     always @(posedge clk) begin
