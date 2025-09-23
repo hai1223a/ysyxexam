@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Tue Sep 23 08:25:52 2025
+[*] Tue Sep 23 08:29:53 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Tue Sep 23 08:24:21 2025"
-[dumpfile_size] 7253744
+[dumpfile_mtime] "Tue Sep 23 08:27:58 2025"
+[dumpfile_size] 74993782
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/delay.gtkw"
-[timestart] 1397294
+[timestart] 1397427
 [size] 2498 1361
 [pos] -101 -101
-*-5.400000 1397508 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-4.200000 1397516 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
