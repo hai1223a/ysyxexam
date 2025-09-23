@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Tue Sep 23 10:22:48 2025
+[*] Tue Sep 23 10:35:10 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Tue Sep 23 09:07:23 2025"
-[dumpfile_size] 10013747
+[dumpfile_mtime] "Tue Sep 23 10:31:42 2025"
+[dumpfile_size] 10015253
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/delay.gtkw"
-[timestart] 1397458
+[timestart] 1828111
 [size] 2498 1361
 [pos] -101 -101
-*-5.400000 1397547 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-3.900000 1828163 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
@@ -39,10 +39,16 @@ TOP.ysyxSoCFull.asic.axi4delay_delayer.write_whole
 TOP.ysyxSoCFull.asic.axi4delay_delayer.write_active
 @24
 TOP.ysyxSoCFull.asic.axi4delay_delayer.write_count[4:0]
-@25
 TOP.ysyxSoCFull.asic.axi4delay_delayer.aw_count[13:0]
 TOP.ysyxSoCFull.asic.axi4delay_delayer.w_count[13:0]
 TOP.ysyxSoCFull.asic.axi4delay_delayer.b_count[13:0]
+@200
+-
+@28
+TOP.ysyxSoCFull.asic.axi4delay_delayer.read_whole
+TOP.ysyxSoCFull.asic.axi4delay_delayer.read_active
+@24
+TOP.ysyxSoCFull.asic.axi4delay_delayer.read_count[4:0]
 @1000200
 -axi
 @28
@@ -61,5 +67,22 @@ TOP.ysyxSoCFull.asic.axi4delay_delayer.in_wvalid
 TOP.ysyxSoCFull.asic.axi4delay_delayer.in_wready
 TOP.ysyxSoCFull.asic.axi4delay_delayer.in_bready
 TOP.ysyxSoCFull.asic.axi4delay_delayer.in_bvalid
+@200
+-
+@28
+TOP.ysyxSoCFull.asic.axi4delay_delayer.out_arvalid
+TOP.ysyxSoCFull.asic.axi4delay_delayer.out_arready
+TOP.ysyxSoCFull.asic.axi4delay_delayer.out_rvalid
+TOP.ysyxSoCFull.asic.axi4delay_delayer.out_rready
+@29
+TOP.ysyxSoCFull.asic.axi4delay_delayer.out_rlast
+@200
+-
+@28
+TOP.ysyxSoCFull.asic.axi4delay_delayer.in_arvalid
+TOP.ysyxSoCFull.asic.axi4delay_delayer.in_arready
+TOP.ysyxSoCFull.asic.axi4delay_delayer.in_rvalid
+TOP.ysyxSoCFull.asic.axi4delay_delayer.in_rready
+TOP.ysyxSoCFull.asic.axi4delay_delayer.in_rlast
 [pattern_trace] 1
 [pattern_trace] 0
