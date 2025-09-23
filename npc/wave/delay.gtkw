@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Tue Sep 23 11:39:01 2025
+[*] Tue Sep 23 11:42:50 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Tue Sep 23 11:31:24 2025"
-[dumpfile_size] 59776651
+[dumpfile_mtime] "Tue Sep 23 11:39:57 2025"
+[dumpfile_size] 95286101
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/delay.gtkw"
-[timestart] 1828132
+[timestart] 1827993
 [size] 2498 1361
 [pos] -101 -101
-*-4.500000 1828312 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-5.400000 1828290 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
@@ -55,7 +55,7 @@ TOP.ysyxSoCFull.asic.axi4delay_delayer.r_count[0][13:0]
 TOP.ysyxSoCFull.asic.axi4delay_delayer.r_count[1][13:0]
 TOP.ysyxSoCFull.asic.axi4delay_delayer.r_count[2][13:0]
 TOP.ysyxSoCFull.asic.axi4delay_delayer.r_count[3][13:0]
-@28
+@25
 TOP.ysyxSoCFull.asic.axi4delay_delayer.rcount_index[2:0]
 @1000200
 -axi
@@ -88,9 +88,7 @@ TOP.ysyxSoCFull.asic.axi4delay_delayer.out_rlast
 @28
 TOP.ysyxSoCFull.asic.axi4delay_delayer.in_arvalid
 TOP.ysyxSoCFull.asic.axi4delay_delayer.in_arready
-@29
 TOP.ysyxSoCFull.asic.axi4delay_delayer.in_rvalid
-@28
 TOP.ysyxSoCFull.asic.axi4delay_delayer.in_rready
 TOP.ysyxSoCFull.asic.axi4delay_delayer.in_rlast
 @200
