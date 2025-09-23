@@ -230,7 +230,7 @@ module ysyx_25050136_ICACHE
                     state_read <= READ_ADDR;
                     // 默认赋值（单次读）
                     m_araddr_r  <= req_addr_i;
-                    m_arid_r    <= 4'b0001;
+                    m_arid_r    <= 4'b1001;
                     m_arlen_r   <= 0;
                     m_arsize_r  <= 3'b010;
                     m_arburst_r <= 2'b00;
