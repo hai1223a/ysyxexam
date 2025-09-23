@@ -207,7 +207,7 @@ perf: $(SOC_DEPEMD)
 
 fuck: $(SOC_DEPEMD)
 	@$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
-           DESIGN=ysyx_25050136_ICACHE \
+           DESIGN=ysyx_25050136_NPCCORE \
            CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clk \
            RTL_FILES="$(SOC_CPU_VSRC)"
 .PHONY: soc_exe soc_run soc_gdb soc_wave clean perf_commit perf

@@ -1,32 +1,42 @@
-module mem_256x32(
-  input  [7:0]  R0_addr,
-  input         R0_en,
-                R0_clk,
-  output [31:0] R0_data,
-  input  [7:0]  W0_addr,
-  input         W0_en,
-                W0_clk,
-  input  [31:0] W0_data,
-  input  [3:0]  W0_mask
+module test_two_always (
+    input  wire        clk,
+    input  wire        reset,
+    input  wire        en,
+    input  wire        en2, 
+    input  wire [31:0] din1,
+    input  wire [31:0] din2,
+    output reg  [31:0] a,
+    output reg  [31:0] b
 );
 
-  reg [31:0] Memory[0:255];
-  reg        _R0_en_d0;
-  reg [7:0]  _R0_addr_d0;
-  always @(posedge R0_clk) begin
-    _R0_en_d0   <= R0_en;
-    _R0_addr_d0 <= R0_addr;
-  end
-  always @(posedge W0_clk) begin
-    if (W0_en & W0_mask[0])
-      Memory[W0_addr][7:0]   <= W0_data[7:0];
-    if (W0_en & W0_mask[1])
-      Memory[W0_addr][15:8]  <= W0_data[15:8];
-    if (W0_en & W0_mask[2])
-      Memory[W0_addr][23:16] <= W0_data[23:16];
-    if (W0_en & W0_mask[3])
-      Memory[W0_addr][31:24] <= W0_data[31:24];
-  end
+    // always 块1：控制 a，判断条件部分与b相同
+    always @(posedge clk) begin
+        if (reset) begin
+            a <= 32'b0;
+        end else if (en & en2) begin
+            a <= (din1 ^ din2) + ((din1 & din2) << 2) - (din1 | din2);
+        end else if (en) begin
+            a <= (a << 1) | (din1 >> 1);
+        end else if (din1[0]) begin // a的特殊判断
+            a <= a ^ din2;
+        end else begin
+            a <= {a[30:0], a[31]}; // 循环左移
+        end
+    end
 
-  assign R0_data = _R0_en_d0 ? Memory[_R0_addr_d0] : 32'bx;
+    // always 块2：控制 b，判断条件部分与a相同
+    always @(posedge clk) begin
+        if (reset) begin
+            b <= 32'b0;
+        end else if (en & en2) begin
+            b <= ((din1[15:0] * din2[15:0]) ^ (din1[31:16] + din2[31:16])) | (din1 - din2);
+        end else if (en2) begin
+            b <= (din2 | a) + 32'h12345678;
+        end else if (din2[0]) begin // b的特殊判断
+            b <= b - din1;
+        end else begin
+            b <= {b[0], b[31:1]};  // 循环右移
+        end
+    end
+
 endmodule
