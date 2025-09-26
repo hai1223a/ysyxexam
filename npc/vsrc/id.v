@@ -206,7 +206,7 @@ module ysyx_25050136_ID
     assign csru_ren_t = !((inst_csrrw | inst_csrrwi) && (rd == 0));
     assign csru_wen_t = !((inst_csrrs | inst_csrrsi | inst_csrrc | inst_csrrci) && (rs1 == 0));
     //==================写回寄存器地址===================
-    assign rd_t  = rd;
+    assign rd_t  = rd[ADDR_WIDTH-1:0];
     assign rd_en_t = (type_store | type_branch) ? 0 : 1;
     //====================时序逻辑======================
     // reg [ADDR_WIDTH-1:0]                    raddr1_r;
