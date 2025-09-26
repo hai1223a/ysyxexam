@@ -104,7 +104,7 @@ module ysyx_25050136_ICACHE
                 end
                 MISS: begin
                     if(ret_last_i & ret_valid_i) begin
-                        state <= HIT;
+                        state <= OVER;
                     end
                 end
                 NO_USE: begin
