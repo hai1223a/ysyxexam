@@ -86,11 +86,6 @@ module ysyx_25050136_NPC
     wire mem_req_use;
     wire [31:0] mem_req_wdata;
     ysyx_25050136_ICACHE_WRAPPER 
-    #(
-        .OFFSET_WIDTH 	(4),
-        .INDEX_WIDTH  	(4),
-        .NUM_WAY     	(1)
-    )
     u_ysyx_25050136_ICACHE(
         .clk         	(clk             ),
         .reset       	(reset           ),
