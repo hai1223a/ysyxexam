@@ -4,7 +4,7 @@ module ysyx_25050136_ICACHE
 #(
     parameter OFFSET_WIDTH = 3,
     parameter NUM_WAY = 2,
-    parameter INDEX_WIDTH = 4
+    parameter INDEX_WIDTH = 3
 )
 (
     input                                      clk          ,
@@ -52,12 +52,9 @@ module ysyx_25050136_ICACHE
     reg [LINE_WIDTH-1:0] cache_data_mux ;
     reg [OFFSET_WIDTH-1:0] addr_offset_r;
     reg cache_hit;
-    reg [LINE_WIDTH-1:0] way_data_or    ;
+    reg [NUM_WAY-1:0] hit_mask;
     reg way_hit_or;
-    wire [TAG_WIDTH-1:0]  way_tag   [0:NUM_WAY-1];
-    wire [NUM_WAY-1:0]    way_valid;
-    wire [NUM_WAY-1:0]    way_hit;
-    wire [LINE_WIDTH-1:0] way_data  [0:NUM_WAY-1];
+    reg [LINE_WIDTH-1:0] selected_line;
     // HIT
     wire [31:0] cache_data_out;
     // NO USE
@@ -90,10 +87,10 @@ module ysyx_25050136_ICACHE
                     end
                 end
                 IN_CAHCE: begin
-                    cache_data_mux <= way_data_or;
+                    cache_data_mux <= selected_line;
                     addr_offset_r <= addr_offset;
-                    cache_hit <= way_hit_or;
-                    if(way_hit_or) begin
+                    cache_hit <= |hit_mask;
+                    if(|hit_mask) begin
                         state <= HIT;
                     end else begin
                         state <= MISS;
@@ -130,22 +127,25 @@ module ysyx_25050136_ICACHE
     assign addr_tag = req_addr_r[31:OFFSET_WIDTH+INDEX_WIDTH];
     assign addr_offset = req_addr_r[OFFSET_WIDTH-1:0];
     // IN_CAHCE
-    genvar i;
-    generate
-        for (i = 0; i < NUM_WAY; i = i + 1) begin : way_mux
-            assign way_tag[i] = cache_tag[i][addr_index];
-            assign way_valid[i] = cache_valid[i][addr_index];
-            assign way_hit[i] = (way_tag[i] == addr_tag) & way_valid[i];
-        end
-    endgenerate
-    integer j;
+    // 读取 tags 和 valids（同步RAM 情况另算，这里假设读出为组合/寄存器）
+    
+    integer k;
     always @(*) begin
-        way_data_or = 0;
-        for (j = 0; j < NUM_WAY; j = j + 1) begin
-            if(way_hit[j]) way_data_or = cache_data[j][addr_index];
+        hit_mask = {NUM_WAY{1'b0}};
+        for (k = 0; k < NUM_WAY; k = k + 1) begin
+            if (cache_valid[k][addr_index] && (cache_tag[k][addr_index] == addr_tag))
+                hit_mask[k] = 1'b1;
         end
     end
-    assign way_hit_or = |way_hit;
+
+    // 单次选择数据，避免每个 way 都输出大宽度数据然后做按位 or
+    
+    always @(*) begin
+        selected_line = {LINE_WIDTH{1'b0}};
+        for (k = 0; k < NUM_WAY; k = k + 1) begin
+            if (hit_mask[k]) selected_line = cache_data[k][addr_index];
+        end
+    end
     // HIT
     assign cache_data_out = cache_data_mux[addr_offset_r * 8 +: 32];
     // NO USE & MISS
