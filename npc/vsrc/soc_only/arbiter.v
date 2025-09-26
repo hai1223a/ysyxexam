@@ -112,7 +112,7 @@ module ysyx_25050136_ARBITER
     assign m_arburst_o = s_arburst_i[AR_bin * 2 +: 2];
     genvar i;
     generate
-        for (i = 0; i < MASTER_NUM ; i = i + 1) begin
+        for (i = 0; i < MASTER_NUM ; i = i + 1) begin: AR_FOR
             assign s_arready_o[i] = m_arready_i & AR_hot[i];
         end
     endgenerate
@@ -132,7 +132,7 @@ module ysyx_25050136_ARBITER
     end
     assign m_rready_o = |(s_rready_i & R_hot);
     generate
-        for (i = 0; i < MASTER_NUM ; i = i + 1) begin
+        for (i = 0; i < MASTER_NUM ; i = i + 1) begin: R_FOR
             assign s_rvalid_o[i] = m_rvalid_i & R_hot[i];
             assign s_rdata_o[i*DATA_WIDTH+:DATA_WIDTH] = R_hot[i] ? m_rdata_i : 0;
             assign s_rresp_o[i*2+:2] = R_hot[i] ? m_rresp_i : 0;
@@ -162,7 +162,7 @@ module ysyx_25050136_ARBITER
     assign m_awsize_o  = s_awsize_i[AW_bin * 3 +: 3];
     assign m_awburst_o = s_awburst_i[AW_bin * 2 +: 2];
     generate
-        for (i = 0; i < MASTER_NUM ; i = i + 1) begin
+        for (i = 0; i < MASTER_NUM ; i = i + 1) begin: AW_FOR
             assign s_awready_o[i] = m_awready_i & AW_hot[i];
         end
     endgenerate
@@ -200,7 +200,7 @@ module ysyx_25050136_ARBITER
     assign m_wstrb_o  = s_wstrb_i[W_bin * 4 +: 4];
     assign m_wlast_o  = s_wlast_i[W_bin];
     generate    
-        for (i = 0; i < MASTER_NUM ; i = i + 1) begin
+        for (i = 0; i < MASTER_NUM ; i = i + 1) begin: W_FOR
             assign s_wready_o[i] = m_wready_i & W_hot[i];
         end
     endgenerate
@@ -220,7 +220,7 @@ module ysyx_25050136_ARBITER
     end
     assign m_bready_o = |(s_bready_i & B_hot);
     generate
-        for (i = 0; i < MASTER_NUM ; i = i + 1) begin
+        for (i = 0; i < MASTER_NUM ; i = i + 1) begin: B_FOR
             assign s_bvalid_o[i] = m_bvalid_i & B_hot[i];
             assign s_bresp_o[i*2+:2] = B_hot[i] ? m_bresp_i : 0;
             assign s_bid_o[i*4+:4] = B_hot[i] ? m_bid_i : 0;

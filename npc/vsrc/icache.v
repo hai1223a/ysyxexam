@@ -127,12 +127,13 @@ module ysyx_25050136_ICACHE
     assign addr_tag = req_addr_r[31:OFFSET_WIDTH+INDEX_WIDTH];
     assign addr_offset = req_addr_r[OFFSET_WIDTH-1:0];
     // IN_CAHCE
+    integer j;
     always @(*) begin
         way_data_or = 0;
         way_hit_or = 0;
-        for (integer i = 0; i < NUM_WAY; i = i + 1) begin
-            way_data_or = way_data_or | way_data[i];
-            way_hit_or = way_hit_or | way_hit[i];
+        for (j = 0; j < NUM_WAY; j = j + 1) begin
+            way_data_or = way_data_or | way_data[j];
+            way_hit_or = way_hit_or | way_hit[j];
         end
     end
     genvar i;
