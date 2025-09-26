@@ -1,3 +1,5 @@
+// 要求OFFSET_WIDTH > 2
+// 要求 NUM_WAY > 1
 module ysyx_25050136_ICACHE
 #(
     parameter OFFSET_WIDTH = 3,
@@ -7,27 +9,20 @@ module ysyx_25050136_ICACHE
 (
     input                                      clk          ,
     input                                      reset        ,
-    // 读地址                                        
-    output                                     m_arvalid_o  ,
-    input                                      m_arready_i  ,
-    output   [31:0]                            m_araddr_o   ,
-    output   [3:0]                             m_arid_o     ,
-    output   [7:0]                             m_arlen_o    ,
-    output   [2:0]                             m_arsize_o   ,
-    output   [1:0]                             m_arburst_o  ,
-    // 读数据                                        
-    input                                      m_rvalid_i   ,
-    output                                     m_rready_o   ,
-    input    [31:0]                            m_rdata_i    ,
-    input    [1:0]                             m_rresp_i    ,
-    input                                      m_rlast_i    ,
-    input    [3:0]                             m_rid_i      ,
-    // 内部
+    // ICACHE与CPU接口
     input    [31:0]                            req_addr_i   ,
     input                                      req_valid_i  ,
     input                                      req_use_i    ,
     output   [31:0]                            req_rdata_o  ,                           
-    output                                     req_ready_o  
+    output                                     req_ready_o  ,  
+    // ICACHE与AXI接口                                        
+    output                                     rd_req_o     ,
+    output                                     rd_size_o    ,             
+    output   [31:0]                            rd_addr_o    ,
+    input                                      ret_valid_i  ,
+    input                                      ret_last_i   ,
+    input    [31:0]                            ret_data_i   
+    // 内部
 );
     // ====================cache内部信号定义==============================
     parameter LINE_WIDTH = 8 * 2 ** OFFSET_WIDTH;
@@ -35,330 +30,164 @@ module ysyx_25050136_ICACHE
     parameter NUM_SET = 2 ** INDEX_WIDTH;
     parameter WAY_WIDTH = NUM_WAY>1?$clog2(NUM_WAY):1;
     parameter BURST_NUM = 2 ** (OFFSET_WIDTH - 2) - 1;
-    // icache状态机
-    localparam IDLE      = 2'd0;
-    localparam INCACHE   = 2'd1;
-    localparam CACHEMISS = 2'd2;
-    localparam MISSIN    = 2'd3;
     // icache存储阵列
     reg [LINE_WIDTH-1:0] cache_data  [0:NUM_WAY-1][0:NUM_SET-1];
     reg [TAG_WIDTH-1 :0] cache_tag   [0:NUM_WAY-1][0:NUM_SET-1];
     reg                  cache_valid [0:NUM_WAY-1][0:NUM_SET-1];
-    reg [LINE_WIDTH-1:0] cache_data_temp;
-    // icache与CPU交互信号
-    reg [1:0] state;
+    // icache 状态机
+    localparam IDLE       = 3'd0;
+    localparam IN_CAHCE   = 3'd1;
+    localparam HIT        = 3'd2;
+    localparam MISS       = 3'd3;
+    localparam NO_USE     = 3'd4;
+    localparam OVER       = 3'd5;
+    localparam OUT_VALID  = 3'd6;
+    reg [2:0] state;
+    // IDLE
     reg [31:0] req_addr_r;
+    wire [INDEX_WIDTH-1:0]  addr_index  ;
+    wire [TAG_WIDTH-1:0]    addr_tag    ;
+    wire [OFFSET_WIDTH-1:0] addr_offset ;
+    // IN_CAHCE
+    reg [LINE_WIDTH-1:0] cache_data_mux ;
+    reg [OFFSET_WIDTH-1:0] addr_offset_r;
+    reg cache_hit;
+    reg [LINE_WIDTH-1:0] way_data_or    ;
+    reg way_hit_or;
+    wire [TAG_WIDTH-1:0]  way_tag   [0:NUM_WAY-1];
+    wire                  way_valid [0:NUM_WAY-1];
+    wire                  way_hit   [0:NUM_WAY-1];
+    wire [LINE_WIDTH-1:0] way_data  [0:NUM_WAY-1];
+    // HIT
+    wire [31:0] cache_data_out;
+    // NO USE
+    reg [31:0] no_use_data;
+    // 输出寄存器
+    wire [31:0] req_rdata;
     reg [31:0] req_rdata_r;
-    reg req_ready_r;
-    // 地址解析
-    wire [INDEX_WIDTH-1:0] addr_index = req_addr_r[OFFSET_WIDTH+INDEX_WIDTH-1:OFFSET_WIDTH];
-    wire [TAG_WIDTH-1:0] addr_tag = req_addr_r[31:OFFSET_WIDTH+INDEX_WIDTH];
-    wire [OFFSET_WIDTH-1:0] addr_offset = req_addr_r[OFFSET_WIDTH-1:0];
-    // 命中信号
-    wire [NUM_WAY-1:0] way_hit;
-    wire [NUM_WAY-1:0] way_valid;
-    wire [NUM_WAY-1:0] hot_hit = way_hit & way_valid;
-    wire [WAY_WIDTH-1:0] bin_hit;
+    // 替换策略
+    reg [WAY_WIDTH-1:0] replace_way;
+    // AXI接口处理
+    reg [LINE_WIDTH-1:0] cache_buffer;
+    // ====================icache逻辑实现==============================
+    always @(posedge clk) begin
+        if(reset) begin
+            state <= IDLE;
+            req_addr_r <= 0;
+            cache_data_mux <= 0;
+            addr_offset_r <= 0;
+            cache_hit <= 0;
+        end else begin
+            case(state)
+                IDLE: begin // address calculation
+                    if(req_valid_i & req_use_i) begin
+                        if(req_use_i) begin
+                            state <= IN_CAHCE;
+                        end else begin
+                            state <= NO_USE;
+                        end
+                        req_addr_r <= req_addr_i;
+                    end
+                end
+                IN_CAHCE: begin
+                    cache_data_mux <= way_data_or;
+                    addr_offset_r <= addr_offset;
+                    cache_hit <= way_hit_or;
+                    if(way_hit_or) begin
+                        state <= HIT;
+                    end else begin
+                        state <= MISS;
+                    end
+                end
+                HIT: begin
+                    state <= OUT_VALID;
+                end
+                MISS: begin
+                    if(ret_last_i & ret_valid_i) begin
+                        state <= HIT;
+                    end
+                end
+                NO_USE: begin
+                    if(ret_valid_i) begin
+                        state <= OUT_VALID;
+                    end
+                end
+                OVER: begin
+                    state <= OUT_VALID;
+                end
+                OUT_VALID: begin
+                    state <= IDLE;
+                end
+                default: state <= IDLE;
+            endcase
+        end
+    end
+    // IDLE
+    assign addr_index = req_addr_r[OFFSET_WIDTH+INDEX_WIDTH-1:OFFSET_WIDTH];
+    assign addr_tag = req_addr_r[31:OFFSET_WIDTH+INDEX_WIDTH];
+    assign addr_offset = req_addr_r[OFFSET_WIDTH-1:0];
+    // IN_CAHCE
+    always @(*) begin
+        way_data_or = 0;
+        way_hit_or = 0;
+        for (integer i = 0; i < NUM_WAY; i = i + 1) begin
+            way_data_or = way_data_or | way_data[i];
+            way_hit_or = way_hit_or | way_hit[i];
+        end
+    end
     generate
         for (genvar i = 0; i < NUM_WAY; i = i + 1) begin
+            assign way_tag[i] = cache_tag[i][addr_index];
             assign way_valid[i] = cache_valid[i][addr_index];
-            assign way_hit[i] = (cache_tag[i][addr_index] == addr_tag);
+            assign way_hit[i] = (way_tag[i] == addr_tag) & way_valid[i];
+            assign way_data[i] = way_hit[i] ? cache_data[i][addr_index] : 'b0;
         end
     endgenerate
-    ysyx_25050136_hot2bin #(.ONE_HOT_WIDTH(NUM_WAY))
-        hot2bin_hit (
-            .one_hot_code(hot_hit),
-            .bin_code(bin_hit)
-        );
-    // 替换索引生成逻辑(随机替换) 
-    reg [WAY_WIDTH-1:0] replace_way;
-    reg [WAY_WIDTH-1:0] replace_way_use;
-    wire [WAY_WIDTH-1:0] replace_way_dirty;
-    wire replace_way_dirty_valid;
+    // HIT
+    assign cache_data_out = cache_data_mux[(addr_offset_r << 3) +: 32];
+    // NO USE & MISS
+    always @(posedge clk) begin
+        if(reset) begin
+            cache_buffer <= 0;
+        end else begin
+            if(ret_valid_i) begin
+                cache_buffer <= {ret_data_i, cache_buffer[LINE_WIDTH-1:32]};
+            end
+        end
+    end
+    // OVER
+    always @(posedge clk) begin
+        if(state == OVER) begin
+            cache_data[replace_way][addr_index] <= cache_buffer;
+            cache_tag[replace_way][addr_index] <= addr_tag;
+            cache_valid[replace_way][addr_index] <= 1'b1;
+        end
+    end
+    // 输出寄存器
+    always @(posedge clk) begin
+        if(reset) begin
+            req_rdata_r <= 0;
+        end else begin
+            req_rdata_r <= req_rdata;
+        end
+    end
+    assign req_rdata = (state == HIT) ? cache_data_out :
+                       (state == NO_USE) ? ret_data_i :
+                       (state == MISS) ? cache_buffer[(addr_offset_r << 3) +: 32] :
+                       32'b0;
+    assign req_rdata_o = req_rdata_r;
+    assign req_ready_o = (state == OUT_VALID);
+    // cache替换
     always @(posedge clk) begin
         if (reset) begin
             replace_way <= 0;
         end else begin
-            if(NUM_WAY > 1) begin
-                replace_way <= replace_way + 1;
-            end
+            replace_way <= replace_way + 1;
         end
     end
-    ysyx_25050136_encoder #(.WIDTH(NUM_WAY))
-        replace_encoder (
-            .in_code(~way_valid),
-            .out_code(replace_way_dirty),
-            .valid(replace_way_dirty_valid)
-        );
-    // axi读请求计数
-    reg [7:0] axi_read_cnt;
-    // axi状态机判断信号
-    reg axi_start1; // ifu取指直接使用axi
-    reg axi_start2; // ifu取指在cache未命中使用axi
-
-
-    // ====================axi信号定义================================
-    localparam READ_IDLE = 2'd0;
-    localparam READ_ADDR = 2'd1;
-    localparam READ_DATA = 2'd2;
-    // axi读请求信号
-    reg [1:0] state_read;
-    reg m_rready_r;
-    reg [3:0] m_arid_r;
-    reg [31:0] m_araddr_r;
-    reg [7:0] m_arlen_r;
-    reg [2:0] m_arsize_r;
-    reg [1:0] m_arburst_r;
-    wire ar_fire, r_fire;
-    // ====================icache逻辑实现==============================
-    // icache总状态机
-    integer i,j;
-    always @(posedge clk) begin
-        if (reset) begin
-            state <= READ_IDLE;
-            req_addr_r <= 0;
-            for (i = 0; i < NUM_WAY; i = i + 1) begin
-                for (j = 0; j < NUM_SET; j = j + 1) begin
-                    cache_valid[i][j] <= 0;
-                end
-            end
-        end else begin
-            case (state)
-            IDLE: begin
-                if(req_valid_i) begin
-                    if (req_use_i) begin
-                        state <= INCACHE;
-                    end else begin
-                        state <= CACHEMISS;                            
-                    end
-                    req_addr_r <= req_addr_i;
-                end         
-            end 
-            INCACHE: begin
-                if(hot_hit != 0) begin
-`ifdef ysyx_25050136_VERILATOR_DPIC
-                    icache_hit();
-`endif
-                    state <= IDLE;
-                end else begin
-                    state <= CACHEMISS;
-                end
-            end
-            CACHEMISS: begin
-                if(r_fire && m_rlast_i && (m_rresp_i == 2'd0)) begin
-                    state <= MISSIN;
-                end
-            end
-            MISSIN: begin
-                if(req_use_i) begin
-                    cache_data[replace_way_use][addr_index] <= cache_data_temp;
-                    cache_tag[replace_way_use][addr_index] <= addr_tag;
-                    cache_valid[replace_way_use][addr_index] <= 1'b1;
-                end
-                state <= IDLE;
-            end
-            endcase
-        end
-    end
+    // AXI接口处理
+    assign rd_req_o = (state == NO_USE) | (state == MISS);
+    assign rd_size_o = (state == MISS);
+    assign rd_addr_o = req_addr_r;
     
-    always @(*) begin
-        req_rdata_r = 0;
-        req_ready_r = 0;
-        axi_start1 = 0;
-        axi_start2 = 0;
-        case (state)
-            IDLE: begin
-                if(req_valid_i & ~req_use_i) begin
-                    axi_start1 = 1;
-                end
-            end
-            INCACHE: begin
-            if(hot_hit != 0) begin
-                req_rdata_r = cache_data[bin_hit][addr_index][addr_offset*8 +: 32];
-                req_ready_r = 1;               
-            end else begin
-                axi_start2 = 1;
-            end
-            end 
-            MISSIN: begin
-                if(req_use_i) begin
-                    req_rdata_r = cache_data_temp[addr_offset*8 +: 32];
-                end else begin
-                    req_rdata_r = cache_data_temp[31:0];
-                end
-                req_ready_r = 1;               
-            end
-            default: ;
-        endcase
-    end
-
-    // reg [31:0] req_rdata_r2;
-    // reg req_ready_r2;
-    // always@(posedge clk) begin
-    //     if(reset) begin
-    //         req_addr_r2 <= 0;
-    //         req_ready_r2 <= 0;
-    //     end else begin
-    //         if(req_ready_r) begin
-    //             req_rdata_r <= req_rdata_r;
-    //             req_ready_r <= req_ready_r;                
-    //         end
-    //     end
-    // end
-    assign req_rdata_o = req_rdata_r;
-    assign req_ready_o = req_ready_r;
-
-    // axi读请求状态机
-    always @(posedge clk) begin
-        if (reset) begin
-            state_read      <= READ_IDLE;
-            cache_data_temp <= 0;
-            replace_way_use <= 0;
-            axi_read_cnt    <= 0;
-            m_araddr_r      <= 0;
-            m_arid_r        <= 0;
-            m_arlen_r       <= 0;   
-            m_arsize_r      <= 0;
-            m_arburst_r     <= 0;
-            m_rready_r      <= 0;
-        end else begin
-            case(state_read)
-            READ_IDLE: begin
-                m_rready_r <= 1;
-                axi_read_cnt <= 0;
-                if (axi_start1 | axi_start2) begin
-                    state_read <= READ_ADDR;
-                    // 默认赋值（单次读）
-                    m_araddr_r  <= req_addr_i;
-                    m_arid_r    <= 4'b1001;
-                    m_arlen_r   <= 0;
-                    m_arsize_r  <= 3'b010;
-                    m_arburst_r <= 2'b00;
-                    // 若为cache miss触发的burst读，覆盖相关参数
-                    if (axi_start2) begin
-                        m_araddr_r  <= {req_addr_r[31:OFFSET_WIDTH], {OFFSET_WIDTH{1'b0}}};
-                        m_arlen_r   <= BURST_NUM;      // burst长度
-                        m_arburst_r <= 2'b01;          // 增量式
-                    end
-                end
-            end 
-            READ_ADDR: begin
-                m_rready_r <= 1;
-                if (ar_fire) begin
-                    replace_way_use <= replace_way_dirty_valid ? replace_way_dirty : replace_way;
-                    m_araddr_r <= 0;
-                    m_arlen_r <= 0;
-                    m_arsize_r <= 0;
-                    m_arburst_r <= 0;
-                    state_read <= READ_DATA;                        
-                end
-            end 
-            READ_DATA: begin
-                if (r_fire) begin
-                    axi_read_cnt <= axi_read_cnt + 1;
-                    cache_data_temp[32*axi_read_cnt +: 32] <= m_rdata_i;
-                    if(m_rlast_i) begin
-                        m_arid_r <= 0;
-                        state_read <= READ_IDLE;
-                    end
-                    m_rready_r <= 0;
-                end else begin
-                    m_rready_r <= 1;                        
-                end
-            end 
-            default: ;
-            endcase
-        end
-    end
-
-    assign m_arvalid_o = (state_read == READ_ADDR);
-    assign m_araddr_o  = m_araddr_r;
-    assign m_arid_o = m_arid_r;
-    assign m_arlen_o = m_arlen_r;
-    assign m_arsize_o = m_arsize_r;
-    assign m_arburst_o = m_arburst_r;
-    assign m_rready_o = m_rready_r;
-    assign ar_fire = m_arvalid_o & m_arready_i;
-    assign r_fire = m_rvalid_i & m_rready_o;
-
-// ========================Simulation only====================================
-`ifdef verilator
-reg [79:0] dbg_cache_state;
-reg [79:0] dbg_axi_state;
-always @(*) begin
-    case (state)
-        IDLE        : dbg_cache_state = "IDLE";
-        INCACHE     : dbg_cache_state = "INCACHE";
-        CACHEMISS   : dbg_cache_state = "CACHEMISS";
-        MISSIN      : dbg_cache_state = "MISSIN";
-        default     : dbg_cache_state = "UNKNOW";
-    endcase
-    case (state_read)
-        READ_IDLE   : dbg_axi_state = "READ_IDLE";
-        READ_ADDR   : dbg_axi_state = "READ_ADDR";
-        READ_DATA   : dbg_axi_state = "READ_DATA";
-        default     : dbg_axi_state = "UNKNOW";
-    endcase
-end
-`endif
 endmodule //ysyx_25050136_ICACHE
-
-module ysyx_25050136_hot2bin
-#(
-    parameter  ONE_HOT_WIDTH = 4,
-    parameter  PRIVATE_TEMP0 = $clog2(ONE_HOT_WIDTH),
-    parameter  PRIVATE_TEMP1 = (ONE_HOT_WIDTH>1?PRIVATE_TEMP0:1)    
-)
-(
-    input   [ONE_HOT_WIDTH-1 : 0]       one_hot_code,
-    output  [PRIVATE_TEMP1-1 : 0]       bin_code
-);
-
-    wire [PRIVATE_TEMP1-1 : 0] temp1 [ONE_HOT_WIDTH-1 : 0];
-	wire [ONE_HOT_WIDTH-1 : 0] temp2 [PRIVATE_TEMP1-1 : 0];
-		
-	genvar i,j,k;
-	generate
-		for(i = 0; i < ONE_HOT_WIDTH; i = i+1)begin : temp1_loop
-			assign temp1[i] = one_hot_code[i]? i[PRIVATE_TEMP1-1:0] : 'b0;
-		end
-	endgenerate
-	generate
-		for(i = 0; i < ONE_HOT_WIDTH; i = i+1)begin : temp_ch1
-			for(j = 0; j < PRIVATE_TEMP1; j = j+1)begin  : temp_ch2
-				assign temp2[j][i] = temp1[i][j];
-			end
-		end
-	endgenerate
-	generate
-		for(j = 0; j < PRIVATE_TEMP1; j = j+1)begin : temp2_loop
-			assign bin_code[j] = |temp2[j];
-		end
-	endgenerate
-    
-endmodule //hot2bin
-
-module ysyx_25050136_encoder
-#(
-    parameter WIDTH = 4,
-    parameter PRIVATE_TEMP0 = $clog2(WIDTH),
-    parameter PRIVATE_TEMP1 = (WIDTH>1?PRIVATE_TEMP0:1)  
-)
-(
-    input   [WIDTH-1 : 0]             in_code,
-    output  reg [PRIVATE_TEMP1-1 : 0] out_code,
-    output  reg                       valid
-);
-    integer i;
-    always @(*) begin
-        out_code = 'b0;
-        valid = 'b0;
-        for(i = 0; i < WIDTH; i = i+1) begin
-            if(in_code[i]) begin
-                out_code = i[PRIVATE_TEMP1-1:0];
-                valid = 'b1;
-            end
-        end
-    end
-    
-endmodule //hot2bin

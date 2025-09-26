@@ -24,7 +24,6 @@ module ysyx_25050136_IMEM2AXI
     input                                      rd_req_i     ,
     input                                      rd_size_i    , // 0: word 1: cahce line                
     input    [31:0]                            rd_addr_i    ,
-    output                                     rd_rdy_o     ,
     output                                     ret_valid_o  ,
     output                                     ret_last_o   ,
     output   [31:0]                            ret_data_o   
@@ -64,7 +63,7 @@ module ysyx_25050136_IMEM2AXI
                         m_arsize_r  <= 3'b010;
                         m_arburst_r <= 2'b00;
                         if(rd_size_i) begin // cache line
-                            m_araddr_r  <= {req_addr_r[31:OFFSET_WIDTH], {OFFSET_WIDTH{1'b0}}};
+                            m_araddr_r  <= {rd_addr_i[31:OFFSET_WIDTH], {OFFSET_WIDTH{1'b0}}};
                             m_arlen_r   <= BURST_NUM;      
                             m_arburst_r <= 2'b01;          
                         end else begin // word
@@ -110,7 +109,6 @@ module ysyx_25050136_IMEM2AXI
     assign ar_fire = m_arvalid_o & m_arready_i;
     assign r_fire = m_rvalid_i & m_rready_o;
 
-    assign rd_rdy_o = ar_fire;
     assign ret_valid_o = r_fire;
     assign ret_last_o = m_rlast_i & r_fire;
     assign ret_data_o = m_rdata_i;

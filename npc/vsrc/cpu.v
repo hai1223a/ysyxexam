@@ -85,7 +85,7 @@ module ysyx_25050136_NPC
     wire [2:0]  mem_req_size;
     wire mem_req_use;
     wire [31:0] mem_req_wdata;
-    ysyx_25050136_ICACHE 
+    ysyx_25050136_ICACHE_WRAPPER 
     #(
         .OFFSET_WIDTH 	(4),
         .INDEX_WIDTH  	(4),
