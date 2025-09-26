@@ -173,7 +173,7 @@ module ysyx_25050136_ICACHE
     end
     assign req_rdata = (state == HIT) ? cache_data_out :
                        (state == NO_USE) ? ret_data_i :
-                       (state == MISS) ? cache_buffer[(addr_offset_r << 3) +: 32] :
+                       (state == MISS) ? cache_buffer[addr_offset_r * 8 +: 32] :
                        32'b0;
     assign req_rdata_o = req_rdata_r;
     assign req_ready_o = (state == OUT_VALID);
