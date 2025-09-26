@@ -251,7 +251,7 @@ module ysyx_25050136(
     assign inst_bid_i     = s_bid_o[7:4]    ;
     assign inst_arready_i = s_arready_o[1]  ;
     assign inst_rvalid_i  = s_rvalid_o[1]   ;
-    assign inst_rdata_i   = s_rdata_o[64:32];
+    assign inst_rdata_i   = s_rdata_o[63:32];
     assign inst_rresp_i   = s_rresp_o[3:2]  ;
     assign inst_rlast_i   = s_rlast_o[1]    ;
     assign inst_rid_i     = s_rid_o[7:4]    ;
