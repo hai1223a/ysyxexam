@@ -106,7 +106,7 @@ module ysyx_25050136(
         end
     end
 `endif
-    localparam TOP_ADDR_WIDTH   = 5 ;
+    localparam TOP_ADDR_WIDTH   = 4 ;
     localparam TOP_DATA_WIDTH   = 32;
     localparam TOP_MASTER_NUM   = 2 ;
 
