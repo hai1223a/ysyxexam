@@ -197,7 +197,7 @@ module ysyx_25050136_ICACHE
     always @(*) begin
         case (state)
             IDLE        : dbg_state = "IDLE"      ;
-            IN_ICACHE   : dbg_state = "IN_CACHE"  ;
+            IN_CAHCE    : dbg_state = "IN_CACHE"  ;
             HIT         : dbg_state = "HIT"       ;
             MISS        : dbg_state = "MISS"      ;
             NO_USE      : dbg_state = "NO_USE"    ;
