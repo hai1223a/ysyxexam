@@ -1,8 +1,4 @@
 module ysyx_25050136_NPC
-#(
-    parameter ADDR_WIDTH = 5,
-    parameter DATA_WIDTH = 32
-)
 (
     input                                     clk,
     input                                   reset,
@@ -10,7 +6,7 @@ module ysyx_25050136_NPC
     // 读地址
     output                        inst_arvalid_o ,
     input                         inst_arready_i ,
-    output   [DATA_WIDTH-1:0]     inst_araddr_o  ,
+    output   [31:0]               inst_araddr_o  ,
     output   [3:0]                inst_arid_o    ,
     output   [7:0]                inst_arlen_o   ,
     output   [2:0]                inst_arsize_o  ,
@@ -26,7 +22,7 @@ module ysyx_25050136_NPC
     // 写地址                     
     output                        mem_awvalid_o  ,
     input                         mem_awready_i  ,
-    output   [DATA_WIDTH-1:0]     mem_awaddr_o   ,
+    output   [31:0]               mem_awaddr_o   ,
     output   [3:0]                mem_awid_o     ,
     output   [7:0]                mem_awlen_o    ,
     output   [2:0]                mem_awsize_o   ,
@@ -34,7 +30,7 @@ module ysyx_25050136_NPC
     // 写数据                      
     output                        mem_wvalid_o   ,
     input                         mem_wready_i   ,
-    output   [DATA_WIDTH-1:0]     mem_wdata_o    ,
+    output   [31:0]               mem_wdata_o    ,
     output   [3:0]                mem_wstrb_o    ,
     output                        mem_wlast_o    ,
     // 写响应                          
@@ -45,7 +41,7 @@ module ysyx_25050136_NPC
     // 读地址                         
     output                        mem_arvalid_o  ,
     input                         mem_arready_i  ,
-    output   [DATA_WIDTH-1:0]     mem_araddr_o   ,
+    output   [31:0]               mem_araddr_o   ,
     output   [3:0]                mem_arid_o     ,
     output   [7:0]                mem_arlen_o    ,
     output   [2:0]                mem_arsize_o   ,
@@ -53,7 +49,7 @@ module ysyx_25050136_NPC
     // 读数据                         
     input                         mem_rvalid_i   ,
     output                        mem_rready_o   ,
-    input    [DATA_WIDTH-1:0]     mem_rdata_i    ,
+    input    [31:0]               mem_rdata_i    ,
     input    [1:0]                mem_rresp_i    ,
     input                         mem_rlast_i    ,
     input    [3:0]                mem_rid_i      
@@ -163,10 +159,7 @@ module ysyx_25050136_NPC
         .req_ready_o 	(mem_req_ready    )
     );
     
-    ysyx_25050136_NPCCORE #(
-        .ADDR_WIDTH 	(ADDR_WIDTH   ),
-        .DATA_WIDTH 	(DATA_WIDTH   )
-    )
+    ysyx_25050136_NPCCORE 
     u_ysyx_25050136_NPCCORE(
         .clk            	(clk             ),
         .reset          	(reset           ),

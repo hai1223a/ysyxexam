@@ -106,21 +106,19 @@ module ysyx_25050136(
         end
     end
 `endif
-    localparam TOP_ADDR_WIDTH   = 4 ;
-    localparam TOP_DATA_WIDTH   = 32;
     localparam TOP_MASTER_NUM   = 2 ;
 
     // 仲裁器信号
     wire [TOP_MASTER_NUM-1:0]                s_awvalid_i ;
     wire [TOP_MASTER_NUM-1:0]                s_awready_o ;
-    wire [TOP_MASTER_NUM*TOP_DATA_WIDTH-1:0] s_awaddr_i  ;
+    wire [TOP_MASTER_NUM*31:0]               s_awaddr_i  ;
     wire [TOP_MASTER_NUM*4-1:0]              s_awid_i    ;
     wire [TOP_MASTER_NUM*8-1:0]              s_awlen_i   ;
     wire [TOP_MASTER_NUM*3-1:0]              s_awsize_i  ;
     wire [TOP_MASTER_NUM*2-1:0]              s_awburst_i ;
     wire [TOP_MASTER_NUM-1:0]                s_wvalid_i  ;
     wire [TOP_MASTER_NUM-1:0]                s_wready_o  ;
-    wire [TOP_MASTER_NUM*TOP_DATA_WIDTH-1:0] s_wdata_i   ;
+    wire [TOP_MASTER_NUM*31:0]               s_wdata_i   ;
     wire [TOP_MASTER_NUM*4-1:0]              s_wstrb_i   ;
     wire [TOP_MASTER_NUM-1:0]                s_wlast_i   ;
     wire [TOP_MASTER_NUM-1:0]                s_bvalid_o  ;
@@ -129,14 +127,14 @@ module ysyx_25050136(
     wire [TOP_MASTER_NUM*4-1:0]              s_bid_o     ;
     wire [TOP_MASTER_NUM-1:0]                s_arvalid_i ;
     wire [TOP_MASTER_NUM-1:0]                s_arready_o ;
-    wire [TOP_MASTER_NUM*TOP_DATA_WIDTH-1:0] s_araddr_i  ;
+    wire [TOP_MASTER_NUM*31:0]               s_araddr_i  ;
     wire [TOP_MASTER_NUM*4-1:0]              s_arid_i    ;
     wire [TOP_MASTER_NUM*8-1:0]              s_arlen_i   ;
     wire [TOP_MASTER_NUM*3-1:0]              s_arsize_i  ;
     wire [TOP_MASTER_NUM*2-1:0]              s_arburst_i ;
     wire [TOP_MASTER_NUM-1:0]                s_rvalid_o  ;
     wire [TOP_MASTER_NUM-1:0]                s_rready_i  ;
-    wire [TOP_MASTER_NUM*TOP_DATA_WIDTH-1:0] s_rdata_o   ;
+    wire [TOP_MASTER_NUM*31:0]               s_rdata_o   ;
     wire [TOP_MASTER_NUM*2-1:0]              s_rresp_o   ;
     wire [TOP_MASTER_NUM-1:0]                s_rlast_o   ;
     wire [TOP_MASTER_NUM*4-1:0]              s_rid_o     ;
@@ -144,27 +142,27 @@ module ysyx_25050136(
     // 主设备信号        
     wire                                  inst_arvalid_o ;
     wire                                  inst_arready_i ;
-    wire [TOP_DATA_WIDTH-1:0]             inst_araddr_o  ;
+    wire [31:0]                           inst_araddr_o  ;
     wire [3:0]                            inst_arid_o    ;
     wire [7:0]                            inst_arlen_o   ;
     wire [2:0]                            inst_arsize_o  ;
     wire [1:0]                            inst_arburst_o ;
     wire                                  inst_rvalid_i  ;
     wire                                  inst_rready_o  ;
-    wire [TOP_DATA_WIDTH-1:0]             inst_rdata_i   ;
+    wire [31:0]                           inst_rdata_i   ;
     wire [1:0]                            inst_rresp_i   ;
     wire                                  inst_rlast_i   ;
     wire [3:0]                            inst_rid_i     ;
     wire                                  inst_awvalid_o ;
     wire                                  inst_awready_i ;
-    wire [TOP_DATA_WIDTH-1:0]             inst_awaddr_o  ;
+    wire [31:0]                           inst_awaddr_o  ;
     wire [3:0]                            inst_awid_o    ;
     wire [7:0]                            inst_awlen_o   ;
     wire [2:0]                            inst_awsize_o  ;
     wire [1:0]                            inst_awburst_o ;
     wire                                  inst_wvalid_o  ;
     wire                                  inst_wready_i  ;
-    wire [TOP_DATA_WIDTH-1:0]             inst_wdata_o   ;
+    wire [31:0]                           inst_wdata_o   ;
     wire [3:0]                            inst_wstrb_o   ;
     wire                                  inst_wlast_o   ;
     wire                                  inst_bvalid_i  ;
@@ -173,14 +171,14 @@ module ysyx_25050136(
     wire [3:0]                            inst_bid_i     ;
     wire                                  mem_awvalid_o  ;
     wire                                  mem_awready_i  ;
-    wire [TOP_DATA_WIDTH-1:0]             mem_awaddr_o   ;
+    wire [31:0]                           mem_awaddr_o   ;
     wire [3:0]                            mem_awid_o     ;
     wire [7:0]                            mem_awlen_o    ;
     wire [2:0]                            mem_awsize_o   ;
     wire [1:0]                            mem_awburst_o  ;
     wire                                  mem_wvalid_o   ;
     wire                                  mem_wready_i   ;
-    wire [TOP_DATA_WIDTH-1:0]             mem_wdata_o    ;
+    wire [31:0]                           mem_wdata_o    ;
     wire [3:0]                            mem_wstrb_o    ;
     wire                                  mem_wlast_o    ;
     wire                                  mem_bvalid_i   ;
@@ -189,14 +187,14 @@ module ysyx_25050136(
     wire [3:0]                            mem_bid_i      ;
     wire                                  mem_arvalid_o  ;
     wire                                  mem_arready_i  ;
-    wire [TOP_DATA_WIDTH-1:0]             mem_araddr_o   ;
+    wire [31:0]                           mem_araddr_o   ;
     wire [3:0]                            mem_arid_o     ;
     wire [7:0]                            mem_arlen_o    ;
     wire [2:0]                            mem_arsize_o   ;
     wire [1:0]                            mem_arburst_o  ;
     wire                                  mem_rvalid_i   ;
     wire                                  mem_rready_o   ;
-    wire [TOP_DATA_WIDTH-1:0]             mem_rdata_i    ;
+    wire [31:0]                           mem_rdata_i    ;
     wire [1:0]                            mem_rresp_i    ;
     wire                                  mem_rlast_i    ;
     wire [3:0]                            mem_rid_i      ;
@@ -235,28 +233,28 @@ module ysyx_25050136(
     assign s_rready_i    = {inst_rready_o,  mem_rready_o}  ;
     
     // 仲裁器到主设备信号连接
-    assign mem_awready_i = s_awready_o[0] ;
-    assign mem_wready_i  = s_wready_o[0]  ;
-    assign mem_bvalid_i  = s_bvalid_o[0]  ;
-    assign mem_bresp_i   = s_bresp_o[1:0] ;
-    assign mem_bid_i     = s_bid_o[3:0]   ;
-    assign mem_arready_i = s_arready_o[0] ;
-    assign mem_rvalid_i  = s_rvalid_o[0]  ;
-    assign mem_rdata_i   = s_rdata_o[0*TOP_DATA_WIDTH+:TOP_DATA_WIDTH];
-    assign mem_rresp_i   = s_rresp_o[1:0] ;
-    assign mem_rlast_i   = s_rlast_o[0]   ;
-    assign mem_rid_i     = s_rid_o[3:0]   ;
-    assign inst_awready_i  = s_awready_o[1] ;
-    assign inst_wready_i   = s_wready_o[1]  ;
-    assign inst_bvalid_i   = s_bvalid_o[1]  ;
-    assign inst_bresp_i    = s_bresp_o[3:2] ;
-    assign inst_bid_i      = s_bid_o[7:4]   ;
-    assign inst_arready_i  = s_arready_o[1] ;
-    assign inst_rvalid_i   = s_rvalid_o[1]  ;
-    assign inst_rdata_i    = s_rdata_o[1*TOP_DATA_WIDTH+:TOP_DATA_WIDTH];
-    assign inst_rresp_i    = s_rresp_o[3:2] ;
-    assign inst_rlast_i    = s_rlast_o[1]   ;
-    assign inst_rid_i      = s_rid_o[7:4]   ;
+    assign mem_awready_i  = s_awready_o[0]  ;
+    assign mem_wready_i   = s_wready_o[0]   ;
+    assign mem_bvalid_i   = s_bvalid_o[0]   ;
+    assign mem_bresp_i    = s_bresp_o[1:0]  ;
+    assign mem_bid_i      = s_bid_o[3:0]    ;
+    assign mem_arready_i  = s_arready_o[0]  ;
+    assign mem_rvalid_i   = s_rvalid_o[0]   ;
+    assign mem_rdata_i    = s_rdata_o[31:0] ;
+    assign mem_rresp_i    = s_rresp_o[1:0]  ;
+    assign mem_rlast_i    = s_rlast_o[0]    ;
+    assign mem_rid_i      = s_rid_o[3:0]    ;
+    assign inst_awready_i = s_awready_o[1]  ;
+    assign inst_wready_i  = s_wready_o[1]   ;
+    assign inst_bvalid_i  = s_bvalid_o[1]   ;
+    assign inst_bresp_i   = s_bresp_o[3:2]  ;
+    assign inst_bid_i     = s_bid_o[7:4]    ;
+    assign inst_arready_i = s_arready_o[1]  ;
+    assign inst_rvalid_i  = s_rvalid_o[1]   ;
+    assign inst_rdata_i   = s_rdata_o[64:32];
+    assign inst_rresp_i   = s_rresp_o[3:2]  ;
+    assign inst_rlast_i   = s_rlast_o[1]    ;
+    assign inst_rid_i     = s_rid_o[7:4]    ;
 
     // 顶层AXI SLAVER接口
     assign io_slave_awready = 0;
@@ -272,10 +270,8 @@ module ysyx_25050136(
     assign io_slave_rlast = 0; 
     assign io_slave_rid = 0;
     // NPC模块实例化
-    ysyx_25050136_NPC #(
-        .ADDR_WIDTH(TOP_ADDR_WIDTH),
-        .DATA_WIDTH(TOP_DATA_WIDTH)
-    ) u_ysyx_25050136_NPC (
+    ysyx_25050136_NPC 
+    u_ysyx_25050136_NPC (
         .clk            	(clock           ),
         .reset          	(reset           ),
         .inst_arvalid_o 	(inst_arvalid_o  ),
@@ -324,9 +320,7 @@ module ysyx_25050136(
     
     // 仲裁器模块实例化
     ysyx_25050136_ARBITER #(
-        .MASTER_NUM(TOP_MASTER_NUM),
-        .DATA_WIDTH(TOP_DATA_WIDTH),
-        .ADDR_WIDTH(TOP_DATA_WIDTH)
+        .MASTER_NUM(TOP_MASTER_NUM)
     )
     u_ysyx_25050136_ARBITER(
         .clk        	(clock              ),
