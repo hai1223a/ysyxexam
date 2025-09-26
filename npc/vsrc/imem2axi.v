@@ -1,6 +1,6 @@
 module ysyx_25050136_IMEM2AXI
 #(
-    parameter OFFSET_WIDTH = 4 // cache line = 16B
+    parameter OFFSET_WIDTH = 3 // cache line = 16B
 )
 (
     input                                      clk          ,

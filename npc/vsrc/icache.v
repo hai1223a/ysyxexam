@@ -55,8 +55,8 @@ module ysyx_25050136_ICACHE
     reg [LINE_WIDTH-1:0] way_data_or    ;
     reg way_hit_or;
     wire [TAG_WIDTH-1:0]  way_tag   [0:NUM_WAY-1];
-    wire                  way_valid [0:NUM_WAY-1];
-    wire                  way_hit   [0:NUM_WAY-1];
+    wire [NUM_WAY-1:0]    way_valid;
+    wire [NUM_WAY-1:0]    way_hit;
     wire [LINE_WIDTH-1:0] way_data  [0:NUM_WAY-1];
     // HIT
     wire [31:0] cache_data_out;
@@ -130,24 +130,22 @@ module ysyx_25050136_ICACHE
     assign addr_tag = req_addr_r[31:OFFSET_WIDTH+INDEX_WIDTH];
     assign addr_offset = req_addr_r[OFFSET_WIDTH-1:0];
     // IN_CAHCE
-    integer j;
-    always @(*) begin
-        way_data_or = 0;
-        way_hit_or = 0;
-        for (j = 0; j < NUM_WAY; j = j + 1) begin
-            way_data_or = way_data_or | way_data[j];
-            way_hit_or = way_hit_or | way_hit[j];
-        end
-    end
     genvar i;
     generate
         for (i = 0; i < NUM_WAY; i = i + 1) begin : way_mux
             assign way_tag[i] = cache_tag[i][addr_index];
             assign way_valid[i] = cache_valid[i][addr_index];
             assign way_hit[i] = (way_tag[i] == addr_tag) & way_valid[i];
-            assign way_data[i] = way_hit[i] ? cache_data[i][addr_index] : 'b0;
         end
     endgenerate
+    integer j;
+    always @(*) begin
+        way_data_or = 0;
+        for (j = 0; j < NUM_WAY; j = j + 1) begin
+            if(way_hit[j]) way_data_or = cache_data[j][addr_index];
+        end
+    end
+    assign way_hit_or = |way_hit;
     // HIT
     assign cache_data_out = cache_data_mux[addr_offset_r * 8 +: 32];
     // NO USE & MISS
