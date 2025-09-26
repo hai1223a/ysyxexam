@@ -111,14 +111,14 @@ module ysyx_25050136(
     // 仲裁器信号
     wire [TOP_MASTER_NUM-1:0]                s_awvalid_i ;
     wire [TOP_MASTER_NUM-1:0]                s_awready_o ;
-    wire [TOP_MASTER_NUM*31:0]               s_awaddr_i  ;
+    wire [TOP_MASTER_NUM*32-1:0]             s_awaddr_i  ;
     wire [TOP_MASTER_NUM*4-1:0]              s_awid_i    ;
     wire [TOP_MASTER_NUM*8-1:0]              s_awlen_i   ;
     wire [TOP_MASTER_NUM*3-1:0]              s_awsize_i  ;
     wire [TOP_MASTER_NUM*2-1:0]              s_awburst_i ;
     wire [TOP_MASTER_NUM-1:0]                s_wvalid_i  ;
     wire [TOP_MASTER_NUM-1:0]                s_wready_o  ;
-    wire [TOP_MASTER_NUM*31:0]               s_wdata_i   ;
+    wire [TOP_MASTER_NUM*32-1:0]             s_wdata_i   ;
     wire [TOP_MASTER_NUM*4-1:0]              s_wstrb_i   ;
     wire [TOP_MASTER_NUM-1:0]                s_wlast_i   ;
     wire [TOP_MASTER_NUM-1:0]                s_bvalid_o  ;
@@ -127,14 +127,14 @@ module ysyx_25050136(
     wire [TOP_MASTER_NUM*4-1:0]              s_bid_o     ;
     wire [TOP_MASTER_NUM-1:0]                s_arvalid_i ;
     wire [TOP_MASTER_NUM-1:0]                s_arready_o ;
-    wire [TOP_MASTER_NUM*31:0]               s_araddr_i  ;
+    wire [TOP_MASTER_NUM*32-1:0]             s_araddr_i  ;
     wire [TOP_MASTER_NUM*4-1:0]              s_arid_i    ;
     wire [TOP_MASTER_NUM*8-1:0]              s_arlen_i   ;
     wire [TOP_MASTER_NUM*3-1:0]              s_arsize_i  ;
     wire [TOP_MASTER_NUM*2-1:0]              s_arburst_i ;
     wire [TOP_MASTER_NUM-1:0]                s_rvalid_o  ;
     wire [TOP_MASTER_NUM-1:0]                s_rready_i  ;
-    wire [TOP_MASTER_NUM*31:0]               s_rdata_o   ;
+    wire [TOP_MASTER_NUM*32-1:0]             s_rdata_o   ;
     wire [TOP_MASTER_NUM*2-1:0]              s_rresp_o   ;
     wire [TOP_MASTER_NUM-1:0]                s_rlast_o   ;
     wire [TOP_MASTER_NUM*4-1:0]              s_rid_o     ;
