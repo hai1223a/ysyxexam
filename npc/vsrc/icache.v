@@ -100,6 +100,9 @@ module ysyx_25050136_ICACHE
                     end
                 end
                 HIT: begin
+`ifdef 
+                    icache_hit();
+`endif
                     state <= OUT_VALID;
                 end
                 MISS: begin
