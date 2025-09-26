@@ -59,8 +59,8 @@ module ysyx_25050136_ID
     //================指令各段分解===============
     wire [6:0] opcode = inst_i[6:0];
     wire [4:0] rd = inst_i[11:7];
-    wire [4:0] rs1 = inst_i[18:15];
-    wire [4:0] rs2 = inst_i[23:20];
+    wire [4:0] rs1 = inst_i[19:15];
+    wire [4:0] rs2 = inst_i[24:20];
     wire [2:0] funct3 = inst_i[14:12];
     wire [6:0] funct7 = inst_i[31:25];
     //================opcode判断================
@@ -149,8 +149,8 @@ module ysyx_25050136_ID
     wire [31:0] imm = inst_Itype ? immI : (inst_Stype ? immS :
                                            (inst_Utype ? immU : (inst_Btype ? immB :
                                                                  (inst_Jtype ? immJ : 0))));
-    assign raddr1_t = rs1;
-    assign raddr2_t = rs2;
+    assign raddr1_t = rs1[ADDR_WIDTH-1:0];
+    assign raddr2_t = rs2[ADDR_WIDTH-1:0];
     //=================选择工作部件================
     assign fu_t[`ysyx_25050136_ALU] = ~(inst_csrrw | inst_csrrs | inst_csrrc | inst_csrrwi | inst_csrrsi | inst_csrrci);
     assign fu_t[`ysyx_25050136_LSU] = type_store | type_load;
