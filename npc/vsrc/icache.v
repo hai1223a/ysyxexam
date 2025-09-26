@@ -100,7 +100,7 @@ module ysyx_25050136_ICACHE
                     end
                 end
                 HIT: begin
-`ifdef 
+`ifdef ysyx_25050136_VERILATOR_DPIC
                     icache_hit();
 `endif
                     state <= OUT_VALID;
