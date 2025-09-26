@@ -1,14 +1,14 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Sat Sep 20 06:18:41 2025
+[*] Fri Sep 26 14:06:39 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Sat Sep 20 06:06:06 2025"
-[dumpfile_size] 15456292
+[dumpfile_mtime] "Fri Sep 26 14:03:53 2025"
+[dumpfile_size] 7117231
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/cache.gtkw"
-[timestart] 2739213
+[timestart] 0
 [size] 2498 1361
-[pos] -101 -101
+[pos] -51 -51
 *-3.900000 2739186 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
@@ -16,6 +16,8 @@
 [treeopen] TOP.ysyxSoCFull.asic.cpu.
 [treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.
 [treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.
+[treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.
+[treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.
 [treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.
 [treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.
 [treeopen] TOP.ysyxSoCFull.asic.lsdram_axi.
@@ -25,6 +27,8 @@
 [signals_width] 255
 [sst_expanded] 1
 [sst_vpaned_height] 645
+@800200
+-cpu
 @22
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.pc_o[31:0]
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.inst_o[31:0]
@@ -37,106 +41,7 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.u_ysyx_25050136_LSU.mem_wen_i
 @22
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.u_ysyx_25050136_LSU.mem_addr_i[31:0]
-@200
--
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_valid
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_ready
-@22
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_addr[31:0]
-@c00022
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_mask[3:0]
-@28
-(0)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_mask[3:0]
-(1)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_mask[3:0]
-(2)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_mask[3:0]
-(3)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_mask[3:0]
-@1401200
--group_end
-@c00022
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-@28
-(0)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(1)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(2)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(3)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(4)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(5)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(6)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(7)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(8)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(9)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(10)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(11)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(12)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(13)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(14)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(15)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(16)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(17)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(18)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(19)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(20)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(21)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(22)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(23)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(24)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(25)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(26)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(27)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(28)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(29)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(30)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-(31)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_rdata[31:0]
-@1401200
--group_end
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_ren
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_size[2:0]
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_use
-@22
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_wdata[31:0]
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_req_wen
-@200
--
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_DCACHE.clk
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_DCACHE.state_write[1:0]
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_DCACHE.m_awvalid_o
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_DCACHE.m_awready_i
-@22
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_DCACHE.m_awaddr_o[31:0]
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_DCACHE.m_wvalid_o
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_DCACHE.m_wready_i
-@22
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_DCACHE.m_wdata_o[31:0]
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_DCACHE.m_wstrb_o[3:0]
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_DCACHE.m_bvalid_i
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_DCACHE.m_bready_o
-@200
--
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_DCACHE.state[1:0]
-@22
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.u_clint.mtime[63:0]
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.u_clint.data_o[31:0]
-@200
--
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.clk
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.inst_req_valid
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.inst_req_ready
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.inst_req_use
-@820
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.dbg_cache_state[79:0]
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE.dbg_axi_state[79:0]
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.inst_arvalid_o
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.inst_arready_i
-@821
-TOP.ysyxSoCFull.asic.lsdram_axi.msdram.u_sdram_axi.u_core.dbg_state[79:0]
+@1000200
+-cpu
 [pattern_trace] 1
 [pattern_trace] 0

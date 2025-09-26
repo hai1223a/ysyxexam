@@ -135,8 +135,9 @@ module ysyx_25050136_ICACHE
             way_hit_or = way_hit_or | way_hit[i];
         end
     end
+    genvar i;
     generate
-        for (genvar i = 0; i < NUM_WAY; i = i + 1) begin : way_mux
+        for (i = 0; i < NUM_WAY; i = i + 1) begin : way_mux
             assign way_tag[i] = cache_tag[i][addr_index];
             assign way_valid[i] = cache_valid[i][addr_index];
             assign way_hit[i] = (way_tag[i] == addr_tag) & way_valid[i];
