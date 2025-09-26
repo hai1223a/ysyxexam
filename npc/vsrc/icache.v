@@ -80,7 +80,7 @@ module ysyx_25050136_ICACHE
         end else begin
             case(state)
                 IDLE: begin // address calculation
-                    if(req_valid_i & req_use_i) begin
+                    if(req_valid_i) begin
                         if(req_use_i) begin
                             state <= IN_CAHCE;
                         end else begin

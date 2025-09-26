@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Fri Sep 26 14:16:06 2025
+[*] Fri Sep 26 14:19:33 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Fri Sep 26 14:12:20 2025"
-[dumpfile_size] 7117231
+[dumpfile_mtime] "Fri Sep 26 14:17:37 2025"
+[dumpfile_size] 7117249
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/cache.gtkw"
 [timestart] 0
 [size] 2498 1361
 [pos] -51 -51
-*-3.900000 2739186 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-5.100000 60 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
@@ -43,5 +43,15 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.u_ysyx_25050136_LSU.mem_addr_i[31:0]
 @1000200
 -cpu
+@800200
+-icache
+@28
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.req_valid_i
+@29
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.req_use_i
+@820
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.dbg_state[79:0]
+@1000200
+-icache
 [pattern_trace] 1
 [pattern_trace] 0
