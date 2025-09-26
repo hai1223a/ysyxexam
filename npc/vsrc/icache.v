@@ -193,3 +193,18 @@ module ysyx_25050136_ICACHE
     assign rd_addr_o = req_addr_r;
     
 endmodule //ysyx_25050136_ICACHE
+`ifdef verilator
+reg [79:0] dbg_state;
+always @(*) begin
+    case (state)
+        IDLE        : dbg_state = "IDLE"      ;
+        IN_ICACHE   : dbg_state = "IN_CACHE"  ;
+        HIT         : dbg_state = "HIT"       ;
+        MISS        : dbg_state = "MISS"      ;
+        NO_USE      : dbg_state = "NO_USE"    ;
+        OVER        : dbg_state = "OVER"      ;
+        OUT_VALID   : dbg_state = "OUT_VALID" ;
+        default     : dbg_state = "UNKNOW"    ;
+    endcase
+end
+`endif
