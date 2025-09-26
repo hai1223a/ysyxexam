@@ -86,7 +86,7 @@ module ysyx_25050136_NPC
     wire mem_req_use;
     wire [31:0] mem_req_wdata;
     ysyx_25050136_ICACHE_WRAPPER 
-    u_ysyx_25050136_ICACHE(
+    u_ysyx_25050136_ICACHE_WRAPPER(
         .clk         	(clk             ),
         .reset       	(reset           ),
         .m_arvalid_o 	(inst_arvalid_o  ),
