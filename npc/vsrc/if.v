@@ -44,8 +44,7 @@ module ysyx_25050136_IF
                 req_addr_r <= next_pc;
                 pc <= next_pc;
                 req_valid_r <= 1;
-                req_use_r   <= ((next_pc) >= 32'ha000_0000) &&
-                               ((next_pc) < 32'ha400_0000);
+                req_use_r   <= 1;
             end
             if(req_ready_i) begin
                 req_use_r   <= 0;
