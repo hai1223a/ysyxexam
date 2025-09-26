@@ -144,7 +144,7 @@ module ysyx_25050136_ICACHE
         end
     endgenerate
     // HIT
-    assign cache_data_out = cache_data_mux[(addr_offset_r << 3) +: 32];
+    assign cache_data_out = cache_data_mux[addr_offset_r * 8 +: 32];
     // NO USE & MISS
     always @(posedge clk) begin
         if(reset) begin
