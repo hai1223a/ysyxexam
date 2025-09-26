@@ -1,6 +1,6 @@
 module ysyx_25050136_NPCCORE
 #(
-    parameter ADDR_WIDTH = 5,
+    parameter ADDR_WIDTH = 4,
     parameter DATA_WIDTH = 32
 )
 (
