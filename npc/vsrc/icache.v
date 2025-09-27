@@ -2,9 +2,9 @@
 // 要求 NUM_WAY > 1
 module ysyx_25050136_ICACHE
 #(
-    parameter OFFSET_WIDTH = 3,
-    parameter NUM_WAY = 2,
-    parameter INDEX_WIDTH = 2
+    parameter OFFSET_WIDTH = 4,
+    parameter NUM_WAY = 1,
+    parameter INDEX_WIDTH = 1
 )
 (
     input                                      clk          ,
