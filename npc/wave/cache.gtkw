@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Sat Sep 27 11:45:16 2025
+[*] Sat Sep 27 16:33:03 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Fri Sep 26 14:31:35 2025"
-[dumpfile_size] 10215673
+[dumpfile_mtime] "Sat Sep 27 16:31:36 2025"
+[dumpfile_size] 288432374
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/cache.gtkw"
-[timestart] 1831375
+[timestart] 16340505
 [size] 2498 1361
 [pos] -101 -101
-*-2.700000 1831408 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-3.300000 16340538 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
@@ -27,7 +27,7 @@
 [signals_width] 255
 [sst_expanded] 1
 [sst_vpaned_height] 645
-@29
+@28
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.u_clint.clk
 @800200
 -cpu
@@ -54,8 +54,8 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.ret_valid_i
 @820
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.dbg_state[79:0]
-@22
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.cache_buffer[63:0]
+@23
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.line_buf[127:0]
 @1000200
 -icache
 @800200
