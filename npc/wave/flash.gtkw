@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Wed Sep  3 14:19:10 2025
+[*] Sat Sep 27 12:30:15 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Wed Sep  3 14:15:35 2025"
-[dumpfile_size] 47540
+[dumpfile_mtime] "Sat Sep 27 12:25:12 2025"
+[dumpfile_size] 20037872
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/flash.gtkw"
-[timestart] 44
-[size] 1858 1001
+[timestart] 61
+[size] 2498 1361
 [pos] -101 -101
-*-3.707232 66 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-2.207232 70 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
@@ -30,7 +30,6 @@
 TOP.ysyxSoCFull.asic.cpu.clock
 TOP.ysyxSoCFull.asic.cpu.reset
 @22
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_IF.pc[31:0]
 TOP.ysyxSoCFull.asic.cpu.auto_master_out_araddr[31:0]
 @28
 TOP.ysyxSoCFull.asic.cpu.auto_master_out_arvalid
@@ -100,11 +99,12 @@ TOP.ysyxSoCFull.asic.lspi.mspi.in_pready
 TOP.ysyxSoCFull.asic.lspi.mspi.in_prdata[31:0]
 @28
 TOP.ysyxSoCFull.asic.lspi.mspi.in_flash
-@29
 TOP.ysyxSoCFull.asic.lspi.mspi.flash_config_good
-@28
-TOP.ysyxSoCFull.asic.lspi.mspi.state[2:0]
-TOP.ysyxSoCFull.asic.lspi.mspi.spi_state[1:0]
+@29
+TOP.ysyxSoCFull.asic.lspi.mspi.spi_trans
+@820
+TOP.ysyxSoCFull.asic.lspi.mspi.dbg_spi_state[79:0]
+TOP.ysyxSoCFull.asic.lspi.mspi.dbg_state[79:0]
 @1000200
 -spi_apb_top
 @200
