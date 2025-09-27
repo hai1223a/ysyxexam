@@ -4,7 +4,7 @@ module ysyx_25050136_ICACHE
 #(
     parameter OFFSET_WIDTH = 4,
     parameter NUM_WAY = 1,
-    parameter INDEX_WIDTH = 2
+    parameter INDEX_WIDTH = 1
 )
 (
     input                                      clk          ,
@@ -41,6 +41,7 @@ module ysyx_25050136_ICACHE
     localparam MISS       = 3'd3;
     localparam NO_USE     = 3'd4;
     localparam OVER       = 3'd5;
+    localparam OUT_VALID  = 3'd6;
     reg [2:0] state;
     // IDLE
     reg [31:0] req_addr_r;
@@ -99,7 +100,7 @@ module ysyx_25050136_ICACHE
 `ifdef ysyx_25050136_VERILATOR_DPIC
                     icache_hit();
 `endif
-                    state <= IDLE;
+                    state <= OUT_VALID;
                 end
                 MISS: begin
                     if(ret_last_i & ret_valid_i) begin
@@ -108,10 +109,13 @@ module ysyx_25050136_ICACHE
                 end
                 NO_USE: begin
                     if(ret_valid_i) begin
-                        state <= IDLE;
+                        state <= OUT_VALID;
                     end
                 end
                 OVER: begin
+                    state <= OUT_VALID;
+                end
+                OUT_VALID: begin
                     state <= IDLE;
                 end
                 default: state <= IDLE;
@@ -163,12 +167,19 @@ module ysyx_25050136_ICACHE
         end
     end
     // 输出寄存器
+    always @(posedge clk) begin
+        if(reset) begin
+            req_rdata_r <= 0;
+        end else begin
+            req_rdata_r <= req_rdata;
+        end
+    end
     assign req_rdata = (state == HIT) ? cache_data_out :
                        (state == NO_USE) ? ret_data_i :
                        (state == OVER) ? cache_buffer[addr_offset_r * 8 +: 32] :
                        32'b0;
-    assign req_rdata_o = req_rdata;
-    assign req_ready_o = (state == HIT) || ((state == NO_USE) & ret_valid_i) || (state == OVER);
+    assign req_rdata_o = req_rdata_r;
+    assign req_ready_o = (state == OUT_VALID);
     // cache替换
     always @(posedge clk) begin
         if (reset) begin
@@ -192,6 +203,7 @@ module ysyx_25050136_ICACHE
             MISS        : dbg_state = "MISS"      ;
             NO_USE      : dbg_state = "NO_USE"    ;
             OVER        : dbg_state = "OVER"      ;
+            OUT_VALID   : dbg_state = "OUT_VALID" ;
             default     : dbg_state = "UNKNOW"    ;
         endcase
     end
