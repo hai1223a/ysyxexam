@@ -88,10 +88,14 @@ void CACHE::readCheck(uint32_t pc) {
     }
     if(hit_way == -1) {
         int replace_way = 0;
-        int empty_way = findEmptyWay(pc_index);
-        if(empty_way != -1) { replace_way = empty_way; }
-        else if(replace_mode == RANDOM) { replace_way = rand() % num_way; }
-        else if(replace_mode == LRU) { replace_way = find_lru(pc_index); }
+        if(replace_mode == REAL_RANDOM) {
+            replace_way = rand() % num_way;
+        } else {
+            int empty_way = findEmptyWay(pc_index);
+            if(empty_way != -1) { replace_way = empty_way; }
+            else if(replace_mode == RANDOM) { replace_way = rand() % num_way; }
+            else if(replace_mode == LRU) { replace_way = find_lru(pc_index); }
+        }
         tag_sram[pc_index][replace_way].valid = true;
         tag_sram[pc_index][replace_way].tag = pc_tag;
         if(replace_mode == LRU) { lru_update(pc_index, replace_way); }

@@ -4,7 +4,7 @@
 #include <vector>
 
 using namespace std;
-enum {RANDOM, LRU};
+enum {REAL_RANDOM, RANDOM, LRU};
 class CACHE {
 private:
     int offset_width;
@@ -30,7 +30,7 @@ public:
     int miss_penalty;
     uint64_t c_pc;
     uint64_t c_reach;
-    CACHE(int offset = 2, int index = 4, int way = 2, int mode = RANDOM);
+    CACHE(int offset = 2, int index = 4, int way = 2, int mode = REAL_RANDOM);
     void printTagSram();
     void readCheck(uint32_t pc);
 };

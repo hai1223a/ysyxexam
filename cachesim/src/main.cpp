@@ -9,7 +9,7 @@ int main(int argc, char *argv[]) {
         << "argv[2]" << " <OFFSET BITS> " << endl
         << "argv[3]" << " <INDEX BITS> " << endl
         << "argv[4]" << " <NUM OF WAYS> " << endl
-        << "argv[5]" << " <MODE OF REPLACE: 0(RANDOM), 1(LRU)> " << endl;
+        << "argv[5]" << " <MODE OF REPLACE: 0(REAL_RANDOM), 1(RANDOM), 2(LRU)> " << endl;
         return 1;
     }
     string file_path = argv[1];

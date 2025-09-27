@@ -185,7 +185,7 @@ module ysyx_25050136_ICACHE
         if (reset) begin
             replace_way <= 0;
         end else begin
-            replace_way <= replace_way + 1;
+            replace_way <= (NUM_WAY == 1) ? 0 : replace_way + 1;
         end
     end
     // AXI接口处理
