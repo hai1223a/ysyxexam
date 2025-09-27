@@ -1,9 +1,9 @@
 module SRAM(dataIn,dataOut,Addr,CS,WE,RD, clk );
 // parameters for the width 
 
-parameter ADR   = 8;
+parameter ADR   = 5;
 
-parameter DAT   = 8;
+parameter DAT   = 32;
 
 parameter DPTH  = 64;
 //ports

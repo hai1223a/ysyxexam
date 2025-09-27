@@ -25,13 +25,14 @@ module ysyx_25050136_ICACHE
     // 内部
 );
     // ====================cache内部信号定义==============================
-    parameter LINE_WIDTH = 8 * 2 ** OFFSET_WIDTH;
-    parameter TAG_WIDTH = 32 - OFFSET_WIDTH - INDEX_WIDTH;
-    parameter NUM_SET = 2 ** INDEX_WIDTH;
-    parameter WAY_WIDTH = NUM_WAY>1?$clog2(NUM_WAY):1;
-    parameter BURST_NUM = 2 ** (OFFSET_WIDTH - 2) - 1;
+    parameter LINE_WIDTH = 8 * 2 ** OFFSET_WIDTH;                // cacheline宽度
+    parameter WORDS      = 2 ** OFFSET_WIDTH;                    // cacheline的字数
+    parameter TAG_WIDTH  = 32 - OFFSET_WIDTH - INDEX_WIDTH;      // tag的数量
+    parameter NUM_SET    = 2 ** INDEX_WIDTH;                     // set的数量
+    parameter WAY_WIDTH  = NUM_WAY>1?$clog2(NUM_WAY):1;          // way的数量
+    parameter BURST_NUM  = 2 ** (OFFSET_WIDTH - 2) - 1;          // cacheline的字节数-1
     // icache存储阵列
-    reg [LINE_WIDTH-1:0] cache_data  [0:NUM_WAY-1][0:NUM_SET-1];
+    reg [LINE_WIDTH-1:0] cache_data  [0:NUM_WAY-1][0:NUM_SET-1]; 
     reg [TAG_WIDTH-1 :0] cache_tag   [0:NUM_WAY-1][0:NUM_SET-1];
     reg                  cache_valid [0:NUM_WAY-1][0:NUM_SET-1];
     // icache 状态机
@@ -41,37 +42,35 @@ module ysyx_25050136_ICACHE
     localparam MISS       = 3'd3;
     localparam NO_USE     = 3'd4;
     localparam OVER       = 3'd5;
-    localparam OUT_VALID  = 3'd6;
     reg [2:0] state;
     // IDLE
     reg [31:0] req_addr_r;
     wire [INDEX_WIDTH-1:0]  addr_index  ;
     wire [TAG_WIDTH-1:0]    addr_tag    ;
     wire [OFFSET_WIDTH-1:0] addr_offset ;
-    // IN_CAHCE
-    reg [LINE_WIDTH-1:0] cache_data_mux ;
+    // IN_CAHCE & AXI
+    reg [LINE_WIDTH-1:0] line_buf ;
+    // IN_CACHE
     reg [OFFSET_WIDTH-1:0] addr_offset_r;
     reg cache_hit;
-    reg [NUM_WAY-1:0] hit_mask;
-    reg way_hit_or;
     reg [LINE_WIDTH-1:0] selected_line;
+    reg [NUM_WAY-1:0] hit_mask;
     // HIT
-    wire [31:0] cache_data_out;
+    wire [31:0] line_word [0:WORDS-1];
+    wire [31:0] hit_word;
     // NO USE
     reg [31:0] no_use_data;
-    // 输出寄存器
-    wire [31:0] req_rdata;
-    reg [31:0] req_rdata_r;
+    // OVER
+    wire [31:0] over_data_words [0:WORDS-1];
+    wire [31:0] over_data_out;
     // 替换策略
     reg [WAY_WIDTH-1:0] replace_way;
-    // AXI接口处理
-    reg [LINE_WIDTH-1:0] cache_buffer;
     // ====================icache逻辑实现==============================
     always @(posedge clk) begin
         if(reset) begin
             state <= IDLE;
             req_addr_r <= 0;
-            cache_data_mux <= 0;
+            line_buf <= 0;
             addr_offset_r <= 0;
             cache_hit <= 0;
         end else begin
@@ -87,7 +86,7 @@ module ysyx_25050136_ICACHE
                     end
                 end
                 IN_CAHCE: begin
-                    cache_data_mux <= selected_line;
+                    line_buf <= selected_line;
                     addr_offset_r <= addr_offset;
                     cache_hit <= |hit_mask;
                     if(|hit_mask) begin
@@ -100,22 +99,22 @@ module ysyx_25050136_ICACHE
 `ifdef ysyx_25050136_VERILATOR_DPIC
                     icache_hit();
 `endif
-                    state <= OUT_VALID;
+                    state <= IDLE;
                 end
                 MISS: begin
                     if(ret_last_i & ret_valid_i) begin
-                        state <= OVER;
+                        line_buf <= {ret_data_i, line_buf[LINE_WIDTH-1:32]};
+                        if(ret_last_i) begin
+                            state <= OVER;
+                        end
                     end
                 end
                 NO_USE: begin
                     if(ret_valid_i) begin
-                        state <= OUT_VALID;
+                        state <= IDLE;
                     end
                 end
                 OVER: begin
-                    state <= OUT_VALID;
-                end
-                OUT_VALID: begin
                     state <= IDLE;
                 end
                 default: state <= IDLE;
@@ -128,7 +127,6 @@ module ysyx_25050136_ICACHE
     assign addr_offset = req_addr_r[OFFSET_WIDTH-1:0];
     // IN_CAHCE
     // 读取 tags 和 valids（同步RAM 情况另算，这里假设读出为组合/寄存器）
-    
     integer k;
     always @(*) begin
         hit_mask = {NUM_WAY{1'b0}};
@@ -137,48 +135,32 @@ module ysyx_25050136_ICACHE
                 hit_mask[k] = 1'b1;
         end
     end
-
     // 单次选择数据，避免每个 way 都输出大宽度数据然后做按位 or
-    
     always @(*) begin
         selected_line = {LINE_WIDTH{1'b0}};
         for (k = 0; k < NUM_WAY; k = k + 1) begin
             if (hit_mask[k]) selected_line = cache_data[k][addr_index];
         end
     end
-    // HIT
-    assign cache_data_out = cache_data_mux[addr_offset_r * 8 +: 32];
-    // NO USE & MISS
-    always @(posedge clk) begin
-        if(reset) begin
-            cache_buffer <= 0;
-        end else begin
-            if(ret_valid_i) begin
-                cache_buffer <= {ret_data_i, cache_buffer[LINE_WIDTH-1:32]};
-            end
-        end
+    // HIT & OVER
+    generate
+    for (genvar i = 0; i < WORDS; i = i + 1) begin : SPLIT_0
+        assign line_word[i] = line_buf[i*32 +: 32];
     end
+    endgenerate
+    assign hit_word = line_word[addr_offset_r];
     // OVER
     always @(posedge clk) begin
         if(state == OVER) begin
-            cache_data[replace_way][addr_index] <= cache_buffer;
+            cache_data[replace_way][addr_index] <= line_buf;
             cache_tag[replace_way][addr_index] <= addr_tag;
             cache_valid[replace_way][addr_index] <= 1'b1;
         end
     end
     // 输出寄存器
-    always @(posedge clk) begin
-        if(reset) begin
-            req_rdata_r <= 0;
-        end else begin
-            req_rdata_r <= req_rdata;
-        end
-    end
-    assign req_rdata = (state == HIT) ? cache_data_out :
-                       (state == NO_USE) ? ret_data_i :
-                       (state == OVER) ? cache_buffer[addr_offset_r * 8 +: 32] :
-                       32'b0;
-    assign req_rdata_o = req_rdata;
+    assign req_rdata_o = ((state == HIT) || (state == OVER)) ? hit_word :
+                         (state == NO_USE) ? ret_data_i :
+                         32'b0;
     assign req_ready_o = (state == HIT) || (state == OVER) || ((state == NO_USE) && ret_valid_i);
     // cache替换
     always @(posedge clk) begin
@@ -203,7 +185,6 @@ module ysyx_25050136_ICACHE
             MISS        : dbg_state = "MISS"      ;
             NO_USE      : dbg_state = "NO_USE"    ;
             OVER        : dbg_state = "OVER"      ;
-            OUT_VALID   : dbg_state = "OUT_VALID" ;
             default     : dbg_state = "UNKNOW"    ;
         endcase
     end
