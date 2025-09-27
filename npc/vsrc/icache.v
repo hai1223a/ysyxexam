@@ -102,7 +102,7 @@ module ysyx_25050136_ICACHE
                     state <= IDLE;
                 end
                 MISS: begin
-                    if(ret_last_i & ret_valid_i) begin
+                    if(ret_valid_i) begin
                         line_buf <= {ret_data_i, line_buf[LINE_WIDTH-1:32]};
                         if(ret_last_i) begin
                             state <= OVER;
