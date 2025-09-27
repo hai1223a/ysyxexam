@@ -14,6 +14,8 @@ private:
     int tag_width;
     int num_set;
     int num_byte;
+    uint32_t sdram_addr;
+    uint32_t sdram_len;
     struct cache_line {
         bool valid;
         uint32_t tag;

@@ -14,6 +14,8 @@ CACHE::CACHE(int offset, int index, int way, int mode)
         tag_width(32 - offset - index),
         num_set(1 << index),
         num_byte(1 << offset),
+        sdram_addr(0xa0000000),
+        sdram_len(0x4000000),
         miss_penalty(6 + (1 << (offset - 1))), 
         c_pc(0),
         c_reach(0) 
@@ -72,6 +74,7 @@ int CACHE::findEmptyWay(uint32_t set_index) {
 }
 
 void CACHE::readCheck(uint32_t pc) {
+    if(pc < sdram_addr || pc >= (sdram_addr + sdram_len)) return;
     uint32_t pc_index = (pc >> offset_width) & ((1U << index_width) - 1);
     uint32_t pc_tag = pc >> (index_width + offset_width);
     int hit_way = -1;
