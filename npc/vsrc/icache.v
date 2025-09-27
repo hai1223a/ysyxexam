@@ -168,7 +168,7 @@ module ysyx_25050136_ICACHE
                        (state == OVER) ? cache_buffer[addr_offset_r * 8 +: 32] :
                        32'b0;
     assign req_rdata_o = req_rdata;
-    assign req_ready_o = (state == HIT) || (state == NO_USE & ret_valid_i) || (state == OVER);
+    assign req_ready_o = (state == HIT) || ((state == NO_USE) & ret_valid_i) || (state == OVER);
     // cache替换
     always @(posedge clk) begin
         if (reset) begin
