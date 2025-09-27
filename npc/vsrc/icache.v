@@ -1,9 +1,8 @@
 // 要求OFFSET_WIDTH > 2
-// 要求 NUM_WAY > 1
 module ysyx_25050136_ICACHE
 #(
     parameter OFFSET_WIDTH = 4,
-    parameter NUM_WAY = 2,
+    parameter NUM_WAY = 1,
     parameter INDEX_WIDTH = 1
 )
 (
