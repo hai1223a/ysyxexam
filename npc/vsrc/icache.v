@@ -51,7 +51,7 @@ module ysyx_25050136_ICACHE
     // IN_CAHCE & AXI
     reg [LINE_WIDTH-1:0] line_buf ;
     // IN_CACHE
-    reg [OFFSET_WIDTH-1:0] addr_offset_r;
+    reg [OFFSET_WIDTH-3:0] addr_offset_r;
     reg cache_hit;
     reg [LINE_WIDTH-1:0] selected_line;
     reg [NUM_WAY-1:0] hit_mask;
@@ -87,7 +87,7 @@ module ysyx_25050136_ICACHE
                 end
                 IN_CAHCE: begin
                     line_buf <= selected_line;
-                    addr_offset_r <= addr_offset;
+                    addr_offset_r <= addr_offset[OFFSET_WIDTH-1:2];
                     cache_hit <= |hit_mask;
                     if(|hit_mask) begin
                         state <= HIT;
