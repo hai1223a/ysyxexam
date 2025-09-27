@@ -26,11 +26,11 @@ module ysyx_25050136_ICACHE
 );
     // ====================cache内部信号定义==============================
     parameter LINE_WIDTH = 8 * 2 ** OFFSET_WIDTH;                // cacheline宽度
-    parameter WORDS      = 2 ** OFFSET_WIDTH;                    // cacheline的字数
+    parameter WORDS      = 2 ** (OFFSET_WIDTH - 2);              // cacheline的字数
     parameter TAG_WIDTH  = 32 - OFFSET_WIDTH - INDEX_WIDTH;      // tag的数量
     parameter NUM_SET    = 2 ** INDEX_WIDTH;                     // set的数量
     parameter WAY_WIDTH  = NUM_WAY>1?$clog2(NUM_WAY):1;          // way的数量
-    parameter BURST_NUM  = 2 ** (OFFSET_WIDTH - 2) - 1;          // cacheline的字节数-1
+    parameter BURST_NUM  = 2 ** (OFFSET_WIDTH - 2) - 1;          // cacheline的字数-1
     // icache存储阵列
     reg [LINE_WIDTH-1:0] cache_data  [0:NUM_WAY-1][0:NUM_SET-1]; 
     reg [TAG_WIDTH-1 :0] cache_tag   [0:NUM_WAY-1][0:NUM_SET-1];
