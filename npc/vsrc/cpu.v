@@ -108,7 +108,7 @@ module ysyx_25050136_NPC
         .req_use_i      (inst_req_use    ),
         .reg_flush_i    (inst_req_flush  ),
         .req_rdata_o 	(inst_req_rdata  ),
-        .req_ready_o 	(inst_req_ready  ),
+        .req_ready_o 	(inst_req_ready  )
         
     );
     
