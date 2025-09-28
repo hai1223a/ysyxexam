@@ -12,6 +12,7 @@ module ysyx_25050136_ICACHE
     input    [31:0]                            req_addr_i   ,
     input                                      req_valid_i  ,
     input                                      req_use_i    ,
+    input                                      req_flush_i  ,
     output   [31:0]                            req_rdata_o  ,                           
     output                                     req_ready_o  ,  
     // ICACHE与AXI接口                                        
@@ -26,7 +27,7 @@ module ysyx_25050136_ICACHE
     // ====================cache内部信号定义==============================
     parameter LINE_WIDTH   = 8 * 2 ** OFFSET_WIDTH;                // cacheline宽度
     parameter WORDS        = 2 ** (OFFSET_WIDTH - 2);              // cacheline的字数
-    parameter TAG_WIDTH    = 32 - OFFSET_WIDTH - INDEX_WIDTH;      // tag的数量
+    parameter TAG_WIDTH    = 32 - OFFSET_WIDTH - INDEX_WIDTH;      // tag的宽度
     parameter NUM_SET      = 2 ** INDEX_WIDTH;                     // set的数量
     parameter WAY_WIDTH    = NUM_WAY>1?$clog2(NUM_WAY):1;          // way的数量
     parameter BURST_NUM    = 2 ** (OFFSET_WIDTH - 2) - 1;          // cacheline的字数-1
@@ -126,7 +127,7 @@ module ysyx_25050136_ICACHE
     assign addr_offset = req_addr_r[OFFSET_WIDTH-1:0];
     // IN_CAHCE
     // 读取 tags 和 valids
-    integer k;
+    integer j,k;
     always @(*) begin
         hit_mask = {NUM_WAY{1'b0}};
         for (k = 0; k < NUM_WAY; k = k + 1) begin
@@ -150,10 +151,18 @@ module ysyx_25050136_ICACHE
     assign hit_word = line_word[addr_offset_r];
     // OVER
     always @(posedge clk) begin
-        if(state == OVER) begin
-            cache_data[replace_way][addr_index] <= line_buf;
-            cache_tag[replace_way][addr_index] <= addr_tag;
-            cache_valid[replace_way][addr_index] <= 1'b1;
+        if(req_flush_i) begin
+            for (j = 0; j < NUM_WAY; j = j + 1) begin
+                for(k = 0; k < NUM_SET; k = k + 1) begin
+                    cache_valid[j][k] <= 1'b0;
+                end
+            end
+        end else begin
+           if(state == OVER) begin
+                cache_data[replace_way][addr_index] <= line_buf;
+                cache_tag[replace_way][addr_index] <= addr_tag;
+                cache_valid[replace_way][addr_index] <= 1'b1;
+            end 
         end
     end
     // 输出寄存器

@@ -11,7 +11,8 @@ module ysyx_25050136_NPCCORE
     input                        inst_req_ready_i,
     output  [31:0]               inst_req_addr_o ,
     output                       inst_req_valid_o,
-    output                       inst_req_use_o  , 
+    output                       inst_req_use_o  ,
+    output                       inst_req_flush_o, 
     // 数据相关
     input    [31:0]               mem_req_rdata_i,
     input                         mem_req_ready_i,
@@ -133,6 +134,7 @@ u_ysyx_25050136_ID(
     .csru_wen_o   	(id2ex_csru_wen_o     ),
     .mem_mask_o   	(id2ex_mem_mask_o     ),
     .mem_signed_o  	(id2ex_mem_signed_o   ),
+    .cache_flush_o  (inst_req_flush_o     ),
     .rd_o          	(id2reg_rd_o          ),
     .rd_en_o       	(id2reg_rd_en_o       ),
     .pc_o           (id2ex_pc_o           )

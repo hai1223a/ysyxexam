@@ -29,6 +29,7 @@ module ysyx_25050136_ID
          output                                       csru_wen_o,
          output     [3:0]                             mem_mask_o,
          output                                     mem_signed_o,
+         output                                    cache_flush_o,
          output     [ADDR_WIDTH-1:0]                        rd_o,
          output                                          rd_en_o,
          output     [DATA_WIDTH-1:0]                        pc_o
@@ -64,16 +65,17 @@ module ysyx_25050136_ID
     wire [2:0] funct3 = inst_i[14:12];
     wire [6:0] funct7 = inst_i[31:25];
     //================opcode判断================
-    wire type_load   = (opcode == 7'b0000011);
-    wire type_op_imm = (opcode == 7'b0010011);
-    wire type_auipc  = (opcode == 7'b0010111);
-    wire type_store  = (opcode == 7'b0100011);
-    wire type_op     = (opcode == 7'b0110011);
-    wire type_lui    = (opcode == 7'b0110111);
-    wire type_branch = (opcode == 7'b1100011);
-    wire type_jalr   = (opcode == 7'b1100111);
-    wire type_jal    = (opcode == 7'b1101111);
-    wire type_system = (opcode == 7'b1110011);
+    wire type_load     = (opcode == 7'b0000011);
+    wire type_op_imm   = (opcode == 7'b0010011);
+    wire type_auipc    = (opcode == 7'b0010111);
+    wire type_store    = (opcode == 7'b0100011);
+    wire type_op       = (opcode == 7'b0110011);
+    wire type_lui      = (opcode == 7'b0110111);
+    wire type_branch   = (opcode == 7'b1100011);
+    wire type_jalr     = (opcode == 7'b1100111);
+    wire type_jal      = (opcode == 7'b1101111);
+    wire type_system   = (opcode == 7'b1110011);
+    wire type_misc_mem = (opcode == 7'b0001111);
     //================funct3判断=================
     wire funct3_000  = (funct3 == 3'b000);
     wire funct3_001  = (funct3 == 3'b001);
@@ -133,6 +135,8 @@ module ysyx_25050136_ID
     wire inst_mret = (inst_i == 32'h30200073);
     wire inst_ecall = (inst_i == 32'h00000073);
     wire inst_ebreak = (inst_i == 32'h00100073);
+    wire inst_fencei = type_misc_mem & funct3_001; 
+    assign cache_flush_o = inst_fencei;
     //================指令类型判断================
     wire inst_Rtype = type_op;
     wire inst_Itype = type_op_imm | type_load | type_jalr;

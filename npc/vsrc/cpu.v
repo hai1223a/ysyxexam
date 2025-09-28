@@ -75,6 +75,7 @@ module ysyx_25050136_NPC
     wire inst_req_ready;
     wire inst_req_valid;
     wire inst_req_use;
+    wire inst_req_flush;
     wire [31:0] mem_req_addr;
     wire [31:0] mem_req_rdata;
     wire mem_req_ready;
@@ -105,8 +106,10 @@ module ysyx_25050136_NPC
         .req_addr_i  	(inst_req_addr   ),
         .req_valid_i 	(inst_req_valid  ),
         .req_use_i      (inst_req_use    ),
+        .reg_flush_i    (inst_req_flush  ),
         .req_rdata_o 	(inst_req_rdata  ),
-        .req_ready_o 	(inst_req_ready  )
+        .req_ready_o 	(inst_req_ready  ),
+        
     );
     
     ysyx_25050136_DCACHE 
@@ -163,6 +166,7 @@ module ysyx_25050136_NPC
         .inst_req_addr_o    (inst_req_addr   ),
         .inst_req_valid_o   (inst_req_valid  ),
         .inst_req_use_o     (inst_req_use    ),
+        .inst_req_flush_o   (inst_req_flush  ),
         .mem_req_rdata_i    (mem_req_rdata   ),
         .mem_req_ready_i    (mem_req_ready   ),
         .mem_req_addr_o     (mem_req_addr    ),
