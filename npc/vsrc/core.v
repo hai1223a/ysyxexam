@@ -12,7 +12,7 @@ module ysyx_25050136_NPCCORE
     output  [31:0]               inst_req_addr_o ,
     output                       inst_req_valid_o,
     output                       inst_req_use_o  ,
-    output                       inst_req_flush_o, 
+    output                       inst_req_flush_o,
     // 数据相关
     input    [31:0]               mem_req_rdata_i,
     input                         mem_req_ready_i,
