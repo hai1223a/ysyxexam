@@ -37,24 +37,21 @@ module ysyx_25050136_ICACHE
     reg                  cache_valid [0:NUM_WAY-1][0:NUM_SET-1];
     // icache 状态机
     localparam IDLE       = 3'd0;
-    localparam IN_CAHCE   = 3'd1;
-    localparam HIT        = 3'd2;
-    localparam MISS       = 3'd3;
-    localparam NO_USE     = 3'd4;
-    localparam OVER       = 3'd5;
+    localparam HIT        = 3'd1;
+    localparam MISS       = 3'd2;
+    localparam NO_USE     = 3'd3;
+    localparam OVER       = 3'd4;
     reg [2:0] state;
     // IDLE
-    reg [31:0] req_addr_r;
     wire [INDEX_WIDTH-1:0]  addr_index  ;
     wire [TAG_WIDTH-1:0]    addr_tag    ;
     wire [OFFSET_WIDTH-1:0] addr_offset ;
-    // IN_CAHCE & AXI
-    reg [LINE_WIDTH-1:0] line_buf ;
-    // IN_CACHE
     reg [$clog2(WORDS)-1:0] addr_offset_r;
     reg cache_hit;
     reg [LINE_WIDTH-1:0] selected_line;
     reg [NUM_WAY-1:0] hit_mask;
+    // IDLE & AXI
+    reg [LINE_WIDTH-1:0] line_buf ;
     // HIT
     wire [31:0] line_word [0:WORDS-1];
     wire [31:0] hit_word;
@@ -69,7 +66,6 @@ module ysyx_25050136_ICACHE
     always @(posedge clk) begin
         if(reset) begin
             state <= IDLE;
-            req_addr_r <= 0;
             line_buf <= 0;
             addr_offset_r <= 0;
             cache_hit <= 0;
@@ -78,21 +74,17 @@ module ysyx_25050136_ICACHE
                 IDLE: begin // address calculation
                     if(req_valid_i) begin
                         if(req_use_i) begin
-                            state <= IN_CAHCE;
+                            line_buf <= selected_line;
+                            addr_offset_r <= addr_offset[OFFSET_WIDTH-1:2];
+                            cache_hit <= |hit_mask;
+                            if(|hit_mask) begin
+                                state <= HIT;
+                            end else begin
+                                state <= MISS;
+                            end
                         end else begin
                             state <= NO_USE;
                         end
-                        req_addr_r <= req_addr_i;
-                    end
-                end
-                IN_CAHCE: begin
-                    line_buf <= selected_line;
-                    addr_offset_r <= addr_offset[OFFSET_WIDTH-1:2];
-                    cache_hit <= |hit_mask;
-                    if(|hit_mask) begin
-                        state <= HIT;
-                    end else begin
-                        state <= MISS;
                     end
                 end
                 HIT: begin
@@ -122,10 +114,9 @@ module ysyx_25050136_ICACHE
         end
     end
     // IDLE
-    assign addr_index = req_addr_r[OFFSET_WIDTH+INDEX_WIDTH-1:OFFSET_WIDTH];
-    assign addr_tag = req_addr_r[31:OFFSET_WIDTH+INDEX_WIDTH];
-    assign addr_offset = req_addr_r[OFFSET_WIDTH-1:0];
-    // IN_CAHCE
+    assign addr_index = req_addr_i[OFFSET_WIDTH+INDEX_WIDTH-1:OFFSET_WIDTH];
+    assign addr_tag = req_addr_i[31:OFFSET_WIDTH+INDEX_WIDTH];
+    assign addr_offset = req_addr_i[OFFSET_WIDTH-1:0];
     // 读取 tags 和 valids
     integer j,k;
     always @(*) begin
@@ -181,14 +172,13 @@ module ysyx_25050136_ICACHE
     // AXI接口处理
     assign rd_req_o = (state == NO_USE) | (state == MISS);
     assign rd_size_o = (state == MISS);
-    assign rd_addr_o = req_addr_r;
+    assign rd_addr_o = req_addr_i;
 
 `ifdef verilator
     reg [79:0] dbg_state;
     always @(*) begin
         case (state)
             IDLE        : dbg_state = "IDLE"      ;
-            IN_CAHCE    : dbg_state = "IN_CACHE"  ;
             HIT         : dbg_state = "HIT"       ;
             MISS        : dbg_state = "MISS"      ;
             NO_USE      : dbg_state = "NO_USE"    ;

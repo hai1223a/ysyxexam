@@ -54,11 +54,11 @@ module ysyx_25050136_IF
             end
         end
     end
-    assign next_pc = dynamic_valid_i ? dynamic_npc_i : static_npc_o;
+    assign next_pc = pc + next_offset;
+    assign next_offset = (pc == 0) ? RESET_PC : (branch_valid ? branch_offset : 32'h4);
     assign req_use_o = req_use_r;
     assign req_addr_o = req_addr_r;
     assign req_valid_o = req_valid_r;
-    assign static_npc_o = (pc == 0) ? RESET_PC : (pc + 32'h4);
     assign bvalid_o = req_ready_i;
     assign inst_o = req_valid_r ? req_rdata_i : inst_r;
     assign pc_o = pc;
