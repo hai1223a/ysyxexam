@@ -94,7 +94,7 @@ module ysyx_25050136_MEM
         end else begin
             if(!stall_i) begin
                 dbg_op_o <= dbg_op_i;
-                dbg_pc_p <= dbg_pc_i;
+                dbg_pc_o <= dbg_pc_i;
             end
         end
     end
