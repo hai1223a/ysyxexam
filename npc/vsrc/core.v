@@ -265,8 +265,8 @@ ysyx_25050136_WB #(
     .wdata_i  	(mem_gpr_wdata  ),
     .waddr_i  	(mem_rd         ),
     .wen_i    	(mem_rd_en      ),
-    .raddr1_i 	(id_addr1       ),
-    .raddr2_i 	(id_addr2       ),
+    .raddr1_i 	(id_raddr1      ),
+    .raddr2_i 	(id_raddr2      ),
     .rdata1_o 	(wb_rdata1      ),
     .rdata2_o 	(wb_rdata2      )
 );
