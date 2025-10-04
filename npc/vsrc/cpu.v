@@ -184,6 +184,7 @@ module ysyx_25050136_NPC
     
     ROM_TEST u_ROM_TEST(
         .clk         	(clk             ),
+        .reset          (reset           ),
         .req_addr_i  	(inst_req_addr   ),
         .req_valid_i 	(inst_req_valid  ),
         .req_use_i   	(inst_req_use    ),
