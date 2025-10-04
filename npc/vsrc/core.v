@@ -116,9 +116,9 @@ ysyx_25050136_IF
 u_ysyx_25050136_IF(
     .clk            	(clk                 ),
     .reset          	(reset               ),
-    .req_rdata_i    	(inst_req_addr_o     ),
-    .req_ready_i    	(inst_req_rdata_i    ),
-    .req_addr_o     	(inst_req_ready_i    ),
+    .req_rdata_i    	(inst_req_rdata_i    ),
+    .req_ready_i    	(inst_req_ready_i    ),
+    .req_addr_o     	(inst_req_addr_o     ),
     .req_valid_o    	(inst_req_valid_o    ),
     .req_use_o      	(inst_req_use_o      ),
     .stall_i        	(0),

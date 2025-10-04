@@ -38,7 +38,7 @@ module ysyx_25050136_MEM
         output   [31:0]                            req_wdata_o  
     );
 
-    wire [31:0] lsu_valid;
+    wire lsu_valid;
     wire [31:0] lsu_rdata;
     wire [31:0] clint_raddr;
     wire [31:0] clint_rdata;
