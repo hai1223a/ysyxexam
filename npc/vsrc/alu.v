@@ -35,5 +35,5 @@ module ysyx_25050136_ALU
             default:                               out = 0;     
         endcase
     end
-
+    assign out_o = out;
 endmodule //ysyx_25050136_ALU
