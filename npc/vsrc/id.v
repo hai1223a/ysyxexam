@@ -270,8 +270,8 @@ module ysyx_25050136_ID
         .csr_addr_o           (csr_addr_o),
         .csr_ren_o            (csr_ren_o),
         .csr_wen_o            (csr_wen_o),
-        .csr_wdata_use_rs1_i  (csr_wdata_use_rs1_o),
-        .rs1_i                (rs1_o),
+        .csr_wdata_use_rs1_o  (csr_wdata_use_rs1_o),
+        .rs1_o                (rs1_o),
         .rd_o                 (rd_o),
         .rd_en_o              (rd_en_o)
     );
