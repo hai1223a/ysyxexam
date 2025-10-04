@@ -37,7 +37,7 @@ module ysyx_25050136_ID
         output                                        csr_ren_o,
         output                                        csr_wen_o,
         output                              csr_wdata_use_rs1_o,
-        output     [ADDR_WIDTH-1:0]                       rs1_o,
+        output     [4:0]                                  rs1_o,
         output     [ADDR_WIDTH-1:0]                        rd_o,
         output                                          rd_en_o
     );
