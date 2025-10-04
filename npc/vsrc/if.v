@@ -31,7 +31,7 @@ module ysyx_25050136_IF
     always @(posedge clk) begin
         if (reset) begin
             pc          <= 0;
-            req_valid_r <= 0;
+            req_valid_r <= 1;
             req_use_r   <= 0;
         end else begin
             if(stall_i) begin
