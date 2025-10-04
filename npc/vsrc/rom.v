@@ -30,7 +30,7 @@ module ROM_TEST (
         rom_mem[15] = 32'h00000013; // NOP
     end 
 
-    wire [1:0] addr = req_addr_i[5:2];
+    wire [3:0] addr = req_addr_i[5:2];
     always @(posedge clk) begin
         if(req_valid_i) begin
             req_rdata_o <= rom_mem[addr];
