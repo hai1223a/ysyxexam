@@ -71,6 +71,7 @@ wire        ex_lsu_signed;
 wire [31:0] ex_lsu_addr;
 wire [31:0] ex_lsu_wdata;
 
+wire        mem_lsu_en;
 wire        mem_lsu_valid;
 wire [ADDR_WIDTH-1:0] mem_rd;
 wire        mem_rd_en;
