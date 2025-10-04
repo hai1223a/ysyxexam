@@ -29,7 +29,7 @@ module ROM_TEST (
     end 
 
     wire [3:0] addr = req_addr_i[5:2];
-    reg [1:0] state; // 0:空闲, 1:等待, 2:输出
+    reg state; // 0:空闲, 1:等待
 
     always @(posedge clk) begin
         if(reset) begin
@@ -45,12 +45,7 @@ module ROM_TEST (
                         state <= 1;
                     end
                 end
-                1: begin // 等待一个周期
-                    req_ready_o <= 0;
-                    req_rdata_o <= 0;
-                    state <= 2;
-                end
-                2: begin // 输出数据
+                1: begin // 输出数据
                     req_rdata_o <= rom_mem[addr];
                     req_ready_o <= 1;
                     state <= 0;
