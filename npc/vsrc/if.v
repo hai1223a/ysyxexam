@@ -30,7 +30,7 @@ module ysyx_25050136_IF
     wire [31:0] next_pc;
     always @(posedge clk) begin
         if (reset) begin
-            pc          <= 0;
+            pc          <= RESET_PC;
             req_valid_r <= 1;
             req_use_r   <= 0;
         end else begin
@@ -44,7 +44,7 @@ module ysyx_25050136_IF
             end
         end
     end
-    assign next_pc = (pc == 0) ? RESET_PC : (branch_valid_i ? branch_npc_i : (pc + 32'h4));
+    assign next_pc = branch_valid_i ? branch_npc_i : (pc + 32'h4);
     assign req_addr_o = pc;
     assign req_valid_o = req_valid_r;
     assign req_use_o = req_use_r;

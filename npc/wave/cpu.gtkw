@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Tue Sep  9 13:34:43 2025
+[*] Sat Oct  4 13:01:47 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Tue Sep  9 13:21:34 2025"
-[dumpfile_size] 13049444
+[dumpfile_mtime] "Sat Oct  4 13:01:33 2025"
+[dumpfile_size] 31090
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/cpu.gtkw"
-[timestart] 522576
-[size] 1858 1001
+[timestart] 0
+[size] 2498 1361
 [pos] -51 -51
-*-6.900000 522988 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-4.399549 5 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
@@ -21,67 +21,5 @@
 [signals_width] 191
 [sst_expanded] 1
 [sst_vpaned_height] 298
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.clk
-@22
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.pc_o[31:0]
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.inst_o[31:0]
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.inst_arvalid_o
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.inst_arready_i
-@200
--
-@28
-TOP.ysyxSoCFull.asic.apbdelay_delayer.out_psel
-TOP.ysyxSoCFull.asic.apbdelay_delayer.out_penable
-TOP.ysyxSoCFull.asic.apbdelay_delayer.out_pready
-@29
-TOP.ysyxSoCFull.asic.apbdelay_delayer.in_pready
-@200
--
-@28
-TOP.ysyxSoCFull.asic.apbdelay_delayer.apb_start
-TOP.ysyxSoCFull.asic.apbdelay_delayer.active
-@c00024
-TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-@28
-(0)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(1)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(2)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(3)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(4)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(5)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(6)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(7)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(8)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(9)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(10)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(11)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(12)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(13)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(14)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(15)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(16)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(17)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(18)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(19)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(20)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(21)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(22)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(23)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(24)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(25)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(26)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(27)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(28)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(29)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(30)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-(31)TOP.ysyxSoCFull.asic.apbdelay_delayer.count[31:0]
-@1401200
--group_end
-@22
-TOP.ysyxSoCFull.asic.apbdelay_delayer.count_q[15:0]
-@28
-TOP.ysyxSoCFull.asic.apbdelay_delayer.apb_end
 [pattern_trace] 1
 [pattern_trace] 0
