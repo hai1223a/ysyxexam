@@ -222,7 +222,7 @@ module ysyx_25050136_ID
     end
 `endif
     ysyx_25050136_ID_REG #(
-        .ADDR_WIDTH(4)
+        .ADDR_WIDTH(ADDR_WIDTH)
     ) ID_REG (
         .clk                  (clk),
         .reset                (reset),
@@ -231,7 +231,7 @@ module ysyx_25050136_ID
         .pc_i                 (pc_i),
         .rdata1_i             (rdata1_i),
         .rdata2_i             (rdata2_i),
-        .imm_i                (imm_t),
+        .imm_i                (imm),
         .alu_op_i             (alu_op_t),
         .csru_op_i            (csru_op_t),
         .alu_op1_use_pc_i     (alu_op1_use_pc_t),
