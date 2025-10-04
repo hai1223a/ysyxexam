@@ -1,5 +1,6 @@
 module ROM_TEST (
     input               clk,
+    input               reset,
     input [31:0]        req_addr_i,
     input               req_valid_i,
     input               req_use_i,
@@ -7,37 +8,55 @@ module ROM_TEST (
     output reg   [31:0] req_rdata_o  
 );
 
-    // ROM存储空间
     reg [31:0] rom_mem [0:15];
-
     initial begin
-        // 可以在这里初始化ROM内容
-        rom_mem[0 ] = 32'h00000013; // NOP
-        rom_mem[1 ] = 32'h00000013; // NOP
-        rom_mem[2 ] = 32'h00000013; // NOP
-        rom_mem[3 ] = 32'h00000013; // NOP
-        rom_mem[4 ] = 32'h00000013; // NOP
-        rom_mem[5 ] = 32'h00000013; // NOP
-        rom_mem[6 ] = 32'h00000013; // NOP
-        rom_mem[7 ] = 32'h00000013; // NOP
-        rom_mem[8 ] = 32'h00000013; // NOP
-        rom_mem[9 ] = 32'h00000013; // NOP
-        rom_mem[10] = 32'h00100073; // EBREAK
-        rom_mem[11] = 32'h00000013; // NOP
-        rom_mem[12] = 32'h00000013; // NOP
-        rom_mem[13] = 32'h00000013; // NOP
-        rom_mem[14] = 32'h00000013; // NOP
-        rom_mem[15] = 32'h00000013; // NOP
+        rom_mem[0 ] = 32'h00000013;
+        rom_mem[1 ] = 32'h00000013;
+        rom_mem[2 ] = 32'h00000013;
+        rom_mem[3 ] = 32'h00000013;
+        rom_mem[4 ] = 32'h00000013;
+        rom_mem[5 ] = 32'h00000013;
+        rom_mem[6 ] = 32'h00000013;
+        rom_mem[7 ] = 32'h00000013;
+        rom_mem[8 ] = 32'h00000013;
+        rom_mem[9 ] = 32'h00000013;
+        rom_mem[10] = 32'h00100073;
+        rom_mem[11] = 32'h00000013;
+        rom_mem[12] = 32'h00000013;
+        rom_mem[13] = 32'h00000013;
+        rom_mem[14] = 32'h00000013;
+        rom_mem[15] = 32'h00000013;
     end 
 
     wire [3:0] addr = req_addr_i[5:2];
+    reg [1:0] state; // 0:空闲, 1:等待, 2:输出
+
     always @(posedge clk) begin
-        if(req_valid_i) begin
-            req_rdata_o <= rom_mem[addr];
-            req_ready_o <= 1;
-        end else begin
+        if(reset) begin
             req_rdata_o <= 0;
             req_ready_o <= 0;
+            state <= 0;
+        end else begin
+            case(state)
+                0: begin // 空闲
+                    req_ready_o <= 0;
+                    req_rdata_o <= 0;
+                    if(req_valid_i) begin
+                        state <= 1;
+                    end
+                end
+                1: begin // 等待一个周期
+                    req_ready_o <= 0;
+                    req_rdata_o <= 0;
+                    state <= 2;
+                end
+                2: begin // 输出数据
+                    req_rdata_o <= rom_mem[addr];
+                    req_ready_o <= 1;
+                    state <= 0;
+                end
+            endcase
         end
-    end    
+    end
+
 endmodule
