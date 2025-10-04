@@ -1,7 +1,6 @@
 module ysyx_25050136_NPCCORE
 #(
-    parameter ADDR_WIDTH = 4,
-    parameter DATA_WIDTH = 32
+    parameter ADDR_WIDTH = 4
 )
 (
     input                                     clk,
@@ -37,8 +36,6 @@ wire [31:0] wb_rdata1;
 wire [31:0] wb_rdata2;
 
 wire [31:0] id_pc;
-wire [31:0] id_rdata1;
-wire [31:0] id_rdata2;
 wire [31:0] id_imm;
 wire [`ysyx_25050136_ALU_OP_NUM-1:0]   id_alu_op;
 wire [`ysyx_25050136_CSRU_OP_NUM-1:0]  id_csru_op;
@@ -56,7 +53,7 @@ wire [11:0] id_csr_addr;
 wire        id_csr_ren;
 wire        id_csr_wen;
 wire        id_csr_wdata_use_rs1;
-wire [31:0] id_rs1;
+wire [4:0]  id_rs1;
 wire [ADDR_WIDTH-1:0] id_rd;
 wire        id_rd_en;
 
