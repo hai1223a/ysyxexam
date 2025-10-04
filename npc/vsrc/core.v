@@ -77,6 +77,10 @@ wire [ADDR_WIDTH-1:0] mem_rd;
 wire        mem_rd_en;
 wire [31:0] mem_gpr_wdata;
 
+wire        ctrl_stall_if;
+wire        ctrl_stall_id;
+wire        ctrl_stall_ex;
+wire        ctrl_stall_mem;
 `ifdef ysyx_25050136_VERILATOR_DPIC
 wire [`ysyx_25050136_DBG_NUM-1:0]  id_dbg_op;
 wire [31:0]                        id_dbg_pc;
@@ -125,7 +129,7 @@ u_ysyx_25050136_IF(
     .req_addr_o     	(inst_req_addr_o     ),
     .req_valid_o    	(inst_req_valid_o    ),
     .req_use_o      	(inst_req_use_o      ),
-    .stall_i        	(0),
+    .stall_i        	(ctrl_stall_if       ),
     .flush_i        	(0),
     .branch_valid_i 	(ex_branch_valid     ),
     .branch_npc_i   	(ex_branch_npc       ),
@@ -135,13 +139,13 @@ u_ysyx_25050136_IF(
 
 
 ysyx_25050136_ID #(
-    .ADDR_WIDTH 	(ADDR_WIDTH  )
+    .ADDR_WIDTH(ADDR_WIDTH)
 ) u_ysyx_25050136_ID (
     .clk                  	(clk                    ),
     .reset                	(reset                  ),
     .inst_i               	(if_inst                ),
     .pc_i                 	(if_pc                  ),
-    .stall_i              	(0),
+    .stall_i              	(ctrl_stall_id          ),
     .flush_i              	(0),
     .rdata1_i             	(wb_rdata1              ),
     .raddr1_o             	(id_raddr1              ),
@@ -177,11 +181,11 @@ ysyx_25050136_ID #(
     .rd_en_o              	(id_rd_en               )
 );
 ysyx_25050136_EX #(
-    .ADDR_WIDTH 	(ADDR_WIDTH  )
+    .ADDR_WIDTH(ADDR_WIDTH)
 ) u_ysyx_25050136_EX (
     .clk                  	(clk                   ),
     .reset                	(reset                 ),
-    .stall_i              	( 0),
+    .stall_i              	(ctrl_stall_ex         ),
     .flush_i              	( 0),
     .pc_i                 	(id_pc                 ),
     .rdata1_i             	(id_rdata1             ),
@@ -228,11 +232,11 @@ ysyx_25050136_EX #(
 );
 
 ysyx_25050136_MEM #(
-    .ADDR_WIDTH 	(ADDR_WIDTH  )
+    .ADDR_WIDTH(ADDR_WIDTH)
 ) u_ysyx_25050136_MEM (
     .clk          	(clk               ),
     .reset        	(reset             ),
-    .stall_i      	(0),
+    .stall_i      	(ctrl_stall_mem    ),
     .flush_i      	(0),
     .rd_i         	(ex_rd             ),
     .rd_en_i      	(ex_rd_en          ),
@@ -269,8 +273,8 @@ ysyx_25050136_MEM #(
 );
 
 ysyx_25050136_WB #(
-    .ADDR_WIDTH 	(ADDR_WIDTH  )
-) u_ysyx_25050136_WB(
+    .ADDR_WIDTH(ADDR_WIDTH)
+) u_ysyx_25050136_WB (
     .clk      	(clk            ),
     .reset      (reset          ),
 `ifdef ysyx_25050136_VERILATOR_DPIC
@@ -285,6 +289,19 @@ ysyx_25050136_WB #(
     .raddr2_i 	(id_raddr2      ),
     .rdata1_o 	(wb_rdata1      ),
     .rdata2_o 	(wb_rdata2      )
+);
+
+ysyx_25050136_CTRL #(
+    .ADDR_WIDTH(ADDR_WIDTH)
+) u_ysyx_25050136_CTRL (
+    .clk         	(clk             ),
+    .reset       	(reset           ),
+    .lsu_en_i    	(mem_lsu_en      ),
+    .lsu_valid_i 	(mem_lsu_valid   ),
+    .stall_if_o  	(ctrl_stall_if   ),
+    .stall_id_o  	(ctrl_stall_id   ),
+    .stall_ex_o  	(ctrl_stall_ex   ),
+    .stall_mem_o 	(ctrl_stall_mem  )
 );
 
 endmodule
