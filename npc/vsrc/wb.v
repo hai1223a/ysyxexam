@@ -6,6 +6,7 @@ module ysyx_25050136_WB
         input                                         clk,
         input                                       reset,
 `ifdef ysyx_25050136_VERILATOR_DPIC
+        input [`ysyx_25050136_DBG_NUM]           dbg_op_i,
         input [31:0]                             dbg_pc_i,
         input [31:0]                           dbg_inst_i,
 `endif
@@ -19,13 +20,16 @@ module ysyx_25050136_WB
     );
 
 `ifdef ysyx_25050136_VERILATOR_DPIC
+    reg [`ysyx_25050136_DBG_NUM-1:0] dbg_op; 
     reg [31:0] dbg_pc;
     reg [31:0] dbg_inst;
     always @(posedge clk) begin
         if (reset) begin
+            dbg_op <= 0;
             dbg_pc <= 0;
             dbg_inst <= 0;
         end else begin
+            dbg_op <= dbg_op_i;
             dbg_pc <= dbg_pc_i;
             dbg_inst <= dbg_inst_i;
         end
