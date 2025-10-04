@@ -110,7 +110,6 @@ module ysyx_25050136_MEM
         .rd_i        	(rd_i         ),
         .rd_en_i     	(rd_en_i      ),
         .gpr_wdata_i 	(gpr_wdata_t  ),
-        .ebreak_i    	(ebreak_i     ),
         .rd_o        	(rd_o         ),
         .rd_en_o     	(rd_en_o      ),
         .gpr_wdata_o 	(gpr_wdata_o  ),
@@ -131,11 +130,9 @@ module ysyx_25050136_MEM_REG
         input [ADDR_WIDTH-1:0] rd_i       ,
         input               rd_en_i       ,
         input [31:0]    gpr_wdata_i       ,
-        input              ebreak_i       ,
         output reg  [ADDR_WIDTH-1:0] rd_o ,
         output reg                rd_en_o ,
-        output reg  [31:0]    gpr_wdata_o ,
-        output reg               ebreak_o 
+        output reg  [31:0]    gpr_wdata_o 
     );
 
     // =========== 标准逻辑 ======================
@@ -144,18 +141,15 @@ module ysyx_25050136_MEM_REG
             rd_o <= 0;
             rd_en_o <= 0;
             gpr_wdata_o <= 0;
-            ebreak_o <= 0;
         end else begin
             if(flush) begin
                 rd_o <= 0;
                 rd_en_o <= 0;
                 gpr_wdata_o <= 0;
-                ebreak_o <= 0;
             end else if(en) begin
                 rd_o <= rd_i;
                 rd_en_o <= rd_en_i;
                 gpr_wdata_o <= gpr_wdata_i;
-                ebreak_o <= ebreak_i;
             end
         end
     end
