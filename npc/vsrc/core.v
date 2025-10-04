@@ -71,6 +71,7 @@ wire        ex_lsu_signed;
 wire [31:0] ex_lsu_addr;
 wire [31:0] ex_lsu_wdata;
 
+wire        mem_lsu_valid;
 wire [ADDR_WIDTH-1:0] mem_rd;
 wire        mem_rd_en;
 wire [31:0] mem_gpr_wdata;
@@ -133,7 +134,7 @@ u_ysyx_25050136_IF(
 
 
 ysyx_25050136_ID #(
-    .ADDR_WIDTH 	(4  )
+    .ADDR_WIDTH 	(ADDR_WIDTH  )
 ) u_ysyx_25050136_ID (
     .clk                  	(clk                    ),
     .reset                	(reset                  ),
@@ -175,7 +176,7 @@ ysyx_25050136_ID #(
     .rd_en_o              	(id_rd_en               )
 );
 ysyx_25050136_EX #(
-    .ADDR_WIDTH 	(4  )
+    .ADDR_WIDTH 	(ADDR_WIDTH  )
 ) u_ysyx_25050136_EX (
     .clk                  	(clk                   ),
     .reset                	(reset                 ),
@@ -226,7 +227,7 @@ ysyx_25050136_EX #(
 );
 
 ysyx_25050136_MEM #(
-    .ADDR_WIDTH 	(4  )
+    .ADDR_WIDTH 	(ADDR_WIDTH  )
 ) u_ysyx_25050136_MEM (
     .clk          	(clk               ),
     .reset        	(reset             ),
@@ -249,6 +250,7 @@ ysyx_25050136_MEM #(
     .dbg_pc_o       (mem_dbg_pc        ),
     .dbg_inst_o     (mem_dbg_inst      ),
 `endif
+    .lsu_valid_o    (mem_lsu_valid     ),
     .rd_o         	(mem_rd            ),
     .rd_en_o      	(mem_rd_en         ),
     .gpr_wdata_o  	(mem_gpr_wdata     ),
@@ -265,12 +267,12 @@ ysyx_25050136_MEM #(
 );
 
 ysyx_25050136_WB #(
-    .ADDR_WIDTH 	(4  )
+    .ADDR_WIDTH 	(ADDR_WIDTH  )
 ) u_ysyx_25050136_WB(
     .clk      	(clk            ),
     .reset      (reset          ),
 `ifdef ysyx_25050136_VERILATOR_DPIC
-    .dbg_op_i   (mem_dbg_op         ),
+    .dbg_op_i   (mem_dbg_op     ),
     .dbg_pc_i   (mem_dbg_pc     ),
     .dbg_inst_i (mem_dbg_inst   ),
 `endif

@@ -22,10 +22,11 @@
 `define ysyx_25050136_CSRU_MRET   3
 `define ysyx_25050136_CSRU_ECALL  4
 
-// DBG信号
+`ifdef ysyx_25050136_VERILATOR_DPIC
 `define ysyx_25050136_DBG_NUM 5
 `define ysyx_25050136_DBG_EBREAK 0
 `define ysyx_25050136_DBG_ALU  1
 `define ysyx_25050136_DBG_CSRU 2
 `define ysyx_25050136_DBG_LSU  3
 `define ysyx_25050136_DBG_BQU  4
+`endif

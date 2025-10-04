@@ -125,7 +125,7 @@ module ysyx_25050136_EX
     end
 `endif
     ysyx_25050136_EX_REG #(
-        .ADDR_WIDTH 	(4  )
+        .ADDR_WIDTH(ADDR_WIDTH)
     ) EX_REG (
         .clk          	(clk           ),
         .reset        	(reset         ),

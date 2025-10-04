@@ -86,31 +86,30 @@ module ysyx_25050136_NPC
     wire [2:0]  mem_req_size;
     wire mem_req_use;
     wire [31:0] mem_req_wdata;
-    ysyx_25050136_ICACHE_WRAPPER 
-    u_ysyx_25050136_ICACHE_WRAPPER(
-        .clk         	(clk             ),
-        .reset       	(reset           ),
-        .m_arvalid_o 	(inst_arvalid_o  ),
-        .m_arready_i 	(inst_arready_i  ),
-        .m_araddr_o  	(inst_araddr_o   ),
-        .m_arid_o    	(inst_arid_o     ),
-        .m_arlen_o   	(inst_arlen_o    ),
-        .m_arsize_o  	(inst_arsize_o   ),
-        .m_arburst_o 	(inst_arburst_o  ),
-        .m_rvalid_i  	(inst_rvalid_i   ),
-        .m_rready_o  	(inst_rready_o   ),
-        .m_rdata_i   	(inst_rdata_i    ),
-        .m_rresp_i   	(inst_rresp_i    ),
-        .m_rlast_i   	(inst_rlast_i    ),
-        .m_rid_i     	(inst_rid_i      ),
-        .req_addr_i  	(inst_req_addr   ),
-        .req_valid_i 	(inst_req_valid  ),
-        .req_use_i      (inst_req_use    ),
-        .reg_flush_i    (inst_req_flush  ),
-        .req_rdata_o 	(inst_req_rdata  ),
-        .req_ready_o 	(inst_req_ready  )
-        
-    );
+    // ysyx_25050136_ICACHE_WRAPPER 
+    // u_ysyx_25050136_ICACHE_WRAPPER(
+    //     .clk         	(clk             ),
+    //     .reset       	(reset           ),
+    //     .m_arvalid_o 	(inst_arvalid_o  ),
+    //     .m_arready_i 	(inst_arready_i  ),
+    //     .m_araddr_o  	(inst_araddr_o   ),
+    //     .m_arid_o    	(inst_arid_o     ),
+    //     .m_arlen_o   	(inst_arlen_o    ),
+    //     .m_arsize_o  	(inst_arsize_o   ),
+    //     .m_arburst_o 	(inst_arburst_o  ),
+    //     .m_rvalid_i  	(inst_rvalid_i   ),
+    //     .m_rready_o  	(inst_rready_o   ),
+    //     .m_rdata_i   	(inst_rdata_i    ),
+    //     .m_rresp_i   	(inst_rresp_i    ),
+    //     .m_rlast_i   	(inst_rlast_i    ),
+    //     .m_rid_i     	(inst_rid_i      ),
+    //     .req_addr_i  	(inst_req_addr   ),
+    //     .req_valid_i 	(inst_req_valid  ),
+    //     .req_use_i      (inst_req_use    ),
+    //     .reg_flush_i    (inst_req_flush  ),
+    //     .req_rdata_o 	(inst_req_rdata  ),
+    //     .req_ready_o 	(inst_req_ready  )
+    // );
     
     ysyx_25050136_DCACHE 
     u_ysyx_25050136_DCACHE(
@@ -179,5 +178,17 @@ module ysyx_25050136_NPC
         .mem_req_wdata_o    (mem_req_wdata   )
     );
     
-
+    // output declaration of module ROM_TEST
+    reg req_ready_o;
+    reg [31:0] req_rdata_o;
+    
+    ROM_TEST u_ROM_TEST(
+        .clk         	(clk             ),
+        .req_addr_i  	(inst_req_addr   ),
+        .req_valid_i 	(inst_req_valid  ),
+        .req_use_i   	(inst_req_use    ),
+        .req_ready_o 	(inst_req_ready  ),
+        .req_rdata_o 	(inst_req_rdata  )
+    );
+    
 endmodule
