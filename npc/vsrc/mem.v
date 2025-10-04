@@ -112,8 +112,7 @@ module ysyx_25050136_MEM
         .gpr_wdata_i 	(gpr_wdata_t  ),
         .rd_o        	(rd_o         ),
         .rd_en_o     	(rd_en_o      ),
-        .gpr_wdata_o 	(gpr_wdata_o  ),
-        .ebreak_o    	(ebreak_o     )
+        .gpr_wdata_o 	(gpr_wdata_o  )
     );
 
 endmodule
