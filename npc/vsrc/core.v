@@ -250,6 +250,7 @@ ysyx_25050136_MEM #(
     .dbg_pc_o       (mem_dbg_pc        ),
     .dbg_inst_o     (mem_dbg_inst      ),
 `endif
+    .lsu_en_o       (mem_lsu_en        ),
     .lsu_valid_o    (mem_lsu_valid     ),
     .rd_o         	(mem_rd            ),
     .rd_en_o      	(mem_rd_en         ),
