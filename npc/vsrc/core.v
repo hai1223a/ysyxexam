@@ -36,6 +36,8 @@ wire [31:0] wb_rdata1;
 wire [31:0] wb_rdata2;
 
 wire [31:0] id_pc;
+wire [31:0] id_rdata1;
+wire [31:0] id_rdata2;
 wire [31:0] id_imm;
 wire [`ysyx_25050136_ALU_OP_NUM-1:0]   id_alu_op;
 wire [`ysyx_25050136_CSRU_OP_NUM-1:0]  id_csru_op;
