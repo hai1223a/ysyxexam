@@ -6,7 +6,7 @@ module ysyx_25050136_WB
         input                                         clk,
         input                                       reset,
 `ifdef ysyx_25050136_VERILATOR_DPIC
-        input [`ysyx_25050136_DBG_NUM]           dbg_op_i,
+        input [`ysyx_25050136_DBG_NUM-1:0]       dbg_op_i,
         input [31:0]                             dbg_pc_i,
         input [31:0]                           dbg_inst_i,
 `endif
