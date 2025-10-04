@@ -16,6 +16,7 @@ module ysyx_25050136_ID
 `ifdef ysyx_25050136_VERILATOR_DPIC
         output reg [`ysyx_25050136_DBG_NUM-1:0]        dbg_op_o,
         output reg [31:0]                              dbg_pc_o,
+        output reg [31:0]                            dbg_inst_o,
 `endif
         output     [31:0]                                  pc_o,
         output     [31:0]                              rdata1_o,
@@ -209,6 +210,7 @@ module ysyx_25050136_ID
         if(reset) begin
             dbg_op_o <= 0;
             dbg_pc_o <= 0;
+            dbg_inst_o <= 0;
         end else begin
             if(!stall_i) begin
                 dbg_op_o[`ysyx_25050136_DBG_EBREAK] <= inst_ebreak;
@@ -217,6 +219,7 @@ module ysyx_25050136_ID
                 dbg_op_o[`ysyx_25050136_DBG_LSU] <= type_store | type_load;
                 dbg_op_o[`ysyx_25050136_DBG_BQU] <= type_branch | type_jalr | type_jal;
                 dbg_pc_o <= pc_i;
+                dbg_inst_o <= inst_i;
             end
         end
     end

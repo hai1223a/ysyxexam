@@ -76,12 +76,15 @@ wire        mem_rd_en;
 wire [31:0] mem_gpr_wdata;
 
 `ifdef ysyx_25050136_VERILATOR_DPIC
-wire [`ysyx_25050136_DBG_NUM-1:0] id_dbg_op;
-wire [31:0]                      id_dbg_pc;
-wire [`ysyx_25050136_DBG_NUM-1:0] ex_dbg_op;
-wire [31:0]                      ex_dbg_pc;
+wire [`ysyx_25050136_DBG_NUM-1:0]  id_dbg_op;
+wire [31:0]                        id_dbg_pc;
+wire [31:0]                      id_dbg_inst;
+wire [`ysyx_25050136_DBG_NUM-1:0]  ex_dbg_op;
+wire [31:0]                        ex_dbg_pc;
+wire [31:0]                      ex_dbg_inst;
 wire [`ysyx_25050136_DBG_NUM-1:0] mem_dbg_op;
-wire [31:0]                      mem_dbg_pc;
+wire [31:0]                       mem_dbg_pc;
+wire [31:0]                     mem_dbg_inst;
 `endif
 //========================================
 // 使用DPI-C实现的取指和访存操作, 以及寻找ebreak
@@ -145,6 +148,7 @@ ysyx_25050136_ID #(
 `ifdef ysyx_25050136_VERILATOR_DPIC
     .dbg_op_o               (id_dbg_op              ),
     .dbg_pc_o               (id_dbg_pc              ),
+    .dbg_inst_o             (id_dbg_inst            ),
 `endif
     .pc_o                 	(id_pc                  ),
     .rdata1_o             	(id_rdata1              ),
@@ -203,8 +207,10 @@ ysyx_25050136_EX #(
 `ifdef ysyx_25050136_VERILATOR_DPIC
     .dbg_op_i               (id_dbg_op             ),
     .dbg_pc_i               (id_dbg_pc             ),
+    .dbg_inst_i             (id_dbg_inst           ),
     .dbg_op_o               (ex_dbg_op             ),
     .dbg_pc_o               (ex_dbg_pc             ),
+    .dbg_inst_o             (ex_dbg_inst           ),
 `endif
     .branch_valid_o       	(ex_branch_valid       ),
     .branch_npc_o         	(ex_branch_npc         ),
@@ -238,8 +244,10 @@ ysyx_25050136_MEM #(
 `ifdef ysyx_25050136_VERILATOR_DPIC
     .dbg_op_i       (ex_dbg_op         ),
     .dbg_pc_i       (ex_dbg_pc         ),
+    .dbg_inst_i     (ex_dbg_inst       ),
     .dbg_op_o       (mem_dbg_op        ),
     .dbg_pc_o       (mem_dbg_pc        ),
+    .dbg_inst_o     (mem_dbg_inst      ),
 `endif
     .rd_o         	(mem_rd            ),
     .rd_en_o      	(mem_rd_en         ),
@@ -260,8 +268,6 @@ ysyx_25050136_WB #(
     .ADDR_WIDTH 	(4  )
 ) u_ysyx_25050136_WB(
     .clk      	(clk            ),
-    .dbg_op_i 	(mem_dbg_op     ),
-    .dbg_pc_i 	(mem_dbg_pc     ),
     .wdata_i  	(mem_gpr_wdata  ),
     .waddr_i  	(mem_rd         ),
     .wen_i    	(mem_rd_en      ),

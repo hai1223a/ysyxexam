@@ -34,8 +34,10 @@ module ysyx_25050136_EX
 `ifdef ysyx_25050136_VERILATOR_DPIC
         input      [`ysyx_25050136_DBG_NUM-1:0]         dbg_op_i,
         input      [31:0]                               dbg_pc_i,
+        input      [31:0]                             dbg_inst_i,
         output reg [`ysyx_25050136_DBG_NUM-1:0]         dbg_op_o,
         output reg [31:0]                               dbg_pc_o,
+        output reg [31:0]                             dbg_inst_o,
 `endif
         output                                    branch_valid_o,
         output    [31:0]                            branch_npc_o,
@@ -112,10 +114,12 @@ module ysyx_25050136_EX
         if(reset) begin
             dbg_op_o <= 0;
             dbg_pc_o <= 0;
+            dbg_inst_o <= 0;
         end else begin
             if(!stall_i) begin
                 dbg_op_o <= dbg_op_i;
                 dbg_pc_o <= dbg_pc_i;
+                dbg_inst_o <= dbg_inst_i;
             end
         end
     end

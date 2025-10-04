@@ -17,10 +17,12 @@ module ysyx_25050136_MEM
         input    [31:0]                             lsu_addr_i ,
         input    [31:0]                            lsu_wdata_i ,
 `ifdef ysyx_25050136_VERILATOR_DPIC
-        input      [`ysyx_25050136_DBG_NUM-1:0]        dbg_op_i,
-        input      [31:0]                              dbg_pc_i,
-        output reg [`ysyx_25050136_DBG_NUM-1:0]        dbg_op_o,
-        output reg [31:0]                              dbg_pc_o,
+        input      [`ysyx_25050136_DBG_NUM-1:0]         dbg_op_i,
+        input      [31:0]                               dbg_pc_i,
+        input      [31:0]                             dbg_inst_i,
+        output reg [`ysyx_25050136_DBG_NUM-1:0]         dbg_op_o,
+        output reg [31:0]                               dbg_pc_o,
+        output reg [31:0]                             dbg_inst_o,
 `endif
         output   [ADDR_WIDTH-1:0]                         rd_o ,
         output                                         rd_en_o ,
@@ -91,10 +93,12 @@ module ysyx_25050136_MEM
         if(reset) begin
             dbg_op_o <= 0;
             dbg_pc_o <= 0;
+            dbg_inst_o <= 0;
         end else begin
             if(!stall_i) begin
                 dbg_op_o <= dbg_op_i;
                 dbg_pc_o <= dbg_pc_i;
+                dbg_inst_o <= dbg_inst_i;
             end
         end
     end

@@ -4,10 +4,6 @@ module ysyx_25050136_WB
     )
     (
         input                                         clk,
-`ifdef ysyx_25050136_VERILATOR_DPIC
-        input [`ysyx_25050136_DBG_NUM-1:0]       dbg_op_i,
-        input [31:0]                             dbg_pc_i,
-`endif
         input [31:0]                              wdata_i,
         input [ADDR_WIDTH-1:0]                    waddr_i,
         input                                       wen_i,
