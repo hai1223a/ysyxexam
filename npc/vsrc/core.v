@@ -268,6 +268,10 @@ ysyx_25050136_WB #(
     .ADDR_WIDTH 	(4  )
 ) u_ysyx_25050136_WB(
     .clk      	(clk            ),
+`ifdef ysyx_25050136_VERILATOR_DPIC
+    .dbg_pc_i   (mem_dbg_pc     ),
+    .dbg_inst_i (mem_dbg_inst   ),
+`endif
     .wdata_i  	(mem_gpr_wdata  ),
     .waddr_i  	(mem_rd         ),
     .wen_i    	(mem_rd_en      ),
