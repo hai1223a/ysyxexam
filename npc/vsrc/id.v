@@ -37,7 +37,7 @@ module ysyx_25050136_ID
         output                                        csr_ren_o,
         output                                        csr_wen_o,
         output                              csr_wdata_use_rs1_o,
-        output                                            rs1_o,
+        output     [ADDR_WIDTH-1:0]                       rs1_o,
         output     [ADDR_WIDTH-1:0]                        rd_o,
         output                                          rd_en_o
     );
@@ -231,7 +231,7 @@ module ysyx_25050136_ID
         .pc_i                 (pc_i),
         .rdata1_i             (rdata1_i),
         .rdata2_i             (rdata2_i),
-        .imm_i                (imm_i),
+        .imm_i                (imm_t),
         .alu_op_i             (alu_op_t),
         .csru_op_i            (csru_op_t),
         .alu_op1_use_pc_i     (alu_op1_use_pc_t),
