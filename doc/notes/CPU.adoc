@@ -17,8 +17,94 @@ image::../images/elf文件结构.jpg[]
 == 取指阶段
 [cols="3*^",options="header"]
 |===
-| 信号 | 来源/去向 | 含义
-| 0 | 标准输入
-| 1 | 标准输出
-| 2 | 标准错误输出
+|信号|来源/去向|含义
+|clk|标准输入|时钟
+|reset|标准输出|复位
+|req_rdata_i|ICACHE|icache返回指令
+|req_ready_i|ICACHE|icache返回指令有效信号
+|req_addr_o|ICACHE|icache寻址地址
+|req_valid_o|ICACHE|icache寻址地址有效信号
+|req_use_o|ICACHE|icache使用信号
+|stall_i|CONTROLLER|流水线暂停
+|flush_i|CONTROLLER|流水线清洗
+|branch_valid_i|EX|跳转有效
+|branch_npc_i|EX|跳转地址
+|pc_o|ID|指令地址
+|inst_o|ID|指令内容
 |===
+
+== 译码阶段
+[cols="3*^",options="header"]
+|===
+|信号|来源/去向|含义
+|clk|标准输入|时钟信号
+|reset|标准输入|复位信号
+|inst_i|IF|取指阶段传来的指令
+|pc_i|IF|取指阶段传来的PC
+|stall_i|CONTROLLER|流水线暂停
+|flush_i|CONTROLLER|流水线清洗
+|rdata1_i|寄存器堆|源操作数1数据
+|raddr1_o|寄存器堆|源操作数1地址
+|rdata2_i|寄存器堆|源操作数2数据
+|raddr2_o|寄存器堆|源操作数2地址
+|pc_o|EX|传递下一级的PC
+|rdata1_o|EX|传递下一级的源操作数1
+|rdata2_o|EX|传递下一级的源操作数2
+|imm_o|EX|立即数
+|alu_op_o|EX|ALU操作码
+|csru_op_o|EX|CSR操作码
+|alu_op1_use_pc_o|EX|ALU操作数1是否用PC
+|alu_op2_use_imm_o|EX|ALU操作数2是否用立即数
+|alu_op2_use_4_o|EX|ALU操作数2是否用4
+|is_jalr_o|EX|是否为JALR指令
+|unconditional_jump_o|EX|是否为无条件跳转
+|mem_ren_o|EX|读存储使能
+|mem_wen_o|EX|写存储使能
+|mem_mask_o|EX|存储掩码
+|mem_signed_o|EX|存储是否有符号
+|csr_addr_o|EX|CSR地址
+|csr_ren_o|EX|CSR读使能
+|csr_wen_o|EX|CSR写使能
+|csr_wdata_use_rs1_o|EX|CSR写数据是否使用位域rs1表示的立即数
+|rs1_o|EX|第一源寄存器地址
+|rd_o|EX|目的寄存器地址
+|rd_en_o|EX|目的寄存器写使能
+|===
+
+=== 操作数统计
+`lui` 仅将 `imm` 写回 +
+`ecall` 将 `pc` 写入 `mepc`, 将 `异常号` 写入 `mcause`, 将 `mtvec` 读出作为跳转地址 +
+`ebreak` 终止仿真, 类似 `nop` 指令在流水线中传递, 在写回阶段才终止程序 +
+`mret` 将 `mepc` 读出作为跳转指令
+
+* **ALU**
+
+`op1` 为 `rs1` 的指令: `addi`,`slti`,`sltiu`,`andi`,`ori`,`xori`,`slli`,`srli`,`srai`,`add`,`slt`,`sltu`,`and`,`or`,`xor`,`sll`,`srl`,
+`sub`,`sra`,`beq`,`bne`,`blt`,`bltu`,`bge`,`bgeu`,`lw`,`lh`,`lhu`,`lb`,`lbu`,`sw`,`sh`,`sb`
+
+`op1` 为 `pc` 的指令: `auipc`,`jal`,`jalr`
+
+`op2` 为 `rs2` 的指令: `add`,`slt`,`sltu`,`and`,`or`,`xor`,`sll`,`srl`,`sub`,`sra`,`beq`,`bne`,`blt`,`bltu`,`bge`,`bgeu`
+
+`op2` 为 `imm` 的指令: `addi`,`slti`,`sltiu`,`andi`,`ori`,`xori`,`slli`,`srli`,`srai`,`auipc`,`lw`,`lh`,`lhu`,`lb`,`lbu`,`sw`,`sh`,`sb`
+
+`op2` 为 `4` 的指令: `jal`,`jalr`
+
+* **BQU**
+
+`op1` 为 `pc` 的指令: `jal`,`beq`,`bne`,`blt`,`bltu`,`bge`,`bgeu`
+
+`op1` 为 `rs1` 的指令: `jalr`
+
+`op2` 为 `imm` 的指令: `jal`,`jalr`,`beq`,`bne`,`blt`,`bltu`,`bge`,`bgeu`
+
+== 执行阶段
+[cols="3*^",options="header"]
+|===
+| 信号 | 来源/去向 | 含义
+| clk | 标准输入 | 时钟
+| reset | 标准输出 | 复位
+|===
+
+* ALU : 该模块的主要用于 *算数指令的执行*;  *条件跳转指令的条件判断*;  *无条件跳转指令返回地址的计算*;  *访存指令访存地址的计算*;  
+* BQU : 该模块例化了一个32位加法器, 用于 *条件跳转指令的跳转地址计算*;  *无条件跳转指令跳转地址计算*

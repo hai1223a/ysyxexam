@@ -1,20 +1,17 @@
 // CSR文件
 module ysyx_25050136_CSR_File
-    #(
-        parameter DATA_WIDTH = 32
-     )
      (
          input                                                 clk,
          input                                               reset,
          input      [11:0]                            csr_waddr1_i,
          input                                          csr_wen1_i,
-         input      [DATA_WIDTH-1:0]                  csr_wdata1_i,
+         input      [31:0]                            csr_wdata1_i,
          input      [11:0]                            csr_waddr2_i,
          input                                          csr_wen2_i,
-         input      [DATA_WIDTH-1:0]                  csr_wdata2_i,
+         input      [31:0]                            csr_wdata2_i,
          input      [11:0]                             csr_raddr_i,
          input                                           csr_ren_i,
-         output reg [DATA_WIDTH-1:0]                   csr_rdata_o
+         output reg [31:0]                             csr_rdata_o
      );
 
     // 读写CSR
@@ -25,10 +22,10 @@ module ysyx_25050136_CSR_File
     // 只读CSR
     localparam MVENDORID = 12'hf11;
     localparam MARCHID   = 12'hf12;
-    reg [DATA_WIDTH-1:0] mepc, mcause, mtvec, mstatus;
+    reg [31:0] mepc, mcause, mtvec, mstatus;
     // 两个写端口的选择，以避免multi drive
     reg [1:0] mepc_hit, mcause_hit, mtvec_hit, mstatus_hit;
-    wire [DATA_WIDTH-1:0] mepc_din, mcause_din, mtvec_din, mstatus_din;
+    wire [31:0] mepc_din, mcause_din, mtvec_din, mstatus_din;
     always @(*) begin
         mepc_hit      = 0;
         mcause_hit    = 0;
