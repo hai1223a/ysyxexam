@@ -45,8 +45,8 @@ module ysyx_25050136_WB
         .waddr_i  	(waddr_i  ),
         .wen_i      (wen_i    ),
         .raddr1_i 	(raddr1_i ),
-        .rdata1_o 	(rdata1_o ),
         .raddr2_i 	(raddr2_i ),
+        .rdata1_o 	(rdata1_o ),
         .rdata2_o 	(rdata2_o )
     );
 

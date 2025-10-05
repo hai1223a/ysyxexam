@@ -43,8 +43,6 @@ module ysyx_25050136_ID
         output                                          rd_en_o
     );
     //============中间信号的定义=================
-    wire [ADDR_WIDTH-1:0]                    raddr1_t;
-    wire [ADDR_WIDTH-1:0]                    raddr2_t;
     wire [`ysyx_25050136_ALU_OP_NUM-1:0]     alu_op_t;
     wire [`ysyx_25050136_CSRU_OP_NUM-1:0]   csru_op_t;
     wire                             alu_op1_use_pc_t;
@@ -157,8 +155,8 @@ module ysyx_25050136_ID
     wire [31:0] imm = inst_Itype ? immI : (inst_Stype ? immS :
                                            (inst_Utype ? immU : (inst_Btype ? immB :
                                                                  (inst_Jtype ? immJ : 0))));
-    assign raddr1_t = rs1[ADDR_WIDTH-1:0];
-    assign raddr2_t = rs2[ADDR_WIDTH-1:0];
+    assign raddr1_o = rs1[ADDR_WIDTH-1:0];
+    assign raddr2_o = rs2[ADDR_WIDTH-1:0];
     //===============选择ALU相关操作================
     assign alu_op_t[`ysyx_25050136_ALU_ADD]   = type_auipc | type_store | type_load | inst_addi | inst_add;
     assign alu_op_t[`ysyx_25050136_ALU_SUB]   = inst_sub;
