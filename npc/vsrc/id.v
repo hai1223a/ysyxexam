@@ -198,12 +198,12 @@ module ysyx_25050136_ID
     assign lsu_signed_t = (inst_lhu | inst_lbu) ? 0 : 1;
     //==================选择CSR的操作数=================
     assign csr_addr_t = inst_i[31:20];
-    assign csr_ren_t = !((inst_csrrw | inst_csrrwi) && (rd == 0));
-    assign csr_wen_t = !((inst_csrrs | inst_csrrsi | inst_csrrc | inst_csrrci) && (rs1 == 0));
+    assign csr_ren_t = (type_system & ~inst_ebreak) & !((inst_csrrw | inst_csrrwi) && (rd == 0));
+    assign csr_wen_t = (type_system & ~inst_ebreak) & !((inst_csrrs | inst_csrrsi | inst_csrrc | inst_csrrci) && (rs1 == 0));
     assign csr_wdata_use_rs1_t = inst_csrrw | inst_csrrs | inst_csrrc;
     // //==================写回寄存器地址===================
     assign rd_t  = rd[ADDR_WIDTH-1:0];
-    assign rd_en_t = (type_store | type_branch) ? 0 : 1;
+    assign rd_en_t = (type_op_imm | type_auipc | type_lui | type_op | type_system | type_load | type_jalr | type_jal) ? 1 : 0;
 
 `ifdef ysyx_25050136_VERILATOR_DPIC
     always @(posedge clk) begin
