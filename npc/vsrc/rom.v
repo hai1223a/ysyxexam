@@ -12,13 +12,13 @@ module ROM_TEST (
     initial begin
         rom_mem[0 ] = 32'h00150513;
         rom_mem[1 ] = 32'h00000013;
-        rom_mem[2 ] = 32'h00150513;
-        rom_mem[3 ] = 32'h00150513;
-        rom_mem[4 ] = 32'h00150513;
-        rom_mem[5 ] = 32'h00150513;
-        rom_mem[6 ] = 32'h00150513;
-        rom_mem[7 ] = 32'h00150513;
-        rom_mem[8 ] = 32'h00150513;
+        rom_mem[2 ] = 32'h00000013;
+        rom_mem[3 ] = 32'h00000013;
+        rom_mem[4 ] = 32'h00000013;
+        rom_mem[5 ] = 32'h00000013;
+        rom_mem[6 ] = 32'h00000013;
+        rom_mem[7 ] = 32'h00000013;
+        rom_mem[8 ] = 32'h00000013;
         rom_mem[9 ] = 32'h00150513;
         rom_mem[10] = 32'h00100073;
         rom_mem[11] = 32'h00000013;
