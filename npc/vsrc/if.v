@@ -49,7 +49,8 @@ module ysyx_25050136_IF
     IF_REG (
         .clk    (clk                    ),
         .reset  (reset                  ),
-        .stall  (stall_i | stall_if     ),
+        .stall  (stall_i      ),
+        .stall_if(stall_if),
         .flush  (flush_i                ),
         .pc_i   (pc                     ),
         .inst_i (req_rdata_i            ),
