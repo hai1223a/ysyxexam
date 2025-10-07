@@ -34,6 +34,7 @@ void cpu_exec_once()
     // break;
     if (SOC_PC != pc__ )
     {
+        printf("%x %x %x %x",pc__,pc_pre,inst__,inst_pre);
         if(SOC_PC != 0) {
             pc_pre = pc__;
             pc__ = SOC_PC;
