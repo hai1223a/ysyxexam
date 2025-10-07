@@ -8,10 +8,10 @@ typedef struct cpu_state {
 } CPU_state;
 
 // SOC_PC 表示的是未提交的第一条指令的PC
-// SOC_INST 表示的是已经提交的最后一条指令的inst
+// SOC_INST 表示的是未提交的第一条指令的inst
 #define SOC_GPR top->rootp->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_NPCCORE__DOT__u_ysyx_25050136_WB__DOT__u_ysyx_25050136_RegisterFile__DOT__gpr
 #define SOC_PC top->rootp->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_NPCCORE__DOT__mem_dbg_pc
-#define SOC_INST top->rootp->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_NPCCORE__DOT__wb_dbg_inst
+#define SOC_INST top->rootp->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_NPCCORE__DOT__mem_dbg_inst
 extern const char *regs[];
 
 uint32_t get_reg(int i);
