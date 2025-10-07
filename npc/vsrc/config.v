@@ -1,5 +1,5 @@
 // 操作部件相关宏定义
-`define ysyx_25050136_ALU_OP_NUM 14
+`define ysyx_25050136_ALU_OP_NUM 15
 `define ysyx_25050136_ALU_ADD    0
 `define ysyx_25050136_ALU_SUB    1
 `define ysyx_25050136_ALU_XOR    2
@@ -14,6 +14,8 @@
 `define ysyx_25050136_ALU_SRA    11
 `define ysyx_25050136_ALU_SLL    12
 `define ysyx_25050136_ALU_SRL    13
+`define ysyx_25050136_ALU_OPD2   14
+
 
 `define ysyx_25050136_CSRU_OP_NUM 5
 `define ysyx_25050136_CSRU_CSRRW  0

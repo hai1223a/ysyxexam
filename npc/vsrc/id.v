@@ -172,6 +172,7 @@ module ysyx_25050136_ID
     assign alu_op_t[`ysyx_25050136_ALU_SRA]   = inst_srai | inst_sra;
     assign alu_op_t[`ysyx_25050136_ALU_SLL]   = inst_slli | inst_sll;
     assign alu_op_t[`ysyx_25050136_ALU_SRL]   = inst_srli | inst_srl;
+    assign alu_op_t[`ysyx_25050136_ALU_OPD2]  = type_lui;
     //=================选择CSRU相关操作==============
     assign csru_op_t[`ysyx_25050136_CSRU_CSRRW] = inst_csrrw | inst_csrrwi;
     assign csru_op_t[`ysyx_25050136_CSRU_CSRRS] = inst_csrrs | inst_csrrsi;
@@ -180,7 +181,7 @@ module ysyx_25050136_ID
     assign csru_op_t[`ysyx_25050136_CSRU_ECALL] = inst_ecall;
     // ====================选择ALU的操作数===============
     assign alu_op1_use_pc_t = type_auipc | type_jal | type_jalr;
-    assign alu_op2_use_imm_t = type_load | type_store | type_op_imm | type_auipc;
+    assign alu_op2_use_imm_t = type_load | type_store | type_op_imm | type_auipc | type_lui;
     assign alu_op2_use_4_t = type_jal | type_jalr;
     // ====================选择BQU的操作数===============
     assign is_jalr_t = type_jalr;
