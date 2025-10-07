@@ -29,6 +29,7 @@ module ysyx_25050136_NPCCORE
 //========================================
 wire [31:0] if_pc;
 wire [31:0] if_inst;
+wire if_busy_if;
 
 wire [ADDR_WIDTH-1:0] id_raddr1;
 wire [ADDR_WIDTH-1:0] id_raddr2;
@@ -71,8 +72,7 @@ wire        ex_lsu_signed;
 wire [31:0] ex_lsu_addr;
 wire [31:0] ex_lsu_wdata;
 
-wire        mem_lsu_en;
-wire        mem_lsu_valid;
+wire        mem_busy_mem;
 wire [ADDR_WIDTH-1:0] mem_rd;
 wire        mem_rd_en;
 wire [31:0] mem_gpr_wdata;
@@ -81,6 +81,8 @@ wire        ctrl_stall_if;
 wire        ctrl_stall_id;
 wire        ctrl_stall_ex;
 wire        ctrl_stall_mem;
+wire        ctrl_bubble_id;
+wire        ctrl_bubble_mem;
 `ifdef ysyx_25050136_VERILATOR_DPIC
 wire [`ysyx_25050136_DBG_NUM-1:0]  id_dbg_op;
 wire [31:0]                        id_dbg_pc;
@@ -136,6 +138,7 @@ u_ysyx_25050136_IF(
     .flush_i        	(0),
     .branch_valid_i 	(ex_branch_valid     ),
     .branch_npc_i   	(ex_branch_npc       ),
+    .busy_if_o          (if_busy_if          ),
     .pc_o           	(if_pc               ),
     .inst_o         	(if_inst             )
 );
@@ -149,6 +152,7 @@ ysyx_25050136_ID #(
     .inst_i               	(if_inst                ),
     .pc_i                 	(if_pc                  ),
     .stall_i              	(ctrl_stall_id          ),
+    .bubble_i               (ctrl_bubble_id         ),
     .flush_i              	(0),
     .rdata1_i             	(wb_rdata1              ),
     .raddr1_o             	(id_raddr1              ),
@@ -240,6 +244,7 @@ ysyx_25050136_MEM #(
     .clk          	(clk               ),
     .reset        	(reset             ),
     .stall_i      	(ctrl_stall_mem    ),
+    .bubble_i       (ctrl_bubble_mem   ),
     .flush_i      	(0),
     .rd_i         	(ex_rd             ),
     .rd_en_i      	(ex_rd_en          ),
@@ -302,12 +307,14 @@ ysyx_25050136_CTRL #(
 ) u_ysyx_25050136_CTRL (
     .clk         	(clk             ),
     .reset       	(reset           ),
-    .lsu_en_i    	(mem_lsu_en      ),
-    .lsu_valid_i 	(mem_lsu_valid   ),
+    .busy_if_i      (if_busy_if      ),
+    .busy_mem_i     (mem_busy_mem    ),
     .stall_if_o  	(ctrl_stall_if   ),
     .stall_id_o  	(ctrl_stall_id   ),
     .stall_ex_o  	(ctrl_stall_ex   ),
-    .stall_mem_o 	(ctrl_stall_mem  )
+    .stall_mem_o 	(ctrl_stall_mem  ),
+    .bubble_id_o    (ctrl_bubble_id  ),
+    .bubble_mem_o   (ctrl_bubble_mem )
 );
 
 endmodule

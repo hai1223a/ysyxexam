@@ -13,7 +13,7 @@ module ysyx_25050136_IF
          input                      flush_i         ,
          input                      branch_valid_i  ,
          input    [31:0]            branch_npc_i    ,
-         output                     busy_if         ,
+         output                     busy_if_o       ,
          output   [31:0]            pc_o            ,
          output   [31:0]            inst_o          
      );
@@ -44,7 +44,7 @@ module ysyx_25050136_IF
     assign req_addr_o = pc;
     assign req_valid_o = ~stall_i;
     assign req_use_o = req_use_r;
-    assign busy_if = req_valid_o & ~req_ready_i;
+    assign busy_if_o = req_valid_o & ~req_ready_i;
 
     ysyx_25050136_IF_REG IF_REG(
         .clk      	(clk         ),
