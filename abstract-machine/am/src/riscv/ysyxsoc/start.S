@@ -2,7 +2,7 @@
 .globl _start
 # 第一级引导加载程序
 _start:
-    la a0, 0x30000000
+    la a0, 0xa0000000
     addi a2, a2, 1000
     sw a2, 0(a0)
     lw t0, 0(a0)

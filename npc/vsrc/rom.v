@@ -10,11 +10,11 @@ module ROM_TEST (
 
     reg [31:0] rom_mem [0:15];
     initial begin
-        rom_mem[0 ] = 32'h30000537; // lui	a0,0x30000
+        rom_mem[0 ] = 32'ha0000537; // lui	a0,0xa0000
         rom_mem[1 ] = 32'h3e860613; // addi	a2,a2,1000
         rom_mem[2 ] = 32'h00000013;
         rom_mem[3 ] = 32'h00000013;
-        rom_mem[4 ] = 32'h00c52023; // sw	a2,0(a0) # 30000000 <_start>
+        rom_mem[4 ] = 32'h00c52023; // sw	a2,0(a0) # a0000000 <_start>
         rom_mem[5 ] = 32'h00000013;
         rom_mem[6 ] = 32'h00000013;
         rom_mem[7 ] = 32'h00052283; // lw	t0,0(a0)
