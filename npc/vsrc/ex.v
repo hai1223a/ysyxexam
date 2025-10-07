@@ -116,7 +116,9 @@ module ysyx_25050136_EX
             dbg_pc_o <= 0;
             dbg_inst_o <= 0;
         end else begin
-            if(!stall_i) begin
+            if(stall_i) begin
+
+            end else begin
                 dbg_op_o <= dbg_op_i;
                 dbg_pc_o <= dbg_pc_i;
                 dbg_inst_o <= dbg_inst_i;
