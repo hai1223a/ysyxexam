@@ -91,6 +91,9 @@ wire [31:0]                      ex_dbg_inst;
 wire [`ysyx_25050136_DBG_NUM-1:0] mem_dbg_op;
 wire [31:0]                       mem_dbg_pc;
 wire [31:0]                     mem_dbg_inst;
+wire [`ysyx_25050136_DBG_NUM-1:0]  wb_dbg_op;
+wire [31:0]                        wb_dbg_pc;
+wire [31:0]                      wb_dbg_inst;
 `endif
 //========================================
 // 使用DPI-C实现的取指和访存操作, 以及寻找ebreak
@@ -277,6 +280,14 @@ ysyx_25050136_WB #(
 ) u_ysyx_25050136_WB (
     .clk      	(clk            ),
     .reset      (reset          ),
+`ifdef ysyx_25050136_VERILATOR_DPIC
+    .dbg_op_i       (mem_dbg_op        ),
+    .dbg_pc_i       (mem_dbg_pc        ),
+    .dbg_inst_i     (mem_dbg_inst      ),
+    .dbg_op_o       (wb_dbg_op         ),
+    .dbg_pc_o       (wb_dbg_pc         ),
+    .dbg_inst_o     (wb_dbg_inst       ),
+`endif
     .wdata_i  	(mem_gpr_wdata  ),
     .waddr_i  	(mem_rd         ),
     .wen_i    	(mem_rd_en      ),
