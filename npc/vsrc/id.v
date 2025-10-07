@@ -366,17 +366,17 @@ module ysyx_25050136_ID_REG
             rd_en_o <= 0;
         end else begin
             if(bubble) begin
-                pc_o <= 0
-                rdata1_o <= 0
-                rdata2_o <= 0
-                imm_o <= 0
-                alu_op_o <= 0
-                csru_op_o <= 0
-                alu_op1_use_pc_o <= 0
-                alu_op2_use_imm_o <= 0
-                alu_op2_use_4_o <= 0
-                is_jalr_o <= 0
-                unconditional_jump_o <= 0
+                pc_o <= 0;
+                rdata1_o <= 0;
+                rdata2_o <= 0;
+                imm_o <= 0;
+                alu_op_o <= 0;
+                csru_op_o <= 0;
+                alu_op1_use_pc_o <= 0;
+                alu_op2_use_imm_o <= 0;
+                alu_op2_use_4_o <= 0;
+                is_jalr_o <= 0;
+                unconditional_jump_o <= 0;
                 conditional_jump_o <= 0;
                 lsu_ren_o <= 0;
                 lsu_wen_o <= 0;
