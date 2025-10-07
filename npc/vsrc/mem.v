@@ -88,7 +88,6 @@ module ysyx_25050136_MEM
     // 中间信号定义
     //=================================================== 
     assign lsu_en_o = lsu_ren_i | lsu_wen_i;
-    wire no_stall = (~lsu_en_o) | lsu_valid_o;
     wire [31:0] gpr_wdata_t = lsu_en_o ? lsu_rdata : gpr_wdata_i;
 
 `ifdef ysyx_25050136_VERILATOR_DPIC
@@ -112,7 +111,7 @@ module ysyx_25050136_MEM
     ) MEM_REG (
         .clk         	(clk                    ),
         .reset       	(reset                  ),
-        .en          	(!stall_i & no_stall    ),
+        .en          	(!stall_i               ),
         .flush       	(flush_i                ),
         .rd_i        	(rd_i                   ),
         .rd_en_i     	(rd_en_i                ),

@@ -16,5 +16,5 @@ module ysyx_25050136_CTRL
     assign stall_if_o  = lsu_en_i & (~lsu_valid_i);
     assign stall_id_o  = lsu_en_i & (~lsu_valid_i);
     assign stall_ex_o  = lsu_en_i & (~lsu_valid_i);
-    assign stall_mem_o = 0;   
+    assign stall_mem_o = lsu_en_i & (~lsu_valid_i);   
 endmodule //moduleName
