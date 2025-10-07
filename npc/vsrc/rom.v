@@ -29,30 +29,27 @@ module ROM_TEST (
     end 
 
     wire [3:0] addr = req_addr_i[5:2];
-    reg state; // 0:空闲, 1:等待
-
+    reg reading;
     always @(posedge clk) begin
-        if(reset) begin
+        if (reset) begin
             req_rdata_o <= 0;
             req_ready_o <= 0;
-            state <= 0;
+            reading     <= 0;
         end else begin
-            case(state)
-                0: begin // 空闲
+            if (!reading && req_valid_i && !req_ready_o) begin
+                // 检测到请求，准备读取
+                req_rdata_o <= rom_mem[addr];
+                req_ready_o <= 1;
+                reading     <= 1;
+            end else if (reading) begin
+                // 等待握手完成
+                if (req_valid_i && req_ready_o) begin
                     req_ready_o <= 0;
-                    req_rdata_o <= 0;
-                    if(req_valid_i) begin
-                        state <= 1;
-                    end
+                    reading     <= 0;
                 end
-                1: begin // 输出数据
-                    req_rdata_o <= rom_mem[addr];
-                    req_ready_o <= 1;
-                    if(req_valid_i & req_ready_o) begin
-                        state <= 0;
-                    end
-                end
-            endcase
+            end else begin
+                req_ready_o <= 0;
+            end
         end
     end
 
