@@ -53,7 +53,7 @@ module ysyx_25050136_IF
     end
     assign next_pc = branch_valid_i ? branch_npc_i : (pc + 32'h4);
     assign req_addr_o = pc;
-    assign req_valid_o = ~stall_i;
+    assign req_valid_o = req_valid_r;
     assign req_use_o = req_use_r;
     assign busy_if_o = req_valid_o & ~req_ready_i;
 
