@@ -96,8 +96,12 @@ module ysyx_25050136_MEM
             dbg_pc_o <= 0;
             dbg_inst_o <= 0;
         end else begin
-            if(stall_i | bubble_i) begin
-                
+            if(bubble_i) begin
+                dbg_op_o <= 0;
+                dbg_pc_o <= 0;
+                dbg_inst_o <= 0;
+            end else if(stall_i) begin
+                //
             end else begin
                 dbg_op_o <= dbg_op_i;
                 dbg_pc_o <= dbg_pc_i;

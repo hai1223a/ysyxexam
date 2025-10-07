@@ -32,7 +32,7 @@ void cpu_exec_once()
     IFDEF(CONFIG_TARGET_NVBOARD, nvboard_update());
     // 指令计算
     // break;
-    if (SOC_PC != pc__ )
+    if (SOC_PC != pc__ && SOC_PC != 0)
     {
         printf("1:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
             pc_pre = pc__;
@@ -65,7 +65,7 @@ void cpu_exec(uint32_t inst_num)
     {
       break;
     }
-    // IFDEF(CONFIG_ITRACE, Itrace_log(inst_pre, pc_pre, inst_num));
+    IFDEF(CONFIG_ITRACE, Itrace_log(inst_pre, pc_pre, inst_num));
     IFDEF(CONFIG_FTRACE, ftracer_log(inst_pre, pc_pre));
     IFDEF(CONFIG_DIFFTEST, difftest_step());
     IFDEF(CONFIG_WATCHPOINT, if(!batch_mode) scan_watchpoint());

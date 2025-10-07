@@ -212,8 +212,12 @@ module ysyx_25050136_ID
             dbg_pc_o <= 0;
             dbg_inst_o <= 0;
         end else begin
-            if(bubble_i | stall_i) begin
-                //
+            if(bubble_i) begin
+                dbg_op_o <= 0;
+                dbg_pc_o <= 0;
+                dbg_inst_o <= 0;
+            end if(stall_i) begin
+            
             end else begin
                 dbg_op_o[`ysyx_25050136_DBG_EBREAK] <= inst_ebreak;
                 dbg_op_o[`ysyx_25050136_DBG_ALU] <= type_op_imm | type_auipc | type_lui | type_op;
