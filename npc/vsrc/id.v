@@ -202,7 +202,7 @@ module ysyx_25050136_ID
     assign csr_wdata_use_rs1_t = inst_csrrw | inst_csrrs | inst_csrrc;
     // //==================写回寄存器地址===================
     assign rd_t  = rd[ADDR_WIDTH-1:0];
-    assign rd_en_t = (type_op_imm | type_auipc | type_lui | type_op | type_system | type_load | type_jalr | type_jal) ? 1 : 0;
+    assign rd_en_t = type_op_imm | type_auipc | type_lui | type_op | type_system | type_load | type_jalr | type_jal;
 
 `ifdef ysyx_25050136_VERILATOR_DPIC
     always @(posedge clk) begin
@@ -228,7 +228,7 @@ module ysyx_25050136_ID
     ) ID_REG (
         .clk                  (clk),
         .reset                (reset),
-        .en                   (!stall_i),
+        .stall                (stall_i),
         .flush                (flush_i),
         .pc_i                 (pc_i),
         .rdata1_i             (rdata1_i),
@@ -286,7 +286,7 @@ module ysyx_25050136_ID_REG
     (
         input clk                                               ,
         input reset                                             ,
-        input en                                                ,
+        input stall                                             ,
         input flush                                             ,
         input [31:0] pc_i                                       ,
         input [31:0] rdata1_i                                   ,
@@ -362,31 +362,9 @@ module ysyx_25050136_ID_REG
             rd_o <= 0;
             rd_en_o <= 0;
         end else begin
-            if(flush) begin
-                pc_o <= 0;
-                rdata1_o <= 0;
-                rdata2_o <= 0;
-                imm_o <= 0;
-                alu_op_o <= 0;
-                csru_op_o <= 0;
-                alu_op1_use_pc_o <= 0;
-                alu_op2_use_imm_o <= 0;
-                alu_op2_use_4_o <= 0;
-                is_jalr_o <= 0;
-                unconditional_jump_o <= 0;
-                conditional_jump_o <= 0;
-                lsu_ren_o <= 0;
-                lsu_wen_o <= 0;
-                lsu_mask_o <= 0;
-                lsu_signed_o <= 0;
-                csr_addr_o <= 0;
-                csr_ren_o <= 0;
-                csr_wen_o <= 0;
-                csr_wdata_use_rs1_o <= 0;
-                rs1_o <= 0;
-                rd_o <= 0;
-                rd_en_o <= 0;
-            end else if(en) begin
+            if(stall) begin
+                //
+            end else begin
                 pc_o <= pc_i;
                 rdata1_o <= rdata1_i;
                 rdata2_o <= rdata2_i;

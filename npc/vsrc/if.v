@@ -48,12 +48,13 @@ module ysyx_25050136_IF
     assign req_addr_o = pc;
     assign req_valid_o = req_valid_r;
     assign req_use_o = req_use_r;
+    wire stall_if = req_valid_o & ~req_ready_i;
 
     ysyx_25050136_IF_REG 
     IF_REG (
         .clk    (clk                    ),
         .reset  (reset                  ),
-        .en     (!stall_i & req_ready_i ),
+        .stall  (stall_i | stall_if     ),
         .flush  (flush_i                ),
         .pc_i   (pc                     ),
         .inst_i (req_rdata_i            ),
@@ -67,7 +68,7 @@ module ysyx_25050136_IF_REG
     (
         input clk                ,
         input reset              ,
-        input en                 ,
+        input stall              ,
         input flush              ,
         input [31:0] pc_i        ,
         input [31:0] inst_i      ,
@@ -80,10 +81,10 @@ module ysyx_25050136_IF_REG
             pc_o <= 0;
             inst_o <= 0;
         end else begin
-            if(flush) begin
+            if(stall) begin
                 pc_o <= 0;
                 inst_o <= 0;
-            end else if(en) begin
+            end else begin
                 pc_o <= pc_i;
                 inst_o <= inst_i;
             end

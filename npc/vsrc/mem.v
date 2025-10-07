@@ -111,7 +111,7 @@ module ysyx_25050136_MEM
     ) MEM_REG (
         .clk         	(clk                    ),
         .reset       	(reset                  ),
-        .en          	(!stall_i               ),
+        .stall          (stall_i               ),
         .flush       	(flush_i                ),
         .rd_i        	(rd_i                   ),
         .rd_en_i     	(rd_en_i                ),
@@ -130,7 +130,7 @@ module ysyx_25050136_MEM_REG
     (
         input clk                         ,
         input reset                       ,
-        input en                          ,
+        input stall                       ,
         input flush                       ,
         input [ADDR_WIDTH-1:0] rd_i       ,
         input               rd_en_i       ,
@@ -147,11 +147,9 @@ module ysyx_25050136_MEM_REG
             rd_en_o <= 0;
             gpr_wdata_o <= 0;
         end else begin
-            if(flush) begin
-                rd_o <= 0;
-                rd_en_o <= 0;
-                gpr_wdata_o <= 0;
-            end else if(en) begin
+            if(stall) begin
+                
+            end else begin    
                 rd_o <= rd_i;
                 rd_en_o <= rd_en_i;
                 gpr_wdata_o <= gpr_wdata_i;

@@ -35,7 +35,7 @@ void cpu_exec_once()
     {
       pc_pre = pc__;
       pc__ = SOC_PC;
-      if((sim_time >= (reset_time + stop_time)) & pc__ != RESET_VECTOR) {
+      if((sim_time >= (reset_time + stop_time)) & (pc__ != RESET_VECTOR) && (pc__ != 0)) {
         inst_pre = SOC_INST;
         inst_count++;
         break;
