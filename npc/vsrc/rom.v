@@ -20,7 +20,7 @@ module ROM_TEST (
         rom_mem[7 ] = 32'h00052283; // lw	t0,0(a0)
         rom_mem[8 ] = 32'h00000013;
         rom_mem[9 ] = 32'h00000013;
-        rom_mem[10] = 32'h00150513;
+        rom_mem[10] = 32'h00100073; // ebreak
         rom_mem[11] = 32'h00000013;
         rom_mem[12] = 32'h00000013;
         rom_mem[13] = 32'h00000013;
