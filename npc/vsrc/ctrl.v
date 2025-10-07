@@ -7,6 +7,7 @@ module ysyx_25050136_CTRL
         input reset,
         input busy_if_i,
         input busy_mem_i,
+        output stall_pc_o,
         output stall_if_o,
         output stall_id_o,
         output stall_ex_o,
@@ -14,6 +15,7 @@ module ysyx_25050136_CTRL
         output bubble_id_o,
         output bubble_mem_o
     );
+    reg stall_pc   ;
     reg stall_if   ;
     reg stall_id   ;
     reg stall_ex   ;
@@ -22,6 +24,7 @@ module ysyx_25050136_CTRL
     reg bubble_mem ;
 
     always @(*) begin
+        stall_pc   = 0;
         stall_if   = 0;
         stall_id   = 0;
         stall_ex   = 0;
@@ -29,15 +32,17 @@ module ysyx_25050136_CTRL
         bubble_id  = 0;
         bubble_mem = 0;
         if(busy_mem_i) begin
+            stall_pc   = 1;
             stall_if   = 1;
             stall_id   = 1;
             stall_ex   = 1;
             bubble_mem = 1;
         end else if(busy_if_i) begin
-            stall_if   = 1;
+            stall_pc   = 1;
             bubble_id  = 1;
         end
     end
+    assign stall_pc_o   = stall_pc   ;
     assign stall_if_o   = stall_if   ;
     assign stall_id_o   = stall_id   ;
     assign stall_ex_o   = stall_ex   ;

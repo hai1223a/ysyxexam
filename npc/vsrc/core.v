@@ -77,6 +77,7 @@ wire [ADDR_WIDTH-1:0] mem_rd;
 wire        mem_rd_en;
 wire [31:0] mem_gpr_wdata;
 
+wire        ctrl_stall_pc;
 wire        ctrl_stall_if;
 wire        ctrl_stall_id;
 wire        ctrl_stall_ex;
@@ -135,6 +136,7 @@ u_ysyx_25050136_IF(
     .req_valid_o    	(inst_req_valid_o    ),
     .req_use_o      	(inst_req_use_o      ),
     .stall_i        	(ctrl_stall_if       ),
+    .stall_pc_i         (ctrl_stall_pc       ),
     .flush_i        	(0),
     .branch_valid_i 	(ex_branch_valid     ),
     .branch_npc_i   	(ex_branch_npc       ),
@@ -308,6 +310,7 @@ ysyx_25050136_CTRL #(
     .reset       	(reset           ),
     .busy_if_i      (if_busy_if      ),
     .busy_mem_i     (mem_busy_mem    ),
+    .stall_pc_o     (ctrl_stall_pc  ),
     .stall_if_o  	(ctrl_stall_if   ),
     .stall_id_o  	(ctrl_stall_id   ),
     .stall_ex_o  	(ctrl_stall_ex   ),

@@ -10,6 +10,7 @@ module ysyx_25050136_IF
          output                     req_use_o       ,     
          // 内部 
          input                      stall_i         ,
+         input                      stall_pc_i      ,
          input                      flush_i         ,
          input                      branch_valid_i  ,
          input    [31:0]            branch_npc_i    ,
