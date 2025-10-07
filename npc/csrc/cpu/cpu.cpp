@@ -45,6 +45,8 @@ void cpu_exec_once()
         if(pc__ != RESET_VECTOR) {
             break;    
         }
+        printf("3:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
+
     }
   }
 }
