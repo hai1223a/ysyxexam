@@ -24,21 +24,16 @@ module ysyx_25050136_IF
 `endif
 
     reg [31:0] pc;
-    reg req_valid_r;
     reg req_use_r;
     reg cnt;
     wire [31:0] next_pc;
     always @(posedge clk) begin
         if (reset) begin
             pc          <= RESET_PC;
-            req_valid_r <= 1;
             req_use_r   <= 0;
         end else begin
-            if(stall_i) begin
-                req_valid_r <= 0;
-            end else if(req_ready_i) begin
+            if(req_ready_i & req_valid_o) begin
                 pc          <= next_pc;
-                req_valid_r <= 1;
                 req_use_r   <= ((next_pc) >= 32'ha000_0000) &&
                                ((next_pc) < 32'ha400_0000);
             end
@@ -46,7 +41,7 @@ module ysyx_25050136_IF
     end
     assign next_pc = branch_valid_i ? branch_npc_i : (pc + 32'h4);
     assign req_addr_o = pc;
-    assign req_valid_o = req_valid_r;
+    assign req_valid_o = ~stall_i;
     assign req_use_o = req_use_r;
     wire stall_if = req_valid_o & ~req_ready_i;
 
