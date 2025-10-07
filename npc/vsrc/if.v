@@ -56,7 +56,7 @@ module ysyx_25050136_IF
     assign req_addr_o = pc;
     assign req_valid_o = req_valid_r;
     assign req_use_o = req_use_r;
-    assign busy_if_o = req_valid_o & ~req_ready_i;
+    assign busy_if_o = ~(req_ready_i & req_valid_o);
 
     ysyx_25050136_IF_REG IF_REG(
         .clk      	(clk         ),
