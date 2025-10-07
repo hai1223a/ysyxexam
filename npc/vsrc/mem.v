@@ -7,6 +7,7 @@ module ysyx_25050136_MEM
         input                                            reset ,
         input                                          stall_i ,
         input                                         bubble_i ,
+        input                                          flush_i ,
         input    [ADDR_WIDTH-1:0]                         rd_i ,
         input                                          rd_en_i ,
         input    [31:0]                            gpr_wdata_i ,
