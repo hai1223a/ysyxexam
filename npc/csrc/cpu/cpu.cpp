@@ -41,6 +41,7 @@ void cpu_exec_once()
             inst__ = SOC_INST;
         printf("2:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
         if(pc__ != RESET_VECTOR) {
+            inst_count++;
             break;    
         }
         printf("3:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
