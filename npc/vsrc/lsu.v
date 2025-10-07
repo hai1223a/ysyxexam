@@ -69,15 +69,7 @@ module ysyx_25050136_LSU
             req_wdata_r <= 0;
             req_addr_r  <= 0;
         end else begin
-            if ((lsu_ren_i | lsu_wen_i) & (!is_clint)) begin
-                req_valid_r <= 1'b1;
-                req_ren_r   <= lsu_ren_i;
-                req_wen_r   <= lsu_wen_i;
-                req_mask_r  <= lsu_strb_r;
-                req_size_r  <= lsu_size_r;
-                req_wdata_r <= lsu_wdata_r;
-                req_addr_r  <= lsu_addr_i;
-            end else if(req_ready_i) begin
+            if(req_ready_i) begin
                 req_valid_r <= 1'b0;
                 req_ren_r   <= 0;
                 req_wen_r   <= 0;
@@ -85,6 +77,16 @@ module ysyx_25050136_LSU
                 req_size_r  <= 0;
                 req_wdata_r <= 0;
                 req_addr_r  <= 0;
+            end else if((lsu_ren_i | lsu_wen_i) & (!is_clint)) begin
+                req_valid_r <= 1'b1;
+                req_ren_r   <= lsu_ren_i;
+                req_wen_r   <= lsu_wen_i;
+                req_mask_r  <= lsu_strb_r;
+                req_size_r  <= lsu_size_r;
+                req_wdata_r <= lsu_wdata_r;
+                req_addr_r  <= lsu_addr_i;
+            
+            
             end
         end
     end
