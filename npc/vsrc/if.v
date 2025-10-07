@@ -64,6 +64,7 @@ module ysyx_25050136_IF_REG
         input clk                ,
         input reset              ,
         input stall              ,
+        input stall_if           ,
         input flush              ,
         input [31:0] pc_i        ,
         input [31:0] inst_i      ,
@@ -76,11 +77,13 @@ module ysyx_25050136_IF_REG
             pc_o <= 0;
             inst_o <= 0;
         end else begin
-            if(stall) begin
+            if(stall_if) begin
                 inst_o <= 0;
+            end else if(stall)begin
+                
             end else begin
                 pc_o <= pc_i;
-                inst_o <= inst_i;
+                inst_o <= inst_i;                
             end
         end
     end
