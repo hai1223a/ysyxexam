@@ -1,8 +1,9 @@
 #include "../../include/common.h"
 
-uint32_t pc__ = 0;            // 执行完指令后的PC值
-uint32_t pc_pre = 0;          // 执行的指令的PC值
-uint32_t inst_pre = 0;        // 执行的指令值
+uint32_t pc__ = 0;            // 执行完指令后的PC
+uint32_t pc_pre = 0;          // 执行的指令的PC
+uint32_t inst__ = 0;          // 执行完指令后的inst
+uint32_t inst_pre = 0;        // 执行的指令的inst
 vluint64_t inst_count = 0;    // 指令数量
 vluint64_t sim_time = 0;      // 记录仿真时间
 vluint64_t reset_time = 40;   // 复位时间
@@ -33,13 +34,15 @@ void cpu_exec_once()
     // break;
     if (SOC_PC != pc__ )
     {
-      pc_pre = pc__;
-      pc__ = SOC_PC;
-      if((sim_time >= (reset_time + stop_time)) & (pc__ != RESET_VECTOR) && (pc__ != 0)) {
-        inst_pre = SOC_INST;
-        inst_count++;
-        break;
-      }
+        if(SOC_PC != 0) {
+            pc_pre = pc__;
+            pc__ = SOC_PC;
+            inst_pre = inst__;
+            inst__ == SOC_INST;
+        }
+        if(pc__ != RESET_VECTOR) {
+            break;    
+        }
     }
   }
 }
