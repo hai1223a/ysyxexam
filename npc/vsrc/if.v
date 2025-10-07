@@ -13,6 +13,7 @@ module ysyx_25050136_IF
          input                      flush_i         ,
          input                      branch_valid_i  ,
          input    [31:0]            branch_npc_i    ,
+         output                     busy_if         ,
          output   [31:0]            pc_o            ,
          output   [31:0]            inst_o          
      );
@@ -43,19 +44,17 @@ module ysyx_25050136_IF
     assign req_addr_o = pc;
     assign req_valid_o = ~stall_i;
     assign req_use_o = req_use_r;
-    wire stall_if = req_valid_o & ~req_ready_i;
+    assign busy_if = req_valid_o & ~req_ready_i;
 
-    ysyx_25050136_IF_REG 
-    IF_REG (
-        .clk    (clk                    ),
-        .reset  (reset                  ),
-        .stall  (stall_i      ),
-        .stall_if(stall_if),
-        .flush  (flush_i                ),
-        .pc_i   (pc                     ),
-        .inst_i (req_rdata_i            ),
-        .pc_o   (pc_o                   ),
-        .inst_o (inst_o                 )
+    ysyx_25050136_IF_REG IF_REG(
+        .clk      	(clk         ),
+        .reset    	(reset       ),
+        .stall    	(stall_i     ),
+        .flush    	(flush_i     ),
+        .pc_i     	(pc          ),
+        .inst_i   	(req_rdata_i ),
+        .pc_o     	(pc_o        ),
+        .inst_o   	(inst_o         )
     );
 
 endmodule
@@ -65,7 +64,6 @@ module ysyx_25050136_IF_REG
         input clk                ,
         input reset              ,
         input stall              ,
-        input stall_if           ,
         input flush              ,
         input [31:0] pc_i        ,
         input [31:0] inst_i      ,
@@ -78,9 +76,7 @@ module ysyx_25050136_IF_REG
             pc_o <= 0;
             inst_o <= 0;
         end else begin
-            if(stall_if) begin
-                inst_o <= 0;
-            end else if(stall)begin
+            if(stall)begin
                 
             end else begin
                 pc_o <= pc_i;
@@ -90,3 +86,13 @@ module ysyx_25050136_IF_REG
     end
 
 endmodule
+
+module moduleName();
+    
+    // output declaration of module ysyx_25050136_IF_REG
+    reg [31:0] pc_o;
+    reg [31:0] inst_o;
+    
+
+    
+endmodule //moduleName

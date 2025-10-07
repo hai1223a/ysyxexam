@@ -35,10 +35,10 @@ void cpu_exec_once()
     if (SOC_PC != pc__ )
     {
         printf("1:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
-        pc_pre = pc__;
-        pc__ = SOC_PC;
-        inst_pre = inst__;
-        inst__ = SOC_INST;
+            pc_pre = pc__;
+            pc__ = SOC_PC;
+            inst_pre = inst__;
+            inst__ = SOC_INST;
         printf("2:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
         if(pc__ != RESET_VECTOR) {
             break;    

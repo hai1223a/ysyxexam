@@ -26,7 +26,7 @@ module ysyx_25050136_LSU
         input    [31:0]               lsu_addr_i   ,
         input    [31:0]               store_data_i ,
         output   [31:0]               load_data_o  ,
-        output                        lsu_valid_o
+        output                        busy_mem_o
      );
     // 地址对齐检查
     wire [3:0] byte_sel = 4'b1 << lsu_addr_i[1:0];
@@ -134,6 +134,6 @@ module ysyx_25050136_LSU
             default;
         endcase
     end
-    assign lsu_valid_o = is_clint ? clint_ready_i : req_ready_i;
+    assign busy_mem_o = (lsu_ren_i | lsu_wen_i) & ~(is_clint ? clint_ready_i : req_ready_i); 
     assign load_data_o = is_clint ? clint_rdata_i : lsu_rdata_r;
  endmodule

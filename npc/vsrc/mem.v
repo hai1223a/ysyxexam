@@ -6,7 +6,7 @@ module ysyx_25050136_MEM
         input                                              clk ,
         input                                            reset ,
         input                                          stall_i ,
-        input                                          flush_i ,
+        input                                         bubble_i ,
         input    [ADDR_WIDTH-1:0]                         rd_i ,
         input                                          rd_en_i ,
         input    [31:0]                            gpr_wdata_i ,
@@ -24,8 +24,7 @@ module ysyx_25050136_MEM
         output reg [31:0]                             dbg_pc_o ,
         output reg [31:0]                           dbg_inst_o ,
 `endif
-        output                                        lsu_en_o ,
-        output                                     lsu_valid_o ,
+        output                                      busy_mem_o ,
         output   [ADDR_WIDTH-1:0]                         rd_o ,
         output                                         rd_en_o ,
         output   [31:0]                            gpr_wdata_o ,
@@ -72,7 +71,7 @@ module ysyx_25050136_MEM
         .lsu_addr_i   	(lsu_addr_i    ),
         .store_data_i 	(lsu_wdata_i   ),
         .load_data_o  	(lsu_rdata     ),
-        .lsu_valid_o  	(lsu_valid_o   )
+        .busy_mem_o  	(busy_mem_o   )
     );
     
     clint u_clint(
@@ -87,8 +86,7 @@ module ysyx_25050136_MEM
     //===================================================
     // 中间信号定义
     //=================================================== 
-    assign lsu_en_o = lsu_ren_i | lsu_wen_i;
-    wire [31:0] gpr_wdata_t = lsu_en_o ? lsu_rdata : gpr_wdata_i;
+    wire [31:0] gpr_wdata_t = (lsu_ren_i | lsu_wen_i) ? lsu_rdata : gpr_wdata_i;
 
 `ifdef ysyx_25050136_VERILATOR_DPIC
     always @(posedge clk) begin
@@ -112,7 +110,7 @@ module ysyx_25050136_MEM
         .clk         	(clk                    ),
         .reset       	(reset                  ),
         .stall          (stall_i               ),
-        .flush       	(flush_i                ),
+        .bubble       	(bubble_i                ),
         .rd_i        	(rd_i                   ),
         .rd_en_i     	(rd_en_i                ),
         .gpr_wdata_i 	(gpr_wdata_t            ),
@@ -131,7 +129,7 @@ module ysyx_25050136_MEM_REG
         input clk                         ,
         input reset                       ,
         input stall                       ,
-        input flush                       ,
+        input bubble                      ,
         input [ADDR_WIDTH-1:0] rd_i       ,
         input               rd_en_i       ,
         input [31:0]    gpr_wdata_i       ,
@@ -147,12 +145,14 @@ module ysyx_25050136_MEM_REG
             rd_en_o <= 0;
             gpr_wdata_o <= 0;
         end else begin
-            if(stall) begin
-                
-            end else begin    
+            if(bubble) begin
+                rd_en_o <= 0;
+            end else if(stall) begin    
+            
+            end else begin
                 rd_o <= rd_i;
                 rd_en_o <= rd_en_i;
-                gpr_wdata_o <= gpr_wdata_i;
+                gpr_wdata_o <= gpr_wdata_i;    
             end
         end
     end

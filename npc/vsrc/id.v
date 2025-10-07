@@ -8,6 +8,7 @@ module ysyx_25050136_ID
         input      [31:0]                                inst_i,
         input      [31:0]                                  pc_i,
         input                                           stall_i,
+        input                                          bubble_i,
         input                                           flush_i,
         input      [31:0]                              rdata1_i,
         output     [ADDR_WIDTH-1:0]                    raddr1_o,
@@ -230,6 +231,7 @@ module ysyx_25050136_ID
         .reset                (reset),
         .stall                (stall_i),
         .flush                (flush_i),
+        .bubble               (bubble_i),
         .pc_i                 (pc_i),
         .rdata1_i             (rdata1_i),
         .rdata2_i             (rdata2_i),
@@ -288,6 +290,7 @@ module ysyx_25050136_ID_REG
         input reset                                             ,
         input stall                                             ,
         input flush                                             ,
+        input bubble                                            ,
         input [31:0] pc_i                                       ,
         input [31:0] rdata1_i                                   ,
         input [31:0] rdata2_i                                   ,
@@ -362,7 +365,31 @@ module ysyx_25050136_ID_REG
             rd_o <= 0;
             rd_en_o <= 0;
         end else begin
-            if(stall) begin
+            if(bubble) begin
+                pc_o <= 0
+                rdata1_o <= 0
+                rdata2_o <= 0
+                imm_o <= 0
+                alu_op_o <= 0
+                csru_op_o <= 0
+                alu_op1_use_pc_o <= 0
+                alu_op2_use_imm_o <= 0
+                alu_op2_use_4_o <= 0
+                is_jalr_o <= 0
+                unconditional_jump_o <= 0
+                conditional_jump_o <= 0;
+                lsu_ren_o <= 0;
+                lsu_wen_o <= 0;
+                lsu_mask_o <= 0;
+                lsu_signed_o <= 0;
+                csr_addr_o <= 0;
+                csr_ren_o <= 0;
+                csr_wen_o <= 0;
+                csr_wdata_use_rs1_o <= 0;
+                rs1_o <= 0;
+                rd_o <= 0;
+                rd_en_o <= 0;
+            end else if(stall) begin
                 //
             end else begin
                 pc_o <= pc_i;
