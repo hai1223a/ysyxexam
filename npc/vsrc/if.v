@@ -36,7 +36,7 @@ module ysyx_25050136_IF
             req_use_r   <= 0;
             req_valid_r <= 0;
         end else begin
-            if(stall_i) begin
+            if(stall_pc_i) begin
                 req_valid_r <= 0;
             end else begin
                 req_valid_r <= 1;

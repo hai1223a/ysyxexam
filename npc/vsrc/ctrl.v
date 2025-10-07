@@ -38,7 +38,7 @@ module ysyx_25050136_CTRL
             stall_ex   = 1;
             bubble_mem = 1;
         end else if(busy_if_i) begin
-            stall_pc   = 1;
+            stall_if   = 1;
             bubble_id  = 1;
         end
     end
