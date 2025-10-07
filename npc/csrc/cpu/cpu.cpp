@@ -34,16 +34,13 @@ void cpu_exec_once()
     // break;
     if (SOC_PC != pc__ )
     {
-        if(SOC_PC != 0) {
-            pc_pre = pc__;
-            pc__ = SOC_PC;
-            inst_pre = inst__;
-            inst__ = SOC_INST;
-        }
+        pc_pre = pc__;
+        pc__ = SOC_PC;
+        inst_pre = inst__;
+        inst__ = SOC_INST;
         if(pc__ != RESET_VECTOR) {
             break;    
         }
-
     }
   }
 }
