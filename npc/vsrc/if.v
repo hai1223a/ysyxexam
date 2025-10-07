@@ -26,13 +26,24 @@ module ysyx_25050136_IF
 
     reg [31:0] pc;
     reg req_use_r;
+    reg req_valid_r;
     reg cnt;
     wire [31:0] next_pc;
     always @(posedge clk) begin
         if (reset) begin
             pc          <= RESET_PC;
             req_use_r   <= 0;
+            req_valid_r <= 0;
         end else begin
+            if(stall_i) begin
+                req_valid_r <= 0;
+            end else begin
+                req_valid_r <= 1;
+                if(req_ready_i & req_valid_o) begin
+                    pc <= next_pc;
+                    req_use_r <= (next_pc >= 32'ha000_0000) && (next_pc < 32'ha400_0000);        
+                end
+            end
             if(req_ready_i & req_valid_o) begin
                 pc          <= next_pc;
                 req_use_r   <= ((next_pc) >= 32'ha000_0000) &&
@@ -86,13 +97,3 @@ module ysyx_25050136_IF_REG
     end
 
 endmodule
-
-module moduleName();
-    
-    // output declaration of module ysyx_25050136_IF_REG
-    reg [31:0] pc_o;
-    reg [31:0] inst_o;
-    
-
-    
-endmodule //moduleName
