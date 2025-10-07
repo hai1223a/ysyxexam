@@ -45,11 +45,6 @@ module ysyx_25050136_IF
                     req_use_r <= (next_pc >= 32'ha000_0000) && (next_pc < 32'ha400_0000);        
                 end
             end
-            if(req_ready_i & req_valid_o) begin
-                pc          <= next_pc;
-                req_use_r   <= ((next_pc) >= 32'ha000_0000) &&
-                               ((next_pc) < 32'ha400_0000);
-            end
         end
     end
     assign next_pc = branch_valid_i ? branch_npc_i : (pc + 32'h4);
