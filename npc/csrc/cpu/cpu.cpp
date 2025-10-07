@@ -65,7 +65,7 @@ void cpu_exec(uint32_t inst_num)
     {
       break;
     }
-    IFDEF(CONFIG_ITRACE, Itrace_log(inst_pre, pc_pre, inst_num));
+    // IFDEF(CONFIG_ITRACE, Itrace_log(inst_pre, pc_pre, inst_num));
     IFDEF(CONFIG_FTRACE, ftracer_log(inst_pre, pc_pre));
     IFDEF(CONFIG_DIFFTEST, difftest_step());
     IFDEF(CONFIG_WATCHPOINT, if(!batch_mode) scan_watchpoint());
