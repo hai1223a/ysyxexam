@@ -48,7 +48,9 @@ module ROM_TEST (
                 1: begin // 输出数据
                     req_rdata_o <= rom_mem[addr];
                     req_ready_o <= 1;
-                    state <= 0;
+                    if(req_valid_i) begin
+                        state <= 0;
+                    end
                 end
             endcase
         end
