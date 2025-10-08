@@ -23,6 +23,6 @@ module ysyx_25050136_RegisterFile
             gpr[waddr_i] <= wdata_i;
     end
 
-    assign rdata1_o = (ren1_i || raddr1_i == 0) ? 0 :gpr[raddr1_i];
-    assign rdata2_o = (ren2_i || raddr2_i == 0) ? 0 :gpr[raddr2_i];
+    assign rdata1_o = (!ren1_i || raddr1_i == 0) ? 0 :gpr[raddr1_i];
+    assign rdata2_o = (!ren2_i || raddr2_i == 0) ? 0 :gpr[raddr2_i];
 endmodule
