@@ -18,6 +18,8 @@ module ysyx_25050136_WB
         input                                       wen_i,
         input [ADDR_WIDTH-1:0]                   raddr1_i,
         input [ADDR_WIDTH-1:0]                   raddr2_i,
+        input                                      ren1_i,
+        input                                      ren2_i,
         output [31:0]                            rdata1_o,
         output [31:0]                            rdata2_o
     );
@@ -46,6 +48,8 @@ module ysyx_25050136_WB
         .wen_i      (wen_i    ),
         .raddr1_i 	(raddr1_i ),
         .raddr2_i 	(raddr2_i ),
+        .ren1_i     (ren1_i   ),
+        .ren2_i     (ren2_i   ),
         .rdata1_o 	(rdata1_o ),
         .rdata2_o 	(rdata2_o )
     );

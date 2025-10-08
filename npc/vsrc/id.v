@@ -12,8 +12,10 @@ module ysyx_25050136_ID
         input                                           flush_i,
         input      [31:0]                              rdata1_i,
         output     [ADDR_WIDTH-1:0]                    raddr1_o,
+        output                                           ren1_o,
         input      [31:0]                              rdata2_i,
         output     [ADDR_WIDTH-1:0]                    raddr2_o,
+        output                                           ren2_o,
 `ifdef ysyx_25050136_VERILATOR_DPIC
         output reg [`ysyx_25050136_DBG_NUM-1:0]        dbg_op_o,
         output reg [31:0]                              dbg_pc_o,
@@ -158,6 +160,8 @@ module ysyx_25050136_ID
                                                                  (inst_Jtype ? immJ : 0))));
     assign raddr1_o = rs1[ADDR_WIDTH-1:0];
     assign raddr2_o = rs2[ADDR_WIDTH-1:0];
+    assign ren1_o = ~(type_lui | type_auipc | type_jal | type_jalr | inst_csrrwi | inst_csrrsi | inst_csrrci);
+    assign ren2_o = type_branch | type_store | type_op;
     //===============选择ALU相关操作================
     assign alu_op_t[`ysyx_25050136_ALU_ADD]   = type_auipc | type_store | type_load | inst_addi | inst_add;
     assign alu_op_t[`ysyx_25050136_ALU_SUB]   = inst_sub;

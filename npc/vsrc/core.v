@@ -39,6 +39,8 @@ wire [31:0] wb_rdata2;
 wire [31:0] id_pc;
 wire [31:0] id_rdata1;
 wire [31:0] id_rdata2;
+wire        id_ren1;
+wire        id_ren2;
 wire [31:0] id_imm;
 wire [`ysyx_25050136_ALU_OP_NUM-1:0]   id_alu_op;
 wire [`ysyx_25050136_CSRU_OP_NUM-1:0]  id_csru_op;
@@ -158,8 +160,10 @@ ysyx_25050136_ID #(
     .flush_i              	(0),
     .rdata1_i             	(wb_rdata1              ),
     .raddr1_o             	(id_raddr1              ),
+    .ren1_o                 (id_ren1                ),
     .rdata2_i             	(wb_rdata2              ),
     .raddr2_o             	(id_raddr2              ),
+    .ren2_o                 (id_ren2                ),
 `ifdef ysyx_25050136_VERILATOR_DPIC
     .dbg_op_o               (id_dbg_op              ),
     .dbg_pc_o               (id_dbg_pc              ),
@@ -299,6 +303,8 @@ ysyx_25050136_WB #(
     .wen_i    	(mem_rd_en      ),
     .raddr1_i 	(id_raddr1      ),
     .raddr2_i 	(id_raddr2      ),
+    .ren1_i     (id_ren1        ),
+    .ren2_i     (id_ren2        ),
     .rdata1_o 	(wb_rdata1      ),
     .rdata2_o 	(wb_rdata2      )
 );
@@ -310,7 +316,17 @@ ysyx_25050136_CTRL #(
     .reset       	(reset           ),
     .busy_if_i      (if_busy_if      ),
     .busy_mem_i     (mem_busy_mem    ),
-    .stall_pc_o     (ctrl_stall_pc  ),
+    .raddr1_id_i    (id_raddr1_id    ),
+    .raddr2_id_i    (id_raddr2_id    ),
+    .ren1_id_i      (id_ren1         ),
+    .ren2_id_i      (id_ren2         ),
+    .wen_ex_i       (id_rd_en        ),
+    .waddr_ex_i     (id_rd           ),
+    .wen_mem_i      (ex_rd_en        ),
+    .waddr_mem_i    (ex_rd           ),
+    .wen_wb_i       (mem_rd_en       ),
+    .waddr_wb_i     (mem_rd          ),
+    .stall_pc_o     (ctrl_stall_pc   ),
     .stall_if_o  	(ctrl_stall_if   ),
     .stall_id_o  	(ctrl_stall_id   ),
     .stall_ex_o  	(ctrl_stall_ex   ),
