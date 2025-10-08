@@ -60,7 +60,7 @@ module ysyx_25050136_CTRL
             stall_id   = 1;
             stall_ex   = 1;
             bubble_mem = 1;
-        end else if(raw1_hazard) begin
+        end else if(raw_hazard) begin
             stall_pc   = 1;
             stall_if   = 1;
             bubble_id  = 1;
