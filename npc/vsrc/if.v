@@ -12,7 +12,6 @@ module ysyx_25050136_IF
          input                      stall_i         ,
          input                      stall_pc_i      ,
          input                      flush_i         ,
-         input                      branch_valid_i  ,
          input    [31:0]            branch_npc_i    ,
          output                     busy_if_o       ,
          output   [31:0]            pc_o            ,
@@ -47,7 +46,7 @@ module ysyx_25050136_IF
             end
         end
     end
-    assign next_pc = branch_valid_i ? branch_npc_i : (pc + 32'h4);
+    assign next_pc = flush_i ? branch_npc_i : (pc + 32'h4);
     assign req_addr_o = pc;
     assign req_valid_o = req_valid_r;
     assign req_use_o = req_use_r;
