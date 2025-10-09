@@ -18,7 +18,7 @@ module ysyx_25050136_CTRL
         input wen_wb_i,
         input [ADDR_WIDTH-1:0] waddr_wb_i,
         input branch_ex_i,
-        input branch_npc_ex_i,
+        input [31:0] branch_npc_ex_i,
         output stall_pc_o,
         output stall_if_o,
         output stall_id_o,
@@ -28,7 +28,7 @@ module ysyx_25050136_CTRL
         output bubble_mem_o,
         output flush_if_o,
         output flush_id_o,
-        output branch_npc_if_o
+        output [31:0] branch_npc_if_o
     );
     reg stall_pc   ;
     reg stall_if   ;
