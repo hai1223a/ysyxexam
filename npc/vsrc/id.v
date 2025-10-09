@@ -216,7 +216,7 @@ module ysyx_25050136_ID
             dbg_pc_o <= 0;
             dbg_inst_o <= 0;
         end else begin
-            if(bubble_i) begin
+            if(bubble_i | flush_i) begin
                 dbg_op_o <= 0;
                 dbg_pc_o <= 0;
                 dbg_inst_o <= 0;
