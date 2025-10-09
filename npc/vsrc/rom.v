@@ -10,17 +10,17 @@ module ROM_TEST (
 
     reg [31:0] rom_mem [0:15];
     initial begin
-        rom_mem[0 ] = 32'ha0000537; // lui	a0,0xa0000
-        rom_mem[1 ] = 32'h7d050593; // addi	a1,a0,2000 # a00007d0
-        rom_mem[2 ] = 32'h40a586b3; // sub	a3,a1,a0
-        rom_mem[3 ] = 32'h3e860613; // addi	a2,a2,1000
-        rom_mem[4 ] = 32'h00c52023; // sw	a2,0(a0) # a0000000 <_start>
-        rom_mem[5 ] = 32'h00000013;
-        rom_mem[6 ] = 32'h00000013;
-        rom_mem[7 ] = 32'h00052283; // lw	t0,0(a0)
-        rom_mem[8 ] = 32'h00000013;
+        rom_mem[0 ] = 32'h0f000537; // lui   a0,0xf000
+        rom_mem[1 ] = 32'h00500593; // li    a1,5
+        rom_mem[2 ] = 32'h00b52023; // sw    a1,0(a0)
+        rom_mem[3 ] = 32'h00052283; // lw    t0,0(a0)
+        rom_mem[4 ] = 32'h00b28333; // add   t1,t0,a1
+        rom_mem[5 ] = 32'h00030463; // beqz  t1,skip
+        rom_mem[6 ] = 32'h00140413; // addi  s0,s0,1
+        rom_mem[7 ] = 32'h40b304b3; // sub   s1,t1,a1
+        rom_mem[8 ] = 32'h00100073; // ebreak
         rom_mem[9 ] = 32'h00000013;
-        rom_mem[10] = 32'h00100073; // ebreak
+        rom_mem[10] = 32'h00000013;
         rom_mem[11] = 32'h00000013;
         rom_mem[12] = 32'h00000013;
         rom_mem[13] = 32'h00000013;
