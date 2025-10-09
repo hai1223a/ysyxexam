@@ -375,7 +375,7 @@ module ysyx_25050136_ID_REG
             rd_o <= 0;
             rd_en_o <= 0;
         end else begin
-            if(bubble) begin
+            if(bubble | flush) begin
                 pc_o <= 0;
                 rdata1_o <= 0;
                 rdata2_o <= 0;

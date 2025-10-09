@@ -86,6 +86,9 @@ wire        ctrl_stall_ex;
 wire        ctrl_stall_mem;
 wire        ctrl_bubble_id;
 wire        ctrl_bubble_mem;
+wire        ctrl_flush_id; 
+wire        ctrl_flush_if;
+wire [31:0] ctrl_branch_npc;
 `ifdef ysyx_25050136_VERILATOR_DPIC
 wire [`ysyx_25050136_DBG_NUM-1:0]  id_dbg_op;
 wire [31:0]                        id_dbg_pc;
@@ -139,9 +142,8 @@ u_ysyx_25050136_IF(
     .req_use_o      	(inst_req_use_o      ),
     .stall_i        	(ctrl_stall_if       ),
     .stall_pc_i         (ctrl_stall_pc       ),
-    .flush_i        	(0),
-    .branch_valid_i 	(ex_branch_valid     ),
-    .branch_npc_i   	(ex_branch_npc       ),
+    .flush_i        	(ctrl_flush_if       ),
+    .branch_npc_i   	(ctrl_branch_npc     ),
     .busy_if_o          (if_busy_if          ),
     .pc_o           	(if_pc               ),
     .inst_o         	(if_inst             )
@@ -157,7 +159,7 @@ ysyx_25050136_ID #(
     .pc_i                 	(if_pc                  ),
     .stall_i              	(ctrl_stall_id          ),
     .bubble_i               (ctrl_bubble_id         ),
-    .flush_i              	(0),
+    .flush_i              	(ctrl_flush_id          ),
     .rdata1_i             	(wb_rdata1              ),
     .raddr1_o             	(id_raddr1              ),
     .ren1_o                 (id_ren1                ),
@@ -326,13 +328,18 @@ ysyx_25050136_CTRL #(
     .waddr_mem_i    (ex_rd           ),
     .wen_wb_i       (mem_rd_en       ),
     .waddr_wb_i     (mem_rd          ),
+    .branch_ex_i    (ex_branch_valid ),
+    .branch_npc_ex_i(ex_branch_npc   ),
     .stall_pc_o     (ctrl_stall_pc   ),
     .stall_if_o  	(ctrl_stall_if   ),
     .stall_id_o  	(ctrl_stall_id   ),
     .stall_ex_o  	(ctrl_stall_ex   ),
     .stall_mem_o 	(ctrl_stall_mem  ),
     .bubble_id_o    (ctrl_bubble_id  ),
-    .bubble_mem_o   (ctrl_bubble_mem )
+    .bubble_mem_o   (ctrl_bubble_mem ),
+    .flush_id_o     (ctrl_flush_id   ),
+    .flush_if_o     (ctrl_flush_if   ),
+    .branch_npc_if_o(ctrl_branch_npc )
 );
 
 endmodule

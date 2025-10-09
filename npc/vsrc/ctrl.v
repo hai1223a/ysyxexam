@@ -17,13 +17,18 @@ module ysyx_25050136_CTRL
         input [ADDR_WIDTH-1:0] waddr_mem_i,
         input wen_wb_i,
         input [ADDR_WIDTH-1:0] waddr_wb_i,
+        input branch_ex_i,
+        input branch_npc_ex_i,
         output stall_pc_o,
         output stall_if_o,
         output stall_id_o,
         output stall_ex_o,
         output stall_mem_o,
         output bubble_id_o,
-        output bubble_mem_o
+        output bubble_mem_o,
+        output flush_if_o,
+        output flush_id_o,
+        output branch_npc_if_o
     );
     reg stall_pc   ;
     reg stall_if   ;
@@ -32,7 +37,9 @@ module ysyx_25050136_CTRL
     reg stall_mem  ;
     reg bubble_id  ;
     reg bubble_mem ;
-
+    reg flush_if   ;
+    reg flush_id   ;
+    reg branch_npc_if;
     wire raw1_hazard,raw2_hazard;
     wire raw_hazard;
 
@@ -69,6 +76,25 @@ module ysyx_25050136_CTRL
             bubble_id  = 1;
         end
     end
+    always @(posedge clk) begin
+        if (reset) begin
+            flush_if <= 0;
+            flush_id <= 0;
+            branch_npc_if <= 0;
+        end else begin
+            if(branch_ex_i) begin
+                if(stall_if) begin
+                    flush_if <= 1;
+                    flush_id <= 1;
+                    branch_npc_if <= branch_npc_ex_i;
+                end
+            end else if(!stall_if) begin
+                    flush_if <= 0;
+                    flush_id <= 0;
+                    branch_npc_if <= 0;
+            end
+        end
+    end
     assign stall_pc_o   = stall_pc   ;
     assign stall_if_o   = stall_if   ;
     assign stall_id_o   = stall_id   ;
@@ -76,4 +102,7 @@ module ysyx_25050136_CTRL
     assign stall_mem_o  = stall_mem  ;
     assign bubble_id_o  = bubble_id  ;
     assign bubble_mem_o = bubble_mem ;   
+    assign flush_if_o   = branch_ex_i | flush_if;
+    assign flush_id_o   = branch_ex_i | flush_id;
+    assign branch_npc_if_o = branch_npc_ex_i | branch_npc_if;
 endmodule //moduleName
