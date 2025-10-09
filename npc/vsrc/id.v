@@ -220,7 +220,7 @@ module ysyx_25050136_ID
                 dbg_op_o <= 0;
                 dbg_pc_o <= 0;
                 dbg_inst_o <= 0;
-            end if(stall_i) begin
+            end else if(stall_i) begin
             
             end else begin
                 dbg_op_o[`ysyx_25050136_DBG_EBREAK] <= inst_ebreak;
