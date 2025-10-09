@@ -85,8 +85,8 @@ module ysyx_25050136_IF_REG
             if(stall)begin
                 
             end else if(flush) begin
-                pc_o <= pc_i;
-                inst_o <= inst_i;
+                pc_o <= 0;
+                inst_o <= 0;
             end else begin
                 pc_o <= pc_i;
                 inst_o <= inst_i;                
