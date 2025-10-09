@@ -39,7 +39,7 @@ module ysyx_25050136_CTRL
     reg bubble_mem ;
     reg flush_if   ;
     reg flush_id   ;
-    reg branch_npc_if;
+    reg [31:0] branch_npc_if;
     wire raw1_hazard,raw2_hazard;
     wire raw_hazard;
 
