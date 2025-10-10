@@ -60,7 +60,7 @@ module ysyx_25050136_IF
         .pc_i     	(pc          ),
         .inst_i   	(req_rdata_i ),
         .pc_o     	(pc_o        ),
-        .inst_o   	(inst_o         )
+        .inst_o   	(inst_o      )
     );
 
 endmodule
@@ -76,6 +76,10 @@ module ysyx_25050136_IF_REG
         output reg [31:0] pc_o   ,
         output reg [31:0] inst_o 
     );
+`ifdef ysyx_25050136_VERILATOR_DPIC
+    wire [31:0] pc_dbg_pc = pc_i;
+    wire [31:0] if_dbg_pc = pc_o;
+`endif
     // =========== 标准逻辑 ======================
     always @(posedge clk) begin
         if(reset) begin
