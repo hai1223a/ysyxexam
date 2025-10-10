@@ -81,7 +81,7 @@ module ysyx_25050136_ICACHE
                     if(req_valid_i) begin
                         line_buf <= selected_line;
                         addr_offset_r <= addr_offset[OFFSET_WIDTH-1:2];
-                        cache_hit <= |hit_mask;
+                        cache_hit <= 1;
                         req_use_r <= req_use_i;
                         req_raddr_r <= req_addr_i;
                     if(~cache_hit) begin state <= MISS;end
