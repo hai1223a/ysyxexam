@@ -156,26 +156,47 @@ module ysyx_25050136_NPC
         .req_ready_o 	(mem_req_ready    )
     );
     
-    ysyx_25050136_NPCCORE 
-    u_ysyx_25050136_NPCCORE(
-        .clk            	(clk             ),
-        .reset          	(reset           ),
-        .inst_req_rdata_i   (inst_req_rdata  ),
-        .inst_req_ready_i   (inst_req_ready  ),
-        .inst_req_addr_o    (inst_req_addr   ),
-        .inst_req_valid_o   (inst_req_valid  ),
-        .inst_req_use_o     (inst_req_use    ),
-        .inst_req_flush_o   (inst_req_flush  ),
-        .mem_req_rdata_i    (mem_req_rdata   ),
-        .mem_req_ready_i    (mem_req_ready   ),
-        .mem_req_addr_o     (mem_req_addr    ),
-        .mem_req_valid_o    (mem_req_valid   ),
-        .mem_req_ren_o      (mem_req_ren     ),
-        .mem_req_wen_o      (mem_req_wen     ),
-        .mem_req_mask_o     (mem_req_mask    ),
-        .mem_req_size_o     (mem_req_size    ),
-        .mem_req_use_o      (mem_req_use     ),
-        .mem_req_wdata_o    (mem_req_wdata   )
+    // ysyx_25050136_NPCCORE 
+    // u_ysyx_25050136_NPCCORE(
+    //     .clk            	(clk             ),
+    //     .reset          	(reset           ),
+    //     .inst_req_rdata_i   (inst_req_rdata  ),
+    //     .inst_req_ready_i   (inst_req_ready  ),
+    //     .inst_req_addr_o    (inst_req_addr   ),
+    //     .inst_req_valid_o   (inst_req_valid  ),
+    //     .inst_req_use_o     (inst_req_use    ),
+    //     .inst_req_flush_o   (inst_req_flush  ),
+    //     .mem_req_rdata_i    (mem_req_rdata   ),
+    //     .mem_req_ready_i    (mem_req_ready   ),
+    //     .mem_req_addr_o     (mem_req_addr    ),
+    //     .mem_req_valid_o    (mem_req_valid   ),
+    //     .mem_req_ren_o      (mem_req_ren     ),
+    //     .mem_req_wen_o      (mem_req_wen     ),
+    //     .mem_req_mask_o     (mem_req_mask    ),
+    //     .mem_req_size_o     (mem_req_size    ),
+    //     .mem_req_use_o      (mem_req_use     ),
+    //     .mem_req_wdata_o    (mem_req_wdata   )
+    // );
+
+    NPCCORE_TEST u_NPCCORE_TEST(
+        .clk              	(clk             ),
+        .reset            	(reset           ),
+        .inst_req_rdata_i 	(inst_req_rdata  ),
+        .inst_req_ready_i 	(inst_req_ready  ),
+        .inst_req_addr_o  	(inst_req_addr   ),
+        .inst_req_valid_o 	(inst_req_valid  ),
+        .inst_req_use_o   	(inst_req_use    ),
+        .inst_req_flush_o 	(inst_req_flush  ),
+        .mem_req_rdata_i  	(mem_req_rdata   ),
+        .mem_req_ready_i  	(mem_req_ready   ),
+        .mem_req_addr_o   	(mem_req_addr    ),
+        .mem_req_valid_o  	(mem_req_valid   ),
+        .mem_req_ren_o    	(mem_req_ren     ),
+        .mem_req_wen_o    	(mem_req_wen     ),
+        .mem_req_mask_o   	(mem_req_mask    ),
+        .mem_req_size_o   	(mem_req_size    ),
+        .mem_req_use_o    	(mem_req_use     ),
+        .mem_req_wdata_o  	(mem_req_wdata   )
     );
     
     // ROM_TEST u_ROM_TEST(
