@@ -54,7 +54,7 @@ module NPCCORE_TEST (
             req_use_r   <= 0;
             req_valid_r <= 0;
         end else begin
-            if(!stall & mem_req_ready_i) begin
+            if(!stall & inst_req_ready_i) begin
                 pc <= next_pc;
                 req_use_r <= (next_pc >= 32'ha000_0000) && (next_pc < 32'ha400_0000);   
             end
