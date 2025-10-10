@@ -20,8 +20,9 @@ module ysyx_25050136_ICACHE_WRAPPER (
     input    [31:0]                            req_addr_i   ,
     input                                      req_valid_i  ,
     input                                      req_use_i    ,
-    input                                      reg_flush_i  ,
-    output   [31:0]                            req_rdata_o  ,                           
+    input                                      req_flush_i  ,
+    output   [31:0]                            req_rdata_o  ,
+    output   [31:0]                            req_raddr_o  ,                           
     output                                     req_ready_o  
 );
 
@@ -44,7 +45,8 @@ module ysyx_25050136_ICACHE_WRAPPER (
         .req_addr_i  	(req_addr_i   ),
         .req_valid_i 	(req_valid_i  ),
         .req_use_i   	(req_use_i    ),
-        .req_flush_i    (reg_flush_i  ),
+        .req_flush_i    (req_flush_i  ),
+        .req_raddr_o    (req_raddr_o  ),
         .req_rdata_o 	(req_rdata_o  ),
         .req_ready_o 	(req_ready_o  ),
         .rd_req_o    	(rd_req       ),

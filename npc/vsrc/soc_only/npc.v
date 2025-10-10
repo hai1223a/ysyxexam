@@ -3,6 +3,7 @@ module NPCCORE_TEST (
     input                                   reset,
     // 指令相关
     input   [31:0]               inst_req_rdata_i,
+    input   [31:0]               inst_req_raddr_i,
     input                        inst_req_ready_i,
     output  [31:0]               inst_req_addr_o ,
     output                       inst_req_valid_o,
@@ -34,10 +35,10 @@ module NPCCORE_TEST (
     reg req_valid_r;
     reg [3:0] cnt;
     wire [31:0] next_pc =
-    (pc < 32'h3000_0040)         ? pc + 32'h4 :
-    (pc == 32'h3000_0040)        ? 32'ha000_0000 :
-    (pc < 32'ha000_000c)         ? pc + 32'h4 :
-    (pc == 32'ha000_000c)        ? 32'ha000_0000 :  32'ha000_0000;    
+                            (pc < 32'h3000_0040)         ? pc + 32'h4 :
+                            (pc == 32'h3000_0040)        ? 32'ha000_0000 :
+                            (pc < 32'ha000_000c)         ? pc + 32'h4 :
+                            (pc == 32'ha000_000c)        ? 32'ha000_0000 :  32'ha000_0000;    
     wire stall = 0;
     always @(posedge clk) begin
         if(reset) begin
