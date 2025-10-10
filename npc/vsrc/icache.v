@@ -15,7 +15,7 @@ module ysyx_25050136_ICACHE
     input                                      req_flush_i  ,
     output   [31:0]                            req_raddr_o  ,
     output   [31:0]                            req_rdata_o  ,                           
-    output                                     req_ready_o  ,  
+    output                                     req_ready_o  ,
     // ICACHE与AXI接口                                        
     output                                     rd_req_o     ,
     output                                     rd_size_o    ,             
@@ -66,13 +66,13 @@ module ysyx_25050136_ICACHE
     wire [31:0] over_data_out;
     // 替换策略
     reg [WAY_WIDTH-1:0] replace_way;
-    wire fire = req_valid_i & req_ready_o;
+    wire fire = req_stall_i & req_ready_o;
     // ====================icache逻辑实现==============================
     always @(posedge clk) begin
         if(reset) begin
             line_buf <= 0;
             addr_offset_r <= 0;
-            cache_hit <= 0;
+            cache_hit <= 1;
             reach <= 0;
             req_use_r <= 0;
             req_raddr_r <= 0;
@@ -81,9 +81,7 @@ module ysyx_25050136_ICACHE
             case(state)
                 IDLE: begin
                     // 第一级流水线
-                    if(req_stall_i) begin
-
-                    end else begin
+                    if(!req_stall_i) begin
                         line_buf <= selected_line;
                         addr_offset_r <= addr_offset[OFFSET_WIDTH-1:2];
                         cache_hit <= 1;

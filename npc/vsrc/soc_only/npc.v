@@ -54,18 +54,15 @@ module NPCCORE_TEST (
             req_use_r   <= 0;
             req_valid_r <= 0;
         end else begin
-            if(stall) begin
-                req_valid_r <= 0;
-            end else begin
-                req_valid_r <= 1;
+            if(!stall & mem_req_ready_i) begin
                 pc <= next_pc;
-                req_use_r <= (next_pc >= 32'ha000_0000) && (next_pc < 32'ha400_0000);        
+                req_use_r <= (next_pc >= 32'ha000_0000) && (next_pc < 32'ha400_0000);   
             end
         end
     end
     
     assign inst_req_addr_o = pc;
-    assign inst_req_valid_o = req_valid_r;
+    assign inst_req_valid_o = 0;
     assign inst_req_use_o = req_use_r;
     assign inst_req_flush_o = 0;
     assign inst_req_stall_o = stall;
