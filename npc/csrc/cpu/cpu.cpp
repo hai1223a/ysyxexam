@@ -9,6 +9,7 @@ vluint64_t sim_time = 0;      // 记录仿真时间
 vluint64_t reset_time = 40;   // 复位时间
 vluint64_t stop_time = 0;     // 暂停时间点
 uint64_t g_timer = 0;         // unit: us
+uint32_t fuck[16];
 void reset()
 {
   top->reset = 0;
