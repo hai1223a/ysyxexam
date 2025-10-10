@@ -12,7 +12,7 @@ module ysyx_25050136_ICACHE
     input         req_valid_i,
     input         req_use_i,
     input         req_flush_i,
-    output        req_miss_o,
+    // output        req_miss_o,
     output [31:0] req_raddr_o,
     output [31:0] req_rdata_o,
     output        req_ready_o,
