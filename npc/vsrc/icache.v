@@ -135,7 +135,7 @@ module ysyx_25050136_ICACHE
     assign req_raddr_o = req_addr_r;
     assign req_rdata_o = line_word[addr_offset_r];
     assign req_ready_o = (state == IDLE && cache_hit) || (state == OVER);
-    assign req_miss_o  = (state == MISS);
+    // assign req_miss_o  = (state == MISS);
     assign rd_req_o    = (state == MISS);
     assign rd_size_o   = req_use_r;
     assign rd_addr_o   = req_addr_r;
