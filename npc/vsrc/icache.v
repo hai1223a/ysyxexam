@@ -103,6 +103,7 @@ module ysyx_25050136_ICACHE
                 OVER: begin
                     state <= IDLE;
                 end
+                default: state <= IDLE;
             endcase
         end
     end
