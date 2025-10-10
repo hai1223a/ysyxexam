@@ -76,6 +76,7 @@ module ysyx_25050136_NPC
     wire inst_req_ready;
     wire inst_req_valid;
     wire inst_req_use;
+    wire inst_req_stall;
     wire inst_req_flush;
     wire [31:0] mem_req_addr;
     wire [31:0] mem_req_rdata;
@@ -107,7 +108,7 @@ module ysyx_25050136_NPC
         .req_addr_i  	(inst_req_addr   ),
         .req_valid_i 	(inst_req_valid  ),
         .req_use_i      (inst_req_use    ),
-        .req_stall_i    (inst_req_stall),
+        .req_stall_i    (inst_req_stall  ),
         .req_flush_i    (inst_req_flush  ),
         .req_raddr_o    (inst_req_raddr  ),
         .req_rdata_o 	(inst_req_rdata  ),

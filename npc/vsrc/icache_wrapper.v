@@ -46,7 +46,7 @@ module ysyx_25050136_ICACHE_WRAPPER (
         .req_addr_i  	(req_addr_i   ),
         .req_valid_i 	(req_valid_i  ),
         .req_use_i   	(req_use_i    ),
-        .req_stall_i    (req_stall_i),
+        .req_stall_i    (req_stall_i  ),
         .req_flush_i    (req_flush_i  ),
         .req_raddr_o    (req_raddr_o  ),
         .req_rdata_o 	(req_rdata_o  ),
