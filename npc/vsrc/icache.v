@@ -42,7 +42,7 @@ module ysyx_25050136_ICACHE
     reg [1:0] state;
 
     // 流水线寄存器
-    reg [31:0] req_addr_r;
+    reg [31:0] req_raddr_r;
     reg        req_use_r;
     reg [LINE_WIDTH-1:0] line_buf;
     reg [$clog2(WORDS)-1:0] addr_offset_r;
@@ -56,7 +56,7 @@ module ysyx_25050136_ICACHE
     wire [OFFSET_WIDTH-1:0] addr_offset = req_addr_i[OFFSET_WIDTH-1:0];
 
     // 命中判断
-    integer k;
+    integer j,k;
     always @(*) begin
         hit_mask = {NUM_WAY{1'b0}};
         for (k = 0; k < NUM_WAY; k = k + 1)
@@ -78,16 +78,16 @@ module ysyx_25050136_ICACHE
     // 状态机与流水线
     always @(posedge clk) begin
         if (reset) begin
-            state        <= IDLE;
-            line_buf     <= 0;
-            addr_offset_r<= 0;
-            req_addr_r   <= 0;
-            req_use_r    <= 0;
+            state         <= IDLE;
+            line_buf      <= 0;
+            addr_offset_r <= 0;
+            req_raddr_r   <= 0;
+            req_use_r     <= 0;
         end else begin
             case (state)
                 IDLE: begin
                     if (req_valid_i) begin
-                        req_addr_r    <= req_addr_i;
+                        req_raddr_r   <= req_addr_i;
                         req_use_r     <= req_use_i;
                         line_buf      <= selected_line;
                         addr_offset_r <= addr_offset[OFFSET_WIDTH-1:2];
@@ -112,7 +112,7 @@ module ysyx_25050136_ICACHE
     always @(posedge clk) begin
         if (req_flush_i) begin
             for (k = 0; k < NUM_WAY; k = k + 1)
-                for (integer j = 0; j < NUM_SET; j = j + 1)
+                for (j = 0; j < NUM_SET; j = j + 1)
                     cache_valid[k][j] <= 1'b0;
         end else if (state == OVER) begin
             cache_data[replace_way][addr_index]  <= line_buf;
@@ -133,13 +133,13 @@ module ysyx_25050136_ICACHE
         for (genvar i = 0; i < WORDS; i = i + 1)
             assign line_word[i] = line_buf[i*32 +: 32];
     endgenerate
-    assign req_raddr_o = req_addr_r;
+    assign req_raddr_o = req_raddr_r;
     assign req_rdata_o = line_word[addr_offset_r];
     assign req_ready_o = (state == IDLE && cache_hit) || (state == OVER);
     // assign req_miss_o  = (state == MISS);
     assign rd_req_o    = (state == MISS);
     assign rd_size_o   = req_use_r;
-    assign rd_addr_o   = req_addr_r;
+    assign rd_addr_o   = req_raddr_r;
 
 `ifdef verilator
     reg [79:0] dbg_state;
