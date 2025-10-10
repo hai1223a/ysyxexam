@@ -24,6 +24,7 @@ module ysyx_25050136_CTRL
         output stall_id_o,
         output stall_ex_o,
         output stall_mem_o,
+        output bubble_if_o,
         output bubble_id_o,
         output bubble_mem_o,
         output flush_if_o,
@@ -35,6 +36,7 @@ module ysyx_25050136_CTRL
     reg stall_id   ;
     reg stall_ex   ;
     reg stall_mem  ;
+    reg bubble_if  ;
     reg bubble_id  ;
     reg bubble_mem ;
     reg flush_if   ;
@@ -72,8 +74,7 @@ module ysyx_25050136_CTRL
             stall_if   = 1;
             bubble_id  = 1;
         end else if(busy_if_i) begin
-            stall_if   = 1;
-            bubble_id  = 1;
+            bubble_if  = 1;
         end
     end
     always @(posedge clk) begin
@@ -100,6 +101,7 @@ module ysyx_25050136_CTRL
     assign stall_id_o   = stall_id   ;
     assign stall_ex_o   = stall_ex   ;
     assign stall_mem_o  = stall_mem  ;
+    assign bubble_if_o  = bubble_if  ;
     assign bubble_id_o  = bubble_id  ;
     assign bubble_mem_o = bubble_mem ;   
     assign flush_if_o   = branch_ex_i | flush_if;

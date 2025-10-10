@@ -9,8 +9,9 @@ module ysyx_25050136_IF
          output                     req_valid_o     ,
          output                     req_use_o       ,     
          // 内部 
-         input                      stall_i         ,
          input                      stall_pc_i      ,
+         input                      stall_i         ,
+         input                      bubble_i        ,
          input                      flush_i         ,
          input    [31:0]            branch_npc_i    ,
          output                     busy_if_o       ,
@@ -56,6 +57,7 @@ module ysyx_25050136_IF
         .clk      	(clk         ),
         .reset    	(reset       ),
         .stall    	(stall_i     ),
+        .bubble     (bubble_i    ),
         .flush    	(flush_i     ),
         .pc_i     	(pc          ),
         .inst_i   	(req_rdata_i ),
@@ -70,6 +72,7 @@ module ysyx_25050136_IF_REG
         input clk                ,
         input reset              ,
         input stall              ,
+        input bubble             ,
         input flush              ,
         input [31:0] pc_i        ,
         input [31:0] inst_i      ,
@@ -86,14 +89,14 @@ module ysyx_25050136_IF_REG
             pc_o <= 0;
             inst_o <= 0;
         end else begin
-            if(flush)begin
+            if(flush | bubble)begin
                 pc_o <= 0;
                 inst_o <= 0;
             end else if(stall) begin
                 
             end else begin
                 pc_o <= pc_i;
-                inst_o <= inst_i;                
+                inst_o <= inst_i;
             end
         end
     end

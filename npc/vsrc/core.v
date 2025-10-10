@@ -84,6 +84,7 @@ wire        ctrl_stall_if;
 wire        ctrl_stall_id;
 wire        ctrl_stall_ex;
 wire        ctrl_stall_mem;
+wire        ctrl_bubble_if;
 wire        ctrl_bubble_id;
 wire        ctrl_bubble_mem;
 wire        ctrl_flush_id; 
@@ -140,8 +141,9 @@ u_ysyx_25050136_IF(
     .req_addr_o     	(inst_req_addr_o     ),
     .req_valid_o    	(inst_req_valid_o    ),
     .req_use_o      	(inst_req_use_o      ),
-    .stall_i        	(ctrl_stall_if       ),
     .stall_pc_i         (ctrl_stall_pc       ),
+    .stall_i        	(ctrl_stall_if       ),
+    .bubble_i           (ctrl_bubble_if      ),
     .flush_i        	(ctrl_flush_if       ),
     .branch_npc_i   	(ctrl_branch_npc     ),
     .busy_if_o          (if_busy_if          ),
@@ -335,6 +337,7 @@ ysyx_25050136_CTRL #(
     .stall_id_o  	(ctrl_stall_id   ),
     .stall_ex_o  	(ctrl_stall_ex   ),
     .stall_mem_o 	(ctrl_stall_mem  ),
+    .bubble_if_o    (ctrl_bubble_if  ),
     .bubble_id_o    (ctrl_bubble_id  ),
     .bubble_mem_o   (ctrl_bubble_mem ),
     .flush_id_o     (ctrl_flush_id   ),
