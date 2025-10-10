@@ -145,9 +145,7 @@ module ysyx_25050136_ICACHE
     always @(*) begin
         case (state)
             IDLE        : dbg_state = "IDLE"      ;
-            HIT         : dbg_state = "HIT"       ;
             MISS        : dbg_state = "MISS"      ;
-            NO_USE      : dbg_state = "NO_USE"    ;
             OVER        : dbg_state = "OVER"      ;
             default     : dbg_state = "UNKNOW"    ;
         endcase
