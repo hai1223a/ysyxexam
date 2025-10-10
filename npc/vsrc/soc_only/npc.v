@@ -8,6 +8,7 @@ module NPCCORE_TEST (
     output  [31:0]               inst_req_addr_o ,
     output                       inst_req_valid_o,
     output                       inst_req_use_o  ,
+    output                       inst_req_stall_o,
     output                       inst_req_flush_o,
     // 数据相关
     input    [31:0]               mem_req_rdata_i,
@@ -57,10 +58,8 @@ module NPCCORE_TEST (
                 req_valid_r <= 0;
             end else begin
                 req_valid_r <= 1;
-                if(inst_req_ready_i & inst_req_valid_o) begin
-                    pc <= next_pc;
-                    req_use_r <= (next_pc >= 32'ha000_0000) && (next_pc < 32'ha400_0000);        
-                end
+                pc <= next_pc;
+                req_use_r <= (next_pc >= 32'ha000_0000) && (next_pc < 32'ha400_0000);        
             end
         end
     end
@@ -69,4 +68,5 @@ module NPCCORE_TEST (
     assign inst_req_valid_o = req_valid_r;
     assign inst_req_use_o = req_use_r;
     assign inst_req_flush_o = 0;
+    assign inst_req_stall_o = stall;
 endmodule

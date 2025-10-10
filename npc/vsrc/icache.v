@@ -11,6 +11,7 @@ module ysyx_25050136_ICACHE
     input    [31:0]                            req_addr_i   ,
     input                                      req_valid_i  ,
     input                                      req_use_i    ,
+    input                                      req_stall_i  ,
     input                                      req_flush_i  ,
     output   [31:0]                            req_raddr_o  ,
     output   [31:0]                            req_rdata_o  ,                           
@@ -80,14 +81,18 @@ module ysyx_25050136_ICACHE
             case(state)
                 IDLE: begin
                     // 第一级流水线
-                    if(req_valid_i) begin
+                    if(req_stall_i) begin
+
+                    end else begin
                         line_buf <= selected_line;
                         addr_offset_r <= addr_offset[OFFSET_WIDTH-1:2];
                         cache_hit <= 1;
                         reach <= 1;
                         req_use_r <= req_use_i;
                         req_raddr_r <= req_addr_i;
-                    if(~cache_hit & reach) begin state <= MISS;end
+                        if(~cache_hit & reach) begin 
+                            state <= MISS;
+                        end
                     end
                 end
                 MISS: begin
