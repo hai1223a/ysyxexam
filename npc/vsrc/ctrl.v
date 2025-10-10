@@ -61,6 +61,7 @@ module ysyx_25050136_CTRL
         stall_id   = 0;
         stall_ex   = 0;
         stall_mem  = 0;
+        bubble_if  = 0;
         bubble_id  = 0;
         bubble_mem = 0;
         if(busy_mem_i) begin
