@@ -60,4 +60,8 @@ module NPCCORE_TEST (
         end
     end
     
+    assign inst_req_addr_o = pc;
+    assign inst_req_valid_o = req_valid_r;
+    assign inst_req_use_o = req_use_r;
+    assign inst_req_flush_o = 0;
 endmodule
