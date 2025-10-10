@@ -33,7 +33,7 @@ module NPCCORE_TEST (
     reg req_use_r;
     reg req_valid_r;
     reg [3:0] cnt;
-    wire [31:0] next_pc = (pc > 32'h3000_0040) ? (pc < 32'ha000_0020 ? pc + 32'h4 : 32'ha000_0000) : pc + 32'h4;
+    wire [31:0] next_pc = (pc < 32'ha000_0020) ? pc + 32'h4 : 32'ha000_0000;
     wire stall = 0;
     always @(posedge clk) begin
         if(reset) begin
