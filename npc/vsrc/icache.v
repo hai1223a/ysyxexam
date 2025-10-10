@@ -70,7 +70,7 @@ module ysyx_25050136_ICACHE
         if(reset) begin
             line_buf <= 0;
             addr_offset_r <= 0;
-            cache_hit <= 1;
+            cache_hit <= 0;
             req_use_r <= 0;
             req_raddr_r <= 0;
             state <= IDLE;
@@ -84,9 +84,7 @@ module ysyx_25050136_ICACHE
                         cache_hit <= |hit_mask;
                         req_use_r <= req_use_i;
                         req_raddr_r <= req_addr_i;
-                    end
-                    if(~cache_hit) begin
-                        state <= MISS;
+                    if(~cache_hit) begin state <= MISS;end
                     end
                 end
                 MISS: begin
