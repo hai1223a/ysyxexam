@@ -5,148 +5,176 @@ module ysyx_25050136_ICACHE
     parameter INDEX_WIDTH = 1
 )
 (
-    input         clk,
-    input         reset,
-    // CPU接口
-    input  [31:0] req_addr_i,
-    input         req_valid_i,
-    input         req_use_i,
-    input         req_flush_i,
-    // output        req_miss_o,
-    output [31:0] req_raddr_o,
-    output [31:0] req_rdata_o,
-    output        req_ready_o,
-    // AXI接口
-    output        rd_req_o,
-    output        rd_size_o,
-    output [31:0] rd_addr_o,
-    input         ret_valid_i,
-    input         ret_last_i,
-    input  [31:0] ret_data_i
+    input                                      clk          ,
+    input                                      reset        ,
+    // ICACHE与CPU接口
+    input    [31:0]                            req_addr_i   ,
+    input                                      req_valid_i  ,
+    input                                      req_use_i    ,
+    input                                      req_flush_i  ,
+    output                                     req_miss_o   ,
+    output   [31:0]                            req_raddr_o  ,
+    output   [31:0]                            req_rdata_o  ,                           
+    output                                     req_ready_o  ,  
+    // ICACHE与AXI接口                                        
+    output                                     rd_req_o     ,
+    output                                     rd_size_o    ,             
+    output   [31:0]                            rd_addr_o    ,
+    input                                      ret_valid_i  ,
+    input                                      ret_last_i   ,
+    input    [31:0]                            ret_data_i   
+    // 内部
 );
-
-    // 参数定义
-    parameter LINE_WIDTH   = 8 * (1 << OFFSET_WIDTH);
-    parameter WORDS        = 1 << (OFFSET_WIDTH - 2);
-    parameter TAG_WIDTH    = 32 - OFFSET_WIDTH - INDEX_WIDTH;
-    parameter NUM_SET      = 1 << INDEX_WIDTH;
-    parameter WAY_WIDTH    = NUM_WAY>1?$clog2(NUM_WAY):1;
-
-    // 存储阵列
-    reg [LINE_WIDTH-1:0] cache_data  [0:NUM_WAY-1][0:NUM_SET-1];
+    // ====================cache内部信号定义==============================
+    parameter LINE_WIDTH   = 8 * 2 ** OFFSET_WIDTH;                // cacheline宽度
+    parameter WORDS        = 2 ** (OFFSET_WIDTH - 2);              // cacheline的字数
+    parameter TAG_WIDTH    = 32 - OFFSET_WIDTH - INDEX_WIDTH;      // tag的宽度
+    parameter NUM_SET      = 2 ** INDEX_WIDTH;                     // set的数量
+    parameter WAY_WIDTH    = NUM_WAY>1?$clog2(NUM_WAY):1;          // way的数量
+    parameter BURST_NUM    = 2 ** (OFFSET_WIDTH - 2) - 1;          // cacheline的字数-1
+    // icache存储阵列
+    reg [LINE_WIDTH-1:0] cache_data  [0:NUM_WAY-1][0:NUM_SET-1]; 
     reg [TAG_WIDTH-1 :0] cache_tag   [0:NUM_WAY-1][0:NUM_SET-1];
     reg                  cache_valid [0:NUM_WAY-1][0:NUM_SET-1];
-
-    // 状态机
-    localparam IDLE = 2'd0, MISS = 2'd1, OVER = 2'd2;
+    // icache 状态机
+    localparam IDLE       = 2'd0;
+    localparam MISS       = 2'd1;
+    localparam OVER       = 2'd2;
     reg [1:0] state;
-
-    // 流水线寄存器
-    reg [31:0] req_raddr_r;
-    reg        req_use_r;
-    reg [LINE_WIDTH-1:0] line_buf;
+    // 输入级 IDLE
+    wire [INDEX_WIDTH-1:0]  addr_index  ;
+    wire [TAG_WIDTH-1:0]    addr_tag    ;
+    wire [OFFSET_WIDTH-1:0] addr_offset ;
+    reg [LINE_WIDTH-1:0] selected_line;
+    reg [NUM_WAY-1:0] hit_mask;
+    // 第一级寄存器
+    reg [LINE_WIDTH-1:0] line_buf ;
     reg [$clog2(WORDS)-1:0] addr_offset_r;
     reg cache_hit;
-    reg [NUM_WAY-1:0] hit_mask;
+    reg req_use_r;
+    reg [31:0] req_raddr_r;
+    // 第二级
+    wire [31:0] line_word [0:WORDS-1];
+    wire [31:0] hit_word;
+    // NO USE
+    reg [31:0] no_use_data;
+    reg [31:0] req_rdata_r;
+    reg req_ready_r;
+    // OVER
+    wire [31:0] over_data_words [0:WORDS-1];
+    wire [31:0] over_data_out;
+    // 替换策略
     reg [WAY_WIDTH-1:0] replace_way;
-
-    // 地址分解
-    wire [INDEX_WIDTH-1:0]  addr_index  = req_addr_i[OFFSET_WIDTH+INDEX_WIDTH-1:OFFSET_WIDTH];
-    wire [TAG_WIDTH-1:0]    addr_tag    = req_addr_i[31:OFFSET_WIDTH+INDEX_WIDTH];
-    wire [OFFSET_WIDTH-1:0] addr_offset = req_addr_i[OFFSET_WIDTH-1:0];
-
-    // 命中判断
-    integer j,k;
-    always @(*) begin
-        hit_mask = {NUM_WAY{1'b0}};
-        for (k = 0; k < NUM_WAY; k = k + 1)
-            if (cache_valid[k][addr_index] && (cache_tag[k][addr_index] == addr_tag))
-                hit_mask[k] = 1'b1;
-    end
-    always @(*) begin
-        cache_hit = |hit_mask;
-    end
-
-    // 数据选择
-    reg [LINE_WIDTH-1:0] selected_line;
-    always @(*) begin
-        selected_line = {LINE_WIDTH{1'b0}};
-        for (k = 0; k < NUM_WAY; k = k + 1)
-            if (hit_mask[k]) selected_line = cache_data[k][addr_index];
-    end
-
-    // 状态机与流水线
+    wire fire = req_valid_i & req_ready_o;
+    // ====================icache逻辑实现==============================
     always @(posedge clk) begin
-        if (reset) begin
-            state         <= IDLE;
-            line_buf      <= 0;
+        if(reset) begin
+            line_buf <= 0;
             addr_offset_r <= 0;
-            req_raddr_r   <= 0;
-            req_use_r     <= 0;
+            cache_hit <= 1;
+            req_use_r <= 0;
+            req_raddr_r <= 0;
+            state <= IDLE;
         end else begin
-            case (state)
+            case(state)
                 IDLE: begin
-                    if (req_valid_i) begin
-                        req_raddr_r   <= req_addr_i;
-                        req_use_r     <= req_use_i;
-                        line_buf      <= selected_line;
+                    // 第一级流水线
+                    if(req_valid_i) begin
+                        line_buf <= selected_line;
                         addr_offset_r <= addr_offset[OFFSET_WIDTH-1:2];
-                        if (!cache_hit) state <= MISS;
+                        cache_hit <= |hit_mask;
+                        req_use_r <= req_use_i;
+                        req_raddr_r <= req_addr_i;
+                    end
+                    if(~cache_hit) begin
+                        state <= MISS;
                     end
                 end
                 MISS: begin
-                    if (ret_valid_i) begin
+                    if(ret_valid_i) begin
                         line_buf <= {ret_data_i, line_buf[LINE_WIDTH-1:32]};
-                        if (ret_last_i) state <= OVER;
+                        if(ret_last_i) begin
+                            state <= OVER;
+                        end
                     end
                 end
                 OVER: begin
-                    state <= IDLE;
+                    if(fire) begin
+                        state <= IDLE;
+                    end
                 end
                 default: state <= IDLE;
             endcase
         end
     end
-
-    // 写回
-    always @(posedge clk) begin
-        if (req_flush_i) begin
-            for (k = 0; k < NUM_WAY; k = k + 1)
-                for (j = 0; j < NUM_SET; j = j + 1)
-                    cache_valid[k][j] <= 1'b0;
-        end else if (state == OVER) begin
-            cache_data[replace_way][addr_index]  <= line_buf;
-            cache_tag[replace_way][addr_index]   <= addr_tag;
-            cache_valid[replace_way][addr_index] <= 1'b1;
+    //=====================第一级流水线===========================
+    assign addr_index = req_addr_i[OFFSET_WIDTH+INDEX_WIDTH-1:OFFSET_WIDTH];
+    assign addr_tag = req_addr_i[31:OFFSET_WIDTH+INDEX_WIDTH];
+    assign addr_offset = req_addr_i[OFFSET_WIDTH-1:0];
+    // 读取 tags 和 valids
+    integer j,k;
+    always @(*) begin
+        hit_mask = {NUM_WAY{1'b0}};
+        for (k = 0; k < NUM_WAY; k = k + 1) begin
+            if (cache_valid[k][addr_index] && (cache_tag[k][addr_index] == addr_tag))
+                hit_mask[k] = 1'b1;
         end
     end
-
-    // 替换策略
-    always @(posedge clk) begin
-        if (reset) replace_way <= 0;
-        else       replace_way <= (NUM_WAY == 1) ? 0 : replace_way + 1;
+    // 单次选择数据
+    always @(*) begin
+        selected_line = {LINE_WIDTH{1'b0}};
+        for (k = 0; k < NUM_WAY; k = k + 1) begin
+            if (hit_mask[k]) selected_line = cache_data[k][addr_index];
+        end
     end
-
-    // 输出
-    wire [31:0] line_word [0:WORDS-1];
+    //=====================第二级流水线===========================
     generate
-        for (genvar i = 0; i < WORDS; i = i + 1)
-            assign line_word[i] = line_buf[i*32 +: 32];
+    for (genvar i = 0; i < WORDS; i = i + 1) begin : SPLIT_0
+        assign line_word[i] = line_buf[i*32 +: 32];
+    end
     endgenerate
+    assign hit_word = line_word[addr_offset_r];
+    // OVER
+    always @(posedge clk) begin
+        if(req_flush_i) begin
+            for (j = 0; j < NUM_WAY; j = j + 1) begin
+                for(k = 0; k < NUM_SET; k = k + 1) begin
+                    cache_valid[j][k] <= 1'b0;
+                end
+            end
+        end else begin
+           if(state == OVER) begin
+                cache_data[replace_way][addr_index] <= line_buf;
+                cache_tag[replace_way][addr_index] <= addr_tag;
+                cache_valid[replace_way][addr_index] <= 1'b1;
+            end 
+        end
+    end
+    // 输出寄存器
     assign req_raddr_o = req_raddr_r;
-    assign req_rdata_o = line_word[addr_offset_r];
-    assign req_ready_o = (state == IDLE && cache_hit) || (state == OVER);
-    // assign req_miss_o  = (state == MISS);
-    assign rd_req_o    = (state == MISS);
-    assign rd_size_o   = req_use_r;
-    assign rd_addr_o   = req_raddr_r;
+    assign req_rdata_o = ((state == IDLE && cache_hit) || (state == OVER)) ? hit_word : 32'b0;
+    assign req_ready_o = ((state == IDLE && cache_hit) || (state == OVER));
+    // cache替换
+    always @(posedge clk) begin
+        if (reset) begin
+            replace_way <= 0;
+        end else begin
+            replace_way <= (NUM_WAY == 1) ? 0 : replace_way + 1;
+        end
+    end
+    // AXI接口处理
+    assign rd_req_o  = (state == MISS);
+    assign rd_size_o = req_use_r;
+    assign rd_addr_o = req_raddr_r;
 
 `ifdef verilator
     reg [79:0] dbg_state;
     always @(*) begin
         case (state)
             IDLE        : dbg_state = "IDLE"      ;
+            HIT         : dbg_state = "HIT"       ;
             MISS        : dbg_state = "MISS"      ;
+            NO_USE      : dbg_state = "NO_USE"    ;
             OVER        : dbg_state = "OVER"      ;
             default     : dbg_state = "UNKNOW"    ;
         endcase
