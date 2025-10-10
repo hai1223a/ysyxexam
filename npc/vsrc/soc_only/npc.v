@@ -39,7 +39,7 @@ module NPCCORE_TEST (
                             (pc == 32'h3000_0040)        ? 32'ha000_0000 :
                             (pc < 32'ha000_000c)         ? pc + 32'h4 :
                             (pc == 32'ha000_000c)        ? 32'ha000_0000 :  32'ha000_0000;    
-    wire stall = 0;
+    wire stall = cnt > 4'd12;
     always @(posedge clk) begin
         if(reset) begin
             cnt <= 0;
