@@ -22,7 +22,6 @@ module ysyx_25050136_IMEM2AXI
     input    [3:0]                             m_rid_i      ,
     // 内部
     input                                      rd_req_i     ,
-    input                                      rd_size_i    , // 0: word 1: cahce line                
     input    [31:0]                            rd_addr_i    ,
     output                                     ret_valid_o  ,
     output                                     ret_last_o   ,
@@ -42,11 +41,15 @@ module ysyx_25050136_IMEM2AXI
     reg [2:0] m_arsize_r;
     reg [1:0] m_arburst_r;
     wire ar_fire, r_fire;
+    // 根据存储介质，选择读取方式
+    wire size = (rd_addr_i >= 32'ha000_0000) && (rd_addr_i < 32'ha400_0000);
+    reg [1:0] cnt;
     // ==================== axi信号定义 ================================
     // 读事务
     always @(posedge clk) begin
         if (reset) begin
             state_read      <= READ_IDLE;
+            cnt             <= 0;
             m_araddr_r      <= 0;
             m_arid_r        <= 0;
             m_arlen_r       <= 0;   
@@ -62,7 +65,7 @@ module ysyx_25050136_IMEM2AXI
                         m_arid_r    <= 4'b1001;
                         m_arsize_r  <= 3'b010;
                         m_arburst_r <= 2'b00;
-                        if(rd_size_i) begin // cache line
+                        if(size) begin // cache line
                             m_araddr_r  <= {rd_addr_i[31:OFFSET_WIDTH], {OFFSET_WIDTH{1'b0}}};
                             m_arlen_r   <= BURST_NUM;      
                             m_arburst_r <= 2'b01;          
@@ -75,6 +78,9 @@ module ysyx_25050136_IMEM2AXI
                 end 
                 READ_ADDR: begin
                     if (ar_fire) begin
+                        if(size) begin
+                            cnt <= cnt + 1;
+                        end
                         m_araddr_r <= 0;
                         m_arlen_r <= 0;
                         m_arsize_r <= 0;
@@ -110,7 +116,7 @@ module ysyx_25050136_IMEM2AXI
     assign r_fire = m_rvalid_i & m_rready_o;
 
     assign ret_valid_o = r_fire;
-    assign ret_last_o = m_rlast_i & r_fire;
+    assign ret_last_o = m_rlast_i & r_fire && (cnt == 0);
     assign ret_data_o = m_rdata_i;
 // ========================Simulation only====================================
 `ifdef verilator

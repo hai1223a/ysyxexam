@@ -2,14 +2,13 @@ module NPCCORE_TEST (
     input                                     clk,
     input                                   reset,
     // 指令相关
-    input   [31:0]               inst_req_rdata_i,
-    input   [31:0]               inst_req_raddr_i,
-    input                        inst_req_ready_i,
-    output  [31:0]               inst_req_addr_o ,
-    output                       inst_req_valid_o,
-    output                       inst_req_use_o  ,
-    output                       inst_req_stall_o,
-    output                       inst_req_flush_o,
+    input                         inst_req_ready_i,
+    output  [31:0]                inst_req_addr_o ,
+    output                        inst_req_valid_o,
+    input                         inst_ret_valid_i,
+    input   [31:0]                inst_ret_addr_i ,
+    input   [31:0]                inst_ret_rdata_i,
+    output                        inst_ret_ready_o,
     // 数据相关
     input    [31:0]               mem_req_rdata_i,
     input                         mem_req_ready_i,
@@ -31,39 +30,104 @@ module NPCCORE_TEST (
     assign mem_req_size_o = 0;
     assign mem_req_use_o = 0;
     assign mem_req_wdata_o = 0;
+
+    IF u_IF(
+        .clk         	(clk               ),
+        .reset       	(reset             ),
+        .out_ready_i 	(inst_req_ready_i  ),
+        .out_pc_o    	(inst_req_addr_o   ),
+        .out_valid_o 	(inst_req_valid_o  )
+    );
+
+    ID u_ID(
+        .clk        	(clk               ),
+        .reset      	(reset             ),
+        .in_valid_i 	(inst_ret_valid_i  ),
+        .in_pc_i    	(inst_ret_addr_i   ),
+        .in_inst_i  	(inst_ret_rdata_i  ),
+        .in_ready_o 	(inst_ret_ready_o  )
+    );
+endmodule
+
+module IF(
+    input clk,
+    input reset,
+    input out_ready_i,
+    output [31:0] out_pc_o,    
+    output out_valid_o
+);
     reg [31:0] pc;
-    reg req_use_r;
-    reg req_valid_r;
-    reg [3:0] cnt;
+    reg idle;
+    wire out_fire = out_ready_i & out_valid_o;
     wire [31:0] next_pc =
                             (pc < 32'h3000_0040)         ? pc + 32'h4 :
                             (pc == 32'h3000_0040)        ? 32'ha000_0000 :
                             (pc < 32'ha000_000c)         ? pc + 32'h4 :
                             (pc == 32'ha000_000c)        ? 32'ha000_0000 :  32'ha000_0000;    
-    wire stall = cnt > 4'd12;
     always @(posedge clk) begin
         if(reset) begin
-            cnt <= 0;
+            idle <= 1;
+            pc <= 32'h3000_0000;
         end else begin
-            cnt <= cnt + 4'd1;
-        end
-    end
-    always @(posedge clk) begin
-        if(reset) begin
-            pc          <= 32'h3000_0000;
-            req_use_r   <= 0;
-            req_valid_r <= 0;
-        end else begin
-            if(!stall & inst_req_ready_i) begin
+            idle <= 0;
+            if(out_fire) begin
                 pc <= next_pc;
-                req_use_r <= (next_pc >= 32'ha000_0000) && (next_pc < 32'ha400_0000);   
             end
         end
     end
+    assign out_pc_o = pc;
+    assign out_valid_o = !idle;
+endmodule //IF
+
+module ID(
+    input clk,
+    input reset,
+    input in_valid_i,
+    input [31:0] in_pc_i,
+    input [31:0] in_inst_i,
+    output in_ready_o
+);
+    reg idle;
+    reg [31:0] id_pc;
+    reg [31:0] id_inst;
+    wire in_fire = in_valid_i & in_ready_o;
+    always @(posedge clk) begin
+        if(reset) begin
+            idle <= 1;
+            id_pc <= 0;
+            id_inst <= 0;
+        end else begin
+            if(in_fire) begin
+                id_pc <= in_pc_i;
+                id_inst <= in_inst_i;
+            end
+        end
+    end
+    assign in_ready_o = idle;
+endmodule //ID
+module f1();
+    // output declaration of module IF
+    wire [31:0] out_pc_o;
+    wire out_valid_o;
     
-    assign inst_req_addr_o = pc;
-    assign inst_req_valid_o = 0;
-    assign inst_req_use_o = req_use_r;
-    assign inst_req_flush_o = 0;
-    assign inst_req_stall_o = stall;
+    IF u_IF(
+        .clk         	(clk          ),
+        .reset       	(reset        ),
+        .out_ready_i 	(out_ready_i  ),
+        .out_pc_o    	(out_pc_o     ),
+        .out_valid_o 	(out_valid_o  )
+    );
+    // output declaration of module ID
+    wire in_ready_o;
+    
+    ID u_ID(
+        .clk        	(clk         ),
+        .reset      	(reset       ),
+        .in_valid_i 	(in_valid_i  ),
+        .in_pc_i    	(in_pc_i     ),
+        .in_inst_i  	(in_inst_i   ),
+        .in_ready_o 	(in_ready_o  )
+    );
+    
+    
 endmodule

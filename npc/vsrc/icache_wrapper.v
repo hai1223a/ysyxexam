@@ -17,23 +17,21 @@ module ysyx_25050136_ICACHE_WRAPPER (
     input                                      m_rlast_i    ,
     input    [3:0]                             m_rid_i      ,
     // 内部
-    input    [31:0]                            req_addr_i   ,
     input                                      req_valid_i  ,
-    input                                      req_use_i    ,
-    input                                      req_flush_i  ,
-    input                                      req_stall_i  ,
-    output   [31:0]                            req_rdata_o  ,
-    output   [31:0]                            req_raddr_o  ,                           
-    output                                     req_ready_o  
+    input    [31:0]                            req_addr_i   ,
+    output                                     req_ready_o  ,
+    input                                      ret_ready_i  ,
+    output   [31:0]                            ret_addr_o   ,
+    output   [31:0]                            ret_rdata_o  ,
+    output                                     ret_valid_o  
 );
 
-    wire rd_req;
-    wire rd_size;
-    wire [31:0] rd_addr;
-    wire ret_valid;
-    wire ret_last;
-    wire [31:0] ret_data;
-    
+    wire ia_rd_req;
+    wire [31:0] ia_rd_addr;
+    wire [31:0] ia_ret_data;
+    wire ia_ret_valid;
+    wire ia_ret_last;
+
     ysyx_25050136_ICACHE 
     #(
         .OFFSET_WIDTH 	(4             ),
@@ -41,23 +39,22 @@ module ysyx_25050136_ICACHE_WRAPPER (
         .INDEX_WIDTH  	(1             )
     )
     u_ysyx_25050136_ICACHE(
-        .clk         	(clk          ),
-        .reset       	(reset        ),
-        .req_addr_i  	(req_addr_i   ),
-        .req_valid_i 	(req_valid_i  ),
-        .req_use_i   	(req_use_i    ),
-        .req_stall_i    (req_stall_i  ),
-        .req_flush_i    (req_flush_i  ),
-        .req_raddr_o    (req_raddr_o  ),
-        .req_rdata_o 	(req_rdata_o  ),
-        .req_ready_o 	(req_ready_o  ),
-        .rd_req_o    	(rd_req       ),
-        .rd_size_o   	(rd_size      ),
-        .rd_addr_o   	(rd_addr      ),
-        .ret_valid_i 	(ret_valid    ),
-        .ret_last_i  	(ret_last     ),
-        .ret_data_i  	(ret_data     )
+        .clk            	(clk             ),
+        .reset          	(reset           ),
+        .ic_req_valid_i 	(req_valid_i     ),
+        .ic_req_addr_i  	(req_addr_i      ),
+        .ic_req_ready_o 	(req_ready_o     ),
+        .ic_ret_ready_i 	(ret_ready_i     ),
+        .ic_ret_rdata_o 	(ret_rdata_o     ),
+        .ic_ret_addr_o  	(ret_addr_o      ),
+        .ic_ret_valid_o 	(ret_valid_o     ),
+        .ia_rd_req_o    	(ia_rd_req       ),
+        .ia_rd_addr_o   	(ia_rd_addr      ),
+        .ia_ret_valid_i 	(ia_ret_valid    ),
+        .ia_ret_last_i  	(ia_ret_last     ),
+        .ia_ret_data_i  	(ia_ret_data     )
     );
+    
 
     ysyx_25050136_IMEM2AXI 
     #(
@@ -79,12 +76,11 @@ module ysyx_25050136_ICACHE_WRAPPER (
         .m_rresp_i   	(m_rresp_i    ),
         .m_rlast_i   	(m_rlast_i    ),
         .m_rid_i     	(m_rid_i      ),
-        .rd_req_i    	(rd_req       ),
-        .rd_size_i   	(rd_size      ),
-        .rd_addr_i   	(rd_addr      ),
-        .ret_valid_o 	(ret_valid    ),
-        .ret_last_o  	(ret_last     ),
-        .ret_data_o  	(ret_data     )
+        .rd_req_i    	(ia_rd_req    ),
+        .rd_addr_i   	(ia_rd_addr   ),
+        .ret_valid_o 	(ia_ret_valid ),
+        .ret_last_o  	(ia_ret_last  ),
+        .ret_data_o  	(ia_ret_data  )
     );
     
     

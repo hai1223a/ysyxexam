@@ -70,14 +70,13 @@ module ysyx_25050136_NPC
         if(mem_req_valid & !mem_req_ready & mem_req_use) dcache_cycle();
     end
 `endif
-    wire [31:0] inst_req_addr;
-    wire [31:0] inst_req_rdata;
-    wire [31:0] inst_req_raddr;
     wire inst_req_ready;
+    wire [31:0] inst_req_addr;
     wire inst_req_valid;
-    wire inst_req_use;
-    wire inst_req_stall;
-    wire inst_req_flush;
+    wire inst_ret_ready;
+    wire [31:0] inst_ret_rdata;
+    wire [31:0] inst_ret_addr;
+    wire inst_ret_valid;
     wire [31:0] mem_req_addr;
     wire [31:0] mem_req_rdata;
     wire mem_req_ready;
@@ -105,14 +104,13 @@ module ysyx_25050136_NPC
         .m_rresp_i   	(inst_rresp_i    ),
         .m_rlast_i   	(inst_rlast_i    ),
         .m_rid_i     	(inst_rid_i      ),
-        .req_addr_i  	(inst_req_addr   ),
-        .req_valid_i 	(inst_req_valid  ),
-        .req_use_i      (inst_req_use    ),
-        .req_stall_i    (inst_req_stall  ),
-        .req_flush_i    (inst_req_flush  ),
-        .req_raddr_o    (inst_req_raddr  ),
-        .req_rdata_o 	(inst_req_rdata  ),
-        .req_ready_o 	(inst_req_ready  )
+        .req_valid_i    (inst_req_valid  ),
+        .req_addr_i     (inst_req_addr   ),
+        .req_ready_o    (inst_req_ready  ),
+        .ret_ready_i    (inst_ret_ready  ),
+        .ret_rdata_o    (inst_ret_rdata  ),
+        .ret_addr_o     (inst_ret_addr   ),
+        .ret_valid_o    (inst_ret_valid  )
     );
     
     ysyx_25050136_DCACHE 
@@ -185,14 +183,13 @@ module ysyx_25050136_NPC
     NPCCORE_TEST u_NPCCORE_TEST(
         .clk              	(clk             ),
         .reset            	(reset           ),
-        .inst_req_rdata_i 	(inst_req_rdata  ),
-        .inst_req_raddr_i   (inst_req_raddr),
         .inst_req_ready_i 	(inst_req_ready  ),
         .inst_req_addr_o  	(inst_req_addr   ),
         .inst_req_valid_o 	(inst_req_valid  ),
-        .inst_req_use_o   	(inst_req_use    ),
-        .inst_req_stall_o   (inst_req_stall  ),
-        .inst_req_flush_o 	(inst_req_flush  ),
+        .inst_ret_valid_i 	(inst_ret_valid  ),
+        .inst_ret_addr_i  	(inst_ret_addr   ),
+        .inst_ret_rdata_i 	(inst_ret_rdata  ),
+        .inst_ret_ready_o 	(inst_ret_ready  ),
         .mem_req_rdata_i  	(mem_req_rdata   ),
         .mem_req_ready_i  	(mem_req_ready   ),
         .mem_req_addr_o   	(mem_req_addr    ),
