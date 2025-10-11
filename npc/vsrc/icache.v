@@ -32,7 +32,7 @@ module ysyx_25050136_ICACHE
     parameter TAG_WIDTH    = 32 - OFFSET_WIDTH - INDEX_WIDTH;  // tag的宽度
     parameter NUM_SET      = 1 << INDEX_WIDTH;                 // set的数量
     parameter WAY_WIDTH    = (NUM_WAY > 1) ? $clog2(NUM_WAY) : 1; // way的数量
-    parameter BURST_NUM    = (1 << (OFFSET_WIDTH - 2)) - 1;    // cacheline的字数-1
+    parameter OFFSET_INDEX = (OFFSET_WIDTH > 2) ? OFFSET_WIDTH-2 : 1; // 用于索引的offset的位宽
     // icache存储阵列
     reg [LINE_WIDTH-1:0] cache_data  [0:NUM_WAY-1][0:NUM_SET-1]; 
     reg [TAG_WIDTH-1 :0] cache_tag   [0:NUM_WAY-1][0:NUM_SET-1];
@@ -46,7 +46,6 @@ module ysyx_25050136_ICACHE
     wire in_fire_1 = ic_req_valid_i & ic_req_ready_o;
     wire [INDEX_WIDTH-1:0]  addr_index  ;
     wire [TAG_WIDTH-1:0]    addr_tag    ;
-    wire [OFFSET_WIDTH-1:0] addr_offset ;
     // 第一第二级流水线握手信号
     wire temp_valid, temp_ready;
     wire temp_fire = temp_valid & temp_ready;
@@ -60,7 +59,7 @@ module ysyx_25050136_ICACHE
     wire ready_go_2;
     wire out_fire_2 = ic_ret_valid_o & ic_ret_ready_i;
     wire [INDEX_WIDTH-1:0]  addr_index_1;
-    wire [OFFSET_WIDTH-1:0] addr_offset_1;
+    wire [OFFSET_INDEX-1:0] addr_offset_1;
     reg [LINE_WIDTH-1:0] selected_line;
     wire [31:0] line_word [0:WORDS-1];
     wire [31:0] hit_word;
@@ -73,7 +72,7 @@ module ysyx_25050136_ICACHE
     
     wire [INDEX_WIDTH-1:0]  addr_index_2 ;
     wire [TAG_WIDTH-1:0]    addr_tag_2   ;
-    wire [OFFSET_WIDTH-1:0] addr_offset_2;
+    wire [OFFSET_INDEX-1:0] addr_offset_2;
     wire [31:0] buf_word [0:WORDS-1];
     wire [31:0] miss_word;
     // ==================== 代码实现 =============================
@@ -96,7 +95,6 @@ module ysyx_25050136_ICACHE
     // 地址decoder
     assign addr_index = ic_req_addr_i[OFFSET_WIDTH+INDEX_WIDTH-1:OFFSET_WIDTH];
     assign addr_tag = ic_req_addr_i[31:OFFSET_WIDTH+INDEX_WIDTH];
-    assign addr_offset = ic_req_addr_i[OFFSET_WIDTH-1:0];
     // 判断是否命中
     integer j,k;
     always @(*) begin
@@ -129,7 +127,7 @@ module ysyx_25050136_ICACHE
     end
     // 地址decoder
     assign addr_index_1 = addr_1[OFFSET_WIDTH+INDEX_WIDTH-1:OFFSET_WIDTH];
-    assign addr_offset_1 = addr_1[OFFSET_WIDTH-1:0];
+    assign addr_offset_1 = (OFFSET_WIDTH > 2) ? addr_1[OFFSET_WIDTH-1:2] : 0;
     // 读data_sram
     always @(*) begin
         selected_line = {LINE_WIDTH{1'b0}};
@@ -174,7 +172,7 @@ module ysyx_25050136_ICACHE
     end
     assign addr_index_2 = addr_2[OFFSET_WIDTH+INDEX_WIDTH-1:OFFSET_WIDTH];
     assign addr_tag_2 = addr_2[31:OFFSET_WIDTH+INDEX_WIDTH];
-    assign addr_offset_2 = addr_2[OFFSET_WIDTH-1:0];
+    assign addr_offset_2 = (OFFSET_WIDTH > 2) ? addr_2[OFFSET_WIDTH-1:2] : 0;
     generate
     for (genvar i = 0; i < WORDS; i = i + 1) begin : SPLIT_1
         assign buf_word[i] = cache_data[miss_way][addr_index_2][i*32 +: 32];
