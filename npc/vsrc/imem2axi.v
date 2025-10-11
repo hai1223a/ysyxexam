@@ -1,6 +1,6 @@
 module ysyx_25050136_IMEM2AXI
 #(
-    parameter OFFSET_WIDTH = 3 // cache line = 16B
+    parameter OFFSET_WIDTH = 4 // cache line = 16B
 )
 (
     input                                      clk          ,
@@ -42,8 +42,11 @@ module ysyx_25050136_IMEM2AXI
     reg [1:0] m_arburst_r;
     wire ar_fire, r_fire;
     // 根据存储介质，选择读取方式
-    wire size = (rd_addr_i >= 32'ha000_0000) && (rd_addr_i < 32'ha400_0000);
     reg [1:0] cnt;
+    wire size = (rd_addr_i >= 32'ha000_0000) && (rd_addr_i < 32'ha400_0000);
+    wire [31:0] align_addr = {rd_addr_i[31:OFFSET_WIDTH], {OFFSET_WIDTH{1'b0}}};
+    wire [31:0] real_addr = align_addr + {{30-OFFSET_WIDTH{1'b0}}, cnt, {OFFSET_WIDTH{1'b0}}};
+    // wire [31:0] real_addr = align_addr;
     // ==================== axi信号定义 ================================
     // 读事务
     always @(posedge clk) begin
@@ -65,12 +68,11 @@ module ysyx_25050136_IMEM2AXI
                         m_arid_r    <= 4'b1001;
                         m_arsize_r  <= 3'b010;
                         m_arburst_r <= 2'b00;
+                        m_araddr_r  <= real_addr;
                         if(size) begin // cache line
-                            m_araddr_r  <= {rd_addr_i[31:OFFSET_WIDTH], {OFFSET_WIDTH{1'b0}}};
                             m_arlen_r   <= BURST_NUM;      
                             m_arburst_r <= 2'b01;          
                         end else begin // word
-                            m_araddr_r  <= rd_addr_i;
                             m_arlen_r   <= 0;
                             m_arburst_r <= 2'b00;
                         end
@@ -78,7 +80,7 @@ module ysyx_25050136_IMEM2AXI
                 end 
                 READ_ADDR: begin
                     if (ar_fire) begin
-                        if(size) begin
+                        if(!size) begin
                             cnt <= cnt + 1;
                         end
                         m_araddr_r <= 0;
