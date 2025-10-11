@@ -187,7 +187,7 @@ module ysyx_25050136_ICACHE
     assign ic_ret_rdata_o = hit_2 ? hit_word_2 : miss_word;
     assign ic_ret_addr_o = addr_2;
     assign temp_ready = idle_2 || out_fire_2;
-    assign ic_ret_valid_o = !idle_1 && ready_go_2;
+    assign ic_ret_valid_o = !idle_2 && ready_go_2;
 
 `ifdef verilator
     reg [79:0] dbg_state;

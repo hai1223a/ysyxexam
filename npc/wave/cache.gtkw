@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Fri Oct 10 13:56:41 2025
+[*] Sat Oct 11 15:45:13 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Fri Oct 10 13:53:41 2025"
-[dumpfile_size] 241550
+[dumpfile_mtime] "Sat Oct 11 15:40:29 2025"
+[dumpfile_size] 178128
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/cache.gtkw"
-[timestart] 40
+[timestart] 52
 [size] 2498 1361
 [pos] -51 -51
-*-2.400000 62 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-1.800000 63 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
@@ -28,47 +28,43 @@
 @800200
 -cpu
 @28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_NPCCORE_TEST.clk
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_NPCCORE_TEST.reset
-@22
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_NPCCORE_TEST.pc[31:0]
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_NPCCORE_TEST.stall
 @1000200
 -cpu
 @800200
 -icache
 @28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.req_valid_i
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.ic_req_valid_i
 @22
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.req_addr_i[31:0]
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.ic_req_addr_i[31:0]
+@28
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.ic_req_ready_o
 @200
 -
-@22
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.req_raddr_r[31:0]
 @28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.cache_hit
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.temp_valid
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.hit_mask_1[0]
+@22
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.addr_1[31:0]
+@28
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.temp_ready
+@200
+-
 @29
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.reach
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.ic_ret_valid_o
+@22
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.ic_ret_rdata_o[31:0]
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.ic_ret_addr_o[31:0]
+@28
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.ic_ret_ready_i
 @200
 -
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.req_ready_o
-@22
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.req_raddr_o[31:0]
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.req_rdata_o[31:0]
 @820
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.dbg_state[79:0]
 @1000200
 -icache
 @800200
 -icache2axi
-@22
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_IMEM2AXI.rd_addr_i[31:0]
-@28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_IMEM2AXI.rd_req_i
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_IMEM2AXI.rd_size_i
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_IMEM2AXI.ret_last_o
 @1000200
 -icache2axi
 [pattern_trace] 1
