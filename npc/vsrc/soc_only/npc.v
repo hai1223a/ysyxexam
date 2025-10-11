@@ -105,29 +105,3 @@ module ID(
     end
     assign in_ready_o = idle;
 endmodule //ID
-module f1();
-    // output declaration of module IF
-    wire [31:0] out_pc_o;
-    wire out_valid_o;
-    
-    IF u_IF(
-        .clk         	(clk          ),
-        .reset       	(reset        ),
-        .out_ready_i 	(out_ready_i  ),
-        .out_pc_o    	(out_pc_o     ),
-        .out_valid_o 	(out_valid_o  )
-    );
-    // output declaration of module ID
-    wire in_ready_o;
-    
-    ID u_ID(
-        .clk        	(clk         ),
-        .reset      	(reset       ),
-        .in_valid_i 	(in_valid_i  ),
-        .in_pc_i    	(in_pc_i     ),
-        .in_inst_i  	(in_inst_i   ),
-        .in_ready_o 	(in_ready_o  )
-    );
-    
-    
-endmodule
