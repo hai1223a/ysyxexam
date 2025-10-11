@@ -45,8 +45,7 @@ module ysyx_25050136_IMEM2AXI
     reg [1:0] cnt;
     wire size = (rd_addr_i >= 32'ha000_0000) && (rd_addr_i < 32'ha400_0000);
     wire [31:0] align_addr = {rd_addr_i[31:OFFSET_WIDTH], {OFFSET_WIDTH{1'b0}}};
-    // wire [31:0] real_addr = align_addr + {{30-OFFSET_WIDTH{1'b0}}, cnt, {OFFSET_WIDTH{1'b0}}};
-    wire [31:0] real_addr = align_addr;
+    wire [31:0] real_addr = align_addr + {{30-OFFSET_WIDTH{1'b0}}, cnt, {OFFSET_WIDTH{1'b0}}};
     // ==================== axi信号定义 ================================
     // 读事务
     always @(posedge clk) begin

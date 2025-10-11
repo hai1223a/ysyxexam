@@ -70,6 +70,9 @@ module ysyx_25050136_ICACHE
     reg [WAY_WIDTH-1:0] replace_way;
     reg [WAY_WIDTH-1:0] miss_way;
     
+    // conflict 和 miss 用于解决流水线中相同cacheline的两次取指的命中冲突问题
+    wire conflict;
+    wire miss;
     wire [INDEX_WIDTH-1:0]  addr_index_2 ;
     wire [TAG_WIDTH-1:0]    addr_tag_2   ;
     wire [OFFSET_INDEX-1:0] addr_offset_2;
@@ -141,8 +144,10 @@ module ysyx_25050136_ICACHE
     end
     endgenerate
     assign hit_word = line_word[addr_offset_1];
-    
     // MISS时阻塞逻辑
+    // 命中冲突
+    assign conflict = addr_1[31:OFFSET_WIDTH] == addr_2[31:OFFSET_WIDTH];
+    assign miss = ~(|hit_mask_1 | (conflict & |hit_mask));
     always @(posedge clk) begin
         if(reset) begin
             state <= IDLE;
@@ -151,7 +156,7 @@ module ysyx_25050136_ICACHE
         end else begin
             case(state)
                 IDLE: begin
-                    if(!(|hit_mask_1) & temp_fire) begin
+                    if(miss & temp_fire) begin
                         state <= MISS;
                     end
                     replace_way <= (NUM_WAY == 1) ? 0 : replace_way + 1;
