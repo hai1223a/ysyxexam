@@ -9,8 +9,8 @@ module ysyx_25050136_ICACHE
     input                                      clk          ,
     input                                      reset        ,
     // ICACHE与CPU接口
+    input                                   ic_flush_i      ,
     input                                   ic_req_valid_i  ,
-    // input                                   ic_req_flush_i  ,
     input    [31:0]                         ic_req_addr_i   ,
     output                                  ic_req_ready_o  ,
 
@@ -86,7 +86,9 @@ module ysyx_25050136_ICACHE
             addr_1 <= 0;
             hit_mask_1 <= 0;
         end else begin
-            if(in_fire_1) begin
+            if(ic_flush_i) begin
+                idle_1 <= 1;                
+            end else if(in_fire_1) begin
                 idle_1 <= 0;
                 addr_1 <= ic_req_addr_i;
                 hit_mask_1 <= hit_mask;
@@ -108,7 +110,7 @@ module ysyx_25050136_ICACHE
         end
     end
     assign ic_req_ready_o = idle_1 || temp_fire;
-    assign temp_valid = !idle_1;
+    assign temp_valid = !(idle_1 || ic_flush_i);
 
     // 第二级流水线
     always @(posedge clk) begin
@@ -118,7 +120,9 @@ module ysyx_25050136_ICACHE
             hit_word_2 <= 0;
             hit_2 <= 0;
         end else begin
-            if(temp_fire) begin
+            if(ic_flush_i) begin
+                idle_2 <= 1;
+            end else if(temp_fire) begin
                 idle_2 <= 0;
                 hit_word_2 <= hit_word;
                 addr_2 <= addr_1;
@@ -192,7 +196,7 @@ module ysyx_25050136_ICACHE
     assign ic_ret_rdata_o = hit_2 ? hit_word_2 : miss_word;
     assign ic_ret_addr_o = addr_2;
     assign temp_ready = idle_2 || out_fire_2;
-    assign ic_ret_valid_o = !idle_2 && ready_go_2;
+    assign ic_ret_valid_o = !(idle_2 || ic_flush_i) && ready_go_2;
 
 `ifdef verilator
     reg [79:0] dbg_state;

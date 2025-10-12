@@ -18,6 +18,7 @@ module ysyx_25050136_ICACHE_WRAPPER
     input                                      m_rlast_i    ,
     input    [3:0]                             m_rid_i      ,
     // 内部
+    input                                      flush_i      ,
     input                                      req_valid_i  ,
     input    [31:0]                            req_addr_i   ,
     output                                     req_ready_o  ,
@@ -42,6 +43,7 @@ module ysyx_25050136_ICACHE_WRAPPER
     u_ysyx_25050136_ICACHE(
         .clk            	(clk             ),
         .reset          	(reset           ),
+        .ic_flush_i         (flush_i         ),
         .ic_req_valid_i 	(req_valid_i     ),
         .ic_req_addr_i  	(req_addr_i      ),
         .ic_req_ready_o 	(req_ready_o     ),
