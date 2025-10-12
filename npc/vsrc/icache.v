@@ -185,7 +185,7 @@ module ysyx_25050136_ICACHE
     assign ia_rd_addr_o = addr_2;
     assign ready_go_2 = (state == IDLE);
 
-    assign ic_ret_rdata_o = miss ? miss_word : hit_word;
+    assign ic_ret_rdata_o = |hit_mask_2 ? miss_word : hit_word;
     assign ic_ret_addr_o = addr_2;
     assign temp_ready = idle_2 || out_fire_2;
     assign ic_ret_valid_o = !(idle_2 || ic_flush_i) && ready_go_2;
