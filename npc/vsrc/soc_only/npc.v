@@ -51,7 +51,7 @@ module NPCCORE_TEST (
     ID u_ID(
         .clk         	(clk               ),
         .reset       	(reset             ),
-        .flush       	(0      ),
+        .flush       	(branch_valid      ),
         .in_valid_i  	(inst_ret_valid_i  ),
         .in_pc_i     	(inst_ret_addr_i   ),
         .in_inst_i   	(inst_ret_rdata_i  ),
@@ -175,6 +175,6 @@ module EX(
     end
 
     assign in_ready_o = idle;
-    assign branch_valid = ex_pc > 32'h3000_0020;
+    assign branch_valid = ex_pc == 32'h3000_0020;
     assign branch_npc = 32'ha000_0000;
 endmodule //IF
