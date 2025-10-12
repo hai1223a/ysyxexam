@@ -142,6 +142,8 @@ module ID(
         end
     end
     assign in_ready_o = idle || out_fire;
+    assign out_pc_o = id_pc;
+    assign out_inst_o = id_inst;
     assign out_valid_o = !(idle || flush) && ready_go;
 endmodule //ID
 
