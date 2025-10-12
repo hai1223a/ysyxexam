@@ -175,6 +175,6 @@ module EX(
     end
 
     assign in_ready_o = idle;
-    assign branch_valid = in_pc_i > 32'h3000_0020;
+    assign branch_valid = ex_pc > 32'h3000_0020;
     assign branch_npc = 32'ha000_0000;
 endmodule //IF
