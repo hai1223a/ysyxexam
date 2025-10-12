@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Sun Oct 12 10:51:33 2025
+[*] Sun Oct 12 11:37:38 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Sun Oct 12 10:51:07 2025"
-[dumpfile_size] 152343
+[dumpfile_mtime] "Sun Oct 12 11:28:35 2025"
+[dumpfile_size] 152646
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/cache.gtkw"
-[timestart] 1862
+[timestart] 6922
 [size] 2498 1361
 [pos] -51 -51
-*-3.000000 1874 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-2.400000 6949 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
@@ -31,21 +31,31 @@
 @28
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_NPCCORE_TEST.reset
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_NPCCORE_TEST.branch_valid
+@22
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_NPCCORE_TEST.u_EX.ex_pc[31:0]
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_NPCCORE_TEST.u_EX.ex_inst[31:0]
 @1000200
 -cpu
 @800200
 -icache
 @28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.ic_req_valid_i
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.miss
+@29
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.conflict
 @22
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.ic_req_addr_i[31:0]
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.addr_1[31:0]
 @28
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.ic_req_ready_o
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.hit_mask_1[0]
+@200
+-
+@22
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.addr_2[31:0]
+@28
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.hit_mask_2[0]
 @200
 -
 @28
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.temp_valid
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.hit_mask_1[0]
 @22
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.addr_1[31:0]
 @28

@@ -148,7 +148,7 @@ module ysyx_25050136_ICACHE
     // MISS时阻塞逻辑
     // 命中冲突
     assign conflict = addr_1[31:OFFSET_WIDTH] == addr_2[31:OFFSET_WIDTH];
-    assign miss = ~(|hit_mask_2 | (conflict & |temp_hit_mask));
+    assign miss = ~(|temp_hit_mask);
     always @(posedge clk) begin
         if(reset) begin
             state <= IDLE;
