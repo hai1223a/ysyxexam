@@ -35,8 +35,16 @@ module NPCCORE_TEST (
     wire branch_valid;
     wire id_ex_valid;
     wire id_ex_ready;
+    wire ex_mem_valid;
+    wire ex_mem_ready;
+    wire mem_wb_valid;
+    wire mem_wb_ready;
     wire [31:0] id_ex_pc;
     wire [31:0] id_ex_inst;
+    wire [31:0] ex_mem_pc;
+    wire [31:0] ex_mem_inst;
+    wire [31:0] mem_wb_pc;
+    wire [31:0] mem_wb_inst;
     wire [31:0] branch_npc;
     IF u_IF(
         .clk         	(clk               ),
@@ -69,9 +77,37 @@ module NPCCORE_TEST (
         .in_pc_i      	(id_ex_pc          ),
         .in_inst_i    	(id_ex_inst        ),
         .in_ready_o   	(id_ex_ready       ),
+        .out_ready_i    (ex_mem_ready      ),
+        .out_pc_o       (ex_mem_pc         ),
+        .out_inst_o     (ex_mem_inst       ),
+        .out_valid_o    (ex_mem_valid      ),
         .branch_valid 	(branch_valid      ),
         .branch_npc   	(branch_npc        )
     );
+
+    
+    MEM u_MEM(
+        .clk         	(clk               ),
+        .reset       	(reset             ),
+        .in_valid_i  	(ex_mem_valid      ),
+        .in_pc_i     	(ex_mem_pc         ),
+        .in_inst_i   	(ex_mem_inst       ),
+        .in_ready_o  	(ex_mem_ready      ),
+        .out_ready_i 	(mem_wb_ready      ),
+        .out_pc_o    	(mem_wb_pc         ),
+        .out_inst_o  	(mem_wb_inst       ),
+        .out_valid_o 	(mem_wb_valid      )
+    );
+
+    WB u_WB(
+        .clk        	(clk               ),
+        .reset      	(reset             ),
+        .in_valid_i 	(mem_wb_valid      ),
+        .in_pc_i    	(mem_wb_pc         ),
+        .in_inst_i  	(mem_wb_inst       ),
+        .in_ready_o 	(mem_wb_ready      )
+    );
+
     assign inst_flush_o = branch_valid;
 endmodule
 
@@ -154,6 +190,10 @@ module EX(
     input [31:0] in_pc_i,
     input [31:0] in_inst_i,
     output in_ready_o,
+    input out_ready_i,
+    output [31:0] out_pc_o,
+    output [31:0] out_inst_o,
+    output out_valid_o,
     output branch_valid, 
     output [31:0] branch_npc
 ); 
@@ -161,6 +201,8 @@ module EX(
     reg [31:0] ex_pc;
     reg [31:0] ex_inst;
     wire in_fire = in_valid_i & in_ready_o;
+    wire out_fire = out_valid_o & out_ready_i;
+    wire ready_go = 1;
     always @(posedge clk) begin
         if(reset) begin
             idle <= 1;
@@ -168,13 +210,86 @@ module EX(
             ex_inst <= 0;
         end else begin
             if(in_fire) begin
+                idle <= 0;
                 ex_pc <= in_pc_i;
                 ex_inst <= in_inst_i;
+            end else if(out_fire) begin
+                idle <= 1;
+            end
+        end
+    end
+
+    assign in_ready_o = idle || out_fire;
+    assign out_pc_o = ex_pc;
+    assign out_inst_o = ex_inst;
+    assign out_valid_o = !idle && ready_go;
+    assign branch_valid = ex_pc == 32'h3000_0020;
+    assign branch_npc = 32'ha000_0000;
+endmodule //EX
+
+module MEM(
+    input clk,
+    input reset,
+    input in_valid_i,
+    input [31:0] in_pc_i,
+    input [31:0] in_inst_i,
+    output in_ready_o,
+    input out_ready_i,
+    output [31:0] out_pc_o,
+    output [31:0] out_inst_o,
+    output out_valid_o
+);
+    reg idle;
+    reg [31:0] mem_pc;
+    reg [31:0] mem_inst;
+    wire in_fire = in_valid_i & in_ready_o;
+    wire out_fire = out_valid_o & out_ready_i;
+    wire ready_go = 1;
+    always @(posedge clk) begin
+        if(reset) begin
+            idle <= 1;
+            mem_pc <= 0;
+            mem_inst <= 0;
+        end else begin
+            if(in_fire) begin
+                idle <= 0;
+                mem_pc <= in_pc_i;
+                mem_inst <= in_inst_i;
+            end else if(out_fire) begin
+                idle <= 1;
+            end
+        end
+    end
+    assign in_ready_o = idle || out_fire;
+    assign out_pc_o = mem_pc;
+    assign out_inst_o = mem_inst;
+    assign out_valid_o = idle && ready_go;
+endmodule //ID
+
+module WB(
+    input clk,
+    input reset,
+    input in_valid_i,
+    input [31:0] in_pc_i,
+    input [31:0] in_inst_i,
+    output in_ready_o
+); 
+    reg idle;
+    reg [31:0] wb_pc;
+    reg [31:0] wb_inst;
+    wire in_fire = in_valid_i & in_ready_o;
+    always @(posedge clk) begin
+        if(reset) begin
+            idle <= 1;
+            wb_pc <= 0;
+            wb_inst <= 0;
+        end else begin
+            if(in_fire) begin
+                wb_pc <= in_pc_i;
+                wb_inst <= in_inst_i;
             end
         end
     end
 
     assign in_ready_o = idle;
-    assign branch_valid = ex_pc == 32'h3000_0020;
-    assign branch_npc = 32'ha000_0000;
-endmodule //IF
+endmodule //MEM
