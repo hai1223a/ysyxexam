@@ -261,9 +261,9 @@ module MEM(
         end
     end
     assign in_ready_o = idle || out_fire;
+    assign out_valid_o = !idle && ready_go;
     assign out_pc_o = mem_pc;
     assign out_inst_o = mem_inst;
-    assign out_valid_o = idle && ready_go;
 endmodule //ID
 
 module WB(
