@@ -59,7 +59,7 @@ module NPCCORE_TEST (
     ID u_ID(
         .clk         	(clk               ),
         .reset       	(reset             ),
-        .flush       	(0      ),
+        .flush       	(branch_valid      ),
         .in_valid_i  	(inst_ret_valid_i  ),
         .in_pc_i     	(inst_ret_addr_i   ),
         .in_inst_i   	(inst_ret_rdata_i  ),
