@@ -223,7 +223,7 @@ module EX(
     assign out_pc_o = ex_pc;
     assign out_inst_o = ex_inst;
     assign out_valid_o = !idle && ready_go;
-    assign branch_valid = ex_pc == 32'h3000_0020;
+    assign branch_valid = out_valid_o && (ex_pc == 32'h3000_0020);
     assign branch_npc = 32'ha000_0000;
 endmodule //EX
 
