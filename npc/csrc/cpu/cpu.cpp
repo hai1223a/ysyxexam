@@ -35,16 +35,11 @@ void cpu_exec_once()
     if (SOC_PC != pc__ && SOC_PC != 0)
     {
         printf("1:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
-            pc_pre = pc__;
             pc__ = SOC_PC;
-            inst_pre = inst__;
             inst__ = SOC_INST;
-        printf("2:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
-        if(pc__ != RESET_VECTOR) {
             inst_count++;
             break;    
-        }
-        printf("3:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
+        printf("2:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
 
     }
   }
@@ -66,8 +61,8 @@ void cpu_exec(uint32_t inst_num)
     {
       break;
     }
-    IFDEF(CONFIG_ITRACE, Itrace_log(inst_pre, pc_pre, inst_num));
-    IFDEF(CONFIG_FTRACE, ftracer_log(inst_pre, pc_pre));
+    IFDEF(CONFIG_ITRACE, Itrace_log(inst__, pc__, inst_num));
+    IFDEF(CONFIG_FTRACE, ftracer_log(inst__, pc__));
     IFDEF(CONFIG_DIFFTEST, difftest_step());
     IFDEF(CONFIG_WATCHPOINT, if(!batch_mode) scan_watchpoint());
   }
