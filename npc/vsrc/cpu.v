@@ -179,44 +179,44 @@ module ysyx_25050136_NPC
     //     .mem_req_wdata_o  	(mem_req_wdata   )
     // );
     
-    // ysyx_25050136_ICACHE_WRAPPER 
-    // u_ysyx_25050136_ICACHE_WRAPPER(
-    //     .clk         	(clk             ),
-    //     .reset       	(reset           ),
-    //     .m_arvalid_o 	(inst_arvalid_o  ),
-    //     .m_arready_i 	(inst_arready_i  ),
-    //     .m_araddr_o  	(inst_araddr_o   ),
-    //     .m_arid_o    	(inst_arid_o     ),
-    //     .m_arlen_o   	(inst_arlen_o    ),
-    //     .m_arsize_o  	(inst_arsize_o   ),
-    //     .m_arburst_o 	(inst_arburst_o  ),
-    //     .m_rvalid_i  	(inst_rvalid_i   ),
-    //     .m_rready_o  	(inst_rready_o   ),
-    //     .m_rdata_i   	(inst_rdata_i    ),
-    //     .m_rresp_i   	(inst_rresp_i    ),
-    //     .m_rlast_i   	(inst_rlast_i    ),
-    //     .m_rid_i     	(inst_rid_i      ),
-    //     .flush_i        (inst_flush      ),
-    //     .req_valid_i    (inst_req_valid  ),
-    //     .req_addr_i     (inst_req_addr   ),
-    //     .req_ready_o    (inst_req_ready  ),
-    //     .ret_ready_i    (inst_ret_ready  ),
-    //     .ret_rdata_o    (inst_ret_rdata  ),
-    //     .ret_addr_o     (inst_ret_addr   ),
-    //     .ret_valid_o    (inst_ret_valid  )
-    // );
-
-    ROM_TEST u_ROM_TEST(
+    ysyx_25050136_ICACHE_WRAPPER 
+    u_ysyx_25050136_ICACHE_WRAPPER(
         .clk         	(clk             ),
         .reset       	(reset           ),
-        .flush_i     	(inst_flush      ),
-        .req_valid_i 	(inst_req_valid  ),
-        .req_addr_i  	(inst_req_addr   ),
-        .req_ready_o 	(inst_req_ready  ),
-        .ret_ready_i 	(inst_ret_ready  ),
-        .ret_addr_o  	(inst_ret_addr   ),
-        .ret_rdata_o 	(inst_ret_rdata  ),
-        .ret_valid_o 	(inst_ret_valid  )
+        .m_arvalid_o 	(inst_arvalid_o  ),
+        .m_arready_i 	(inst_arready_i  ),
+        .m_araddr_o  	(inst_araddr_o   ),
+        .m_arid_o    	(inst_arid_o     ),
+        .m_arlen_o   	(inst_arlen_o    ),
+        .m_arsize_o  	(inst_arsize_o   ),
+        .m_arburst_o 	(inst_arburst_o  ),
+        .m_rvalid_i  	(inst_rvalid_i   ),
+        .m_rready_o  	(inst_rready_o   ),
+        .m_rdata_i   	(inst_rdata_i    ),
+        .m_rresp_i   	(inst_rresp_i    ),
+        .m_rlast_i   	(inst_rlast_i    ),
+        .m_rid_i     	(inst_rid_i      ),
+        .flush_i        (inst_flush      ),
+        .req_valid_i    (inst_req_valid  ),
+        .req_addr_i     (inst_req_addr   ),
+        .req_ready_o    (inst_req_ready  ),
+        .ret_ready_i    (inst_ret_ready  ),
+        .ret_rdata_o    (inst_ret_rdata  ),
+        .ret_addr_o     (inst_ret_addr   ),
+        .ret_valid_o    (inst_ret_valid  )
     );
+
+    // ROM_TEST u_ROM_TEST(
+    //     .clk         	(clk             ),
+    //     .reset       	(reset           ),
+    //     .flush_i     	(inst_flush      ),
+    //     .req_valid_i 	(inst_req_valid  ),
+    //     .req_addr_i  	(inst_req_addr   ),
+    //     .req_ready_o 	(inst_req_ready  ),
+    //     .ret_ready_i 	(inst_ret_ready  ),
+    //     .ret_addr_o  	(inst_ret_addr   ),
+    //     .ret_rdata_o 	(inst_ret_rdata  ),
+    //     .ret_valid_o 	(inst_ret_valid  )
+    // );
     
 endmodule
