@@ -95,7 +95,7 @@ void difftest_step()
     {
       dut_r.gpr[i] = get_reg(i);
     }
-    dut_r.pc = SOC_PC;
+    dut_r.pc = SOC_NPC;
     ref_difftest_regcpy(&dut_r, DIFFTEST_TO_REF);
   } else {
     CPU_state ref_r;

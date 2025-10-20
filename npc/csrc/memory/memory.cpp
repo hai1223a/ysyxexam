@@ -77,17 +77,17 @@ extern "C" void psram_write(int32_t addr, int32_t data, int32_t len) {
 }
 
 extern "C" void find_ebreak() {
-  set_nemu_state(NPC_END, SOC_PC, get_reg(10));
+  set_nemu_state(NPC_END, SOC_NPC, get_reg(10));
 }
 
 extern "C" void find_resp() {
   Log("NPC抛出Access Fault异常");
-  set_nemu_state(NPC_END, SOC_PC, 2);
+  set_nemu_state(NPC_END, SOC_NPC, 2);
 }
 
 extern "C" void find_addr_0() {
   Log("你正在对地址0进行读写");
-  set_nemu_state(NPC_END, SOC_PC, 3);
+  set_nemu_state(NPC_END, SOC_NPC, 3);
 }
 
 extern "C" void find_diff_skip() {

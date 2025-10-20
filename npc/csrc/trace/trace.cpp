@@ -67,7 +67,7 @@ void add_mtrace(uint32_t addr, int type, uint32_t data, int mask)
   static size_t ptr = 0;
   char *p = mtrace_buf[ptr];
   size_t buf_len = sizeof(mtrace_buf) / ARRLEN(mtrace_buf);
-  p += snprintf(p, buf_len, "%ld  %08x:  ", ptr, SOC_PC);
+  p += snprintf(p, buf_len, "%ld  %08x:  ", ptr, SOC_NPC);
   p += snprintf(p, mtrace_buf[ptr] + buf_len - p, "%8x  ", addr);
   if (type == wen)
     p += snprintf(p, mtrace_buf[ptr] + buf_len - p, "write %08x %08x", data, mask);
@@ -241,10 +241,10 @@ void ftracer_log(uint32_t inst_in, uint32_t pc_in)
     for(int i = 0; i < FUNC_nums; i++)
     {
       if(FUNC_FTRACER[i].addr == 0) break;
-      if(SOC_PC == FUNC_FTRACER[i].addr)
+      if(SOC_NPC == FUNC_FTRACER[i].addr)
       {
         Assert(p_stack < ARRLEN(FUNC_stack), "调用太深, ftracer的堆栈溢出了");
-        snprintf(_buf, sizeof(_buf), "0x%8x %u C [%s @ 0x%8x]\n", pc_in, p_stack, FUNC_FTRACER[i].func_name, SOC_PC);
+        snprintf(_buf, sizeof(_buf), "0x%8x %u C [%s @ 0x%8x]\n", pc_in, p_stack, FUNC_FTRACER[i].func_name, SOC_NPC);
         if(!strcmp(_buf, repeat_buf[1])) {
           repeat_count++;
         } else {
