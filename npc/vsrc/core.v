@@ -30,7 +30,7 @@ module ysyx_25050136_NPCCORE
 // 顶层信号定义
 //========================================
 // === 跳转 ===
-wire flush;
+wire flush0;
 wire branch_valid;
 wire [31:0] branch_npc;
 // === 取操作数 ===
@@ -104,7 +104,7 @@ assign inst_flush_o = flush0;
 //========================================
 `ifdef ysyx_25050136_VERILATOR_DPIC
 always @(*) begin
-    if(mem_dbg_op[`ysyx_25050136_DBG_EBREAK]) begin
+    if(mem_wb_valid & mem_wb_ready & (mem_dbg_inst == 32'h00100073)) begin
         find_ebreak();
     end
 end
