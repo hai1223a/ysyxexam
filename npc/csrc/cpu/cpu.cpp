@@ -34,12 +34,11 @@ void cpu_exec_once()
     // 指令计算
     if (SOC_PC != pc__ && SOC_PC != 0)
     {
-        printf("1:SOC_PC: %x SOC_INST: %x pc__: %x inst__: %x\n",SOC_PC, SOC_INST, pc__,inst__);
+        printf("检查:SOC_PC: %x SOC_INST: %x pc__: %x inst__: %x\n",SOC_PC, SOC_INST, pc__,inst__);
             pc__ = SOC_PC;
             inst__ = SOC_INST;
             inst_count++;
             break;    
-        printf("2:SOC_PC: %x SOC_INST: %x pc__: %x inst__: %x\n",SOC_PC, SOC_INST, pc__,inst__);
     }
   }
 }
