@@ -214,8 +214,8 @@ module ysyx_25050136_NPC
         .req_addr_i  	(inst_req_addr   ),
         .req_ready_o 	(inst_req_ready  ),
         .ret_ready_i 	(inst_ret_ready  ),
-        .ret_addr_o  	(inst_ret_rdata  ),
-        .ret_rdata_o 	(inst_ret_addr   ),
+        .ret_addr_o  	(inst_ret_addr   ),
+        .ret_rdata_o 	(inst_ret_rdata  ),
         .ret_valid_o 	(inst_ret_valid  )
     );
     
