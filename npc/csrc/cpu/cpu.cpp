@@ -32,7 +32,7 @@ void cpu_exec_once()
     sim_time++;
     IFDEF(CONFIG_TARGET_NVBOARD, nvboard_update());
     // 指令计算
-    if (SOC_PC != pc__ && SOC_PC != 0)
+    if (SOC_PC != pc__ && SOC_PC != 0 && SOC_NPC != SOC_PC)
     {
         printf("检查:SOC_PC: %x SOC_INST: %x pc__: %x inst__: %x\n",SOC_PC, SOC_INST, pc__,inst__);
             pc__ = SOC_PC;
