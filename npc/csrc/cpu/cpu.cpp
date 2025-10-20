@@ -9,7 +9,7 @@ vluint64_t sim_time = 0;      // 记录仿真时间
 vluint64_t reset_time = 40;   // 复位时间
 vluint64_t stop_time = 0;     // 暂停时间点
 uint64_t g_timer = 0;         // unit: us
-uint32_t fuck[16];
+
 void reset()
 {
   top->reset = 0;
@@ -32,22 +32,21 @@ void cpu_exec_once()
     sim_time++;
     IFDEF(CONFIG_TARGET_NVBOARD, nvboard_update());
     // 指令计算
-    break;
-    // if (SOC_PC != pc__ && SOC_PC != 0)
-    // {
-    //     // printf("1:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
-    //         pc_pre = pc__;
-    //         pc__ = SOC_PC;
-    //         inst_pre = inst__;
-    //         inst__ = SOC_INST;
-    //     // printf("2:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
-    //     if(pc__ != RESET_VECTOR) {
-    //         inst_count++;
-    //         break;    
-    //     }
-    //     // printf("3:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
+    if (SOC_PC != pc__ && SOC_PC != 0)
+    {
+        // printf("1:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
+            pc_pre = pc__;
+            pc__ = SOC_PC;
+            inst_pre = inst__;
+            inst__ = SOC_INST;
+        // printf("2:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
+        if(pc__ != RESET_VECTOR) {
+            inst_count++;
+            break;    
+        }
+        // printf("3:%x %x %x %x %x %x\n",SOC_PC, SOC_INST, pc__,pc_pre,inst__,inst_pre);
 
-    // }
+    }
   }
 }
 

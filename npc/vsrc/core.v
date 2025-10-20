@@ -143,7 +143,7 @@ ysyx_25050136_ID #(
 ) u_ysyx_25050136_ID (
     .clk                      	(clk                       ),
     .reset                    	(reset                     ),
-    .flush                    	(flush0                     ),
+    .flush                    	(flush0                    ),
     .in_valid_i               	(inst_ret_valid_i          ),
     .in_inst_i                	(inst_ret_rdata_i          ),
     .in_pc_i                  	(inst_ret_addr_i           ),
