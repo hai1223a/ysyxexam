@@ -236,7 +236,7 @@ module ysyx_25050136_ID
     assign in_ready_o = idle || out_fire;
     assign out_valid_o = !(idle || flush) && ready_go;
 `ifdef ysyx_25050136_VERILATOR_DPIC
-    wire id_dbg_pc = out_pc_o;
+    wire [31:0] id_dbg_pc = out_pc_o;
     assign out_dbg_inst_o = id_inst;
 `endif
 
