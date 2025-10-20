@@ -18,21 +18,26 @@ module ysyx_25050136_LSU
         input                         clint_ready_i,
         output                        clint_valid_o,
         output   [31:0]               clint_addr_o , 
-        // 内部
+        // 组合输入
+        input                         lsu_en_i     ,
         input                         lsu_ren_i    ,
         input                         lsu_wen_i    ,             
-        input    [3:0]                lsu_mask_i   ,
-        input                         lsu_signed_i ,
         input    [31:0]               lsu_addr_i   ,
+        input    [3:0]                lsu_wmask_i  ,
+        input                         lsu_wsigned_i,
+        // 时序输入
+        input    [3:0]                lsu_rmask_i  ,
+        input                         lsu_rsigned_i,
+        input                         lsu_signed_i ,
         input    [31:0]               store_data_i ,
         output   [31:0]               load_data_o  ,
         output                        busy_mem_o
      );
     // 地址对齐检查
+    // wire misaligned = (lsu_mask_i == 4'h3) ? lsu_addr_i[0] :       // halfword检查bit[0]
+    //                   (lsu_mask_i == 4'hF) ? |lsu_addr_i[1:0] :    // word检查bit[1:0]
+    //                   1'b0;                                        // byte总是对齐
     wire [3:0] byte_sel = 4'b1 << lsu_addr_i[1:0];
-    wire misaligned = (lsu_mask_i == 4'h3) ? lsu_addr_i[0] :       // halfword检查bit[0]
-                      (lsu_mask_i == 4'hF) ? |lsu_addr_i[1:0] :    // word检查bit[1:0]
-                      1'b0;                                        // byte总是对齐
     // 从设备选择
     wire is_clint = (lsu_addr_i >= 32'h0200_0000) && (lsu_addr_i < 32'h0201_0000);
     // DEBUG
@@ -77,7 +82,7 @@ module ysyx_25050136_LSU
                 req_size_r  <= 0;
                 req_wdata_r <= 0;
                 req_addr_r  <= 0;
-            end else if((lsu_ren_i | lsu_wen_i) & (!is_clint)) begin
+            end else if(lsu_en_i & (lsu_ren_i | lsu_wen_i) & (!is_clint)) begin
                 req_valid_r <= 1'b1;
                 req_ren_r   <= lsu_ren_i;
                 req_wen_r   <= lsu_wen_i;
@@ -85,8 +90,6 @@ module ysyx_25050136_LSU
                 req_size_r  <= lsu_size_r;
                 req_wdata_r <= lsu_wdata_r;
                 req_addr_r  <= lsu_addr_i;
-            
-            
             end
         end
     end

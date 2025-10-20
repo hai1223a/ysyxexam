@@ -6,210 +6,216 @@ module ysyx_25050136_EX
         // 内部
         input                                                clk,
         input                                              reset,
-        input                                            stall_i,
-        input                                            flush_i,
-        input     [31:0]                                    pc_i,
-        input     [31:0]                                rdata1_i,
-        input     [31:0]                                rdata2_i,
-        input     [31:0]                                   imm_i,
-        input     [`ysyx_25050136_ALU_OP_NUM-1:0]       alu_op_i,
-        input     [`ysyx_25050136_CSRU_OP_NUM-1:0]     csru_op_i,
-        input                                   alu_op1_use_pc_i,
-        input                                  alu_op2_use_imm_i,
-        input                                    alu_op2_use_4_i,
-        input                                          is_jalr_i,
-        input                               unconditional_jump_i,
-        input                                 conditional_jump_i,
-        input                                          lsu_ren_i,
-        input                                          lsu_wen_i,
-        input     [3:0]                               lsu_mask_i,
-        input                                       lsu_signed_i,
-        input     [11:0]                              csr_addr_i,
-        input                                          csr_ren_i,
-        input                                          csr_wen_i,
-        input                                csr_wdata_use_rs1_i,
-        input     [4:0]                                    rs1_i,
-        input     [ADDR_WIDTH-1:0]                          rd_i,
-        input                                            rd_en_i,
+        input                                              flush,
+        input                                         in_valid_i,
+        input     [31:0]                                 in_pc_i,
+        input     [31:0]                             in_rdata1_i,
+        input     [31:0]                             in_rdata2_i,
+        input     [31:0]                                in_imm_i,
+        input     [`ysyx_25050136_ALU_OP_NUM-1:0]    in_alu_op_i,
+        input     [`ysyx_25050136_CSRU_OP_NUM-1:0]  in_csru_op_i,
+        input                                in_alu_op1_use_pc_i,
+        input                               in_alu_op2_use_imm_i,
+        input                                 in_alu_op2_use_4_i,
+        input                                       in_is_jalr_i,
+        input                            in_unconditional_jump_i,
+        input                              in_conditional_jump_i,
+        input                                       in_lsu_ren_i,
+        input                                       in_lsu_wen_i,
+        input     [3:0]                            in_lsu_mask_i,
+        input                                    in_lsu_signed_i,
+        input     [11:0]                           in_csr_addr_i,
+        input                                       in_csr_ren_i,
+        input                                       in_csr_wen_i,
+        input                             in_csr_wdata_use_rs1_i,
+        input     [4:0]                                 in_rs1_i,
+        input     [ADDR_WIDTH-1:0]                       in_rd_i,
+        input                                         in_rd_en_i,
+        output                                        in_ready_o,
 `ifdef ysyx_25050136_VERILATOR_DPIC
-        input      [`ysyx_25050136_DBG_NUM-1:0]         dbg_op_i,
-        input      [31:0]                               dbg_pc_i,
-        input      [31:0]                             dbg_inst_i,
-        output reg [`ysyx_25050136_DBG_NUM-1:0]         dbg_op_o,
-        output reg [31:0]                               dbg_pc_o,
-        output reg [31:0]                             dbg_inst_o,
+        input      [31:0]                          in_dbg_inst_i,
+        output     [31:0]                           out_dbg_pc_o,
+        output reg [31:0]                         out_dbg_inst_o,
 `endif
+        input                                        out_ready_i,
+        output    [ADDR_WIDTH-1:0]                      out_rd_o,
+        output                                       out_rd_en_o,
+        output    [31:0]                         out_gpr_wdata_o,
+        output                                     out_lsu_ren_o,
+        output                                     out_lsu_wen_o,
+        output    [3:0]                           out_lsu_mask_o,
+        output                                  out_lsu_signed_o,
+        output    [31:0]                          out_lsu_addr_o,
+        output    [31:0]                         out_lsu_wdata_o,
+        output                                       out_valid_o,
         output                                    branch_valid_o,
         output    [31:0]                            branch_npc_o,
-        output    [ADDR_WIDTH-1:0]                          rd_o,
-        output                                           rd_en_o,
-        output    [31:0]                             gpr_wdata_o,
-        output                                         lsu_ren_o,
-        output                                         lsu_wen_o,
-        output    [3:0]                               lsu_mask_o,
-        output                                      lsu_signed_o,
-        output    [31:0]                              lsu_addr_o,
-        output    [31:0]                             lsu_wdata_o
-     );    
-    //===================================================
-    // ALU
-    //===================================================
+        output    [ADDR_WIDTH-1:0]                       waddr_o
+     );
+    // ==== 信号定义 ====
+    // 时序逻辑
+    reg idle;
+    reg [31:0] ex_pc;
+    reg [31:0] ex_rdata1;
+    reg [31:0] ex_rdata2;
+    reg [31:0] ex_imm;
+    reg [`ysyx_25050136_ALU_OP_NUM-1:0] ex_alu_op;
+    reg [`ysyx_25050136_CSRU_OP_NUM-1:0] ex_csru_op;
+    reg ex_alu_op1_use_pc;
+    reg ex_alu_op2_use_imm;
+    reg ex_alu_op2_use_4;
+    reg ex_is_jalr;
+    reg ex_unconditional_jump;
+    reg ex_conditional_jump;
+    reg ex_lsu_ren;
+    reg ex_lsu_wen;
+    reg [3:0] ex_lsu_mask;
+    reg ex_lsu_signed;
+    reg [11:0] ex_csr_addr;
+    reg ex_csr_ren;
+    reg ex_csr_wen;
+    reg ex_csr_wdata_use_rs1;
+    reg [4:0] ex_rs1;
+    reg [ADDR_WIDTH-1:0] ex_rd;
+    reg ex_rd_en;
+    // 组合逻辑
+    wire in_fire = in_valid_i & in_ready_o;
+    wire out_fire = out_valid_o & out_ready_i;
+    wire ready_go;
+    // === ALU ===
     wire [31:0] alu_opd1;
     wire [31:0] alu_opd2;
     wire [31:0] alu_out; 
-    assign alu_opd1 = alu_op1_use_pc_i ? pc_i : rdata1_i;
-    assign alu_opd2 = alu_op2_use_imm_i ? imm_i :
-                     (alu_op2_use_4_i) ? 32'd4 : rdata2_i;
-    ysyx_25050136_ALU u_ysyx_25050136_ALU(
-        .op1_i          (alu_opd1    ),
-        .op2_i          (alu_opd2    ),
-        .op_i 	        (alu_op_i    ),
-        .out_o       	(alu_out     )
-    );
-    //===================================================
-    // BQU
-    //===================================================
+    // === 跳转 ===
     wire [31:0] bqu_opd1;
     wire [31:0] bqu_opd2;
+    wire [31:0] bqu_add_result;
     wire [31:0] bqu_out;
-    assign bqu_opd1 = is_jalr_i ? rdata2_i : pc_i;
-    assign bqu_opd2 = imm_i;
-    ysyx_25050136_BQU u_ysyx_25050136_BQU(
-        .op1_i          (bqu_opd1    ),
-        .op2_i          (bqu_opd2    ),
-        .is_jalr_i      (is_jalr_i   ),
-        .out_o       	(bqu_out     )
-    );
-    //===================================================
-    // CSRU
-    //=================================================== 
+    // === CSRU ===
     wire [31:0] csru_wdata;
     wire [31:0] csru_out;
-    assign csru_wdata = csr_wdata_use_rs1_i ? {{32-5{1'b0}},rs1_i} : rdata1_i;
+    
+    // ==== 逻辑实现 ====
+    always @(posedge clk) begin
+        if(reset) begin
+            idle <= 1;
+            ex_pc <= 0;
+            ex_rdata1 <= 0;
+            ex_rdata2 <= 0;
+            ex_imm <= 0;
+            ex_alu_op <= 0;
+            ex_csru_op <= 0;
+            ex_alu_op1_use_pc <= 0;
+            ex_alu_op2_use_imm <= 0;
+            ex_alu_op2_use_4 <= 0;
+            ex_is_jalr <= 0;
+            ex_unconditional_jump <= 0;
+            ex_conditional_jump <= 0;
+            ex_lsu_ren <= 0;
+            ex_lsu_wen <= 0;
+            ex_lsu_mask <= 0;
+            ex_lsu_signed <= 0;
+            ex_csr_addr <= 0;
+            ex_csr_ren <= 0;
+            ex_csr_wen <= 0;
+            ex_csr_wdata_use_rs1 <= 0;
+            ex_rs1 <= 0;
+            ex_rd <= 0;
+            ex_rd_en <= 0;
+        end else begin
+            if(flush) begin
+                idle <= 1;
+            end else if(in_fire) begin
+                idle <= 0;
+                ex_pc <= in_pc_i;
+                ex_rdata1 <= in_rdata1_i;
+                ex_rdata2 <= in_rdata2_i;
+                ex_imm <= in_imm_i;
+                ex_alu_op <= in_alu_op_i;
+                ex_csru_op <= in_csru_op_i;
+                ex_alu_op1_use_pc <= in_alu_op1_use_pc_i;
+                ex_alu_op2_use_imm <= in_alu_op2_use_imm_i;
+                ex_alu_op2_use_4 <= in_alu_op2_use_4_i;
+                ex_is_jalr <= in_is_jalr_i;
+                ex_unconditional_jump <= in_unconditional_jump_i;
+                ex_conditional_jump <= in_conditional_jump_i;
+                ex_lsu_ren <= in_lsu_ren_i;
+                ex_lsu_wen <= in_lsu_wen_i;
+                ex_lsu_mask <= in_lsu_mask_i;
+                ex_lsu_signed <= in_lsu_signed_i;
+                ex_csr_addr <= in_csr_addr_i;
+                ex_csr_ren <= in_csr_ren_i;
+                ex_csr_wen <= in_csr_wen_i;
+                ex_csr_wdata_use_rs1 <= in_csr_wdata_use_rs1_i;
+                ex_rs1 <= in_rs1_i;
+                ex_rd <= in_rd_i;
+                ex_rd_en <= in_rd_en_i;
+            end else if(out_fire) begin
+                idle <= 1;
+            end
+        end
+    end
+    // === ALU ===
+    assign alu_opd1 = ex_alu_op1_use_pc ? ex_pc : ex_rdata1;
+    assign alu_opd2 = ex_alu_op2_use_imm ? ex_imm :
+                     (ex_alu_op2_use_4) ? 32'd4 : ex_rdata2;
+    ysyx_25050136_ALU u_ysyx_25050136_ALU(
+        .op1_i          (alu_opd1     ),
+        .op2_i          (alu_opd2     ),
+        .op_i 	        (ex_alu_op    ),
+        .out_o       	(alu_out      )
+    );
+    // === BQU ===
+    assign bqu_opd1 = ex_is_jalr ? ex_rdata2 : ex_pc;
+    assign bqu_opd2 = ex_imm;
+    assign bqu_add_result = bqu_opd1 + bqu_opd2;
+    assign bqu_out = {bqu_add_result[31:1], (~ex_is_jalr & bqu_add_result[0])};
+    // === CSR ===
+    assign csru_wdata = ex_csr_wdata_use_rs1 ? {{32-5{1'b0}},ex_rs1} : ex_rdata1;
     ysyx_25050136_CSRU u_ysyx_25050136_CSRU(
         .clk          	(clk         ),
         .reset        	(reset       ),
-        .pc_i         	(pc_i        ),
-        .operation_i  	(csru_op_i   ),
+        .pc_i         	(ex_pc       ),
+        .operation_i  	(ex_csru_op  ),
         .csru_wdata_i 	(csru_wdata  ),
-        .csru_addr_i  	(csr_addr_i  ),
-        .csru_ren_i   	(csr_ren_i   ),
-        .csru_wen_i   	(csr_wen_i   ),
+        .csru_addr_i  	(ex_csr_addr ),
+        .csru_ren_i   	(ex_csr_ren  ),
+        .csru_wen_i   	(ex_csr_wen  ),
         .csru_rdata_o 	(csru_out    )
     );
-    //===================================================
-    // 跳转路径
-    //=================================================== 
-    assign branch_valid_o = unconditional_jump_i | csru_op_i[`ysyx_25050136_CSRU_ECALL] |
-                            csru_op_i[`ysyx_25050136_CSRU_MRET] | (conditional_jump_i & alu_out[0]);
-    assign branch_npc_o = (csru_op_i[`ysyx_25050136_CSRU_ECALL] | csru_op_i[`ysyx_25050136_CSRU_MRET]) ?
+    // === 跳转 ===
+    assign branch_valid_o = out_valid_o & (ex_unconditional_jump | ex_csru_op[`ysyx_25050136_CSRU_ECALL] |
+                            ex_csru_op[`ysyx_25050136_CSRU_MRET] | (ex_conditional_jump & alu_out[0]));
+    assign branch_npc_o = (ex_csru_op[`ysyx_25050136_CSRU_ECALL] | ex_csru_op[`ysyx_25050136_CSRU_MRET]) ?
                            csru_out : bqu_out;
-    //===================================================
-    // 中间信号定义
-    //=================================================== 
-    wire [31:0] gpr_wdata_t = csr_ren_i ? csru_out : alu_out;
-
+    // === 访存 ===
+    assign out_lsu_ren_o = ex_lsu_ren;
+    assign out_lsu_wen_o = ex_lsu_wen;
+    assign out_lsu_mask_o = ex_lsu_mask;
+    assign out_lsu_signed_o = ex_lsu_signed;
+    assign out_lsu_addr_o = alu_out;
+    assign out_lsu_wdata_o = ex_rdata2;
+    // === 写回 ===
+    assign out_rd_o = ex_rd;
+    assign out_rd_en_o = ex_rd_en;
+    assign out_gpr_wdata_o = ex_csr_ren ? csru_out : alu_out;
+    assign waddr_o = ex_rd & {ADDR_WIDTH{ex_rd_en & out_valid_o}};
+    // === 握手 ===
+    assign ready_go = 1;
+    assign in_ready_o = idle || out_fire;
+    assign out_valid_o = !(idle || flush) && ready_go;
 `ifdef ysyx_25050136_VERILATOR_DPIC
     always @(posedge clk) begin
         if(reset) begin
-            dbg_op_o <= 0;
-            dbg_pc_o <= 0;
-            dbg_inst_o <= 0;
+            out_dbg_inst_o <= 0;
         end else begin
-            if(stall_i) begin
-
-            end else begin
-                dbg_op_o <= dbg_op_i;
-                dbg_pc_o <= dbg_pc_i;
-                dbg_inst_o <= dbg_inst_i;
-            end
+            if(flush) begin
+            end else if(in_fire) begin
+                out_dbg_inst_o <= in_dbg_inst_i;
+            end if(out_fire) begin
+            end 
         end
     end
+    assign out_dbg_pc_o = ex_pc;
 `endif
-    ysyx_25050136_EX_REG #(
-        .ADDR_WIDTH(ADDR_WIDTH)
-    ) EX_REG (
-        .clk          	(clk           ),
-        .reset        	(reset         ),
-        .stall         	(stall_i       ),
-        .flush        	(flush_i       ),
-        .rd_i         	(rd_i          ),
-        .rd_en_i      	(rd_en_i       ),
-        .gpr_wdata_i  	(gpr_wdata_t   ),
-        .lsu_ren_i    	(lsu_ren_i     ),
-        .lsu_wen_i    	(lsu_wen_i     ),
-        .lsu_mask_i   	(lsu_mask_i    ),
-        .lsu_signed_i 	(lsu_signed_i  ),
-        .lsu_addr_i   	(alu_out       ),
-        .lsu_wdata_i  	(rdata2_i      ),
-        .rd_o         	(rd_o          ),
-        .rd_en_o      	(rd_en_o       ),
-        .gpr_wdata_o  	(gpr_wdata_o   ),
-        .lsu_ren_o    	(lsu_ren_o     ),
-        .lsu_wen_o    	(lsu_wen_o     ),
-        .lsu_mask_o   	(lsu_mask_o    ),
-        .lsu_signed_o 	(lsu_signed_o  ),
-        .lsu_addr_o   	(lsu_addr_o    ),
-        .lsu_wdata_o  	(lsu_wdata_o   )
-    );
-    
-endmodule //ysyx_25050136_EX
-
-module ysyx_25050136_EX_REG
-    #(
-        parameter ADDR_WIDTH = 4
-    )
-    (
-        input                        clk,
-        input                        reset,
-        input                        stall,
-        input                        flush,
-        input      [ADDR_WIDTH-1:0]  rd_i,
-        input                        rd_en_i,
-        input      [31:0]            gpr_wdata_i,
-        input                        lsu_ren_i,
-        input                        lsu_wen_i,
-        input      [3:0]             lsu_mask_i,
-        input                        lsu_signed_i,
-        input      [31:0]            lsu_addr_i,
-        input      [31:0]            lsu_wdata_i,
-        output reg [ADDR_WIDTH-1:0]  rd_o,
-        output reg                   rd_en_o,
-        output reg [31:0]            gpr_wdata_o,
-        output reg                   lsu_ren_o,
-        output reg                   lsu_wen_o,
-        output reg [3:0]             lsu_mask_o,
-        output reg                   lsu_signed_o,
-        output reg [31:0]            lsu_addr_o,
-        output reg [31:0]            lsu_wdata_o
-    );
-
-    always @(posedge clk) begin
-        if (reset) begin
-            rd_o        <= 0;
-            rd_en_o     <= 0;
-            gpr_wdata_o <= 0;
-            lsu_ren_o   <= 0;
-            lsu_wen_o   <= 0;
-            lsu_mask_o  <= 0;
-            lsu_signed_o<= 0;
-            lsu_addr_o  <= 0;
-            lsu_wdata_o <= 0;
-        end else begin
-            if (stall) begin
-                
-            end else begin
-                rd_o        <= rd_i;
-                rd_en_o     <= rd_en_i;
-                gpr_wdata_o <= gpr_wdata_i;
-                lsu_ren_o   <= lsu_ren_i;
-                lsu_wen_o   <= lsu_wen_i;
-                lsu_mask_o  <= lsu_mask_i;
-                lsu_signed_o<= lsu_signed_i;
-                lsu_addr_o  <= lsu_addr_i;
-                lsu_wdata_o <= lsu_wdata_i;
-            end
-        end
-    end
-
 endmodule

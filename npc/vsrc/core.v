@@ -6,15 +6,17 @@ module ysyx_25050136_NPCCORE
     input                                     clk,
     input                                   reset,
     // 指令相关
-    input   [31:0]               inst_req_rdata_i,
-    input                        inst_req_ready_i,
-    output  [31:0]               inst_req_addr_o ,
-    output                       inst_req_valid_o,
-    output                       inst_req_use_o  ,
-    output                       inst_req_flush_o,
+    input                         inst_req_ready_i,
+    output  [31:0]                inst_req_addr_o ,
+    output                        inst_req_valid_o,
+    input                         inst_ret_valid_i,
+    input   [31:0]                inst_ret_addr_i ,
+    input   [31:0]                inst_ret_rdata_i,
+    output                        inst_ret_ready_o,
+    output                            inst_flush_o,
     // 数据相关
-    input    [31:0]               mem_req_rdata_i,
-    input                         mem_req_ready_i,
+    input    [31:0]               mem_ret_rdata_i,
+    input                         mem_ret_ready_i,
     output   [31:0]               mem_req_addr_o ,
     output                        mem_req_valid_o,
     output                        mem_req_ren_o  ,
@@ -27,83 +29,76 @@ module ysyx_25050136_NPCCORE
 //========================================
 // 顶层信号定义
 //========================================
-wire [31:0] if_pc;
-wire [31:0] if_inst;
-wire if_busy_if;
-
-wire [ADDR_WIDTH-1:0] id_raddr1;
-wire [ADDR_WIDTH-1:0] id_raddr2;
-wire [31:0] wb_rdata1;
-wire [31:0] wb_rdata2;
-
-wire [31:0] id_pc;
-wire [31:0] id_rdata1;
-wire [31:0] id_rdata2;
-wire        id_ren1;
-wire        id_ren2;
-wire [31:0] id_imm;
-wire [`ysyx_25050136_ALU_OP_NUM-1:0]   id_alu_op;
-wire [`ysyx_25050136_CSRU_OP_NUM-1:0]  id_csru_op;
-wire        id_alu_op1_use_pc;
-wire        id_alu_op2_use_imm;
-wire        id_alu_op2_use_4;
-wire        id_is_jalr;
-wire        id_unconditional_jump;
-wire        id_conditional_jump;
-wire        id_lsu_ren;
-wire        id_lsu_wen;
-wire [3:0]  id_lsu_mask;
-wire        id_lsu_signed;
-wire [11:0] id_csr_addr;
-wire        id_csr_ren;
-wire        id_csr_wen;
-wire        id_csr_wdata_use_rs1;
-wire [4:0]  id_rs1;
-wire [ADDR_WIDTH-1:0] id_rd;
-wire        id_rd_en;
-
-wire        ex_branch_valid;
-wire [31:0] ex_branch_npc;
-wire [ADDR_WIDTH-1:0] ex_rd;
-wire        ex_rd_en;
-wire [31:0] ex_gpr_wdata;
-wire        ex_lsu_ren;
-wire        ex_lsu_wen;
-wire [3:0]  ex_lsu_mask;
-wire        ex_lsu_signed;
-wire [31:0] ex_lsu_addr;
-wire [31:0] ex_lsu_wdata;
-
-wire        mem_busy_mem;
-wire [ADDR_WIDTH-1:0] mem_rd;
-wire        mem_rd_en;
-wire [31:0] mem_gpr_wdata;
-
-wire        ctrl_stall_pc;
-wire        ctrl_stall_if;
-wire        ctrl_stall_id;
-wire        ctrl_stall_ex;
-wire        ctrl_stall_mem;
-wire        ctrl_bubble_if;
-wire        ctrl_bubble_id;
-wire        ctrl_bubble_mem;
-wire        ctrl_flush_id; 
-wire        ctrl_flush_if;
-wire [31:0] ctrl_branch_npc;
+// === 跳转 ===
+wire flush;
+wire branch_valid;
+wire [31:0] branch_npc;
+// === 取操作数 ===
+wire [ADDR_WIDTH-1:0]   raddr1;
+wire [ADDR_WIDTH-1:0]   raddr2;
+wire [31:0]             rdata1;
+wire [31:0]             rdata2;
+// === DBG ===
 `ifdef ysyx_25050136_VERILATOR_DPIC
-wire [`ysyx_25050136_DBG_NUM-1:0]  id_dbg_op;
-wire [31:0]                        id_dbg_pc;
 wire [31:0]                      id_dbg_inst;
-wire [`ysyx_25050136_DBG_NUM-1:0]  ex_dbg_op;
 wire [31:0]                        ex_dbg_pc;
 wire [31:0]                      ex_dbg_inst;
-wire [`ysyx_25050136_DBG_NUM-1:0] mem_dbg_op;
 wire [31:0]                       mem_dbg_pc;
 wire [31:0]                     mem_dbg_inst;
-wire [`ysyx_25050136_DBG_NUM-1:0]  wb_dbg_op;
-wire [31:0]                        wb_dbg_pc;
-wire [31:0]                      wb_dbg_inst;
 `endif
+// === 数据冒险 ===
+wire [ADDR_WIDTH-1:0]   ex_waddr;
+wire [ADDR_WIDTH-1:0]   mem_waddr;
+// === ID和EX ===
+wire                    id_ex_ready;
+wire [31:0]             id_ex_dbg_inst;
+wire [31:0]             id_ex_rdata1;
+wire [ADDR_WIDTH-1:0]   id_ex_raddr1;
+wire [31:0]             id_ex_rdata2;
+wire [ADDR_WIDTH-1:0]   id_ex_raddr2;
+wire [31:0]             id_ex_pc;
+wire [31:0]             id_ex_imm;
+wire [`ysyx_25050136_ALU_OP_NUM-1:0]  id_ex_alu_op;
+wire [`ysyx_25050136_CSRU_OP_NUM-1:0] id_ex_csru_op;
+wire                    id_ex_alu_op1_use_pc;
+wire                    id_ex_alu_op2_use_imm;
+wire                    id_ex_alu_op2_use_4;
+wire                    id_ex_is_jalr;
+wire                    id_ex_unconditional_jump;
+wire                    id_ex_conditional_jump;
+wire                    id_ex_lsu_ren;
+wire                    id_ex_lsu_wen;
+wire [3:0]              id_ex_lsu_mask;
+wire                    id_ex_lsu_signed;
+wire [11:0]             id_ex_csr_addr;
+wire                    id_ex_csr_ren;
+wire                    id_ex_csr_wen;
+wire                    id_ex_csr_wdata_use_rs1;
+wire [4:0]              id_ex_rs1;
+wire [ADDR_WIDTH-1:0]   id_ex_rd;
+wire                    id_ex_rd_en;
+wire                    id_ex_valid;
+// === EX和MEM ===
+wire                    ex_mem_ready;
+wire [ADDR_WIDTH-1:0]   ex_mem_rd;
+wire                    ex_mem_rd_en;
+wire [31:0]             ex_mem_gpr_wdata;
+wire                    ex_mem_lsu_ren;
+wire                    ex_mem_lsu_wen;
+wire [3:0]              ex_mem_lsu_mask;
+wire                    ex_mem_lsu_signed;
+wire [31:0]             ex_mem_lsu_addr;
+wire [31:0]             ex_mem_lsu_wdata;
+wire                    ex_mem_valid;
+// === MEM和WB ===
+wire                    mem_wb_ready;
+wire [ADDR_WIDTH-1:0]   mem_wb_rd;
+wire                    mem_wb_rd_en;
+wire [31:0]             mem_wb_gpr_wdata;
+wire                    mem_wb_valid;
+
+assign flush0 = branch_valid;
+assign inst_flush_o = flush0;
 //========================================
 // 使用DPI-C实现的取指和访存操作, 以及寻找ebreak
 //========================================
@@ -132,217 +127,175 @@ end
 //========================================
 // 子模块
 //========================================
-ysyx_25050136_IF 
-u_ysyx_25050136_IF(
-    .clk            	(clk                 ),
-    .reset          	(reset               ),
-    .req_rdata_i    	(inst_req_rdata_i    ),
-    .req_ready_i    	(inst_req_ready_i    ),
-    .req_addr_o     	(inst_req_addr_o     ),
-    .req_valid_o    	(inst_req_valid_o    ),
-    .req_use_o      	(inst_req_use_o      ),
-    .stall_pc_i         (ctrl_stall_pc       ),
-    .stall_i        	(ctrl_stall_if       ),
-    .bubble_i           (ctrl_bubble_if      ),
-    .flush_i        	(ctrl_flush_if       ),
-    .branch_npc_i   	(ctrl_branch_npc     ),
-    .busy_if_o          (if_busy_if          ),
-    .pc_o           	(if_pc               ),
-    .inst_o         	(if_inst             )
-);
 
+ysyx_25050136_IF u_ysyx_25050136_IF(
+    .clk         	(clk              ),
+    .reset       	(reset            ),
+    .flush       	(flush0           ),
+    .branch_npc  	(branch_npc       ),
+    .out_ready_i 	(inst_req_ready_i ),
+    .out_pc_o    	(inst_req_addr_o  ),
+    .out_valid_o 	(inst_req_valid_o )
+);
 
 ysyx_25050136_ID #(
-    .ADDR_WIDTH(ADDR_WIDTH)
+    .ADDR_WIDTH 	(ADDR_WIDTH)
 ) u_ysyx_25050136_ID (
-    .clk                  	(clk                    ),
-    .reset                	(reset                  ),
-    .inst_i               	(if_inst                ),
-    .pc_i                 	(if_pc                  ),
-    .stall_i              	(ctrl_stall_id          ),
-    .bubble_i               (ctrl_bubble_id         ),
-    .flush_i              	(ctrl_flush_id          ),
-    .rdata1_i             	(wb_rdata1              ),
-    .raddr1_o             	(id_raddr1              ),
-    .ren1_o                 (id_ren1                ),
-    .rdata2_i             	(wb_rdata2              ),
-    .raddr2_o             	(id_raddr2              ),
-    .ren2_o                 (id_ren2                ),
+    .clk                      	(clk                       ),
+    .reset                    	(reset                     ),
+    .flush                    	(flush0                     ),
+    .in_valid_i               	(inst_ret_valid_i          ),
+    .in_inst_i                	(inst_ret_rdata_i          ),
+    .in_pc_i                  	(inst_ret_addr_i           ),
+    .in_ready_o               	(inst_ret_ready_o          ),
+    .ex_waddr_i               	(ex_waddr                  ),
+    .mem_waddr_i              	(mem_waddr                 ),
+    .out_ready_i              	(id_ex_ready               ),
+    .out_raddr1_o             	(raddr1                    ),
+    .out_raddr2_o             	(raddr2                    ),
+    .out_rdata1_i             	(rdata1                    ),
+    .out_rdata2_i             	(rdata2                    ),
 `ifdef ysyx_25050136_VERILATOR_DPIC
-    .dbg_op_o               (id_dbg_op              ),
-    .dbg_pc_o               (id_dbg_pc              ),
-    .dbg_inst_o             (id_dbg_inst            ),
+    .out_dbg_inst_o           	(id_dbg_inst               ),
 `endif
-    .pc_o                 	(id_pc                  ),
-    .rdata1_o             	(id_rdata1              ),
-    .rdata2_o             	(id_rdata2              ),
-    .imm_o                	(id_imm                 ),
-    .alu_op_o             	(id_alu_op              ),
-    .csru_op_o            	(id_csru_op             ),
-    .alu_op1_use_pc_o     	(id_alu_op1_use_pc      ),
-    .alu_op2_use_imm_o    	(id_alu_op2_use_imm     ),
-    .alu_op2_use_4_o      	(id_alu_op2_use_4       ),
-    .is_jalr_o            	(id_is_jalr             ),
-    .unconditional_jump_o 	(id_unconditional_jump  ),
-    .conditional_jump_o     (id_conditional_jump    ),
-    .lsu_ren_o            	(id_lsu_ren             ),
-    .lsu_wen_o            	(id_lsu_wen             ),
-    .lsu_mask_o           	(id_lsu_mask            ),
-    .lsu_signed_o         	(id_lsu_signed          ),
-    .csr_addr_o           	(id_csr_addr            ),
-    .csr_ren_o            	(id_csr_ren             ),
-    .csr_wen_o            	(id_csr_wen             ),
-    .csr_wdata_use_rs1_o    (id_csr_wdata_use_rs1   ),
-    .rs1_o                  (id_rs1                 ),
-    .rd_o                 	(id_rd                  ),
-    .rd_en_o              	(id_rd_en               )
-);
-ysyx_25050136_EX #(
-    .ADDR_WIDTH(ADDR_WIDTH)
-) u_ysyx_25050136_EX (
-    .clk                  	(clk                   ),
-    .reset                	(reset                 ),
-    .stall_i              	(ctrl_stall_ex         ),
-    .flush_i              	( 0),
-    .pc_i                 	(id_pc                 ),
-    .rdata1_i             	(id_rdata1             ),
-    .rdata2_i             	(id_rdata2             ),
-    .imm_i                	(id_imm                ),
-    .alu_op_i             	(id_alu_op             ),
-    .csru_op_i            	(id_csru_op            ),
-    .alu_op1_use_pc_i     	(id_alu_op1_use_pc     ),
-    .alu_op2_use_imm_i    	(id_alu_op2_use_imm    ),
-    .alu_op2_use_4_i      	(id_alu_op2_use_4      ),
-    .is_jalr_i            	(id_is_jalr            ),
-    .unconditional_jump_i 	(id_unconditional_jump ),
-    .conditional_jump_i   	(id_conditional_jump   ),
-    .lsu_ren_i            	(id_lsu_ren            ),
-    .lsu_wen_i            	(id_lsu_wen            ),
-    .lsu_mask_i           	(id_lsu_mask           ),
-    .lsu_signed_i         	(id_lsu_signed         ),
-    .csr_addr_i           	(id_csr_addr           ),
-    .csr_ren_i            	(id_csr_ren            ),
-    .csr_wen_i            	(id_csr_wen            ),
-    .csr_wdata_use_rs1_i  	(id_csr_wdata_use_rs1  ),
-    .rs1_i                	(id_rs1                ),
-    .rd_i                 	(id_rd                 ),
-    .rd_en_i              	(id_rd_en              ),
-`ifdef ysyx_25050136_VERILATOR_DPIC
-    .dbg_op_i               (id_dbg_op             ),
-    .dbg_pc_i               (id_dbg_pc             ),
-    .dbg_inst_i             (id_dbg_inst           ),
-    .dbg_op_o               (ex_dbg_op             ),
-    .dbg_pc_o               (ex_dbg_pc             ),
-    .dbg_inst_o             (ex_dbg_inst           ),
-`endif
-    .branch_valid_o       	(ex_branch_valid       ),
-    .branch_npc_o         	(ex_branch_npc         ),
-    .rd_o                 	(ex_rd                 ),
-    .rd_en_o              	(ex_rd_en              ),
-    .gpr_wdata_o          	(ex_gpr_wdata          ),
-    .lsu_ren_o            	(ex_lsu_ren            ),
-    .lsu_wen_o            	(ex_lsu_wen            ),
-    .lsu_mask_o           	(ex_lsu_mask           ),
-    .lsu_signed_o         	(ex_lsu_signed         ),
-    .lsu_addr_o           	(ex_lsu_addr           ),
-    .lsu_wdata_o          	(ex_lsu_wdata          )
+    .out_pc_o                 	(id_ex_pc                  ),
+    .out_rdata1_o             	(id_ex_rdata1              ),
+    .out_rdata2_o             	(id_ex_rdata2              ),
+    .out_imm_o                	(id_ex_imm                 ),
+    .out_alu_op_o             	(id_ex_alu_op              ),
+    .out_csru_op_o            	(id_ex_csru_op             ),
+    .out_alu_op1_use_pc_o     	(id_ex_alu_op1_use_pc      ),
+    .out_alu_op2_use_imm_o    	(id_ex_alu_op2_use_imm     ),
+    .out_alu_op2_use_4_o      	(id_ex_alu_op2_use_4       ),
+    .out_is_jalr_o            	(id_ex_is_jalr             ),
+    .out_unconditional_jump_o 	(id_ex_unconditional_jump  ),
+    .out_conditional_jump_o   	(id_ex_conditional_jump    ),
+    .out_lsu_ren_o            	(id_ex_lsu_ren             ),
+    .out_lsu_wen_o            	(id_ex_lsu_wen             ),
+    .out_lsu_mask_o           	(id_ex_lsu_mask            ),
+    .out_lsu_signed_o         	(id_ex_lsu_signed          ),
+    .out_csr_addr_o           	(id_ex_csr_addr            ),
+    .out_csr_ren_o            	(id_ex_csr_ren             ),
+    .out_csr_wen_o            	(id_ex_csr_wen             ),
+    .out_csr_wdata_use_rs1_o  	(id_ex_csr_wdata_use_rs1   ),
+    .out_rs1_o                	(id_ex_rs1                 ),
+    .out_rd_o                 	(id_ex_rd                  ),
+    .out_rd_en_o              	(id_ex_rd_en               ),
+    .out_valid_o              	(id_ex_valid               )
 );
 
-ysyx_25050136_MEM #(
-    .ADDR_WIDTH(ADDR_WIDTH)
-) u_ysyx_25050136_MEM (
-    .clk          	(clk               ),
-    .reset        	(reset             ),
-    .stall_i      	(ctrl_stall_mem    ),
-    .bubble_i       (ctrl_bubble_mem   ),
-    .flush_i      	(0),
-    .rd_i         	(ex_rd             ),
-    .rd_en_i      	(ex_rd_en          ),
-    .gpr_wdata_i  	(ex_gpr_wdata      ),
-    .lsu_ren_i    	(ex_lsu_ren        ),
-    .lsu_wen_i    	(ex_lsu_wen        ),
-    .lsu_mask_i   	(ex_lsu_mask       ),
-    .lsu_signed_i 	(ex_lsu_signed     ),
-    .lsu_addr_i   	(ex_lsu_addr       ),
-    .lsu_wdata_i  	(ex_lsu_wdata      ),
+ysyx_25050136_EX #(
+    .ADDR_WIDTH 	(ADDR_WIDTH)
+) u_ysyx_25050136_EX (
+    .clk                     	(clk                      ),
+    .reset                   	(reset                    ),
+    .flush                   	(0                    ),
+    .in_valid_i              	(id_ex_valid              ),
+    .in_pc_i                 	(id_ex_pc                 ),
+    .in_rdata1_i             	(id_ex_rdata1             ),
+    .in_rdata2_i             	(id_ex_rdata2             ),
+    .in_imm_i                	(id_ex_imm                ),
+    .in_alu_op_i             	(id_ex_alu_op             ),
+    .in_csru_op_i            	(id_ex_csru_op            ),
+    .in_alu_op1_use_pc_i     	(id_ex_alu_op1_use_pc     ),
+    .in_alu_op2_use_imm_i    	(id_ex_alu_op2_use_imm    ),
+    .in_alu_op2_use_4_i      	(id_ex_alu_op2_use_4      ),
+    .in_is_jalr_i            	(id_ex_is_jalr            ),
+    .in_unconditional_jump_i 	(id_ex_unconditional_jump ),
+    .in_conditional_jump_i   	(id_ex_conditional_jump   ),
+    .in_lsu_ren_i            	(id_ex_lsu_ren            ),
+    .in_lsu_wen_i            	(id_ex_lsu_wen            ),
+    .in_lsu_mask_i           	(id_ex_lsu_mask           ),
+    .in_lsu_signed_i         	(id_ex_lsu_signed         ),
+    .in_csr_addr_i           	(id_ex_csr_addr           ),
+    .in_csr_ren_i            	(id_ex_csr_ren            ),
+    .in_csr_wen_i            	(id_ex_csr_wen            ),
+    .in_csr_wdata_use_rs1_i  	(id_ex_csr_wdata_use_rs1  ),
+    .in_rs1_i                	(id_ex_rs1                ),
+    .in_rd_i                 	(id_ex_rd                 ),
+    .in_rd_en_i              	(id_ex_rd_en              ),
+    .in_ready_o              	(id_ex_ready              ),
 `ifdef ysyx_25050136_VERILATOR_DPIC
-    .dbg_op_i       (ex_dbg_op         ),
-    .dbg_pc_i       (ex_dbg_pc         ),
-    .dbg_inst_i     (ex_dbg_inst       ),
-    .dbg_op_o       (mem_dbg_op        ),
-    .dbg_pc_o       (mem_dbg_pc        ),
-    .dbg_inst_o     (mem_dbg_inst      ),
+    .in_dbg_inst_i           	(id_dbg_inst              ),
+    .out_dbg_pc_o            	(ex_dbg_pc                ),
+    .out_dbg_inst_o          	(ex_dbg_inst              ),
 `endif
-    .busy_mem_o     (mem_busy_mem      ),
-    .rd_o         	(mem_rd            ),
-    .rd_en_o      	(mem_rd_en         ),
-    .gpr_wdata_o  	(mem_gpr_wdata     ),
-    .req_rdata_i  	(mem_req_rdata_i   ),
-    .req_ready_i  	(mem_req_ready_i   ),
-    .req_addr_o   	(mem_req_addr_o    ),
-    .req_valid_o  	(mem_req_valid_o   ),
-    .req_ren_o    	(mem_req_ren_o     ),
-    .req_wen_o    	(mem_req_wen_o     ),
-    .req_mask_o   	(mem_req_mask_o    ),
-    .req_size_o   	(mem_req_size_o    ),
-    .req_use_o    	(mem_req_use_o     ),
-    .req_wdata_o  	(mem_req_wdata_o   )
+    .out_ready_i             	(ex_mem_ready             ),
+    .out_rd_o                	(ex_mem_rd                ),
+    .out_rd_en_o             	(ex_mem_rd_en             ),
+    .out_gpr_wdata_o         	(ex_mem_gpr_wdata         ),
+    .out_lsu_ren_o           	(ex_mem_lsu_ren           ),
+    .out_lsu_wen_o           	(ex_mem_lsu_wen           ),
+    .out_lsu_mask_o          	(ex_mem_lsu_mask          ),
+    .out_lsu_signed_o        	(ex_mem_lsu_signed        ),
+    .out_lsu_addr_o          	(ex_mem_lsu_addr          ),
+    .out_lsu_wdata_o         	(ex_mem_lsu_wdata         ),
+    .out_valid_o             	(ex_mem_valid             ),
+    .branch_valid_o          	(branch_valid             ),
+    .branch_npc_o            	(branch_npc               ),
+    .waddr_o                 	(ex_waddr                 )
+);
+
+
+ysyx_25050136_MEM #(
+    .ADDR_WIDTH 	(ADDR_WIDTH)
+) u_ysyx_25050136_MEM (
+    .clk             	(clk                ),
+    .reset           	(reset              ),
+    .flush           	(0              ),
+    .in_valid_i      	(ex_mem_valid       ),
+    .in_rd_i         	(ex_mem_rd          ),
+    .in_rd_en_i      	(ex_mem_rd_en       ),
+    .in_gpr_wdata_i  	(ex_mem_gpr_wdata   ),
+    .in_req_ren_i    	(ex_mem_lsu_ren     ),
+    .in_req_wen_i    	(ex_mem_lsu_wen     ),
+    .in_req_mask_i   	(ex_mem_lsu_mask    ),
+    .in_lsu_signed_i 	(ex_mem_lsu_signed  ),
+    .in_req_addr_i   	(ex_mem_lsu_addr    ),
+    .in_lsu_wdata_i  	(ex_mem_lsu_wdata   ),
+    .in_ready_o      	(ex_mem_ready       ),
+`ifdef ysyx_25050136_VERILATOR_DPIC
+    .in_dbg_pc_i     	(ex_dbg_pc          ),
+    .in_dbg_inst_i   	(ex_dbg_inst        ),
+    .out_dbg_pc_o    	(mem_dbg_pc         ),
+    .out_dbg_inst_o  	(mem_dbg_inst       ),
+`endif
+    .out_ready_i     	(mem_wb_ready       ),
+    .out_rd_o        	(mem_wb_rd          ),
+    .out_rd_en_o     	(mem_wb_rd_en       ),
+    .out_gpr_wdata_o 	(mem_wb_gpr_wdata   ),
+    .out_valid_o     	(mem_wb_valid       ),
+    .waddr_o         	(mem_waddr          ),
+    .ret_rdata_i     	(mem_ret_rdata_i    ),
+    .ret_ready_i     	(mem_ret_ready_i    ),
+    .req_addr_o      	(mem_req_addr_o     ),
+    .req_valid_o     	(mem_req_valid_o    ),
+    .req_ren_o       	(mem_req_ren_o      ),
+    .req_wen_o       	(mem_req_wen_o      ),
+    .req_mask_o      	(mem_req_mask_o     ),
+    .req_size_o      	(mem_req_size_o     ),
+    .req_use_o       	(mem_req_use_o      ),
+    .req_wdata_o     	(mem_req_wdata_o    )
 );
 
 ysyx_25050136_WB #(
-    .ADDR_WIDTH(ADDR_WIDTH)
+    .ADDR_WIDTH 	(4  )
 ) u_ysyx_25050136_WB (
-    .clk      	(clk            ),
-    .reset      (reset          ),
+    .clk             	(clk              ),
+    .reset           	(reset            ),
+    .in_valid_i      	(mem_wb_valid     ),
+    .in_rd_i         	(mem_wb_rd        ),
+    .in_rd_en_i      	(mem_wb_rd_en     ),
+    .in_gpr_wdata_i  	(mem_wb_gpr_wdata ),
+    .in_ready_o      	(mem_wb_ready     ),
 `ifdef ysyx_25050136_VERILATOR_DPIC
-    .dbg_op_i       (mem_dbg_op        ),
-    .dbg_pc_i       (mem_dbg_pc        ),
-    .dbg_inst_i     (mem_dbg_inst      ),
-    .dbg_op_o       (wb_dbg_op         ),
-    .dbg_pc_o       (wb_dbg_pc         ),
-    .dbg_inst_o     (wb_dbg_inst       ),
+    .in_dbg_pc_i     	(mem_dbg_pc       ),
+    .in_dbg_inst_i   	(mem_dbg_inst     ),
 `endif
-    .wdata_i  	(mem_gpr_wdata  ),
-    .waddr_i  	(mem_rd         ),
-    .wen_i    	(mem_rd_en      ),
-    .raddr1_i 	(id_raddr1      ),
-    .raddr2_i 	(id_raddr2      ),
-    .ren1_i     (id_ren1        ),
-    .ren2_i     (id_ren2        ),
-    .rdata1_o 	(wb_rdata1      ),
-    .rdata2_o 	(wb_rdata2      )
-);
-
-ysyx_25050136_CTRL #(
-    .ADDR_WIDTH(ADDR_WIDTH)
-) u_ysyx_25050136_CTRL (
-    .clk         	(clk             ),
-    .reset       	(reset           ),
-    .busy_if_i      (if_busy_if      ),
-    .busy_mem_i     (mem_busy_mem    ),
-    .raddr1_id_i    (id_raddr1       ),
-    .raddr2_id_i    (id_raddr2       ),
-    .ren1_id_i      (id_ren1         ),
-    .ren2_id_i      (id_ren2         ),
-    .wen_ex_i       (id_rd_en        ),
-    .waddr_ex_i     (id_rd           ),
-    .wen_mem_i      (ex_rd_en        ),
-    .waddr_mem_i    (ex_rd           ),
-    .wen_wb_i       (mem_rd_en       ),
-    .waddr_wb_i     (mem_rd          ),
-    .branch_ex_i    (ex_branch_valid ),
-    .branch_npc_ex_i(ex_branch_npc   ),
-    .stall_pc_o     (ctrl_stall_pc   ),
-    .stall_if_o  	(ctrl_stall_if   ),
-    .stall_id_o  	(ctrl_stall_id   ),
-    .stall_ex_o  	(ctrl_stall_ex   ),
-    .stall_mem_o 	(ctrl_stall_mem  ),
-    .bubble_if_o    (ctrl_bubble_if  ),
-    .bubble_id_o    (ctrl_bubble_id  ),
-    .bubble_mem_o   (ctrl_bubble_mem ),
-    .flush_id_o     (ctrl_flush_id   ),
-    .flush_if_o     (ctrl_flush_if   ),
-    .branch_npc_if_o(ctrl_branch_npc )
+    .raddr1_i  	        (raddr1           ),
+    .raddr2_i     	    (raddr2           ),
+    .rdata1_o           (rdata1           ),
+    .rdata2_o     	    (rdata2           )
 );
 
 endmodule

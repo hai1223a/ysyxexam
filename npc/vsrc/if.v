@@ -1,104 +1,45 @@
 module ysyx_25050136_IF
-     (
-         input                      clk             ,
-         input                      reset           ,
-         // 与icache握手信号
-         input    [31:0]            req_rdata_i     ,
-         input                      req_ready_i     ,
-         output   [31:0]            req_addr_o      ,
-         output                     req_valid_o     ,
-         output                     req_use_o       ,     
-         // 内部 
-         input                      stall_pc_i      ,
-         input                      stall_i         ,
-         input                      bubble_i        ,
-         input                      flush_i         ,
-         input    [31:0]            branch_npc_i    ,
-         output                     busy_if_o       ,
-         output   [31:0]            pc_o            ,
-         output   [31:0]            inst_o          
-     );
+    (
+        input         clk         ,
+        input         reset       ,
+        input         flush       ,
+        input  [31:0] branch_npc  ,
+        input         out_ready_i ,
+        output [31:0] out_pc_o    ,
+        output        out_valid_o
+    );
      
 `ifdef ysyx_25050136_RESET_PC
     localparam RESET_PC = `ysyx_25050136_RESET_PC;
 `else
     localparam RESET_PC = 32'h80000000;  // 默认复位地址
 `endif
-
+    // ==== 信号定义 ====
+    // 时序逻辑
     reg [31:0] pc;
-    reg req_use_r;
-    reg req_valid_r;
-    reg cnt;
-    wire [31:0] next_pc;
-    always @(posedge clk) begin
-        if (reset) begin
-            pc          <= RESET_PC;
-            req_use_r   <= 0;
-            req_valid_r <= 0;
-        end else begin
-            if(stall_pc_i) begin
-                req_valid_r <= 0;
-            end else begin
-                req_valid_r <= 1;
-                if(req_ready_i & req_valid_o) begin
-                    pc <= next_pc;
-                    req_use_r <= (next_pc >= 32'ha000_0000) && (next_pc < 32'ha400_0000);        
-                end
-            end
-        end
-    end
-    assign next_pc = flush_i ? branch_npc_i : (pc + 32'h4);
-    assign req_addr_o = pc;
-    assign req_valid_o = req_valid_r;
-    assign req_use_o = req_use_r;
-    assign busy_if_o = ~(req_ready_i & req_valid_o);
-
-    ysyx_25050136_IF_REG IF_REG(
-        .clk      	(clk         ),
-        .reset    	(reset       ),
-        .stall    	(stall_i     ),
-        .bubble     (bubble_i    ),
-        .flush    	(flush_i     ),
-        .pc_i     	(pc          ),
-        .inst_i   	(req_rdata_i ),
-        .pc_o     	(pc_o        ),
-        .inst_o   	(inst_o      )
-    );
-
-endmodule
-
-module ysyx_25050136_IF_REG
-    (
-        input clk                ,
-        input reset              ,
-        input stall              ,
-        input bubble             ,
-        input flush              ,
-        input [31:0] pc_i        ,
-        input [31:0] inst_i      ,
-        output reg [31:0] pc_o   ,
-        output reg [31:0] inst_o 
-    );
+    reg idle;
+    // 组合逻辑
+    wire ready_go = 1;
+    wire out_fire = out_ready_i & out_valid_o;
+    wire [31:0] next_pc = pc + 32'h4;
 `ifdef ysyx_25050136_VERILATOR_DPIC
-    wire [31:0] pc_dbg_pc = pc_i;
-    wire [31:0] if_dbg_pc = pc_o;
+    wire [31:0] if_dbg_pc = out_pc_o;
 `endif
-    // =========== 标准逻辑 ======================
+    // ==== 逻辑实现 ====
     always @(posedge clk) begin
         if(reset) begin
-            pc_o <= 0;
-            inst_o <= 0;
+            idle <= 1;
+            pc <= 32'h3000_0000;
         end else begin
-            if(flush | bubble)begin
-                pc_o <= 0;
-                inst_o <= 0;
-            end else if(stall) begin
-                
-            end else begin
-                pc_o <= pc_i;
-                inst_o <= inst_i;
+            idle <= 0;
+            if(flush) begin
+                pc <= branch_npc;
+            end else if(out_fire) begin
+                pc <= next_pc;
             end
         end
     end
+    assign out_pc_o = pc;
+    assign out_valid_o = !(idle || flush) && ready_go;
 
 endmodule

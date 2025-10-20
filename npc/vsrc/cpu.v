@@ -62,10 +62,10 @@ module ysyx_25050136_NPC
     always @(posedge clk) begin
         if(inst_req_valid & inst_req_ready) ifu_get();
         if(inst_req_valid & !inst_req_ready) ifu_cycle();
-        if(mem_req_valid & mem_req_ready) lsu_noclint_get();
-        if(mem_req_valid & !mem_req_ready) lsu_noclint_cycle();
-        if(mem_req_valid & mem_req_ready & mem_req_use) dcache_get();
-        if(mem_req_valid & !mem_req_ready & mem_req_use) dcache_cycle();
+        if(mem_req_valid & mem_ret_ready) lsu_noclint_get();
+        if(mem_req_valid & !mem_ret_ready) lsu_noclint_cycle();
+        if(mem_req_valid & mem_ret_ready & mem_req_use) dcache_get();
+        if(mem_req_valid & !mem_ret_ready & mem_req_use) dcache_cycle();
     end
 `endif
     wire inst_req_ready;
@@ -77,8 +77,8 @@ module ysyx_25050136_NPC
     wire [31:0] inst_ret_addr;
     wire inst_ret_valid;
     wire [31:0] mem_req_addr;
-    wire [31:0] mem_req_rdata;
-    wire mem_req_ready;
+    wire [31:0] mem_ret_rdata;
+    wire mem_ret_ready;
     wire mem_req_valid;
     wire mem_req_ren;
     wire mem_req_wen;
@@ -86,32 +86,6 @@ module ysyx_25050136_NPC
     wire [2:0]  mem_req_size;
     wire mem_req_use;
     wire [31:0] mem_req_wdata;
-    ysyx_25050136_ICACHE_WRAPPER 
-    u_ysyx_25050136_ICACHE_WRAPPER(
-        .clk         	(clk             ),
-        .reset       	(reset           ),
-        .m_arvalid_o 	(inst_arvalid_o  ),
-        .m_arready_i 	(inst_arready_i  ),
-        .m_araddr_o  	(inst_araddr_o   ),
-        .m_arid_o    	(inst_arid_o     ),
-        .m_arlen_o   	(inst_arlen_o    ),
-        .m_arsize_o  	(inst_arsize_o   ),
-        .m_arburst_o 	(inst_arburst_o  ),
-        .m_rvalid_i  	(inst_rvalid_i   ),
-        .m_rready_o  	(inst_rready_o   ),
-        .m_rdata_i   	(inst_rdata_i    ),
-        .m_rresp_i   	(inst_rresp_i    ),
-        .m_rlast_i   	(inst_rlast_i    ),
-        .m_rid_i     	(inst_rid_i      ),
-        .flush_i        (inst_flush      ),
-        .req_valid_i    (inst_req_valid  ),
-        .req_addr_i     (inst_req_addr   ),
-        .req_ready_o    (inst_req_ready  ),
-        .ret_ready_i    (inst_ret_ready  ),
-        .ret_rdata_o    (inst_ret_rdata  ),
-        .ret_addr_o     (inst_ret_addr   ),
-        .ret_valid_o    (inst_ret_valid  )
-    );
     
     ysyx_25050136_DCACHE 
     u_ysyx_25050136_DCACHE(
@@ -154,33 +128,12 @@ module ysyx_25050136_NPC
         .req_size_i  	(mem_req_size     ),
         .req_use_i   	(mem_req_use      ),
         .req_wdata_i 	(mem_req_wdata    ),
-        .req_rdata_o 	(mem_req_rdata    ),
-        .req_ready_o 	(mem_req_ready    )
+        .req_rdata_o 	(mem_ret_rdata    ),
+        .req_ready_o 	(mem_ret_ready    )
     );
-    
-    // ysyx_25050136_NPCCORE 
-    // u_ysyx_25050136_NPCCORE(
-    //     .clk            	(clk             ),
-    //     .reset          	(reset           ),
-    //     .inst_req_rdata_i   (inst_req_rdata  ),
-    //     .inst_req_ready_i   (inst_req_ready  ),
-    //     .inst_req_addr_o    (inst_req_addr   ),
-    //     .inst_req_valid_o   (inst_req_valid  ),
-    //     .inst_req_use_o     (inst_req_use    ),
-    //     .inst_req_flush_o   (inst_req_flush  ),
-    //     .mem_req_rdata_i    (mem_req_rdata   ),
-    //     .mem_req_ready_i    (mem_req_ready   ),
-    //     .mem_req_addr_o     (mem_req_addr    ),
-    //     .mem_req_valid_o    (mem_req_valid   ),
-    //     .mem_req_ren_o      (mem_req_ren     ),
-    //     .mem_req_wen_o      (mem_req_wen     ),
-    //     .mem_req_mask_o     (mem_req_mask    ),
-    //     .mem_req_size_o     (mem_req_size    ),
-    //     .mem_req_use_o      (mem_req_use     ),
-    //     .mem_req_wdata_o    (mem_req_wdata   )
-    // );
 
-    NPCCORE_TEST u_NPCCORE_TEST(
+    ysyx_25050136_NPCCORE 
+    u_ysyx_25050136_NPCCORE(
         .clk              	(clk             ),
         .reset            	(reset           ),
         .inst_req_ready_i 	(inst_req_ready  ),
@@ -190,9 +143,9 @@ module ysyx_25050136_NPC
         .inst_ret_addr_i  	(inst_ret_addr   ),
         .inst_ret_rdata_i 	(inst_ret_rdata  ),
         .inst_ret_ready_o 	(inst_ret_ready  ),
-        .inst_flush_o       (inst_flush      ),
-        .mem_req_rdata_i  	(mem_req_rdata   ),
-        .mem_req_ready_i  	(mem_req_ready   ),
+        .inst_flush_o     	(inst_flush      ),
+        .mem_ret_rdata_i  	(mem_ret_rdata   ),
+        .mem_ret_ready_i  	(mem_ret_ready   ),
         .mem_req_addr_o   	(mem_req_addr    ),
         .mem_req_valid_o  	(mem_req_valid   ),
         .mem_req_ren_o    	(mem_req_ren     ),
@@ -203,14 +156,67 @@ module ysyx_25050136_NPC
         .mem_req_wdata_o  	(mem_req_wdata   )
     );
     
-    // ROM_TEST u_ROM_TEST(
-    //     .clk         	(clk             ),
-    //     .reset          (reset           ),
-    //     .req_addr_i  	(inst_req_addr   ),
-    //     .req_valid_i 	(inst_req_valid  ),
-    //     .req_use_i   	(inst_req_use    ),
-    //     .req_ready_o 	(inst_req_ready  ),
-    //     .req_rdata_o 	(inst_req_rdata  )
+    // NPCCORE_TEST u_NPCCORE_TEST(
+    //     .clk              	(clk             ),
+    //     .reset            	(reset           ),
+    //     .inst_req_ready_i 	(inst_req_ready  ),
+    //     .inst_req_addr_o  	(inst_req_addr   ),
+    //     .inst_req_valid_o 	(inst_req_valid  ),
+    //     .inst_ret_valid_i 	(inst_ret_valid  ),
+    //     .inst_ret_addr_i  	(inst_ret_addr   ),
+    //     .inst_ret_rdata_i 	(inst_ret_rdata  ),
+    //     .inst_ret_ready_o 	(inst_ret_ready  ),
+    //     .inst_flush_o        (inst_flush      ),
+    //     .mem_ret_rdata_i  	(mem_ret_rdata   ),
+    //     .mem_ret_ready_i  	(mem_ret_ready   ),
+    //     .mem_req_addr_o   	(mem_req_addr    ),
+    //     .mem_req_valid_o  	(mem_req_valid   ),
+    //     .mem_req_ren_o    	(mem_req_ren     ),
+    //     .mem_req_wen_o    	(mem_req_wen     ),
+    //     .mem_req_mask_o   	(mem_req_mask    ),
+    //     .mem_req_size_o   	(mem_req_size    ),
+    //     .mem_req_use_o    	(mem_req_use     ),
+    //     .mem_req_wdata_o  	(mem_req_wdata   )
     // );
+    
+    // ysyx_25050136_ICACHE_WRAPPER 
+    // u_ysyx_25050136_ICACHE_WRAPPER(
+    //     .clk         	(clk             ),
+    //     .reset       	(reset           ),
+    //     .m_arvalid_o 	(inst_arvalid_o  ),
+    //     .m_arready_i 	(inst_arready_i  ),
+    //     .m_araddr_o  	(inst_araddr_o   ),
+    //     .m_arid_o    	(inst_arid_o     ),
+    //     .m_arlen_o   	(inst_arlen_o    ),
+    //     .m_arsize_o  	(inst_arsize_o   ),
+    //     .m_arburst_o 	(inst_arburst_o  ),
+    //     .m_rvalid_i  	(inst_rvalid_i   ),
+    //     .m_rready_o  	(inst_rready_o   ),
+    //     .m_rdata_i   	(inst_rdata_i    ),
+    //     .m_rresp_i   	(inst_rresp_i    ),
+    //     .m_rlast_i   	(inst_rlast_i    ),
+    //     .m_rid_i     	(inst_rid_i      ),
+    //     .flush_i        (inst_flush      ),
+    //     .req_valid_i    (inst_req_valid  ),
+    //     .req_addr_i     (inst_req_addr   ),
+    //     .req_ready_o    (inst_req_ready  ),
+    //     .ret_ready_i    (inst_ret_ready  ),
+    //     .ret_rdata_o    (inst_ret_rdata  ),
+    //     .ret_addr_o     (inst_ret_addr   ),
+    //     .ret_valid_o    (inst_ret_valid  )
+    // );
+
+    ROM_TEST u_ROM_TEST(
+        .clk         	(clk             ),
+        .reset       	(reset           ),
+        .flush_i     	(inst_flush      ),
+        .req_valid_i 	(inst_req_valid  ),
+        .req_addr_i  	(inst_req_addr   ),
+        .req_ready_o 	(inst_req_ready  ),
+        .ret_ready_i 	(inst_ret_ready  ),
+        .ret_addr_o  	(inst_ret_rdata  ),
+        .ret_rdata_o 	(inst_ret_addr   ),
+        .ret_valid_o 	(inst_ret_valid  )
+    );
     
 endmodule

@@ -5,53 +5,53 @@ module ysyx_25050136_WB
     (
         input                                         clk,
         input                                       reset,
+        input                                  in_valid_i,
+        input  [ADDR_WIDTH-1:0]                   in_rd_i,
+        input                                  in_rd_en_i,
+        input  [31:0]                      in_gpr_wdata_i,
+        output                                 in_ready_o,
 `ifdef ysyx_25050136_VERILATOR_DPIC
-        input      [`ysyx_25050136_DBG_NUM-1:0]       dbg_op_i ,
-        input      [31:0]                             dbg_pc_i ,
-        input      [31:0]                           dbg_inst_i ,
-        output reg [`ysyx_25050136_DBG_NUM-1:0]       dbg_op_o ,
-        output reg [31:0]                             dbg_pc_o ,
-        output reg [31:0]                           dbg_inst_o ,
+        input  [31:0]                         in_dbg_pc_i,
+        input  [31:0]                       in_dbg_inst_i,
 `endif
-        input [31:0]                              wdata_i,
-        input [ADDR_WIDTH-1:0]                    waddr_i,
-        input                                       wen_i,
-        input [ADDR_WIDTH-1:0]                   raddr1_i,
-        input [ADDR_WIDTH-1:0]                   raddr2_i,
-        input                                      ren1_i,
-        input                                      ren2_i,
+        input  [ADDR_WIDTH-1:0]                  raddr1_i,
+        input  [ADDR_WIDTH-1:0]                  raddr2_i,
         output [31:0]                            rdata1_o,
         output [31:0]                            rdata2_o
     );
-
+    // ==== 信号定义 ====
+    wire in_fire = in_valid_i & in_ready_o;
+    wire real_wen;
+    // ==== 逻辑实现 ====
+    assign in_ready_o = 1;
+    assign real_wen = in_fire & in_rd_en_i;
 `ifdef ysyx_25050136_VERILATOR_DPIC
+    reg [31:0] wb_dbg_pc;
+    reg [31:0] wb_dbg_inst;
     always @(posedge clk) begin
         if(reset) begin
-            dbg_op_o <= 0;
-            dbg_pc_o <= 0;
-            dbg_inst_o <= 0;
+            wb_dbg_pc <= 0;
+            wb_dbg_inst <= 0;
         end else begin
-            dbg_op_o <= dbg_op_i;
-            dbg_pc_o <= dbg_pc_i;
-            dbg_inst_o <= dbg_inst_i;
+            if(in_fire) begin
+                wb_dbg_pc <= in_dbg_pc_i;
+                wb_dbg_inst <= in_dbg_inst_i;
+            end
         end
     end
 `endif
 
-    ysyx_25050136_RegisterFile#(
+    ysyx_25050136_RegisterFile #(
         .ADDR_WIDTH(ADDR_WIDTH)
-    ) 
-    u_ysyx_25050136_RegisterFile(
-        .clk      	(clk      ),
-        .wdata_i  	(wdata_i  ),
-        .waddr_i  	(waddr_i  ),
-        .wen_i      (wen_i    ),
-        .raddr1_i 	(raddr1_i ),
-        .raddr2_i 	(raddr2_i ),
-        .ren1_i     (ren1_i   ),
-        .ren2_i     (ren2_i   ),
-        .rdata1_o 	(rdata1_o ),
-        .rdata2_o 	(rdata2_o )
+    ) u_ysyx_25050136_RegisterFile (
+        .clk      	(clk             ),
+        .wdata_i  	(in_gpr_wdata_i  ),
+        .waddr_i  	(in_rd_i         ),
+        .wen_i      (real_wen        ),
+        .raddr1_i 	(raddr1_i        ),
+        .raddr2_i 	(raddr2_i        ),
+        .rdata1_o 	(rdata1_o        ),
+        .rdata2_o 	(rdata2_o        )
     );
 
-endmodule //moduleName
+endmodule //ysyx_25050136_WB

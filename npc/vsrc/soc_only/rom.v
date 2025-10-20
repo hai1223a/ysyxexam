@@ -1,13 +1,67 @@
 module ROM_TEST (
-    input               clk,
-    input               reset,
-    input [31:0]        req_addr_i,
-    input               req_valid_i,
-    input               req_use_i,
-    output reg          req_ready_o,
-    output reg   [31:0] req_rdata_o  
+    input            clk          ,
+    input            reset        ,
+    input            flush_i      ,
+    input            req_valid_i  ,
+    input    [31:0]  req_addr_i   ,
+    output           req_ready_o  ,
+    input            ret_ready_i  ,
+    output   [31:0]  ret_addr_o   ,
+    output   [31:0]  ret_rdata_o  ,
+    output           ret_valid_o    
 );
 
+// output declaration of module ROM_1
+wire temp_ready;
+wire [31:0] temp_pc;
+wire [31:0] temp_inst;
+wire temp_valid;
+
+    ROM_1 u_ROM_1(
+        .clk         	(clk          ),
+        .reset       	(reset        ),
+        .flush       	(flush_i      ),
+        .in_valid_i  	(req_valid_i  ),
+        .in_pc_i     	(req_addr_i   ),
+        .in_ready_o  	(req_ready_o  ),
+        .out_ready_i 	(temp_ready   ),
+        .out_pc_o    	(temp_pc      ),
+        .out_inst_o  	(temp_inst    ),
+        .out_valid_o 	(temp_valid   )
+    );
+    ROM_2 u_ROM_2(
+        .clk         	(clk          ),
+        .reset       	(reset        ),
+        .flush       	(flush_i      ),
+        .in_valid_i  	(temp_valid   ),
+        .in_pc_i     	(temp_pc      ),
+        .in_inst_i   	(temp_inst    ),
+        .in_ready_o  	(temp_ready   ),
+        .out_ready_i 	(ret_ready_i  ),
+        .out_pc_o    	(ret_addr_o   ),
+        .out_inst_o  	(ret_rdata_o  ),
+        .out_valid_o 	(ret_valid_o  )
+    );
+    
+endmodule
+
+module ROM_1(
+    input clk,
+    input reset,
+    input flush,
+    input in_valid_i,
+    input [31:0] in_pc_i,
+    output in_ready_o,
+    input out_ready_i,
+    output [31:0] out_pc_o,
+    output [31:0] out_inst_o,
+    output out_valid_o
+);
+    reg idle;
+    reg [31:0] id_pc;
+    wire in_fire = in_valid_i & in_ready_o;
+    wire out_fire = out_valid_o & out_ready_i;
+    wire ready_go = 1;
     reg [31:0] rom_mem [0:15];
     initial begin
         rom_mem[0 ] = 32'h0f000537; // lui   a0,0xf000
@@ -26,31 +80,67 @@ module ROM_TEST (
         rom_mem[13] = 32'h00000013;
         rom_mem[14] = 32'h00000013;
         rom_mem[15] = 32'h00000013;
-    end 
-
-    wire [3:0] addr = req_addr_i[5:2];
-    reg reading;
+    end
     always @(posedge clk) begin
-        if (reset) begin
-            req_rdata_o <= 0;
-            req_ready_o <= 0;
-            reading     <= 0;
+        if(reset) begin
+            idle <= 1;
+            id_pc <= 0;
         end else begin
-            if (!reading && req_valid_i && !req_ready_o) begin
-                // 检测到请求，准备读取
-                req_rdata_o <= rom_mem[addr];
-                req_ready_o <= 1;
-                reading     <= 1;
-            end else if (reading) begin
-                // 等待握手完成
-                if (req_valid_i && req_ready_o) begin
-                    req_ready_o <= 0;
-                    reading     <= 0;
-                end
-            end else begin
-                req_ready_o <= 0;
+            if(flush) begin
+                idle <= 1;
+            end else if(in_fire) begin
+                idle <= 0;
+                id_pc <= in_pc_i;
+            end else if(out_fire) begin
+                idle <= 1;
             end
         end
     end
+    assign in_ready_o = idle || out_fire;
+    assign out_pc_o = id_pc;
+    assign out_inst_o = rom_mem[id_pc[5:2]];
+    assign out_valid_o = !(idle || flush) && ready_go;
+endmodule //ROM1
 
-endmodule
+module ROM_2(
+    input clk,
+    input reset,
+    input flush,
+    input in_valid_i,
+    input [31:0] in_pc_i,
+    input [31:0] in_inst_i,
+    output in_ready_o,
+    input out_ready_i,
+    output [31:0] out_pc_o,
+    output [31:0] out_inst_o,
+    output out_valid_o
+);
+
+    reg idle;
+    reg [31:0] id_pc;
+    reg [31:0] id_inst;
+    wire in_fire = in_valid_i & in_ready_o;
+    wire out_fire = out_valid_o & out_ready_i;
+    wire ready_go = 1;
+    always @(posedge clk) begin
+        if(reset) begin
+            idle <= 1;
+            id_pc <= 0;
+            id_inst <= 0;
+        end else begin
+            if(flush) begin
+                idle <= 1;
+            end else if(in_fire) begin
+                idle <= 0;
+                id_pc <= in_pc_i;
+                id_inst <= in_inst_i;
+            end else if(out_fire) begin
+                idle <= 1;
+            end
+        end
+    end
+    assign in_ready_o = idle || out_fire;
+    assign out_pc_o = id_pc;
+    assign out_inst_o = id_inst;
+    assign out_valid_o = !(idle || flush) && ready_go;
+endmodule //ROM2

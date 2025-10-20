@@ -11,8 +11,8 @@ module NPCCORE_TEST (
     output                        inst_ret_ready_o,
     output                            inst_flush_o,
     // 数据相关
-    input    [31:0]               mem_req_rdata_i,
-    input                         mem_req_ready_i,
+    input    [31:0]               mem_ret_rdata_i,
+    input                         mem_ret_ready_i,
     output   [31:0]               mem_req_addr_o ,
     output                        mem_req_valid_o,
     output                        mem_req_ren_o  ,
