@@ -32,14 +32,15 @@ void cpu_exec_once()
     sim_time++;
     IFDEF(CONFIG_TARGET_NVBOARD, nvboard_update());
     // 指令计算
-    if (SOC_PC != pc__ && SOC_PC != 0 && SOC_NPC != SOC_PC)
-    {
-        printf("检查:SOC_PC: %x SOC_INST: %x pc__: %x inst__: %x\n",SOC_PC, SOC_INST, pc__,inst__);
-            pc__ = SOC_PC;
-            inst__ = SOC_INST;
-            inst_count++;
-            break;    
-    }
+    break;
+    // if (SOC_PC != pc__ && SOC_PC != 0 && SOC_NPC != SOC_PC)
+    // {
+    //     printf("检查:SOC_PC: %x SOC_INST: %x pc__: %x inst__: %x\n",SOC_PC, SOC_INST, pc__,inst__);
+    //         pc__ = SOC_PC;
+    //         inst__ = SOC_INST;
+    //         inst_count++;
+    //         break;    
+    // }
   }
 }
 
@@ -59,9 +60,9 @@ void cpu_exec(uint32_t inst_num)
     {
       break;
     }
-    IFDEF(CONFIG_ITRACE, Itrace_log(inst__, pc__, inst_num));
+    // IFDEF(CONFIG_ITRACE, Itrace_log(inst__, pc__, inst_num));
     IFDEF(CONFIG_FTRACE, ftracer_log(inst__, pc__));
-    IFDEF(CONFIG_DIFFTEST, difftest_step());
+    // IFDEF(CONFIG_DIFFTEST, difftest_step());
     IFDEF(CONFIG_WATCHPOINT, if(!batch_mode) scan_watchpoint());
   }
   uint64_t timer_end = get_time();
