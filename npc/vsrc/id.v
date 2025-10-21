@@ -177,7 +177,7 @@ module ysyx_25050136_ID
     assign ready_go = !(raw1_hazard | raw2_hazard);
     assign out_raddr1_o = rs1[ADDR_WIDTH-1:0];
     assign out_raddr2_o = rs2[ADDR_WIDTH-1:0];
-    assign ren1 = ~(type_lui | type_auipc | type_jal | type_jalr | inst_csrrwi | inst_csrrsi | inst_csrrci);
+    assign ren1 = ~(type_lui | type_auipc | type_jal | inst_csrrwi | inst_csrrsi | inst_csrrci);
     assign ren2 = type_branch | type_store | type_op;
     // === 选择ALU相关操作 ===
     assign out_alu_op_o[`ysyx_25050136_ALU_ADD]   = type_auipc | type_store | type_load | inst_addi | inst_add;

@@ -166,7 +166,7 @@ module ysyx_25050136_EX
         .out_o       	(alu_out      )
     );
     // === BQU ===
-    assign bqu_opd1 = ex_is_jalr ? ex_rdata2 : ex_pc;
+    assign bqu_opd1 = ex_is_jalr ? ex_rdata1 : ex_pc;
     assign bqu_opd2 = ex_imm;
     assign bqu_add_result = bqu_opd1 + bqu_opd2;
     assign bqu_out = {bqu_add_result[31:1], (~ex_is_jalr & bqu_add_result[0])};
