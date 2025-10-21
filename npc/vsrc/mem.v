@@ -186,7 +186,7 @@ module ysyx_25050136_MEM
     assign out_gpr_wdata_o = mem_ren ? (mem_clint ? clint_rdata : gpr_data) : mem_gpr_wdata;
     assign out_rd_o = mem_rd;
     assign out_rd_en_o = mem_rd_en;
-    assign waddr_o = mem_rd & {ADDR_WIDTH{mem_rd_en & out_valid_o}};
+    assign waddr_o = mem_rd & {ADDR_WIDTH{mem_rd_en & (out_valid_o | ~idle)}};
     // === 握手信号 ===
     assign ready_go = (state === IDLE);
     assign in_ready_o = idle || out_fire;
