@@ -27,8 +27,8 @@ module ysyx_25050136_WB
     assign in_ready_o = 1;
     assign real_wen = in_fire & in_rd_en_i;
 `ifdef ysyx_25050136_VERILATOR_DPIC
-    (* keep = "true" *) reg [31:0] wb_dbg_pc;
-    (* keep = "true" *) reg [31:0] wb_dbg_inst;
+    (* keep *) reg [31:0] wb_dbg_pc;
+    (* keep *) reg [31:0] wb_dbg_inst;
     always @(posedge clk) begin
         if(reset) begin
             wb_dbg_pc <= 0;
