@@ -35,7 +35,7 @@ void cpu_exec_once()
     // break;
     if (SOC_PC != pc__ && SOC_PC != 0 && SOC_NPC != SOC_PC)
     {
-        printf("is skip = %x", if_skip);
+        // printf("is skip = %x", if_skip);
         // printf("检查:SOC_PC: %x SOC_INST: %x pc__: %x inst__: %x\n",SOC_PC, SOC_INST, pc__,inst__);
             pc__ = SOC_PC;
             inst__ = SOC_INST;
