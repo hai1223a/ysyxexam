@@ -82,7 +82,9 @@ module ysyx_25050136_IMEM2AXI
                     end
                 end 
                 READ_ADDR: begin
-                    is_flush <= flush_i;
+                    if(flush_i) begin
+                        is_flush <= 1;
+                    end
                     if (ar_fire) begin
                         if(!size) begin
                             cnt <= cnt + 1;
@@ -95,7 +97,9 @@ module ysyx_25050136_IMEM2AXI
                     end
                 end 
                 READ_DATA: begin
-                    is_flush <= flush_i;
+                    if(flush_i) begin
+                        is_flush <= 1;
+                    end
                     if (r_fire) begin
                         if(m_rlast_i) begin
                             m_arid_r <= 0;
