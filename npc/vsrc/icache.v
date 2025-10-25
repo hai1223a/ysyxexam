@@ -155,7 +155,7 @@ module ysyx_25050136_ICACHE
         end else begin
             if(ic_flush_i) begin
                 if(state == MISS) begin
-                    cache_valid[replace_way][addr_index_2] <= 1'b1;
+                    cache_valid[replace_way][addr_index_2] <= 1'b0;
                 end
                 state <= IDLE;
             end else begin
