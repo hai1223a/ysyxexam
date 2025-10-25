@@ -41,6 +41,11 @@ module ysyx_25050136_WB
             end
         end
     end
+    always @(*) begin
+        if((wb_dbg_pc != 0) & (wb_dbg_inst == 32'h00100073)) begin
+            find_ebreak();
+        end
+    end
 `endif
 
     ysyx_25050136_RegisterFile #(

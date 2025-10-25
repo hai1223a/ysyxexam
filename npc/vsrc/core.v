@@ -104,11 +104,6 @@ assign inst_flush_o = flush0;
 // 使用DPI-C实现的取指和访存操作, 以及寻找ebreak
 //========================================
 `ifdef ysyx_25050136_VERILATOR_DPIC
-always @(*) begin
-    if(mem_wb_valid & mem_wb_ready & (mem_dbg_inst == 32'h00100073)) begin
-        find_ebreak();
-    end
-end
 // always @(posedge clk) begin
 //     if(!reset) begin
 //         if(if2ex_bvalid_o) begin
