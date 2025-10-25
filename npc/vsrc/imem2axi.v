@@ -99,6 +99,9 @@ module ysyx_25050136_IMEM2AXI
                     if (r_fire) begin
                         if(m_rlast_i) begin
                             m_arid_r <= 0;
+                            if(is_flush) begin
+                                cnt <= 0;
+                            end
                             is_flush <= 0;
                             state_read <= READ_IDLE;
                         end
