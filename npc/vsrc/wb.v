@@ -13,6 +13,7 @@ module ysyx_25050136_WB
 `ifdef ysyx_25050136_VERILATOR_DPIC
         input  [31:0]                         in_dbg_pc_i,
         input  [31:0]                       in_dbg_inst_i,
+        input                          in_dbg_is_device_i,
 `endif
         input  [ADDR_WIDTH-1:0]                  raddr1_i,
         input  [ADDR_WIDTH-1:0]                  raddr2_i,
@@ -34,6 +35,7 @@ module ysyx_25050136_WB
             wb_dbg_inst <= 0;
         end else begin
             if(in_fire) begin
+                if(in_dbg_is_device_i) find_diff_skip();
                 wb_dbg_pc <= in_dbg_pc_i;
                 wb_dbg_inst <= in_dbg_inst_i;
             end

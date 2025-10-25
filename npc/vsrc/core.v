@@ -45,6 +45,7 @@ wire [31:0]                        ex_dbg_pc;
 wire [31:0]                      ex_dbg_inst;
 wire [31:0]                       mem_dbg_pc;
 wire [31:0]                     mem_dbg_inst;
+wire                       mem_dbg_is_device;
 `endif
 // === 数据冒险 ===
 wire [ADDR_WIDTH-1:0]   ex_waddr;
@@ -259,6 +260,7 @@ ysyx_25050136_MEM #(
     .in_dbg_inst_i   	(ex_dbg_inst        ),
     .out_dbg_pc_o    	(mem_dbg_pc         ),
     .out_dbg_inst_o  	(mem_dbg_inst       ),
+    .out_dbg_is_device_o(mem_dbg_is_device  ),
 `endif
     .out_ready_i     	(mem_wb_ready       ),
     .out_rd_o        	(mem_wb_rd          ),
@@ -291,6 +293,7 @@ ysyx_25050136_WB #(
 `ifdef ysyx_25050136_VERILATOR_DPIC
     .in_dbg_pc_i     	(mem_dbg_pc       ),
     .in_dbg_inst_i   	(mem_dbg_inst     ),
+    .in_dbg_is_device_i (mem_dbg_is_device),
 `endif
     .raddr1_i  	        (raddr1           ),
     .raddr2_i     	    (raddr2           ),
