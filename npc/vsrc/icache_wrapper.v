@@ -52,7 +52,7 @@ module ysyx_25050136_ICACHE_WRAPPER
         .ic_ret_rdata_o 	(ret_rdata_o     ),
         .ic_ret_addr_o  	(ret_addr_o      ),
         .ic_ret_valid_o 	(ret_valid_o     ),
-        .ic_flush_i         (ia_flush        ),
+        .ia_flush_o         (ia_flush        ),
         .ia_rd_req_o    	(ia_rd_req       ),
         .ia_rd_addr_o   	(ia_rd_addr      ),
         .ia_ret_valid_i 	(ia_ret_valid    ),

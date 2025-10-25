@@ -19,7 +19,7 @@ module ysyx_25050136_ICACHE
     output   [31:0]                         ic_ret_addr_o   ,
     output                                  ic_ret_valid_o  ,                           
     // ICACHE与AXI接口                                        
-    output                                  ia_flush_i      ,
+    output                                  ia_flush_o      ,
     output                                  ia_rd_req_o     ,
     output   [31:0]                         ia_rd_addr_o    ,
     input                                   ia_ret_valid_i  ,
@@ -190,7 +190,7 @@ module ysyx_25050136_ICACHE
     endgenerate
     assign miss_word = buf_word[addr_offset_2];
 
-    assign ia_flush_i  = ic_flush_i;
+    assign ia_flush_o  = ic_flush_i;
     assign ia_rd_req_o = (state == MISS);
     assign ia_rd_addr_o = addr_2;
     assign ready_go_2 = (state == IDLE);
