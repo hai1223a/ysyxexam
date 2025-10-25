@@ -22,7 +22,7 @@ module ysyx_25050136_MEM
         input      [31:0]                        in_dbg_inst_i ,
         output reg [31:0]                         out_dbg_pc_o ,
         output reg [31:0]                       out_dbg_inst_o ,
-        output                             out_dbg_is_device_o , 
+        output reg                         out_dbg_is_device_o , 
 `endif
         input                                      out_ready_i ,
         output   [ADDR_WIDTH-1:0]                     out_rd_o ,
@@ -193,7 +193,6 @@ module ysyx_25050136_MEM
     assign in_ready_o = idle || out_fire;
     assign out_valid_o = !(idle || flush) && ready_go;
 `ifdef ysyx_25050136_VERILATOR_DPIC
-    assign out_dbg_is_device_o = !();
     always @(posedge clk) begin
         if(reset) begin
             out_dbg_is_device_o <= 0;
