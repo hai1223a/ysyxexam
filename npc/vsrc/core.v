@@ -40,12 +40,12 @@ wire [31:0]             rdata1;
 wire [31:0]             rdata2;
 // === DBG ===
 `ifdef ysyx_25050136_VERILATOR_DPIC
-(* keep *) wire [31:0]                      id_dbg_inst/* verilator public_flat */;
-(* keep *) wire [31:0]                        ex_dbg_pc/* verilator public_flat */;
-(* keep *) wire [31:0]                      ex_dbg_inst/* verilator public_flat */;
-(* keep *) wire [31:0]                       mem_dbg_pc/* verilator public_flat */;
-(* keep *) wire [31:0]                     mem_dbg_inst/* verilator public_flat */;
-(* keep *) wire                       mem_dbg_is_device/* verilator public_flat */;
+wire [31:0]                      id_dbg_inst/* verilator public_flat */;
+wire [31:0]                        ex_dbg_pc/* verilator public_flat */;
+wire [31:0]                      ex_dbg_inst/* verilator public_flat */;
+wire [31:0]                       mem_dbg_pc/* verilator public_flat */;
+wire [31:0]                     mem_dbg_inst/* verilator public_flat */;
+wire                       mem_dbg_is_device/* verilator public_flat */;
 `endif
 // === 数据冒险 ===
 wire [ADDR_WIDTH-1:0]   ex_waddr;

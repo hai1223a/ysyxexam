@@ -11,9 +11,9 @@ module ysyx_25050136_WB
         input  [31:0]                      in_gpr_wdata_i,
         output                                 in_ready_o,
 `ifdef ysyx_25050136_VERILATOR_DPIC
-        (* keep *) input  [31:0]                         in_dbg_pc_i,
-        (* keep *) input  [31:0]                       in_dbg_inst_i,
-        (* keep *) input                          in_dbg_is_device_i,
+        input  [31:0]                         in_dbg_pc_i,
+        input  [31:0]                       in_dbg_inst_i,
+        input                          in_dbg_is_device_i,
 `endif
         input  [ADDR_WIDTH-1:0]                  raddr1_i,
         input  [ADDR_WIDTH-1:0]                  raddr2_i,
@@ -27,8 +27,8 @@ module ysyx_25050136_WB
     assign in_ready_o = 1;
     assign real_wen = in_fire & in_rd_en_i;
 `ifdef ysyx_25050136_VERILATOR_DPIC
-    (* keep *) reg [31:0] wb_dbg_pc    ;
-    (* keep *) reg [31:0] wb_dbg_inst  ;
+    reg [31:0] wb_dbg_pc    ;
+    reg [31:0] wb_dbg_inst  ;
     always @(posedge clk) begin
         if(reset) begin
             wb_dbg_pc <= 0;

@@ -18,11 +18,11 @@ module ysyx_25050136_MEM
         input    [31:0]                         in_lsu_wdata_i ,
         output                                      in_ready_o ,
 `ifdef ysyx_25050136_VERILATOR_DPIC
-        (* keep *) input      [31:0]                          in_dbg_pc_i ,
-        (* keep *) input      [31:0]                        in_dbg_inst_i ,
-        (* keep *) output reg [31:0]                         out_dbg_pc_o ,
-        (* keep *) output reg [31:0]                       out_dbg_inst_o ,
-        (* keep *) output reg                         out_dbg_is_device_o , 
+        input      [31:0]                          in_dbg_pc_i ,
+        input      [31:0]                        in_dbg_inst_i ,
+        output reg [31:0]                         out_dbg_pc_o ,
+        output reg [31:0]                       out_dbg_inst_o ,
+        output reg                         out_dbg_is_device_o , 
 `endif
         input                                      out_ready_i ,
         output   [ADDR_WIDTH-1:0]                     out_rd_o ,
