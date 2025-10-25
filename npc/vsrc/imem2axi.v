@@ -66,10 +66,10 @@ module ysyx_25050136_IMEM2AXI
             case(state_read)
                 READ_IDLE: begin
                     m_rready_r <= 1;
-                    if(is_flush) begin
+                    if(is_flush | flush_i) begin
                         is_flush <= 0;
                         cnt <= 0;
-                    end else if(!flush_i & rd_req_i) begin
+                    end else if(rd_req_i) begin
                         state_read <= READ_ADDR;
                         m_arid_r    <= 4'b1001;
                         m_arsize_r  <= 3'b010;
