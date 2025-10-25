@@ -28,6 +28,7 @@ module ysyx_25050136_ICACHE_WRAPPER
     output                                     ret_valid_o  
 );
 
+    wire ia_flush;
     wire ia_rd_req;
     wire [31:0] ia_rd_addr;
     wire [31:0] ia_ret_data;
@@ -51,6 +52,7 @@ module ysyx_25050136_ICACHE_WRAPPER
         .ic_ret_rdata_o 	(ret_rdata_o     ),
         .ic_ret_addr_o  	(ret_addr_o      ),
         .ic_ret_valid_o 	(ret_valid_o     ),
+        .ic_flush_i         (ia_flush        ),
         .ia_rd_req_o    	(ia_rd_req       ),
         .ia_rd_addr_o   	(ia_rd_addr      ),
         .ia_ret_valid_i 	(ia_ret_valid    ),
@@ -79,6 +81,7 @@ module ysyx_25050136_ICACHE_WRAPPER
         .m_rresp_i   	(m_rresp_i    ),
         .m_rlast_i   	(m_rlast_i    ),
         .m_rid_i     	(m_rid_i      ),
+        .flush_i        (ia_flush     ),
         .rd_req_i    	(ia_rd_req    ),
         .rd_addr_i   	(ia_rd_addr   ),
         .ret_valid_o 	(ia_ret_valid ),

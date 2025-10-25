@@ -19,6 +19,7 @@ module ysyx_25050136_ICACHE
     output   [31:0]                         ic_ret_addr_o   ,
     output                                  ic_ret_valid_o  ,                           
     // ICACHE与AXI接口                                        
+    output                                  ia_flush_i      ,
     output                                  ia_rd_req_o     ,
     output   [31:0]                         ia_rd_addr_o    ,
     input                                   ia_ret_valid_i  ,
@@ -152,25 +153,33 @@ module ysyx_25050136_ICACHE
             replace_way <= 0;
             miss_way <= 0;
         end else begin
-            case(state)
-                IDLE: begin
-                    if(miss & temp_fire) begin
-                        state <= MISS;
-                    end
-                    replace_way <= (NUM_WAY == 1) ? 0 : replace_way + 1;
+            if(ic_flush_i) begin
+                if(state == MISS) begin
+                    cache_valid[replace_way][addr_index_2] <= 1'b1;
                 end
-                MISS: begin
-                    if(ia_ret_valid_i) begin
-                        cache_data[replace_way][addr_index_2] <= {ia_ret_data_i, cache_data[replace_way][addr_index_2][LINE_WIDTH-1:32]};
-                        if(ia_ret_last_i) begin
-                            cache_tag[replace_way][addr_index_2] <= addr_tag_2;
-                            cache_valid[replace_way][addr_index_2] <= 1'b1;
-                            miss_way <= replace_way;
-                            state <= IDLE;
+                state <= IDLE;
+            end else begin
+                case(state)
+                    IDLE: begin
+                        if(miss & temp_fire) begin
+                            state <= MISS;
+                        end
+                        replace_way <= (NUM_WAY == 1) ? 0 : replace_way + 1;
+                    end
+                    MISS: begin
+                        if(ia_ret_valid_i) begin
+                            cache_data[replace_way][addr_index_2] <= {ia_ret_data_i, cache_data[replace_way][addr_index_2][LINE_WIDTH-1:32]};
+                            if(ia_ret_last_i) begin
+                                cache_tag[replace_way][addr_index_2] <= addr_tag_2;
+                                cache_valid[replace_way][addr_index_2] <= 1'b1;
+                                miss_way <= replace_way;
+                                state <= IDLE;
+                            end
                         end
                     end
-                end
-            endcase
+                endcase    
+            end
+
         end
     end
     
@@ -181,6 +190,7 @@ module ysyx_25050136_ICACHE
     endgenerate
     assign miss_word = buf_word[addr_offset_2];
 
+    assign ia_flush_i  = ic_flush_i;
     assign ia_rd_req_o = (state == MISS);
     assign ia_rd_addr_o = addr_2;
     assign ready_go_2 = (state == IDLE);

@@ -21,6 +21,7 @@ module ysyx_25050136_IMEM2AXI
     input                                      m_rlast_i    ,
     input    [3:0]                             m_rid_i      ,
     // 内部
+    input                                      flush_i      ,
     input                                      rd_req_i     ,
     input    [31:0]                            rd_addr_i    ,
     output                                     ret_valid_o  ,
@@ -32,6 +33,8 @@ module ysyx_25050136_IMEM2AXI
     localparam READ_IDLE = 2'd0;
     localparam READ_ADDR = 2'd1;
     localparam READ_DATA = 2'd2;
+    // 由于flush信号引发的读数据丢弃
+    reg is_flush;
     // axi读请求信号
     reg [1:0] state_read;
     reg m_rready_r;
@@ -51,6 +54,7 @@ module ysyx_25050136_IMEM2AXI
     always @(posedge clk) begin
         if (reset) begin
             state_read      <= READ_IDLE;
+            is_flush        <= 0;
             cnt             <= 0;
             m_araddr_r      <= 0;
             m_arid_r        <= 0;
@@ -62,7 +66,7 @@ module ysyx_25050136_IMEM2AXI
             case(state_read)
                 READ_IDLE: begin
                     m_rready_r <= 1;
-                    if (rd_req_i) begin
+                    if(!flush_i & rd_req_i) begin
                         state_read <= READ_ADDR;
                         m_arid_r    <= 4'b1001;
                         m_arsize_r  <= 3'b010;
@@ -78,6 +82,7 @@ module ysyx_25050136_IMEM2AXI
                     end
                 end 
                 READ_ADDR: begin
+                    is_flush <= flush_i;
                     if (ar_fire) begin
                         if(!size) begin
                             cnt <= cnt + 1;
@@ -90,9 +95,11 @@ module ysyx_25050136_IMEM2AXI
                     end
                 end 
                 READ_DATA: begin
+                    is_flush <= flush_i;
                     if (r_fire) begin
                         if(m_rlast_i) begin
                             m_arid_r <= 0;
+                            is_flush <= 0;
                             state_read <= READ_IDLE;
                         end
                         m_rready_r <= 0;
@@ -116,8 +123,8 @@ module ysyx_25050136_IMEM2AXI
     assign ar_fire = m_arvalid_o & m_arready_i;
     assign r_fire = m_rvalid_i & m_rready_o;
 
-    assign ret_valid_o = r_fire;
-    assign ret_last_o = m_rlast_i & r_fire && (cnt == 0);
+    assign ret_valid_o = !is_flush & r_fire;
+    assign ret_last_o = !is_flush & m_rlast_i & r_fire && (cnt == 0);
     assign ret_data_o = m_rdata_i;
 // ========================Simulation only====================================
 `ifdef verilator
