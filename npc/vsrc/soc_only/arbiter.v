@@ -91,82 +91,77 @@ module ysyx_25050136_ARBITER
      );
     // ========================读通道仲裁器===========================
     // AR通道
-    // ...existing code...
-        // ========================读通道仲裁器===========================
-        // AR通道：简单的锁定+轮询优先（仅两个主设备），在一次 AR 握手完成前不切换占用者
-        reg                     AR_owner;    // 0/1 表示当前占用的主设备
-        reg                     AR_busy;     // 锁定标志：一旦选中，占用直到握手完成
-        reg                     rr_ptr;      // 轮询指针，消除恒定优先级（优化面积，2台设备时1位）
-        reg [MASTER_NUM-1:0]    AR_hot;
-        reg [$clog2(MASTER_NUM)-1:0] AR_bin;
-    
-        // 候选选择：按 rr_ptr 优先，若该方向没请求则选择另一方
-        reg [MASTER_NUM-1:0] AR_cand_hot;
-        reg [$clog2(MASTER_NUM)-1:0] AR_cand_bin;
-        always @(*) begin
-            AR_cand_hot = {MASTER_NUM{1'b0}};
+    // AR通道：加锁机制 —— 一旦选中某主设备（有候选请求），在AR握手完成前保持该占用者不变
+    reg [MASTER_NUM-1:0] AR_owner;
+    reg                  AR_busy;
+    reg [MASTER_NUM-1:0] AR_hot;
+    reg [$clog2(MASTER_NUM)-1:0] AR_bin;
+    // 候选选择（固定优先级，从0到N-1的第一个有效者）
+    reg [MASTER_NUM-1:0] AR_cand_hot;
+    reg [$clog2(MASTER_NUM)-1:0] AR_cand_bin;
+    integer a;
+    genvar i;
+    always @(*) begin
+        AR_cand_hot = 0;
+        AR_cand_bin = 0;
+        if (s_arvalid_i[0]) begin
+            AR_cand_hot[0] = 1;
             AR_cand_bin = 0;
-            if (s_arvalid_i[rr_ptr]) begin
-                AR_cand_hot[rr_ptr] = 1'b1;
-                AR_cand_bin = rr_ptr;
-            end else if (s_arvalid_i[~rr_ptr & (MASTER_NUM-1)]) begin
-                AR_cand_hot[~rr_ptr & (MASTER_NUM-1)] = 1'b1;
-                AR_cand_bin = ~rr_ptr & (MASTER_NUM-1);
-            end
+        end else if (s_arvalid_i[1]) begin
+            AR_cand_hot[1] = 1;
+            AR_cand_bin = 1;
         end
-    
-        // AR_hot/AR_bin 取决于是否处于忙态
-        always @(*) begin
-            if (AR_busy) begin
-                AR_hot = {MASTER_NUM{1'b0}};
-                AR_hot[AR_owner] = 1'b1;
-                AR_bin = AR_owner;
-            end else begin
-                AR_hot = AR_cand_hot;
-                AR_bin = AR_cand_bin;
-            end
+    end
+
+    // AR_hot 和 AR_bin 由 busy/owner 或 候选 决定
+    always @(*) begin
+        if (AR_busy) begin
+            AR_hot = AR_owner;
+        end else begin
+            AR_hot = AR_cand_hot;
         end
-    
-        assign m_arvalid_o = |(s_arvalid_i & AR_hot);
-        assign m_araddr_o  = s_araddr_i[AR_bin * ADDR_WIDTH +: ADDR_WIDTH];
-        assign m_arid_o    = s_arid_i[AR_bin * 4 +: 4];
-        assign m_arlen_o   = s_arlen_i[AR_bin * 8 +: 8];
-        assign m_arsize_o  = s_arsize_i[AR_bin * 3 +: 3];
-        assign m_arburst_o = s_arburst_i[AR_bin * 2 +: 2];
-    
-        genvar i;
-        generate
-            for (i = 0; i < MASTER_NUM ; i = i + 1) begin: AR_FOR
-                assign s_arready_o[i] = m_arready_i & AR_hot[i];
+        AR_bin = 0;
+        for (a = 0; a < MASTER_NUM; a = a + 1)
+            if (AR_hot[a]) AR_bin = a[$clog2(MASTER_NUM)-1:0];
+    end
+
+    assign m_arvalid_o = |(s_arvalid_i & AR_hot);
+    assign m_araddr_o  = s_araddr_i[AR_bin * ADDR_WIDTH +: ADDR_WIDTH];
+    assign m_arid_o    = s_arid_i[AR_bin * 4 +: 4];
+    assign m_arlen_o   = s_arlen_i[AR_bin * 8 +: 8];
+    assign m_arsize_o  = s_arsize_i[AR_bin * 3 +: 3];
+    assign m_arburst_o = s_arburst_i[AR_bin * 2 +: 2];
+
+    // s_arready 回授给发起者
+    generate
+        for (i = 0; i < MASTER_NUM ; i = i + 1) begin: AR_FOR
+            assign s_arready_o[i] = m_arready_i & AR_hot[i];
+        end
+    endgenerate
+
+    // 时序：管理 AR_owner / AR_busy
+    wire AR_grant = |(s_arvalid_i & AR_hot); // m_arvalid_o
+    wire AR_fire  = AR_grant & m_arready_i; // 完成握手
+
+    always @(posedge clk) begin
+        if (reset) begin
+            AR_owner <= 0;
+            AR_busy  <= 0;
+        end else begin
+            // 当当前不忙且有候选请求时，占用者设为该候选并进入忙态
+            if (!AR_busy) begin
+                if (|AR_cand_hot) begin
+                    AR_owner <= AR_cand_hot;
+                    AR_busy  <= 1;
+                end
             end
-        endgenerate
-    
-        // 时序：管理 AR_owner / AR_busy / rr_ptr
-        wire AR_grant = |(s_arvalid_i & AR_hot); // 意味着 m_arvalid_o
-        wire AR_fire  = AR_grant & m_arready_i; // 握手完成
-    
-        always @(posedge clk) begin
-            if (reset) begin
+            // 当握手完成，释放忙态
+            if (AR_fire) begin
                 AR_owner <= 0;
                 AR_busy  <= 0;
-                rr_ptr   <= 0;
-            end else begin
-                // 当不忙且有候选请求时，锁定该候选为占用者
-                if (!AR_busy) begin
-                    if (|AR_cand_hot) begin
-                        AR_owner <= AR_cand_bin;
-                        AR_busy  <= 1;
-                    end
-                end
-                // 握手完成后释放锁，并更新轮询指针以避免恒定优先
-                if (AR_fire) begin
-                    AR_busy <= 0;
-                    // 将 rr 指向下一候选（简单切换）
-                    rr_ptr <= ~AR_owner;
-                end
             end
         end
-    // ...existing code...
+    end
     // R通道
     reg [MASTER_NUM-1:0] R_hot;
     reg [$clog2(MASTER_NUM)-1:0] R_bin;
