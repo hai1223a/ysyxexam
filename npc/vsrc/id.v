@@ -12,7 +12,7 @@ module ysyx_25050136_ID
         output                                           in_ready_o,
         input                                           out_ready_i,
 `ifdef ysyx_25050136_VERILATOR_DPIC
-        output     [31:0]                            out_dbg_inst_o,
+        (* keep *) output     [31:0]                            out_dbg_inst_o,
 `endif
         // 读操作数以及解决数据冒险
         input      [ADDR_WIDTH-1:0]                      ex_waddr_i,

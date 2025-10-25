@@ -33,9 +33,9 @@ module ysyx_25050136_EX
         input                                         in_rd_en_i,
         output                                        in_ready_o,
 `ifdef ysyx_25050136_VERILATOR_DPIC
-        input      [31:0]                          in_dbg_inst_i,
-        output     [31:0]                           out_dbg_pc_o,
-        output reg [31:0]                         out_dbg_inst_o,
+        (* keep *) input      [31:0]                          in_dbg_inst_i,
+        (* keep *) output     [31:0]                           out_dbg_pc_o,
+        (* keep *) output reg [31:0]                         out_dbg_inst_o,
 `endif
         input                                        out_ready_i,
         output    [ADDR_WIDTH-1:0]                      out_rd_o,
