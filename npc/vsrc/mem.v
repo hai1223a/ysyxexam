@@ -193,9 +193,21 @@ module ysyx_25050136_MEM
     assign in_ready_o = idle || out_fire;
     assign out_valid_o = !(idle || flush) && ready_go;
 `ifdef ysyx_25050136_VERILATOR_DPIC
-    assign out_dbg_is_device_o = !((req_addr_o >= 32'h3000_0000 && req_addr_o < 32'h4000_0000) || 
-                                (req_addr_o >= 32'h0f00_0000 && req_addr_o < 32'h1000_0000) ||
-                                (req_addr_o >= 32'ha000_0000 && req_addr_o < 32'hc000_0000));
+    assign out_dbg_is_device_o = !();
+    always @(posedge clk) begin
+        if(reset) begin
+            out_dbg_is_device_o <= 0;
+        end else begin
+            if(req_valid_o)begin
+                if(!((req_addr_o >= 32'h3000_0000 && req_addr_o < 32'h4000_0000) || 
+                   (req_addr_o >= 32'h0f00_0000 && req_addr_o < 32'h1000_0000) ||
+                   (req_addr_o >= 32'ha000_0000 && req_addr_o < 32'hc000_0000)))
+                    out_dbg_is_device_o <= 1;
+            end else if(out_fire) begin
+                    out_dbg_is_device_o <= 0;                
+            end
+        end
+    end
     always @(posedge clk) begin
         if(reset) begin
             out_dbg_pc_o   <= 0;
