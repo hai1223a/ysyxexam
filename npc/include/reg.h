@@ -13,6 +13,8 @@ typedef struct cpu_state {
 // SOC_PC,SOC_INST 当前提交的的指令的PC, INST
 #define SOC_PC   top->rootp->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_NPCCORE__DOT__u_ysyx_25050136_WB__DOT__wb_dbg_pc
 #define SOC_INST top->rootp->ysyxSoCFull__DOT__asic__DOT__cpu__DOT__cpu__DOT__u_ysyx_25050136_NPC__DOT__u_ysyx_25050136_NPCCORE__DOT__u_ysyx_25050136_WB__DOT__wb_dbg_inst
+// SOC_SRAM 指向SOC的外设SRAM
+#define SOC_SRAM top->rootp->ysyxSoCFull__DOT__asic__DOT__axi4ram__DOT__mem_ext__DOT__Memory
 
 uint32_t get_reg(int i);
 void printf_regs();

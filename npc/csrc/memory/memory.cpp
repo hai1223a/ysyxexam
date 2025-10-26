@@ -10,6 +10,8 @@ static inline uint8_t *dmem_guest_to_host(uint32_t paddr) { return dmem + paddr 
 static inline bool in_imem(uint32_t paddr) { return paddr - CONFIG_IMEM_BASE < CONFIG_IMEM_SIZE; }
 static inline bool in_dmem(uint32_t paddr) { return paddr - CONFIG_DMEM_BASE < CONFIG_DMEM_SIZE; }
 
+
+
 long init_imem(char *img_file)
 {
   if (!img_file)
