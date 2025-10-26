@@ -6,8 +6,7 @@ uint8_t dmem[CONFIG_DMEM_SIZE] __attribute((aligned(4096))) = {}; // 内存变�
 
 static inline uint8_t *imem_guest_to_host(uint32_t paddr) { return imem + paddr - CONFIG_IMEM_BASE; }
 static inline uint8_t *dmem_guest_to_host(uint32_t paddr) { return dmem + paddr - CONFIG_DMEM_BASE; }
-static inline uint8_t *sram_guest_to_host(uint32_t paddr) { return SOC_SRAM + paddr - CONFIG_SRAM_BASE; }
-
+static inline uint8_t *sram_guest_to_host(uint32_t paddr) { uint32_t offset = paddr - CONFIG_SRAM_BASE;return &SOC_SRAM[offset];}
 static inline bool in_imem(uint32_t paddr) { return paddr - CONFIG_IMEM_BASE < CONFIG_IMEM_SIZE; }
 static inline bool in_dmem(uint32_t paddr) { return paddr - CONFIG_DMEM_BASE < CONFIG_DMEM_SIZE; }
 static inline bool in_sram(uint32_t paddr) { return paddr - CONFIG_SRAM_BASE < CONFIG_SRAM_SIZE; }
