@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Sun Oct 26 15:54:39 2025
+[*] Sun Oct 26 16:01:59 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Sun Oct 26 15:34:53 2025"
+[dumpfile_mtime] "Sun Oct 26 15:55:52 2025"
 [dumpfile_size] 92137437
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/temp.gtkw"
-[timestart] 16023483
+[timestart] 16023466
 [size] 2498 1361
 [pos] -51 -51
-*-1.200000 16023500 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-2.100000 16023499 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
@@ -17,7 +17,7 @@
 [treeopen] TOP.ysyxSoCFull.asic.cpu.
 [treeopen] TOP.ysyxSoCFull.asic.cpu.cpu.
 [sst_width] 427
-[signals_width] 235
+[signals_width] 286
 [sst_expanded] 1
 [sst_vpaned_height] 423
 @22
@@ -37,6 +37,15 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_ARBITER.m_rid_i[3:0]
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_ARBITER.m_rvalid_i
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_ARBITER.m_rready_o
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_ARBITER.m_rresp_i[1:0]
+@c00022
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_ARBITER.s_rresp_o[3:0]
+@28
+(0)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_ARBITER.s_rresp_o[3:0]
+(1)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_ARBITER.s_rresp_o[3:0]
+(2)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_ARBITER.s_rresp_o[3:0]
+(3)TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_ARBITER.s_rresp_o[3:0]
+@1401200
+-group_end
 @200
 -
 @22
@@ -60,9 +69,14 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_arready_i
 -
 @28
 TOP.ysyxSoCFull.asic.axi4ram.r_sel1
-@29
 TOP.ysyxSoCFull.asic.axi4ram.auto_in_rresp[1:0]
 @22
 TOP.ysyxSoCFull.asic.axi4ram.auto_in_araddr[27:0]
+@200
+-
+@28
+TOP.ysyxSoCFull.asic.lsdram_axi.auto_in_rresp[1:0]
+@23
+TOP.ysyxSoCFull.asic.lsdram_axi.auto_in_rid[3:0]
 [pattern_trace] 1
 [pattern_trace] 0
