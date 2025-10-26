@@ -176,7 +176,6 @@ module ysyx_25050136_DCACHE
                     if (r_fire) begin
                         cache_data_temp <= m_rdata_i;
                         if(m_rlast_i) begin
-                            m_arid_r <= 0;
                             state_read <= READ_IDLE;
                         end
                         m_rready_r <= 0;
