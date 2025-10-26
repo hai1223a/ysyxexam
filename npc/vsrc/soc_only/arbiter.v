@@ -85,7 +85,7 @@ module ysyx_25050136_ARBITER
         input                                   m_rvalid_i  ,
         output                                  m_rready_o  ,
         input     [DATA_WIDTH-1:0]              m_rdata_i   ,
-        input     [3:0]                         m_rresp_i   ,
+        input     [1:0]                         m_rresp_i   ,
         input                                   m_rlast_i   ,
         input     [3:0]                         m_rid_i
      );
