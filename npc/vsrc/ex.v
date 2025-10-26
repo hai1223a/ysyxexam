@@ -171,7 +171,7 @@ module ysyx_25050136_EX
     assign bqu_add_result = bqu_opd1 + bqu_opd2;
     assign bqu_out = {bqu_add_result[31:1], (~ex_is_jalr & bqu_add_result[0])};
     // === CSR ===
-    assign csru_wdata = ex_csr_wdata_use_rs1 ? {{32-5{1'b0}},ex_rs1} : ex_rdata1;
+    assign csru_wdata = ex_csr_wdata_use_rs1 ? ex_rdata1 : {{32-5{1'b0}},ex_rs1};
     ysyx_25050136_CSRU u_ysyx_25050136_CSRU(
         .clk          	(clk         ),
         .reset        	(reset       ),
