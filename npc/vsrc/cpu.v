@@ -55,12 +55,12 @@ module ysyx_25050136_NPC
     input    [3:0]                mem_rid_i      
 );
 `ifdef ysyx_25050136_VERILATOR_DPIC
-    always @(*) begin
-        if(((inst_rresp_i != 2'd0) & inst_rvalid_i & inst_rready_o) | 
-           ((mem_rresp_i != 2'd0) & mem_rvalid_i & mem_rready_o) | 
-           ((mem_bresp_i != 2'd0) & mem_bvalid_i & mem_bready_o))
-            find_resp();
-    end
+    // always @(*) begin
+    //     if(((inst_rresp_i != 2'd0) & inst_rvalid_i & inst_rready_o) | 
+    //        ((mem_rresp_i != 2'd0) & mem_rvalid_i & mem_rready_o) | 
+    //        ((mem_bresp_i != 2'd0) & mem_bvalid_i & mem_bready_o))
+    //         find_resp();
+    // end
     always @(posedge clk) begin
         if(inst_req_valid & inst_req_ready) ifu_get();
         if(inst_req_valid & !inst_req_ready) ifu_cycle();
