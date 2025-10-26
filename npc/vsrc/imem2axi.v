@@ -105,6 +105,7 @@ module ysyx_25050136_IMEM2AXI
                     end
                     if (r_fire) begin
                         if(m_rlast_i) begin
+                            m_arid_r <= 0;
                             state_read <= READ_IDLE;
                         end
                         m_rready_r <= 0;
