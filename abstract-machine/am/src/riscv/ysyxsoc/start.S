@@ -2,27 +2,15 @@
 .globl _start
 # 第一级引导加载程序
 _start:
-        la   a0, 0x0F000000    # 1. a0 = 内存基址
-        addi a1, zero, 2       # 2. a1 = 2  (准备要写入的值)
-        sw   a1, 0(a0)         # 3. 写内存 -> MEM 占10周期，会阻塞IF阶段 (结构冒险)
-        lw   t0, 0(a0)         # 4. 读回刚写的值 -> t0 = 2 (RAW 数据冒险)
-        add  t1, t0, a1        # 5. 使用t0 -> 数据冒险 (lw-use)
-        addi t2, t2, 1
-skip:
-        sub  t1, t1, t2
-        bne  t1, zero, skip    # 6. 控制冒险：判断结果是否为0
-        addi s0, s0, 1         # 7. 若分支被取则冲刷该指令
-        addi ra, ra, 1         # 7. 若分支被取则冲刷该指令
-
-    # la      a0, boot_start          # 目标地址
-    # la      a1, boot_load_start     # 源地址
-    # la      a2, boot_size           # 大#
-    # beq     a0, a1, _boot_end 
-    # beqz    a2, _boot_end
-    # # 计算4字节块数和剩余字节
-    # srli    a3, a2, 2
-    # andi    a4, a2, 0x3
-    # beqz    a3, _bootf_1bytes
+    la      a0, boot_start          # 目标地址
+    la      a1, boot_load_start     # 源地址
+    la      a2, boot_size           # 大#
+    beq     a0, a1, _boot_end 
+    beqz    a2, _boot_end
+    # 计算4字节块数和剩余字节
+    srli    a3, a2, 2
+    andi    a4, a2, 0x3
+    beqz    a3, _bootf_1bytes
 _bootf_4bytes:
     lw      a5, 0(a1)
     sw      a5, 0(a0)
