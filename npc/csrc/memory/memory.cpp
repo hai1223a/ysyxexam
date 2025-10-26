@@ -8,8 +8,14 @@ static inline uint8_t *imem_guest_to_host(uint32_t paddr) { return imem + paddr 
 static inline uint8_t *dmem_guest_to_host(uint32_t paddr) { return dmem + paddr - CONFIG_DMEM_BASE; }
 static inline uint8_t *sram_guest_to_host(uint32_t paddr) { 
     uint32_t offset = paddr - CONFIG_SRAM_BASE;
-    return reinterpret_cast<uint8_t*>(SOC_SRAM) + offset;
-}static inline bool in_imem(uint32_t paddr) { return paddr - CONFIG_IMEM_BASE < CONFIG_IMEM_SIZE; }
+    uint32_t word_index = offset / 4;  // 每个 unsigned int 是 4 字节
+    uint32_t byte_offset = offset % 4;
+    
+    // 获取对应字的引用，然后转换为字节指针
+    unsigned int& word = SOC_SRAM[word_index];
+    return reinterpret_cast<uint8_t*>(&word) + byte_offset;
+}
+static inline bool in_imem(uint32_t paddr) { return paddr - CONFIG_IMEM_BASE < CONFIG_IMEM_SIZE; }
 static inline bool in_dmem(uint32_t paddr) { return paddr - CONFIG_DMEM_BASE < CONFIG_DMEM_SIZE; }
 static inline bool in_sram(uint32_t paddr) { return paddr - CONFIG_SRAM_BASE < CONFIG_SRAM_SIZE; }
 
