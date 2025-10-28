@@ -7,7 +7,8 @@
 //         AR, R通道纯组合逻辑
 //         AW, B通道纯组合逻辑
 //         W通道为保持突发写操作数据完整性, 使用时序逻辑   
-// 优先级配置: m0 > m1
+// AR通道：加锁机制 —— 一旦选中某主设备（有候选请求），在AR握手完成前保持该占用者不变(m0 > m1)
+// R通道: 读数据返回时根据rid判断目标主设备
 //----------------------------------------------------------
 module ysyx_25050136_ARBITER
     #(
@@ -163,18 +164,23 @@ module ysyx_25050136_ARBITER
         end
     end
     // R通道
+    // R通道成功握手后, 还需要占据一个周期用来传输rready信号
+    reg m_rid3_d; // 只需要判断rid[3]即可区分主设备
     reg [MASTER_NUM-1:0] R_hot;
     reg [$clog2(MASTER_NUM)-1:0] R_bin;
     always @(*) begin
         R_hot = 0;
         R_bin = 0;
-        if (m_rid_i < 4'b1000) begin
-            R_hot[0] = 1;
-            R_bin = 0;
-        end else begin
+        if (m_rid3_d | m_rid_i[3]) begin
             R_hot[1] = 1;
             R_bin = 1;
+        end else begin
+            R_hot[0] = 1;
+            R_bin = 0;
         end
+    end
+    always @(posedge clk) begin
+        m_rid3_d <= m_rid_i[3];
     end
     assign m_rready_o = |(s_rready_i & R_hot);
     generate
