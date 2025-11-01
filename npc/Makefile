@@ -62,7 +62,7 @@ COMMON_VERFLAGS += -Wall $(COMMON_VERWNO)
 endif
 
 # C编译和链接选项
-COMMON_CFLAGS += 
+COMMON_CFLAGS += -I$(CAPSTONE_PATH)/repo/include
 COMMON_LDFLAGS += -lreadline
 
 # 地址消毒剂选项（用于调试）
