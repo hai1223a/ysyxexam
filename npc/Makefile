@@ -18,12 +18,9 @@ defualt: soc_run
 #================第二步: 第三方工具配置 ====================
 # Capstone 配置（用于itrace）
 CAPSTONE_PATH := $(NPC_HOME)/tools/capstone
-ifeq ($(CONFIG_DIFFTEST),y)
-CAPSTONE_PATH := tools/capstone
 LIBCAPSTONE   := tools/capstone/repo/libcapstone.so.5
 $(LIBCAPSTONE):
 	$(MAKE) -C $(CAPSTONE_PATH)
-endif
 
 #================第三步: 通用配置 ====================
 # 目录配置
