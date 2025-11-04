@@ -105,6 +105,7 @@ extern "C" void find_diff_skip() {
 }
 
 NPC_perforcount npc_perC = {0};
+extern "C" void fetch_get()          {npc_perC.fetch_count++;      }
 extern "C" void commit_get()       {npc_perC.commit_count++;     }
 extern "C" void load_get()         {npc_perC.load_count++;       }
 extern "C" void store_get()        {npc_perC.store_count++;      }

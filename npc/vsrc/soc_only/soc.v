@@ -5,6 +5,7 @@ import "DPI-C" function void find_resp();
 import "DPI-C" function void find_diff_skip();
 
 // DPI-C 函数导入声明
+import "DPI-C" function void fetch_get();
 import "DPI-C" function void commit_get();
 import "DPI-C" function void load_get();
 import "DPI-C" function void store_get();

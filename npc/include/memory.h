@@ -9,7 +9,7 @@ enum {
 };
 
 typedef struct {
-  uint64_t ifu_count;         // 取指数量
+  uint64_t fetch_count;       // 取指数量
   uint64_t commit_count;      // 提交数量
   uint64_t load_count;        // 加载操作数量
   uint64_t store_count;       // 存储操作数量
