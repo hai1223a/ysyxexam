@@ -141,12 +141,12 @@ void printf_statu()
     uint64_t dcache_total_count = dcache_total_rcount + dcache_total_wcount;
     uint64_t dcache_total_misscycle = npc_perC.dcache_flash_misscycle + npc_perC.dcache_sram_wmisscycle + npc_perC.dcache_sram_rmisscycle + npc_perC.dcache_sdram_wmisscycle + npc_perC.dcache_sdram_rmisscycle;
     
-    // 延迟统计
-    uint64_t all_delay = (npc_perC.ifu_count == 0) ? 0 : (((sim_time - 1) / 2) / npc_perC.ifu_count);
+    // 延迟统计(基于提交指令数)
+    uint64_t all_delay = (npc_perC.commit_count == 0) ? 0 : (((sim_time - 1) / 2) / npc_perC.commit_count);
     
     Log("执行平均延迟: %ld", all_delay);
     Log("NPC的性能计数器如下:");
-    Log("  提交指令数: %ld, 取指数: %ld", npc_perC.commit_count, npc_perC.ifu_count);
+    Log("  提交指令数: %ld, 取指数: %ld", npc_perC.commit_count, npc_perC.fetch_count);
     Log("  Load数: %ld, Store数: %ld", npc_perC.load_count, npc_perC.store_count);
     Log("  Jump数: %ld, Branch数: %ld", npc_perC.jump_count, npc_perC.branch_count);
     Log("  ALU数: %ld, System数: %ld", npc_perC.alu_count, npc_perC.system_count);
