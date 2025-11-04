@@ -159,6 +159,7 @@ void printf_statu()
     uint64_t total_cycles = (sim_time - 1) / 2;
     uint64_t all_delay = (npc_perC.commit_count == 0) ? 0 : (total_cycles / npc_perC.commit_count);
     float ipc = (total_cycles == 0) ? 0 : (float)npc_perC.commit_count / (float)total_cycles;
+    float guess_rate = (npc_perC.jump_count == 0) ? 0 : (float)npc_perC.guess_jump_count * 100 / (float)npc_perC.jump_count;
     
     Log("执行平均延迟: %ld", all_delay);
     Log("IPC (Instructions Per Cycle): %.6f", ipc);
@@ -167,7 +168,7 @@ void printf_statu()
     Log("  Load数: %ld, Store数: %ld", npc_perC.load_count, npc_perC.store_count);
     Log("  Jump数: %ld, Branch数: %ld", npc_perC.jump_count, npc_perC.branch_count);
     Log("  ALU数: %ld, System数: %ld", npc_perC.alu_count, npc_perC.system_count);
-    Log("  实际跳转数: %ld, 预测跳转数: %ld", npc_perC.real_jump_count, npc_perC.guess_jump_count);
+    Log("  实际跳转数: %ld, 预测成功率: %.4f", npc_perC.real_jump_count, npc_perC.guess_jump_count);
     Log("  相关性延迟周期: %ld", npc_perC.related_delay_count);
     
     Log("ICache相关:");
