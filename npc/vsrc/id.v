@@ -235,7 +235,7 @@ module ysyx_25050136_ID
     assign out_rdata1_o = ((out_raddr1_o != 0) && (out_raddr1_o == ex_waddr_i) && ex_wvalid_i) ? ex_wdata_i :
                           ((out_raddr1_o != 0) && (out_raddr1_o == mem_waddr_i) && mem_wvalid_i) ? mem_wdata_i :
                           out_rdata1_i;
-    assign out_rdata2_o =((out_rdata2_i != 0) && (out_raddr2_o == ex_waddr_i) && ex_wvalid_i) ? ex_wdata_i :
+    assign out_rdata2_o =((out_raddr2_o != 0) && (out_raddr2_o == ex_waddr_i) && ex_wvalid_i) ? ex_wdata_i :
                          ((out_raddr2_o != 0) && (out_raddr2_o == mem_waddr_i) && mem_wvalid_i) ? mem_wdata_i :
                          out_rdata2_i;
     assign out_imm_o = inst_Itype ? immI : (inst_Stype ? immS :
