@@ -24,6 +24,9 @@ module ysyx_25050136_IF
     wire [31:0] next_pc = pc + 32'h4;
 `ifdef ysyx_25050136_VERILATOR_DPIC
     wire [31:0] if_dbg_pc = out_pc_o;
+    always @(posedge clk) begin
+        if(out_fire) ifu_get();
+    end
 `endif
     // ==== 逻辑实现 ====
     always @(posedge clk) begin
@@ -41,5 +44,6 @@ module ysyx_25050136_IF
     end
     assign out_pc_o = pc;
     assign out_valid_o = !(idle || flush) && ready_go;
+
 
 endmodule

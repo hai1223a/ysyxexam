@@ -276,4 +276,21 @@ module ysyx_25050136_DCACHE
     assign aw_fire     = m_awvalid_o & m_awready_i;
     assign w_fire      = m_wvalid_o & m_wready_i;
     assign b_fire      = m_bvalid_i & m_bready_o;
+
+`ifdef ysyx_25050136_VERILATOR_DPIC
+    wire [31:0] mem_type;
+    assign mem_type = (req_addr_r >= 32'ha0000000) ? 32'd2 :
+                      (req_addr_r >= 32'h30000000) ? 32'd1 :
+                      (req_addr_r >= 32'h0f000000) ? 32'd0 : 32'd3;
+    always @(posedge clk) begin
+        if(wen) begin
+            dcache_misscycle(mem_type+32'd3);
+            if(state == ACK) dcache_get(mem_type+32'd3);
+        end
+        if(ren) begin
+            dcache_misscycle(mem_type);
+            if(state == ACK) dcache_get(mem_type);
+        end
+    end
+`endif
 endmodule

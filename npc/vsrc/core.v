@@ -41,11 +41,14 @@ wire [31:0]             rdata2;
 // === DBG ===
 `ifdef ysyx_25050136_VERILATOR_DPIC
 wire [31:0]                      id_dbg_inst/* verilator public_flat */;
+wire [5:0]                     id_dbg_optype/* verilator public_flat */;
 wire [31:0]                        ex_dbg_pc/* verilator public_flat */;
 wire [31:0]                      ex_dbg_inst/* verilator public_flat */;
+wire [5:0]                     ex_dbg_optype/* verilator public_flat */;
 wire [31:0]                       mem_dbg_pc/* verilator public_flat */;
 wire [31:0]                     mem_dbg_inst/* verilator public_flat */;
 wire                       mem_dbg_is_device/* verilator public_flat */;
+wire [5:0]                    mem_dbg_optype/* verilator public_flat */;
 `endif
 // === 数据冒险 ===
 wire [ADDR_WIDTH-1:0]   ex_waddr;
@@ -104,21 +107,7 @@ assign inst_flush_o = flush0;
 // 使用DPI-C实现的取指和访存操作, 以及寻找ebreak
 //========================================
 `ifdef ysyx_25050136_VERILATOR_DPIC
-// always @(posedge clk) begin
-//     if(!reset) begin
-//         if(if2ex_bvalid_o) begin
-//             if(id2ex_fu_o[`ysyx_25050136_CSRU]) begin
-//                 csru_get();
-//             end else if(id2ex_fu_o[`ysyx_25050136_LSU]) begin
-//                 lsu_get();
-//             end else if(id2ex_fu_o[`ysyx_25050136_BQU]) begin
-//                 bqu_get();
-//             end else if(id2ex_fu_o[`ysyx_25050136_ALU]) begin
-//                 alu_get();
-//             end
-//         end
-//     end
-// end
+
 `endif
 //========================================
 // 子模块
@@ -153,6 +142,7 @@ ysyx_25050136_ID #(
     .out_rdata2_i             	(rdata2                    ),
 `ifdef ysyx_25050136_VERILATOR_DPIC
     .out_dbg_inst_o           	(id_dbg_inst               ),
+    .out_dbg_optype_o           (id_dbg_optype             ),
 `endif
     .out_pc_o                 	(id_ex_pc                  ),
     .out_rdata1_o             	(id_ex_rdata1              ),
@@ -213,8 +203,10 @@ ysyx_25050136_EX #(
     .in_ready_o              	(id_ex_ready              ),
 `ifdef ysyx_25050136_VERILATOR_DPIC
     .in_dbg_inst_i           	(id_dbg_inst              ),
+    .in_dbg_optype_i            (id_dbg_optype            ),
     .out_dbg_pc_o            	(ex_dbg_pc                ),
     .out_dbg_inst_o          	(ex_dbg_inst              ),
+    .out_dbg_optype_o         	(ex_dbg_optype            ),
 `endif
     .out_ready_i             	(ex_mem_ready             ),
     .out_rd_o                	(ex_mem_rd                ),
@@ -253,9 +245,11 @@ ysyx_25050136_MEM #(
 `ifdef ysyx_25050136_VERILATOR_DPIC
     .in_dbg_pc_i     	(ex_dbg_pc          ),
     .in_dbg_inst_i   	(ex_dbg_inst        ),
+    .in_dbg_optype_i  	(ex_dbg_optype      ),
     .out_dbg_pc_o    	(mem_dbg_pc         ),
     .out_dbg_inst_o  	(mem_dbg_inst       ),
     .out_dbg_is_device_o(mem_dbg_is_device  ),
+    .out_dbg_optype_o	(mem_dbg_optype     ),
 `endif
     .out_ready_i     	(mem_wb_ready       ),
     .out_rd_o        	(mem_wb_rd          ),

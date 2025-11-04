@@ -27,6 +27,7 @@ module ysyx_25050136_ICACHE
     input    [31:0]                         ia_ret_data_i   
     // 内部
 );
+
     // ==================== cache内部信号定义 =============================
     parameter LINE_WIDTH   = 8 << OFFSET_WIDTH;                // cacheline宽度
     parameter WORDS        = 1 << (OFFSET_WIDTH - 2);          // cacheline的字数
@@ -200,6 +201,26 @@ module ysyx_25050136_ICACHE
     assign temp_ready = idle_2 || out_fire_2;
     assign ic_ret_valid_o = !(idle_2 || ic_flush_i) && ready_go_2;
 
+`ifdef ysyx_25050136_VERILATOR_DPIC
+    reg [31:0] mem_type;
+    always @(posedge clk) begin
+        if(reset) begin
+
+        end else begin
+            if(state == MISS) begin
+                icache_misscycle(mem_type);
+            end 
+            if(ic_flush_i) begin
+
+            end else if(temp_fire) begin
+                if(temp_addr >= 32'ha0000000) begin mem_type <= 32'd2; icache_get(2); if(miss) icache_miss(2); end
+                else if(temp_addr >= 32'h30000000) begin mem_type <= 32'd1; icache_get(1); if(miss) icache_miss(1); end
+                else if(temp_addr >= 32'h0f000000) begin mem_type <= 32'd0; icache_get(0); if(miss) icache_miss(0); end
+            end
+        end
+    end
+
+`endif
 `ifdef verilator
     reg [79:0] dbg_state;
     always @(*) begin

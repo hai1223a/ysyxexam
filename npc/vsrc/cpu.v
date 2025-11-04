@@ -61,14 +61,6 @@ module ysyx_25050136_NPC
            ((mem_bresp_i != 2'd0) & mem_bvalid_i & mem_bready_o))
             find_resp();
     end
-    always @(posedge clk) begin
-        if(inst_req_valid & inst_req_ready) ifu_get();
-        if(inst_req_valid & !inst_req_ready) ifu_cycle();
-        if(mem_req_valid & mem_ret_ready) lsu_noclint_get();
-        if(mem_req_valid & !mem_ret_ready) lsu_noclint_cycle();
-        if(mem_req_valid & mem_ret_ready & mem_req_use) dcache_get();
-        if(mem_req_valid & !mem_ret_ready & mem_req_use) dcache_cycle();
-    end
 `endif
     wire inst_req_ready;
     wire [31:0] inst_req_addr;

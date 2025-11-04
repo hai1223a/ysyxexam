@@ -13,6 +13,7 @@ module ysyx_25050136_ID
         input                                           out_ready_i,
 `ifdef ysyx_25050136_VERILATOR_DPIC
         output     [31:0]                            out_dbg_inst_o,
+        output     [5:0]                           out_dbg_optype_o,
 `endif
         // 读操作数以及解决数据冒险
         input      [ADDR_WIDTH-1:0]                      ex_waddr_i,
@@ -238,6 +239,12 @@ module ysyx_25050136_ID
 `ifdef ysyx_25050136_VERILATOR_DPIC
     wire [31:0] id_dbg_pc = out_pc_o;
     assign out_dbg_inst_o = id_inst;
+    assign out_dbg_optype_o = {type_jalr | type_jal, type_branch, type_load, type_store, type_system, type_op_imm | type_auipc | type_lui | type_op};
+    always @(posedge clk) begin
+        if(!reset) begin
+            if(!ready_go) related_delay_get();
+        end
+    end
 `endif
 
 endmodule

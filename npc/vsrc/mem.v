@@ -20,9 +20,11 @@ module ysyx_25050136_MEM
 `ifdef ysyx_25050136_VERILATOR_DPIC
         input      [31:0]                          in_dbg_pc_i ,
         input      [31:0]                        in_dbg_inst_i ,
+        input      [5:0]                       in_dbg_optype_i ,
         output reg [31:0]                         out_dbg_pc_o ,
         output reg [31:0]                       out_dbg_inst_o ,
-        output reg                         out_dbg_is_device_o , 
+        output reg                         out_dbg_is_device_o ,
+        output reg [5:0]                      out_dbg_optype_o , 
 `endif
         input                                      out_ready_i ,
         output   [ADDR_WIDTH-1:0]                     out_rd_o ,
@@ -215,6 +217,7 @@ module ysyx_25050136_MEM
             end else if(in_fire) begin
                 out_dbg_pc_o   <= in_dbg_pc_i;
                 out_dbg_inst_o <= in_dbg_inst_i;
+                out_dbg_optype_o <= in_dbg_optype_i;
             end if(out_fire) begin
             end 
         end

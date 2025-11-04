@@ -4,21 +4,22 @@ import "DPI-C" function void find_ebreak();
 import "DPI-C" function void find_resp();
 import "DPI-C" function void find_diff_skip();
 
-import "DPI-C" function void bqu_get();
+// DPI-C 函数导入声明
+import "DPI-C" function void commit_get();
+import "DPI-C" function void load_get();
+import "DPI-C" function void store_get();
+import "DPI-C" function void jump_get();
+import "DPI-C" function void branch_get();
 import "DPI-C" function void alu_get();
-import "DPI-C" function void csru_get();
-import "DPI-C" function void lsu_get();
-
-import "DPI-C" function void ifu_get();
-import "DPI-C" function void ifu_cycle();
-import "DPI-C" function void icache_get();
-import "DPI-C" function void icache_cycle();
-import "DPI-C" function void icache_hit();
-import "DPI-C" function void lsu_noclint_get();
-import "DPI-C" function void lsu_noclint_cycle();
-import "DPI-C" function void dcache_get();
-import "DPI-C" function void dcache_hit();
-import "DPI-C" function void dcache_cycle();
+import "DPI-C" function void system_get();
+import "DPI-C" function void real_jump_get();
+import "DPI-C" function void guess_jump_get();
+import "DPI-C" function void related_delay_get();
+import "DPI-C" function void icache_get(input int type);
+import "DPI-C" function void icache_miss(input int type);
+import "DPI-C" function void icache_misscycle(input int type);
+import "DPI-C" function void dcache_get(input int type);
+import "DPI-C" function void dcache_misscycle(input int type);
 `endif
 
 module ysyx_25050136(

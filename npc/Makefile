@@ -212,7 +212,7 @@ fuck: $(SOC_DEPEMD)
 ABB = /home/yunhai/ysyx-workbench/npc/sim/a.v
 shift: $(ABB) 
 	@$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
-           DESIGN=ysyx_25050136_CSRU \
+           DESIGN=ysyx \
            CLK_FREQ_MHZ=10000 CLK_PORT_NAME=clk \
            RTL_FILES="$(ABB)"
 

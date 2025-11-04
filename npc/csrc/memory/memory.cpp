@@ -105,21 +105,62 @@ extern "C" void find_diff_skip() {
 }
 
 NPC_perforcount npc_perC = {0};
-
-extern "C" void lsu_get()          {npc_perC.lsu_count++;        }
-extern "C" void bqu_get()          {npc_perC.bqu_count++;        }
-extern "C" void csru_get()         {npc_perC.csru_count++;       }
+extern "C" void commit_get()       {npc_perC.commit_count++;     }
+extern "C" void load_get()         {npc_perC.load_count++;       }
+extern "C" void store_get()        {npc_perC.store_count++;      }
+extern "C" void jump_get()         {npc_perC.jump_count++;       }
+extern "C" void branch_get()       {npc_perC.branch_count++;     }
 extern "C" void alu_get()          {npc_perC.alu_count++;        }
-extern "C" void ifu_get()          {npc_perC.ifu_count++;        }
-extern "C" void ifu_cycle()        {npc_perC.ifu_cycle++;        }
-extern "C" void icache_get()       {npc_perC.icache_count++;     }
-extern "C" void icache_hit()       {npc_perC.icache_hit++;       }
-extern "C" void icache_cycle()     {npc_perC.icache_cycle++;     }    
-extern "C" void lsu_noclint_get()  {npc_perC.lsu_noclint_count++;}
-extern "C" void dcache_get()       {npc_perC.dcache_count++;     }
-extern "C" void dcache_hit()       {npc_perC.dcache_hit++;       }
-extern "C" void lsu_noclint_cycle(){npc_perC.lsu_noclint_cycle++; }        
-extern "C" void dcache_cycle()     {npc_perC.dcache_cycle++;     }    
+extern "C" void system_get()       {npc_perC.system_count++;     }
+extern "C" void real_jump_get()    {npc_perC.real_jump_count++;  }
+extern "C" void guess_jump_get()   {npc_perC.guess_jump_count++; }
+extern "C" void related_delay_get(){npc_perC.related_delay_count++;}
+extern "C" void icache_get(int type) {
+  switch(type) {
+    case 0: npc_perC.icache_sram_count++; break;
+    case 1: npc_perC.icache_flash_count++;  break;
+    case 2: npc_perC.icache_sdram_count++; break;
+    default: break;
+  }
+}
+extern "C" void icache_miss(int type) {
+  switch(type) {
+    case 0: npc_perC.icache_sram_miss++; break;
+    case 1: npc_perC.icache_flash_miss++;  break;
+    case 2: npc_perC.icache_sdram_miss++; break;
+    default: break;
+  }
+}
+extern "C" void icache_misscycle(int type) {
+  switch(type) {
+    case 0: npc_perC.icache_sram_misscycle++; break;
+    case 1: npc_perC.icache_flash_misscycle++;  break;
+    case 2: npc_perC.icache_sdram_misscycle++; break;
+    default: break;
+  }
+}
+extern "C" void dcache_get(int type) {
+  switch(type) {
+    case 0: npc_perC.dcache_sram_count++; break;
+    case 1: npc_perC.dcache_flash_rcount++;  break;
+    case 2: npc_perC.dcache_sdram_rcount++; break;
+    case 3: npc_perC.dcache_sram_wcount++; break;
+    case 4: break;
+    case 5: npc_perC.dcache_sdram_wcount++; break;
+    default: break;
+  }
+}
+extern "C" void dcache_misscycle(int type) {
+  switch(type) {
+    case 0: npc_perC.dcache_sram_misscycle++; break;
+    case 1: npc_perC.dcache_flash_misscycle++;  break;
+    case 2: npc_perC.dcache_sdram_misscycle++; break;
+    case 3: npc_perC.dcache_sram_wmisscycle++; break;
+    case 4: break;
+    case 5: npc_perC.dcache_sdram_wmisscycle++; break;
+    default: break;
+  }
+}
 
 uint32_t vaddr_read(uint32_t paddr)
 {

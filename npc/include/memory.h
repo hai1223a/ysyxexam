@@ -10,19 +10,35 @@ enum {
 
 typedef struct {
   uint64_t ifu_count;         // 取指数量
-  uint64_t lsu_count;         // 访存操作数量
-  uint64_t bqu_count;         // 跳转操作数量
-  uint64_t csru_count;        // CSR操作数量
-  uint64_t alu_count;         // 其他操作数量
-  uint64_t ifu_cycle;         // 取指总周期
-  uint64_t icache_count;      // icache取指数量
-  uint64_t icache_cycle;      // icache总周期
-  uint64_t icache_hit;        // icache命中数量
-  uint64_t lsu_noclint_count; // 访存数量， 不包含对clint的访问 
-  uint64_t lsu_noclint_cycle; // 访存总周期, 不包含对clint的访问
-  uint64_t dcache_count;      // dcache访存数量
-  uint64_t dcache_cycle;      // dcache总周期
-  uint64_t dcache_hit;        // dcache命中数量
+  uint64_t commit_count;      // 提交数量
+  uint64_t load_count;        // 加载操作数量
+  uint64_t store_count;       // 存储操作数量
+  uint64_t jump_count;        // 无条件跳转操作数量
+  uint64_t branch_count;      // 条件跳转操作数量  
+  uint64_t alu_count;         // 定点运算操作数量
+  uint64_t system_count;      // 系统控制操作数量
+  uint64_t real_jump_count;   // 实际跳转数量
+  uint64_t guess_jump_count;  // 预测跳转数量
+  uint64_t related_delay_count; // 相关性延迟周期数
+  uint64_t icache_flash_count;  
+  uint64_t icache_flash_miss;  
+  uint64_t icache_flash_misscycle;
+  uint64_t icache_sram_count;  
+  uint64_t icache_sram_miss;   
+  uint64_t icache_sram_misscycle;
+  uint64_t icache_sdram_count; 
+  uint64_t icache_sdram_miss;  
+  uint64_t icache_sdram_misscycle; 
+  uint64_t dcache_flash_count;  
+  uint64_t dcache_flash_misscycle;
+  uint64_t dcache_sram_wcout;
+  uint64_t dcache_sram_rcount;  
+  uint64_t dcache_sram_wmisscycle;
+  uint64_t dcache_sram_rmisscycle;
+  uint64_t dcache_sdram_wcount; 
+  uint64_t dcache_sdram_rcount; 
+  uint64_t dcache_sdram_wmisscycle;
+  uint64_t dcache_sdram_rmisscycle;
 } NPC_perforcount;
 
 extern NPC_perforcount npc_perC;

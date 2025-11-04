@@ -14,6 +14,7 @@ module ysyx_25050136_WB
         input  [31:0]                         in_dbg_pc_i,
         input  [31:0]                       in_dbg_inst_i,
         input                          in_dbg_is_device_i,
+        input  [5:0]                      in_dbg_optype_i,
 `endif
         input  [ADDR_WIDTH-1:0]                  raddr1_i,
         input  [ADDR_WIDTH-1:0]                  raddr2_i,
@@ -44,6 +45,34 @@ module ysyx_25050136_WB
     always @(*) begin
         if((wb_dbg_pc != 0) & (wb_dbg_inst == 32'h00100073)) begin
             find_ebreak();
+        end
+    end
+    always @(posedge clk) begin
+        if(!reset) begin
+            if(in_fire) begin
+                commit_get();   // 提交指令计数
+                case (1'b1)
+                    in_dbg_optype_i[0] : begin // 定点运算操作
+                        alu_get();
+                    end
+                    in_dbg_optype_i[1] : begin // 系统控制操作
+                        system_get();
+                    end
+                    in_dbg_optype_i[2] : begin // 存储操作
+                        store_get();
+                    end
+                    in_dbg_optype_i[3] : begin // 加载操作
+                        load_get();
+                    end
+                    in_dbg_optype_i[4] : begin // 条件跳转
+                        branch_get();
+                    end
+                    in_dbg_optype_i[5] : begin // 无条件跳转  
+                        jump_get();
+                    end 
+                    default: 
+                endcase
+            end
         end
     end
 `endif
