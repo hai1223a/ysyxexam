@@ -47,3 +47,42 @@ module ysyx_25050136_IF
 
 
 endmodule
+
+module PHT
+    #(
+        parameter INDEX_WIDTH = 10
+    )
+    (
+        input                     clk         ,
+        input                     reset       ,
+        input  [INDEX_WIDTH-1:0]  index       ,
+        input                     pred_taken_i,
+        input                     update_en_i ,
+        output                    pred_taken_o
+    );
+    localparam PHT_SIZE = 1 << INDEX_WIDTH;
+    // ==== 信号定义 ====
+    reg [1:0] pht_array [0:INDEX_WIDTH-1]; // 2-bit saturating counter
+    integer i;
+    // ==== 逻辑实现 ====
+    // PHT 初始化
+    always @(posedge clk) begin
+        if(reset) begin
+            for(i = 0; i < 1024; i = i + 1) begin
+                pht_array[i] <= 2'b01; // 初始状态为弱不跳转
+            end
+        end else if(update_en_i) begin
+            if(pred_taken_i) begin
+                // 实际跳转，状态加1，饱和在11
+                if(pht_array[index] != 2'b11)
+                    pht_array[index] <= pht_array[index] + 2'b01;
+            end else begin
+                // 实际不跳转，状态减1，饱和在00
+                if(pht_array[index] != 2'b00)
+                    pht_array[index] <= pht_array[index] - 2'b01;
+            end
+        end
+    end
+    // 输出预测结果
+    assign pred_taken_o = (pht_array[index][1] == 1'b1) ? 1'b1 : 1'b0;
+endmodule

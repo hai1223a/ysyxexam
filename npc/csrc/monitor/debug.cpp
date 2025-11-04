@@ -131,7 +131,8 @@ void printf_statu()
     uint64_t icache_total_count = npc_perC.icache_flash_count + npc_perC.icache_sram_count + npc_perC.icache_sdram_count;
     uint64_t icache_total_miss = npc_perC.icache_flash_miss + npc_perC.icache_sram_miss + npc_perC.icache_sdram_miss;
     uint64_t icache_total_misscycle = npc_perC.icache_flash_misscycle + npc_perC.icache_sram_misscycle + npc_perC.icache_sdram_misscycle;
-    float icache_hit_rate = (icache_total_count == 0) ? 0 : ((float)(icache_total_count - icache_total_miss) * 100 / (float)icache_total_count);
+    // 只考虑SDRAM的命中率
+    float icache_hit_rate = (npc_perC.icache_sdram_count == 0) ? 0 : ((float)(npc_perC.icache_sdram_count - npc_perC.icache_sdram_miss) * 100 / (float)npc_perC.icache_sdram_count);
     // 只考虑SDRAM的缺失代价
     uint64_t icache_miss_penalty = (npc_perC.icache_sdram_miss == 0) ? 0 : (npc_perC.icache_sdram_misscycle / npc_perC.icache_sdram_miss);
     // 只考虑SDRAM的AMAT
