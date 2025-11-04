@@ -58,9 +58,6 @@ module ysyx_25050136_DCACHE
     reg [31:0] cache_data_temp;
     // Dcache与CPU交互信号
     reg [1:0] state;
-    reg [3:0] req_mask_r;
-    reg [31:0] req_addr_r;
-    reg [31:0] req_wdata_r;
     reg [31:0] req_rdata_r;
     reg req_ready_r;
     // 读写使能信号
@@ -279,9 +276,9 @@ module ysyx_25050136_DCACHE
 
 `ifdef ysyx_25050136_VERILATOR_DPIC
     wire [31:0] mem_type;
-    assign mem_type = (req_addr_r >= 32'ha0000000) ? 32'd2 :
-                      (req_addr_r >= 32'h30000000) ? 32'd1 :
-                      (req_addr_r >= 32'h0f000000) ? 32'd0 : 32'd3;
+    assign mem_type = (req_addr_i >= 32'ha0000000) ? 32'd2 :
+                      (req_addr_i >= 32'h30000000) ? 32'd1 :
+                      (req_addr_i >= 32'h0f000000) ? 32'd0 : 32'd10;
     always @(posedge clk) begin
         if(wen) begin
             dcache_misscycle(mem_type+32'd3);
