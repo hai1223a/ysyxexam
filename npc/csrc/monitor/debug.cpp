@@ -135,22 +135,18 @@ void printf_statu()
     uint64_t icache_miss_penalty = (icache_total_miss == 0) ? 0 : (icache_total_misscycle / icache_total_miss);
     float icache_amat = (icache_total_count == 0) ? 0 : 1 + (float)icache_total_misscycle / (float)icache_total_count;
     
-    // DCache统计
+    // DCache统计(无缓存实现,仅统计访问次数和周期)
     uint64_t dcache_total_rcount = npc_perC.dcache_flash_count + npc_perC.dcache_sram_rcount + npc_perC.dcache_sdram_rcount;
     uint64_t dcache_total_wcount = npc_perC.dcache_sram_wcount + npc_perC.dcache_sdram_wcount;
     uint64_t dcache_total_count = dcache_total_rcount + dcache_total_wcount;
     uint64_t dcache_total_misscycle = npc_perC.dcache_flash_misscycle + npc_perC.dcache_sram_wmisscycle + npc_perC.dcache_sram_rmisscycle + npc_perC.dcache_sdram_wmisscycle + npc_perC.dcache_sdram_rmisscycle;
-    uint64_t dcache_hit_rate = (dcache_total_count == 0) ? 0 : ((dcache_total_count - dcache_total_misscycle) * 100 / dcache_total_count);
-    uint64_t dcache_miss_penalty = (dcache_total_misscycle == 0) ? 0 : dcache_total_misscycle / dcache_total_count;
-    uint64_t dcache_amat = (dcache_total_count == 0) ? 0 : 1 + dcache_total_misscycle / dcache_total_count;
     
     // 延迟统计
-    uint64_t all_delay = (npc_perC.fetch_count == 0) ? 0 : (((sim_time - 1) / 2) / npc_perC.fetch_count);
+    uint64_t all_delay = (npc_perC.ifu_count == 0) ? 0 : (((sim_time - 1) / 2) / npc_perC.ifu_count);
     
     Log("执行平均延迟: %ld", all_delay);
     Log("NPC的性能计数器如下:");
-
-    Log("  提交指令数: %ld, 取指数: %ld", npc_perC.commit_count, npc_perC.fetch_count);
+    Log("  提交指令数: %ld, 取指数: %ld", npc_perC.commit_count, npc_perC.ifu_count);
     Log("  Load数: %ld, Store数: %ld", npc_perC.load_count, npc_perC.store_count);
     Log("  Jump数: %ld, Branch数: %ld", npc_perC.jump_count, npc_perC.branch_count);
     Log("  ALU数: %ld, System数: %ld", npc_perC.alu_count, npc_perC.system_count);
@@ -164,18 +160,17 @@ void printf_statu()
         icache_total_miss, npc_perC.icache_flash_miss, npc_perC.icache_sram_miss, npc_perC.icache_sdram_miss);
     Log("  总缺失周期 = %ld (Flash: %ld, SRAM: %ld, SDRAM: %ld)", 
         icache_total_misscycle, npc_perC.icache_flash_misscycle, npc_perC.icache_sram_misscycle, npc_perC.icache_sdram_misscycle);
-    Log("  命中率 = %f%%, 缺失代价: %ld, AMAT = %f", icache_hit_rate, icache_miss_penalty, icache_amat);
+    Log("  命中率 = %.2f%%, 缺失代价: %ld, AMAT = %.2f", icache_hit_rate, icache_miss_penalty, icache_amat);
     
-    Log("DCache相关:");
+    Log("DCache相关(无缓存实现):");
     Log("  读访问次数 = %ld (Flash: %ld, SRAM: %ld, SDRAM: %ld)", 
         dcache_total_rcount, npc_perC.dcache_flash_count, npc_perC.dcache_sram_rcount, npc_perC.dcache_sdram_rcount);
     Log("  写访问次数 = %ld (SRAM: %ld, SDRAM: %ld)", 
         dcache_total_wcount, npc_perC.dcache_sram_wcount, npc_perC.dcache_sdram_wcount);
     Log("  总访问次数 = %ld", dcache_total_count);
-    Log("  缺失周期 = %ld (Flash: %ld, SRAM_R: %ld, SRAM_W: %ld, SDRAM_R: %ld, SDRAM_W: %ld)", 
+    Log("  总访问周期 = %ld (Flash: %ld, SRAM_R: %ld, SRAM_W: %ld, SDRAM_R: %ld, SDRAM_W: %ld)", 
         dcache_total_misscycle, npc_perC.dcache_flash_misscycle, npc_perC.dcache_sram_rmisscycle, 
         npc_perC.dcache_sram_wmisscycle, npc_perC.dcache_sdram_rmisscycle, npc_perC.dcache_sdram_wmisscycle);
-    Log("  命中率 = %ld%%, 缺失代价: %ld, AMAT = %ld", dcache_hit_rate, dcache_miss_penalty, dcache_amat);
     
     Log("PC = 0x%08x, halt = %d, NPC 的结束状态是%s", npcstate.halt_pc, npcstate.halt_ret,
         (npcstate.state == NPC_ABORT ? ANSI_FMT("ABORT", ANSI_FG_RED) : 
