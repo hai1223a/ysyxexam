@@ -102,6 +102,7 @@ module ysyx_25050136_BTB
         output [31:0]             target_pc_o
     );
     localparam BTB_SIZE = 1 << INDEX_WIDTH;
+    localparam BTB_TAG_WIDTH = TAG_WIDTH + 32 + 1;
     // ==== 信号定义 ====
     reg [31:0] btb_array [0:BTB_SIZE-1];
     integer i;
@@ -118,4 +119,5 @@ module ysyx_25050136_BTB
     end
     // 输出目标地址
     assign target_pc_o = btb_array[index];
+
 endmodule
