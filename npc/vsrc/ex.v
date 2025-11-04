@@ -203,7 +203,7 @@ module ysyx_25050136_EX
     assign out_rd_en_o = ex_rd_en;
     assign out_gpr_wdata_o = ex_csr_ren ? csru_out : alu_out;
     assign waddr_o = ex_rd & {ADDR_WIDTH{ex_rd_en & out_valid_o}};
-    assign wdata_o = out_gpr_wdata_o;
+    // assign wdata_o = out_gpr_wdata_o;
     // === 握手 ===
     assign ready_go = 1;
     assign in_ready_o = idle || out_fire;
