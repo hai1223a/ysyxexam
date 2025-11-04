@@ -62,7 +62,7 @@ module PHT
     );
     localparam PHT_SIZE = 1 << INDEX_WIDTH;
     // ==== 信号定义 ====
-    reg [1:0] pht_array [0:INDEX_WIDTH-1]; // 2-bit saturating counter
+    reg [1:0] pht_array [0:PHT_SIZE-1]; // 2-bit saturating counter
     integer i;
     // ==== 逻辑实现 ====
     // PHT 初始化
