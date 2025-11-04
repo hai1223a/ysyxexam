@@ -25,7 +25,7 @@ module ysyx_25050136_IF
 `ifdef ysyx_25050136_VERILATOR_DPIC
     wire [31:0] if_dbg_pc = out_pc_o;
     always @(posedge clk) begin
-        if(out_fire) ifu_get();
+        if(out_fire) fetch_get();
     end
 `endif
     // ==== 逻辑实现 ====
