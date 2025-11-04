@@ -15,11 +15,11 @@ import "DPI-C" function void system_get();
 import "DPI-C" function void real_jump_get();
 import "DPI-C" function void guess_jump_get();
 import "DPI-C" function void related_delay_get();
-import "DPI-C" function void icache_get(input int type);
-import "DPI-C" function void icache_miss(input int type);
-import "DPI-C" function void icache_misscycle(input int type);
-import "DPI-C" function void dcache_get(input int type);
-import "DPI-C" function void dcache_misscycle(input int type);
+import "DPI-C" function void icache_get(input int cache_type);
+import "DPI-C" function void icache_miss(input int cache_type);
+import "DPI-C" function void icache_misscycle(input int cache_type);
+import "DPI-C" function void dcache_get(input int cache_type);
+import "DPI-C" function void dcache_misscycle(input int cache_type);
 `endif
 
 module ysyx_25050136(
