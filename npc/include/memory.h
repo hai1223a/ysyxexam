@@ -31,7 +31,7 @@ typedef struct {
   uint64_t icache_sdram_misscycle; 
   uint64_t dcache_flash_count;  
   uint64_t dcache_flash_misscycle;
-  uint64_t dcache_sram_wcout;
+  uint64_t dcache_sram_wcount;
   uint64_t dcache_sram_rcount;  
   uint64_t dcache_sram_wmisscycle;
   uint64_t dcache_sram_rmisscycle;

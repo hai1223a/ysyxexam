@@ -137,7 +137,7 @@ void printf_statu()
     
     // DCache统计
     uint64_t dcache_total_rcount = npc_perC.dcache_flash_count + npc_perC.dcache_sram_rcount + npc_perC.dcache_sdram_rcount;
-    uint64_t dcache_total_wcount = npc_perC.dcache_sram_wcout + npc_perC.dcache_sdram_wcount;
+    uint64_t dcache_total_wcount = npc_perC.dcache_sram_wcount + npc_perC.dcache_sdram_wcount;
     uint64_t dcache_total_count = dcache_total_rcount + dcache_total_wcount;
     uint64_t dcache_total_misscycle = npc_perC.dcache_flash_misscycle + npc_perC.dcache_sram_wmisscycle + npc_perC.dcache_sram_rmisscycle + npc_perC.dcache_sdram_wmisscycle + npc_perC.dcache_sdram_rmisscycle;
     uint64_t dcache_hit_rate = (dcache_total_count == 0) ? 0 : ((dcache_total_count - dcache_total_misscycle) * 100 / dcache_total_count);
@@ -170,7 +170,7 @@ void printf_statu()
     Log("  读访问次数 = %ld (Flash: %ld, SRAM: %ld, SDRAM: %ld)", 
         dcache_total_rcount, npc_perC.dcache_flash_count, npc_perC.dcache_sram_rcount, npc_perC.dcache_sdram_rcount);
     Log("  写访问次数 = %ld (SRAM: %ld, SDRAM: %ld)", 
-        dcache_total_wcount, npc_perC.dcache_sram_wcout, npc_perC.dcache_sdram_wcount);
+        dcache_total_wcount, npc_perC.dcache_sram_wcount, npc_perC.dcache_sdram_wcount);
     Log("  总访问次数 = %ld", dcache_total_count);
     Log("  缺失周期 = %ld (Flash: %ld, SRAM_R: %ld, SRAM_W: %ld, SDRAM_R: %ld, SDRAM_W: %ld)", 
         dcache_total_misscycle, npc_perC.dcache_flash_misscycle, npc_perC.dcache_sram_rmisscycle, 
