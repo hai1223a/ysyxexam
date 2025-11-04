@@ -48,7 +48,7 @@ module ysyx_25050136_IF
 
 endmodule
 
-module PHT
+module ysyx_25050136_PHT
     #(
         parameter INDEX_WIDTH = 10
     )
@@ -85,4 +85,37 @@ module PHT
     end
     // 输出预测结果
     assign pred_taken_o = (pht_array[index][1] == 1'b1) ? 1'b1 : 1'b0;
+
+endmodule
+
+module ysyx_25050136_BTB
+    #(
+        parameter INDEX_WIDTH = 10,
+        parameter TAG_WIDTH   = 20
+    )
+    (
+        input                     clk         ,
+        input                     reset       ,
+        input  [INDEX_WIDTH-1:0]  index       ,
+        input                     update_en_i ,
+        input  [31:0]             target_pc_i ,
+        output [31:0]             target_pc_o
+    );
+    localparam BTB_SIZE = 1 << INDEX_WIDTH;
+    // ==== 信号定义 ====
+    reg [31:0] btb_array [0:BTB_SIZE-1];
+    integer i;
+    // ==== 逻辑实现 ====
+    // BTB 初始化
+    always @(posedge clk) begin
+        if(reset) begin
+            for(i = 0; i < BTB_SIZE; i = i + 1) begin
+                btb_array[i] <= 32'b0;
+            end
+        end else if(update_en_i) begin
+            btb_array[index] <= target_pc_i;
+        end
+    end
+    // 输出目标地址
+    assign target_pc_o = btb_array[index];
 endmodule
