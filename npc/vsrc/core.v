@@ -52,7 +52,11 @@ wire [5:0]                    mem_dbg_optype/* verilator public_flat */;
 `endif
 // === 数据冒险 ===
 wire [ADDR_WIDTH-1:0]   ex_waddr;
+wire [31:0]            ex_wdata;
+wire                   ex_wvalid;
 wire [ADDR_WIDTH-1:0]   mem_waddr;
+wire [31:0]           mem_wdata;
+wire                  mem_wvalid;
 // === ID和EX ===
 wire                    id_ex_ready;
 wire [31:0]             id_ex_dbg_inst;
@@ -134,7 +138,11 @@ ysyx_25050136_ID #(
     .in_pc_i                  	(inst_ret_addr_i           ),
     .in_ready_o               	(inst_ret_ready_o          ),
     .ex_waddr_i               	(ex_waddr                  ),
-    .mem_waddr_i              	(mem_waddr                 ),
+    .ex_wdata_i               	(ex_wdata                  ),
+    .ex_wvalid_i              	(ex_wvalid                 ),
+    .mem_waddr_i              	(mem_waddr                  ),
+    .mem_wdata_i              	(mem_wdata                  ),
+    .mem_wvalid_i             	(mem_wvalid                 ),
     .out_ready_i              	(id_ex_ready               ),
     .out_raddr1_o             	(raddr1                    ),
     .out_raddr2_o             	(raddr2                    ),
@@ -221,7 +229,9 @@ ysyx_25050136_EX #(
     .out_valid_o             	(ex_mem_valid             ),
     .branch_valid_o          	(branch_valid             ),
     .branch_npc_o            	(branch_npc               ),
-    .waddr_o                 	(ex_waddr                 )
+    .waddr_o                 	(ex_waddr                 ),
+    .wdata_o                 	(ex_wdata                 ),
+    .wvalid_o                	(ex_wvalid)
 );
 
 
@@ -257,6 +267,8 @@ ysyx_25050136_MEM #(
     .out_gpr_wdata_o 	(mem_wb_gpr_wdata   ),
     .out_valid_o     	(mem_wb_valid       ),
     .waddr_o         	(mem_waddr          ),
+    .wdata_o         	(mem_wdata          ),
+    .wvalid_o        	(mem_wvalid         ),
     .ret_rdata_i     	(mem_ret_rdata_i    ),
     .ret_ready_i     	(mem_ret_ready_i    ),
     .req_addr_o      	(mem_req_addr_o     ),
