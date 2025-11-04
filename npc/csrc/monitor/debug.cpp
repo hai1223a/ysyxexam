@@ -168,7 +168,7 @@ void printf_statu()
     Log("  Load数: %ld, Store数: %ld", npc_perC.load_count, npc_perC.store_count);
     Log("  Jump数: %ld, Branch数: %ld", npc_perC.jump_count, npc_perC.branch_count);
     Log("  ALU数: %ld, System数: %ld", npc_perC.alu_count, npc_perC.system_count);
-    Log("  实际跳转数: %ld, 预测成功率: %.4f", npc_perC.real_jump_count, npc_perC.guess_jump_count);
+    Log("  实际跳转数: %ld, 预测成功率: %.4f", npc_perC.real_jump_count, guess_rate);
     Log("  相关性延迟周期: %ld", npc_perC.related_delay_count);
     
     Log("ICache相关:");
