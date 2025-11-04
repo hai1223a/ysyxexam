@@ -70,7 +70,7 @@ module ysyx_25050136_WB
                     in_dbg_optype_i[5] : begin // 无条件跳转  
                         jump_get();
                     end 
-                    default: 
+                    default: ;
                 endcase
             end
         end
