@@ -142,8 +142,8 @@ extern "C" void icache_misscycle(int type) {
 }
 extern "C" void dcache_get(int type) {
   switch(type) {
-    case 0: npc_perC.dcache_sram_count++; break;
-    case 1: npc_perC.dcache_flash_rcount++;  break;
+    case 0: npc_perC.dcache_sram_rcount++; break;
+    case 1: npc_perC.dcache_flash_count++;  break;
     case 2: npc_perC.dcache_sdram_rcount++; break;
     case 3: npc_perC.dcache_sram_wcount++; break;
     case 4: break;
@@ -153,9 +153,9 @@ extern "C" void dcache_get(int type) {
 }
 extern "C" void dcache_misscycle(int type) {
   switch(type) {
-    case 0: npc_perC.dcache_sram_misscycle++; break;
+    case 0: npc_perC.dcache_sram_rmisscycle++; break;
     case 1: npc_perC.dcache_flash_misscycle++;  break;
-    case 2: npc_perC.dcache_sdram_misscycle++; break;
+    case 2: npc_perC.dcache_sdram_rmisscycle++; break;
     case 3: npc_perC.dcache_sram_wmisscycle++; break;
     case 4: break;
     case 5: npc_perC.dcache_sdram_wmisscycle++; break;
