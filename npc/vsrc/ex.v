@@ -52,8 +52,9 @@ module ysyx_25050136_EX
         output                                       out_valid_o,
         output                                    branch_valid_o,
         output    [31:0]                            branch_npc_o,
-        output    [ADDR_WIDTH-1:0]                       waddr_o
-        // output    [31:0]                                 wdata_o    
+        output                                     wvalid_o,   
+        output    [ADDR_WIDTH-1:0]                       waddr_o,
+        output    [31:0]                                 wdata_o    
      );
     // ==== 信号定义 ====
     // 时序逻辑
@@ -202,8 +203,9 @@ module ysyx_25050136_EX
     assign out_rd_o = ex_rd;
     assign out_rd_en_o = ex_rd_en;
     assign out_gpr_wdata_o = ex_csr_ren ? csru_out : alu_out;
+    assign wvalid_o = !ex_lsu_ren & out_valid_o;
     assign waddr_o = ex_rd & {ADDR_WIDTH{ex_rd_en & out_valid_o}};
-    // assign wdata_o = out_gpr_wdata_o;
+    assign wdata_o = out_gpr_wdata_o;
     // === 握手 ===
     assign ready_go = 1;
     assign in_ready_o = idle || out_fire;

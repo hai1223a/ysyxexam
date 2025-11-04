@@ -32,6 +32,8 @@ module ysyx_25050136_MEM
         output   [31:0]                        out_gpr_wdata_o ,
         output                                     out_valid_o ,
         output   [ADDR_WIDTH-1:0]                      waddr_o ,
+        output   [31:0]                                wdata_o ,
+        output                                        wvalid_o ,
         // 与DCACHE握手信号
         input    [31:0]                            ret_rdata_i ,
         input                                      ret_ready_i ,
@@ -190,6 +192,8 @@ module ysyx_25050136_MEM
     assign out_rd_o = mem_rd;
     assign out_rd_en_o = mem_rd_en;
     assign waddr_o = mem_rd & {ADDR_WIDTH{mem_rd_en & (out_valid_o | ~idle)}};
+    assign wdata_o = out_gpr_wdata_o;
+    assign wvalid_o = out_valid_o;
     // === 握手信号 ===
     assign ready_go = (state === IDLE);
     assign in_ready_o = idle || out_fire;

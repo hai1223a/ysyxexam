@@ -16,8 +16,12 @@ module ysyx_25050136_ID
         output     [5:0]                           out_dbg_optype_o,
 `endif
         // 读操作数以及解决数据冒险
+        input                                           ex_wvalid_i,
         input      [ADDR_WIDTH-1:0]                      ex_waddr_i,
+        input      [31:0]                                ex_wdata_i,
+        input                                          mem_wvalid_i,
         input      [ADDR_WIDTH-1:0]                     mem_waddr_i,
+        input      [31:0]                               mem_wdata_i,
         input      [31:0]                              out_rdata1_i,
         output     [ADDR_WIDTH-1:0]                    out_raddr1_o,
         input      [31:0]                              out_rdata2_i,
@@ -170,16 +174,6 @@ module ysyx_25050136_ID
             end
         end
     end
-    // === 读操作数与数据冒险 ===
-    assign raw1_hazard = (out_raddr1_o != 0) && ren1 && ((out_raddr1_o == ex_waddr_i) ||
-                          (out_raddr1_o == mem_waddr_i));
-    assign raw2_hazard = (out_raddr2_o != 0) && ren2 && ((out_raddr2_o == ex_waddr_i) ||
-                          (out_raddr2_o == mem_waddr_i));
-    assign ready_go = !(raw1_hazard | raw2_hazard);
-    assign out_raddr1_o = rs1[ADDR_WIDTH-1:0];
-    assign out_raddr2_o = rs2[ADDR_WIDTH-1:0];
-    assign ren1 = ~(type_lui | type_auipc | type_jal | inst_csrrwi | inst_csrrsi | inst_csrrci);
-    assign ren2 = type_branch | type_store | type_op;
     // === 选择ALU相关操作 ===
     assign out_alu_op_o[`ysyx_25050136_ALU_ADD]   = type_auipc | type_store | type_load | inst_addi | inst_add | type_jalr | type_jal;
     assign out_alu_op_o[`ysyx_25050136_ALU_SUB]   = inst_sub;
@@ -226,9 +220,24 @@ module ysyx_25050136_ID
     assign out_rd_o  = rd[ADDR_WIDTH-1:0];
     assign out_rd_en_o = type_op_imm | type_auipc | type_lui | type_op | type_system | type_load | type_jalr | type_jal;
     // === 操作数 ===
+    // === 读操作数与数据冒险 ===
+    assign raw1_hazard = (out_raddr1_o != 0) && ren1 && (((out_raddr1_o == ex_waddr_i) && !ex_wvalid_i) ||
+                          ((out_raddr1_o == mem_waddr_i) && !mem_wvalid_i));
+    assign raw2_hazard = (out_raddr2_o != 0) && ren2 && (((out_raddr2_o == ex_waddr_i) && !ex_wvalid_i) ||
+                          ((out_raddr2_o == mem_waddr_i) && !mem_wvalid_i));
+    assign ready_go = !(raw1_hazard | raw2_hazard);
+    assign out_raddr1_o = rs1[ADDR_WIDTH-1:0];
+    assign out_raddr2_o = rs2[ADDR_WIDTH-1:0];
+    assign ren1 = ~(type_lui | type_auipc | type_jal | inst_csrrwi | inst_csrrsi | inst_csrrci);
+    assign ren2 = type_branch | type_store | type_op;
+    
     assign out_pc_o = id_pc;
-    assign out_rdata1_o = out_rdata1_i;
-    assign out_rdata2_o = out_rdata2_i;
+    assign out_rdata1_o = ((out_raddr1_o != 0) && (out_raddr1_o == ex_waddr_i) && ex_wvalid_i) : ex_wdata_i :
+                          ((out_raddr1_o != 0) && (out_raddr1_o == mem_waddr_i) && mem_wvalid_i) ? mem_wdata_i :
+                          out_rdata1_i;
+    assign out_rdata2_o =((out_rdata2_i != 0) && (out_raddr2_o == ex_waddr_i) && ex_wvalid_i) ? ex_wdata_i :
+                         ((out_raddr2_o != 0) && (out_raddr2_o == mem_waddr_i) && mem_wvalid_i) ? mem_wdata_i :
+                         out_rdata2_i;
     assign out_imm_o = inst_Itype ? immI : (inst_Stype ? immS :
                                            (inst_Utype ? immU : (inst_Btype ? immB :
                                                                  (inst_Jtype ? immJ : 0))));
