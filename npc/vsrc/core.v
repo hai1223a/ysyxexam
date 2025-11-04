@@ -283,6 +283,7 @@ ysyx_25050136_WB #(
     .in_dbg_pc_i     	(mem_dbg_pc       ),
     .in_dbg_inst_i   	(mem_dbg_inst     ),
     .in_dbg_is_device_i (mem_dbg_is_device),
+    .in_dbg_optype_i  	(mem_dbg_optype   ),
 `endif
     .raddr1_i  	        (raddr1           ),
     .raddr2_i     	    (raddr2           ),
