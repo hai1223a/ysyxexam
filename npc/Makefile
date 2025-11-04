@@ -78,8 +78,8 @@ COMMON_VERDEFINE := +ysyx_25050136_VERILATOR_DPIC
 # 默认仿真参数
 override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 				 -l $(NPC_HOME)/build/log/log.txt \
-				 -i $(NPC_HOME)/sim/microbench-train.bin
-# 				 -i $(NPC_HOME)/sim/microbench-test.bin
+				 -i $(NPC_HOME)/sim/microbench-test.bin
+# 				 -i $(NPC_HOME)/sim/microbench-train.bin
 # 				 -i $(NPC_HOME)/sim/fib.bin
 #================第五步: NPC专用配置 ====================
 # NPC模式Verilog源文件（合并config.v和其他文件，确保config.v在最前面）
