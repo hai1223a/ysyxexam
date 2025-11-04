@@ -130,7 +130,7 @@ $(shell rm -f $(SOC_CPU_VSRC))
 $(SOC_CPU_VSRC):
 	cat $(COMMON_VSRC) $(wildcard vsrc/soc_only/*.v) > $@
 SOC_VSRC = $(SOC_CPU_VSRC) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v 
-SOC_CSRC := $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \))
+SOC_CSRC := $(abspath $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \)))
 
 # SoC的配置
 SOC_RESET := 32'h30000000
