@@ -150,7 +150,7 @@ ysyx_25050136_ID #(
 ) u_ysyx_25050136_ID (
     .clk                      	(clk                       ),
     .reset                    	(reset                     ),
-    .flush                    	(ex_flush                  ),
+    .flush                    	(id_flush                  ),
     .in_valid_i               	(inst_ret_valid_i          ),
     .in_btb_hit_i             	(inst_ret_btb_hit_i       ),
     .in_taken_i               	(inst_ret_taken_i          ),
