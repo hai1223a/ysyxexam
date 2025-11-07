@@ -1,12 +1,12 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Tue Nov  4 10:35:13 2025
+[*] Fri Nov  7 10:58:24 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Tue Nov  4 10:06:21 2025"
-[dumpfile_size] 14497024
+[dumpfile_mtime] "Fri Nov  7 08:46:01 2025"
+[dumpfile_size] 112836
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/cpu.gtkw"
-[timestart] 2648354
+[timestart] 0
 [size] 2560 1333
 [pos] -27 -24
 *-2.400000 2648381 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
@@ -44,7 +44,7 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.id_pc[31:0]
 @28
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_fire
-@800201
+@800200
 -related
 @29
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.raw1_hazard
@@ -66,9 +66,8 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_rdata2_i[31:0]
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_rdata1_o[31:0]
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_rdata2_o[31:0]
-@1000201
--related
 @1000200
+-related
 -id
 @800200
 -ex
