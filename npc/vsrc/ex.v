@@ -226,6 +226,7 @@ module ysyx_25050136_EX
     assign pht_update_o = direction_mismatch & in_pulse;
     assign branch_taken_o = branch_valid & in_pulse;
     assign btb_update_o =  branch_valid & in_pulse & (!ex_btb_hit | target_mismatch);
+    assign update_pc_o = ex_pc;
     // === 访存 ===
     assign out_lsu_ren_o = ex_lsu_ren;
     assign out_lsu_wen_o = ex_lsu_wen;
