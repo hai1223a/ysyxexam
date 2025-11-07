@@ -123,7 +123,7 @@ wire                    mem_wb_rd_en;
 wire [31:0]             mem_wb_gpr_wdata;
 wire                    mem_wb_valid;
 
-assign inst_flush_o = id_flush || ex_flush;
+assign inst_flush_o = if_flush;
 //========================================
 // 子模块
 //========================================
