@@ -21,8 +21,8 @@ module ysyx_25050136_IF
 `else
     localparam RESET_PC = 32'h80000000;  // 默认复位地址
 `endif
-    localparam PHT_BTB_INDEX = 3;
-    localparam BTB_TAG   = 10;
+    localparam PHT_BTB_INDEX = 10;
+    localparam BTB_TAG   = 20;
     // ==== 信号定义 ====
     // 时序逻辑
     reg [31:0] pc;
