@@ -21,8 +21,8 @@ module ysyx_25050136_IF
 `else
     localparam RESET_PC = 32'h80000000;  // 默认复位地址
 `endif
-    localparam PHT_BTB_INDEX = 10;
-    localparam BTB_TAG   = 20;
+    localparam PHT_BTB_INDEX = 3;
+    localparam BTB_TAG   = 10;
     // ==== 信号定义 ====
     // 时序逻辑
     reg [31:0] pc;
@@ -74,7 +74,10 @@ module ysyx_25050136_IF
     assign out_taken_o = pht_pred_taken;  
     assign out_valid_o = !(idle || flush) && ready_go;
 
-    ysyx_25050136_PHT u_PHT (
+    ysyx_25050136_PHT 
+    #(
+        .INDEX_WIDTH (PHT_BTB_INDEX  )
+    ) u_PHT (
         .clk          (clk            ),
         .reset        (reset          ),
         .index        (pc_index       ),
@@ -83,7 +86,11 @@ module ysyx_25050136_IF
         .pred_taken_o (pht_pred_taken)
     );
 
-    ysyx_25050136_BTB u_BTB (
+    ysyx_25050136_BTB
+    #(
+        .INDEX_WIDTH (PHT_BTB_INDEX ),
+        .TAG_WIDTH   (BTB_TAG       )
+    ) u_BTB (
         .clk          (clk             ),
         .reset        (reset           ),
         .index        (pc_index        ),
