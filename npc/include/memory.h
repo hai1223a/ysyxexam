@@ -17,8 +17,8 @@ typedef struct {
   uint64_t branch_count;        // 条件跳转操作数量  
   uint64_t alu_count;           // 定点运算操作数量
   uint64_t system_count;        // 系统控制操作数量
-  uint64_t real_jump_count;     // 实际跳转数量
-  uint64_t guess_jump_count;    // 预测成功数量
+  uint64_t predict_miss_count;     // 预测错误数量
+  uint64_t predict_not_jump_count; // 预测非跳转数量
   uint64_t related_delay_count; // 相关性延迟周期数
   uint64_t icache_flash_count;  
   uint64_t icache_flash_miss;  

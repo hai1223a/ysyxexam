@@ -1,11 +1,18 @@
 module ysyx_25050136_IF
     (
-        input         clk         ,
-        input         reset       ,
-        input         flush       ,
-        input  [31:0] branch_npc  ,
-        input         out_ready_i ,
-        output [31:0] out_pc_o    ,
+        input         clk           ,
+        input         reset         ,
+        input         flush         ,
+        input         branch_taken_i,
+        input  [31:0] branch_pc_i   ,
+        input  [31:0] update_pc_i   ,
+        input         pht_update_i  ,
+        input         btb_update_i  ,
+        input         out_ready_i   ,
+        output [31:0] out_pc_o      ,
+        output [31:0] out_prepc_o   ,
+        output        out_taken_o   ,
+        output        out_btb_hit_o ,
         output        out_valid_o
     );
      
@@ -14,6 +21,8 @@ module ysyx_25050136_IF
 `else
     localparam RESET_PC = 32'h80000000;  // 默认复位地址
 `endif
+    localparam PHT_BTB_INDEX = 10;
+    localparam BTB_TAG   = 20;
     // ==== 信号定义 ====
     // 时序逻辑
     reg [31:0] pc;
@@ -21,18 +30,36 @@ module ysyx_25050136_IF
     // 组合逻辑
     wire ready_go = 1;
     wire out_fire = out_ready_i & out_valid_o;
-    wire [31:0] next_pc = pc + 32'h4;
+    wire branch_update = pht_update_i | btb_update_i;
+    wire [PHT_BTB_INDEX-1:0] pc_index = branch_update ? update_pc_i[2+:PHT_BTB_INDEX] : pc[2+:PHT_BTB_INDEX];
+    wire [BTB_TAG-1:0]       pc_tag   = branch_update ? update_pc_i[12+:BTB_TAG] : pc[12+:BTB_TAG];
+    wire        pht_pred_taken;
+    wire [31:0] btb_pred_npc;
+
+    // === 复用加法器 ===
+    // 选择信号：flush 时用 branch_pc_i，否则用 pc
+    wire adder_sel = flush;
+    wire [31:0] adder_op1 = adder_sel ? branch_pc_i : pc;
+    wire [31:0] adder_op2 = 32'h4;  
+    wire [31:0] adder_out = adder_op1 + adder_op2;  
+    
+    // next_pc: 预测跳转时用 BTB 目标，否则用 pc + 4 (adder_out)
+    wire [31:0] next_pc = (pht_pred_taken & out_btb_hit_o) ? btb_pred_npc : adder_out;
+    // branch_npc: 跳转时用 branch_pc_i，否则用 branch_pc_i + 4 (adder_out)
+    wire [31:0] branch_npc = branch_taken_i ? branch_pc_i : adder_out;
+ 
 `ifdef ysyx_25050136_VERILATOR_DPIC
     wire [31:0] if_dbg_pc = out_pc_o;
     always @(posedge clk) begin
         if(out_fire) fetch_get();
     end
+    
 `endif
     // ==== 逻辑实现 ====
     always @(posedge clk) begin
         if(reset) begin
             idle <= 1;
-            pc <= 32'h3000_0000;
+            pc <= RESET_PC;
         end else begin
             idle <= 0;
             if(flush) begin
@@ -43,7 +70,29 @@ module ysyx_25050136_IF
         end
     end
     assign out_pc_o = pc;
+    assign out_prepc_o = next_pc; 
+    assign out_taken_o = pht_pred_taken;  
     assign out_valid_o = !(idle || flush) && ready_go;
+
+    ysyx_25050136_PHT u_PHT (
+        .clk          (clk            ),
+        .reset        (reset          ),
+        .index        (pc_index       ),
+        .pred_taken_i (branch_taken_i ),
+        .update_en_i  (pht_update_i   ),
+        .pred_taken_o (pht_pred_taken)
+    );
+
+    ysyx_25050136_BTB u_BTB (
+        .clk          (clk             ),
+        .reset        (reset           ),
+        .index        (pc_index        ),
+        .tag          (pc_tag          ),
+        .update_en_i  (btb_update_i    ),
+        .target_pc_i  (branch_pc_i      ),
+        .hit_o        (out_btb_hit_o   ),
+        .target_pc_o  (btb_pred_npc)
+    );
 
 
 endmodule
@@ -97,27 +146,35 @@ module ysyx_25050136_BTB
         input                     clk         ,
         input                     reset       ,
         input  [INDEX_WIDTH-1:0]  index       ,
+        input  [TAG_WIDTH-1:0]    tag         ,
         input                     update_en_i ,
         input  [31:0]             target_pc_i ,
+        output                    hit_o       ,
         output [31:0]             target_pc_o
     );
     localparam BTB_SIZE = 1 << INDEX_WIDTH;
-    localparam BTB_TAG_WIDTH = TAG_WIDTH + 32 + 1;
     // ==== 信号定义 ====
-    reg [31:0] btb_array [0:BTB_SIZE-1];
+    reg btb_valid [0:BTB_SIZE-1];
+    reg [TAG_WIDTH-1:0] btb_tag [0:BTB_SIZE-1];
+    reg [31:0] btb_target [0:BTB_SIZE-1];
+    // 查找逻辑
+    wire btb_hit = btb_valid[index] && (btb_tag[index] == tag);
     integer i;
     // ==== 逻辑实现 ====
     // BTB 初始化
     always @(posedge clk) begin
         if(reset) begin
             for(i = 0; i < BTB_SIZE; i = i + 1) begin
-                btb_array[i] <= 32'b0;
+                btb_valid[i] <= 32'b0;
             end
         end else if(update_en_i) begin
-            btb_array[index] <= target_pc_i;
+            btb_valid[index]  <= 1'b1;
+            btb_tag[index]    <= tag;
+            btb_target[index] <= target_pc_i;
         end
     end
     // 输出目标地址
-    assign target_pc_o = btb_array[index];
+    assign hit_o = btb_hit;
+    assign target_pc_o = btb_hit ? btb_target[index] : 32'b0;
 
 endmodule

@@ -105,17 +105,17 @@ extern "C" void find_diff_skip() {
 }
 
 NPC_perforcount npc_perC = {0};
-extern "C" void fetch_get()          {npc_perC.fetch_count++;      }
-extern "C" void commit_get()       {npc_perC.commit_count++;     }
-extern "C" void load_get()         {npc_perC.load_count++;       }
-extern "C" void store_get()        {npc_perC.store_count++;      }
-extern "C" void jump_get()         {npc_perC.jump_count++;       }
-extern "C" void branch_get()       {npc_perC.branch_count++;     }
-extern "C" void alu_get()          {npc_perC.alu_count++;        }
-extern "C" void system_get()       {npc_perC.system_count++;     }
-extern "C" void real_jump_get()    {npc_perC.real_jump_count++;  }
-extern "C" void guess_jump_get()   {npc_perC.guess_jump_count++; }
-extern "C" void related_delay_get(){npc_perC.related_delay_count++;}
+extern "C" void fetch_get()                  {npc_perC.fetch_count++;            }
+extern "C" void commit_get()                 {npc_perC.commit_count++;           }
+extern "C" void load_get()                   {npc_perC.load_count++;             }
+extern "C" void store_get()                  {npc_perC.store_count++;            }
+extern "C" void jump_get()                   {npc_perC.jump_count++;             }
+extern "C" void branch_get()                 {npc_perC.branch_count++;           }
+extern "C" void alu_get()                    {npc_perC.alu_count++;              }
+extern "C" void system_get()                 {npc_perC.system_count++;           }
+extern "C" void predict_miss_count()         {npc_perC.predict_miss_count++;     }
+extern "C" void predict_not_jump_count()     {npc_perC.predict_not_jump_count++; }
+extern "C" void related_delay_get()          {npc_perC.related_delay_count++;    }
 extern "C" void icache_get(int type) {
   switch(type) {
     case 0: npc_perC.icache_sram_count++; break;

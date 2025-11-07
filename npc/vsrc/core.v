@@ -8,8 +8,14 @@ module ysyx_25050136_NPCCORE
     // 指令相关
     input                         inst_req_ready_i,
     output  [31:0]                inst_req_addr_o ,
+    output  [31:0]                inst_req_prepc_o,
+    output                        inst_req_taken_o,
+    output                      inst_req_btb_hit_o,
     output                        inst_req_valid_o,
     input                         inst_ret_valid_i,
+    input   [31:0]                inst_ret_prepc_i,
+    input                         inst_ret_taken_i,
+    input                       inst_ret_btb_hit_i,
     input   [31:0]                inst_ret_addr_i ,
     input   [31:0]                inst_ret_rdata_i,
     output                        inst_ret_ready_o,
@@ -30,9 +36,18 @@ module ysyx_25050136_NPCCORE
 // 顶层信号定义
 //========================================
 // === 跳转 ===
-wire flush0;
-wire branch_valid;
-wire [31:0] branch_npc;
+wire id_branch_flush;
+wire [31:0] id_branch_pc;
+wire ex_branch_flush;
+wire [31:0] ex_branch_pc;
+wire branch_taken;
+wire [31:0] branch_pc = ex_branch_taken ? ex_branch_pc : id_branch_pc;
+wire [31:0] update_pc;
+wire pht_update;
+wire btb_update;
+// === 清洗流水线 ===
+wire if_flush = id_branch_flush | ex_branch_flush;
+wire id_flush = ex_branch_flush;
 // === 取操作数 ===
 wire [ADDR_WIDTH-1:0]   raddr1;
 wire [ADDR_WIDTH-1:0]   raddr2;
@@ -65,6 +80,9 @@ wire [ADDR_WIDTH-1:0]   id_ex_raddr1;
 wire [31:0]             id_ex_rdata2;
 wire [ADDR_WIDTH-1:0]   id_ex_raddr2;
 wire [31:0]             id_ex_pc;
+wire [31:0]             id_ex_prepc;
+wire                    id_ex_taken;
+wire                    id_ex_btb_hit; 
 wire [31:0]             id_ex_imm;
 wire [`ysyx_25050136_ALU_OP_NUM-1:0]  id_ex_alu_op;
 wire [`ysyx_25050136_CSRU_OP_NUM-1:0] id_ex_csru_op;
@@ -105,14 +123,7 @@ wire                    mem_wb_rd_en;
 wire [31:0]             mem_wb_gpr_wdata;
 wire                    mem_wb_valid;
 
-assign flush0 = branch_valid;
-assign inst_flush_o = flush0;
-//========================================
-// 使用DPI-C实现的取指和访存操作, 以及寻找ebreak
-//========================================
-`ifdef ysyx_25050136_VERILATOR_DPIC
-
-`endif
+assign inst_flush_o = id_flush || ex_flush;
 //========================================
 // 子模块
 //========================================
@@ -120,10 +131,17 @@ assign inst_flush_o = flush0;
 ysyx_25050136_IF u_ysyx_25050136_IF(
     .clk         	(clk              ),
     .reset       	(reset            ),
-    .flush       	(flush0           ),
-    .branch_npc  	(branch_npc       ),
+    .flush       	(if_flush         ),           
+    .branch_taken_i (branch_taken     ),
+    .branch_pc_i    (branch_pc        ),
+    .update_pc_i    (update_pc        ),
+    .pht_update_i   (pht_update       ),
+    .btb_update_i   (btb_update       ),
     .out_ready_i 	(inst_req_ready_i ),
     .out_pc_o    	(inst_req_addr_o  ),
+    .out_prepc_o	(inst_req_prepc_o ),
+    .out_taken_o	(inst_req_taken_o ),
+    .out_btb_hit_o	(inst_req_btb_hit_o),
     .out_valid_o 	(inst_req_valid_o )
 );
 
@@ -132,18 +150,24 @@ ysyx_25050136_ID #(
 ) u_ysyx_25050136_ID (
     .clk                      	(clk                       ),
     .reset                    	(reset                     ),
-    .flush                    	(flush0                    ),
+    .flush                    	(ex_flush                  ),
     .in_valid_i               	(inst_ret_valid_i          ),
+    .in_btb_hit_i             	(inst_ret_btb_hit_i       ),
+    .in_taken_i               	(inst_ret_taken_i          ),
+    .in_prepc_i               	(inst_ret_prepc_i          ),
     .in_inst_i                	(inst_ret_rdata_i          ),
     .in_pc_i                  	(inst_ret_addr_i           ),
     .in_ready_o               	(inst_ret_ready_o          ),
     .ex_waddr_i               	(ex_waddr                  ),
     .ex_wdata_i               	(ex_wdata                  ),
     .ex_wvalid_i              	(ex_wvalid                 ),
-    .mem_waddr_i              	(mem_waddr                  ),
-    .mem_wdata_i              	(mem_wdata                  ),
-    .mem_wvalid_i             	(mem_wvalid                 ),
+    .mem_waddr_i              	(mem_waddr                 ),
+    .mem_wdata_i              	(mem_wdata                 ),
+    .mem_wvalid_i             	(mem_wvalid                ),
     .out_ready_i              	(id_ex_ready               ),
+    .out_btb_hit_o           	(id_ex_btb_hit             ),
+    .out_taken_o             	(id_ex_taken               ),
+    .out_prepc_o             	(id_ex_prepc               ),
     .out_raddr1_o             	(raddr1                    ),
     .out_raddr2_o             	(raddr2                    ),
     .out_rdata1_i             	(rdata1                    ),
@@ -175,7 +199,9 @@ ysyx_25050136_ID #(
     .out_rs1_o                	(id_ex_rs1                 ),
     .out_rd_o                 	(id_ex_rd                  ),
     .out_rd_en_o              	(id_ex_rd_en               ),
-    .out_valid_o              	(id_ex_valid               )
+    .out_valid_o              	(id_ex_valid               ),
+    .branch_flush_o          	(id_branch_flush                  ),
+    .branch_pc_o             	(id_branch_pc              )
 );
 
 ysyx_25050136_EX #(
@@ -186,6 +212,9 @@ ysyx_25050136_EX #(
     .flush                   	(0                    ),
     .in_valid_i              	(id_ex_valid              ),
     .in_pc_i                 	(id_ex_pc                 ),
+    .in_prepc_i              	(id_ex_prepc              ),
+    .in_taken_i              	(id_ex_taken              ),
+    .in_btb_hit_i            	(id_ex_btb_hit            ),
     .in_rdata1_i             	(id_ex_rdata1             ),
     .in_rdata2_i             	(id_ex_rdata2             ),
     .in_imm_i                	(id_ex_imm                ),
@@ -227,8 +256,12 @@ ysyx_25050136_EX #(
     .out_lsu_addr_o          	(ex_mem_lsu_addr          ),
     .out_lsu_wdata_o         	(ex_mem_lsu_wdata         ),
     .out_valid_o             	(ex_mem_valid             ),
-    .branch_valid_o          	(branch_valid             ),
-    .branch_npc_o            	(branch_npc               ),
+    .pht_update_o           	(pht_update               ),
+    .btb_update_o           	(btb_update               ),
+    .update_pc_o            	(update_pc                ),
+    .branch_taken_o         	(branch_taken             ),
+    .branch_pc_o            	(ex_branch_pc             ),
+    .branch_flush_o         	(ex_branch_flush          ),
     .waddr_o                 	(ex_waddr                 ),
     .wdata_o                 	(ex_wdata                 ),
     .wvalid_o                	(ex_wvalid)

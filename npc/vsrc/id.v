@@ -9,6 +9,9 @@ module ysyx_25050136_ID
         input                                            in_valid_i,
         input      [31:0]                                 in_inst_i,
         input      [31:0]                                   in_pc_i,
+        input      [31:0]                                in_prepc_i,
+        input                                            in_taken_i,
+        input                                          in_btb_hit_i,
         output                                           in_ready_o,
         input                                           out_ready_i,
 `ifdef ysyx_25050136_VERILATOR_DPIC
@@ -26,8 +29,14 @@ module ysyx_25050136_ID
         output     [ADDR_WIDTH-1:0]                    out_raddr1_o,
         input      [31:0]                              out_rdata2_i,
         output     [ADDR_WIDTH-1:0]                    out_raddr2_o,
+        // 分支预测
+        output                                       branch_flush_o,
+        output     [31:0]                               branch_pc_o,
         // 传递给EX
         output     [31:0]                                  out_pc_o,
+        output     [31:0]                               out_prepc_o,
+        output                                          out_taken_o,
+        output                                        out_btb_hit_o,              
         output     [31:0]                              out_rdata1_o,
         output     [31:0]                              out_rdata2_o,
         output     [31:0]                                 out_imm_o,
@@ -55,8 +64,12 @@ module ysyx_25050136_ID
     // ==== 信号定义 ====
     // 时序逻辑
     reg idle;
+    reg in_pulse;
     reg [31:0] id_pc;
     reg [31:0] id_inst;
+    reg [31:0] id_prepc;
+    reg        id_taken;
+    reg        id_btb_hit;
     // 组合逻辑
     wire in_fire = in_valid_i & in_ready_o;
     wire out_fire = out_valid_o & out_ready_i;
@@ -162,18 +175,37 @@ module ysyx_25050136_ID
             idle <= 1;
             id_pc <= 0;
             id_inst <= 0;
+            in_pulse <= 0;
         end else begin
             if(flush) begin
                 idle <= 1;
+                in_pulse <= 0;
             end else if(in_fire) begin
                 idle <= 0;
+                in_pulse <= 1;
                 id_pc <= in_pc_i;
                 id_inst <= in_inst_i;
+                id_prepc <= in_prepc_i;
+                id_taken <= in_taken_i;
+                id_btb_hit <= in_btb_hit_i;
             end else if(out_fire) begin
                 idle <= 1;
+                in_pulse <= 0;
+            end else begin
+                in_pulse <= 0;
             end
         end
     end
+    // === 读操作数与数据冒险 ===
+    assign raw1_hazard = (out_raddr1_o != 0) && ren1 && (((out_raddr1_o == ex_waddr_i) && !ex_wvalid_i) ||
+                          ((out_raddr1_o == mem_waddr_i) && !mem_wvalid_i));
+    assign raw2_hazard = (out_raddr2_o != 0) && ren2 && (((out_raddr2_o == ex_waddr_i) && !ex_wvalid_i) ||
+                          ((out_raddr2_o == mem_waddr_i) && !mem_wvalid_i));
+    assign ready_go = !(raw1_hazard | raw2_hazard);
+    assign out_raddr1_o = rs1[ADDR_WIDTH-1:0];
+    assign out_raddr2_o = rs2[ADDR_WIDTH-1:0];
+    assign ren1 = ~(type_lui | type_auipc | type_jal | inst_csrrwi | inst_csrrsi | inst_csrrci);
+    assign ren2 = type_branch | type_store | type_op;
     // === 选择ALU相关操作 ===
     assign out_alu_op_o[`ysyx_25050136_ALU_ADD]   = type_auipc | type_store | type_load | inst_addi | inst_add | type_jalr | type_jal;
     assign out_alu_op_o[`ysyx_25050136_ALU_SUB]   = inst_sub;
@@ -204,6 +236,11 @@ module ysyx_25050136_ID
     assign out_is_jalr_o = type_jalr;
     assign out_unconditional_jump_o = type_jalr | type_jal;
     assign out_conditional_jump_o = type_branch;
+    assign branch_flush_o = !(out_conditional_jump_o | out_unconditional_jump_o) && id_btb_hit && id_taken && in_pulse;
+    assign branch_pc_o = id_pc;
+    assign out_prepc_o = id_prepc;
+    assign out_taken_o = id_taken;
+    assign out_btb_hit_o = id_btb_hit;
     // === 访存相关 ===
     assign out_lsu_ren_o = type_load;
     assign out_lsu_wen_o = type_store;
@@ -220,17 +257,6 @@ module ysyx_25050136_ID
     assign out_rd_o  = rd[ADDR_WIDTH-1:0];
     assign out_rd_en_o = type_op_imm | type_auipc | type_lui | type_op | type_system | type_load | type_jalr | type_jal;
     // === 操作数 ===
-    // === 读操作数与数据冒险 ===
-    assign raw1_hazard = (out_raddr1_o != 0) && ren1 && (((out_raddr1_o == ex_waddr_i) && !ex_wvalid_i) ||
-                          ((out_raddr1_o == mem_waddr_i) && !mem_wvalid_i));
-    assign raw2_hazard = (out_raddr2_o != 0) && ren2 && (((out_raddr2_o == ex_waddr_i) && !ex_wvalid_i) ||
-                          ((out_raddr2_o == mem_waddr_i) && !mem_wvalid_i));
-    assign ready_go = !(raw1_hazard | raw2_hazard);
-    assign out_raddr1_o = rs1[ADDR_WIDTH-1:0];
-    assign out_raddr2_o = rs2[ADDR_WIDTH-1:0];
-    assign ren1 = ~(type_lui | type_auipc | type_jal | inst_csrrwi | inst_csrrsi | inst_csrrci);
-    assign ren2 = type_branch | type_store | type_op;
-    
     assign out_pc_o = id_pc;
     assign out_rdata1_o = ((out_raddr1_o != 0) && (out_raddr1_o == ex_waddr_i) && ex_wvalid_i) ? ex_wdata_i :
                           ((out_raddr1_o != 0) && (out_raddr1_o == mem_waddr_i) && mem_wvalid_i) ? mem_wdata_i :
@@ -252,6 +278,7 @@ module ysyx_25050136_ID
     always @(posedge clk) begin
         if(!reset) begin
             if(!ready_go) related_delay_get();
+            if(branch_flush_o) predict_not_jump_count();
         end
     end
 `endif
