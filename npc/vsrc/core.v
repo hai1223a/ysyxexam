@@ -41,7 +41,7 @@ wire [31:0] id_branch_pc;
 wire ex_branch_flush;
 wire [31:0] ex_branch_pc;
 wire branch_taken;
-wire [31:0] branch_pc = ex_branch_taken ? ex_branch_pc : id_branch_pc;
+wire [31:0] branch_pc = branch_taken ? ex_branch_pc : id_branch_pc;
 wire [31:0] update_pc;
 wire pht_update;
 wire btb_update;
