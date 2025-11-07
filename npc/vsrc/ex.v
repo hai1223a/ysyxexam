@@ -221,7 +221,7 @@ module ysyx_25050136_EX
                             ex_csru_op[`ysyx_25050136_CSRU_MRET] | (ex_conditional_jump & alu_out[0]);
     assign branch_npc = (ex_csru_op[`ysyx_25050136_CSRU_ECALL] | ex_csru_op[`ysyx_25050136_CSRU_MRET]) ?
                            csru_out : bqu_out;
-    assign branch_flush_o = direction_mismatch | (branch_valid & target_mismatch)  & in_pulse;
+    assign branch_flush_o = (direction_mismatch | (branch_valid & target_mismatch))  & in_pulse;
     assign branch_pc_o = branch_valid ? branch_npc : ex_pc;
     assign pht_update_o = direction_mismatch & in_pulse;
     assign branch_taken_o = branch_valid & in_pulse;
