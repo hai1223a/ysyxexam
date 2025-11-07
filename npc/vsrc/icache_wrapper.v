@@ -21,10 +21,16 @@ module ysyx_25050136_ICACHE_WRAPPER
     input                                      flush_i      ,
     input                                      req_valid_i  ,
     input    [31:0]                            req_addr_i   ,
+    input    [31:0]                            req_prepc_i  ,  // 新增：预测 PC
+    input                                      req_taken_i  ,  // 新增：预测跳转
+    input                                      req_btb_hit_i,  // 新增：BTB 命中
     output                                     req_ready_o  ,
     input                                      ret_ready_i  ,
     output   [31:0]                            ret_addr_o   ,
     output   [31:0]                            ret_rdata_o  ,
+    output   [31:0]                            ret_prepc_o  ,  // 新增：返回预测 PC
+    output                                     ret_taken_o  ,  // 新增：返回预测跳转
+    output                                     ret_btb_hit_o,  // 新增：返回 BTB 命中
     output                                     ret_valid_o  
 );
 
@@ -47,10 +53,16 @@ module ysyx_25050136_ICACHE_WRAPPER
         .ic_flush_i         (flush_i         ),
         .ic_req_valid_i 	(req_valid_i     ),
         .ic_req_addr_i  	(req_addr_i      ),
+        .ic_req_prepc_i     (req_prepc_i     ),  // 新增
+        .ic_req_taken_i     (req_taken_i     ),  // 新增
+        .ic_req_btb_hit_i   (req_btb_hit_i   ),  // 新增
         .ic_req_ready_o 	(req_ready_o     ),
         .ic_ret_ready_i 	(ret_ready_i     ),
         .ic_ret_rdata_o 	(ret_rdata_o     ),
         .ic_ret_addr_o  	(ret_addr_o      ),
+        .ic_ret_prepc_o     (ret_prepc_o     ),  // 新增
+        .ic_ret_taken_o     (ret_taken_o     ),  // 新增
+        .ic_ret_btb_hit_o   (ret_btb_hit_o   ),  // 新增
         .ic_ret_valid_o 	(ret_valid_o     ),
         .ia_flush_o         (ia_flush        ),
         .ia_rd_req_o    	(ia_rd_req       ),

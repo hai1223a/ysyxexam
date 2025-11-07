@@ -205,8 +205,8 @@ perf: $(SOC_DEPEMD)
 
 fuck: $(SOC_DEPEMD)
 	@$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
-           DESIGN=ysyx_25050136 \
-           CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clock \
+           DESIGN=ysyx_25050136_NPCCORE \
+           CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clk \
            RTL_FILES="$(SOC_CPU_VSRC)"
 
 ABB = /home/yunhai/ysyx-workbench/npc/sim/a.v

@@ -12,11 +12,16 @@ module ysyx_25050136_ICACHE
     input                                   ic_flush_i      ,
     input                                   ic_req_valid_i  ,
     input    [31:0]                         ic_req_addr_i   ,
+    input    [31:0]                         ic_req_prepc_i  ,  // 新增：预测 PC
+    input                                   ic_req_taken_i  ,  // 新增：预测跳转
+    input                                   ic_req_btb_hit_i,  // 新增：BTB 命中
     output                                  ic_req_ready_o  ,
-
     input                                   ic_ret_ready_i  ,
     output   [31:0]                         ic_ret_rdata_o  ,
     output   [31:0]                         ic_ret_addr_o   ,
+    output   [31:0]                         ic_ret_prepc_o  ,  // 新增：返回预测 PC
+    output                                  ic_ret_taken_o  ,  // 新增：返回预测跳转
+    output                                  ic_ret_btb_hit_o,  // 新增：返回 BTB 命中
     output                                  ic_ret_valid_o  ,                           
     // ICACHE与AXI接口                                        
     output                                  ia_flush_o      ,
@@ -42,6 +47,9 @@ module ysyx_25050136_ICACHE
     // 第一级流水线
     reg idle_1;
     reg [31:0] addr_1;
+    reg [31:0] prepc_1;  // 新增：预测 PC
+    reg taken_1;         // 新增：预测跳转
+    reg btb_hit_1;       // 新增：BTB 命中
     
     reg [NUM_WAY-1:0] hit_mask_1;
     wire in_fire_1 = ic_req_valid_i & ic_req_ready_o;
@@ -50,12 +58,18 @@ module ysyx_25050136_ICACHE
     // 第一第二级流水线握手信号
     wire temp_valid, temp_ready;
     wire [31:0] temp_addr;
+    wire [31:0] temp_prepc;
+    wire temp_taken;       
+    wire temp_btb_hit;     
     wire [NUM_WAY-1:0] temp_hit_mask;
     wire temp_fire = temp_valid & temp_ready;
     // 第二级流水线
     // HIT 时
     reg idle_2;
     reg [31:0] addr_2;
+    reg [31:0] prepc_2;
+    reg taken_2;       
+    reg btb_hit_2;     
     reg [NUM_WAY-1:0] hit_mask_2;
 
     wire ready_go_2;
@@ -82,12 +96,18 @@ module ysyx_25050136_ICACHE
         if(reset) begin
             idle_1 <= 1;
             addr_1 <= 0;
+            prepc_1 <= 0;
+            taken_1 <= 0;
+            btb_hit_1 <= 0;
         end else begin
             if(ic_flush_i) begin
                 idle_1 <= 1;                
             end else if(in_fire_1) begin
                 idle_1 <= 0;
                 addr_1 <= ic_req_addr_i;
+                prepc_1 <= ic_req_prepc_i;
+                taken_1 <= ic_req_taken_i;
+                btb_hit_1 <= ic_req_btb_hit_i;
             end else if(temp_fire) begin
                 idle_1 <= 1;
             end
@@ -106,6 +126,9 @@ module ysyx_25050136_ICACHE
         end
     end
     assign temp_addr = addr_1;
+    assign temp_prepc = prepc_1;
+    assign temp_taken = taken_1;
+    assign temp_btb_hit = btb_hit_1;
     assign temp_hit_mask = hit_mask_1;
     assign ic_req_ready_o = idle_1 || temp_fire;
     assign temp_valid = !(idle_1 || ic_flush_i);
@@ -115,6 +138,9 @@ module ysyx_25050136_ICACHE
         if(reset) begin
             idle_2 <= 1;
             addr_2 <= 0;
+            prepc_2 <= 0;
+            taken_2 <= 0;
+            btb_hit_2 <= 0;
             hit_mask_2 <= 0;
         end else begin
             if(ic_flush_i) begin
@@ -122,6 +148,9 @@ module ysyx_25050136_ICACHE
             end else if(temp_fire) begin
                 idle_2 <= 0;
                 addr_2 <= temp_addr;
+                prepc_2 <= temp_prepc;
+                taken_2 <= temp_taken;
+                btb_hit_2 <= temp_btb_hit;
                 hit_mask_2 <= temp_hit_mask;
             end else if(out_fire_2) begin
                 idle_2 <= 1;
@@ -198,6 +227,9 @@ module ysyx_25050136_ICACHE
 
     assign ic_ret_rdata_o = |hit_mask_2 ? hit_word : miss_word;
     assign ic_ret_addr_o = addr_2;
+    assign ic_ret_prepc_o = prepc_2;
+    assign ic_ret_taken_o = taken_2;
+    assign ic_ret_btb_hit_o = btb_hit_2;
     assign temp_ready = idle_2 || out_fire_2;
     assign ic_ret_valid_o = !(idle_2 || ic_flush_i) && ready_go_2;
 

@@ -64,11 +64,17 @@ module ysyx_25050136_NPC
 `endif
     wire inst_req_ready;
     wire [31:0] inst_req_addr;
+    wire [31:0] inst_req_prepc;  // 新增：预测 PC
+    wire inst_req_taken;         // 新增：预测跳转
+    wire inst_req_btb_hit;       // 新增：BTB 命中
     wire inst_req_valid;
     wire inst_flush;
     wire inst_ret_ready;
     wire [31:0] inst_ret_rdata;
     wire [31:0] inst_ret_addr;
+    wire [31:0] inst_ret_prepc;  // 新增：返回预测 PC
+    wire inst_ret_taken;         // 新增：返回预测跳转
+    wire inst_ret_btb_hit;       // 新增：返回 BTB 命中
     wire inst_ret_valid;
     wire [31:0] mem_req_addr;
     wire [31:0] mem_ret_rdata;
@@ -132,8 +138,14 @@ module ysyx_25050136_NPC
         .reset            	(reset           ),
         .inst_req_ready_i 	(inst_req_ready  ),
         .inst_req_addr_o  	(inst_req_addr   ),
+        .inst_req_prepc_o 	(inst_req_prepc  ),  // 新增
+        .inst_req_taken_o 	(inst_req_taken  ),  // 新增
+        .inst_req_btb_hit_o	(inst_req_btb_hit),  // 新增
         .inst_req_valid_o 	(inst_req_valid  ),
         .inst_ret_valid_i 	(inst_ret_valid  ),
+        .inst_ret_prepc_i 	(inst_ret_prepc  ),  // 新增
+        .inst_ret_taken_i 	(inst_ret_taken  ),  // 新增
+        .inst_ret_btb_hit_i	(inst_ret_btb_hit),  // 新增
         .inst_ret_addr_i  	(inst_ret_addr   ),
         .inst_ret_rdata_i 	(inst_ret_rdata  ),
         .inst_ret_ready_o 	(inst_ret_ready  ),
@@ -193,10 +205,16 @@ module ysyx_25050136_NPC
         .flush_i        (inst_flush      ),
         .req_valid_i    (inst_req_valid  ),
         .req_addr_i     (inst_req_addr   ),
+        .req_prepc_i    (inst_req_prepc  ),  // 新增
+        .req_taken_i    (inst_req_taken  ),  // 新增
+        .req_btb_hit_i  (inst_req_btb_hit),  // 新增
         .req_ready_o    (inst_req_ready  ),
         .ret_ready_i    (inst_ret_ready  ),
         .ret_rdata_o    (inst_ret_rdata  ),
         .ret_addr_o     (inst_ret_addr   ),
+        .ret_prepc_o    (inst_ret_prepc  ),  // 新增
+        .ret_taken_o    (inst_ret_taken  ),  // 新增
+        .ret_btb_hit_o  (inst_ret_btb_hit),  // 新增
         .ret_valid_o    (inst_ret_valid  )
     );
 
