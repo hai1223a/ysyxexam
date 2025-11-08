@@ -11,7 +11,7 @@ INCLUDES = $(addprefix -I, $(INC_PATH))
 OBJS := $(CXXSRC:%.cpp=$(OBJ_DIR)/%.o)
 CXXFLAGS := -O2 -MMD -Wall -Werror -lm $(INCLUDES)
 
-# override ARGS ?= source/microbench-test.bin.bz2 4 1 2 0
+override ARGS ?= source/branch.bin.bz2 10 10 20
 
 $(OBJ_DIR)/%.o: %.cpp
 	@echo + CXX $<
@@ -26,7 +26,7 @@ $(BINARY):: $(OBJS)
 	@$(LD) -o $@ $(OBJS) $(LDFLAGS)
 
 run: $(BINARY)
-	@$(BINARY)
+	@$(BINARY) $(ARGS)
 
 clean: 
 	rm -rf $(BUILD_DIR)
