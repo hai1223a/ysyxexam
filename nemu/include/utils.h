@@ -117,7 +117,7 @@ extern int FUNC_nums;
 //=========================================
 #ifdef CONFIG_BTRACE
 #define btrace_write(...) do {extern FILE* branchbin_fp; \
-    fwrite(__VA_ARGS__, 10, 1, branchbin_fp); \
+    fwrite(__VA_ARGS__, 9, 1, branchbin_fp); \
     fflush(branchbin_fp); \
 } while(0)
 #endif
