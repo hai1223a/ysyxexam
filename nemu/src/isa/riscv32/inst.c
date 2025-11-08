@@ -289,8 +289,9 @@ static int decode_exec(Decode *s) {
   __VA_ARGS__ ; \
   IFDEF(CONFIG_FTRACE,ftracer_log(s, name)); \
 }
+
   // printf("imm = %d  %u  %x \n src1 = %x, src2 = %x, rd = %s, Reg(rd) = %x\n $pc = 0x%x\n",(int)imm, imm, imm, src1, src2, reg_name(rd), Reg(rd), s->pc); 
-  char *p = s->branchbuf;
+  IFDEF(CONFIG_BTRACE, char *p = s->branchbuf;)
   INSTPAT_START();
   // RV32I
   INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, Reg(rd) = imm);
