@@ -21,8 +21,10 @@ module ysyx_25050136_IF
 `else
     localparam RESET_PC = 32'h80000000;  // 默认复位地址
 `endif
-    localparam PHT_BTB_INDEX = 10;
-    localparam BTB_TAG   = 20;
+    localparam PHT_INDEX = 4;
+    localparam BTB_INDEX = 3;
+    localparam BTB_TAG   = 1;
+    localparam RAS_WIDTH = 2;
     // ==== 信号定义 ====
     // 时序逻辑
     reg [31:0] pc;
@@ -31,8 +33,9 @@ module ysyx_25050136_IF
     wire ready_go = 1;
     wire out_fire = out_ready_i & out_valid_o;
     wire branch_update = pht_update_i | btb_update_i;
-    wire [PHT_BTB_INDEX-1:0] pc_index = branch_update ? update_pc_i[2+:PHT_BTB_INDEX] : pc[2+:PHT_BTB_INDEX];
-    wire [BTB_TAG-1:0]       pc_tag   = branch_update ? update_pc_i[12+:BTB_TAG] : pc[12+:BTB_TAG];
+    wire [PHT_INDEX-1:0] pht_pc_index = branch_update ? update_pc_i[2+:PHT_INDEX] : pc[2+:PHT_INDEX];
+    wire [BTB_INDEX-1:0] btb_pc_index = branch_update ? update_pc_i[2+:BTB_INDEX] ^ update_pc_i[2+BTB_INDEX+:BTB_INDEX] : pc[2+:BTB_INDEX] ^ pc[2+BTB_INDEX+:BTB_INDEX];
+    wire [BTB_TAG-1:0]   btb_pc_tag   = branch_update ? update_pc_i[2+BTB_INDEX+:BTB_TAG] ^ update_pc_i[9+BTB_INDEX+:BTB_TAG] : update_pc_i[2+BTB_INDEX+:BTB_TAG] ^ update_pc_i[9+BTB_INDEX+:BTB_TAG];
     wire        pht_pred_taken;
     wire [31:0] btb_pred_npc;
 
@@ -76,11 +79,11 @@ module ysyx_25050136_IF
 
     ysyx_25050136_PHT 
     #(
-        .INDEX_WIDTH (PHT_BTB_INDEX  )
+        .INDEX_WIDTH (PHT_INDEX  )
     ) u_PHT (
         .clk          (clk            ),
         .reset        (reset          ),
-        .index        (pc_index       ),
+        .index        (pht_pc_index   ),
         .pred_taken_i (branch_taken_i ),
         .update_en_i  (pht_update_i   ),
         .pred_taken_o (pht_pred_taken)
@@ -88,15 +91,15 @@ module ysyx_25050136_IF
 
     ysyx_25050136_BTB
     #(
-        .INDEX_WIDTH (PHT_BTB_INDEX ),
+        .INDEX_WIDTH (BTB_INDEX     ),
         .TAG_WIDTH   (BTB_TAG       )
     ) u_BTB (
         .clk          (clk             ),
         .reset        (reset           ),
-        .index        (pc_index        ),
-        .tag          (pc_tag          ),
+        .index        (btb_pc_index    ),
+        .tag          (btb_pc_tag      ),
         .update_en_i  (btb_update_i    ),
-        .target_pc_i  (branch_pc_i      ),
+        .target_pc_i  (branch_pc_i     ),
         .hit_o        (out_btb_hit_o   ),
         .target_pc_o  (btb_pred_npc)
     );
@@ -124,7 +127,7 @@ module ysyx_25050136_PHT
     // PHT 初始化
     always @(posedge clk) begin
         if(reset) begin
-            for(i = 0; i < 1024; i = i + 1) begin
+            for(i = 0; i < PHT_SIZE; i = i + 1) begin
                 pht_array[i] = 2'b01; // 初始状态为弱不跳转
             end
         end else if(update_en_i) begin
