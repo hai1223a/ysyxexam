@@ -76,6 +76,7 @@ static long load_img() {
 }
 
 static char *itrace_file = NULL;
+//==================================================
 // itrace bin内容
 //==================================================
 #ifdef CONFIG_ITRACE
@@ -84,6 +85,18 @@ void init_itracebin() {
     Assert(itrace_file, "你需要给一个bin文件的地址,用于记录itracebin");
     itracebin_fp = fopen(itrace_file, "wb");
     Assert(itracebin_fp, "打不开文件 '%s'", itrace_file);
+}
+#endif
+static char *branch_file = NULL;
+//==================================================
+// branch trace bin内容
+//==================================================
+#ifdef CONFIG_BTRACE
+FILE *branchbin_fp = NULL;
+void init_branchbin() {
+    Assert(branch_file, "你需要给一个bin文件的地址,用于记录branch trace bin");
+    branchbin_fp = fopen(branch_file, "wb");
+    Assert(branchbin_fp, "打不开文件 '%s'", branch_file);
 }
 #endif
 //==================================================
@@ -212,6 +225,7 @@ static int parse_args(int argc, char *argv[]) {
     {"batch"      , no_argument      , NULL, 'b'},
     {"log"        , required_argument, NULL, 'l'},
     {"itracebin"  , required_argument, NULL, 't'},
+    {"branchbin"  , required_argument, NULL, 'r'},
     {"diff"       , required_argument, NULL, 'd'},
     {"port"       , required_argument, NULL, 'p'},
     {"elf"        , required_argument, NULL, 'e'},  // 读取elf文件
@@ -222,28 +236,31 @@ static int parse_args(int argc, char *argv[]) {
     {0            , 0                , NULL,  0 },
   };
   int o;
-  while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:g:k:i:t:", table, NULL)) != -1) {
+  while ( (o = getopt_long(argc, argv, "-bhl:t:r:d:p:e:g:k:i:", table, NULL)) != -1) {
     switch (o) {
       case 'b': sdb_set_batch_mode(); break;
-      case 'p': sscanf(optarg, "%d", &difftest_port); break;
       case 'l': log_file = optarg; break;
+      case 't': itrace_file = optarg; break;
+      case 'r': branch_file = optarg; break;
       case 'd': diff_so_file = optarg; break;
+      case 'p': sscanf(optarg, "%d", &difftest_port); break;
       case 'e': elf_file = optarg; break;
       case 'g': ftracer_log_file = optarg; break;
       case 'k': dtracer_log_file = optarg; break;
       case 'i': img_file = optarg; break;
-      case 't': itrace_file = optarg; break;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
+        printf("\t-h,--help                      print this help message\n");
         printf("\t-b,--batch                     run with batch mode\n");
         printf("\t-l,--log=FILE                  output log to FILE\n");
+        printf("\t-t,--itrace=ITRACE_FILE        itrace bin for cachesim\n");
+        printf("\t-r,--branchbin=BRANCH_FILE     branch trace bin for branch predictor\n");
         printf("\t-d,--diff=REF_SO               run DiffTest with reference REF_SO\n");
         printf("\t-p,--port=PORT                 run DiffTest with port PORT\n");
         printf("\t-e,--elf=ELF_FILE              load elf file for ftrace\n");
         printf("\t-g,--elf-log=FTRACER_FILE      ftracer output log to FTRACER_FILE\n");
         printf("\t-k,--dtrace-log=DTRACER_FILE   ftracer output log to DTRACER_FILE\n");
         printf("\t-i,--image=IMG_FILE            load program from IMG_FILE\n");
-        printf("\t-t,--itrace=ITRACE_FILE        itrace bin for cachesim\n");
         printf("\n");
         exit(0);
     }
@@ -282,9 +299,13 @@ void init_monitor(int argc, char *argv[]) {
   /* Initialize the simple debugger. */
   init_sdb();
 
+  /* 初始化 itrace bin */
   IFDEF(CONFIG_ITRACE, init_itracebin());
   IFDEF(CONFIG_ITRACE, init_disasm());
 
+  /* 初始化 branch trace bin */
+  IFDEF(CONFIG_BTRACE, init_branchbin());
+  
   /* 初始化 ftracer */
   IFDEF(CONFIG_FTRACE, load_elf());
 
