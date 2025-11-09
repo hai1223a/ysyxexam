@@ -282,7 +282,11 @@ static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
 
 #ifdef CONFIG_BTRACE
-  #define TRACE_COMMON 
+  #define TRACE_COMMON \
+    memcpy(p, &s->pc, 4); p += 4; \
+    memcpy(p, &s->dnpc, 4); p += 4; \
+    memset(p, 0, 4); \
+    btrace_write(&s->branchbuf)
 #endif
 #define INSTPAT_INST(s) ((s)->isa.inst)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
@@ -299,8 +303,8 @@ static int decode_exec(Decode *s) {
   // RV32I
   INSTPAT("??????? ????? ????? ??? ????? 01101 11", lui    , U, IFDEF(CONFIG_BTRACE, TRACE_COMMON);Reg(rd) = imm);
   INSTPAT("??????? ????? ????? ??? ????? 00101 11", auipc  , U, IFDEF(CONFIG_BTRACE, TRACE_COMMON);Reg(rd) = s->pc + imm);
-  INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, IFDEF(CONFIG_BTRACE, TRACE_COMMON);Reg(rd) = s->snpc; s->dnpc = alu(s->pc, imm, ADD); IFDEF(CONFIG_BTRACE, memcpy(p, &s->pc, 4); p += 4; memcpy(p, &s->dnpc, 4); p+=4; memset(p, 1, 1); p++; if(rd == 1) memset(p, 2, 3); else memset(p, 3, 3); btrace_write(&s->branchbuf)));
-  INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, IFDEF(CONFIG_BTRACE, TRACE_COMMON);Reg(rd) = s->snpc; s->dnpc = (alu(src1, imm, ADD) & ~1); IFDEF(CONFIG_BTRACE, memcpy(p, &s->pc, 4); p += 4; memcpy(p, &s->dnpc, 4); p+=4; memset(p, 1, 4); p++; if(s->isa.inst == 0x00008067) memset(p, 1, 3); else if(rd == 1) memset(p, 2, 3); else memset(p, 3, 3); btrace_write(&s->branchbuf)));
+  INSTPAT("??????? ????? ????? ??? ????? 11011 11", jal    , J, Reg(rd) = s->snpc; s->dnpc = alu(s->pc, imm, ADD); IFDEF(CONFIG_BTRACE, memcpy(p, &s->pc, 4); p += 4; memcpy(p, &s->dnpc, 4); p+=4; memset(p, 1, 1); p++; if(rd == 1) memset(p, 2, 3); else memset(p, 3, 3); btrace_write(&s->branchbuf)));
+  INSTPAT("??????? ????? ????? 000 ????? 11001 11", jalr   , I, Reg(rd) = s->snpc; s->dnpc = (alu(src1, imm, ADD) & ~1); IFDEF(CONFIG_BTRACE, memcpy(p, &s->pc, 4); p += 4; memcpy(p, &s->dnpc, 4); p+=4; memset(p, 1, 4); p++; if(s->isa.inst == 0x00008067) memset(p, 1, 3); else if(rd == 1) memset(p, 2, 3); else memset(p, 3, 3); btrace_write(&s->branchbuf)));
   INSTPAT("??????? ????? ????? 000 ????? 11000 11", beq    , B, if(alu(src1, src2, EQ))    s->dnpc = alu(s->pc, imm, ADD); IFDEF(CONFIG_BTRACE, memcpy(p, &s->pc, 4); p += 4; memcpy(p, &s->dnpc, 4); p += 4; if(alu(src1, src2, EQ))    memset(p, 1, 4); else memset(p, 0, 4); p++; memset(p, 3, 3); btrace_write(&s->branchbuf)));
   INSTPAT("??????? ????? ????? 001 ????? 11000 11", bne    , B, if(alu(src1, src2, NEQ))   s->dnpc = alu(s->pc, imm, ADD); IFDEF(CONFIG_BTRACE, memcpy(p, &s->pc, 4); p += 4; memcpy(p, &s->dnpc, 4); p += 4; if(alu(src1, src2, NEQ))   memset(p, 1, 4); else memset(p, 0, 4); p++; memset(p, 3, 3); btrace_write(&s->branchbuf)));
   INSTPAT("??????? ????? ????? 100 ????? 11000 11", blt    , B, if(alu(src1, src2, LEQ))   s->dnpc = alu(s->pc, imm, ADD); IFDEF(CONFIG_BTRACE, memcpy(p, &s->pc, 4); p += 4; memcpy(p, &s->dnpc, 4); p += 4; if(alu(src1, src2, LEQ))   memset(p, 1, 4); else memset(p, 0, 4); p++; memset(p, 3, 3); btrace_write(&s->branchbuf)));
