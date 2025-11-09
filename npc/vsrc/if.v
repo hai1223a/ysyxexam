@@ -32,10 +32,10 @@ module ysyx_25050136_IF
     // 组合逻辑
     wire ready_go = 1;
     wire out_fire = out_ready_i & out_valid_o;
-    wire branch_update = pht_update_i | btb_update_i;
-    wire [PHT_INDEX-1:0] pht_pc_index = branch_update ? update_pc_i[2+:PHT_INDEX] : pc[2+:PHT_INDEX];
-    wire [BTB_INDEX-1:0] btb_pc_index = branch_update ? update_pc_i[2+:BTB_INDEX] ^ update_pc_i[2+BTB_INDEX+:BTB_INDEX] : pc[2+:BTB_INDEX] ^ pc[2+BTB_INDEX+:BTB_INDEX];
-    wire [BTB_TAG-1:0]   btb_pc_tag   = branch_update ? update_pc_i[2+BTB_INDEX+:BTB_TAG] ^ update_pc_i[9+BTB_INDEX+:BTB_TAG] : update_pc_i[2+BTB_INDEX+:BTB_TAG] ^ update_pc_i[9+BTB_INDEX+:BTB_TAG];
+    wire [PHT_INDEX-1:0] pht_pc_index_w = update_pc_i[2+:PHT_INDEX];
+    wire [PHT_INDEX-1:0] pht_pc_index_r = pc[2+:PHT_INDEX];
+    wire [BTB_INDEX-1:0] btb_pc_index = btb_update_i ? update_pc_i[2+:BTB_INDEX] ^ update_pc_i[2+BTB_INDEX+:BTB_INDEX] : pc[2+:BTB_INDEX] ^ pc[2+BTB_INDEX+:BTB_INDEX];
+    wire [BTB_TAG-1:0]   btb_pc_tag   = btb_update_i ? update_pc_i[2+BTB_INDEX+:BTB_TAG] ^ update_pc_i[9+BTB_INDEX+:BTB_TAG] : update_pc_i[2+BTB_INDEX+:BTB_TAG] ^ update_pc_i[9+BTB_INDEX+:BTB_TAG];
     wire        pht_pred_taken;
     wire [31:0] btb_pred_npc;
 
@@ -83,7 +83,8 @@ module ysyx_25050136_IF
     ) u_PHT (
         .clk          (clk            ),
         .reset        (reset          ),
-        .index        (pht_pc_index   ),
+        .index_w      (pht_pc_index_w   ),
+        .index_r      (pht_pc_index_r   ),
         .pred_taken_i (branch_taken_i ),
         .update_en_i  (pht_update_i   ),
         .pred_taken_o (pht_pred_taken)
@@ -114,7 +115,8 @@ module ysyx_25050136_PHT
     (
         input                     clk         ,
         input                     reset       ,
-        input  [INDEX_WIDTH-1:0]  index       ,
+        input  [INDEX_WIDTH-1:0]  index_w     ,
+        input  [INDEX_WIDTH-1:0]  index_r     ,
         input                     pred_taken_i,
         input                     update_en_i ,
         output                    pred_taken_o
@@ -133,17 +135,17 @@ module ysyx_25050136_PHT
         end else if(update_en_i) begin
             if(pred_taken_i) begin
                 // 实际跳转，状态加1，饱和在11
-                if(pht_array[index] != 2'b11)
-                    pht_array[index] <= pht_array[index] + 2'b01;
+                if(pht_array[index_w] != 2'b11)
+                    pht_array[index_w] <= pht_array[index_w] + 2'b01;
             end else begin
                 // 实际不跳转，状态减1，饱和在00
-                if(pht_array[index] != 2'b00)
-                    pht_array[index] <= pht_array[index] - 2'b01;
+                if(pht_array[index_w] != 2'b00)
+                    pht_array[index_w] <= pht_array[index_w] - 2'b01;
             end
         end
     end
     // 输出预测结果
-    assign pred_taken_o = (pht_array[index][1] == 1'b1) ? 1'b1 : 1'b0;
+    assign pred_taken_o = (pht_array[index_r][1] == 1'b1) ? 1'b1 : 1'b0;
 
 endmodule
 
