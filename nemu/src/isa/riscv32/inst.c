@@ -282,11 +282,7 @@ static int decode_exec(Decode *s) {
   s->dnpc = s->snpc;
 
 #ifdef CONFIG_BTRACE
-  #define TRACE_COMMON \
-    memcpy(p, &s->pc, 4); p += 4; \
-    memcpy(p, &s->dnpc, 4); p += 4; \
-    memset(p, 0, 4); \
-    btrace_write(&s->branchbuf)
+  #define TRACE_COMMON 
 #endif
 #define INSTPAT_INST(s) ((s)->isa.inst)
 #define INSTPAT_MATCH(s, name, type, ... /* execute body */ ) { \
