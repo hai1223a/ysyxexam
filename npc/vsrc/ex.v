@@ -105,7 +105,7 @@ module ysyx_25050136_EX
     wire [31:0] alu_out; 
     // === 跳转 ===
     wire target_mismatch = (ex_prepc != branch_npc);  // 预测目标与实际目标不匹配
-    wire direction_mismatch = (branch_valid ^ ex_taken);  // 预测方向与实际不匹配
+    wire direction_mismatch = (branch_valid ^ ex_taken) && (ex_unconditional_jump | ex_csru_op[`ysyx_25050136_CSRU_ECALL] | ex_csru_op[`ysyx_25050136_CSRU_MRET] | ex_conditional_jump);  // 预测方向与实际不匹配
     wire [31:0] branch_npc;
     wire branch_valid;
     wire [31:0] bqu_opd1;

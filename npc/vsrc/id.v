@@ -36,7 +36,7 @@ module ysyx_25050136_ID
         output     [31:0]                                  out_pc_o,
         output     [31:0]                               out_prepc_o,
         output                                          out_taken_o,
-        output                                        out_btb_hit_o,              
+        output                                        out_btb_hit_o,
         output     [31:0]                              out_rdata1_o,
         output     [31:0]                              out_rdata2_o,
         output     [31:0]                                 out_imm_o,
