@@ -37,7 +37,7 @@ module ysyx_25050136_IF
     wire [PHT_INDEX-1:0] pht_pc_index_w = update_pc_i[2+:PHT_INDEX];
     wire [PHT_INDEX-1:0] pht_pc_index_r = pc[2+:PHT_INDEX];
     wire [BTB_INDEX-1:0] btb_pc_index = btb_update_i ? update_pc_i[2+:BTB_INDEX] ^ update_pc_i[2+BTB_INDEX+:BTB_INDEX] : pc[2+:BTB_INDEX] ^ pc[2+BTB_INDEX+:BTB_INDEX];
-    wire [BTB_TAG-1:0]   btb_pc_tag   = btb_update_i ? update_pc_i[2+BTB_INDEX+:BTB_TAG] ^ update_pc_i[9+BTB_INDEX+:BTB_TAG] : update_pc_i[2+BTB_INDEX+:BTB_TAG] ^ update_pc_i[9+BTB_INDEX+:BTB_TAG];
+    wire [BTB_TAG-1:0]   btb_pc_tag   = btb_update_i ? update_pc_i[2+BTB_INDEX+:BTB_TAG] ^ update_pc_i[9+BTB_INDEX+:BTB_TAG] : pc[2+BTB_INDEX+:BTB_TAG] ^ pc[9+BTB_INDEX+:BTB_TAG];
     wire        pht_pred_taken;
     wire [31:0] btb_pred_npc;
 
