@@ -13,8 +13,7 @@ LDSCRIPTS += $(AM_HOME)/scripts/linker_nemu.ld
 LDFLAGS   += --defsym=_pmem_start=0x20000000 --defsym=_entry_offset=0x0
 LDFLAGS   += --gc-sections -e _start
 override NEMUFLAGS += -l $(shell dirname $(IMAGE).elf)/nemu-log.txt  \
-                      -t $(shell dirname $(IMAGE).elf)/itracer.bin  \
-                      -r $(shell dirname $(IMAGE).elf)/btracer.bin  \
+                      -r $(shell dirname $(IMAGE).elf)/tracer.bin  \
                       -k $(shell dirname $(IMAGE).elf)/nemu-dtracer-log.txt 
 
 MAINARGS_MAX_LEN = 64
