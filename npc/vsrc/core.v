@@ -46,7 +46,6 @@ wire [31:0] update_pc;
 wire pht_update;
 wire btb_update;
 // === 清洗流水线 ===
-wire if_flush = id_branch_flush | ex_branch_flush;
 wire id_flush = ex_branch_flush;
 // === 取操作数 ===
 wire [ADDR_WIDTH-1:0]   raddr1;
@@ -123,15 +122,16 @@ wire                    mem_wb_rd_en;
 wire [31:0]             mem_wb_gpr_wdata;
 wire                    mem_wb_valid;
 
-assign inst_flush_o = if_flush;
+assign inst_flush_o = id_branch_flush | ex_branch_flush;;
 //========================================
 // 子模块
 //========================================
 
 ysyx_25050136_IF u_ysyx_25050136_IF(
-    .clk         	(clk              ),
-    .reset       	(reset            ),
-    .flush       	(if_flush         ),           
+    .clk         	(clk      ),
+    .reset       	(reset    ),
+    .flush_id       (id_branch_flush ),
+    .flush_ex       (ex_branch_flush),           
     .branch_taken_i (branch_taken     ),
     .branch_pc_i    (branch_pc        ),
     .update_pc_i    (update_pc        ),

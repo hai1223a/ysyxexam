@@ -2,7 +2,8 @@ module ysyx_25050136_IF
     (
         input         clk           ,
         input         reset         ,
-        input         flush         ,
+        input         flush_id      ,
+        input         flush_ex      ,
         input         branch_taken_i,
         input  [31:0] branch_pc_i   ,
         input  [31:0] update_pc_i   ,
@@ -32,6 +33,7 @@ module ysyx_25050136_IF
     // 组合逻辑
     wire ready_go = 1;
     wire out_fire = out_ready_i & out_valid_o;
+    wire flush = flush_id | flush_ex;
     wire [PHT_INDEX-1:0] pht_pc_index_w = update_pc_i[2+:PHT_INDEX];
     wire [PHT_INDEX-1:0] pht_pc_index_r = pc[2+:PHT_INDEX];
     wire [BTB_INDEX-1:0] btb_pc_index = btb_update_i ? update_pc_i[2+:BTB_INDEX] ^ update_pc_i[2+BTB_INDEX+:BTB_INDEX] : pc[2+:BTB_INDEX] ^ pc[2+BTB_INDEX+:BTB_INDEX];
@@ -49,7 +51,7 @@ module ysyx_25050136_IF
     // next_pc: 预测跳转时用 BTB 目标，否则用 pc + 4 (adder_out)
     wire [31:0] next_pc = (pht_pred_taken & out_btb_hit_o) ? btb_pred_npc : adder_out;
     // branch_npc: 跳转时用 branch_pc_i，否则用 branch_pc_i + 4 (adder_out)
-    wire [31:0] branch_npc = branch_taken_i ? branch_pc_i : adder_out;
+    wire [31:0] branch_npc = (flush_ex & branch_taken_i) ? branch_pc_i : adder_out;
  
 `ifdef ysyx_25050136_VERILATOR_DPIC
     wire [31:0] if_dbg_pc = out_pc_o;
