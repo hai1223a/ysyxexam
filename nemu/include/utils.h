@@ -104,21 +104,12 @@ extern int FUNC_nums;
 #endif
 
 //=========================================
-// itrace 部分内容
-//=========================================
-#ifdef CONFIG_ITRACE
-#define itrace_write(...) do {extern FILE* itracebin_fp; \
-    fwrite(__VA_ARGS__, 4, 1, itracebin_fp); \
-} while(0)
-#endif
-
-//=========================================
 // btrace 部分内容
 //=========================================
 #ifdef CONFIG_BTRACE
-#define btrace_write(...) do {extern FILE* branchbin_fp; \
-    fwrite(__VA_ARGS__, 12, 1, branchbin_fp); \
-    fflush(branchbin_fp); \
+#define btrace_write(...) do {extern FILE* tracebin_fp; \
+    fwrite(__VA_ARGS__, 12, 1, tracebin_fp); \
+    fflush(tracebin_fp); \
 } while(0)
 #endif
 
