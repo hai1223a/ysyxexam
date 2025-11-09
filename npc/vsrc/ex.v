@@ -104,8 +104,9 @@ module ysyx_25050136_EX
     wire [31:0] alu_opd2;
     wire [31:0] alu_out; 
     // === 跳转 ===
+    wire is_jump = ex_unconditional_jump | ex_csru_op[`ysyx_25050136_CSRU_ECALL] | ex_csru_op[`ysyx_25050136_CSRU_MRET] | ex_conditional_jump;
     wire target_mismatch = (ex_prepc != branch_npc);  // 预测目标与实际目标不匹配
-    wire direction_mismatch = (branch_valid ^ ex_taken) && (ex_unconditional_jump | ex_csru_op[`ysyx_25050136_CSRU_ECALL] | ex_csru_op[`ysyx_25050136_CSRU_MRET] | ex_conditional_jump);  // 预测方向与实际不匹配
+    wire direction_mismatch = (branch_valid ^ ex_taken) && is_jump;  // 预测方向与实际不匹配
     wire [31:0] branch_npc;
     wire branch_valid;
     wire [31:0] bqu_opd1;
@@ -223,7 +224,7 @@ module ysyx_25050136_EX
                            csru_out : bqu_out;
     assign branch_flush_o = (direction_mismatch | (branch_valid & target_mismatch))  & in_pulse;
     assign branch_pc_o = branch_valid ? branch_npc : ex_pc;
-    assign pht_update_o = direction_mismatch & in_pulse;
+    assign pht_update_o = is_jump & in_pulse;
     assign branch_taken_o = branch_valid & in_pulse;
     assign btb_update_o =  branch_valid & in_pulse & (!ex_btb_hit | target_mismatch);
     assign update_pc_o = ex_pc;
