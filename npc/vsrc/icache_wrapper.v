@@ -40,12 +40,19 @@ module ysyx_25050136_ICACHE_WRAPPER
     wire [31:0] ia_ret_data;
     wire ia_ret_valid;
     wire ia_ret_last;
-
+// 仿真时为了速度可以配置为更好的参数
+        // .OFFSET_WIDTH 	(4             ),
+        // .NUM_WAY      	(4             ),
+        // .INDEX_WIDTH  	(3             )
+// 综合考虑面积和性能，最终版本配置为
+        // .OFFSET_WIDTH 	(4             ),
+        // .NUM_WAY      	(1             ),
+        // .INDEX_WIDTH  	(1             )
     ysyx_25050136_ICACHE 
     #(
         .OFFSET_WIDTH 	(4             ),
-        .NUM_WAY      	(4             ),
-        .INDEX_WIDTH  	(3             )
+        .NUM_WAY      	(1             ),
+        .INDEX_WIDTH  	(1             )
     )
     u_ysyx_25050136_ICACHE(
         .clk            	(clk             ),

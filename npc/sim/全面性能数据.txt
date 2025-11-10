@@ -79,3 +79,4 @@ PC = 0xa0005a50, halt = 0, NPC 的结束状态是HIT GOOD TRAP
 指令数量为 547382 条
 程序时间 = 83562771 us
 
+pht index : 1 --- 2734 

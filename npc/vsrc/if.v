@@ -24,7 +24,7 @@ module ysyx_25050136_IF
 `endif
     localparam PHT_INDEX = 4;
     localparam BTB_INDEX = 3;
-    localparam BTB_TAG   = 5;
+    localparam BTB_TAG   = 6;
     localparam RAS_WIDTH = 2;
     // ==== 信号定义 ====
     // 时序逻辑
