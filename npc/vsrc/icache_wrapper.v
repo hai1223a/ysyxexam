@@ -51,8 +51,8 @@ module ysyx_25050136_ICACHE_WRAPPER
     ysyx_25050136_ICACHE 
     #(
         .OFFSET_WIDTH 	(4             ),
-        .NUM_WAY      	(1             ),
-        .INDEX_WIDTH  	(1             )
+        .NUM_WAY      	(4             ),
+        .INDEX_WIDTH  	(3             )
     )
     u_ysyx_25050136_ICACHE(
         .clk            	(clk             ),
