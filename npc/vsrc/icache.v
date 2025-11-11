@@ -10,6 +10,7 @@ module ysyx_25050136_ICACHE
     input                                      reset        ,
     // ICACHE与CPU接口
     input                                   ic_flush_i      ,
+    input                                   ic_fencei_i     ,  // 新增：fence.i 信号       
     input                                   ic_req_valid_i  ,
     input    [31:0]                         ic_req_addr_i   ,
     input    [31:0]                         ic_req_prepc_i  ,  // 新增：预测 PC
@@ -184,7 +185,14 @@ module ysyx_25050136_ICACHE
             miss_way <= 0;
         end else begin
             if(ic_flush_i) begin
-                if(state == MISS) begin
+                if(ic_fencei_i) begin
+                    integer m,n;
+                    for (m = 0; m < NUM_WAY; m = m + 1) begin
+                        for (n = 0; n < NUM_SET; n = n + 1) begin
+                            cache_valid[m][n] <= 1'b0;
+                        end
+                    end
+                end else if(state == MISS) begin
                     cache_valid[replace_way][addr_index_2] <= 1'b0;
                 end
                 state <= IDLE;

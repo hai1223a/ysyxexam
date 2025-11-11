@@ -69,6 +69,7 @@ module ysyx_25050136_NPC
     wire inst_req_btb_hit;       // 新增：BTB 命中
     wire inst_req_valid;
     wire inst_flush;
+    wire inst_fencei;         // 新增：fence.i 信号
     wire inst_ret_ready;
     wire [31:0] inst_ret_rdata;
     wire [31:0] inst_ret_addr;
@@ -150,6 +151,7 @@ module ysyx_25050136_NPC
         .inst_ret_rdata_i 	(inst_ret_rdata  ),
         .inst_ret_ready_o 	(inst_ret_ready  ),
         .inst_flush_o     	(inst_flush      ),
+        .inst_fencei_o    	(inst_fencei     ),
         .mem_ret_rdata_i  	(mem_ret_rdata   ),
         .mem_ret_ready_i  	(mem_ret_ready   ),
         .mem_req_addr_o   	(mem_req_addr    ),
@@ -203,6 +205,7 @@ module ysyx_25050136_NPC
         .m_rlast_i   	(inst_rlast_i    ),
         .m_rid_i     	(inst_rid_i      ),
         .flush_i        (inst_flush      ),
+        .fencei_i       (inst_fencei     ), 
         .req_valid_i    (inst_req_valid  ),
         .req_addr_i     (inst_req_addr   ),
         .req_prepc_i    (inst_req_prepc  ),  // 新增

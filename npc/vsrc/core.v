@@ -20,6 +20,7 @@ module ysyx_25050136_NPCCORE
     input   [31:0]                inst_ret_rdata_i,
     output                        inst_ret_ready_o,
     output                            inst_flush_o,
+    output                           inst_fencei_o,
     // 数据相关
     input    [31:0]               mem_ret_rdata_i,
     input                         mem_ret_ready_i,
@@ -45,6 +46,8 @@ wire [31:0] branch_pc = (ex_branch_flush | btb_update) ? ex_branch_pc : id_branc
 wire [31:0] update_pc;
 wire pht_update;
 wire btb_update;
+// === fence.i ===
+wire id_fencei_flush;
 // === 清洗流水线 ===
 wire id_flush = ex_branch_flush;
 // === 取操作数 ===
@@ -122,16 +125,17 @@ wire                    mem_wb_rd_en;
 wire [31:0]             mem_wb_gpr_wdata;
 wire                    mem_wb_valid;
 
-assign inst_flush_o = id_branch_flush | ex_branch_flush;;
+assign inst_flush_o = id_branch_flush | ex_branch_flush | id_fencei_flush;
+assign inst_fencei_o = id_fencei_flush;
 //========================================
 // 子模块
 //========================================
 
 ysyx_25050136_IF u_ysyx_25050136_IF(
-    .clk         	(clk      ),
-    .reset       	(reset    ),
-    .flush_id       (id_branch_flush ),
-    .flush_ex       (ex_branch_flush),           
+    .clk         	(clk              ),
+    .reset       	(reset            ),
+    .flush_id       (id_branch_flush | id_fencei_flush),
+    .flush_ex       (ex_branch_flush  ),           
     .branch_taken_i (branch_taken     ),
     .branch_pc_i    (branch_pc        ),
     .update_pc_i    (update_pc        ),
@@ -200,8 +204,9 @@ ysyx_25050136_ID #(
     .out_rd_o                 	(id_ex_rd                  ),
     .out_rd_en_o              	(id_ex_rd_en               ),
     .out_valid_o              	(id_ex_valid               ),
-    .branch_flush_o          	(id_branch_flush                  ),
-    .branch_pc_o             	(id_branch_pc              )
+    .branch_flush_o          	(id_branch_flush           ),
+    .branch_pc_o             	(id_branch_pc              ),
+    .fencei_flush_o          	(id_fencei_flush)
 );
 
 ysyx_25050136_EX #(

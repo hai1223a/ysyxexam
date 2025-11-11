@@ -32,6 +32,8 @@ module ysyx_25050136_ID
         // 分支预测
         output                                       branch_flush_o,
         output     [31:0]                               branch_pc_o,
+        // fence.i
+        output                                       fencei_flush_o,
         // 传递给EX
         output     [31:0]                                  out_pc_o,
         output     [31:0]                               out_prepc_o,
@@ -152,6 +154,7 @@ module ysyx_25050136_ID
     wire inst_mret = (id_inst == 32'h30200073);
     wire inst_ecall = (id_inst == 32'h00000073);
     wire inst_ebreak = (id_inst == 32'h00100073);
+    wire inst_fence_i = (id_inst == 32'h0000100F);
     // === 指令类型判断 ===
     // wire inst_Rtype = type_op;
     wire inst_Itype = type_op_imm | type_load | type_jalr;
@@ -241,6 +244,8 @@ module ysyx_25050136_ID
     assign out_prepc_o = id_prepc;
     assign out_taken_o = id_taken;
     assign out_btb_hit_o = id_btb_hit;
+    // === fence.i ===
+    assign fencei_flush_o = inst_fence_i & in_pulse;
     // === 访存相关 ===
     assign out_lsu_ren_o = type_load;
     assign out_lsu_wen_o = type_store;

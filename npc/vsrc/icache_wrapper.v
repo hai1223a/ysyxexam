@@ -19,6 +19,7 @@ module ysyx_25050136_ICACHE_WRAPPER
     input    [3:0]                             m_rid_i      ,
     // 内部
     input                                      flush_i      ,
+    input                                      fencei_i     ,  // 新增：fence.i 信号
     input                                      req_valid_i  ,
     input    [31:0]                            req_addr_i   ,
     input    [31:0]                            req_prepc_i  ,  // 新增：预测 PC
@@ -58,6 +59,7 @@ module ysyx_25050136_ICACHE_WRAPPER
         .clk            	(clk             ),
         .reset          	(reset           ),
         .ic_flush_i         (flush_i         ),
+        .ic_fencei_i        (fencei_i        ),  // 新增
         .ic_req_valid_i 	(req_valid_i     ),
         .ic_req_addr_i  	(req_addr_i      ),
         .ic_req_prepc_i     (req_prepc_i     ),  // 新增
