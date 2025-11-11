@@ -18,7 +18,7 @@ module ysyx_25050136_IF
     );
      
 `ifdef VERILATOR
-    localparam RESET_PC = 32'h30000000;  // Verilator 仿真复位地址
+    localparam RESET_PC = 32'h30000000;  
 `elsif __ICARUS__
     localparam RESET_PC = 32'h80000000;  // Icarus 仿真复位地址
 `else
