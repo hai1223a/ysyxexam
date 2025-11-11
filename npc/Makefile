@@ -1,9 +1,9 @@
 #***************************************************************************************
 # NPC 仿真工程 Makefile
-# 功能: 支持NPC和SoC两种模式的Verilator仿真
+# 功能: 支持Verilator的SoC仿真, 支持Iverilog的NPC仿真 
 #***************************************************************************************/
 
-#================第一步: 环境检查与配置加载 ====================
+#================ 第一步: 环境检查与配置加载 ====================
 # 检查NPC_HOME环境变量是否设置正确
 ifeq ($(wildcard $(NPC_HOME)/vsrc/cpu.v),)
  $(error NPC_HOME=$(NPC_HOME) is not a NPC repo)
@@ -15,14 +15,14 @@ defualt: soc_run
 -include $(NPC_HOME)/include/config/auto.conf
 -include $(NPC_HOME)/include/config/auto.conf.cmd
 
-#================第二步: 第三方工具配置 ====================
+#================ 第二步: 第三方工具配置 ========================
 # Capstone 配置（用于itrace）
 CAPSTONE_PATH := $(NPC_HOME)/tools/capstone
 LIBCAPSTONE   := tools/capstone/repo/libcapstone.so.5
 $(LIBCAPSTONE):
 	$(MAKE) -C $(CAPSTONE_PATH)
 
-#================第三步: 通用配置 ====================
+#================ 第三步: 通用配置 =============================
 # 目录配置
 BUILD_DIR = $(NPC_HOME)/build
 WAVE_DIR = $(NPC_HOME)/wave
@@ -30,11 +30,13 @@ OBJ_DIR = $(BUILD_DIR)/obj_dir
 LOG_DIR = $(BUILD_DIR)/log
 $(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
 
+# 用于生成ysyx_25050136.v的Verilog源文件列表
+COMMON_VSRC = vsrc/config.v $(filter-out vsrc/config.v,$(wildcard vsrc/*.v))
+
+#================ 第四步: Verilator配置 =========================
 # 编译工具
 VERILATOR_BIN   := verilator
-
 # 共同源文件与用于SOC的CPU文件
-COMMON_VSRC = vsrc/config.v $(filter-out vsrc/config.v,$(wildcard vsrc/*.v))
 
 # Verilator编译选项
 COMMON_VERFLAGS += -MMD --cc -exe --build --x-assign fast --x-initial fast\
@@ -53,7 +55,7 @@ endif
 # ASSIGNDLY: 模块中存在 #1 这类延时语句, 同时又约定了--no-timing忽略延时语句加速仿真
 # UNUSEDPARAM: 模块定义了未被使用的参数
 # SYNCASYNCNET: 一个复位信号既被用于同步复位, 又被用于异步复位. 目前该报错发生于uart_reg的复位是异步复位, 暂时忽略日后修改
-COMMON_VERWNO := $(addprefix -Wno-, PINCONNECTEMPTY DECLFILENAME UNUSEDSIGNAL  UNUSEDPARAM SYNCASYNCNET)
+COMMON_VERWNO := $(addprefix -Wno-, PINCONNECTEMPTY DECLFILENAME UNUSEDSIGNAL ASSIGNDLY UNUSEDPARAM SYNCASYNCNET)
 
 # 警告级别配置
 ifdef CONFIG_WALL
