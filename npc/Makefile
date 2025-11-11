@@ -51,10 +51,9 @@ endif
 # DECLFILENAME: 模块名与其文件名不一致
 # UNUSEDSIGNAL: 模块定义了未被使用的信号
 # ASSIGNDLY: 模块中存在 #1 这类延时语句, 同时又约定了--no-timing忽略延时语句加速仿真
-# UNDRIVEN: 模块中有信号没有被驱动
 # UNUSEDPARAM: 模块定义了未被使用的参数
 # SYNCASYNCNET: 一个复位信号既被用于同步复位, 又被用于异步复位. 目前该报错发生于uart_reg的复位是异步复位, 暂时忽略日后修改
-COMMON_VERWNO := $(addprefix -Wno-, PINCONNECTEMPTY DECLFILENAME UNUSEDSIGNAL ASSIGNDLY  UNUSEDPARAM SYNCASYNCNET)
+COMMON_VERWNO := $(addprefix -Wno-, PINCONNECTEMPTY DECLFILENAME UNUSEDSIGNAL  UNUSEDPARAM SYNCASYNCNET)
 
 # 警告级别配置
 ifdef CONFIG_WALL
