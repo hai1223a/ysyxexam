@@ -132,7 +132,7 @@ module ysyx_25050136_PHT
     always @(posedge clk) begin
         if(reset) begin
             for(i = 0; i < PHT_SIZE; i = i + 1) begin
-                pht_array[i] = 2'b01; // 初始状态为弱不跳转
+                pht_array[i] <= 2'b01; // 初始状态为弱不跳转
             end
         end else if(update_en_i) begin
             if(pred_taken_i) begin
@@ -179,7 +179,7 @@ module ysyx_25050136_BTB
     always @(posedge clk) begin
         if(reset) begin
             for(i = 0; i < BTB_SIZE; i = i + 1) begin
-                btb_valid[i] = 0;
+                btb_valid[i] <= 0;
             end
         end else if(update_en_i) begin
             btb_valid[index]  <= 1'b1;
