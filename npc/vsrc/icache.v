@@ -241,7 +241,7 @@ module ysyx_25050136_ICACHE
     assign temp_ready = idle_2 || out_fire_2;
     assign ic_ret_valid_o = !(idle_2 || ic_flush_i) && ready_go_2;
 
-`ifdef ysyx_25050136_VERILATOR_DPIC
+`ifdef VERILATOR
     reg [31:0] mem_type;
     always @(posedge clk) begin
         if(reset) begin

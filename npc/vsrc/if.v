@@ -53,7 +53,7 @@ module ysyx_25050136_IF
     // branch_npc: 跳转时用 branch_pc_i，否则用 branch_pc_i + 4 (adder_out)
     wire [31:0] branch_npc = (flush_ex & branch_taken_i) ? branch_pc_i : adder_out;
  
-`ifdef ysyx_25050136_VERILATOR_DPIC
+`ifdef VERILATOR
     wire [31:0] if_dbg_pc = out_pc_o;
     always @(posedge clk) begin
         if(out_fire) fetch_get();

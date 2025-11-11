@@ -54,7 +54,7 @@ module ysyx_25050136_NPC
     input                         mem_rlast_i    ,
     input    [3:0]                mem_rid_i      
 );
-`ifdef ysyx_25050136_VERILATOR_DPIC
+`ifdef VERILATOR
     always @(*) begin
         if(((inst_rresp_i != 2'd0) & inst_rvalid_i & inst_rready_o) | 
            ((mem_rresp_i != 2'd0) & mem_rvalid_i & mem_rready_o) | 

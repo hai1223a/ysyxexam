@@ -24,7 +24,7 @@
 `define ysyx_25050136_CSRU_MRET   3
 `define ysyx_25050136_CSRU_ECALL  4
 
-`ifdef ysyx_25050136_VERILATOR_DPIC
+`ifdef VERILATOR
 `define ysyx_25050136_DBG_NUM 5
 `define ysyx_25050136_DBG_EBREAK 0
 `define ysyx_25050136_DBG_ALU  1

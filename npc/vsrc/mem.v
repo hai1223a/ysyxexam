@@ -17,7 +17,7 @@ module ysyx_25050136_MEM
         input    [31:0]                          in_req_addr_i ,
         input    [31:0]                         in_lsu_wdata_i ,
         output                                      in_ready_o ,
-`ifdef ysyx_25050136_VERILATOR_DPIC
+`ifdef VERILATOR
         input      [31:0]                          in_dbg_pc_i ,
         input      [31:0]                        in_dbg_inst_i ,
         input      [5:0]                       in_dbg_optype_i ,
@@ -198,7 +198,7 @@ module ysyx_25050136_MEM
     assign ready_go = (state === IDLE);
     assign in_ready_o = idle || out_fire;
     assign out_valid_o = !(idle || flush) && ready_go;
-`ifdef ysyx_25050136_VERILATOR_DPIC
+`ifdef VERILATOR
     always @(posedge clk) begin
         if(reset) begin
             out_dbg_is_device_o <= 0;

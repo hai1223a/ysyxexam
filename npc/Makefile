@@ -72,9 +72,6 @@ COMMON_CFLAGS += -fsanitize=address
 COMMON_LDFLAGS += -fsanitize=address
 endif
 
-# 宏定义
-COMMON_VERDEFINE := +ysyx_25050136_VERILATOR_DPIC
-
 #================第四步: 仿真参数配置 ====================
 # 默认仿真参数
 override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \

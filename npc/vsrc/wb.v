@@ -10,7 +10,7 @@ module ysyx_25050136_WB
         input                                  in_rd_en_i,
         input  [31:0]                      in_gpr_wdata_i,
         output                                 in_ready_o,
-`ifdef ysyx_25050136_VERILATOR_DPIC
+`ifdef VERILATOR
         input  [31:0]                         in_dbg_pc_i,
         input  [31:0]                       in_dbg_inst_i,
         input                          in_dbg_is_device_i,
@@ -27,7 +27,7 @@ module ysyx_25050136_WB
     // ==== 逻辑实现 ====
     assign in_ready_o = 1;
     assign real_wen = in_fire & in_rd_en_i;
-`ifdef ysyx_25050136_VERILATOR_DPIC
+`ifdef VERILATOR
     reg [31:0] wb_dbg_pc    ;
     reg [31:0] wb_dbg_inst  ;
     always @(posedge clk) begin

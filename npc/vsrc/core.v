@@ -56,7 +56,7 @@ wire [ADDR_WIDTH-1:0]   raddr2;
 wire [31:0]             rdata1;
 wire [31:0]             rdata2;
 // === DBG ===
-`ifdef ysyx_25050136_VERILATOR_DPIC
+`ifdef VERILATOR
 wire [31:0]                      id_dbg_inst/* verilator public_flat */;
 wire [5:0]                     id_dbg_optype/* verilator public_flat */;
 wire [31:0]                        ex_dbg_pc/* verilator public_flat */;
@@ -176,7 +176,7 @@ ysyx_25050136_ID #(
     .out_raddr2_o             	(raddr2                    ),
     .out_rdata1_i             	(rdata1                    ),
     .out_rdata2_i             	(rdata2                    ),
-`ifdef ysyx_25050136_VERILATOR_DPIC
+`ifdef VERILATOR
     .out_dbg_inst_o           	(id_dbg_inst               ),
     .out_dbg_optype_o           (id_dbg_optype             ),
 `endif
@@ -243,7 +243,7 @@ ysyx_25050136_EX #(
     .in_rd_i                 	(id_ex_rd                 ),
     .in_rd_en_i              	(id_ex_rd_en              ),
     .in_ready_o              	(id_ex_ready              ),
-`ifdef ysyx_25050136_VERILATOR_DPIC
+`ifdef VERILATOR
     .in_dbg_inst_i           	(id_dbg_inst              ),
     .in_dbg_optype_i            (id_dbg_optype            ),
     .out_dbg_pc_o            	(ex_dbg_pc                ),
@@ -290,7 +290,7 @@ ysyx_25050136_MEM #(
     .in_req_addr_i   	(ex_mem_lsu_addr    ),
     .in_lsu_wdata_i  	(ex_mem_lsu_wdata   ),
     .in_ready_o      	(ex_mem_ready       ),
-`ifdef ysyx_25050136_VERILATOR_DPIC
+`ifdef VERILATOR
     .in_dbg_pc_i     	(ex_dbg_pc          ),
     .in_dbg_inst_i   	(ex_dbg_inst        ),
     .in_dbg_optype_i  	(ex_dbg_optype      ),
@@ -329,7 +329,7 @@ ysyx_25050136_WB #(
     .in_rd_en_i      	(mem_wb_rd_en     ),
     .in_gpr_wdata_i  	(mem_wb_gpr_wdata ),
     .in_ready_o      	(mem_wb_ready     ),
-`ifdef ysyx_25050136_VERILATOR_DPIC
+`ifdef VERILATOR
     .in_dbg_pc_i     	(mem_dbg_pc       ),
     .in_dbg_inst_i   	(mem_dbg_inst     ),
     .in_dbg_is_device_i (mem_dbg_is_device),

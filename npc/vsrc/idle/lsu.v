@@ -41,7 +41,7 @@ module ysyx_25050136_LSU
     // 从设备选择
     wire is_clint = (lsu_addr_i >= 32'h0200_0000) && (lsu_addr_i < 32'h0201_0000);
     // DEBUG
-`ifdef ysyx_25050136_VERILATOR_DPIC
+`ifdef VERILATOR
     wire is_mmio = ((lsu_addr_i >= 32'h0200_0000) && (lsu_addr_i < 32'h0201_0000)) ||
                    ((lsu_addr_i >= 32'h1000_0000) && (lsu_addr_i < 32'h1000_1000));
     wire is_lsuop = lsu_wen_i | lsu_ren_i;
