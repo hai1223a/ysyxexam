@@ -17,11 +17,14 @@ module ysyx_25050136_IF
         output        out_valid_o
     );
      
-`ifdef ysyx_25050136_RESET_PC
-    localparam RESET_PC = `ysyx_25050136_RESET_PC;
+`ifdef VERILATOR
+    localparam RESET_PC = 32'h30000000;  // Verilator 仿真复位地址
+`elsif __ICARUS__
+    localparam RESET_PC = 32'h80000000;  // Icarus 仿真复位地址
 `else
-    localparam RESET_PC = 32'h80000000;  // 默认复位地址
+    localparam RESET_PC = 32'h30000000;  // yosys 综合复位地址
 `endif
+
     localparam PHT_INDEX = 4;
     localparam BTB_INDEX = 3;
     localparam BTB_TAG   = 6;
@@ -58,8 +61,8 @@ module ysyx_25050136_IF
     always @(posedge clk) begin
         if(out_fire) fetch_get();
     end
-    
 `endif
+
     // ==== 逻辑实现 ====
     always @(posedge clk) begin
         if(reset) begin
