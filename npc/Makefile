@@ -94,7 +94,7 @@ SOC_CFLAGS := $(CFLAGS) $(addprefix -I, $(SOC_CPATHS))
 SOC_LDFLAGS := $(LDFLAGS)
 
 # SoC Verilator宏定义
-SOC_VERDEFINE := TOP_NAME="V$(SOC_TOP)"
+SOC_VERDEFINE := +TOP_NAME="V$(SOC_TOP)"
 
 # SoC Verilator编译选项
 SOC_VERFLAGS += $(VERFLAGS) --top-module $(SOC_TOP) $(SOC_VSRC) $(SOC_CSRC) \
