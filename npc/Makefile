@@ -78,9 +78,9 @@ COMMON_VERDEFINE := +ysyx_25050136_VERILATOR_DPIC
 # 默认仿真参数
 override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 				 -l $(NPC_HOME)/build/log/log.txt \
-				 -i $(NPC_HOME)/sim/microbench-test.bin
+				 -i $(NPC_HOME)/sim/microbench-train.bin
+# 				 -i $(NPC_HOME)/sim/microbench-test.bin
 # 				 -i $(NPC_HOME)/sim/fib.bin
-# 				 -i $(NPC_HOME)/sim/microbench-train.bin
 #================第五步: NPC专用配置 ====================
 # NPC模式Verilog源文件（合并config.v和其他文件，确保config.v在最前面）
 # NPC_CPU_VSRC = $(BUILD_DIR)/ysyx_25050136_cpu.v
@@ -205,8 +205,8 @@ perf: $(SOC_DEPEMD)
 
 fuck: $(SOC_DEPEMD)
 	@$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
-           DESIGN=ysyx_25050136 \
-           CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clock \
+           DESIGN=ysyx_25050136_NPC \
+           CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clk \
            RTL_FILES="$(SOC_CPU_VSRC)"
 
 ABB = /home/yunhai/ysyx-workbench/npc/sim/a.v
