@@ -42,10 +42,10 @@ wire [31:0] id_branch_pc;
 wire ex_branch_flush;
 wire [31:0] ex_branch_pc;
 wire branch_taken;
+wire btb_update;
 wire [31:0] branch_pc = (ex_branch_flush | btb_update) ? ex_branch_pc : id_branch_pc;
 wire [31:0] update_pc;
 wire pht_update;
-wire btb_update;
 // === fence.i ===
 wire id_fencei_flush;
 // === 清洗流水线 ===
@@ -76,6 +76,7 @@ wire [31:0]           mem_wdata;
 wire                  mem_wvalid;
 // === ID和EX ===
 wire                    id_ex_ready;
+wire                    id_ex_ebreak;
 wire [31:0]             id_ex_dbg_inst;
 wire [31:0]             id_ex_rdata1;
 wire [ADDR_WIDTH-1:0]   id_ex_raddr1;
@@ -108,6 +109,7 @@ wire                    id_ex_rd_en;
 wire                    id_ex_valid;
 // === EX和MEM ===
 wire                    ex_mem_ready;
+wire                    ex_mem_ebreak;
 wire [ADDR_WIDTH-1:0]   ex_mem_rd;
 wire                    ex_mem_rd_en;
 wire [31:0]             ex_mem_gpr_wdata;
@@ -120,6 +122,7 @@ wire [31:0]             ex_mem_lsu_wdata;
 wire                    ex_mem_valid;
 // === MEM和WB ===
 wire                    mem_wb_ready;
+wire                    mem_wb_ebreak;
 wire [ADDR_WIDTH-1:0]   mem_wb_rd;
 wire                    mem_wb_rd_en;
 wire [31:0]             mem_wb_gpr_wdata;
@@ -181,6 +184,7 @@ ysyx_25050136_ID #(
     .out_dbg_optype_o           (id_dbg_optype             ),
 `endif
     .out_pc_o                 	(id_ex_pc                  ),
+    .out_ebreak_o             	(id_ex_ebreak              ),
     .out_rdata1_o             	(id_ex_rdata1              ),
     .out_rdata2_o             	(id_ex_rdata2              ),
     .out_imm_o                	(id_ex_imm                 ),
@@ -214,9 +218,10 @@ ysyx_25050136_EX #(
 ) u_ysyx_25050136_EX (
     .clk                     	(clk                      ),
     .reset                   	(reset                    ),
-    .flush                   	(0                    ),
+    .flush                   	(1'b0                    ),
     .in_valid_i              	(id_ex_valid              ),
     .in_pc_i                 	(id_ex_pc                 ),
+    .in_ebreak_i             	(id_ex_ebreak             ),
     .in_prepc_i              	(id_ex_prepc              ),
     .in_taken_i              	(id_ex_taken              ),
     .in_btb_hit_i            	(id_ex_btb_hit            ),
@@ -252,6 +257,7 @@ ysyx_25050136_EX #(
 `endif
     .out_ready_i             	(ex_mem_ready             ),
     .out_rd_o                	(ex_mem_rd                ),
+    .out_ebreak_o             	(ex_mem_ebreak            ),
     .out_rd_en_o             	(ex_mem_rd_en             ),
     .out_gpr_wdata_o         	(ex_mem_gpr_wdata         ),
     .out_lsu_ren_o           	(ex_mem_lsu_ren           ),
@@ -278,8 +284,9 @@ ysyx_25050136_MEM #(
 ) u_ysyx_25050136_MEM (
     .clk             	(clk                ),
     .reset           	(reset              ),
-    .flush           	(0              ),
+    .flush           	(1'b0              ),
     .in_valid_i      	(ex_mem_valid       ),
+    .in_ebreak_i    	(ex_mem_ebreak      ),
     .in_rd_i         	(ex_mem_rd          ),
     .in_rd_en_i      	(ex_mem_rd_en       ),
     .in_gpr_wdata_i  	(ex_mem_gpr_wdata   ),
@@ -301,6 +308,7 @@ ysyx_25050136_MEM #(
 `endif
     .out_ready_i     	(mem_wb_ready       ),
     .out_rd_o        	(mem_wb_rd          ),
+    .out_ebreak_o     	(mem_wb_ebreak      ),
     .out_rd_en_o     	(mem_wb_rd_en       ),
     .out_gpr_wdata_o 	(mem_wb_gpr_wdata   ),
     .out_valid_o     	(mem_wb_valid       ),

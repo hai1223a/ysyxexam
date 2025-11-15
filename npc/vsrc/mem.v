@@ -7,6 +7,7 @@ module ysyx_25050136_MEM
         input                                            reset ,
         input                                            flush ,
         input                                       in_valid_i ,
+        input                                      in_ebreak_i ,
         input    [ADDR_WIDTH-1:0]                      in_rd_i ,
         input                                       in_rd_en_i ,
         input    [31:0]                         in_gpr_wdata_i ,
@@ -28,6 +29,7 @@ module ysyx_25050136_MEM
 `endif
         input                                      out_ready_i ,
         output   [ADDR_WIDTH-1:0]                     out_rd_o ,
+        output                                    out_ebreak_o ,
         output                                     out_rd_en_o ,
         output   [31:0]                        out_gpr_wdata_o ,
         output                                     out_valid_o ,
@@ -53,6 +55,7 @@ module ysyx_25050136_MEM
     reg idle;
     reg state;
     reg [ADDR_WIDTH-1:0] mem_rd;
+    reg                  mem_ebreak;
     reg                  mem_rd_en;
     reg [31:0]           mem_gpr_wdata;
     reg [31:0]           mem_addr;
@@ -84,6 +87,7 @@ module ysyx_25050136_MEM
         if(reset) begin
             idle         <= 1;
             mem_rd       <= 0;
+            mem_ebreak   <= 0;
             mem_rd_en    <= 0;
             mem_gpr_wdata <= 0;
             mem_addr     <= 0;
@@ -96,6 +100,7 @@ module ysyx_25050136_MEM
             end else if(in_fire) begin
                 idle           <= 0;
                 mem_rd         <= in_rd_i;
+                mem_ebreak     <= in_ebreak_i;
                 mem_rd_en      <= in_rd_en_i;
                 mem_gpr_wdata  <= in_gpr_wdata_i;
                 mem_addr       <= in_req_addr_i;
@@ -190,6 +195,7 @@ module ysyx_25050136_MEM
     // === 输出选择器 ===
     assign out_gpr_wdata_o = mem_ren ? (mem_clint ? clint_rdata : gpr_data) : mem_gpr_wdata;
     assign out_rd_o = mem_rd;
+    assign out_ebreak_o = mem_ebreak;
     assign out_rd_en_o = mem_rd_en;
     assign waddr_o = mem_rd & {ADDR_WIDTH{mem_rd_en & (out_valid_o | ~idle)}};
     assign wdata_o = out_gpr_wdata_o;

@@ -36,6 +36,7 @@ module ysyx_25050136_ID
         output                                       fencei_flush_o,
         // 传递给EX
         output     [31:0]                                  out_pc_o,
+        output                                         out_ebreak_o,
         output     [31:0]                               out_prepc_o,
         output                                          out_taken_o,
         output                                        out_btb_hit_o,
@@ -246,6 +247,7 @@ module ysyx_25050136_ID
     assign out_btb_hit_o = id_btb_hit;
     // === fence.i ===
     assign fencei_flush_o = inst_fence_i & in_pulse;
+    assign out_ebreak_o = inst_ebreak & in_pulse;
     // === 访存相关 ===
     assign out_lsu_ren_o = type_load;
     assign out_lsu_wen_o = type_store;

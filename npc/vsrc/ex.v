@@ -9,6 +9,7 @@ module ysyx_25050136_EX
         input                                              flush,
         input                                         in_valid_i,
         input     [31:0]                                 in_pc_i,
+        input                                        in_ebreak_i,
         input     [31:0]                              in_prepc_i,
         input                                         in_taken_i,
         input                                       in_btb_hit_i,
@@ -43,6 +44,7 @@ module ysyx_25050136_EX
         output reg [5:0]                        out_dbg_optype_o,
 `endif
         input                                        out_ready_i,
+        output                                      out_ebreak_o,
         output    [ADDR_WIDTH-1:0]                      out_rd_o,
         output                                       out_rd_en_o,
         output    [31:0]                         out_gpr_wdata_o,
@@ -70,6 +72,7 @@ module ysyx_25050136_EX
     reg idle;
     reg in_pulse;
     reg [31:0] ex_pc;
+    reg ex_ebreak;
     reg [31:0] ex_prepc;
     reg ex_taken;
     reg ex_btb_hit;
@@ -104,11 +107,11 @@ module ysyx_25050136_EX
     wire [31:0] alu_opd2;
     wire [31:0] alu_out; 
     // === 跳转 ===
+    wire [31:0] branch_npc;
+    wire branch_valid;
     wire is_jump = ex_unconditional_jump | ex_csru_op[`ysyx_25050136_CSRU_ECALL] | ex_csru_op[`ysyx_25050136_CSRU_MRET] | ex_conditional_jump;
     wire target_mismatch = (ex_prepc != branch_npc);  // 预测目标与实际目标不匹配
     wire direction_mismatch = (branch_valid ^ ex_taken) && is_jump;  // 预测方向与实际不匹配
-    wire [31:0] branch_npc;
-    wire branch_valid;
     wire [31:0] bqu_opd1;
     wire [31:0] bqu_opd2;
     wire [31:0] bqu_add_result;
@@ -123,6 +126,7 @@ module ysyx_25050136_EX
             idle <= 1;
             in_pulse <= 0;
             ex_pc <= 0;
+            ex_ebreak <= 0;
             ex_prepc <= 0;
             ex_taken <= 0;
             ex_btb_hit <= 0;
@@ -156,6 +160,7 @@ module ysyx_25050136_EX
                 idle <= 0;
                 in_pulse <= 1;
                 ex_pc <= in_pc_i;
+                ex_ebreak <= in_ebreak_i;
                 ex_prepc <= in_prepc_i;
                 ex_taken <= in_taken_i;
                 ex_btb_hit <= in_btb_hit_i;
@@ -236,6 +241,7 @@ module ysyx_25050136_EX
     assign out_lsu_addr_o = alu_out;
     assign out_lsu_wdata_o = ex_rdata2;
     // === 写回 ===
+    assign out_ebreak_o = ex_ebreak;
     assign out_rd_o = ex_rd;
     assign out_rd_en_o = ex_rd_en;
     assign out_gpr_wdata_o = ex_csr_ren ? csru_out : alu_out;

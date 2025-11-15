@@ -28,7 +28,8 @@ BUILD_DIR = $(NPC_HOME)/build
 WAVE_DIR = $(NPC_HOME)/wave
 OBJ_DIR = $(BUILD_DIR)/obj_dir
 LOG_DIR = $(BUILD_DIR)/log
-$(shell mkdir -p $(LOG_DIR) $(WAVE_DIR))
+IVER_DIR = $(BUILD_DIR)/iverilog
+$(shell mkdir -p $(LOG_DIR) $(WAVE_DIR) $(IVER_DIR))
 
 # 用于生成ysyx_25050136.v的Verilog源文件列表
 NPC_VSRC := $(BUILD_DIR)/ysyx_25050136.v
@@ -123,11 +124,28 @@ SOC_VERFLAGS += --noassert -O3 $(NVBOARD_ARCHIVE)
 SOC_DEPEMD += $(SRC_AUTO_BIND) $(NVBOARD_ARCHIVE)
 endif
 
+#================第八步: Iverilog 配置 ====================
+IMG = $(NPC_HOME)/sim/iverilog_test.bin
+IMG_HEX = $(IVER_DIR)/$(shell basename $(IMG) .bin).hex
+$(info $(IMG_HEX))
+IVERILOG_BIN := iverilog
+IVER_TOP = tb_fullsoc
+IVER_VSRC = $(NPC_VSRC) vsrc/idle/fullsoc.v vsrc/idle/sram.v vsrc/idle/tb_fullsoc.v vsrc/idle/uart.v vsrc/idle/xbar.v
+IVER_OUT = $(IVER_DIR)/iverilog_sim.out
+IVERFLAGS = -o $(IVER_OUT) -g2012 -s $(IVER_TOP) -Ptb_fullsoc.PROG_FILE='"$(IMG_HEX)"' 
+VVP_BIN := vvp
+VVPFLAGS = -n $(IVER_OUT) -lxt2
+NETLIST = yyy
+CELLS = zzz
+
 #================第步: 构建目标规则 ====================
 -include $(NPC_HOME)/scripts/config.mk
 
-$(NPC_VSRC): $(COMMON_VSRC)
+$(NPC_VSRC): $(COMMON_VSRC)  
 	@cat $^ > $@
+
+$(IMG_HEX): $(IMG)
+	@xxd -c 1 -p $^ > $@
 
 verilog: $(NPC_VSRC)
 
@@ -143,6 +161,14 @@ soc_gdb: $(SOC_BIN)
 
 soc_wave: soc_run
 	@gtkwave $(WAVE_DIR)/waveform.fst
+
+sim-iverilog: verilog $(IMG_HEX)
+	@$(info IMG = $(IMG) NETLIST = $(NETLIST) CELLS = $(CELLS))
+	@$(IVERILOG_BIN) $(IVERFLAGS) $(IVER_VSRC)
+	@$(VVP_BIN) $(VVPFLAGS)
+
+sim-iverilog-netlist:
+	@$(info IMG = $(IMG) NETLIST = $(NETLIST) CELLS = $(CELLS))
 
 clean:
 	rm -rf build
@@ -168,13 +194,6 @@ fuck: $(SOC_DEPEMD)
            CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clk \
            RTL_FILES="$(SOC_CPU_VSRC)"
 
-ABB = /home/yunhai/ysyx-workbench/npc/sim/a.v
-shift: $(ABB) 
-	@$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
-           DESIGN=ysyx \
-           CLK_FREQ_MHZ=10000 CLK_PORT_NAME=clk \
-           RTL_FILES="$(ABB)"
-
-.PHONY: soc_exe soc_run soc_gdb soc_wave clean perf_commit perf shift
+.PHONY: verilog soc_run soc_gdb soc_wave clean perf_commit perf fuck sim-iverilog
 
 include ../Makefile
