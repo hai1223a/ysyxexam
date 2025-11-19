@@ -36,7 +36,6 @@ module ysyx_25050136_CSRU
                 csr_wdata2 = 32'd11;
                 csr_waddr2 = 12'h342;
                 csr_wen2 = 1;
-                csr_raddr = 12'h342;
             end
             default:;
         endcase
