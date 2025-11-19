@@ -78,9 +78,9 @@ endif
 # 默认仿真参数
 override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 				 -l $(NPC_HOME)/build/log/log.txt \
-				 -i $(NPC_HOME)/sim/microbench-riscv32e-ysyxsoc.bin
+				 -i $(NPC_HOME)/sim/fib.bin
+# 				 -i $(NPC_HOME)/sim/microbench-riscv32e-ysyxsoc.bin
 # 				 -i $(NPC_HOME)/sim/microbench-test.bin
-# 				 -i $(NPC_HOME)/sim/fib.bin
 
 #================第六步: SOC 专用配置 ====================
 # SoC模式源文件
@@ -130,7 +130,7 @@ IMG_HEX = $(IVER_DIR)/$(shell basename $(IMG) .bin).hex
 $(info $(IMG_HEX))
 IVERILOG_BIN := iverilog
 IVER_TOP = tb_fullsoc
-IVER_VSRC = $(NPC_VSRC) vsrc/idle/fullsoc.v vsrc/idle/sram.v vsrc/idle/tb_fullsoc.v vsrc/idle/uart.v vsrc/idle/xbar.v
+IVER_VSRC = $(NPC_VSRC) vsrc/idle/fullsoc.v vsrc/idle/sram.v vsrc/idle/tb_fullsoc.v vsrc/idle/uart.v vsrc/idle/xbar.v vsrc/idle/back_tb.v
 IVER_OUT = $(IVER_DIR)/iverilog_sim.out
 IVERFLAGS = -o $(IVER_OUT) -g2012 -s $(IVER_TOP) -Ptb_fullsoc.PROG_FILE='"$(IMG_HEX)"' 
 VVP_BIN := vvp
@@ -186,14 +186,18 @@ perf: $(SOC_DEPEMD)
 	@$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
            DESIGN=ysyx_25050136 \
            CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clock \
-           RTL_FILES="$(SOC_CPU_VSRC)"
+           RTL_FILES="$(NPC_VSRC)"
+
+
+export NPC_VSRC
 
 fuck: $(SOC_DEPEMD)
-	@$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
-           DESIGN=ysyx_25050136_NPC \
-           CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clk \
-           RTL_FILES="$(SOC_CPU_VSRC)"
+	@python3 scripts/synthesis.py
 
-.PHONY: verilog soc_run soc_gdb soc_wave clean perf_commit perf fuck sim-iverilog
+synth-single: $(SOC_DEPEMD)
+	@python3 scripts/synthesis.py ysyx_25050136_ICACHE 2000 clk "$(NPC_VSRC)"
+
+
+.PHONY: verilog soc_run soc_gdb soc_wave clean perf_commit perf fuck sim-iverilog synth-single
 
 include ../Makefile

@@ -1,0 +1,49 @@
+[*]
+[*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
+[*] Tue Nov 18 08:58:44 2025
+[*]
+[dumpfile] "/home/yunhai/ysyx-workbench/npc/csru_waveform.vcd"
+[dumpfile_mtime] "Tue Nov 18 08:53:15 2025"
+[dumpfile_size] 534
+[savefile] "/home/yunhai/ysyx-workbench/npc/a.gtkw"
+[timestart] 0
+[size] 2560 1333
+[pos] -27 -24
+*-13.200000 35000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_csru.
+[treeopen] tb_csru.uut.
+[sst_width] 297
+[signals_width] 260
+[sst_expanded] 1
+[sst_vpaned_height] 414
+@28
+tb_csru.uut.clk[0]
+tb_csru.uut.reset[0]
+@22
+tb_csru.uut.csru_addr_i[11:0]
+@c00022
+tb_csru.uut.operation_i[4:0]
+@28
+(0)tb_csru.uut.operation_i[4:0]
+(1)tb_csru.uut.operation_i[4:0]
+(2)tb_csru.uut.operation_i[4:0]
+(3)tb_csru.uut.operation_i[4:0]
+(4)tb_csru.uut.operation_i[4:0]
+@1401200
+-group_end
+@29
+tb_csru.uut.csru_wen_i[0]
+@28
+tb_csru.uut.csru_ren_i[0]
+@22
+tb_csru.uut.csru_wdata_i[31:0]
+tb_csru.uut.csru_rdata_o[31:0]
+@200
+-
+@28
+tb_csru.uut.csr_wen1[0]
+@22
+tb_csru.uut.csr_wdata1[31:0]
+tb_csru.uut.csr_waddr1[11:0]
+[pattern_trace] 1
+[pattern_trace] 0

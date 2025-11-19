@@ -1,4 +1,3 @@
-// CSR读写单元
 module ysyx_25050136_CSRU
      (
          input                                              clk,
@@ -9,66 +8,101 @@ module ysyx_25050136_CSRU
          input   [11:0]                             csru_addr_i,
          input                                       csru_ren_i,
          input                                       csru_wen_i,
-         output  [31:0]                            csru_rdata_o
+         output  reg [31:0]                        csru_rdata_o
      );
+
     reg [31:0] csr_wdata1, csr_wdata2;
     reg [11:0] csr_waddr1, csr_waddr2, csr_raddr;
     reg csr_wen1, csr_wen2, csr_ren;
     always @(*) begin
         csr_wdata1 = csru_wdata_i;
         csr_waddr1 = csru_addr_i;
-        csr_wen1 = 0;
+        csr_wen1 = csru_wen_i;
+        csr_raddr = csru_addr_i;
+        csr_ren = csru_ren_i;
         csr_wdata2 = 0;
         csr_waddr2 = 0;
         csr_wen2 = 0;
-        csr_raddr = csru_addr_i;
-        csr_ren = 0;
         case (1'b1)
-            operation_i[`ysyx_25050136_CSRU_CSRRW]: begin
-                csr_wdata1 = csru_wdata_i;
-                csr_wen1 = csru_wen_i;
-                csr_ren = csru_ren_i;
-            end
             operation_i[`ysyx_25050136_CSRU_CSRRS]: begin
                 csr_wdata1 = csru_rdata_o | csru_wdata_i;
-                csr_wen1 = csru_wen_i;
-                csr_ren = csru_ren_i;
             end
             operation_i[`ysyx_25050136_CSRU_CSRRC]: begin
                 csr_wdata1 = csru_rdata_o & (~csru_wdata_i);
-                csr_wen1 = csru_wen_i;
-                csr_ren = csru_ren_i;
             end
             operation_i[`ysyx_25050136_CSRU_ECALL]: begin
                 csr_wdata1 = pc_i;
                 csr_waddr1 = 12'h341;
-                csr_wen1 = 1;
                 csr_wdata2 = 32'd11;
                 csr_waddr2 = 12'h342;
                 csr_wen2 = 1;
-                csr_raddr = 12'h305;
-                csr_ren = 1;
-            end
-            operation_i[`ysyx_25050136_CSRU_MRET]: begin
-                csr_raddr = 12'h341;
-                csr_ren = 1;
+                csr_raddr = 12'h342;
             end
             default:;
         endcase
     end
-    // output declaration of module ysyx_25050136_CSR_File
-    ysyx_25050136_CSR_File u_ysyx_25050136_CSR_File(
-                               .clk          	(clk           ),
-                               .reset        	(reset         ),
-                               .csr_waddr1_i 	(csr_waddr1    ),
-                               .csr_wen1_i   	(csr_wen1      ),
-                               .csr_wdata1_i 	(csr_wdata1    ),
-                               .csr_waddr2_i 	(csr_waddr2    ),
-                               .csr_wen2_i   	(csr_wen2      ),
-                               .csr_wdata2_i 	(csr_wdata2    ),
-                               .csr_raddr_i  	(csr_raddr     ),
-                               .csr_ren_i    	(csr_ren       ),
-                               .csr_rdata_o  	(csru_rdata_o  )
-                           );
+    
+    // CSR 地址参数
+    localparam MEPC      = 12'h341;
+    localparam MCAUSE    = 12'h342;
+    localparam MTVEC     = 12'h305;
+    localparam MSTATUS   = 12'h300;
+    // 只读CSR
+    localparam MVENDORID = 12'hf11;
+    localparam MARCHID   = 12'hf12;
 
+    // CSR 物理寄存器
+    reg [31:0] mepc, mcause, mtvec, mstatus;
+
+    // --- 写寄存器逻辑 (时序逻辑) ---
+    // 将两个写端口的逻辑合并到一个 always 块中
+    always @(posedge clk) begin
+        if (reset) begin
+            // mepc      <= 32'b0;
+            // mcause    <= 32'b0;
+            // mtvec     <= 32'b0;
+            // mstatus   <= 32'b0;
+        end else begin
+            // --- 处理写端口 1 ---
+            if (csr_wen1) begin
+                case (csr_waddr1)
+                    MEPC:    mepc    <= csr_wdata1;
+                    MCAUSE:  mcause  <= csr_wdata1;
+                    MTVEC:   mtvec   <= csr_wdata1;
+                    MSTATUS: mstatus <= csr_wdata1;
+                    default: ; // 端口1写其他地址，无操作
+                endcase
+            end
+
+            // --- 处理写端口 2 ---
+            // 如果端口2也使能，它的写操作会覆盖端口1对同一个寄存器的写操作
+            if (csr_wen2) begin
+                case (csr_waddr2)
+                    MEPC:    mepc    <= csr_wdata2;
+                    MCAUSE:  mcause  <= csr_wdata2;
+                    MTVEC:   mtvec   <= csr_wdata2;
+                    MSTATUS: mstatus <= csr_wdata2;
+                    default: ; // 端口2写其他地址，无操作
+                endcase
+            end
+        end
+    end
+
+    // --- 读寄存器逻辑 (组合逻辑) ---
+    // 这个逻辑保持不变，它是正确的
+    always @(*) begin
+        // 默认输出为0，当读使能为低或地址未实现时，输出0
+        csru_rdata_o = 32'b0;
+        if (csr_ren) begin
+            case (csr_raddr)
+                MEPC:      csru_rdata_o = mepc;
+                MCAUSE:    csru_rdata_o = mcause;
+                MTVEC:     csru_rdata_o = mtvec;
+                MSTATUS:   csru_rdata_o = mstatus;
+                MVENDORID: csru_rdata_o = 32'h79737978; // "ysyx"
+                MARCHID:   csru_rdata_o = 32'd25050136; // 你的学号
+                default:   csru_rdata_o = 32'b0;       // 读取未实现的CSR返回0
+            endcase
+        end
+    end
 endmodule

@@ -177,9 +177,9 @@ module ysyx_25050136_ID
     always @(posedge clk) begin
         if(reset) begin
             idle <= 1;
-            id_pc <= 0;
-            id_inst <= 0;
-            in_pulse <= 0;
+            // id_pc <= 0;
+            // id_inst <= 0;
+            // in_pulse <= 0;
         end else begin
             if(flush) begin
                 idle <= 1;
@@ -240,7 +240,7 @@ module ysyx_25050136_ID
     assign out_is_jalr_o = type_jalr;
     assign out_unconditional_jump_o = type_jalr | type_jal;
     assign out_conditional_jump_o = type_branch;
-    assign branch_flush_o = !(out_conditional_jump_o | out_unconditional_jump_o) && id_btb_hit && id_taken && in_pulse;
+    assign branch_flush_o = !(out_conditional_jump_o | out_unconditional_jump_o | inst_mret | inst_ecall) && id_btb_hit && id_taken && in_pulse;
     assign branch_pc_o = id_pc;
     assign out_prepc_o = id_prepc;
     assign out_taken_o = id_taken;
@@ -256,7 +256,7 @@ module ysyx_25050136_ID
             ((inst_sb | inst_lbu | inst_lb) ? 4'h1 : 0));
     assign out_lsu_signed_o = (inst_lhu | inst_lbu) ? 0 : 1;
     // === 选择CSR的操作数 ===
-    assign out_csr_addr_o = id_inst[31:20];
+    assign out_csr_addr_o = inst_ecall ? 12'h305: (inst_mret ? 12'h341 : id_inst[31:20]);// 作为csr指令的地址，以及ecall/mret的读地址
     assign out_csr_ren_o = (type_system & ~inst_ebreak) & !((inst_csrrw | inst_csrrwi) && (rd == 0));
     assign out_csr_wen_o = (type_system & ~inst_ebreak) & !((inst_csrrs | inst_csrrsi | inst_csrrc | inst_csrrci) && (rs1 == 0));
     assign out_csr_wdata_use_rs1_o = inst_csrrw | inst_csrrs | inst_csrrc;

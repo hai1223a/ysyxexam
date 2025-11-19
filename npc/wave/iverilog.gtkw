@@ -1,87 +1,78 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Sat Nov 15 09:07:55 2025
+[*] Tue Nov 18 06:08:14 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.vcd"
-[dumpfile_mtime] "Sat Nov 15 08:55:25 2025"
-[dumpfile_size] 7832187
+[dumpfile_mtime] "Tue Nov 18 05:53:31 2025"
+[dumpfile_size] 8494
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/iverilog.gtkw"
-[timestart] 0
+[timestart] 101950
 [size] 2560 1333
 [pos] -27 -24
-*-16.200001 283000 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-11.700000 116830 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] tb_fullsoc.
 [treeopen] tb_fullsoc.u_dut.
 [treeopen] tb_fullsoc.u_dut.u_ysyx_25050136.
 [treeopen] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.
 [treeopen] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.
-[treeopen] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.
 [treeopen] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.
+[treeopen] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.
 [treeopen] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_MEM.
+[treeopen] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_WB.
 [sst_width] 384
-[signals_width] 233
+[signals_width] 285
 [sst_expanded] 1
 [sst_vpaned_height] 414
 @28
-tb_fullsoc.u_dut.u_ysyx_25050136_SRAM.clk[0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.clk[0]
+@800200
+-if
 @22
-tb_fullsoc.u_dut.u_ysyx_25050136_SRAM.s_araddr_i[31:0]
-@28
-tb_fullsoc.u_dut.u_ysyx_25050136_SRAM.s_arvalid_i[0]
-tb_fullsoc.u_dut.u_ysyx_25050136_SRAM.s_arready_o[0]
-tb_fullsoc.u_dut.u_ysyx_25050136_SRAM.s_rvalid_o[0]
-tb_fullsoc.u_dut.u_ysyx_25050136_SRAM.s_rready_i[0]
-@22
-tb_fullsoc.u_dut.u_ysyx_25050136_SRAM.s_rdata_o[31:0]
-@200
--
-@28
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.flush[0]
-@22
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.out_pc_o[31:0]
 tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.pc[31:0]
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.next_pc[31:0]
-@28
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.idle[0]
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.out_valid_o[0]
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.out_ready_i[0]
-@200
--
-@28
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.miss[0]
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.in_fire_1[0]
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.temp_fire[0]
-@200
--
-@28
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.state[0]
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_IMEM2AXI.size[0]
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_IMEM2AXI.state_read[1:0]
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_IMEM2AXI.m_rvalid_i[0]
+@1000200
+-if
+@800200
+-cache1
 @22
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_IMEM2AXI.m_rdata_i[31:0]
-@200
--
-@28
-tb_fullsoc.u_dut.u_ysyx_25050136.io_master_arvalid[0]
-tb_fullsoc.u_dut.u_ysyx_25050136.io_master_rvalid[0]
-tb_fullsoc.u_dut.u_ysyx_25050136.io_master_awvalid[0]
-tb_fullsoc.u_dut.u_ysyx_25050136.io_master_wvalid[0]
-tb_fullsoc.u_dut.u_ysyx_25050136.io_master_bvalid[0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.addr_1[31:0]
+@1000200
+-cache1
+@800200
+-cache2
 @22
-tb_fullsoc.u_dut.u_ysyx_25050136.io_master_bid[3:0]
-@200
--
-@28
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_MEM.req_wen_o[0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_ICACHE_WRAPPER.u_ysyx_25050136_ICACHE.addr_2[31:0]
+@1000200
+-cache2
+@800200
+-id
 @22
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_MEM.req_addr_o[31:0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.id_pc[31:0]
+@c00022
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_csru_op_o[4:0]
 @28
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_MEM.ret_ready_i[0]
-tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_DCACHE.m_bvalid_i[0]
+(0)tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_csru_op_o[4:0]
+(1)tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_csru_op_o[4:0]
+(2)tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_csru_op_o[4:0]
+(3)tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_csru_op_o[4:0]
+(4)tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_csru_op_o[4:0]
+@1401200
+-group_end
+@28
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.inst_csrrs[0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_csr_wen_o[0]
 @22
-tb_fullsoc.u_dut.u_ysyx_25050136_XBAR.s_bid_o[3:0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.rs1[4:0]
+@28
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_csr_ren_o[0]
+@22
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_csr_addr_o[11:0]
+@1000200
+-id
+@800200
+-ex
 @23
-tb_fullsoc.u_dut.u_ysyx_25050136_XBAR.m_bid_i[7:0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.ex_pc[31:0]
+@1000200
+-ex
 [pattern_trace] 1
 [pattern_trace] 0

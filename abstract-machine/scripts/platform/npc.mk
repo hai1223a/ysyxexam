@@ -1,6 +1,8 @@
 AM_SRCS := riscv/npc/start.S \
            riscv/npc/trm.c \
            riscv/npc/ioe.c \
+           riscv/npc/uart.c \
+           riscv/npc/gpu.c \
            riscv/npc/timer.c \
            riscv/npc/input.c \
            riscv/npc/cte.c \
@@ -35,7 +37,7 @@ image: image-dep
 	@echo + mainargs = "$(MAINARGS_PLACEHOLDER)"
 
 run: insert-arg
-# 	@$(MAKE) -C $(NPC_HOME) run ARGS="$(NPCFLAGS)"
+	@$(MAKE) -C $(NPC_HOME) sim-iverilog IMG="$(IMAGE).bin"
 
 gdb: insert-arg
 	@$(MAKE) -C $(NPC_HOME) gdb ARGS="$(NPCFLAGS)"

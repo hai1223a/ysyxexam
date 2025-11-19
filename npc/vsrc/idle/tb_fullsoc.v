@@ -52,13 +52,23 @@ module tb_fullsoc;
             end else begin
                 no_change_count <= no_change_count + 1;
                 if (no_change_count == NO_CHANGE_THRESHOLD) begin
-                    $display("你的PC已经好久没有变化了, 当前IF的PC: %08h, 当前时间: %dus\n", pc, $time/1000);
+                    // $display("你的PC已经好久没有变化了, 当前IF的PC: %08h, 当前时间: %dus", pc, $time/1000);
                     no_change_count <= 0; // 重置以避免重复输出
                 end
             end
         end
     end
 
+    reg [63:0] cnt;
+    always @(posedge clk) begin
+        if (reset) begin
+            cnt <= 0;
+        end else begin
+            cnt <= cnt + 1;
+            // if(cnt % 100000 == 0)
+                // $display("当前IF的PC: %08h, 当前时间: %dns", pc, $time);
+        end
+    end
     // 寻找ebreak作为仿真结束标志
     wire ebreak = u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.mem_wb_ebreak;
     always @(posedge clk) begin

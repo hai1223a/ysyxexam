@@ -73,35 +73,35 @@ ysyx_25050136 u_ysyx_25050136(
     .io_master_rlast   	(cpu_rlast        ),
     .io_master_rid     	(cpu_rid          ),
     // Unused slave interface, tie off inputs
-    .io_slave_awready  	(                 ),
-    .io_slave_awvalid  	(1'b0             ),
-    .io_slave_awaddr   	(32'b0            ),
-    .io_slave_awid     	(4'b0             ),
-    .io_slave_awlen    	(8'b0             ),
-    .io_slave_awsize   	(3'b0             ),
-    .io_slave_awburst  	(2'b0             ),
-    .io_slave_wready   	(                 ),
-    .io_slave_wvalid   	(1'b0             ),
-    .io_slave_wdata    	(32'b0            ),
-    .io_slave_wstrb    	(4'b0             ),
-    .io_slave_wlast    	(1'b0             ),
-    .io_slave_bready   	(1'b0             ),
-    .io_slave_bvalid   	(                 ),
-    .io_slave_bresp    	(                 ),
-    .io_slave_bid      	(                 ),
-    .io_slave_arready  	(                 ),
-    .io_slave_arvalid  	(1'b0             ),
-    .io_slave_araddr   	(32'b0            ),
-    .io_slave_arid     	(4'b0             ),
-    .io_slave_arlen    	(8'b0             ),
-    .io_slave_arsize   	(3'b0             ),
-    .io_slave_arburst  	(2'b0             ),
-    .io_slave_rready   	(1'b0             ),
-    .io_slave_rvalid   	(                 ),
-    .io_slave_rresp    	(                 ),
-    .io_slave_rdata    	(                 ),
-    .io_slave_rlast    	(                 ),
-    .io_slave_rid      	(                 )
+    .io_slave_awready       (/* unused */),
+    .io_slave_awvalid       (1'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:35:23, :36:19, :38:21
+    .io_slave_awid     (4'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:36:19, :38:21
+    .io_slave_awaddr   (32'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:36:19, :38:21
+    .io_slave_awlen    (8'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:36:19, :38:21
+    .io_slave_awsize   (3'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:36:19, :38:21
+    .io_slave_awburst  (2'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:36:19, :38:21
+    .io_slave_wready        (/* unused */),
+    .io_slave_wvalid        (1'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:35:23, :36:19, :38:21
+    .io_slave_wdata    (32'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:36:19, :38:21
+    .io_slave_wstrb    (4'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:36:19, :38:21
+    .io_slave_wlast    (1'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:35:23, :36:19, :38:21
+    .io_slave_bready        (1'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:35:23, :36:19, :38:21
+    .io_slave_bvalid        (/* unused */),
+    .io_slave_bid      (/* unused */),
+    .io_slave_bresp    (/* unused */),
+    .io_slave_arready       (/* unused */),
+    .io_slave_arvalid       (1'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:35:23, :36:19, :38:21
+    .io_slave_arid     (4'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:36:19, :38:21
+    .io_slave_araddr   (32'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:36:19, :38:21
+    .io_slave_arlen    (8'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:36:19, :38:21
+    .io_slave_arsize   (3'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:36:19, :38:21
+    .io_slave_arburst  (2'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:36:19, :38:21
+    .io_slave_rready        (1'h0),	// home/yunhai/ysyx-workbench/ysyxSoC/src/CPU.scala:35:23, :36:19, :38:21
+    .io_slave_rvalid        (/* unused */),
+    .io_slave_rid      (/* unused */),
+    .io_slave_rdata    (/* unused */),
+    .io_slave_rresp    (/* unused */),
+    .io_slave_rlast    (/* unused */)
 );
 
 // AXI signals between XBAR and Slaves (SRAM, UART)
@@ -254,32 +254,37 @@ ysyx_25050136_UART #(
     .ADDR_WIDTH 	(ADDR_WIDTH ),
     .DATA_WIDTH 	(DATA_WIDTH ))
 u_ysyx_25050136_UART(
-    .clk         	(clk                                                ),
-    .reset       	(reset                                              ),
-    .s_awvalid_i 	(m_awvalid[0]                                       ),
-    .s_awready_o 	(m_awready[0]                                       ),
-    .s_awaddr_i  	(m_awaddr[ADDR_WIDTH-1:0]                           ),
-    .s_awid_i    	(m_awid[3:0]                                        ),
-    .s_awlen_i   	(m_awlen[7:0]                                       ),
-    .s_awsize_i  	(m_awsize[2:0]                                      ),
-    .s_awburst_i 	(m_awburst[1:0]                                     ),
-    .s_wvalid_i  	(m_wvalid[0]                                        ),
-    .s_wready_o  	(m_wready[0]                                        ),
-    .s_wdata_i   	(m_wdata[DATA_WIDTH-1:0]                            ),
-    .s_wstrb_i   	(m_wstrb[3:0]                                       ),
-    .s_wlast_i   	(m_wlast[0]                                         ),
-    .s_bvalid_o  	(m_bvalid[0]                                        ),
-    .s_bready_i  	(m_bready[0]                                        ),
-    .s_bresp_o   	(m_bresp[1:0]                                       ),
-    .s_bid_o     	(m_bid[3:0]                                         )
+    .clk         	(clk                                    ),
+    .reset       	(reset                                  ),
+    .s_awvalid_i 	(m_awvalid[0]                           ),
+    .s_awready_o 	(m_awready[0]                           ),
+    .s_awaddr_i  	(m_awaddr[ADDR_WIDTH-1:0]               ),
+    .s_awid_i    	(m_awid[3:0]                            ),
+    .s_awlen_i   	(m_awlen[7:0]                           ),
+    .s_awsize_i  	(m_awsize[2:0]                          ),
+    .s_awburst_i 	(m_awburst[1:0]                         ),
+    .s_wvalid_i  	(m_wvalid[0]                            ),
+    .s_wready_o  	(m_wready[0]                            ),
+    .s_wdata_i   	(m_wdata[DATA_WIDTH-1:0]                ),
+    .s_wstrb_i   	(m_wstrb[3:0]                           ),
+    .s_wlast_i   	(m_wlast[0]                             ),
+    .s_bvalid_o  	(m_bvalid[0]                            ),
+    .s_bready_i  	(m_bready[0]                            ),
+    .s_bresp_o   	(m_bresp[1:0]                           ),
+    .s_bid_o     	(m_bid[3:0]                             ),
+    .s_arvalid_i 	(m_arvalid[0]                           ),
+    .s_arready_o 	(m_arready[0]                           ),
+    .s_araddr_i  	(m_araddr[ADDR_WIDTH-1:0]               ),
+    .s_arid_i    	(m_arid[3:0]                            ),
+    .s_arlen_i   	(m_arlen[7:0]                           ),
+    .s_arsize_i  	(m_arsize[2:0]                          ),
+    .s_arburst_i 	(m_arburst[1:0]                         ),
+    .s_rvalid_o  	(m_rvalid[0]                            ),
+    .s_rready_i  	(m_rready[0]                            ),
+    .s_rlast_o   	(m_rlast[0]                             ),
+    .s_rdata_o   	(m_rdata[DATA_WIDTH-1:0]                ),
+    .s_rresp_o   	(m_rresp[1:0]                           ),
+    .s_rid_o     	(m_rid[3:0]                             )
 );
-
-// Tie-off unused read channels for UART (Slave 1)
-assign m_arready[0] = 1'b0;
-assign m_rvalid[0]  = 1'b0;
-assign m_rdata[DATA_WIDTH-1:0] = 32'b0;
-assign m_rresp[1:0] = 2'b0;
-assign m_rlast[0]   = 1'b0;
-assign m_rid[3:0]   = 4'b0;
 
 endmodule

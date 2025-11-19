@@ -86,14 +86,14 @@ module ysyx_25050136_MEM
     always @(posedge clk) begin
         if(reset) begin
             idle         <= 1;
-            mem_rd       <= 0;
-            mem_ebreak   <= 0;
-            mem_rd_en    <= 0;
-            mem_gpr_wdata <= 0;
-            mem_addr     <= 0;
-            mem_ren      <= 0;
-            mem_wen      <= 0;
-            mem_clint    <= 0;
+            // mem_rd       <= 0;
+            // mem_ebreak   <= 0;
+            // mem_rd_en    <= 0;
+            // mem_gpr_wdata <= 0;
+            // mem_addr     <= 0;
+            // mem_ren      <= 0;
+            // mem_wen      <= 0;
+            // mem_clint    <= 0;
         end else begin
             if(flush) begin
                 idle <= 1;
