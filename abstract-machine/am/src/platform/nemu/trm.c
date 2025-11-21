@@ -7,21 +7,8 @@ int main(const char *args);
 Area heap = RANGE(&_heap_start, &_heap_end);
 static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined in CFLAGS
 
-int count = 0;
-
 void putch(char ch) {
-  while(1) {
-    if(count < 1) {
-      outb(SERIAL_PORT, ch);
-      count++;
-      break;
-    }
-    if(inb(0x0f000000) == 1) {
-      outb(SERIAL_PORT, ch);
-      count = 0;
-      break;
-    } 
-  }
+  outb(SERIAL_PORT, ch);
 }
 
 void halt(int code) {
@@ -30,7 +17,6 @@ void halt(int code) {
   // should not reach here
   while (1);
 }
-
 static void _id_puts() {
   uint32_t mvendorid, marchid;
   asm volatile ("csrr %0, mvendorid" : "=r"(mvendorid));
@@ -46,7 +32,6 @@ static void _id_puts() {
   }
   putch('\n');
 }
-
 void _trm_init() {
   _id_puts();
   int ret = main(mainargs);
