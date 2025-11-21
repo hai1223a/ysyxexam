@@ -7,21 +7,8 @@ int main(const char *args);
 Area heap = RANGE(&_heap_start, &_heap_end);
 static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined in CFLAGS
 
-
-int count = 0;
 void putch(char ch) {
-  while(1) {
-    if(count < 16) {
-      outb(SERIAL_PORT, ch);
-      count++;
-      break;
-    }
-    if(1) {
-      outb(SERIAL_PORT, ch);
-      count = 0;
-      break;
-    } 
-  }
+  outb(SERIAL_PORT, ch);
 }
 
 void halt(int code) {
