@@ -7,7 +7,7 @@ module ysyx_25050136_ICACHE
 (
     input                                      clk          ,
     input                                      reset        ,
-    // CPU Interface
+    // CPU 接口
     input                                   ic_flush_i      ,
     input                                   ic_fencei_i     ,
     input                                   ic_req_valid_i  ,
@@ -23,7 +23,7 @@ module ysyx_25050136_ICACHE
     output                                  ic_ret_taken_o  ,
     output                                  ic_ret_btb_hit_o,
     output                                  ic_ret_valid_o  ,
-    // AXI Interface
+    // AXI 接口
     output                                  ia_flush_o      ,
     output                                  ia_rd_req_o     ,
     output   [31:0]                         ia_rd_addr_o    ,
@@ -32,7 +32,7 @@ module ysyx_25050136_ICACHE
     input    [31:0]                         ia_ret_data_i   
 );
 
-    // ==================== Parameters ====================
+    // ==================== 参数 ====================
     parameter LINE_WIDTH   = 8 << OFFSET_WIDTH;
     parameter WORDS        = 1 << (OFFSET_WIDTH - 2);
     parameter TAG_WIDTH    = 32 - OFFSET_WIDTH - INDEX_WIDTH;
@@ -42,26 +42,26 @@ module ysyx_25050136_ICACHE
     localparam IDLE = 1'd0;
     localparam MISS = 1'd1;
 
-    // ==================== Signal Definitions ====================
+    // ==================== 信号定义 ====================
     
-    // Storage Arrays
+    // 存储阵列
     reg [LINE_WIDTH-1:0] cache_data  [0:NUM_WAY-1][0:NUM_SET-1]; 
     reg [TAG_WIDTH-1 :0] cache_tag   [0:NUM_WAY-1][0:NUM_SET-1];
     reg                  cache_valid [0:NUM_WAY-1][0:NUM_SET-1];
 
-    // Pipeline Registers
+    // 流水寄存器
     reg        ic_idle;
     reg [31:0] ic_addr;
     reg [31:0] ic_prepc;
     reg        ic_taken;
     reg        ic_btb_hit;
 
-    // State Machine Registers
+    // 状态机寄存器
     reg state;
     reg [WAY_WIDTH-1:0] replace_way; 
     reg [WAY_WIDTH-1:0] miss_way;    
 
-    // Wires & Intermediates
+    // 中间信号
     wire in_fire;
     wire out_fire;
     wire ready_go;
@@ -79,13 +79,13 @@ module ysyx_25050136_ICACHE
     wire [31:0] hit_word;
     wire [31:0] miss_word;
 
-    // Loop Variables
+    // 循环变量
     integer k, m, n;
     genvar i;
 
-    // ==================== Logic Assignments ====================
+    // ==================== 逻辑赋值 ====================
 
-    // --- 1. Address Decoding & Handshake ---
+    // --- 1. 地址解析与握手 ---
     assign addr_index  = ic_addr[OFFSET_WIDTH+INDEX_WIDTH-1:OFFSET_WIDTH];
     assign addr_tag    = ic_addr[31:OFFSET_WIDTH+INDEX_WIDTH];
     assign addr_offset = (OFFSET_WIDTH > 2) ? ic_addr[OFFSET_WIDTH-1:2] : 0;
@@ -93,14 +93,14 @@ module ysyx_25050136_ICACHE
     assign in_fire  = ic_req_valid_i & ic_req_ready_o;
     assign out_fire = ic_ret_valid_o & ic_ret_ready_i;
 
-    // --- 2. Pipeline Register Update (Input Latching) ---
+    // --- 2. 输入流水寄存器更新 ---
     always @(posedge clk) begin
         if (reset) begin
             ic_idle    <= 1'b1;
-            ic_addr    <= 32'b0;
-            ic_prepc   <= 32'b0;
-            ic_taken   <= 1'b0;
-            ic_btb_hit <= 1'b0;
+            // ic_addr    <= 32'b0;
+            // ic_prepc   <= 32'b0;
+            // ic_taken   <= 1'b0;
+            // ic_btb_hit <= 1'b0;
         end else begin
             if (ic_flush_i) begin
                 ic_idle <= 1'b1; 
@@ -116,7 +116,7 @@ module ysyx_25050136_ICACHE
         end
     end
 
-    // --- 3. Tag Compare & Data Select (Combinational) ---
+    // --- 3. TAG 比较与数据选取（组合逻辑） ---
     always @(*) begin
         hit_mask = {NUM_WAY{1'b0}};
         for (k = 0; k < NUM_WAY; k = k + 1) begin
@@ -146,7 +146,7 @@ module ysyx_25050136_ICACHE
     assign hit_word  = line_word[addr_offset];
     assign miss_word = buf_word[addr_offset];
 
-    // --- 4. State Machine & Cache Maintenance ---
+    // --- 4. 状态机与 Cache 维护 ---
     always @(posedge clk) begin
         if (reset) begin
             state       <= IDLE;
@@ -171,9 +171,7 @@ module ysyx_25050136_ICACHE
                             state    <= MISS;
                             miss_way <= replace_way;
                         end
-                        if (!ic_idle && miss && NUM_WAY > 1) begin
-                            replace_way <= (replace_way + 1) % NUM_WAY;
-                        end
+                        replace_way <= (NUM_WAY == 1) ? 0 : replace_way + 1;
                     end
 
                     MISS: begin
@@ -191,7 +189,7 @@ module ysyx_25050136_ICACHE
         end
     end
 
-    // --- 5. Output Assignments ---
+    // --- 5. 输出信号 ---
     assign ready_go = (state == IDLE) && !miss;
 
     assign ic_req_ready_o   = (state == IDLE) && (out_fire || ic_idle);
