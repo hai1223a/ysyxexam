@@ -9,25 +9,27 @@ static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined 
 
 int count = 0;
 void putch(char ch) {
-  while(1) {
+  for(int i = 0;i < 10 ; i++) {
     if(count < 16) {
       outb(SERIAL_PORT, ch);
       count++;
       break;
     }
-    if(inb(0x30000000)) {
+    if(inb(0x30000000) & 0x01) {
       outb(SERIAL_PORT, ch);
       count = 0;
       break;
     } 
   }
 }
+
 void halt(int code) {
   nemu_trap(code);
 
   // should not reach here
   while (1);
 }
+
 static void _id_puts() {
   uint32_t mvendorid, marchid;
   asm volatile ("csrr %0, mvendorid" : "=r"(mvendorid));
@@ -43,6 +45,7 @@ static void _id_puts() {
   }
   putch('\n');
 }
+
 void _trm_init() {
   _id_puts();
   int ret = main(mainargs);
