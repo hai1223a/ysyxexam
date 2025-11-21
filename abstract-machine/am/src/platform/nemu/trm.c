@@ -10,13 +10,13 @@ static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined 
 int count = 0;
 
 void putch(char ch) {
-  for(int i = 0;i <  1002; i++) {
-    // if(count < 16) {
-    //   outb(SERIAL_PORT, ch);
-    //   count++;
-    //   break;
-    // }
-    if(i == 1000) {
+  while(1) {
+    if(count < 16) {
+      outb(SERIAL_PORT, ch);
+      count++;
+      break;
+    }
+    if(inb(0x0f000000)) {
       outb(SERIAL_PORT, ch);
       count = 0;
       break;
