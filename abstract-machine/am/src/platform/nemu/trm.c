@@ -16,7 +16,7 @@ void putch(char ch) {
       count++;
       break;
     }
-    if(inb(0x0f000000)) {
+    if(inb(0x0f000000) == 1) {
       outb(SERIAL_PORT, ch);
       count = 0;
       break;
