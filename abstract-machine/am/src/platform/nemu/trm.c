@@ -11,7 +11,7 @@ int count = 0;
 
 void putch(char ch) {
   while(1) {
-    if(count < 16) {
+    if(count < 1) {
       outb(SERIAL_PORT, ch);
       count++;
       break;
