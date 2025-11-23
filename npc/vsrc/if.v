@@ -39,8 +39,10 @@ module ysyx_25050136_IF
     wire out_fire = out_ready_i & out_valid_o;
     wire [PHT_INDEX-1:0] pht_pc_index_w = pht_pc_i[2+:PHT_INDEX];
     wire [PHT_INDEX-1:0] pht_pc_index_r = pc[2+:PHT_INDEX];
-    wire [BTB_INDEX-1:0] btb_pc_index = btb_update_i ? btb_pc_i[2+:BTB_INDEX] ^ btb_pc_i[2+BTB_INDEX+:BTB_INDEX] : pc[2+:BTB_INDEX] ^ pc[2+BTB_INDEX+:BTB_INDEX];
-    wire [BTB_TAG-1:0]   btb_pc_tag   = btb_update_i ? btb_pc_i[2+BTB_INDEX+:BTB_TAG] ^ btb_pc_i[9+BTB_INDEX+:BTB_TAG] : pc[2+BTB_INDEX+:BTB_TAG] ^ pc[9+BTB_INDEX+:BTB_TAG];
+    wire [BTB_INDEX-1:0] btb_pc_index_w = btb_pc_i[2+:BTB_INDEX] ^ btb_pc_i[2+BTB_INDEX+:BTB_INDEX];
+    wire [BTB_TAG-1:0]   btb_pc_tag_w   = btb_pc_i[2+BTB_INDEX+:BTB_TAG] ^ btb_pc_i[9+BTB_INDEX+:BTB_TAG];
+    wire [BTB_INDEX-1:0] btb_pc_index_r = pc[2+:BTB_INDEX] ^ pc[2+BTB_INDEX+:BTB_INDEX];
+    wire [BTB_TAG-1:0]   btb_pc_tag_r   = pc[2+BTB_INDEX+:BTB_TAG] ^ pc[9+BTB_INDEX+:BTB_TAG];
     wire        pht_pred_taken;
     wire [31:0] btb_pred_npc;
 
@@ -91,8 +93,10 @@ module ysyx_25050136_IF
     ) u_BTB (
         .clk          (clk             ),
         .reset        (reset           ),
-        .index        (btb_pc_index    ),
-        .tag          (btb_pc_tag      ),
+        .index_r      (btb_pc_index_r  ),
+        .tag_r        (btb_pc_tag_r    ),
+        .index_w      (btb_pc_index_w  ),
+        .tag_w        (btb_pc_tag_r    ),
         .update_en_i  (btb_update_i    ),
         .target_pc_i  (btb_target_i    ),
         .hit_o        (out_btb_hit_o   ),
@@ -151,8 +155,10 @@ module ysyx_25050136_BTB
     (
         input                     clk         ,
         input                     reset       ,
-        input  [INDEX_WIDTH-1:0]  index       ,
-        input  [TAG_WIDTH-1:0]    tag         ,
+        input  [INDEX_WIDTH-1:0]  index_r     ,
+        input  [TAG_WIDTH-1:0]    tag_r       ,
+        input  [INDEX_WIDTH-1:0]  index_w     ,
+        input  [TAG_WIDTH-1:0]    tag_w       ,
         input                     update_en_i ,
         input  [31:0]             target_pc_i ,
         output                    hit_o       ,
@@ -164,7 +170,6 @@ module ysyx_25050136_BTB
     reg [TAG_WIDTH-1:0] btb_tag [0:BTB_SIZE-1];
     reg [31:0] btb_target [0:BTB_SIZE-1];
     // 查找逻辑
-    wire btb_hit = btb_valid[index] && (btb_tag[index] == tag);
     integer i;
     // ==== 逻辑实现 ====
     // BTB 初始化
@@ -174,13 +179,13 @@ module ysyx_25050136_BTB
                 btb_valid[i] <= 0;
             end
         end else if(update_en_i) begin
-            btb_valid[index]  <= 1'b1;
-            btb_tag[index]    <= tag;
-            btb_target[index] <= target_pc_i;
+            btb_valid[index_w]  <= 1'b1;
+            btb_tag[index_w]    <= tag_w;
+            btb_target[index_w] <= target_pc_i;
         end
     end
     // 输出目标地址
-    assign hit_o = btb_hit;
-    assign target_pc_o = btb_hit ? btb_target[index] : 32'b0;
+    assign hit_o = btb_valid[index_r] && (btb_tag[index_r] == tag_r);
+    assign target_pc_o = hit_o ? btb_target[index_r] : 32'b0;
 
 endmodule
