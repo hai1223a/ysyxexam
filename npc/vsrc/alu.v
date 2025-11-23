@@ -16,7 +16,7 @@ module ysyx_25050136_ALU
     assign adder_cin = (op_i == `ysyx_25050136_ALU_SUB || op_i == `ysyx_25050136_ALU_SLT || op_i == `ysyx_25050136_ALU_SLTU);
     assign adder_op2 = adder_cin ? ~op2_i : op2_i;
     assign {adder_cout, adder_result} = op1_i + adder_op2 + adder_cin;
-    assign slt_res = (op1_i[31] ^ op2_i[31]) ? adder_result[31] : op1_i[31];
+    assign slt_res = (op1_i[31] ^ op2_i[31]) ? adder_result[31] :{31'b0, adder_cin};
     assign sltu_res = ~adder_cout;
     // 移位器
     wire [31:0] sr_opd     = (op_i == `ysyx_25050136_ALU_SRA) ? $signed(op1_i) : op1_i;
