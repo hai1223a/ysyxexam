@@ -16,7 +16,7 @@ module ysyx_25050136_EX
         input     [31:0]                             in_rdata1_i,
         input     [31:0]                             in_rdata2_i,
         input     [31:0]                                in_imm_i,
-        input     [`ysyx_25050136_ALU_OP_NUM-1:0]    in_alu_op_i,
+        input     [3:0]                              in_alu_op_i,
         input     [`ysyx_25050136_CSRU_OP_NUM-1:0]  in_csru_op_i,
         input                                in_alu_op1_use_pc_i,
         input                               in_alu_op2_use_imm_i,

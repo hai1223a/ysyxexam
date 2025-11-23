@@ -74,3 +74,97 @@ module alu(
     end
     assign y = y_r;
 endmodule //alu
+
+`define ysyx_25050136_ALU_OP_NUM 11
+`define ysyx_25050136_ALU_ADD    0
+`define ysyx_25050136_ALU_SUB    1
+`define ysyx_25050136_ALU_XOR    2
+`define ysyx_25050136_ALU_OR     3
+`define ysyx_25050136_ALU_AND    4
+`define ysyx_25050136_ALU_LEQ_U  5
+`define ysyx_25050136_ALU_LEQ    6
+`define ysyx_25050136_ALU_SRA    7
+`define ysyx_25050136_ALU_SLL    8
+`define ysyx_25050136_ALU_SRL    9
+`define ysyx_25050136_ALU_OPD2   10
+// ... existing `define`s ...
+
+module real_alu
+     (
+         input                                  clk,
+         input                                  reset,
+         input  [31:0]                          op1_i,
+         input  [31:0]                          op2_i,
+         // op_i 位宽改为4，使用二进制编码
+         input  [3:0]                           op_i, 
+         output [31:0]                          out_o
+     );
+
+    // --- 1. 流水线寄存器 ---
+    reg [31:0] op1_r, op2_r;
+    reg [3:0]  op_r; // op_r 位宽改为4
+    reg [31:0] out_r;
+    reg [31:0] out_temp;
+
+    always @(posedge clk) begin
+        if (reset) begin
+            op1_r <= 32'b0;
+            op2_r <= 32'b0;
+            op_r  <= 4'b0;
+            out_r <= 32'b0;
+        end
+        else begin
+            op1_r <= op1_i;
+            op2_r <= op2_i;
+            op_r  <= op_i;
+            out_r <= out_temp;
+        end
+    end
+
+    // --- 2. 组合逻辑计算部分 (资源高度复用) ---
+
+    // **核心加法器 (用于加、减、比较)**
+    wire [31:0] adder_op2 = op_r == `ysyx_25050136_ALU_SUB || op_r == `ysyx_25050136_ALU_LEQ || op_r == `ysyx_25050136_ALU_LEQ_U ? ~op2_r : op2_r;
+    wire        adder_cin = op_r == `ysyx_25050136_ALU_SUB || op_r == `ysyx_25050136_ALU_LEQ || op_r == `ysyx_25050136_ALU_LEQ_U ? 1'b1 : 1'b0;
+    wire [31:0] adder_result;
+    wire        adder_cout;
+    // 使用一个全加器模块或直接相加
+    assign {adder_cout, adder_result} = op1_r + adder_op2 + adder_cin;
+
+    // **从加法器结果派生出比较结果**
+    wire slt_result = (op1_r[31] & ~op2_r[31]) | (~(op1_r[31] ^ op2_r[31]) & adder_result[31]);
+    wire ult_result = ~adder_cout; // 无符号小于等价于减法不产生进位(即产生借位)
+
+    // **通用移位器**
+    wire [31:0] shifter_result;
+    wire [31:0] sra_operand = {{32{op1_r[31]}}, op1_r}; // 算术右移的扩展操作数
+    wire [5:0]  shift_amount = op2_r[4:0];
+    // 根据op_r选择移位方向和类型
+    assign shifter_result = (op_r == `ysyx_25050136_ALU_SLL) ? (op1_r << shift_amount) :
+                          (op_r == `ysyx_25050136_ALU_SRL) ? (op1_r >> shift_amount) :
+                          (op_r == `ysyx_25050136_ALU_SRA) ? ($signed(op1_r) >>> shift_amount) :
+                          32'b0;
+    
+    // --- 3. 组合逻辑选择部分 (高效的 MUX) ---
+    always @(*) begin
+        // 使用二进制编码的 case 语句，生成高效 MUX
+        case (op_r)
+            `ysyx_25050136_ALU_ADD:   out_temp = adder_result;
+            `ysyx_25050136_ALU_SUB:   out_temp = adder_result;
+            `ysyx_25050136_ALU_XOR:   out_temp = op1_r ^ op2_r;
+            `ysyx_25050136_ALU_OR:    out_temp = op1_r | op2_r;
+            `ysyx_25050136_ALU_AND:   out_temp = op1_r & op2_r;
+            `ysyx_25050136_ALU_LEQ_U: out_temp = {{31{1'b0}}, ult_result};
+            `ysyx_25050136_ALU_LEQ:   out_temp = {{31{1'b0}}, slt_result};
+            `ysyx_25050136_ALU_SRA:   out_temp = shifter_result;
+            `ysyx_25050136_ALU_SLL:   out_temp = shifter_result;
+            `ysyx_25050136_ALU_SRL:   out_temp = shifter_result;
+            `ysyx_25050136_ALU_OPD2:  out_temp = op2_r;
+            default:                 out_temp = 32'b0;     
+        endcase
+    end
+
+    // --- 4. 输出 ---
+    assign out_o = out_r;
+
+endmodule //real_alu

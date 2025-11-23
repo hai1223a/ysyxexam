@@ -202,7 +202,7 @@ synth-single: $(SOC_DEPEMD)
 
 A:
 	$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
-           DESIGN=alu \
+           DESIGN=real_alu \
            CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clk \
            RTL_FILES="/home/yunhai/ysyx-workbench/npc/sim/a.v"
 
