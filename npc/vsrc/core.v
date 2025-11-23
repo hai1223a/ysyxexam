@@ -66,9 +66,11 @@ wire [5:0]                    mem_dbg_optype/* verilator public_flat */;
 wire [ADDR_WIDTH-1:0]   ex_waddr;
 wire [31:0]            ex_wdata;
 wire                   ex_wvalid;
+wire                    ex_wen;
 wire [ADDR_WIDTH-1:0]   mem_waddr;
 wire [31:0]           mem_wdata;
 wire                  mem_wvalid;
+wire                   mem_wen;
 // === IF和ICACHE ===
 wire                    if_ic_ready;
 wire [31:0]             if_ic_pc;
@@ -238,9 +240,11 @@ ysyx_25050136_ID #(
     .out_rd_o                 (id_ex_rd                  ),
     .out_rd_en_o              (id_ex_rd_en               ),
     .out_valid_o              (id_ex_valid               ),
+    .ex_wen_i                 (ex_wen                    ),
     .ex_wvalid_i              (ex_wvalid                 ),
     .ex_waddr_i               (ex_waddr                  ),
     .ex_wdata_i               (ex_wdata                  ),
+    .mem_wen_i                (mem_wen                   ),
     .mem_wvalid_i             (mem_wvalid                ),
     .mem_waddr_i              (mem_waddr                 ),
     .mem_wdata_i              (mem_wdata                 ),
@@ -315,6 +319,7 @@ ysyx_25050136_EX #(
     .btb_target_o             (ex_btb_target            ),
     .branch_flush_o           (ex_branch_flush          ),
     .branch_npc_o             (ex_branch_npc            ),
+    .wen_o                    (ex_wen                   ),
     .waddr_o                  (ex_waddr                 ),
     .wdata_o                  (ex_wdata                 ),
     .wvalid_o                 (ex_wvalid                )
@@ -354,6 +359,7 @@ ysyx_25050136_MEM #(
     .out_rd_en_o     	(mem_wb_rd_en       ),
     .out_gpr_wdata_o 	(mem_wb_gpr_wdata   ),
     .out_valid_o     	(mem_wb_valid       ),
+    .wen_o           	(mem_wen            ),
     .waddr_o         	(mem_waddr          ),
     .wdata_o         	(mem_wdata          ),
     .wvalid_o        	(mem_wvalid         ),

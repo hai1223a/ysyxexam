@@ -33,6 +33,7 @@ module ysyx_25050136_MEM
         output                                     out_rd_en_o ,
         output   [31:0]                        out_gpr_wdata_o ,
         output                                     out_valid_o ,
+        output                                           wen_o ,
         output   [ADDR_WIDTH-1:0]                      waddr_o ,
         output   [31:0]                                wdata_o ,
         output                                        wvalid_o ,
@@ -200,6 +201,7 @@ module ysyx_25050136_MEM
     assign waddr_o = mem_rd;
     assign wdata_o = mem_gpr_wdata;
     assign wvalid_o = mem_rd_en & !mem_ren & (out_valid_o | ~idle);
+    assign wen_o = mem_rd_en;
     // === 握手信号 ===
     assign ready_go = (state === IDLE);
     assign in_ready_o = idle || out_fire;

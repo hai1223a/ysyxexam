@@ -211,10 +211,10 @@ module ysyx_25050136_ID
         end
     end
     // === 读操作数与数据冒险 ===
-    assign raw1_hazard = (out_raddr1_o != 0) && ren1 && (((out_raddr1_o == ex_waddr_i) && !ex_wvalid_i) ||
-                          ((out_raddr1_o == mem_waddr_i) && !mem_wvalid_i));
-    assign raw2_hazard = (out_raddr2_o != 0) && ren2 && (((out_raddr2_o == ex_waddr_i) && !ex_wvalid_i) ||
-                          ((out_raddr2_o == mem_waddr_i) && !mem_wvalid_i));
+    assign raw1_hazard = (out_raddr1_o != 0) && ren1 && (((out_raddr1_o == ex_waddr_i)  && !ex_wvalid_i  && ex_wen_i) ||
+                                                         ((out_raddr1_o == mem_waddr_i) && !mem_wvalid_i && mem_wen_i));
+    assign raw2_hazard = (out_raddr2_o != 0) && ren2 && (((out_raddr2_o == ex_waddr_i)  && !ex_wvalid_i  && ex_wen_i) ||
+                                                         ((out_raddr2_o == mem_waddr_i) && !mem_wvalid_i && mem_wen_i));
     assign ready_go = !(raw1_hazard | raw2_hazard);
     assign out_raddr1_o = rs1[ADDR_WIDTH-1:0];
     assign out_raddr2_o = rs2[ADDR_WIDTH-1:0];
