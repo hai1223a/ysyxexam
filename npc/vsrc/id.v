@@ -46,8 +46,7 @@ module ysyx_25050136_ID
         output     [31:0]                              out_rdata1_o,
         output     [31:0]                              out_rdata2_o,
         output     [31:0]                                 out_imm_o,
-        // output     [`ysyx_25050136_ALU_OP_NUM-1:0]     out_alu_op_o,
-        output     [3:0]                                 out_alu_op,
+        output     [3:0]                               out_alu_op_o,
         output     [`ysyx_25050136_CSRU_OP_NUM-1:0]   out_csru_op_o,
         output                                 out_alu_op1_use_pc_o,
         output                                out_alu_op2_use_imm_o,
@@ -220,18 +219,7 @@ module ysyx_25050136_ID
     assign ren1 = ~(type_lui | type_auipc | type_jal | inst_csrrwi | inst_csrrsi | inst_csrrci);
     assign ren2 = type_branch | type_store | type_op;
     // === 选择ALU相关操作 ===
-    assign out_alu_op_o[`ysyx_25050136_ALU_ADD]   = type_auipc | type_store | type_load | inst_addi | inst_add | type_jalr | type_jal | type_branch;
-    assign out_alu_op_o[`ysyx_25050136_ALU_SUB]   = inst_sub;
-    assign out_alu_op_o[`ysyx_25050136_ALU_XOR]   = inst_xor | inst_xori;
-    assign out_alu_op_o[`ysyx_25050136_ALU_OR]    = inst_or  | inst_ori;
-    assign out_alu_op_o[`ysyx_25050136_ALU_AND]   = inst_and | inst_andi;
-    assign out_alu_op_o[`ysyx_25050136_ALU_SLTU] = inst_sltiu | inst_sltu;
-    assign out_alu_op_o[`ysyx_25050136_ALU_SLT]   = inst_slti | inst_slt;
-    assign out_alu_op_o[`ysyx_25050136_ALU_SRA]   = inst_srai | inst_sra;
-    assign out_alu_op_o[`ysyx_25050136_ALU_SLL]   = inst_slli | inst_sll;
-    assign out_alu_op_o[`ysyx_25050136_ALU_SRL]   = inst_srli | inst_srl;
-    assign out_alu_op_o[`ysyx_25050136_ALU_OPD2]  = type_lui;
-    assign out_alu_op = 
+    assign out_alu_op_o = 
         (type_auipc | type_store | type_load | inst_addi | inst_add | type_jalr | type_jal | type_branch) ? 4'd1 :
         (inst_sub)                               ? 4'd2 :
         (inst_xor | inst_xori)                   ? 4'd3 :

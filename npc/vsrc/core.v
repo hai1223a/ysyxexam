@@ -97,7 +97,7 @@ wire [31:0]             id_ex_npc;
 wire [31:0]             id_ex_prepc;
 wire                    id_ex_btb_hit;
 wire [31:0]             id_ex_imm;
-wire [`ysyx_25050136_ALU_OP_NUM-1:0]  id_ex_alu_op;
+wire [3:0]              id_ex_alu_op;
 wire [`ysyx_25050136_CSRU_OP_NUM-1:0] id_ex_csru_op;
 wire                    id_ex_alu_op1_use_pc;
 wire                    id_ex_alu_op2_use_imm;

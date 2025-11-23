@@ -78,7 +78,7 @@ module ysyx_25050136_EX
     reg [31:0] ex_rdata1;
     reg [31:0] ex_rdata2;
     reg [31:0] ex_imm;
-    reg [`ysyx_25050136_ALU_OP_NUM-1:0] ex_alu_op;
+    reg [3:0] ex_alu_op;
     reg [`ysyx_25050136_CSRU_OP_NUM-1:0] ex_csru_op;
     reg ex_alu_op1_use_pc;
     reg ex_alu_op2_use_imm;
