@@ -1,6 +1,5 @@
 module ysyx_25050136_ALU
      (
-        input clk,
          input  [31:0]                          op1_i,
          input  [31:0]                          op2_i,
          input  [3:0]                            op_i,
