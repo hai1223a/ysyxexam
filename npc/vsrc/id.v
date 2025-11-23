@@ -20,9 +20,11 @@ module ysyx_25050136_ID
 `endif
         // 读操作数以及解决数据冒险
         input                                           ex_wvalid_i,
+        input                                              ex_wen_i,
         input      [ADDR_WIDTH-1:0]                      ex_waddr_i,
         input      [31:0]                                ex_wdata_i,
         input                                          mem_wvalid_i,
+        input                                             mem_wen_i,
         input      [ADDR_WIDTH-1:0]                     mem_waddr_i,
         input      [31:0]                               mem_wdata_i,
         input      [31:0]                              out_rdata1_i,
