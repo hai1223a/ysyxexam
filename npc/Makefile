@@ -195,8 +195,13 @@ fuck: $(SOC_DEPEMD)
 	@python3 scripts/synthesis.py
 
 synth-single: $(SOC_DEPEMD)
-	@python3 scripts/synthesis.py ysyx_25050136_ICACHE 2000 clk "$(NPC_VSRC)"
+	@python3 scripts/synthesis.py add 2000 clk "$(NPC_VSRC)"
 
+A:
+	$(MAKE) -C /home/yunhai/ysyx-workbench/yosys-sta sta \
+           DESIGN=alu \
+           CLK_FREQ_MHZ=1500 CLK_PORT_NAME=clk \
+           RTL_FILES="/home/yunhai/ysyx-workbench/npc/sim/a.v"
 
 .PHONY: verilog soc_run soc_gdb soc_wave clean perf_commit perf fuck sim-iverilog synth-single
 

@@ -2,13 +2,14 @@ module ysyx_25050136_IF
     (
         input         clk           ,
         input         reset         ,
-        input         flush_id      ,
-        input         flush_ex      ,
-        input         branch_taken_i,
-        input  [31:0] branch_pc_i   ,
-        input  [31:0] update_pc_i   ,
+        input         flush         ,
+        input  [31:0] branch_npc_i  ,
+        input  [31:0] pht_pc_i      ,
         input         pht_update_i  ,
+        input         pht_taken_i   ,
+        input  [31:0] btb_pc_i      ,
         input         btb_update_i  ,
+        input  [31:0] btb_target_i  ,
         input         out_ready_i   ,
         output [31:0] out_pc_o      ,
         output [31:0] out_prepc_o   ,
@@ -36,26 +37,14 @@ module ysyx_25050136_IF
     // 组合逻辑
     wire ready_go = 1;
     wire out_fire = out_ready_i & out_valid_o;
-    wire flush = flush_id | flush_ex;
-    wire [PHT_INDEX-1:0] pht_pc_index_w = update_pc_i[2+:PHT_INDEX];
+    wire [PHT_INDEX-1:0] pht_pc_index_w = pht_pc_i[2+:PHT_INDEX];
     wire [PHT_INDEX-1:0] pht_pc_index_r = pc[2+:PHT_INDEX];
-    wire [BTB_INDEX-1:0] btb_pc_index = btb_update_i ? update_pc_i[2+:BTB_INDEX] ^ update_pc_i[2+BTB_INDEX+:BTB_INDEX] : pc[2+:BTB_INDEX] ^ pc[2+BTB_INDEX+:BTB_INDEX];
-    wire [BTB_TAG-1:0]   btb_pc_tag   = btb_update_i ? update_pc_i[2+BTB_INDEX+:BTB_TAG] ^ update_pc_i[9+BTB_INDEX+:BTB_TAG] : pc[2+BTB_INDEX+:BTB_TAG] ^ pc[9+BTB_INDEX+:BTB_TAG];
+    wire [BTB_INDEX-1:0] btb_pc_index = btb_update_i ? btb_pc_i[2+:BTB_INDEX] ^ btb_pc_i[2+BTB_INDEX+:BTB_INDEX] : pc[2+:BTB_INDEX] ^ pc[2+BTB_INDEX+:BTB_INDEX];
+    wire [BTB_TAG-1:0]   btb_pc_tag   = btb_update_i ? btb_pc_i[2+BTB_INDEX+:BTB_TAG] ^ btb_pc_i[9+BTB_INDEX+:BTB_TAG] : pc[2+BTB_INDEX+:BTB_TAG] ^ pc[9+BTB_INDEX+:BTB_TAG];
     wire        pht_pred_taken;
     wire [31:0] btb_pred_npc;
 
-    // === 复用加法器 ===
-    // 选择信号：flush 时用 branch_pc_i，否则用 pc
-    wire adder_sel = flush;
-    wire [31:0] adder_op1 = adder_sel ? branch_pc_i : pc;
-    wire [31:0] adder_op2 = 32'h4;  
-    wire [31:0] adder_out = adder_op1 + adder_op2;  
-    
-    // next_pc: 预测跳转时用 BTB 目标，否则用 pc + 4 (adder_out)
-    wire [31:0] next_pc = (pht_pred_taken & out_btb_hit_o) ? btb_pred_npc : adder_out;
-    // branch_npc: 跳转时用 branch_pc_i，否则用 branch_pc_i + 4 (adder_out)
-    wire [31:0] branch_npc = (flush_ex & branch_taken_i) ? branch_pc_i : adder_out;
- 
+    wire [31:0] next_pc = (pht_pred_taken && out_btb_hit_o) ? btb_pred_npc : (pc + 4);
 `ifdef VERILATOR
     wire [31:0] if_dbg_pc = out_pc_o;
     always @(posedge clk) begin
@@ -71,7 +60,7 @@ module ysyx_25050136_IF
         end else begin
             idle <= 0;
             if(flush) begin
-                pc <= branch_npc;
+                pc <= branch_npc_i;
             end else if(out_fire) begin
                 pc <= next_pc;
             end
@@ -90,7 +79,7 @@ module ysyx_25050136_IF
         .reset        (reset          ),
         .index_w      (pht_pc_index_w   ),
         .index_r      (pht_pc_index_r   ),
-        .pred_taken_i (branch_taken_i ),
+        .pred_taken_i (pht_taken_i    ),
         .update_en_i  (pht_update_i   ),
         .pred_taken_o (pht_pred_taken)
     );
@@ -105,7 +94,7 @@ module ysyx_25050136_IF
         .index        (btb_pc_index    ),
         .tag          (btb_pc_tag      ),
         .update_en_i  (btb_update_i    ),
-        .target_pc_i  (branch_pc_i     ),
+        .target_pc_i  (btb_target_i    ),
         .hit_o        (out_btb_hit_o   ),
         .target_pc_o  (btb_pred_npc)
     );

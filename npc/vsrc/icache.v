@@ -2,34 +2,33 @@ module ysyx_25050136_ICACHE
 #(
     parameter OFFSET_WIDTH = 4,
     parameter NUM_WAY = 1,
-    parameter INDEX_WIDTH = 1
+    parameter INDEX_WIDTH = 2
 )
 (
     input                                      clk          ,
     input                                      reset        ,
     // CPU 接口
-    input                                   ic_flush_i      ,
-    input                                   ic_fencei_i     ,
-    input                                   ic_req_valid_i  ,
-    input    [31:0]                         ic_req_addr_i   ,
-    input    [31:0]                         ic_req_prepc_i  ,
-    input                                   ic_req_taken_i  ,
-    input                                   ic_req_btb_hit_i,
-    output                                  ic_req_ready_o  ,
-    input                                   ic_ret_ready_i  ,
-    output   [31:0]                         ic_ret_rdata_o  ,
-    output   [31:0]                         ic_ret_addr_o   ,
-    output   [31:0]                         ic_ret_prepc_o  ,
-    output                                  ic_ret_taken_o  ,
-    output                                  ic_ret_btb_hit_o,
-    output                                  ic_ret_valid_o  ,
+    input                                   flush           ,
+    input                                   fencei          ,
+    input                                   in_valid_i      ,
+    input    [31:0]                         in_pc_i         ,
+    input    [31:0]                         in_prepc_i      ,
+    input                                   in_taken_i      ,
+    input                                   in_btb_hit_i    ,
+    output                                  in_ready_o      ,
+    input                                   out_ready_i     ,
+    output   [31:0]                         out_inst_o      ,
+    output   [31:0]                         out_pc_o        ,
+    output   [31:0]                         out_prepc_o     ,
+    output                                  out_taken_o     ,
+    output                                  out_btb_hit_o   ,
+    output                                  out_valid_o     ,
     // AXI 接口
-    output                                  ia_flush_o      ,
-    output                                  ia_rd_req_o     ,
-    output   [31:0]                         ia_rd_addr_o    ,
-    input                                   ia_ret_valid_i  ,
-    input                                   ia_ret_last_i   ,
-    input    [31:0]                         ia_ret_data_i   
+    output                                  req_valid_o     ,
+    output   [31:0]                         req_addr_o      ,
+    input                                   ret_valid_i     ,
+    input                                   ret_last_i      ,
+    input    [31:0]                         ret_data_i   
 );
 
     // ==================== 参数 ====================
@@ -90,8 +89,8 @@ module ysyx_25050136_ICACHE
     assign addr_tag    = ic_addr[31:OFFSET_WIDTH+INDEX_WIDTH];
     assign addr_offset = (OFFSET_WIDTH > 2) ? ic_addr[OFFSET_WIDTH-1:2] : 0;
 
-    assign in_fire  = ic_req_valid_i & ic_req_ready_o;
-    assign out_fire = ic_ret_valid_o & ic_ret_ready_i;
+    assign in_fire  = in_valid_i & in_ready_o;
+    assign out_fire = out_valid_o & out_ready_i;
 
     // --- 2. 输入流水寄存器更新 ---
     always @(posedge clk) begin
@@ -102,14 +101,14 @@ module ysyx_25050136_ICACHE
             // ic_taken   <= 1'b0;
             // ic_btb_hit <= 1'b0;
         end else begin
-            if (ic_flush_i) begin
+            if (flush) begin
                 ic_idle <= 1'b1; 
             end else if (in_fire) begin
                 ic_idle    <= 1'b0;
-                ic_addr    <= ic_req_addr_i;
-                ic_prepc   <= ic_req_prepc_i;
-                ic_taken   <= ic_req_taken_i;
-                ic_btb_hit <= ic_req_btb_hit_i;
+                ic_addr    <= in_pc_i    ;
+                ic_prepc   <= in_prepc_i        ;
+                ic_taken   <= in_taken_i;
+                ic_btb_hit <= in_btb_hit_i;
             end else if (out_fire) begin
                 ic_idle <= 1'b1;
             end
@@ -153,8 +152,8 @@ module ysyx_25050136_ICACHE
             replace_way <= 0;
             miss_way    <= 0;
         end else begin
-            if (ic_flush_i) begin
-                if (ic_fencei_i) begin
+            if (flush) begin
+                if (fencei) begin
                     for (m = 0; m < NUM_WAY; m = m + 1) begin
                         for (n = 0; n < NUM_SET; n = n + 1) begin
                             cache_valid[m][n] <= 1'b0;
@@ -175,9 +174,9 @@ module ysyx_25050136_ICACHE
                     end
 
                     MISS: begin
-                        if (ia_ret_valid_i) begin
-                            cache_data[miss_way][addr_index] <= {ia_ret_data_i, cache_data[miss_way][addr_index][LINE_WIDTH-1:32]};
-                            if (ia_ret_last_i) begin
+                        if (ret_valid_i) begin
+                            cache_data[miss_way][addr_index] <= {ret_data_i, cache_data[miss_way][addr_index][LINE_WIDTH-1:32]};
+                            if (ret_last_i) begin
                                 cache_tag[miss_way][addr_index]   <= addr_tag;
                                 cache_valid[miss_way][addr_index] <= 1'b1;
                                 state <= IDLE;
@@ -192,17 +191,16 @@ module ysyx_25050136_ICACHE
     // --- 5. 输出信号 ---
     assign ready_go = (state == IDLE) && !miss;
 
-    assign ic_req_ready_o   = (state == IDLE) && (out_fire || ic_idle);
-    assign ic_ret_valid_o   = !ic_idle && !ic_flush_i && ready_go;
+    assign in_ready_o   = (state == IDLE) && (out_fire || ic_idle);
+    assign out_valid_o   = !ic_idle && !flush && ready_go;
     
-    assign ic_ret_rdata_o   = hit_word;
-    assign ic_ret_addr_o    = ic_addr;
-    assign ic_ret_prepc_o   = ic_prepc;
-    assign ic_ret_taken_o   = ic_taken;
-    assign ic_ret_btb_hit_o = ic_btb_hit;
+    assign out_inst_o   = hit_word;
+    assign out_pc_o    = ic_addr;
+    assign out_prepc_o   = ic_prepc;
+    assign out_taken_o   = ic_taken;
+    assign out_btb_hit_o = ic_btb_hit;
 
-    assign ia_flush_o       = ic_flush_i;
-    assign ia_rd_req_o      = (state == MISS);
-    assign ia_rd_addr_o     = ic_addr;
+    assign req_valid_o      = (state == MISS);
+    assign req_addr_o     = ic_addr;
 
 endmodule

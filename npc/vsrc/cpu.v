@@ -62,21 +62,13 @@ module ysyx_25050136_NPC
             find_resp();
     end
 `endif
-    wire inst_req_ready;
-    wire [31:0] inst_req_addr;
-    wire [31:0] inst_req_prepc;  
-    wire inst_req_taken;         
-    wire inst_req_btb_hit;       
-    wire inst_req_valid;
+    // 内部信号定义
     wire inst_flush;
-    wire inst_fencei;        
-    wire inst_ret_ready;
-    wire [31:0] inst_ret_rdata;
-    wire [31:0] inst_ret_addr;
-    wire [31:0] inst_ret_prepc;  
-    wire inst_ret_taken;         
-    wire inst_ret_btb_hit;       
+    wire inst_req_valid;
+    wire [31:0] inst_req_addr;
     wire inst_ret_valid;
+    wire inst_ret_last;
+    wire [31:0] inst_ret_data;
     wire [31:0] mem_req_addr;
     wire [31:0] mem_ret_rdata;
     wire mem_ret_ready;
@@ -133,25 +125,16 @@ module ysyx_25050136_NPC
         .req_ready_o 	(mem_ret_ready    )
     );
 
-    ysyx_25050136_NPCCORE 
+    ysyx_25050136_NPCCORE
     u_ysyx_25050136_NPCCORE(
         .clk              	(clk             ),
         .reset            	(reset           ),
-        .inst_req_ready_i 	(inst_req_ready  ),
-        .inst_req_addr_o  	(inst_req_addr   ),
-        .inst_req_prepc_o 	(inst_req_prepc  ), 
-        .inst_req_taken_o 	(inst_req_taken  ), 
-        .inst_req_btb_hit_o	(inst_req_btb_hit), 
-        .inst_req_valid_o 	(inst_req_valid  ),
-        .inst_ret_valid_i 	(inst_ret_valid  ),
-        .inst_ret_prepc_i 	(inst_ret_prepc  ), 
-        .inst_ret_taken_i 	(inst_ret_taken  ), 
-        .inst_ret_btb_hit_i	(inst_ret_btb_hit), 
-        .inst_ret_addr_i  	(inst_ret_addr   ),
-        .inst_ret_rdata_i 	(inst_ret_rdata  ),
-        .inst_ret_ready_o 	(inst_ret_ready  ),
         .inst_flush_o     	(inst_flush      ),
-        .inst_fencei_o    	(inst_fencei     ),
+        .inst_req_valid_o 	(inst_req_valid  ),
+        .inst_req_addr_o  	(inst_req_addr   ),
+        .inst_ret_valid_i  	(inst_ret_valid  ),
+        .inst_ret_last_i   	(inst_ret_last   ),
+        .inst_ret_data_i   	(inst_ret_data   ),        
         .mem_ret_rdata_i  	(mem_ret_rdata   ),
         .mem_ret_ready_i  	(mem_ret_ready   ),
         .mem_req_addr_o   	(mem_req_addr    ),
@@ -164,38 +147,32 @@ module ysyx_25050136_NPC
         .mem_req_wdata_o  	(mem_req_wdata   )
     );
     
-    ysyx_25050136_ICACHE_WRAPPER 
-    u_ysyx_25050136_ICACHE_WRAPPER(
-        .clk         	(clk             ),
-        .reset       	(reset           ),
-        .m_arvalid_o 	(inst_arvalid_o  ),
-        .m_arready_i 	(inst_arready_i  ),
-        .m_araddr_o  	(inst_araddr_o   ),
-        .m_arid_o    	(inst_arid_o     ),
-        .m_arlen_o   	(inst_arlen_o    ),
-        .m_arsize_o  	(inst_arsize_o   ),
-        .m_arburst_o 	(inst_arburst_o  ),
-        .m_rvalid_i  	(inst_rvalid_i   ),
-        .m_rready_o  	(inst_rready_o   ),
-        .m_rdata_i   	(inst_rdata_i    ),
-        .m_rresp_i   	(inst_rresp_i    ),
-        .m_rlast_i   	(inst_rlast_i    ),
-        .m_rid_i     	(inst_rid_i      ),
-        .flush_i        (inst_flush      ),
-        .fencei_i       (inst_fencei     ), 
-        .req_valid_i    (inst_req_valid  ),
-        .req_addr_i     (inst_req_addr   ),
-        .req_prepc_i    (inst_req_prepc  ), 
-        .req_taken_i    (inst_req_taken  ), 
-        .req_btb_hit_i  (inst_req_btb_hit), 
-        .req_ready_o    (inst_req_ready  ),
-        .ret_ready_i    (inst_ret_ready  ),
-        .ret_rdata_o    (inst_ret_rdata  ),
-        .ret_addr_o     (inst_ret_addr   ),
-        .ret_prepc_o    (inst_ret_prepc  ), 
-        .ret_taken_o    (inst_ret_taken  ), 
-        .ret_btb_hit_o  (inst_ret_btb_hit), 
-        .ret_valid_o    (inst_ret_valid  )
+    ysyx_25050136_IMEM2AXI 
+    #(
+        .OFFSET_WIDTH 	(4  )
+    )
+    u_ysyx_25050136_IMEM2AXI(
+        .clk         	(clk                ),
+        .reset       	(reset              ),
+        .flush_i        (inst_flush         ),
+        .m_arvalid_o 	(inst_arvalid_o     ),
+        .m_arready_i 	(inst_arready_i     ),
+        .m_araddr_o  	(inst_araddr_o      ),
+        .m_arid_o    	(inst_arid_o        ),
+        .m_arlen_o   	(inst_arlen_o       ),
+        .m_arsize_o  	(inst_arsize_o      ),
+        .m_arburst_o 	(inst_arburst_o     ),
+        .m_rvalid_i  	(inst_rvalid_i      ),
+        .m_rready_o  	(inst_rready_o      ),
+        .m_rdata_i   	(inst_rdata_i       ),
+        .m_rresp_i   	(inst_rresp_i       ),
+        .m_rlast_i   	(inst_rlast_i       ),
+        .m_rid_i     	(inst_rid_i         ),
+        .req_valid_i    (inst_req_valid     ),
+        .req_addr_i   	(inst_req_addr      ),
+        .ret_valid_o 	(inst_ret_valid     ),
+        .ret_last_o  	(inst_ret_last      ),
+        .ret_data_o  	(inst_ret_data      )
     );
     
 endmodule

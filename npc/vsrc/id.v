@@ -31,14 +31,17 @@ module ysyx_25050136_ID
         output     [ADDR_WIDTH-1:0]                    out_raddr2_o,
         // 分支预测
         output                                       branch_flush_o,
-        output     [31:0]                               branch_pc_o,
+        output     [31:0]                              branch_npc_o,
+        output                                         pht_update_o,
+        output     [31:0]                                  pht_pc_o,
+        output                                          pht_taken_o,
         // fence.i
         output                                       fencei_flush_o,
         // 传递给EX
         output     [31:0]                                  out_pc_o,
+        output     [31:0]                                 out_npc_o,
         output                                         out_ebreak_o,
         output     [31:0]                               out_prepc_o,
-        output                                          out_taken_o,
         output                                        out_btb_hit_o,
         output     [31:0]                              out_rdata1_o,
         output     [31:0]                              out_rdata2_o,
@@ -48,9 +51,9 @@ module ysyx_25050136_ID
         output                                 out_alu_op1_use_pc_o,
         output                                out_alu_op2_use_imm_o,
         output                                  out_alu_op2_use_4_o,
-        output                                        out_is_jalr_o,
-        output                             out_unconditional_jump_o,
-        output                               out_conditional_jump_o,
+        output                                           out_jump_o,
+        output                                     out_mispredict_o,
+        output                                           out_jalr_o,
         output                                        out_lsu_ren_o,
         output                                        out_lsu_wen_o,
         output     [3:0]                             out_lsu_mask_o,
@@ -60,6 +63,7 @@ module ysyx_25050136_ID
         output                                        out_csr_wen_o,
         output                              out_csr_wdata_use_rs1_o,
         output     [4:0]                                  out_rs1_o,
+        output                                         out_rd_npc_o,
         output     [ADDR_WIDTH-1:0]                        out_rd_o,
         output                                          out_rd_en_o,
         output                                          out_valid_o
@@ -169,6 +173,11 @@ module ysyx_25050136_ID
     wire [31:0] immB = {{20{id_inst[31]}}, id_inst[7], id_inst[30:25], id_inst[11:8], 1'b0};
     wire [31:0] immU = {id_inst[31:12], 12'h0};
     wire [31:0] immJ = {{12{id_inst[31]}}, id_inst[19:12], id_inst[20], id_inst[30:21], 1'b0};
+    // === 跳转相关 ===
+    wire [31:0] bqu_op1;
+    wire [31:0] bqu_op2;
+    wire [5:0]  bqu_op;
+    wire        bqu_out;
     // === 数据冒险 ===
     wire raw1_hazard;
     wire raw2_hazard;
@@ -214,14 +223,10 @@ module ysyx_25050136_ID
     assign out_alu_op_o[`ysyx_25050136_ALU_ADD]   = type_auipc | type_store | type_load | inst_addi | inst_add | type_jalr | type_jal;
     assign out_alu_op_o[`ysyx_25050136_ALU_SUB]   = inst_sub;
     assign out_alu_op_o[`ysyx_25050136_ALU_XOR]   = inst_xor | inst_xori;
-    assign out_alu_op_o[`ysyx_25050136_ALU_OR]    = inst_or | inst_ori;
+    assign out_alu_op_o[`ysyx_25050136_ALU_OR]    = inst_or  | inst_ori;
     assign out_alu_op_o[`ysyx_25050136_ALU_AND]   = inst_and | inst_andi;
-    assign out_alu_op_o[`ysyx_25050136_ALU_EQ]    = inst_beq;
-    assign out_alu_op_o[`ysyx_25050136_ALU_NEQ]   = inst_bne;
-    assign out_alu_op_o[`ysyx_25050136_ALU_LEQ_U] = inst_bltu | inst_sltiu | inst_sltu;
-    assign out_alu_op_o[`ysyx_25050136_ALU_GEQ_U] = inst_bgeu;
-    assign out_alu_op_o[`ysyx_25050136_ALU_LEQ]   = inst_blt | inst_slti | inst_slt;
-    assign out_alu_op_o[`ysyx_25050136_ALU_GEQ]   = inst_bge;
+    assign out_alu_op_o[`ysyx_25050136_ALU_LEQ_U] = inst_sltiu | inst_sltu;
+    assign out_alu_op_o[`ysyx_25050136_ALU_LEQ]   = inst_slti | inst_slt;
     assign out_alu_op_o[`ysyx_25050136_ALU_SRA]   = inst_srai | inst_sra;
     assign out_alu_op_o[`ysyx_25050136_ALU_SLL]   = inst_slli | inst_sll;
     assign out_alu_op_o[`ysyx_25050136_ALU_SRL]   = inst_srli | inst_srl;
@@ -233,15 +238,26 @@ module ysyx_25050136_ID
     assign out_csru_op_o[`ysyx_25050136_CSRU_MRET]  = inst_mret;
     assign out_csru_op_o[`ysyx_25050136_CSRU_ECALL] = inst_ecall;
     // === 选择ALU的操作数 ===
-    assign out_alu_op1_use_pc_o = type_auipc | type_jal | type_jalr;
-    assign out_alu_op2_use_imm_o = type_load | type_store | type_op_imm | type_auipc | type_lui;
-    assign out_alu_op2_use_4_o = type_jal | type_jalr;
-    // === 选择BQU的操作数 ===
-    assign out_is_jalr_o = type_jalr;
-    assign out_unconditional_jump_o = type_jalr | type_jal;
-    assign out_conditional_jump_o = type_branch;
-    assign branch_flush_o = !(out_conditional_jump_o | out_unconditional_jump_o | inst_mret | inst_ecall) && id_btb_hit && id_taken && in_pulse;
-    assign branch_pc_o = id_pc;
+    assign out_alu_op1_use_pc_o = type_auipc | type_branch | type_jal;
+    assign out_alu_op2_use_imm_o = type_load | type_store | type_op_imm | type_auipc | type_lui | type_branch | type_jalr;
+    // === 选择BQU的操作数, 并判断跳转 ===
+    assign bqu_op1 = out_rdata1_o;
+    assign bqu_op2 = out_rdata2_o;
+    assign bqu_op = {inst_bgeu, inst_bltu, inst_bge, inst_blt, inst_bne, inst_beq};
+    ysyx_25050136_BQU u_bqu (
+        .op1_i      (bqu_op1),
+        .op2_i      (bqu_op2),
+        .op_i       (bqu_op),
+        .out_o      (bqu_out)
+    );
+    assign pht_update_o = (type_branch | type_jal | type_jalr | inst_ecall | inst_mret) & in_pulse;
+    assign pht_pc_o = id_pc;
+    assign pht_taken_o = out_jump_o;
+    assign out_jump_o = bqu_out | type_jal | type_jalr | inst_ecall | inst_mret;
+    assign branch_flush_o = !(type_branch | type_jal | type_jalr | inst_ecall | inst_mret) && id_btb_hit && id_taken && in_pulse;
+    assign branch_npc_o = out_npc_o;
+    assign out_jalr_o = type_jalr;
+    assign out_mispredict_o = out_jump_o ^ id_taken; // 预测错误
     assign out_prepc_o = id_prepc;
     assign out_taken_o = id_taken;
     assign out_btb_hit_o = id_btb_hit;
@@ -261,19 +277,24 @@ module ysyx_25050136_ID
     assign out_csr_wen_o = (type_system & ~inst_ebreak) & !((inst_csrrs | inst_csrrsi | inst_csrrc | inst_csrrci) && (rs1 == 0));
     assign out_csr_wdata_use_rs1_o = inst_csrrw | inst_csrrs | inst_csrrc;
     // === 写回寄存器地址 ===
+    assign out_rd_npc_o = type_jalr | type_jal;
     assign out_rd_o  = rd[ADDR_WIDTH-1:0];
     assign out_rd_en_o = type_op_imm | type_auipc | type_lui | type_op | type_system | type_load | type_jalr | type_jal;
     // === 操作数 ===
     assign out_pc_o = id_pc;
+    assign out_npc_o = id_pc + 4;
     assign out_rdata1_o = ((out_raddr1_o != 0) && (out_raddr1_o == ex_waddr_i) && ex_wvalid_i) ? ex_wdata_i :
                           ((out_raddr1_o != 0) && (out_raddr1_o == mem_waddr_i) && mem_wvalid_i) ? mem_wdata_i :
                           out_rdata1_i;
     assign out_rdata2_o =((out_raddr2_o != 0) && (out_raddr2_o == ex_waddr_i) && ex_wvalid_i) ? ex_wdata_i :
                          ((out_raddr2_o != 0) && (out_raddr2_o == mem_waddr_i) && mem_wvalid_i) ? mem_wdata_i :
                          out_rdata2_i;
-    assign out_imm_o = inst_Itype ? immI : (inst_Stype ? immS :
-                                           (inst_Utype ? immU : (inst_Btype ? immB :
-                                                                 (inst_Jtype ? immJ : 0))));
+    assign out_imm_o = inst_Itype ? immI :
+                          (inst_Stype ? immS :
+                          (inst_Utype ? immU :
+                          (inst_Btype ? immB :
+                          (inst_Jtype ? immJ :
+                            32'b0))));
     assign out_rs1_o = rs1;
     // === 握手信号 ===
     assign in_ready_o = idle || out_fire;

@@ -22,8 +22,8 @@ module ysyx_25050136_IMEM2AXI
     input    [3:0]                             m_rid_i      ,
     // 内部
     input                                      flush_i      ,
-    input                                      rd_req_i     ,
-    input    [31:0]                            rd_addr_i    ,
+    input                                      req_valid_i  ,
+    input    [31:0]                            req_addr_i   ,
     output                                     ret_valid_o  ,
     output                                     ret_last_o   ,
     output   [31:0]                            ret_data_o   
@@ -46,8 +46,8 @@ module ysyx_25050136_IMEM2AXI
     wire ar_fire, r_fire;
     // 根据存储介质，选择读取方式
     reg [1:0] cnt;
-    wire size = (rd_addr_i >= 32'ha000_0000) && (rd_addr_i < 32'ha400_0000);
-    wire [31:0] align_addr = {rd_addr_i[31:OFFSET_WIDTH], {OFFSET_WIDTH{1'b0}}};
+    wire size = (req_addr_i >= 32'ha000_0000) && (req_addr_i < 32'ha400_0000);
+    wire [31:0] align_addr = {req_addr_i[31:OFFSET_WIDTH], {OFFSET_WIDTH{1'b0}}};
     wire [31:0] real_addr = align_addr + {28'd0, cnt, 2'd0};
     // ==================== axi信号定义 ================================
     // 读事务
@@ -69,7 +69,7 @@ module ysyx_25050136_IMEM2AXI
                     if(is_flush | flush_i) begin
                         is_flush <= 0;
                         cnt <= 0;
-                    end else if(rd_req_i) begin
+                    end else if(req_valid_i) begin
                         state_read <= READ_ADDR;
                         m_arid_r    <= 4'b1001;
                         m_arsize_r  <= 3'b010;

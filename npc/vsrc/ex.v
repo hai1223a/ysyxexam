@@ -9,9 +9,9 @@ module ysyx_25050136_EX
         input                                              flush,
         input                                         in_valid_i,
         input     [31:0]                                 in_pc_i,
+        input     [31:0]                                in_npc_i,
         input                                        in_ebreak_i,
         input     [31:0]                              in_prepc_i,
-        input                                         in_taken_i,
         input                                       in_btb_hit_i,
         input     [31:0]                             in_rdata1_i,
         input     [31:0]                             in_rdata2_i,
@@ -20,10 +20,9 @@ module ysyx_25050136_EX
         input     [`ysyx_25050136_CSRU_OP_NUM-1:0]  in_csru_op_i,
         input                                in_alu_op1_use_pc_i,
         input                               in_alu_op2_use_imm_i,
-        input                                 in_alu_op2_use_4_i,
-        input                                       in_is_jalr_i,
-        input                            in_unconditional_jump_i,
-        input                              in_conditional_jump_i,
+        input                                          in_jump_i,
+        input                                    in_mispredict_i,
+        input                                          in_jalr_i,
         input                                       in_lsu_ren_i,
         input                                       in_lsu_wen_i,
         input     [3:0]                            in_lsu_mask_i,
@@ -33,6 +32,7 @@ module ysyx_25050136_EX
         input                                       in_csr_wen_i,
         input                             in_csr_wdata_use_rs1_i,
         input     [4:0]                                 in_rs1_i,
+        input                                        in_rd_npc_i,
         input     [ADDR_WIDTH-1:0]                       in_rd_i,
         input                                         in_rd_en_i,
         output                                        in_ready_o,
@@ -56,12 +56,11 @@ module ysyx_25050136_EX
         output    [31:0]                         out_lsu_wdata_o,
         output                                       out_valid_o,
         // 分支
-        output                                      pht_update_o,
         output                                      btb_update_o,
-        output    [31:0]                             update_pc_o,
+        output    [31:0]                                btb_pc_o,
+        output    [31:0]                            btb_target_o,
         output                                    branch_flush_o,
-        output                                    branch_taken_o,
-        output    [31:0]                             branch_pc_o,
+        output    [31:0]                            branch_npc_o,
         // 旁路
         output                                          wvalid_o,   
         output    [ADDR_WIDTH-1:0]                       waddr_o,
@@ -72,9 +71,9 @@ module ysyx_25050136_EX
     reg idle;
     reg in_pulse;
     reg [31:0] ex_pc;
+    reg [31:0] ex_npc;
     reg ex_ebreak;
     reg [31:0] ex_prepc;
-    reg ex_taken;
     reg ex_btb_hit;
     reg [31:0] ex_rdata1;
     reg [31:0] ex_rdata2;
@@ -83,10 +82,9 @@ module ysyx_25050136_EX
     reg [`ysyx_25050136_CSRU_OP_NUM-1:0] ex_csru_op;
     reg ex_alu_op1_use_pc;
     reg ex_alu_op2_use_imm;
-    reg ex_alu_op2_use_4;
-    reg ex_is_jalr;
-    reg ex_unconditional_jump;
-    reg ex_conditional_jump;
+    reg ex_jump;
+    reg ex_mispredict;
+    reg ex_jalr;
     reg ex_lsu_ren;
     reg ex_lsu_wen;
     reg [3:0] ex_lsu_mask;
@@ -96,6 +94,7 @@ module ysyx_25050136_EX
     reg ex_csr_wen;
     reg ex_csr_wdata_use_rs1;
     reg [4:0] ex_rs1;
+    reg ex_rd_npc;
     reg [ADDR_WIDTH-1:0] ex_rd;
     reg ex_rd_en;
     // 组合逻辑
@@ -108,10 +107,7 @@ module ysyx_25050136_EX
     wire [31:0] alu_out; 
     // === 跳转 ===
     wire [31:0] branch_npc;
-    wire branch_valid;
-    wire is_jump = ex_unconditional_jump | ex_csru_op[`ysyx_25050136_CSRU_ECALL] | ex_csru_op[`ysyx_25050136_CSRU_MRET] | ex_conditional_jump;
     wire target_mismatch = (ex_prepc != branch_npc);  // 预测目标与实际目标不匹配
-    wire direction_mismatch = (branch_valid ^ ex_taken) && is_jump;  // 预测方向与实际不匹配
     wire [31:0] bqu_opd1;
     wire [31:0] bqu_opd2;
     wire [31:0] bqu_add_result;
@@ -124,34 +120,6 @@ module ysyx_25050136_EX
     always @(posedge clk) begin
         if(reset) begin
             idle <= 1;
-            // in_pulse <= 0;
-            // ex_pc <= 0;
-            // ex_ebreak <= 0;
-            // ex_prepc <= 0;
-            // ex_taken <= 0;
-            // ex_btb_hit <= 0;
-            // ex_rdata1 <= 0;
-            // ex_rdata2 <= 0;
-            // ex_imm <= 0;
-            // ex_alu_op <= 0;
-            // ex_csru_op <= 0;
-            // ex_alu_op1_use_pc <= 0;
-            // ex_alu_op2_use_imm <= 0;
-            // ex_alu_op2_use_4 <= 0;
-            // ex_is_jalr <= 0;
-            // ex_unconditional_jump <= 0;
-            // ex_conditional_jump <= 0;
-            // ex_lsu_ren <= 0;
-            // ex_lsu_wen <= 0;
-            // ex_lsu_mask <= 0;
-            // ex_lsu_signed <= 0;
-            // ex_csr_addr <= 0;
-            // ex_csr_ren <= 0;
-            // ex_csr_wen <= 0;
-            // ex_csr_wdata_use_rs1 <= 0;
-            // ex_rs1 <= 0;
-            // ex_rd <= 0;
-            // ex_rd_en <= 0;
         end else begin
             if(flush) begin
                 idle <= 1;
@@ -160,9 +128,9 @@ module ysyx_25050136_EX
                 idle <= 0;
                 in_pulse <= 1;
                 ex_pc <= in_pc_i;
+                ex_npc <= in_npc_i;
                 ex_ebreak <= in_ebreak_i;
                 ex_prepc <= in_prepc_i;
-                ex_taken <= in_taken_i;
                 ex_btb_hit <= in_btb_hit_i;
                 ex_rdata1 <= in_rdata1_i;
                 ex_rdata2 <= in_rdata2_i;
@@ -171,10 +139,9 @@ module ysyx_25050136_EX
                 ex_csru_op <= in_csru_op_i;
                 ex_alu_op1_use_pc <= in_alu_op1_use_pc_i;
                 ex_alu_op2_use_imm <= in_alu_op2_use_imm_i;
-                ex_alu_op2_use_4 <= in_alu_op2_use_4_i;
-                ex_is_jalr <= in_is_jalr_i;
-                ex_unconditional_jump <= in_unconditional_jump_i;
-                ex_conditional_jump <= in_conditional_jump_i;
+                ex_jump <= in_jump_i;
+                ex_mispredict <= in_mispredict_i;
+                ex_jalr <= in_jalr_i;
                 ex_lsu_ren <= in_lsu_ren_i;
                 ex_lsu_wen <= in_lsu_wen_i;
                 ex_lsu_mask <= in_lsu_mask_i;
@@ -184,6 +151,7 @@ module ysyx_25050136_EX
                 ex_csr_wen <= in_csr_wen_i;
                 ex_csr_wdata_use_rs1 <= in_csr_wdata_use_rs1_i;
                 ex_rs1 <= in_rs1_i;
+                ex_rd_npc <= in_rd_npc_i;
                 ex_rd <= in_rd_i;
                 ex_rd_en <= in_rd_en_i;
             end else if(out_fire) begin
@@ -196,8 +164,7 @@ module ysyx_25050136_EX
     end
     // === ALU ===
     assign alu_opd1 = ex_alu_op1_use_pc ? ex_pc : ex_rdata1;
-    assign alu_opd2 = ex_alu_op2_use_imm ? ex_imm :
-                     (ex_alu_op2_use_4) ? 32'd4 : ex_rdata2;
+    assign alu_opd2 = ex_alu_op2_use_imm ? ex_imm : ex_rdata2;
     ysyx_25050136_ALU u_ysyx_25050136_ALU(
         .op1_i          (alu_opd1     ),
         .op2_i          (alu_opd2     ),
@@ -205,10 +172,13 @@ module ysyx_25050136_EX
         .out_o       	(alu_out      )
     );
     // === BQU ===
-    assign bqu_opd1 = ex_is_jalr ? ex_rdata1 : ex_pc;
-    assign bqu_opd2 = ex_imm;
-    assign bqu_add_result = bqu_opd1 + bqu_opd2;
-    assign bqu_out = {bqu_add_result[31:1], (~ex_is_jalr & bqu_add_result[0])};
+    assign bqu_out = ex_jalr ? (alu_out & ~32'h1) : alu_out;
+    assign branch_npc = (ex_csru_op[`ysyx_25050136_CSRU_ECALL] | ex_csru_op[`ysyx_25050136_CSRU_MRET]) ? csru_out : bqu_out;
+    assign branch_flush_o = (ex_mispredict | (ex_jump & target_mismatch))  & in_pulse;
+    assign branch_npc_o = ex_jump ? branch_npc : ex_npc;
+    assign btb_update_o =  ex_jump & (!ex_btb_hit | target_mismatch) & in_pulse;
+    assign btb_target_o = branch_npc;
+    assign btb_pc_o = ex_pc;
     // === CSR ===
     assign csru_wdata = ex_csr_wdata_use_rs1 ? ex_rdata1 : {{32-5{1'b0}},ex_rs1};
     ysyx_25050136_CSRU u_ysyx_25050136_CSRU(
@@ -222,17 +192,6 @@ module ysyx_25050136_EX
         .csru_wen_i   	(ex_csr_wen  ),
         .csru_rdata_o 	(csru_out    )
     );
-    // === 跳转 ===
-    assign branch_valid = ex_unconditional_jump | ex_csru_op[`ysyx_25050136_CSRU_ECALL] |
-                            ex_csru_op[`ysyx_25050136_CSRU_MRET] | (ex_conditional_jump & alu_out[0]);
-    assign branch_npc = (ex_csru_op[`ysyx_25050136_CSRU_ECALL] | ex_csru_op[`ysyx_25050136_CSRU_MRET]) ?
-                           csru_out : bqu_out;
-    assign branch_flush_o = (direction_mismatch | (branch_valid & target_mismatch))  & in_pulse;
-    assign branch_pc_o = branch_valid ? branch_npc : ex_pc;
-    assign pht_update_o = is_jump & in_pulse;
-    assign branch_taken_o = branch_valid & in_pulse;
-    assign btb_update_o =  branch_valid & in_pulse & (!ex_btb_hit | target_mismatch);
-    assign update_pc_o = ex_pc;
     // === 访存 ===
     assign out_lsu_ren_o = ex_lsu_ren;
     assign out_lsu_wen_o = ex_lsu_wen;
@@ -244,7 +203,7 @@ module ysyx_25050136_EX
     assign out_ebreak_o = ex_ebreak;
     assign out_rd_o = ex_rd;
     assign out_rd_en_o = ex_rd_en;
-    assign out_gpr_wdata_o = ex_csr_ren ? csru_out : alu_out;
+    assign out_gpr_wdata_o = ex_rd_npc ? ex_npc : (ex_csr_ren ? csru_out : alu_out);
     assign wvalid_o = !ex_lsu_ren & out_valid_o;
     assign waddr_o = ex_rd & {ADDR_WIDTH{ex_rd_en & out_valid_o}};
     assign wdata_o = out_gpr_wdata_o;
