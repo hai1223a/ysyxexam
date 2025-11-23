@@ -96,7 +96,7 @@ module ysyx_25050136_IF
         .index_r      (btb_pc_index_r  ),
         .tag_r        (btb_pc_tag_r    ),
         .index_w      (btb_pc_index_w  ),
-        .tag_w        (btb_pc_tag_r    ),
+        .tag_w        (btb_pc_tag_w    ),
         .update_en_i  (btb_update_i    ),
         .target_pc_i  (btb_target_i    ),
         .hit_o        (out_btb_hit_o   ),
