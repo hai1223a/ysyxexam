@@ -20,7 +20,7 @@ module ysyx_25050136_ALU
     assign slt_res = (op1_i[31] ^ op2_i[31]) ? adder_result[31] : op1_i[31];
     assign sltu_res = ~adder_cout;
     // 移位器
-    wire [31:0] sr_opd     = (op_i == ALU_SRA) ? $signed(op1_i) : op1_i;
+    wire [31:0] sr_opd     = (op_i == `ysyx_25050136_ALU_SRA) ? $signed(op1_i) : op1_i;
     wire [31:0] sr_result  = sr_opd >> op2_i[4:0];
     // wire [31:0] sra_result = $signed(op1_i) >>> op2_i[4:0];
     // wire [31:0] srl_result = op1_i >> op2_i[4:0];
