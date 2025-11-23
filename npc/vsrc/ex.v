@@ -205,7 +205,7 @@ module ysyx_25050136_EX
     assign out_rd_o = ex_rd;
     assign out_rd_en_o = ex_rd_en;
     assign out_gpr_wdata_o = ex_rd_npc ? ex_npc : (ex_csr_ren ? csru_out : alu_out);
-    assign wen_o = ex_rd_en;
+    assign wen_o = ex_rd_en & out_valid_o;
     assign wvalid_o = ex_rd_en & ex_rd_npc & out_valid_o;
     assign waddr_o = ex_rd;
     assign wdata_o = ex_npc;

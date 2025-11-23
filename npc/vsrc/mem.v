@@ -201,7 +201,7 @@ module ysyx_25050136_MEM
     assign waddr_o = mem_rd;
     assign wdata_o = mem_gpr_wdata;
     assign wvalid_o = mem_rd_en & !mem_ren & (out_valid_o | ~idle);
-    assign wen_o = mem_rd_en;
+    assign wen_o = mem_rd_en & (out_valid_o | ~idle);;
     // === 握手信号 ===
     assign ready_go = (state === IDLE);
     assign in_ready_o = idle || out_fire;
