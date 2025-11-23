@@ -50,7 +50,6 @@ module ysyx_25050136_ID
         output     [`ysyx_25050136_CSRU_OP_NUM-1:0]   out_csru_op_o,
         output                                 out_alu_op1_use_pc_o,
         output                                out_alu_op2_use_imm_o,
-        output                                  out_alu_op2_use_4_o,
         output                                           out_jump_o,
         output                                     out_mispredict_o,
         output                                           out_jalr_o,
@@ -259,7 +258,6 @@ module ysyx_25050136_ID
     assign out_jalr_o = type_jalr;
     assign out_mispredict_o = out_jump_o ^ id_taken; // 预测错误
     assign out_prepc_o = id_prepc;
-    assign out_taken_o = id_taken;
     assign out_btb_hit_o = id_btb_hit;
     // === fence.i ===
     assign fencei_flush_o = inst_fence_i & in_pulse;

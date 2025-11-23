@@ -5,7 +5,7 @@ module  ysyx_25050136_NPCCORE
     // 指令相关
     output                        inst_flush_o     ,
     output                        inst_req_valid_o ,
-    output                        inst_req_addr_o  ,
+    output   [31:0]               inst_req_addr_o  ,
     input                         inst_ret_valid_i ,
     input                         inst_ret_last_i  ,
     input    [31:0]               inst_ret_data_i  ,
