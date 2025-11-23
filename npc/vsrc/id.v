@@ -238,7 +238,7 @@ module ysyx_25050136_ID
     assign out_csru_op_o[`ysyx_25050136_CSRU_ECALL] = inst_ecall;
     // === 选择ALU的操作数 ===
     assign out_alu_op1_use_pc_o = type_auipc | type_branch | type_jal;
-    assign out_alu_op2_use_imm_o = type_load | type_store | type_op_imm | type_auipc | type_lui | type_branch | type_jalr;
+    assign out_alu_op2_use_imm_o = type_load | type_store | type_op_imm | type_auipc | type_lui | type_branch | type_jalr | type_jal;
     // === 选择BQU的操作数, 并判断跳转 ===
     assign bqu_op1 = out_rdata1_o;
     assign bqu_op2 = out_rdata2_o;
