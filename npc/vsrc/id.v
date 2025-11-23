@@ -219,7 +219,7 @@ module ysyx_25050136_ID
     assign ren1 = ~(type_lui | type_auipc | type_jal | inst_csrrwi | inst_csrrsi | inst_csrrci);
     assign ren2 = type_branch | type_store | type_op;
     // === 选择ALU相关操作 ===
-    assign out_alu_op_o[`ysyx_25050136_ALU_ADD]   = type_auipc | type_store | type_load | inst_addi | inst_add | type_jalr | type_jal;
+    assign out_alu_op_o[`ysyx_25050136_ALU_ADD]   = type_auipc | type_store | type_load | inst_addi | inst_add | type_jalr | type_jal | type_branch;
     assign out_alu_op_o[`ysyx_25050136_ALU_SUB]   = inst_sub;
     assign out_alu_op_o[`ysyx_25050136_ALU_XOR]   = inst_xor | inst_xori;
     assign out_alu_op_o[`ysyx_25050136_ALU_OR]    = inst_or  | inst_ori;
