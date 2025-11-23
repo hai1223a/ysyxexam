@@ -15,14 +15,12 @@ module ysyx_25050136_ALU
 
     assign adder_cin = (op_i == `ysyx_25050136_ALU_SUB || op_i == `ysyx_25050136_ALU_SLT || op_i == `ysyx_25050136_ALU_SLTU);
     assign adder_op2 = adder_cin ? ~op2_i : op2_i;
-    assign {adder_cout, adder_result} = op1_i + adder_op2 + {32'd0, adder_cin};
+    assign {adder_cout, adder_result} = op1_i + adder_op2 + {31'b0, adder_cin};
     assign slt_res = (op1_i[31] ^ op2_i[31]) ? adder_result[31] : op1_i[31];
     assign sltu_res = ~adder_cout;
     // 移位器
-    wire [31:0] sr_opd     = (op_i == `ysyx_25050136_ALU_SRA) ? $signed(op1_i) : op1_i;
-    wire [31:0] sr_result  = sr_opd >> op2_i[4:0];
-    // wire [31:0] sra_result = $signed(op1_i) >>> op2_i[4:0];
-    // wire [31:0] srl_result = op1_i >> op2_i[4:0];
+    wire [31:0] sra_result = $signed(op1_i) >>> op2_i[4:0];
+    wire [31:0] srl_result = op1_i >> op2_i[4:0];
     wire [31:0] sll_result = op1_i << op2_i[4:0];
     reg [31:0] out;
     always @(*) begin
@@ -34,9 +32,9 @@ module ysyx_25050136_ALU
             `ysyx_25050136_ALU_AND:  out = op1_i & op2_i;
             `ysyx_25050136_ALU_SLTU: out = {{31{1'b0}},sltu_res};
             `ysyx_25050136_ALU_SLT:  out = {{31{1'b0}},slt_res};
-            `ysyx_25050136_ALU_SRA:  out = sr_result;
+            `ysyx_25050136_ALU_SRA:  out = sra_result;
             `ysyx_25050136_ALU_SLL:  out = sll_result;
-            `ysyx_25050136_ALU_SRL:  out = sr_result;
+            `ysyx_25050136_ALU_SRL:  out = srl_result;
             `ysyx_25050136_ALU_OPD2: out = op2_i;
             default:                 out = 0;     
         endcase
