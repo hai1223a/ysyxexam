@@ -205,11 +205,23 @@ module ysyx_25050136_ICACHE
 
 `ifdef VERILATOR
     reg [31:0] mem_type;
+    reg in_pulse;
+        always @(posedge clk) begin
+        if (reset) begin
+            in_pulse <= 1'b0;
+        end else begin
+            if (in_fire) begin
+                in_pulse <= 1'b1;
+            end else begin
+                in_pulse <= 1'b0;
+            end
+        end
+    end
     always @(posedge clk) begin
-        if(!reset && in_fire) begin
-            if(in_pc_i >= 32'ha0000000) begin mem_type <= 32'd2; icache_get(2); if(miss) icache_miss(2); end
-            else if(in_pc_i >= 32'h30000000) begin mem_type <= 32'd1; icache_get(1); if(miss) icache_miss(1); end
-            else if(in_pc_i >= 32'h0f000000) begin mem_type <= 32'd0; icache_get(0); if(miss) icache_miss(0); end
+        if(!reset && in_pulse) begin
+            if(ic_addr >= 32'ha0000000) begin mem_type <= 32'd2; icache_get(2); if(miss) icache_miss(2); end
+            else if(ic_addr >= 32'h30000000) begin mem_type <= 32'd1; icache_get(1); if(miss) icache_miss(1); end
+            else if(ic_addr >= 32'h0f000000) begin mem_type <= 32'd0; icache_get(0); if(miss) icache_miss(0); end
         end
         if(!reset && !ready_go) begin
             icache_misscycle(mem_type);
