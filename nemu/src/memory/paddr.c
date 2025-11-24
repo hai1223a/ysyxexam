@@ -26,10 +26,12 @@ static uint8_t psram[CONFIG_SRAM_SIZE] PG_ALIGN = {};
 static uint8_t psdram[CONFIG_SDRAM_SIZE] PG_ALIGN = {};
 #endif
 
-// mtrace的视线
+// mtrace的实现, 增设mtrace功能, 目的是让nemu作为ref时能追踪指定地址的访存情况
 //===============================================
 #ifdef CONFIG_MTRACE
   char mtrace_buf[128];
+  #define traced_addr 0xa10001a4  // 设定要追踪的物理地址
+
 #endif
 //===============================================
 
@@ -93,6 +95,9 @@ word_t paddr_read(paddr_t addr, int len) {
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "%8x  ", addr);
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "read  %d", len);
     *p = '\0';
+    if(traced_addr == addr) {
+      puts(mtrace_buf);
+    }
   #endif
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
   if (in_sram(addr)) return sram_read(addr, len);
@@ -109,6 +114,9 @@ void paddr_write(paddr_t addr, int len, word_t data) {
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "%8x  ", addr);
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "write  %d     %x", len, data);
     *p = '\0';
+    if(traced_addr == addr) {
+      puts(mtrace_buf);
+    }
   #endif
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
   if (in_sram(addr)) { sram_write(addr, len, data); return; }
