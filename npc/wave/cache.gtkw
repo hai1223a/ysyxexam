@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Mon Nov 24 09:55:48 2025
+[*] Mon Nov 24 14:29:39 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Mon Nov 24 09:26:49 2025"
-[dumpfile_size] 2745003
+[dumpfile_mtime] "Mon Nov 24 14:18:16 2025"
+[dumpfile_size] 1802908
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/cache.gtkw"
-[timestart] 335733
+[timestart] 202367
 [size] 2560 1333
 [pos] -27 -24
-*-4.200000 335922 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-2.700000 202417 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
@@ -29,6 +29,8 @@
 @800200
 -cpu
 -if
+@22
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.pc[31:0]
 @1000200
 -if
 @800200
@@ -45,6 +47,8 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_
 -icache
 @800200
 -id
+@22
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.id_pc[31:0]
 @1000200
 -id
 @800200
@@ -55,6 +59,8 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_
 -ex
 @800200
 -mem
+@23
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_MEM.req_addr_o[31:0]
 @1000200
 -mem
 @800200
@@ -65,17 +71,9 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_
 @200
 -
 @28
-TOP.ysyxSoCFull.asic.axi4delay_delayer.read_whole
 TOP.ysyxSoCFull.asic.axi4delay_delayer.in_arvalid
 @22
 TOP.ysyxSoCFull.asic.axi4delay_delayer.in_arid[3:0]
-@28
-TOP.ysyxSoCFull.asic.axi4delay_delayer.real_in_arvalid
-@22
-TOP.ysyxSoCFull.asic.axi4delay_delayer.r_count[0][15:0]
-TOP.ysyxSoCFull.asic.axi4delay_delayer.r_count[1][15:0]
-TOP.ysyxSoCFull.asic.axi4delay_delayer.r_count[2][15:0]
-TOP.ysyxSoCFull.asic.axi4delay_delayer.r_count[3][15:0]
 @28
 TOP.ysyxSoCFull.asic.axi4delay_delayer.in_rvalid
 @22
@@ -88,16 +86,5 @@ TOP.ysyxSoCFull.asic.axi4delay_delayer.out_rdata[31:0]
 TOP.ysyxSoCFull.asic.axi4delay_delayer.out_rvalid
 TOP.ysyxSoCFull.asic.axi4delay_delayer.out_rready
 TOP.ysyxSoCFull.asic.axi4delay_delayer.out_rlast
-TOP.ysyxSoCFull.asic.axi4delay_delayer.rdata_fifo.rptr[1:0]
-TOP.ysyxSoCFull.asic.axi4delay_delayer.rdata_fifo.wptr[1:0]
-TOP.ysyxSoCFull.asic.axi4delay_delayer.rdata_fifo.count[2:0]
-TOP.ysyxSoCFull.asic.axi4delay_delayer.rdata_fifo.out_valid
-@29
-TOP.ysyxSoCFull.asic.axi4delay_delayer.rdata_fifo.out_valid
 [pattern_trace] 1
 [pattern_trace] 0
-!100000@@
-?"00068313
-@23
-TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ICACHE.ret_data_i[31:0]
-!!
