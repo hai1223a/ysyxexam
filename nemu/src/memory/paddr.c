@@ -30,7 +30,7 @@ static uint8_t psdram[CONFIG_SDRAM_SIZE] PG_ALIGN = {};
 //===============================================
 #ifdef CONFIG_MTRACE
   char mtrace_buf[128];
-  #define traced_addr 0xa10001a4  // 设定要追踪的物理地址
+  #define traced_addr 0x0f001f58  // 设定要追踪的物理地址
 
 #endif
 //===============================================
