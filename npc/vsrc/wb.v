@@ -30,15 +30,18 @@ module ysyx_25050136_WB
 `ifdef VERILATOR
     reg [31:0] wb_dbg_pc    ;
     reg [31:0] wb_dbg_inst  ;
+    reg [63:0] inst_count;
     always @(posedge clk) begin
         if(reset) begin
             wb_dbg_pc <= 0;
             wb_dbg_inst <= 0;
+            inst_count <= 0;
         end else begin
             if(in_fire) begin
                 if(in_dbg_is_device_i) find_diff_skip();
                 wb_dbg_pc <= in_dbg_pc_i;
                 wb_dbg_inst <= in_dbg_inst_i;
+                inst_count <= inst_count + 64'd1;
             end
         end
     end
