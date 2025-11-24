@@ -203,4 +203,23 @@ module ysyx_25050136_ICACHE
     assign req_valid_o      = (state == MISS);
     assign req_addr_o     = ic_addr;
 
+`ifdef VERILATOR
+    reg [31:0] mem_type;
+    always @(posedge clk) begin
+        if(reset) begin
+
+        end else begin
+            if(state == MISS) begin
+                icache_misscycle(mem_type);
+            end 
+            if(flush) begin
+
+            end else if(in_fire) begin
+                if(ic_addr >= 32'ha0000000) begin mem_type <= 32'd2; icache_get(2); if(miss) icache_miss(2); end
+                else if(ic_addr >= 32'h30000000) begin mem_type <= 32'd1; icache_get(1); if(miss) icache_miss(1); end
+                else if(ic_addr >= 32'h0f000000) begin mem_type <= 32'd0; icache_get(0); if(miss) icache_miss(0); end
+            end
+        end
+    end
+`endif
 endmodule
