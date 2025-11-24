@@ -116,7 +116,10 @@ module ysyx_25050136_EX
     // === CSRU ===
     wire [31:0] csru_wdata;
     wire [31:0] csru_out;
-    
+    // === 调试(这些信号仅用作实验, 不可作为设计功能的一部分) ===
+    // reg [31:0] alu_reg;
+    // always @(posedge clk) begin
+    // end
     // ==== 逻辑实现 ====
     always @(posedge clk) begin
         if(reset) begin

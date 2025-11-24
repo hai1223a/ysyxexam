@@ -160,7 +160,7 @@ module ysyx_25050136_ICACHE
                         end
                     end
                 end else if (state == MISS) begin
-                    cache_valid[replace_way][addr_index] <= 1'b0;
+                    cache_valid[miss_way][addr_index] <= 1'b0;
                 end
                 state <= IDLE;
             end else begin
