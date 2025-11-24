@@ -261,7 +261,7 @@ module ysyx_25050136_ID
     assign branch_flush_o = !(type_branch | type_jal | type_jalr | inst_ecall | inst_mret) && id_btb_hit && id_taken && in_pulse;
     assign branch_npc_o = out_npc_o;
     assign out_jalr_o = type_jalr;
-    assign out_mispredict_o = (type_branch | type_jal | type_jalr | inst_ecall | inst_mret) & (out_jump_o ^ id_taken); // 预测错误
+    assign out_mispredict_o = (type_branch | type_jal | type_jalr | inst_ecall | inst_mret) & (out_jump_o ^ (id_taken & id_btb_hit)); // 预测错误
     assign out_prepc_o = id_prepc;
     assign out_btb_hit_o = id_btb_hit;
     // === fence.i ===

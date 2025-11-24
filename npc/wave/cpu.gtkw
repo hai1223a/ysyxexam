@@ -1,15 +1,15 @@
 [*]
 [*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
-[*] Mon Nov 24 04:35:59 2025
+[*] Mon Nov 24 06:37:27 2025
 [*]
 [dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
-[dumpfile_mtime] "Mon Nov 24 04:17:24 2025"
-[dumpfile_size] 212708191
+[dumpfile_mtime] "Mon Nov 24 06:23:26 2025"
+[dumpfile_size] 2238857
 [savefile] "/home/yunhai/ysyx-workbench/npc/wave/cpu.gtkw"
-[timestart] 5222844
+[timestart] 250010
 [size] 2560 1333
 [pos] -27 -24
-*-4.139736 5223300 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+*-2.639736 249990 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
 [treeopen] TOP.
 [treeopen] TOP.ysyxSoCFull.
 [treeopen] TOP.ysyxSoCFull.asic.
@@ -23,7 +23,12 @@
 [sst_vpaned_height] 414
 @800200
 -if
+@28
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.pht_pred_taken
+@29
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.out_btb_hit_o
 @22
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.btb_pred_npc[31:0]
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.btb_pred_npc[31:0]
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.next_pc[31:0]
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.out_pc_o[31:0]
@@ -48,7 +53,7 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_
 -icache
 @200
 -
-@c00200
+@800200
 -id
 @22
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.id_pc[31:0]
@@ -83,11 +88,15 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_rdata2_i[31:0]
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_rdata1_o[31:0]
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_rdata2_o[31:0]
+@28
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.out_jump_o
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.id_taken
+@22
+TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_ID.in_prepc_i[31:0]
 @1000200
 -related
-@1401200
 -id
-@c00200
+@800200
 -ex
 @22
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.ex_pc[31:0]
@@ -109,7 +118,7 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.ex_alu_op2_use_imm
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.branch_flush_o
 TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_EX.ex_mispredict
-@1401200
+@1000200
 -ex
 @c00200
 -mem
@@ -151,13 +160,10 @@ TOP.ysyxSoCFull.asic.cpu.cpu.u_ysyx_25050136_NPC.mem_rid_i[3:0]
 -
 @28
 TOP.ysyxSoCFull.asic.axi4delay_delayer.ir_fire
-@29
 TOP.ysyxSoCFull.asic.axi4delay_delayer.in_rlast
-@28
 TOP.ysyxSoCFull.asic.axi4delay_delayer.read_whole
 TOP.ysyxSoCFull.asic.axi4delay_delayer.real_in_arvalid
 @22
-TOP.ysyxSoCFull.asic.axi4delay_delayer.rcount_index_minus1[3:0]
 TOP.ysyxSoCFull.asic.axi4delay_delayer.r_count[0][15:0]
 TOP.ysyxSoCFull.asic.axi4delay_delayer.r_count[1][15:0]
 TOP.ysyxSoCFull.asic.axi4delay_delayer.r_count[2][15:0]
