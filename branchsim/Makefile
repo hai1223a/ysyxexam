@@ -11,7 +11,7 @@ INCLUDES = $(addprefix -I, $(INC_PATH))
 OBJS := $(CXXSRC:%.cpp=$(OBJ_DIR)/%.o)
 CXXFLAGS := -O2 -MMD -Wall -Werror -lm $(INCLUDES)
 
-override ARGS ?= source/test.bin.bz2 4 4 6 0 0 1
+override ARGS ?= source/test.bin.bz2 7 4 6 0 0 1
 
 $(OBJ_DIR)/%.o: %.cpp
 	@echo + CXX $<
