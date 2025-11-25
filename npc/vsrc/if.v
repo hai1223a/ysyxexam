@@ -9,7 +9,7 @@ module ysyx_25050136_IF
         input         pht_taken_i   ,
         input  [31:0] btb_pc_i      ,
         input         btb_update_i  ,
-        input  [31:0] btb_target_i  ,
+        input  [31:0] btb_target_i  , // 为了时序，暂时未使用，btb更新值就是branch_npc_i
         input         out_ready_i   ,
         output [31:0] out_pc_o      ,
         output [31:0] out_prepc_o   ,
