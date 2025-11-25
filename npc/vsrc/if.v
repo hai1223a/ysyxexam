@@ -27,20 +27,17 @@ module ysyx_25050136_IF
 `endif
 
     localparam PHT_INDEX = 4;
-    localparam GHR_WIDTH = 4;
-    localparam BTB_INDEX = 3;
+    localparam BTB_INDEX = 4;
     localparam BTB_TAG   = 6;
-    localparam RAS_WIDTH = 2;
     // ==== 信号定义 ====
     // 时序逻辑
     reg [31:0] pc;
     reg idle;
-    reg [GHR_WIDTH-1:0] ghr; // 全局历史寄存器
     // 组合逻辑
     wire ready_go = 1;
     wire out_fire = out_ready_i & out_valid_o;
-    wire [PHT_INDEX-1:0] pht_pc_index_w = pht_pc_i[2+:PHT_INDEX] ^ ghr[0+:PHT_INDEX];
-    wire [PHT_INDEX-1:0] pht_pc_index_r = pc[2+:PHT_INDEX] ^ ghr[0+:PHT_INDEX];
+    wire [PHT_INDEX-1:0] pht_pc_index_w = pht_pc_i[2+:PHT_INDEX];
+    wire [PHT_INDEX-1:0] pht_pc_index_r = pc[2+:PHT_INDEX];
     wire [BTB_INDEX-1:0] btb_pc_index_w = btb_pc_i[2+:BTB_INDEX] ^ btb_pc_i[2+BTB_INDEX+:BTB_INDEX];
     wire [BTB_TAG-1:0]   btb_pc_tag_w   = btb_pc_i[2+BTB_INDEX+:BTB_TAG] ^ btb_pc_i[9+BTB_INDEX+:BTB_TAG];
     wire [BTB_INDEX-1:0] btb_pc_index_r = pc[2+:BTB_INDEX] ^ pc[2+BTB_INDEX+:BTB_INDEX];
@@ -68,13 +65,6 @@ module ysyx_25050136_IF
             end else if(out_fire) begin
                 pc <= next_pc;
             end
-        end
-    end
-    always @(posedge clk) begin
-        if(reset) begin
-            ghr <= 0;
-        end else if(pht_update_i) begin
-            ghr <= {ghr[GHR_WIDTH-2:0], pht_taken_i};
         end
     end
 

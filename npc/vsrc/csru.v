@@ -35,7 +35,7 @@ module ysyx_25050136_CSRU
                 csr_waddr1 = 12'h341;
                 csr_wdata2 = 32'd11;
                 csr_waddr2 = 12'h342;
-                csr_wen2 = 1;
+                csr_wen2   = 1;
             end
             default:;
         endcase
@@ -74,7 +74,6 @@ module ysyx_25050136_CSRU
             end
 
             // --- 处理写端口 2 ---
-            // 如果端口2也使能，它的写操作会覆盖端口1对同一个寄存器的写操作
             if (csr_wen2) begin
                 case (csr_waddr2)
                     MEPC:    mepc    <= csr_wdata2;
@@ -88,9 +87,7 @@ module ysyx_25050136_CSRU
     end
 
     // --- 读寄存器逻辑 (组合逻辑) ---
-    // 这个逻辑保持不变，它是正确的
     always @(*) begin
-        // 默认输出为0，当读使能为低或地址未实现时，输出0
         csru_rdata_o = 32'b0;
         if (csr_ren) begin
             case (csr_raddr)
