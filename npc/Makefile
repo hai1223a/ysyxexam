@@ -175,7 +175,7 @@ clean:
 	rm -f $(WAVE_DIR)/*.fst
 
 perf_commit:
-	$(call git_commit, "性能测试提交-全流水线CPU-详见sim性能测试文件") # DO NOT REMOVE THIS LINE!!!
+	$(call git_commit, "性能测试提交-为CI测试准备的CPU版本-详见sim性能测试文件") # DO NOT REMOVE THIS LINE!!!
 
 perf: $(SOC_DEPEMD)
 	$(call git_commit, "make perf") # DO NOT REMOVE THIS LINE!!!
