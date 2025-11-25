@@ -28,7 +28,7 @@ module ysyx_25050136_IF
 
     localparam PHT_INDEX = 4;
     localparam BTB_INDEX = 4;
-    localparam BTB_TAG   = 7;
+    localparam BTB_TAG   = 10;
     // ==== 信号定义 ====
     // 时序逻辑
     reg [31:0] pc;
