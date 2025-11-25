@@ -167,7 +167,7 @@ ysyx_25050136_IF u_ysyx_25050136_IF(
 ysyx_25050136_ICACHE 
 #(
     .OFFSET_WIDTH 	(4             ),
-    .NUM_WAY      	(2             ),
+    .NUM_WAY      	(1             ),
     .INDEX_WIDTH  	(2             )
 )u_ysyx_25050136_ICACHE(  
     .clk            	(clk               ),
