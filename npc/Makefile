@@ -78,9 +78,9 @@ endif
 # 默认仿真参数
 override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 				 -l $(NPC_HOME)/build/log/log.txt \
-				 -i $(NPC_HOME)/sim/microbench-test.bin
+				 -i $(NPC_HOME)/sim/microbench-train.bin
 # 				 -i $(NPC_HOME)/sim/fib.bin 
-# 				 -i $(NPC_HOME)/sim/microbench-riscv32e-ysyxsoc.bin
+# 				 -i $(NPC_HOME)/sim/microbench-test.bin
 
 #================第六步: SOC 专用配置 ====================
 # SoC模式源文件
