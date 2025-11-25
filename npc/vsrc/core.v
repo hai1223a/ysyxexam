@@ -168,7 +168,7 @@ ysyx_25050136_ICACHE
 #(
     .OFFSET_WIDTH 	(4             ),
     .NUM_WAY      	(2             ),
-    .INDEX_WIDTH  	(1             )
+    .INDEX_WIDTH  	(2             )
 )u_ysyx_25050136_ICACHE(  
     .clk            	(clk               ),
     .reset          	(reset             ),
