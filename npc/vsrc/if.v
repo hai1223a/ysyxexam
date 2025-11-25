@@ -26,7 +26,7 @@ module ysyx_25050136_IF
     localparam RESET_PC = 32'h30000000;  // yosys 综合复位地址
 `endif
 
-    localparam PHT_INDEX = 4;
+    localparam PHT_INDEX = 5;
     localparam BTB_INDEX = 4;
     localparam BTB_TAG   = 5;
     // ==== 信号定义 ====
