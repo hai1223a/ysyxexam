@@ -95,7 +95,6 @@ $(SRC_AUTO_BIND): $(NXDC_FILES)
 ifdef CONFIG_TARGET_NVBOARD
 -include $(NVBOARD_HOME)/scripts/nvboard.mk
 SOC_CFLAGS += $(addprefix -I, $(INC_PATH))
-SOC_LDFLAGS += $(LDFLAGS)
 SOC_CSRC += $(SRC_AUTO_BIND)
 SOC_VERFLAGS += --noassert -O3 $(NVBOARD_ARCHIVE)
 SOC_DEPEMD += $(SRC_AUTO_BIND) $(NVBOARD_ARCHIVE)
@@ -104,17 +103,17 @@ endif
 #================第七步: SOC 专用配置 ====================
 # SoC模式源文件
 SOC_VSRC = $(NPC_VSRC) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v 
-SOC_CSRC := $(abspath $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \)))
+SOC_CSRC += $(abspath $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \)))
 
 # SoC的配置
-SOC_TOP := ysyxSoCFull 
-SOC_INC := $(addprefix -I, ../ysyxSoC/perip/uart16550/rtl ../ysyxSoC/perip/spi/rtl)
-SOC_CPATHS := $(abspath ../include ../include/generated)
-SOC_CFLAGS := $(CFLAGS) $(addprefix -I, $(SOC_CPATHS))
-SOC_LDFLAGS := $(LDFLAGS)
+SOC_TOP = ysyxSoCFull 
+SOC_INC = $(addprefix -I, ../ysyxSoC/perip/uart16550/rtl ../ysyxSoC/perip/spi/rtl)
+SOC_CPATHS = $(abspath ../include ../include/generated)
+SOC_CFLAGS += $(CFLAGS) $(addprefix -I, $(SOC_CPATHS))
+SOC_LDFLAGS += $(LDFLAGS)
 
 # SoC Verilator宏定义
-SOC_VERDEFINE := +TOP_NAME="V$(SOC_TOP)"
+SOC_VERDEFINE = +TOP_NAME="V$(SOC_TOP)"
 
 # SoC Verilator编译选项
 SOC_VERFLAGS += $(VERFLAGS) --top-module $(SOC_TOP) $(SOC_VSRC) $(SOC_CSRC) \
@@ -122,23 +121,20 @@ SOC_VERFLAGS += $(VERFLAGS) --top-module $(SOC_TOP) $(SOC_VSRC) $(SOC_CSRC) \
 
 # SoC依赖文件
 SOC_DEPEMD += $(LIBCAPSTONE) $(NPC_VSRC)
-SOC_BIN := $(OBJ_DIR)/V$(SOC_TOP)
-
-
-
+SOC_BIN = $(OBJ_DIR)/V$(SOC_TOP)
 #================第八步: Iverilog 配置 ====================
 IMG = $(NPC_HOME)/sim/iverilog_test.bin
 NETLIST = $(NPC_HOME)/../yosys-sta/result/ysyx_25050136-1500MHz/ysyx_25050136.v
 CELLS = $(NPC_HOME)/../yosys-sta/pdk/nangate45/sim/cells.v
 IMG_HEX = $(IVER_DIR)/$(shell basename $(IMG) .bin).hex
 $(info $(IMG_HEX))
+
 IVERILOG_BIN := iverilog
+VVP_BIN := vvp
 IVER_TOP = tb_fullsoc
 IVER_VSRC = vsrc/idle/fullsoc.v vsrc/idle/sram.v vsrc/idle/tb_fullsoc.v vsrc/idle/uart.v vsrc/idle/xbar.v
-# IVER_VSRC += build/ysyx_25050136.v
 IVER_OUT = $(IVER_DIR)/iverilog_sim.out
 IVERFLAGS = -o $(IVER_OUT) -g2012 -s $(IVER_TOP) -Ptb_fullsoc.PROG_FILE='"$(IMG_HEX)"' 
-VVP_BIN := vvp
 VVPFLAGS = -n $(IVER_OUT) -lxt2
 #================第步: 构建目标规则 ====================
 -include $(NPC_HOME)/scripts/config.mk
