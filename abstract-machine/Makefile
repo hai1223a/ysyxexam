@@ -114,7 +114,7 @@ $(DST_DIR)/%.o: %.cpp
 	@$(CXX) -std=c++17 $(CXXFLAGS) -c -o $@ $(realpath $<)
 
 ### Rule (compile): a single `.S` -> `.o` (gcc, which preprocesses and calls as)
-$(DST_DIR)/%.o: %.Sz
+$(DST_DIR)/%.o: %.S
 	@mkdir -p $(dir $@) && echo + AS $<
 	@$(AS) $(ASFLAGS) -c -o $@ $(realpath $<)
 
