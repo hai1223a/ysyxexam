@@ -23,7 +23,7 @@ module ysyx_25050136_IF
 `elsif __ICARUS__
     localparam RESET_PC = 32'h80000000;  // Icarus 仿真复位地址
 `else
-    localparam RESET_PC = 32'h30000000;  // yosys 综合复位地址
+    localparam RESET_PC = 32'h80000000;  // yosys 综合复位地址
 `endif
 
     localparam PHT_INDEX = 4;
@@ -32,9 +32,6 @@ module ysyx_25050136_IF
     // ==== 信号定义 ====
     // 时序逻辑
     reg [31:0] pc;
-    reg idle;
-    // 组合逻辑
-    wire ready_go = 1;
     wire out_fire = out_ready_i & out_valid_o;
     wire [PHT_INDEX-1:0] pht_pc_index_w = pht_pc_i[2+:PHT_INDEX];
     wire [PHT_INDEX-1:0] pht_pc_index_r = pc[2+:PHT_INDEX];
@@ -56,10 +53,8 @@ module ysyx_25050136_IF
     // ==== 逻辑实现 ====
     always @(posedge clk) begin
         if(reset) begin
-            idle <= 1;
             pc <= RESET_PC;
         end else begin
-            idle <= 0;
             if(flush) begin
                 pc <= branch_npc_i;
             end else if(out_fire) begin
@@ -71,7 +66,7 @@ module ysyx_25050136_IF
     assign out_pc_o = pc;
     assign out_prepc_o = next_pc; 
     assign out_taken_o = pht_pred_taken;  
-    assign out_valid_o = !(idle || flush) && ready_go;
+    assign out_valid_o = !flush;
 
     ysyx_25050136_PHT 
     #(

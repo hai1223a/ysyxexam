@@ -140,6 +140,7 @@ module ysyx_25050136_DCACHE
     always @(posedge clk) begin
         if (reset) begin
             state_read   <= READ_IDLE;
+            cache_data_temp <= 0;
             m_araddr_r   <= 0;
             m_arid_r     <= 0;
             m_arlen_r    <= 0;
@@ -153,7 +154,7 @@ module ysyx_25050136_DCACHE
                     if ((state == IDLE) && ren) begin
                         state_read  <= READ_ADDR;
                         m_araddr_r  <= req_addr_i;
-                        m_arid_r    <= 4'b0001;
+                        m_arid_r    <= 4'b0100;
                         m_arlen_r   <= 0;
                         m_arsize_r  <= req_size_i;
                         m_arburst_r <= 0;
@@ -219,7 +220,7 @@ module ysyx_25050136_DCACHE
                     if((state == IDLE) && wen) begin
                         state_write <= WRITE_DATA_ADDR;
                         m_awaddr_r  <= req_addr_i;
-                        m_awid_r    <= 4'b0001;
+                        m_awid_r    <= 0;
                         m_awlen_r   <= 0;
                         m_awsize_r  <= req_size_i;
                         m_awburst_r <= 0;

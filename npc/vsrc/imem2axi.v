@@ -46,7 +46,7 @@ module ysyx_25050136_IMEM2AXI
     wire ar_fire, r_fire;
     // 根据存储介质，选择读取方式
     reg [1:0] cnt;
-    wire size = (req_addr_i >= 32'ha000_0000) && (req_addr_i < 32'ha400_0000);
+    wire is_sdram_region = (req_addr_i[31:28] == 4'hA); // 0xA000_0000 ~ 0xAFFF_FFFF (越界问题由设备端判断)
     wire [31:0] align_addr = {req_addr_i[31:OFFSET_WIDTH], {OFFSET_WIDTH{1'b0}}};
     wire [31:0] real_addr = align_addr + {28'd0, cnt, 2'd0};
     // ==================== axi信号定义 ================================
@@ -71,11 +71,10 @@ module ysyx_25050136_IMEM2AXI
                         cnt <= 0;
                     end else if(req_valid_i) begin
                         state_read <= READ_ADDR;
-                        m_arid_r    <= 4'b1001;
+                        m_arid_r    <= 4'b1000;
                         m_arsize_r  <= 3'b010;
-                        m_arburst_r <= 2'b00;
                         m_araddr_r  <= real_addr;
-                        if(size) begin // cache line
+                        if(is_sdram_region) begin // cache line
                             m_arlen_r   <= BURST_NUM;      
                             m_arburst_r <= 2'b01;          
                         end else begin // word
@@ -89,7 +88,7 @@ module ysyx_25050136_IMEM2AXI
                         is_flush <= 1;
                     end
                     if (ar_fire) begin
-                        if(!size) begin
+                        if(!is_sdram_region) begin
                             cnt <= cnt + 1;
                         end
                         m_araddr_r <= 0;

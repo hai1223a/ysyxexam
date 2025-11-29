@@ -17,7 +17,7 @@ module ysyx_25050136_RegisterFile
      );
     reg [31:0] gpr [2**ADDR_WIDTH-1:0];
     always @(posedge clk) begin
-        if(wen_i & (|waddr_i))
+        if(wen_i && |waddr_i)
             gpr[waddr_i] <= wdata_i;
     end
 

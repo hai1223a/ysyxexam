@@ -108,155 +108,88 @@ module ysyx_25050136(
         end
     end
 `endif
-    localparam TOP_MASTER_NUM   = 2 ;
-
+    localparam TOP_MASTER_NUM = 2 ; // 顶层总线主设备数量
+    // 顶层仲裁器只对读信号进行二选一仲裁，写信号直接连接(也是被后仿逼得)
     // 仲裁器信号
-    wire [TOP_MASTER_NUM-1:0]                s_awvalid_i ;
-    wire [TOP_MASTER_NUM-1:0]                s_awready_o ;
-    wire [TOP_MASTER_NUM*32-1:0]             s_awaddr_i  ;
-    wire [TOP_MASTER_NUM*4-1:0]              s_awid_i    ;
-    wire [TOP_MASTER_NUM*8-1:0]              s_awlen_i   ;
-    wire [TOP_MASTER_NUM*3-1:0]              s_awsize_i  ;
-    wire [TOP_MASTER_NUM*2-1:0]              s_awburst_i ;
-    wire [TOP_MASTER_NUM-1:0]                s_wvalid_i  ;
-    wire [TOP_MASTER_NUM-1:0]                s_wready_o  ;
-    wire [TOP_MASTER_NUM*32-1:0]             s_wdata_i   ;
-    wire [TOP_MASTER_NUM*4-1:0]              s_wstrb_i   ;
-    wire [TOP_MASTER_NUM-1:0]                s_wlast_i   ;
-    wire [TOP_MASTER_NUM-1:0]                s_bvalid_o  ;
-    wire [TOP_MASTER_NUM-1:0]                s_bready_i  ;
-    wire [TOP_MASTER_NUM*2-1:0]              s_bresp_o   ;
-    wire [TOP_MASTER_NUM*4-1:0]              s_bid_o     ;
-    wire [TOP_MASTER_NUM-1:0]                s_arvalid_i ;
-    wire [TOP_MASTER_NUM-1:0]                s_arready_o ;
-    wire [TOP_MASTER_NUM*32-1:0]             s_araddr_i  ;
-    wire [TOP_MASTER_NUM*4-1:0]              s_arid_i    ;
-    wire [TOP_MASTER_NUM*8-1:0]              s_arlen_i   ;
-    wire [TOP_MASTER_NUM*3-1:0]              s_arsize_i  ;
-    wire [TOP_MASTER_NUM*2-1:0]              s_arburst_i ;
-    wire [TOP_MASTER_NUM-1:0]                s_rvalid_o  ;
-    wire [TOP_MASTER_NUM-1:0]                s_rready_i  ;
-    wire [TOP_MASTER_NUM*32-1:0]             s_rdata_o   ;
-    wire [TOP_MASTER_NUM*2-1:0]              s_rresp_o   ;
-    wire [TOP_MASTER_NUM-1:0]                s_rlast_o   ;
-    wire [TOP_MASTER_NUM*4-1:0]              s_rid_o     ;
-
+    wire [TOP_MASTER_NUM-1:0]               s_arvalid    ;
+    wire [TOP_MASTER_NUM-1:0]               s_arready    ;
+    wire [TOP_MASTER_NUM*32-1:0]            s_araddr     ;
+    wire [TOP_MASTER_NUM*4-1:0]             s_arid       ;
+    wire [TOP_MASTER_NUM*8-1:0]             s_arlen      ;
+    wire [TOP_MASTER_NUM*3-1:0]             s_arsize     ;
+    wire [TOP_MASTER_NUM*2-1:0]             s_arburst    ;
+    wire [TOP_MASTER_NUM-1:0]               s_rvalid     ;
+    wire [TOP_MASTER_NUM-1:0]               s_rready     ;
+    wire [TOP_MASTER_NUM*32-1:0]            s_rdata      ;
+    wire [TOP_MASTER_NUM*2-1:0]             s_rresp      ;
+    wire [TOP_MASTER_NUM-1:0]               s_rlast      ;
+    wire [TOP_MASTER_NUM*4-1:0]             s_rid        ;
     // 主设备信号        
-    wire                                  inst_arvalid_o ;
-    wire                                  inst_arready_i ;
-    wire [31:0]                           inst_araddr_o  ;
-    wire [3:0]                            inst_arid_o    ;
-    wire [7:0]                            inst_arlen_o   ;
-    wire [2:0]                            inst_arsize_o  ;
-    wire [1:0]                            inst_arburst_o ;
-    wire                                  inst_rvalid_i  ;
-    wire                                  inst_rready_o  ;
-    wire [31:0]                           inst_rdata_i   ;
-    wire [1:0]                            inst_rresp_i   ;
-    wire                                  inst_rlast_i   ;
-    wire [3:0]                            inst_rid_i     ;
-    wire                                  inst_awvalid_o ;
-    wire                                  inst_awready_i ;
-    wire [31:0]                           inst_awaddr_o  ;
-    wire [3:0]                            inst_awid_o    ;
-    wire [7:0]                            inst_awlen_o   ;
-    wire [2:0]                            inst_awsize_o  ;
-    wire [1:0]                            inst_awburst_o ;
-    wire                                  inst_wvalid_o  ;
-    wire                                  inst_wready_i  ;
-    wire [31:0]                           inst_wdata_o   ;
-    wire [3:0]                            inst_wstrb_o   ;
-    wire                                  inst_wlast_o   ;
-    wire                                  inst_bvalid_i  ;
-    wire                                  inst_bready_o  ;
-    wire [1:0]                            inst_bresp_i   ;
-    wire [3:0]                            inst_bid_i     ;
-    wire                                  mem_awvalid_o  ;
-    wire                                  mem_awready_i  ;
-    wire [31:0]                           mem_awaddr_o   ;
-    wire [3:0]                            mem_awid_o     ;
-    wire [7:0]                            mem_awlen_o    ;
-    wire [2:0]                            mem_awsize_o   ;
-    wire [1:0]                            mem_awburst_o  ;
-    wire                                  mem_wvalid_o   ;
-    wire                                  mem_wready_i   ;
-    wire [31:0]                           mem_wdata_o    ;
-    wire [3:0]                            mem_wstrb_o    ;
-    wire                                  mem_wlast_o    ;
-    wire                                  mem_bvalid_i   ;
-    wire                                  mem_bready_o   ;
-    wire [1:0]                            mem_bresp_i    ;
-    wire [3:0]                            mem_bid_i      ;
-    wire                                  mem_arvalid_o  ;
-    wire                                  mem_arready_i  ;
-    wire [31:0]                           mem_araddr_o   ;
-    wire [3:0]                            mem_arid_o     ;
-    wire [7:0]                            mem_arlen_o    ;
-    wire [2:0]                            mem_arsize_o   ;
-    wire [1:0]                            mem_arburst_o  ;
-    wire                                  mem_rvalid_i   ;
-    wire                                  mem_rready_o   ;
-    wire [31:0]                           mem_rdata_i    ;
-    wire [1:0]                            mem_rresp_i    ;
-    wire                                  mem_rlast_i    ;
-    wire [3:0]                            mem_rid_i      ;
-
-    // 指令端口默认连接
-    assign inst_awvalid_o   = 0 ;
-    assign inst_awaddr_o    = 0 ;
-    assign inst_awid_o      = 0 ;
-    assign inst_awlen_o     = 0 ;
-    assign inst_awsize_o    = 0 ;
-    assign inst_awburst_o   = 0 ;
-    assign inst_wvalid_o    = 0 ;
-    assign inst_wdata_o     = 0 ;
-    assign inst_wstrb_o     = 0 ;
-    assign inst_wlast_o     = 0 ;
-    assign inst_bready_o    = 0 ;
-
-    // 主设备到仲裁器信号连接
-    assign s_awvalid_i   = {inst_awvalid_o, mem_awvalid_o} ;
-    assign s_awaddr_i    = {inst_awaddr_o,  mem_awaddr_o}  ;
-    assign s_awid_i      = {inst_awid_o,    mem_awid_o}    ;
-    assign s_awlen_i     = {inst_awlen_o,   mem_awlen_o}   ;
-    assign s_awsize_i    = {inst_awsize_o,  mem_awsize_o}  ;
-    assign s_awburst_i   = {inst_awburst_o, mem_awburst_o} ;
-    assign s_wvalid_i    = {inst_wvalid_o,  mem_wvalid_o}  ;
-    assign s_wdata_i     = {inst_wdata_o,   mem_wdata_o}   ;
-    assign s_wstrb_i     = {inst_wstrb_o,   mem_wstrb_o}   ;
-    assign s_wlast_i     = {inst_wlast_o,   mem_wlast_o}   ;
-    assign s_bready_i    = {inst_bready_o,  mem_bready_o}  ;
-    assign s_arvalid_i   = {inst_arvalid_o, mem_arvalid_o} ;
-    assign s_araddr_i    = {inst_araddr_o,  mem_araddr_o}  ;
-    assign s_arid_i      = {inst_arid_o,    mem_arid_o}    ;
-    assign s_arlen_i     = {inst_arlen_o,   mem_arlen_o}   ;
-    assign s_arsize_i    = {inst_arsize_o,  mem_arsize_o}  ;
-    assign s_arburst_i   = {inst_arburst_o, mem_arburst_o} ;
-    assign s_rready_i    = {inst_rready_o,  mem_rready_o}  ;
+    wire                                    inst_arvalid ;
+    wire                                    inst_arready ;
+    wire [31:0]                             inst_araddr  ;
+    wire [3:0]                              inst_arid    ;
+    wire [7:0]                              inst_arlen   ;
+    wire [2:0]                              inst_arsize  ;
+    wire [1:0]                              inst_arburst ;
+    wire                                    inst_rvalid  ;
+    wire                                    inst_rready  ;
+    wire [31:0]                             inst_rdata   ;
+    wire [1:0]                              inst_rresp   ;
+    wire                                    inst_rlast   ;
+    wire [3:0]                              inst_rid     ;
+    wire                                    mem_awvalid  ;
+    wire                                    mem_awready  ;
+    wire [31:0]                             mem_awaddr   ;
+    wire [3:0]                              mem_awid     ;
+    wire [7:0]                              mem_awlen    ;
+    wire [2:0]                              mem_awsize   ;
+    wire [1:0]                              mem_awburst  ;
+    wire                                    mem_wvalid   ;
+    wire                                    mem_wready   ;
+    wire [31:0]                             mem_wdata    ;
+    wire [3:0]                              mem_wstrb    ;
+    wire                                    mem_wlast    ;
+    wire                                    mem_bvalid   ;
+    wire                                    mem_bready   ;
+    wire [1:0]                              mem_bresp    ;
+    wire [3:0]                              mem_bid      ;
+    wire                                    mem_arvalid  ;
+    wire                                    mem_arready  ;
+    wire [31:0]                             mem_araddr   ;
+    wire [3:0]                              mem_arid     ;
+    wire [7:0]                              mem_arlen    ;
+    wire [2:0]                              mem_arsize   ;
+    wire [1:0]                              mem_arburst  ;
+    wire                                    mem_rvalid   ;
+    wire                                    mem_rready   ;
+    wire [31:0]                             mem_rdata    ;
+    wire [1:0]                              mem_rresp    ;
+    wire                                    mem_rlast    ;
+    wire [3:0]                              mem_rid      ;
+   
+    // 主设备到仲裁器信号连接 -- 仅读事务仲裁
+    assign s_arvalid   = {inst_arvalid, mem_arvalid} ;
+    assign s_araddr    = {inst_araddr,  mem_araddr}  ;
+    assign s_arid      = {inst_arid,    mem_arid}    ;
+    assign s_arlen     = {inst_arlen,   mem_arlen}   ;
+    assign s_arsize    = {inst_arsize,  mem_arsize}  ;
+    assign s_arburst   = {inst_arburst, mem_arburst} ;
+    assign s_rready    = {inst_rready,  mem_rready}  ;
     
     // 仲裁器到主设备信号连接
-    assign mem_awready_i  = s_awready_o[0]  ;
-    assign mem_wready_i   = s_wready_o[0]   ;
-    assign mem_bvalid_i   = s_bvalid_o[0]   ;
-    assign mem_bresp_i    = s_bresp_o[1:0]  ;
-    assign mem_bid_i      = s_bid_o[3:0]    ;
-    assign mem_arready_i  = s_arready_o[0]  ;
-    assign mem_rvalid_i   = s_rvalid_o[0]   ;
-    assign mem_rdata_i    = s_rdata_o[31:0] ;
-    assign mem_rresp_i    = s_rresp_o[1:0]  ;
-    assign mem_rlast_i    = s_rlast_o[0]    ;
-    assign mem_rid_i      = s_rid_o[3:0]    ;
-    assign inst_awready_i = s_awready_o[1]  ;
-    assign inst_wready_i  = s_wready_o[1]   ;
-    assign inst_bvalid_i  = s_bvalid_o[1]   ;
-    assign inst_bresp_i   = s_bresp_o[3:2]  ;
-    assign inst_bid_i     = s_bid_o[7:4]    ;
-    assign inst_arready_i = s_arready_o[1]  ;
-    assign inst_rvalid_i  = s_rvalid_o[1]   ;
-    assign inst_rdata_i   = s_rdata_o[63:32];
-    assign inst_rresp_i   = s_rresp_o[3:2]  ;
-    assign inst_rlast_i   = s_rlast_o[1]    ;
-    assign inst_rid_i     = s_rid_o[7:4]    ;
+    assign mem_arready  = s_arready[0]  ;
+    assign mem_rvalid   = s_rvalid[0]   ;
+    assign mem_rdata    = s_rdata[31:0] ;
+    assign mem_rresp    = s_rresp[1:0]  ;
+    assign mem_rlast    = s_rlast[0]    ;
+    assign mem_rid      = s_rid[3:0]    ;
+    assign inst_arready = s_arready[1]  ;
+    assign inst_rvalid  = s_rvalid[1]   ;
+    assign inst_rdata   = s_rdata[63:32];
+    assign inst_rresp   = s_rresp[3:2]  ;
+    assign inst_rlast   = s_rlast[1]    ;
+    assign inst_rid     = s_rid[7:4]    ;
 
     // 顶层AXI SLAVER接口
     assign io_slave_awready = 0;
@@ -271,91 +204,92 @@ module ysyx_25050136(
     assign io_slave_rdata = 0; 
     assign io_slave_rlast = 0; 
     assign io_slave_rid = 0;
+
     // NPC模块实例化
     ysyx_25050136_NPC 
     u_ysyx_25050136_NPC (
         .clk            	(clock           ),
         .reset          	(reset           ),
-        .inst_arvalid_o 	(inst_arvalid_o  ),
-        .inst_arready_i 	(inst_arready_i  ),
-        .inst_araddr_o  	(inst_araddr_o   ),
-        .inst_arid_o    	(inst_arid_o     ),
-        .inst_arlen_o   	(inst_arlen_o    ),
-        .inst_arsize_o  	(inst_arsize_o   ),
-        .inst_arburst_o 	(inst_arburst_o  ),
-        .inst_rvalid_i  	(inst_rvalid_i   ),
-        .inst_rready_o  	(inst_rready_o   ),
-        .inst_rdata_i   	(inst_rdata_i    ),
-        .inst_rresp_i   	(inst_rresp_i    ),
-        .inst_rlast_i   	(inst_rlast_i    ),
-        .inst_rid_i     	(inst_rid_i      ),
-        .mem_awvalid_o  	(mem_awvalid_o   ),
-        .mem_awready_i  	(mem_awready_i   ),
-        .mem_awaddr_o   	(mem_awaddr_o    ),
-        .mem_awid_o     	(mem_awid_o      ),
-        .mem_awlen_o    	(mem_awlen_o     ),
-        .mem_awsize_o   	(mem_awsize_o    ),
-        .mem_awburst_o  	(mem_awburst_o   ),
-        .mem_wvalid_o   	(mem_wvalid_o    ),
-        .mem_wready_i   	(mem_wready_i    ),
-        .mem_wdata_o    	(mem_wdata_o     ),
-        .mem_wstrb_o    	(mem_wstrb_o     ),
-        .mem_wlast_o    	(mem_wlast_o     ),
-        .mem_bvalid_i   	(mem_bvalid_i    ),
-        .mem_bready_o   	(mem_bready_o    ),
-        .mem_bresp_i    	(mem_bresp_i     ),
-        .mem_bid_i      	(mem_bid_i       ),
-        .mem_arvalid_o  	(mem_arvalid_o   ),
-        .mem_arready_i  	(mem_arready_i   ),
-        .mem_araddr_o   	(mem_araddr_o    ),
-        .mem_arid_o     	(mem_arid_o      ),
-        .mem_arlen_o    	(mem_arlen_o     ),
-        .mem_arsize_o   	(mem_arsize_o    ),
-        .mem_arburst_o  	(mem_arburst_o   ),
-        .mem_rvalid_i   	(mem_rvalid_i    ),
-        .mem_rready_o   	(mem_rready_o    ),
-        .mem_rdata_i    	(mem_rdata_i     ),
-        .mem_rresp_i    	(mem_rresp_i     ),
-        .mem_rlast_i    	(mem_rlast_i     ),
-        .mem_rid_i      	(mem_rid_i       )
+        .inst_arvalid_o 	(inst_arvalid  ),
+        .inst_arready_i 	(inst_arready  ),
+        .inst_araddr_o  	(inst_araddr   ),
+        .inst_arid_o    	(inst_arid     ),
+        .inst_arlen_o   	(inst_arlen    ),
+        .inst_arsize_o  	(inst_arsize   ),
+        .inst_arburst_o 	(inst_arburst  ),
+        .inst_rvalid_i  	(inst_rvalid   ),
+        .inst_rready_o  	(inst_rready   ),
+        .inst_rdata_i   	(inst_rdata    ),
+        .inst_rresp_i   	(inst_rresp    ),
+        .inst_rlast_i   	(inst_rlast    ),
+        .inst_rid_i     	(inst_rid      ),
+        .mem_awvalid_o  	(mem_awvalid   ),
+        .mem_awready_i  	(mem_awready   ),
+        .mem_awaddr_o   	(mem_awaddr    ),
+        .mem_awid_o     	(mem_awid      ),
+        .mem_awlen_o    	(mem_awlen     ),
+        .mem_awsize_o   	(mem_awsize    ),
+        .mem_awburst_o  	(mem_awburst   ),
+        .mem_wvalid_o   	(mem_wvalid    ),
+        .mem_wready_i   	(mem_wready    ),
+        .mem_wdata_o    	(mem_wdata     ),
+        .mem_wstrb_o    	(mem_wstrb     ),
+        .mem_wlast_o    	(mem_wlast     ),
+        .mem_bvalid_i   	(mem_bvalid    ),
+        .mem_bready_o   	(mem_bready    ),
+        .mem_bresp_i    	(mem_bresp     ),
+        .mem_bid_i      	(mem_bid       ),
+        .mem_arvalid_o  	(mem_arvalid   ),
+        .mem_arready_i  	(mem_arready   ),
+        .mem_araddr_o   	(mem_araddr    ),
+        .mem_arid_o     	(mem_arid      ),
+        .mem_arlen_o    	(mem_arlen     ),
+        .mem_arsize_o   	(mem_arsize    ),
+        .mem_arburst_o  	(mem_arburst   ),
+        .mem_rvalid_i   	(mem_rvalid    ),
+        .mem_rready_o   	(mem_rready    ),
+        .mem_rdata_i    	(mem_rdata     ),
+        .mem_rresp_i    	(mem_rresp     ),
+        .mem_rlast_i    	(mem_rlast     ),
+        .mem_rid_i      	(mem_rid       )
     );
     
     // 仲裁器模块实例化
+    // 仲裁器模块实例化
     ysyx_25050136_ARBITER #(
-        .MASTER_NUM(TOP_MASTER_NUM)
-    )
-    u_ysyx_25050136_ARBITER(
+        .MASTER_NUM     (TOP_MASTER_NUM    )
+    ) u_ysyx_25050136_ARBITER( 
         .clk        	(clock              ),
         .reset      	(reset              ),
-        .s_awvalid_i 	(s_awvalid_i        ),
-        .s_awready_o 	(s_awready_o        ),
-        .s_awaddr_i  	(s_awaddr_i         ),
-        .s_awid_i    	(s_awid_i           ),
-        .s_awlen_i   	(s_awlen_i          ),
-        .s_awsize_i  	(s_awsize_i         ),
-        .s_awburst_i 	(s_awburst_i        ),
-        .s_wvalid_i  	(s_wvalid_i         ),
-        .s_wready_o  	(s_wready_o         ),
-        .s_wdata_i   	(s_wdata_i          ),
-        .s_wstrb_i   	(s_wstrb_i          ),
-        .s_wlast_i   	(s_wlast_i          ),
-        .s_bvalid_o  	(s_bvalid_o         ),
-        .s_bready_i  	(s_bready_i         ),
-        .s_bresp_o   	(s_bresp_o          ),
-        .s_bid_o     	(s_bid_o            ),
-        .s_arvalid_i 	(s_arvalid_i        ),
-        .s_arready_o 	(s_arready_o        ),
-        .s_araddr_i  	(s_araddr_i         ),
-        .s_arid_i    	(s_arid_i           ),
-        .s_arlen_i   	(s_arlen_i          ),
-        .s_arsize_i  	(s_arsize_i         ),
-        .s_arburst_i 	(s_arburst_i        ),
-        .s_rvalid_o  	(s_rvalid_o         ),
-        .s_rready_i  	(s_rready_i         ),
-        .s_rdata_o   	(s_rdata_o          ),
-        .s_rresp_o   	(s_rresp_o          ),
-        .s_rlast_o   	(s_rlast_o          ),
-        .s_rid_o     	(s_rid_o            ),
+        .s_awvalid_i 	(mem_awvalid        ),
+        .s_awready_o 	(mem_awready        ),
+        .s_awaddr_i  	(mem_awaddr         ),
+        .s_awid_i    	(mem_awid           ),
+        .s_awlen_i   	(mem_awlen          ),
+        .s_awsize_i  	(mem_awsize         ),
+        .s_awburst_i 	(mem_awburst        ),
+        .s_wvalid_i  	(mem_wvalid         ),
+        .s_wready_o  	(mem_wready         ),
+        .s_wdata_i   	(mem_wdata          ),
+        .s_wstrb_i   	(mem_wstrb          ),
+        .s_wlast_i   	(mem_wlast          ),
+        .s_bvalid_o  	(mem_bvalid         ),
+        .s_bready_i  	(mem_bready         ),
+        .s_bresp_o   	(mem_bresp          ),
+        .s_bid_o     	(mem_bid            ),
+        .s_arvalid_i 	(s_arvalid          ),
+        .s_arready_o 	(s_arready          ),
+        .s_araddr_i  	(s_araddr           ),
+        .s_arid_i    	(s_arid             ),
+        .s_arlen_i   	(s_arlen            ),
+        .s_arsize_i  	(s_arsize           ),
+        .s_arburst_i 	(s_arburst          ),
+        .s_rvalid_o  	(s_rvalid           ),
+        .s_rready_i  	(s_rready           ),
+        .s_rdata_o   	(s_rdata            ),
+        .s_rresp_o   	(s_rresp            ),
+        .s_rlast_o   	(s_rlast            ),
+        .s_rid_o     	(s_rid              ),
         .m_awvalid_o 	(io_master_awvalid  ),
         .m_awready_i 	(io_master_awready  ),
         .m_awaddr_o  	(io_master_awaddr   ),

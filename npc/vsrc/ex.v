@@ -101,7 +101,7 @@ module ysyx_25050136_EX
     // 组合逻辑
     wire in_fire = in_valid_i & in_ready_o;
     wire out_fire = out_valid_o & out_ready_i;
-    wire ready_go;
+
     // === ALU ===
     wire [31:0] alu_opd1;
     wire [31:0] alu_opd2;
@@ -121,13 +121,11 @@ module ysyx_25050136_EX
     always @(posedge clk) begin
         if(reset) begin
             idle <= 1;
+            in_pulse <= 0;
         end else begin
-            if(flush) begin
-                idle <= 1;
-                in_pulse <= 0;
-            end else if(in_fire) begin
-                idle <= 0;
-                in_pulse <= 1;
+            idle <= (flush) | (!in_fire & out_fire) | (!in_fire & !flush & idle);
+            in_pulse <= !flush & in_fire;
+            if(in_fire) begin
                 ex_pc <= in_pc_i;
                 ex_npc <= in_npc_i;
                 ex_ebreak <= in_ebreak_i;
@@ -155,11 +153,6 @@ module ysyx_25050136_EX
                 ex_rd_npc <= in_rd_npc_i;
                 ex_rd <= in_rd_i;
                 ex_rd_en <= in_rd_en_i;
-            end else if(out_fire) begin
-                idle <= 1;
-                in_pulse <= 0;
-            end else begin
-                in_pulse <= 0;
             end
         end
     end
@@ -184,7 +177,6 @@ module ysyx_25050136_EX
     assign csru_wdata = ex_csr_wdata_use_rs1 ? ex_rdata1 : {{32-5{1'b0}},ex_rs1};
     ysyx_25050136_CSRU u_ysyx_25050136_CSRU(
         .clk          	(clk         ),
-        .reset        	(reset       ),
         .pc_i         	(ex_pc       ),
         .operation_i  	(ex_csru_op  ),
         .csru_wdata_i 	(csru_wdata  ),
@@ -209,10 +201,9 @@ module ysyx_25050136_EX
     assign wvalid_o = ex_rd_en & ex_rd_npc & out_valid_o;
     assign waddr_o = ex_rd;
     assign wdata_o = ex_npc;
-    // === 握手 ===
-    assign ready_go = 1;
+    // === 流水线控制 ===
     assign in_ready_o = idle || out_fire;
-    assign out_valid_o = !(idle || flush) && ready_go;
+    assign out_valid_o = !(idle || flush);
 `ifdef VERILATOR
     always @(posedge clk) begin
         if(reset) begin

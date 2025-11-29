@@ -1,6 +1,6 @@
 module ysyx_25050136_ID
     #(
-        parameter ADDR_WIDTH = 5
+        parameter ADDR_WIDTH = 4
     )
     (
         input                                                   clk,
@@ -187,26 +187,21 @@ module ysyx_25050136_ID
     always @(posedge clk) begin
         if(reset) begin
             idle <= 1;
+            // in_pulse <= 0;
             // id_pc <= 0;
             // id_inst <= 0;
-            // in_pulse <= 0;
+            // id_prepc <= 0;
+            // id_taken <= 0;
+            // id_btb_hit <= 0;
         end else begin
-            if(flush) begin
-                idle <= 1;
-                in_pulse <= 0;
-            end else if(in_fire) begin
-                idle <= 0;
-                in_pulse <= 1;
+            idle <= (flush) | (!in_fire & out_fire) | (!in_fire & !flush & idle);
+            in_pulse <= !flush & in_fire;
+            if(in_fire) begin
                 id_pc <= in_pc_i;
                 id_inst <= in_inst_i;
                 id_prepc <= in_prepc_i;
                 id_taken <= in_taken_i;
                 id_btb_hit <= in_btb_hit_i;
-            end else if(out_fire) begin
-                idle <= 1;
-                in_pulse <= 0;
-            end else begin
-                in_pulse <= 0;
             end
         end
     end

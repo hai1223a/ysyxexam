@@ -25,7 +25,7 @@ module ysyx_25050136_ICACHE
     output                                  out_valid_o     ,
     // AXI 接口
     output                                  req_valid_o     ,
-    output   [31:0]                         req_addr_o      ,
+    // output   [31:0]                         req_addr_o      ,
     input                                   ret_valid_i     ,
     input                                   ret_last_i      ,
     input    [31:0]                         ret_data_i   
@@ -49,7 +49,7 @@ module ysyx_25050136_ICACHE
     reg                  cache_valid [0:NUM_WAY-1][0:NUM_SET-1];
 
     // 流水寄存器
-    reg        ic_idle;
+    reg        idle;
     reg [31:0] ic_addr;
     reg [31:0] ic_prepc;
     reg        ic_taken;
@@ -95,22 +95,14 @@ module ysyx_25050136_ICACHE
     // --- 2. 输入流水寄存器更新 ---
     always @(posedge clk) begin
         if (reset) begin
-            ic_idle    <= 1'b1;
-            // ic_addr    <= 32'b0;
-            // ic_prepc   <= 32'b0;
-            // ic_taken   <= 1'b0;
-            // ic_btb_hit <= 1'b0;
+            idle    <= 1'b1;
         end else begin
-            if (flush) begin
-                ic_idle <= 1'b1; 
-            end else if (in_fire) begin
-                ic_idle    <= 1'b0;
-                ic_addr    <= in_pc_i    ;
-                ic_prepc   <= in_prepc_i        ;
+            idle <= (flush) | (!in_fire & out_fire) | (!in_fire & !flush & idle);
+            if (in_fire) begin
+                ic_addr    <= in_pc_i;
+                ic_prepc   <= in_prepc_i;
                 ic_taken   <= in_taken_i;
                 ic_btb_hit <= in_btb_hit_i;
-            end else if (out_fire) begin
-                ic_idle <= 1'b1;
             end
         end
     end
@@ -151,6 +143,11 @@ module ysyx_25050136_ICACHE
             state       <= IDLE;
             replace_way <= 0;
             miss_way    <= 0;
+            for (m = 0; m < NUM_WAY; m = m + 1) begin
+                for (n = 0; n < NUM_SET; n = n + 1) begin
+                    cache_valid[m][n] <= 1'b0;
+                end
+            end
         end else begin
             if (flush) begin
                 if (fencei) begin
@@ -166,7 +163,7 @@ module ysyx_25050136_ICACHE
             end else begin
                 case (state)
                     IDLE: begin
-                        if (!ic_idle && miss) begin
+                        if (!idle && miss) begin
                             state    <= MISS;
                             miss_way <= replace_way;
                         end
@@ -191,8 +188,8 @@ module ysyx_25050136_ICACHE
     // --- 5. 输出信号 ---
     assign ready_go = (state == IDLE) && !miss;
 
-    assign in_ready_o   = (state == IDLE) && (out_fire || ic_idle);
-    assign out_valid_o   = !ic_idle && !flush && ready_go;
+    assign in_ready_o   = out_fire || idle;
+    assign out_valid_o   = !(idle || flush) && ready_go;
     
     assign out_inst_o   = hit_word;
     assign out_pc_o    = ic_addr;
@@ -201,7 +198,7 @@ module ysyx_25050136_ICACHE
     assign out_btb_hit_o = ic_btb_hit;
 
     assign req_valid_o      = (state == MISS);
-    assign req_addr_o     = ic_addr;
+    // assign req_addr_o     = ic_addr;
 
 `ifdef VERILATOR
     reg [31:0] mem_type;

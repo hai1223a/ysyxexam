@@ -168,3 +168,51 @@ module real_alu
     assign out_o = out_r;
 
 endmodule //real_alu
+
+module ysyx_25050136_ICACHE
+#(
+    parameter OFFSET_WIDTH = 4,
+    parameter NUM_WAY = 1,
+    parameter INDEX_WIDTH = 2
+)
+(
+    input                                      clk          ,
+    input                                      reset        ,
+    // CPU 接口
+    input                                   flush           ,
+    input                                   in_valid_i      ,
+    input    [31:0]                         in_pc_i         ,
+    output                                  in_ready_o      ,
+    input                                   out_ready_i     ,
+    output   [31:0]                         out_pc_o        ,
+    output                                  out_valid_o     
+);
+
+    // 流水寄存器
+    reg        ic_idle;
+    reg [31:0] ic_pc;
+    wire       in_fire  = in_valid_i && in_ready_o;
+    wire       out_fire = out_valid_o && out_ready_i;
+    always @(posedge clk) begin
+        if (reset) begin
+            ic_idle    <= 1'b1;
+        end else begin
+            if (flush) begin
+                ic_idle <= 1'b1; 
+            end else if (in_fire) begin
+                ic_idle    <= 1'b0;
+                ic_pc    <= in_pc_i;
+            end else if (out_fire) begin
+                ic_idle <= 1'b1;
+            end
+        end
+    end
+
+    assign ready_go = 内部逻辑;
+
+    assign in_ready_o   = (out_fire || ic_idle);
+    assign out_valid_o   = !ic_idle && !flush && ready_go;
+    
+    assign out_pc_o    = ic_pc;
+
+endmodule

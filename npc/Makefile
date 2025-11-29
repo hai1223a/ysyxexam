@@ -82,7 +82,26 @@ override ARGS ?= -d $(NPC_HOME)/../nemu/build/riscv32-nemu-interpreter-so \
 # 				 -i $(NPC_HOME)/sim/microbench-test.bin
 # 				 -i $(NPC_HOME)/sim/fib.bin 
 
-#================第六步: SOC 专用配置 ====================
+#================第六步: NVBoard配置 ====================
+# NVBoard约束文件配置
+NXDC_FILES = constr/top.nxdc          # NVBoard约束文件
+
+# 自动引脚绑定生成
+SRC_AUTO_BIND = $(abspath $(BUILD_DIR)/auto_bind.cpp)
+$(SRC_AUTO_BIND): $(NXDC_FILES)
+	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
+
+# NVBoard相关配置
+ifdef CONFIG_TARGET_NVBOARD
+-include $(NVBOARD_HOME)/scripts/nvboard.mk
+SOC_CFLAGS += $(addprefix -I, $(INC_PATH))
+SOC_LDFLAGS += $(LDFLAGS)
+SOC_CSRC += $(SRC_AUTO_BIND)
+SOC_VERFLAGS += --noassert -O3 $(NVBOARD_ARCHIVE)
+SOC_DEPEMD += $(SRC_AUTO_BIND) $(NVBOARD_ARCHIVE)
+endif
+
+#================第七步: SOC 专用配置 ====================
 # SoC模式源文件
 SOC_VSRC = $(NPC_VSRC) $(shell find ../ysyxSoC/perip -type f -name "*.v") ../ysyxSoC/build/ysyxSoCFull.v 
 SOC_CSRC := $(abspath $(shell find csrc -type f \( -name "*.c" -o -name "*.cpp" \)))
@@ -105,39 +124,22 @@ SOC_VERFLAGS += $(VERFLAGS) --top-module $(SOC_TOP) $(SOC_VSRC) $(SOC_CSRC) \
 SOC_DEPEMD += $(LIBCAPSTONE) $(NPC_VSRC)
 SOC_BIN := $(OBJ_DIR)/V$(SOC_TOP)
 
-#================第七步: NVBoard配置 ====================
-# NVBoard约束文件配置
-NXDC_FILES = constr/top.nxdc          # NVBoard约束文件
 
-# 自动引脚绑定生成
-SRC_AUTO_BIND = $(abspath $(BUILD_DIR)/auto_bind.cpp)
-$(SRC_AUTO_BIND): $(NXDC_FILES)
-	python3 $(NVBOARD_HOME)/scripts/auto_pin_bind.py $^ $@
-
-# NVBoard相关配置
-ifdef CONFIG_TARGET_NVBOARD
--include $(NVBOARD_HOME)/scripts/nvboard.mk
-SOC_CFLAGS += $(addprefix -I, $(INC_PATH))
-SOC_LDFLAGS += $(LDFLAGS)
-SOC_CSRC += $(SRC_AUTO_BIND)
-SOC_VERFLAGS += --noassert -O3 $(NVBOARD_ARCHIVE)
-SOC_DEPEMD += $(SRC_AUTO_BIND) $(NVBOARD_ARCHIVE)
-endif
 
 #================第八步: Iverilog 配置 ====================
 IMG = $(NPC_HOME)/sim/iverilog_test.bin
+NETLIST = $(NPC_HOME)/../yosys-sta/result/ysyx_25050136-1500MHz/ysyx_25050136.v
+CELLS = $(NPC_HOME)/../yosys-sta/pdk/nangate45/sim/cells.v
 IMG_HEX = $(IVER_DIR)/$(shell basename $(IMG) .bin).hex
 $(info $(IMG_HEX))
 IVERILOG_BIN := iverilog
 IVER_TOP = tb_fullsoc
-IVER_VSRC = $(NPC_VSRC) vsrc/idle/fullsoc.v vsrc/idle/sram.v vsrc/idle/tb_fullsoc.v vsrc/idle/uart.v vsrc/idle/xbar.v vsrc/idle/back_tb.v
+IVER_VSRC = vsrc/idle/fullsoc.v vsrc/idle/sram.v vsrc/idle/tb_fullsoc.v vsrc/idle/uart.v vsrc/idle/xbar.v
+# IVER_VSRC += build/ysyx_25050136.v
 IVER_OUT = $(IVER_DIR)/iverilog_sim.out
 IVERFLAGS = -o $(IVER_OUT) -g2012 -s $(IVER_TOP) -Ptb_fullsoc.PROG_FILE='"$(IMG_HEX)"' 
 VVP_BIN := vvp
 VVPFLAGS = -n $(IVER_OUT) -lxt2
-NETLIST = yyy
-CELLS = zzz
-
 #================第步: 构建目标规则 ====================
 -include $(NPC_HOME)/scripts/config.mk
 
@@ -163,12 +165,14 @@ soc_wave: soc_run
 	@gtkwave $(WAVE_DIR)/waveform.fst
 
 sim-iverilog: verilog $(IMG_HEX)
-	@$(info IMG = $(IMG) NETLIST = $(NETLIST) CELLS = $(CELLS))
-	@$(IVERILOG_BIN) $(IVERFLAGS) $(IVER_VSRC)
+	@$(info IMG = $(IMG))
+	@$(IVERILOG_BIN) $(IVERFLAGS) $(NPC_VSRC) $(IVER_VSRC)
 	@$(VVP_BIN) $(VVPFLAGS)
 
-sim-iverilog-netlist:
+sim-iverilog-netlist: $(IMG_HEX)
 	@$(info IMG = $(IMG) NETLIST = $(NETLIST) CELLS = $(CELLS))
+	@$(IVERILOG_BIN) $(IVERFLAGS) $(IVER_VSRC) $(NETLIST) $(CELLS)
+	@$(VVP_BIN) $(VVPFLAGS)
 
 clean:
 	rm -rf build

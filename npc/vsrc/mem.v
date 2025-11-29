@@ -96,10 +96,8 @@ module ysyx_25050136_MEM
             // mem_wen      <= 0;
             // mem_clint    <= 0;
         end else begin
-            if(flush) begin
-                idle <= 1;
-            end else if(in_fire) begin
-                idle           <= 0;
+            idle <= (flush) | (!in_fire & out_fire) | (!in_fire & !flush & idle);
+            if(in_fire) begin
                 mem_rd         <= in_rd_i;
                 mem_ebreak     <= in_ebreak_i;
                 mem_rd_en      <= in_rd_en_i;
@@ -108,8 +106,6 @@ module ysyx_25050136_MEM
                 mem_ren        <= in_req_ren_i;
                 mem_wen        <= in_req_wen_i;
                 mem_clint      <= is_clint;
-            end else if(out_fire) begin
-                idle <= 1;
             end
         end
     end
@@ -120,6 +116,7 @@ module ysyx_25050136_MEM
             req_mask <= 0;
             lsu_wdata <= 0;
             lsu_signed <= 0;
+            ret_rdata <= 0;
             state <= IDLE;
         end else begin
             case(state)

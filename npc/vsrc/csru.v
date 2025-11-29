@@ -1,7 +1,6 @@
 module ysyx_25050136_CSRU
      (
          input                                              clk,
-         input                                            reset,
          input   [31:0]                                    pc_i,
          input   [`ysyx_25050136_CSRU_OP_NUM-1:0]   operation_i,
          input   [31:0]                            csru_wdata_i,
@@ -56,33 +55,26 @@ module ysyx_25050136_CSRU
     // --- 写寄存器逻辑 (时序逻辑) ---
     // 将两个写端口的逻辑合并到一个 always 块中
     always @(posedge clk) begin
-        if (reset) begin
-            // mepc      <= 32'b0;
-            // mcause    <= 32'b0;
-            // mtvec     <= 32'b0;
-            // mstatus   <= 32'b0;
-        end else begin
-            // --- 处理写端口 1 ---
-            if (csr_wen1) begin
-                case (csr_waddr1)
-                    MEPC:    mepc    <= csr_wdata1;
-                    MCAUSE:  mcause  <= csr_wdata1;
-                    MTVEC:   mtvec   <= csr_wdata1;
-                    MSTATUS: mstatus <= csr_wdata1;
-                    default: ; // 端口1写其他地址，无操作
-                endcase
-            end
+        // --- 处理写端口 1 ---
+        if (csr_wen1) begin
+            case (csr_waddr1)
+                MEPC:    mepc    <= csr_wdata1;
+                MCAUSE:  mcause  <= csr_wdata1;
+                MTVEC:   mtvec   <= csr_wdata1;
+                MSTATUS: mstatus <= csr_wdata1;
+                default: ; // 端口1写其他地址，无操作
+            endcase
+        end
 
-            // --- 处理写端口 2 ---
-            if (csr_wen2) begin
-                case (csr_waddr2)
-                    MEPC:    mepc    <= csr_wdata2;
-                    MCAUSE:  mcause  <= csr_wdata2;
-                    MTVEC:   mtvec   <= csr_wdata2;
-                    MSTATUS: mstatus <= csr_wdata2;
-                    default: ; // 端口2写其他地址，无操作
-                endcase
-            end
+        // --- 处理写端口 2 ---
+        if (csr_wen2) begin
+            case (csr_waddr2)
+                MEPC:    mepc    <= csr_wdata2;
+                MCAUSE:  mcause  <= csr_wdata2;
+                MTVEC:   mtvec   <= csr_wdata2;
+                MSTATUS: mstatus <= csr_wdata2;
+                default: ; // 端口2写其他地址，无操作
+            endcase
         end
     end
 

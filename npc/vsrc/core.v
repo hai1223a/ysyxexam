@@ -188,12 +188,11 @@ ysyx_25050136_ICACHE
     .out_btb_hit_o  	(ic_id_btb_hit     ),
     .out_valid_o    	(ic_id_valid       ),
     .req_valid_o     	(inst_req_valid_o  ),
-    .req_addr_o      	(inst_req_addr_o   ),
     .ret_valid_i     	(inst_ret_valid_i  ),
     .ret_last_i      	(inst_ret_last_i   ),
     .ret_data_i      	(inst_ret_data_i   )
 );
-
+assign inst_req_addr_o = ic_id_pc;
 ysyx_25050136_ID #(
     .ADDR_WIDTH     (ADDR_WIDTH)
 ) u_ysyx_25050136_ID (
