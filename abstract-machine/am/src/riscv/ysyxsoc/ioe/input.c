@@ -57,18 +57,19 @@ const int ps2_scancode_to_amkey[144] = {
    };
 
 void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
+  int keyname = 0;
   bool extend = false;
-  kbd->keycode = inb(PS2_ADDR);
-  if(kbd->keycode == 0xe0) {
+  keyname = inb(PS2_ADDR);
+  if(keyname == 0xe0) {
     extend = true;
-    kbd->keycode = inb(PS2_ADDR);
+    keyname = inb(PS2_ADDR);
   }
 
-  if(kbd->keycode == 0xf0) {
-      kbd->keycode = inb(PS2_ADDR);
-    if(kbd->keycode == 0xe0) {
+  if(keyname == 0xf0) {
+      keyname = inb(PS2_ADDR);
+    if(keyname == 0xe0) {
       extend = true;
-      kbd->keycode = inb(PS2_ADDR);
+      keyname = inb(PS2_ADDR);
     }
       kbd->keydown = false;
   } else {
@@ -76,24 +77,24 @@ void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
   }
 
   if(extend) {
-    switch (kbd->keycode)
+    switch (keyname)
     {
-    case 0x11: kbd->keyname = AM_KEY_RALT; break;
-    case 0x14: kbd->keyname = AM_KEY_RCTRL; break;
-    case 0x70: kbd->keyname = AM_KEY_INSERT; break;
-    case 0x71: kbd->keyname = AM_KEY_DELETE; break;
-    case 0x6c: kbd->keyname = AM_KEY_HOME; break;
-    case 0x69: kbd->keyname = AM_KEY_END; break;
-    case 0x7d: kbd->keyname = AM_KEY_PAGEUP; break;
-    case 0x7a: kbd->keyname = AM_KEY_PAGEDOWN; break;
-    case 0x75: kbd->keyname = AM_KEY_UP; break;
-    case 0x72: kbd->keyname = AM_KEY_DOWN; break;
-    case 0x6b: kbd->keyname = AM_KEY_LEFT; break;
-    case 0x74: kbd->keyname = AM_KEY_RIGHT; break;
+    case 0x11: kbd->keycode = AM_KEY_RALT; break;
+    case 0x14: kbd->keycode = AM_KEY_RCTRL; break;
+    case 0x70: kbd->keycode = AM_KEY_INSERT; break;
+    case 0x71: kbd->keycode = AM_KEY_DELETE; break;
+    case 0x6c: kbd->keycode = AM_KEY_HOME; break;
+    case 0x69: kbd->keycode = AM_KEY_END; break;
+    case 0x7d: kbd->keycode = AM_KEY_PAGEUP; break;
+    case 0x7a: kbd->keycode = AM_KEY_PAGEDOWN; break;
+    case 0x75: kbd->keycode = AM_KEY_UP; break;
+    case 0x72: kbd->keycode = AM_KEY_DOWN; break;
+    case 0x6b: kbd->keycode = AM_KEY_LEFT; break;
+    case 0x74: kbd->keycode = AM_KEY_RIGHT; break;
     default:
       break;
     }
   } else {
-    kbd->keyname = ps2_scancode_to_amkey[kbd->keycode];
+    kbd->keycode = ps2_scancode_to_amkey[keyname];
   }
 }
