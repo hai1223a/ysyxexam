@@ -26,7 +26,7 @@ void (*ref_difftest_memcpy)(uint32_t addr, void *buf, size_t n, bool direction) 
 void (*ref_difftest_regcpy)(void *dut, bool direction) = NULL;
 void (*ref_difftest_exec)(uint64_t n) = NULL;
 void (*ref_difftest_raise_intr)(uint32_t NO) = NULL;
-
+void (*ref_difftest_instcheck)(uint32_t dut_pc, uint32_t *ref_inst) = NULL;
 void init_difftest(char *ref_so_file, long img_size, int port)
 {
   CPU_state cpu;
@@ -53,6 +53,9 @@ void init_difftest(char *ref_so_file, long img_size, int port)
 
   ref_difftest_raise_intr = (void (*)(uint32_t))dlsym(handle, "difftest_raise_intr");
   assert(ref_difftest_raise_intr);
+
+  ref_difftest_instcheck = (void (*)(uint32_t, uint32_t *))dlsym(handle, "difftest_instcheck");
+  assert(ref_difftest_instcheck);
 
   void (*ref_difftest_init)(int) = (void (*)(int))dlsym(handle, "difftest_init");
   assert(ref_difftest_init);
@@ -86,6 +89,16 @@ static void checkregs(CPU_state *ref)
   }
 }
 
+static void checkinst()
+{
+  uint32_t dut_pc = SOC_PC;
+  uint32_t ref_inst;
+  ref_difftest_instcheck(dut_pc, &ref_inst);
+  if (ref_inst != SOC_INST) {
+    Log("dut_pc = 0x%08x, ref_inst = 0x%08x, dut_inst = 0x%08x\n", dut_pc, ref_inst, SOC_INST);
+    Assert(0 ,ANSI_FMT("指令检查不通过! \n", ANSI_FG_RED));
+  }
+}
 bool if_skip = false;
 void difftest_step()
 {
@@ -103,5 +116,6 @@ void difftest_step()
     ref_difftest_regcpy(&ref_r, DIFFTEST_TO_DUT);
     checkregs(&ref_r);
   }
+  checkinst();
   if_skip = false;
 }

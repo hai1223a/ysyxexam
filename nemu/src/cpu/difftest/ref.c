@@ -79,3 +79,7 @@ __EXPORT void difftest_init(int port) {
   /* Perform ISA dependent initialization. */
   init_isa();
 }
+// 针对AXI总线检查, 每次检查执行的指令是否和DUT一致
+__EXPORT void difftest_instcheck(uint32_t dut_pc, uint32_t *ref_inst) {
+  *ref_inst = (uint32_t)paddr_read(dut_pc, 4);
+}

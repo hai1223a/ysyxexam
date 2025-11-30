@@ -63,16 +63,18 @@ void __am_input_keybrd(AM_INPUT_KEYBRD_T *kbd) {
     extend = true;
     kbd->keycode = inb(PS2_ADDR);
   }
+
   if(kbd->keycode == 0xf0) {
-    kbd->keycode = inb(PS2_ADDR);
-  if(kbd->keycode == 0xe0) {
-    extend = true;
-    kbd->keycode = inb(PS2_ADDR);
-  }
-    kbd->keydown = false;
+      kbd->keycode = inb(PS2_ADDR);
+    if(kbd->keycode == 0xe0) {
+      extend = true;
+      kbd->keycode = inb(PS2_ADDR);
+    }
+      kbd->keydown = false;
   } else {
     kbd->keydown = true;
   }
+
   if(extend) {
     switch (kbd->keycode)
     {
