@@ -210,7 +210,7 @@ module ysyx_25050136_MEM
         end else begin
             if((req_valid_o && !((req_addr_o >= 32'h3000_0000 && req_addr_o < 32'h4000_0000) || 
                    (req_addr_o >= 32'h0f00_0000 && req_addr_o < 32'h1000_0000) ||
-                   (req_addr_o >= 32'ha000_0000 && req_addr_o < 32'hc000_0000))) || is_clint) begin
+                   (req_addr_o >= 32'ha000_0000 && req_addr_o < 32'hc000_0000))) || (is_clint && in_req_ren_i)) begin
                     out_dbg_is_device_o <= 1;
             end else if(out_fire) begin
                     out_dbg_is_device_o <= 0;                
