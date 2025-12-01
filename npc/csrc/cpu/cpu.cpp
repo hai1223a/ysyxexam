@@ -30,7 +30,7 @@ void cpu_exec_once()
     IFDEF(CONFIG_FST, tfp->dump(sim_time));
     // 推动仿真进行
     sim_time++;
-    IFDEF(CONFIG_TARGET_NVBOARD, nvboard_update());
+    IFDEF(CONFIG_TARGET_NVBOARD, if(top->clock == 1 && top-->reset == 0) nvboard_update());
     // 指令计算
     // break;
     if (SOC_PC != pc__ && SOC_PC != 0 && SOC_NPC != SOC_PC)
