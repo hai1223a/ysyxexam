@@ -28,6 +28,7 @@ void init_disasm();
 static void welcome() {
   Log("Trace: %s", MUXDEF(CONFIG_TRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
   Log("ITrace: %s", MUXDEF(CONFIG_ITRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
+  Log("BTrace: %s", MUXDEF(CONFIG_BTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
   Log("MTrace: %s", MUXDEF(CONFIG_MTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
   Log("FTrace: %s", MUXDEF(CONFIG_FTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
   Log("DTrace: %s", MUXDEF(CONFIG_DTRACE, ANSI_FMT("ON", ANSI_FG_GREEN), ANSI_FMT("OFF", ANSI_FG_RED)));
@@ -50,6 +51,7 @@ void sdb_set_batch_mode();
 static char *log_file = NULL;
 static char *diff_so_file = NULL;
 static char *img_file = NULL;
+
 static int difftest_port = 1234;
 
 static long load_img() {
@@ -74,6 +76,19 @@ static long load_img() {
   return size;
 }
 
+static char *trace_fie = NULL;
+//==================================================
+// branch trace bin内容
+//==================================================
+#ifdef CONFIG_BTRACE
+FILE *tracebin_fp = NULL;
+void init_tracebin() {
+    Assert(trace_fie, "你需要给一个bin文件的地址,用于记录branch trace bin");
+    tracebin_fp = fopen(trace_fie, "wb");
+    Assert(tracebin_fp, "打不开文件 '%s'", trace_fie);
+}
+#endif
+//==================================================
 // 写入 DTACER 文件
 //==================================================
 static char *dtracer_log_file = NULL;
@@ -198,34 +213,40 @@ static int parse_args(int argc, char *argv[]) {
   const struct option table[] = {
     {"batch"      , no_argument      , NULL, 'b'},
     {"log"        , required_argument, NULL, 'l'},
+    {"branchbin"  , required_argument, NULL, 'r'},
     {"diff"       , required_argument, NULL, 'd'},
     {"port"       , required_argument, NULL, 'p'},
     {"elf"        , required_argument, NULL, 'e'},  // 读取elf文件
     {"elf-log"    , required_argument, NULL, 'g'},  // 写入ftracer的内容
     {"dtrace-log" , required_argument, NULL, 'k'},  // 写入DTRACE的内容
+    {"image"      , required_argument, NULL, 'i'},
     {"help"       , no_argument      , NULL, 'h'},
     {0            , 0                , NULL,  0 },
   };
   int o;
-  while ( (o = getopt_long(argc, argv, "-bhl:d:p:e:g:k:", table, NULL)) != -1) {
+  while ( (o = getopt_long(argc, argv, "-bhl:r:d:p:e:g:k:i:", table, NULL)) != -1) {
     switch (o) {
       case 'b': sdb_set_batch_mode(); break;
-      case 'p': sscanf(optarg, "%d", &difftest_port); break;
       case 'l': log_file = optarg; break;
+      case 'r': trace_fie = optarg; break;
       case 'd': diff_so_file = optarg; break;
+      case 'p': sscanf(optarg, "%d", &difftest_port); break;
       case 'e': elf_file = optarg; break;
       case 'g': ftracer_log_file = optarg; break;
       case 'k': dtracer_log_file = optarg; break;
-      case 1: img_file = optarg; return 0;
+      case 'i': img_file = optarg; break;
       default:
         printf("Usage: %s [OPTION...] IMAGE [args]\n\n", argv[0]);
+        printf("\t-h,--help                      print this help message\n");
         printf("\t-b,--batch                     run with batch mode\n");
         printf("\t-l,--log=FILE                  output log to FILE\n");
+        printf("\t-r,--tracebin=trace_fie        trace bin for branch/cache predictor\n");
         printf("\t-d,--diff=REF_SO               run DiffTest with reference REF_SO\n");
         printf("\t-p,--port=PORT                 run DiffTest with port PORT\n");
         printf("\t-e,--elf=ELF_FILE              load elf file for ftrace\n");
         printf("\t-g,--elf-log=FTRACER_FILE      ftracer output log to FTRACER_FILE\n");
         printf("\t-k,--dtrace-log=DTRACER_FILE   ftracer output log to DTRACER_FILE\n");
+        printf("\t-i,--image=IMG_FILE            load program from IMG_FILE\n");
         printf("\n");
         exit(0);
     }
@@ -264,7 +285,11 @@ void init_monitor(int argc, char *argv[]) {
   /* Initialize the simple debugger. */
   init_sdb();
 
+  /* 初始化反汇编器 */
   IFDEF(CONFIG_ITRACE, init_disasm());
+
+  /* 初始化 branch trace bin */
+  IFDEF(CONFIG_BTRACE, init_tracebin());
 
   /* 初始化 ftracer */
   IFDEF(CONFIG_FTRACE, load_elf());

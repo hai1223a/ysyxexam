@@ -67,6 +67,7 @@ uint64_t get_time();
   } while (0) \
 )
 
+//=========================================
 // ftracer 部分内容
 //=========================================
 #ifdef CONFIG_FTRACE
@@ -86,8 +87,8 @@ struct FUNC_FTRACE{
 extern struct FUNC_FTRACE *FUNC_FTRACER;
 extern int FUNC_nums;
 #endif
-//=========================================
 
+//=========================================
 // dtracer 部分内容
 //=========================================
 #ifdef CONFIG_DTRACE
@@ -101,13 +102,23 @@ extern int FUNC_nums;
   } while(0) \
 )
 #endif
-//=========================================
 
+//=========================================
+// btrace 部分内容
+//=========================================
+#ifdef CONFIG_BTRACE
+#define btrace_write(...) do {extern FILE* tracebin_fp; \
+    fwrite(__VA_ARGS__, 12, 1, tracebin_fp); \
+    fflush(tracebin_fp); \
+} while(0)
+#endif
+
+//=========================================
+// Log 宏定义
+//=========================================
 #define _Log(...) \
   do { \
     printf(__VA_ARGS__); \
     log_write(__VA_ARGS__); \
   } while (0)
-
-
 #endif

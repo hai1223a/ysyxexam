@@ -8,7 +8,6 @@ void __am_timer_uptime(AM_TIMER_UPTIME_T *uptime) {
   uptime->us = inl(RTC_ADDR + 4);
   uptime->us <<= 32;
   uptime->us += inl(RTC_ADDR);
-  uptime->us *= 15;
 }
 
 void __am_timer_rtc(AM_TIMER_RTC_T *rtc) {
@@ -19,3 +18,4 @@ void __am_timer_rtc(AM_TIMER_RTC_T *rtc) {
   rtc->month  = 0;
   rtc->year   = 1900;
 }
+

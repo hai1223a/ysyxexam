@@ -1,0 +1,32 @@
+NAME := cachesim
+BUILD_DIR := $(shell pwd)/build
+OBJ_DIR := $(BUILD_DIR)/obj-$(NAME)
+BINARY := $(BUILD_DIR)/$(NAME)
+
+CXX := g++
+LD := $(CXX)
+CXXSRC += $(shell find src -type f -name "*.cpp" )
+INC_PATH := include
+INCLUDES = $(addprefix -I, $(INC_PATH))
+OBJS := $(CXXSRC:%.cpp=$(OBJ_DIR)/%.o)
+CXXFLAGS := -O2 -MMD -Wall -Werror $(INCLUDES)
+
+override ARGS ?= source/microbench-test.bin.bz2 4 2 2 0
+
+$(OBJ_DIR)/%.o: %.cpp
+	@echo + CXX $<
+	@mkdir -p $(dir $@)
+	@$(CXX) $(CXXFLAGS) -c -o $@ $<
+
+# Depencies
+-include $(OBJS:.o=.d)
+
+$(BINARY):: $(OBJS)
+	@echo + LD $@
+	@$(LD) -o $@ $(OBJS) $(LDFLAGS)
+
+run: $(BINARY)
+	@$(BINARY) $(ARGS)
+
+clean: 
+	rm -rf $(BUILD_DIR)

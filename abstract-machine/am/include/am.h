@@ -47,14 +47,16 @@ extern "C" {
 extern   Area        heap;
 void     putch       (char ch);
 void     halt        (int code) __attribute__((__noreturn__));
-void     spi_config  (uint8_t SS, uint8_t CHAR_LEN);
-uint32_t bitrev_read (uint32_t data);
-
 
 // -------------------- IOE: Input/Output Devices --------------------
 bool     ioe_init    (void);
 void     ioe_read    (int reg, void *buf);
 void     ioe_write   (int reg, void *buf);
+void     spi_config  (uint8_t SS, uint8_t CHAR_LEN);
+uint32_t bitrev_read (uint32_t data);
+void     write_led   (uint16_t data);
+uint16_t read_sw     ();
+void     write_seg   (uint32_t data);
 #include "amdev.h"
 
 // ---------- CTE: Interrupt Handling and Context Switching ----------

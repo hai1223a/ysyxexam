@@ -10,6 +10,9 @@
 #ifdef CONFIG_FST
 #include "verilated_fst_c.h"     // fst波形文件所需要的库
 #endif
+#ifdef CONFIG_TARGET_NVBOARD
+#include <nvboard.h>
+#endif
 #include "reg.h"
 #include "sdb.h"
 #include "cpu.h"

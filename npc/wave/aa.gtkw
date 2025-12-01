@@ -1,0 +1,76 @@
+[*]
+[*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
+[*] Thu Nov 27 13:27:08 2025
+[*]
+[dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.vcd"
+[dumpfile_mtime] "Thu Nov 27 13:11:07 2025"
+[dumpfile_size] 795217
+[savefile] "/home/yunhai/ysyx-workbench/npc/wave/aa.gtkw"
+[timestart] 55160
+[size] 2560 1333
+[pos] -27 -24
+*-13.500000 63020 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] tb_fullsoc.
+[treeopen] tb_fullsoc.u_dut.
+[treeopen] tb_fullsoc.u_dut.u_ysyx_25050136.
+[treeopen] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.
+[sst_width] 329
+[signals_width] 446
+[sst_expanded] 1
+[sst_vpaned_height] 421
+@28
+tb_fullsoc.u_dut.u_ysyx_25050136.inst_arvalid[0]
+@22
+tb_fullsoc.u_dut.u_ysyx_25050136.inst_araddr[31:0]
+@200
+-
+@28
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_IMEM2AXI.req_valid_i[0]
+@22
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_IMEM2AXI.req_addr_i[31:0]
+@28
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_IMEM2AXI.flush_i[0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_IMEM2AXI.cnt[1:0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_IMEM2AXI.state_read[1:0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.inst_flush_o[0]
+@c00022
+#{tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[31:0][0]} tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[31][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[30][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[29][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[28][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[27][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[26][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[25][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[24][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[23][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[22][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[21][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[20][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[19][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[18][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[17][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[16][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[15][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[14][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[13][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[12][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[11][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[10][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[9][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[8][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[7][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[6][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[5][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[4][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[3][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[2][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[1][0] tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[0][0]
+@28
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[0][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[1][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[2][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[3][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[4][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[5][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[6][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[7][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[8][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[9][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[10][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[11][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[12][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[13][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[14][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[15][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[16][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[17][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[18][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[19][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[20][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[21][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[22][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[23][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[24][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[25][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[26][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[27][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[28][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[29][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[30][0]
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\if_ic_pc[31][0]
+@1401200
+-group_end
+@68
+tb_fullsoc.u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.\u_ysyx_25050136_ICACHE.ic_idle_$_SDFFE_PP1P__Q_E[0]
+[pattern_trace] 1
+[pattern_trace] 0

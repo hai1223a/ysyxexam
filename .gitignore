@@ -12,10 +12,8 @@
 !/nanos-lite/*
 !/navy-apps/*
 !/npc/*
+!*.patch
 !Makefile
 !README.md
 !.gitignore
 !init.sh
-/fceux-am
-/am-kernels
-/Templates/rt-thread-am//nvboard

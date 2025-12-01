@@ -9,13 +9,21 @@ config MSIZE
   hex "Memory size"
   default 0x8000000
 
+config SDRAM_BASE
+  hex "SDRAM base address"
+  default 0xa0000000
+
+config SDRAM_SIZE
+  hex "SDRAM size"
+  default 0x4000000
+  
 config SRAM_BASE
   hex "SRAM base address"
   default 0x0f000000
 
 config SRAM_SIZE
   hex "SRAM size"
-  default 0x1fff
+  default 0x2000
   
 config PC_RESET_OFFSET
   hex "Offset of reset vector from the base of memory"

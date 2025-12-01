@@ -23,18 +23,22 @@ static uint8_t *pmem = NULL;
 #else // CONFIG_PMEM_GARRAY
 static uint8_t pmem[CONFIG_MSIZE] PG_ALIGN = {};
 static uint8_t psram[CONFIG_SRAM_SIZE] PG_ALIGN = {};
+static uint8_t psdram[CONFIG_SDRAM_SIZE] PG_ALIGN = {};
 #endif
 
-// mtrace的视线
+// mtrace的实现, 增设mtrace功能, 目的是让nemu作为ref时能追踪指定地址的访存情况
 //===============================================
 #ifdef CONFIG_MTRACE
   char mtrace_buf[128];
+  #define traced_addr 0x0f001f58  // 设定要追踪的物理地址
+
 #endif
 //===============================================
 
 uint8_t* guest_to_host(paddr_t paddr) { return pmem + paddr - CONFIG_MBASE; }
 paddr_t host_to_guest(uint8_t *haddr) { return haddr - pmem + CONFIG_MBASE; }
 uint8_t* guest_to_host_sram(paddr_t paddr) { return psram + paddr - CONFIG_SRAM_BASE; }
+uint8_t* guest_to_host_sdram(paddr_t paddr) { return psdram + paddr - CONFIG_SDRAM_BASE; }
 
 static word_t pmem_read(paddr_t addr, int len) {
   word_t ret = host_read(guest_to_host(addr), len);
@@ -54,6 +58,15 @@ static void sram_write(paddr_t addr, int len, word_t data) {
   host_write(guest_to_host_sram(addr), len, data);
 }
 
+static word_t sdram_read(paddr_t addr, int len) {
+  word_t ret = host_read(guest_to_host_sdram(addr), len);
+  return ret;
+}
+
+static void sdram_write(paddr_t addr, int len, word_t data) {
+  host_write(guest_to_host_sdram(addr), len, data);
+}
+
 static void out_of_bound(paddr_t addr) {
   #ifdef CONFIG_MTRACE
     printf("mtrace 访存出错报告\n");
@@ -71,6 +84,7 @@ void init_mem() {
 #endif
   IFDEF(CONFIG_MEM_RANDOM, memset(pmem, rand(), CONFIG_MSIZE));
   IFDEF(CONFIG_MEM_RANDOM, memset(psram, rand(), CONFIG_SRAM_SIZE));
+  IFDEF(CONFIG_MEM_RANDOM, memset(psdram, rand(), CONFIG_SDRAM_SIZE));
   Log("NEMU: physical memory area [" FMT_PADDR ", " FMT_PADDR "]", PMEM_LEFT, PMEM_RIGHT);
 }
 
@@ -81,9 +95,13 @@ word_t paddr_read(paddr_t addr, int len) {
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "%8x  ", addr);
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "read  %d", len);
     *p = '\0';
+    if(traced_addr == addr) {
+      puts(mtrace_buf);
+    }
   #endif
   if (likely(in_pmem(addr))) return pmem_read(addr, len);
   if (in_sram(addr)) return sram_read(addr, len);
+  if (in_sdram(addr)) return sdram_read(addr, len);
   IFDEF(CONFIG_DEVICE, return mmio_read(addr, len));
   out_of_bound(addr);
   return 0;
@@ -96,9 +114,13 @@ void paddr_write(paddr_t addr, int len, word_t data) {
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "%8x  ", addr);
     p += snprintf(p, mtrace_buf + sizeof(mtrace_buf) - p, "write  %d     %x", len, data);
     *p = '\0';
+    if(traced_addr == addr) {
+      puts(mtrace_buf);
+    }
   #endif
   if (likely(in_pmem(addr))) { pmem_write(addr, len, data); return; }
   if (in_sram(addr)) { sram_write(addr, len, data); return; }
+  if (in_sdram(addr)) { sdram_write(addr, len, data); return; }
   IFDEF(CONFIG_DEVICE, mmio_write(addr, len, data); return);
   out_of_bound(addr);
 }

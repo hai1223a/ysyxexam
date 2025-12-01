@@ -1,6 +1,8 @@
 AM_SRCS := riscv/npc/start.S \
            riscv/npc/trm.c \
            riscv/npc/ioe.c \
+           riscv/npc/uart.c \
+           riscv/npc/gpu.c \
            riscv/npc/timer.c \
            riscv/npc/input.c \
            riscv/npc/cte.c \
@@ -9,7 +11,7 @@ AM_SRCS := riscv/npc/start.S \
            platform/dummy/mpe.c
 
 CFLAGS    += -fdata-sections -ffunction-sections
-LDSCRIPTS += $(AM_HOME)/scripts/linker.ld
+LDSCRIPTS += $(AM_HOME)/scripts/linker_npc.ld
 LDFLAGS   += --defsym=_pmem_start=0x80000000 --defsym=_entry_offset=0x0 --print-map
 LDFLAGS   += --gc-sections -e _start
 IMAGE_NAME = $(basename $(notdir $(IMAGE)))
@@ -32,9 +34,10 @@ image: image-dep
 	@$(OBJDUMP) -d $(IMAGE).elf > $(IMAGE).txt
 	@echo + OBJCOPY "->" $(IMAGE_REL).bin
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
+	@echo + mainargs = "$(MAINARGS_PLACEHOLDER)"
 
 run: insert-arg
-	@$(MAKE) -C $(NPC_HOME) run ARGS="$(NPCFLAGS)"
+	@$(MAKE) -C $(NPC_HOME) sim-iverilog IMG="$(IMAGE).bin"
 
 gdb: insert-arg
 	@$(MAKE) -C $(NPC_HOME) gdb ARGS="$(NPCFLAGS)"

@@ -1,0 +1,187 @@
+[*]
+[*] GTKWave Analyzer v3.4.0 (w)1999-2022 BSI
+[*] Sat Aug 30 15:34:29 2025
+[*]
+[dumpfile] "/home/yunhai/ysyx-workbench/npc/wave/waveform.fst"
+[dumpfile_mtime] "Sat Aug 30 15:30:27 2025"
+[dumpfile_size] 272718
+[savefile] "/home/yunhai/ysyx-workbench/npc/wave/uart.gtkw"
+[timestart] 27037
+[size] 1858 1001
+[pos] -101 -101
+*-6.492957 27311 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1 -1
+[treeopen] TOP.
+[treeopen] TOP.ysyxSoCFull.
+[treeopen] TOP.ysyxSoCFull.asic.
+[treeopen] TOP.ysyxSoCFull.asic.cpu.
+[treeopen] TOP.ysyxSoCFull.asic.luart.
+[treeopen] TOP.ysyxSoCFull.asic.luart.muart.
+[treeopen] TOP.ysyxSoCFull.asic.luart.muart.Uregs.
+[treeopen] TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.
+[treeopen] TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.
+[sst_width] 381
+[signals_width] 403
+[sst_expanded] 1
+[sst_vpaned_height] 648
+@28
+TOP.ysyxSoCFull.asic.cpu.clock
+@c00200
+-cpu
+@c00022
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+@28
+(0)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(1)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(2)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(3)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(4)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(5)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(6)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(7)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(8)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(9)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(10)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(11)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(12)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(13)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(14)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(15)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(16)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(17)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(18)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(19)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(20)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(21)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(22)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(23)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(24)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(25)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(26)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(27)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(28)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(29)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(30)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+(31)TOP.ysyxSoCFull.asic.cpu.auto_master_out_awaddr[31:0]
+@1401200
+-group_end
+@28
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_awburst[1:0]
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_awvalid
+@c00022
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+@28
+(0)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(1)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(2)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(3)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(4)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(5)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(6)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(7)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(8)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(9)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(10)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(11)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(12)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(13)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(14)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(15)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(16)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(17)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(18)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(19)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(20)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(21)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(22)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(23)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(24)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(25)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(26)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(27)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(28)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(29)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(30)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+(31)TOP.ysyxSoCFull.asic.cpu.auto_master_out_wdata[31:0]
+@1401200
+-group_end
+@28
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_wlast
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_bvalid
+@22
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_araddr[31:0]
+@28
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_arsize[2:0]
+@22
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_rdata[31:0]
+@28
+TOP.ysyxSoCFull.asic.cpu.auto_master_out_rvalid
+@1401200
+-cpu
+@200
+-
+@29
+TOP.ysyxSoCFull.externalPins_uart_rx
+@28
+TOP.ysyxSoCFull.externalPins_uart_tx
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.clk
+TOP.ysyxSoCFull.asic.luart.auto_in_pwrite
+TOP.ysyxSoCFull.asic.luart.auto_in_psel
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.enable
+@c00028
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.wb_addr_i[2:0]
+@28
+(0)TOP.ysyxSoCFull.asic.luart.muart.Uregs.wb_addr_i[2:0]
+(1)TOP.ysyxSoCFull.asic.luart.muart.Uregs.wb_addr_i[2:0]
+(2)TOP.ysyxSoCFull.asic.luart.muart.Uregs.wb_addr_i[2:0]
+@1401200
+-group_end
+@22
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.wb_dat_i[7:0]
+@28
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.wb_we_i
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.lsr5
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.lsr6
+@22
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.ier[3:0]
+@c00022
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.iir[3:0]
+@28
+(0)TOP.ysyxSoCFull.asic.luart.muart.Uregs.iir[3:0]
+(1)TOP.ysyxSoCFull.asic.luart.muart.Uregs.iir[3:0]
+(2)TOP.ysyxSoCFull.asic.luart.muart.Uregs.iir[3:0]
+(3)TOP.ysyxSoCFull.asic.luart.muart.Uregs.iir[3:0]
+@1401200
+-group_end
+@22
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.dl[15:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.lcr[7:0]
+@820
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[0][7:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[1][7:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[2][7:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[3][7:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[4][7:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[5][7:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[6][7:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[7][7:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[8][7:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[9][7:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[10][7:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[11][7:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[12][7:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[13][7:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[14][7:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.tfifo.ram[15][7:0]
+@22
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.top[3:0]
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.bottom[3:0]
+@28
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.overrun
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.push
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.fifo_tx.pop
+@24
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.tstate[2:0]
+@28
+TOP.ysyxSoCFull.asic.luart.muart.Uregs.transmitter.tf_pop
+[pattern_trace] 1
+[pattern_trace] 0
