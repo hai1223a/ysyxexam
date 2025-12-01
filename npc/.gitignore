@@ -13,6 +13,7 @@ build/
 !README.md
 !Kconfig
 !Makefile
+!.config
 !*.gtkw
-!sim/
+!include/**
 !sim/**
