@@ -187,7 +187,7 @@ module ysyx_25050136_ID
     always @(posedge clk) begin
         if(reset) begin
             idle <= 1;
-            // in_pulse <= 0;
+            in_pulse <= 0;
             // id_pc <= 0;
             // id_inst <= 0;
             // id_prepc <= 0;

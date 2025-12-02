@@ -35,6 +35,20 @@ module tb_fullsoc;
         $display("复位结束，开始执行程序...");
     end
 
+    reg [63:0] cnt;
+    always @(posedge clk) begin
+        if (reset) begin
+            cnt <= 0;
+        end else begin
+            cnt <= cnt + 1;
+            if(cnt > 5000000) begin
+                $display("仿真了500万个时钟周期, 仿真结束");
+                $finish;
+            end            
+
+        end
+    end
+
     // wire [31:0] pc = u_dut.u_ysyx_25050136.u_ysyx_25050136_NPC.u_ysyx_25050136_NPCCORE.u_ysyx_25050136_IF.pc;
     // // 新增变量用于检测 PC 无变化
     // reg [31:0] pc_prev;

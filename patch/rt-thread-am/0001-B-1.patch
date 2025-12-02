@@ -1,6 +1,6 @@
-From affc10a96fb695589eb72e960dcd720925881987 Mon Sep 17 00:00:00 2001
+From 921c38e3bffbdc8510a0358d1963378352bb6680 Mon Sep 17 00:00:00 2001
 From: ysyx_25050136-Xie pingjiang <2690477553@qq.com>
-Date: Mon, 1 Dec 2025 11:39:04 +0800
+Date: Tue, 2 Dec 2025 21:29:19 +0800
 Subject: [PATCH] =?UTF-8?q?B=E9=98=B6=E6=AE=B5=E8=80=83=E6=A0=B8=E5=87=86?=
  =?UTF-8?q?=E5=A4=871?=
 MIME-Version: 1.0
@@ -8,29 +8,17 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 ---
- bsp/abstract-machine/SConstruct    |  1 +
- bsp/abstract-machine/extra.ld      | 91 +++++++++++++++---------------
+ bsp/abstract-machine/extra.ld      | 90 ++++++++++++++---------------
  bsp/abstract-machine/src/context.c | 91 +++++++++++++++++++++++++-----
  bsp/abstract-machine/src/hello.c   |  2 +-
- bsp/abstract-machine/src/uart.c    |  8 ++-
- 5 files changed, 132 insertions(+), 61 deletions(-)
+ bsp/abstract-machine/src/uart.c    | 10 +++-
+ 4 files changed, 131 insertions(+), 62 deletions(-)
 
-diff --git a/bsp/abstract-machine/SConstruct b/bsp/abstract-machine/SConstruct
-index 7c015111d..240b7fd91 100644
---- a/bsp/abstract-machine/SConstruct
-+++ b/bsp/abstract-machine/SConstruct
-@@ -1,5 +1,6 @@
- import os
- import sys
-+sys.path.insert(0, '/home/yunhai/ysyx-workbench/Templates/rt-thread-am/tools')
- import rtconfig
- 
- from rtconfig import RTT_ROOT
 diff --git a/bsp/abstract-machine/extra.ld b/bsp/abstract-machine/extra.ld
-index 5cdc65670..3dafc5560 100644
+index 5cdc65670..dcf01d6b5 100644
 --- a/bsp/abstract-machine/extra.ld
 +++ b/bsp/abstract-machine/extra.ld
-@@ -1,45 +1,46 @@
+@@ -1,45 +1,45 @@
 -SECTIONS {
 -  .data.extra : {
 -    /* section information for finsh shell */
@@ -76,53 +64,51 @@ index 5cdc65670..3dafc5560 100644
 -  }
 -}
 -INSERT BEFORE .bss;
-+/* SECTIONS {
-+/*   .data.extra : {
-+/*     /* section information for finsh shell */
-+/*     __fsymtab_start = .;
-+/*     KEEP(*(FSymTab))
-+/*     __fsymtab_end = .;
-+/*     . = ALIGN(8);
-+/*     __vsymtab_start = .;
-+/*     KEEP(*(VSymTab))
-+/*     __vsymtab_end = .;
-+/*     . = ALIGN(8);
-+/* 
-+/*     /* section information for initial. */
-+/*     . = ALIGN(8);
-+/*     __rt_init_start = .;
-+/*     KEEP(*(SORT(.rti_fn*)))
-+/*     __rt_init_end = .;
-+/*     . = ALIGN(8);
-+/* 
-+/*     __rt_utest_tc_tab_start = .;
-+/*     KEEP(*(UtestTcTab))
-+/*     __rt_utest_tc_tab_end = .;
-+/* 
-+/*     . = ALIGN(8);
-+/*     __am_apps_data_start = .;
-+/*     *(__am_apps.data*)
-+/*     *(__am_apps.sdata*)
-+/*     __am_apps_data_end = .;
-+/*     . = ALIGN(8);
-+/*   }
-+/* }
-+/* INSERT BEFORE .data;
-+/* 
-+/* SECTIONS {
-+/*   .bss.extra : {
-+/*     . = ALIGN(8);
-+/*     __am_apps_bss_start = .;
-+/*     *(__am_apps.bss*)
-+/*     *(__am_apps.sbss*)
-+/*     *(__am_apps.scommon*)
-+/*     __am_apps_bss_end = .;
-+/*     . = ALIGN(8);
-+/*   }
-+/* }
-+/* INSERT BEFORE .bss;
-+*/
-\ No newline at end of file
++ SECTIONS {
++   .data.extra : {
++     /* section information for finsh shell */
++     __fsymtab_start = .;
++     KEEP(*(FSymTab))
++     __fsymtab_end = .;
++     . = ALIGN(8);
++     __vsymtab_start = .;
++     KEEP(*(VSymTab))
++     __vsymtab_end = .;
++     . = ALIGN(8);
++ 
++     /* section information for initial. */
++     . = ALIGN(8);
++     __rt_init_start = .;
++     KEEP(*(SORT(.rti_fn*)))
++     __rt_init_end = .;
++     . = ALIGN(8);
++ 
++     __rt_utest_tc_tab_start = .;
++     KEEP(*(UtestTcTab))
++     __rt_utest_tc_tab_end = .;
++ 
++     . = ALIGN(8);
++     __am_apps_data_start = .;
++     *(__am_apps.data*)
++     *(__am_apps.sdata*)
++     __am_apps_data_end = .;
++     . = ALIGN(8);
++   }
++ }
++ INSERT BEFORE .data;
++ 
++ SECTIONS {
++   .bss.extra : {
++     . = ALIGN(8);
++     __am_apps_bss_start = .;
++     *(__am_apps.bss*)
++     *(__am_apps.sbss*)
++     *(__am_apps.scommon*)
++     __am_apps_bss_end = .;
++     . = ALIGN(8);
++   }
++ }
++ INSERT BEFORE .bss;
 diff --git a/bsp/abstract-machine/src/context.c b/bsp/abstract-machine/src/context.c
 index ee38829ae..1aa4440ff 100644
 --- a/bsp/abstract-machine/src/context.c
@@ -248,7 +234,7 @@ index cda4015f7..5b08608b5 100644
 +INIT_ENV_EXPORT(hello);
 \ No newline at end of file
 diff --git a/bsp/abstract-machine/src/uart.c b/bsp/abstract-machine/src/uart.c
-index e4eb86689..ad85a1d46 100644
+index e4eb86689..c841301ad 100644
 --- a/bsp/abstract-machine/src/uart.c
 +++ b/bsp/abstract-machine/src/uart.c
 @@ -13,7 +13,10 @@
@@ -263,11 +249,13 @@ index e4eb86689..ad85a1d46 100644
  struct device_uart {
    rt_ubase_t hw_base;
    rt_uint32_t irqno;
-@@ -38,7 +41,8 @@ static int _uart_putc(struct rt_serial_device *serial, char c) {
+@@ -37,8 +40,9 @@ static int _uart_putc(struct rt_serial_device *serial, char c) {
+ }
  
  static int _uart_getc(struct rt_serial_device *serial) {
-   static const char *p = "help\ndate\nversion\nfree\nps\npwd\nls\nmemtrace\nmemcheck\nutest_list\n";
+-  static const char *p = "help\ndate\nversion\nfree\nps\npwd\nls\nmemtrace\nmemcheck\nutest_list\n";
 -  return (*p != '\0' ? *(p ++) : -1);
++  static const char *p = "help\ndate\nversion\nfree\nps\npwd\nls\nmemtrace\nmemcheck\nutest_list\nam_hello\nam_microbench test\n";
 +  char rdata = io_read(AM_UART_RX).data;
 +  return (*p != '\0' ? *(p ++) : rdata);
  }
