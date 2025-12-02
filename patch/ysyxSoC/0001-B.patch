@@ -1,8 +1,8 @@
-From 4c027b6c595ca2853ee6a14583e754b33f34649e Mon Sep 17 00:00:00 2001
+From 9b60dd5918af682d25007091cc09837be86243e2 Mon Sep 17 00:00:00 2001
 From: ysyx_25050136-Xie pingjiang <2690477553@qq.com>
-Date: Mon, 1 Dec 2025 11:38:23 +0800
+Date: Tue, 2 Dec 2025 23:09:20 +0800
 Subject: [PATCH] =?UTF-8?q?B=E9=98=B6=E6=AE=B5=E8=80=83=E6=A0=B8=E5=87=86?=
- =?UTF-8?q?=E5=A4=871?=
+ =?UTF-8?q?=E5=A4=87?=
 MIME-Version: 1.0
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
@@ -31,14 +31,14 @@ Content-Transfer-Encoding: 8bit
  20 files changed, 1991 insertions(+), 375 deletions(-)
 
 diff --git a/perip/amba/apb_delayer.v b/perip/amba/apb_delayer.v
-index c0d20764..295e59c0 100644
+index c0d20764..806445b1 100644
 --- a/perip/amba/apb_delayer.v
 +++ b/perip/amba/apb_delayer.v
 @@ -23,16 +23,84 @@ module apb_delayer(
    input  [31:0] out_prdata,
    input         out_pslverr
  );
-+// `define NO_DELAY
++`define NO_DELAY
 +`ifdef NO_DELAY
 +// ========================= 无延迟 =========================
 +    assign out_paddr   = in_paddr;
@@ -130,7 +130,7 @@ index c0d20764..295e59c0 100644
 +`endif
  endmodule
 diff --git a/perip/amba/axi4_delayer.v b/perip/amba/axi4_delayer.v
-index f692803b..c81b8e6c 100644
+index f692803b..7c50d7bf 100644
 --- a/perip/amba/axi4_delayer.v
 +++ b/perip/amba/axi4_delayer.v
 @@ -1,96 +1,536 @@
@@ -259,7 +259,7 @@ index f692803b..c81b8e6c 100644
 +    input  [3:0]  out_bid,
 +    input  [1:0]  out_bresp
  );
-+// `define NO_DELAY
++`define NO_DELAY
 +`ifdef NO_DELAY
 +    // 如果定义了 NO_DELAY 宏, 则不进行延迟处理, 直接连接输入输出
 +    assign out_arvalid = in_arvalid;
