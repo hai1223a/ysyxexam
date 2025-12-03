@@ -1,6 +1,6 @@
-From 3077910727ca6a229d98bb70c979b8c748f22819 Mon Sep 17 00:00:00 2001
+From 061e6d5d923c0ba4048295862b16416f3ec0f478 Mon Sep 17 00:00:00 2001
 From: ysyx_25050136-Xie pingjiang <2690477553@qq.com>
-Date: Tue, 2 Dec 2025 23:02:26 +0800
+Date: Wed, 3 Dec 2025 19:19:58 +0800
 Subject: [PATCH] =?UTF-8?q?B=E9=98=B6=E6=AE=B5=E8=80=83=E6=A0=B8=E5=87=86?=
  =?UTF-8?q?=E5=A4=87?=
 MIME-Version: 1.0
@@ -8,17 +8,17 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 ---
- bsp/abstract-machine/extra.ld      | 90 ++++++++++++++---------------
+ bsp/abstract-machine/extra.ld      | 91 +++++++++++++++---------------
  bsp/abstract-machine/src/context.c | 91 +++++++++++++++++++++++++-----
  bsp/abstract-machine/src/hello.c   |  2 +-
  bsp/abstract-machine/src/uart.c    | 10 +++-
- 4 files changed, 131 insertions(+), 62 deletions(-)
+ 4 files changed, 132 insertions(+), 62 deletions(-)
 
 diff --git a/bsp/abstract-machine/extra.ld b/bsp/abstract-machine/extra.ld
-index 5cdc65670..c73595963 100644
+index 5cdc65670..3dafc5560 100644
 --- a/bsp/abstract-machine/extra.ld
 +++ b/bsp/abstract-machine/extra.ld
-@@ -1,45 +1,45 @@
+@@ -1,45 +1,46 @@
 -SECTIONS {
 -  .data.extra : {
 -    /* section information for finsh shell */
@@ -109,6 +109,8 @@ index 5cdc65670..c73595963 100644
 +/*   }
 +/* }
 +/* INSERT BEFORE .bss;
++*/
+\ No newline at end of file
 diff --git a/bsp/abstract-machine/src/context.c b/bsp/abstract-machine/src/context.c
 index ee38829ae..1aa4440ff 100644
 --- a/bsp/abstract-machine/src/context.c

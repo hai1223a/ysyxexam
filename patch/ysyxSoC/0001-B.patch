@@ -1,6 +1,6 @@
-From 9b60dd5918af682d25007091cc09837be86243e2 Mon Sep 17 00:00:00 2001
+From 003c4fde02645d15ea28ec93d00176f356e5097b Mon Sep 17 00:00:00 2001
 From: ysyx_25050136-Xie pingjiang <2690477553@qq.com>
-Date: Tue, 2 Dec 2025 23:09:20 +0800
+Date: Wed, 3 Dec 2025 19:22:52 +0800
 Subject: [PATCH] =?UTF-8?q?B=E9=98=B6=E6=AE=B5=E8=80=83=E6=A0=B8=E5=87=86?=
  =?UTF-8?q?=E5=A4=87?=
 MIME-Version: 1.0
@@ -22,13 +22,13 @@ Content-Transfer-Encoding: 8bit
  perip/sdram/sdram.v                          | 344 +++++++++-
  perip/sdram/sdram_top_apb.v                  |  70 ++-
  perip/sdram/sdram_top_axi.v                  | 209 ++++---
- perip/spi/rtl/spi_top_apb.v                  | 252 +++++++-
+ perip/spi/rtl/spi_top_apb.v                  | 265 +++++++-
  perip/uart16550/rtl/uart_regs.v              |   8 +-
  perip/vga/vga_top_apb.v                      | 106 ++++
  src/CPU.scala                                |   4 +-
  src/Top.scala                                |   2 +-
  src/device/SDRAM.scala                       |  12 +-
- 20 files changed, 1991 insertions(+), 375 deletions(-)
+ 20 files changed, 2004 insertions(+), 375 deletions(-)
 
 diff --git a/perip/amba/apb_delayer.v b/perip/amba/apb_delayer.v
 index c0d20764..806445b1 100644
@@ -2426,7 +2426,7 @@ index f0fd6fdb..5d0ddc74 100644
  
  endmodule
 diff --git a/perip/spi/rtl/spi_top_apb.v b/perip/spi/rtl/spi_top_apb.v
-index 92d37516..a6619e30 100644
+index 92d37516..75ab5dca 100644
 --- a/perip/spi/rtl/spi_top_apb.v
 +++ b/perip/spi/rtl/spi_top_apb.v
 @@ -1,6 +1,6 @@
@@ -2437,7 +2437,7 @@ index 92d37516..a6619e30 100644
  
  module spi_top_apb #(
    parameter flash_addr_start = 32'h30000000,
-@@ -47,27 +47,253 @@ assign in_pready  = in_penable && in_psel && !in_pwrite;
+@@ -47,27 +47,266 @@ assign in_pready  = in_penable && in_psel && !in_pwrite;
  assign in_prdata  = data[31:0];
  
  `else
@@ -2461,6 +2461,8 @@ index 92d37516..a6619e30 100644
 +wire in_flash = (in_paddr >= flash_addr_start) && (in_paddr <= flash_addr_end);
 +wire xip_ready, xip_slverr;
 +wire [31:0] xip_rdata;
++reg xip_ready_reg, xip_slverr_reg;
++reg [31:0] xip_rdata_reg;
 +reg [31:0] xip_wdata;
 +reg [4:0] xip_addr;
 +reg [3:0] xip_strb;
@@ -2635,18 +2637,29 @@ index 92d37516..a6619e30 100644
 +  endcase
 +end
 +
++always @(posedge clock) begin
++  if (reset) begin
++    xip_ready_reg <= 0;
++    xip_slverr_reg <= 0;
++    xip_rdata_reg <= 0;
++  end else begin
++    xip_ready_reg <= xip_ready;
++    xip_slverr_reg <= xip_slverr;
++    xip_rdata_reg <= xip_rdata;
++  end
++end
 +assign xip_ready = ((state == R_DATA) && (wb_ack_o)) ? 1 : 0;
 +assign xip_slverr = ((state == R_DATA) && (wb_ack_o)) ? wb_err_o : 0;
 +assign xip_rdata = ((state == R_DATA) && (wb_ack_o)) ? {wb_dat_o[7:0], wb_dat_o[15:8], wb_dat_o[23:16], wb_dat_o[31:24]} : 0;
 +assign wb_adr_i = in_flash ? xip_addr[4:0] : in_paddr[4:0];
 +assign wb_dat_i = in_flash ? xip_wdata : in_pwdata;
-+assign in_prdata = in_flash ? xip_rdata : wb_dat_o;
++assign in_prdata = in_flash ? xip_rdata_reg : wb_dat_o;
 +assign wb_sel_i = in_flash ? xip_strb : in_pstrb;
 +assign wb_we_i = in_flash ? xip_write : in_pwrite;
 +assign wb_stb_i = in_flash ? xip_sel : in_psel;
 +assign wb_cyc_i = in_flash ? xip_enable : in_penable;
-+assign in_pready = in_flash ? xip_ready : wb_ack_o;
-+assign in_pslverr = in_flash ? xip_slverr : wb_err_o;
++assign in_pready = in_flash ? xip_ready_reg : wb_ack_o;
++assign in_pslverr = in_flash ? xip_slverr_reg : wb_err_o;
  
  spi_top u0_spi_top (
    .wb_clk_i(clock),
