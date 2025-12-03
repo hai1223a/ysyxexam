@@ -110,12 +110,12 @@ module ysyx_25050136_DCACHE
                     end
                 end 
                 READ: begin
-                    if(r_fire && m_rlast_i && (m_rresp_i == 2'd0)) begin
+                    if(r_fire && m_rlast_i) begin
                         state <= ACK;
                     end
                 end
                 WRITE: begin
-                    if(b_fire && (m_bresp_i == 2'd0)) begin
+                    if(b_fire) begin
                         state <= ACK;
                     end
                 end

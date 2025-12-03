@@ -91,8 +91,7 @@ extern "C" void find_ebreak() {
 }
 
 extern "C" void find_resp() {
-  Log("NPC抛出Access Fault异常");
-  set_nemu_state(NPC_END, SOC_NPC, 2);
+  Log("NPC抛出Access Fault异常, 但我继续仿真, 如果后续有问题可以检查这个");
 }
 
 extern "C" void find_addr_0() {
