@@ -1,6 +1,6 @@
-From 061e6d5d923c0ba4048295862b16416f3ec0f478 Mon Sep 17 00:00:00 2001
+From 82a2b9f613bd05d1a00ed5f076e6312ee9ea0360 Mon Sep 17 00:00:00 2001
 From: ysyx_25050136-Xie pingjiang <2690477553@qq.com>
-Date: Wed, 3 Dec 2025 19:19:58 +0800
+Date: Thu, 4 Dec 2025 13:09:20 +0800
 Subject: [PATCH] =?UTF-8?q?B=E9=98=B6=E6=AE=B5=E8=80=83=E6=A0=B8=E5=87=86?=
  =?UTF-8?q?=E5=A4=87?=
 MIME-Version: 1.0
@@ -8,11 +8,12 @@ Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 ---
- bsp/abstract-machine/extra.ld      | 91 +++++++++++++++---------------
- bsp/abstract-machine/src/context.c | 91 +++++++++++++++++++++++++-----
- bsp/abstract-machine/src/hello.c   |  2 +-
- bsp/abstract-machine/src/uart.c    | 10 +++-
- 4 files changed, 132 insertions(+), 62 deletions(-)
+ bsp/abstract-machine/extra.ld             | 91 ++++++++++++-----------
+ bsp/abstract-machine/integrate-am-apps.py |  2 +-
+ bsp/abstract-machine/src/context.c        | 91 +++++++++++++++++++----
+ bsp/abstract-machine/src/hello.c          |  2 +-
+ bsp/abstract-machine/src/uart.c           | 10 ++-
+ 5 files changed, 133 insertions(+), 63 deletions(-)
 
 diff --git a/bsp/abstract-machine/extra.ld b/bsp/abstract-machine/extra.ld
 index 5cdc65670..3dafc5560 100644
@@ -111,6 +112,19 @@ index 5cdc65670..3dafc5560 100644
 +/* INSERT BEFORE .bss;
 +*/
 \ No newline at end of file
+diff --git a/bsp/abstract-machine/integrate-am-apps.py b/bsp/abstract-machine/integrate-am-apps.py
+index 8968df387..08c91d0b1 100644
+--- a/bsp/abstract-machine/integrate-am-apps.py
++++ b/bsp/abstract-machine/integrate-am-apps.py
+@@ -94,7 +94,7 @@ static void am_app_start_wrapper(const char *app_name, void *app_main, int argc,
+   memcpy(am_apps_data.start, am_apps_data_content, am_apps_data.end - am_apps_data.start);
+   memset(am_apps_bss.start, 0, am_apps_bss.end - am_apps_bss.start);
+   heap = am_apps_heap;
+-  void *args[2] = { app_main, (argc >= 2 ? argv[1] : "") };
++  void *args[2] = { app_main, (argc >= 2 ? argv[1] : "test") };
+   rt_thread_t tid = rt_thread_create(app_name, am_app_start_thread, args, 0x4000, 0, 20);
+   rt_thread_startup(tid);
+ }
 diff --git a/bsp/abstract-machine/src/context.c b/bsp/abstract-machine/src/context.c
 index ee38829ae..1aa4440ff 100644
 --- a/bsp/abstract-machine/src/context.c
@@ -236,7 +250,7 @@ index cda4015f7..5b08608b5 100644
 +INIT_ENV_EXPORT(hello);
 \ No newline at end of file
 diff --git a/bsp/abstract-machine/src/uart.c b/bsp/abstract-machine/src/uart.c
-index e4eb86689..c841301ad 100644
+index e4eb86689..737be0402 100644
 --- a/bsp/abstract-machine/src/uart.c
 +++ b/bsp/abstract-machine/src/uart.c
 @@ -13,7 +13,10 @@
@@ -257,7 +271,7 @@ index e4eb86689..c841301ad 100644
  static int _uart_getc(struct rt_serial_device *serial) {
 -  static const char *p = "help\ndate\nversion\nfree\nps\npwd\nls\nmemtrace\nmemcheck\nutest_list\n";
 -  return (*p != '\0' ? *(p ++) : -1);
-+  static const char *p = "help\ndate\nversion\nfree\nps\npwd\nls\nmemtrace\nmemcheck\nutest_list\nam_hello\nam_microbench test\n";
++  static const char *p = "help\ndate\nversion\nfree\nps\npwd\nls\nmemtrace\nmemcheck\nutest_list\nam_hello\nam_microbench\n";
 +  char rdata = io_read(AM_UART_RX).data;
 +  return (*p != '\0' ? *(p ++) : rdata);
  }
