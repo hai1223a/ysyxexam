@@ -1,6 +1,6 @@
-From 82a2b9f613bd05d1a00ed5f076e6312ee9ea0360 Mon Sep 17 00:00:00 2001
+From d04c94bcd81afb981488b5c6da77e30eb4af995a Mon Sep 17 00:00:00 2001
 From: ysyx_25050136-Xie pingjiang <2690477553@qq.com>
-Date: Thu, 4 Dec 2025 13:09:20 +0800
+Date: Thu, 4 Dec 2025 23:37:30 +0800
 Subject: [PATCH] =?UTF-8?q?B=E9=98=B6=E6=AE=B5=E8=80=83=E6=A0=B8=E5=87=86?=
  =?UTF-8?q?=E5=A4=87?=
 MIME-Version: 1.0
@@ -250,7 +250,7 @@ index cda4015f7..5b08608b5 100644
 +INIT_ENV_EXPORT(hello);
 \ No newline at end of file
 diff --git a/bsp/abstract-machine/src/uart.c b/bsp/abstract-machine/src/uart.c
-index e4eb86689..737be0402 100644
+index e4eb86689..aa66cb5eb 100644
 --- a/bsp/abstract-machine/src/uart.c
 +++ b/bsp/abstract-machine/src/uart.c
 @@ -13,7 +13,10 @@
@@ -271,7 +271,7 @@ index e4eb86689..737be0402 100644
  static int _uart_getc(struct rt_serial_device *serial) {
 -  static const char *p = "help\ndate\nversion\nfree\nps\npwd\nls\nmemtrace\nmemcheck\nutest_list\n";
 -  return (*p != '\0' ? *(p ++) : -1);
-+  static const char *p = "help\ndate\nversion\nfree\nps\npwd\nls\nmemtrace\nmemcheck\nutest_list\nam_hello\nam_microbench\n";
++  static const char *p = "";
 +  char rdata = io_read(AM_UART_RX).data;
 +  return (*p != '\0' ? *(p ++) : rdata);
  }
