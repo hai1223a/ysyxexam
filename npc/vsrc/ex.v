@@ -36,7 +36,7 @@ module ysyx_25050136_EX
         input     [ADDR_WIDTH-1:0]                       in_rd_i,
         input                                         in_rd_en_i,
         output                                        in_ready_o,
-`ifdef VERILATOR
+`ifdef YSYXSOC
         input      [31:0]                          in_dbg_inst_i,
         input      [5:0]                         in_dbg_optype_i,
         output     [31:0]                           out_dbg_pc_o,
@@ -204,7 +204,7 @@ module ysyx_25050136_EX
     // === 流水线控制 ===
     assign in_ready_o = idle || out_fire;
     assign out_valid_o = !(idle || flush);
-`ifdef VERILATOR
+`ifdef YSYXSOC
     always @(posedge clk) begin
         if(reset) begin
             out_dbg_inst_o <= 0;

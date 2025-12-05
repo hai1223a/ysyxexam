@@ -14,7 +14,7 @@ module ysyx_25050136_ID
         input                                          in_btb_hit_i,
         output                                           in_ready_o,
         input                                           out_ready_i,
-`ifdef VERILATOR
+`ifdef YSYXSOC
         output     [31:0]                            out_dbg_inst_o,
         output     [5:0]                           out_dbg_optype_o,
 `endif
@@ -297,7 +297,7 @@ module ysyx_25050136_ID
     // === 握手信号 ===
     assign in_ready_o = idle || out_fire;
     assign out_valid_o = !(idle || flush) && ready_go;
-`ifdef VERILATOR
+`ifdef YSYXSOC
     wire [31:0] id_dbg_pc = out_pc_o;
     assign out_dbg_inst_o = id_inst;
     assign out_dbg_optype_o = {type_jalr | type_jal, type_branch, type_load, type_store, type_system, type_op_imm | type_auipc | type_lui | type_op};

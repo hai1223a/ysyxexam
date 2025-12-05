@@ -275,7 +275,7 @@ module ysyx_25050136_DCACHE
     assign w_fire      = m_wvalid_o & m_wready_i;
     assign b_fire      = m_bvalid_i & m_bready_o;
 
-`ifdef VERILATOR
+`ifdef YSYXSOC
     wire [31:0] mem_type;
     assign mem_type = (req_addr_i >= 32'ha0000000) ? 32'd2 :
                       (req_addr_i >= 32'h30000000) ? 32'd1 :

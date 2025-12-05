@@ -23,7 +23,7 @@ module ysyx_25050136_RegisterFile
 
     assign rdata1_o = (raddr1_i == 0) ? 0 :gpr[raddr1_i];
     assign rdata2_o = (raddr2_i == 0) ? 0 :gpr[raddr2_i];
-`ifdef VERILATOR
+`ifdef YSYXSOC
     wire [31:0] zero = 32'd0;          // x0
     wire [31:0] ra   = gpr[1];         // x1
     wire [31:0] sp   = gpr[2];         // x2

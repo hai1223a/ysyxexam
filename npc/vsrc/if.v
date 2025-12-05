@@ -18,10 +18,8 @@ module ysyx_25050136_IF
         output        out_valid_o
     );
      
-`ifdef VERILATOR
+`ifdef YSYXSOC
     localparam RESET_PC = 32'h30000000;  
-`elsif __ICARUS__
-    localparam RESET_PC = 32'h80000000;  // Icarus 仿真复位地址
 `else
     localparam RESET_PC = 32'h80000000;  // yosys 综合复位地址
 `endif
@@ -43,7 +41,7 @@ module ysyx_25050136_IF
     wire [31:0] btb_pred_npc;
 
     wire [31:0] next_pc = (pht_pred_taken && out_btb_hit_o) ? btb_pred_npc : (pc + 4);
-`ifdef VERILATOR
+`ifdef YSYXSOC
     wire [31:0] if_dbg_pc = out_pc_o;
     always @(posedge clk) begin
         if(out_fire) fetch_get();

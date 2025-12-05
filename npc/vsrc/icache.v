@@ -200,7 +200,7 @@ module ysyx_25050136_ICACHE
     assign req_valid_o      = (state == MISS);
     // assign req_addr_o     = ic_addr;
 
-`ifdef VERILATOR
+`ifdef YSYXSOC
     reg [31:0] mem_type;
     reg in_pulse;
         always @(posedge clk) begin
