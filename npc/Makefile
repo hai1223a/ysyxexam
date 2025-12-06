@@ -117,7 +117,7 @@ SOC_VERDEFINE = +TOP_NAME="V$(SOC_TOP)"
 
 # SoC Verilator编译选项
 SOC_VERFLAGS += $(VERFLAGS) --top-module $(SOC_TOP) $(SOC_VSRC) $(SOC_CSRC) \
-			    $(SOC_INC) +define$(SOC_VERDEFINE) -DYSYXSOC
+			    $(SOC_INC) +define$(SOC_VERDEFINE)
 
 # SoC依赖文件
 SOC_DEPEMD += $(LIBCAPSTONE) $(NPC_VSRC)
