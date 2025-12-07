@@ -86,12 +86,11 @@ module ysyx_25050136_XBAR
     // ==================================================================
     // 写通道仲裁 (Write Channel Arbitration)
     // ==================================================================
-    reg [SLAVER_NUM-1:0] w_slaver_grand;      // 写从设备授权 (one-hot)
-    reg [$clog2(SLAVER_NUM)-1:0] w_slaver_id; // 写从设备ID (binary)
-    reg [SLAVER_NUM-1:0] w_current_slaver;    // 当前服务的写从设备 (one-hot)
-    reg [$clog2(SLAVER_NUM)-1:0] w_current_slaver_id; // 当前服务的写从设备ID (binary)
+    reg [SLAVER_NUM-1:0] w_slaver_grand;      
+    reg [$clog2(SLAVER_NUM)-1:0] w_slaver_id; 
+    reg [SLAVER_NUM-1:0] w_current_slaver;   
+    reg [$clog2(SLAVER_NUM)-1:0] w_current_slaver_id; 
 
-    // 写地址译码：根据s_awaddr_i决定目标从设备
     always @(*) begin
         w_slaver_grand = 0;
         w_slaver_id = 0;
@@ -107,13 +106,11 @@ module ysyx_25050136_XBAR
         end
     end
 
-    // 写仲裁状态机：锁定一个写事务，直到写响应通道完成
     always @(posedge aclk) begin
         if (reset) begin
             w_current_slaver <= 0;
             w_current_slaver_id <= 0;
         end else begin
-            // 当总线空闲或上一个写事务完成时，锁存新的请求
             if(|w_current_slaver == 0 || (s_bvalid_o && s_bready_i)) begin
                 w_current_slaver <= w_slaver_grand;
                 w_current_slaver_id <= w_slaver_id;
@@ -124,12 +121,11 @@ module ysyx_25050136_XBAR
     // ==================================================================
     // 读通道仲裁 (Read Channel Arbitration)
     // ==================================================================
-    reg [SLAVER_NUM-1:0] r_slaver_grand;      // 读从设备授权 (one-hot)
-    reg [$clog2(SLAVER_NUM)-1:0] r_slaver_id; // 读从设备ID (binary)
-    reg [SLAVER_NUM-1:0] r_current_slaver;    // 当前服务的读从设备 (one-hot)
-    reg [$clog2(SLAVER_NUM)-1:0] r_current_slaver_id; // 当前服务的读从设备ID (binary)
+    reg [SLAVER_NUM-1:0] r_slaver_grand;      
+    reg [$clog2(SLAVER_NUM)-1:0] r_slaver_id; 
+    reg [SLAVER_NUM-1:0] r_current_slaver;    
+    reg [$clog2(SLAVER_NUM)-1:0] r_current_slaver_id; 
 
-    // 读地址译码：根据s_araddr_i决定目标从设备
     always @(*) begin
         r_slaver_grand = 0;
         r_slaver_id = 0;
@@ -145,13 +141,11 @@ module ysyx_25050136_XBAR
         end
     end
 
-    // 读仲裁状态机：锁定一个读事务，直到读数据通道最后一个包传输完成
     always @(posedge aclk) begin
         if (reset) begin
             r_current_slaver <= 0;
             r_current_slaver_id <= 0;
         end else begin
-            // 当总线空闲或上一个读事务完成时，锁存新的请求
             if(|r_current_slaver == 0 || (s_rvalid_o && s_rready_i && s_rlast_o)) begin
                 r_current_slaver <= r_slaver_grand;
                 r_current_slaver_id <= r_slaver_id;
@@ -160,7 +154,7 @@ module ysyx_25050136_XBAR
     end
 
     // ==================================================================
-    // 通道 1: 写地址通道 (AW Channel)
+    // 写地址通道 (AW Channel)
     // ==================================================================
     assign s_awready_o = |(m_awready_i & w_current_slaver);
     genvar j_aw;
@@ -176,7 +170,7 @@ module ysyx_25050136_XBAR
     endgenerate
 
     // ==================================================================
-    // 通道 2: 写数据通道 (W Channel)
+    // 写数据通道 (W Channel)
     // ==================================================================
     assign s_wready_o  = |(m_wready_i & w_current_slaver);
     genvar j_w;
@@ -190,7 +184,7 @@ module ysyx_25050136_XBAR
     endgenerate
 
     // ==================================================================
-    // 通道 3: 写响应通道 (B Channel)
+    // 写响应通道 (B Channel)
     // ==================================================================
     assign s_bvalid_o  = |(m_bvalid_i & w_current_slaver);
     assign s_bresp_o   = m_bresp_i[w_current_slaver_id * 2 +: 2];
@@ -203,7 +197,7 @@ module ysyx_25050136_XBAR
     endgenerate
 
     // ==================================================================
-    // 通道 4: 读地址通道 (AR Channel)
+    // 读地址通道 (AR Channel)
     // ==================================================================
     assign s_arready_o = |(m_arready_i & r_current_slaver);
     genvar j_ar;
@@ -219,7 +213,7 @@ module ysyx_25050136_XBAR
     endgenerate
 
     // ==================================================================
-    // 通道 5: 读数据通道 (R Channel)
+    // 读数据通道 (R Channel)
     // ==================================================================
     assign s_rvalid_o  = |(m_rvalid_i & r_current_slaver);
     assign s_rdata_o   = m_rdata_i[r_current_slaver_id * DATA_WIDTH +: DATA_WIDTH];

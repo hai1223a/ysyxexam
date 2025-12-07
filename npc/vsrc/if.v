@@ -18,11 +18,7 @@ module ysyx_25050136_IF
         output        out_valid_o
     );
      
-`ifdef __ICARUS__
-    localparam RESET_PC = 32'h80000000;  
-`else
-    localparam RESET_PC = 32'h30000000; 
-`endif
+    localparam RESET_PC = 32'h30000000;  
 
     localparam PHT_INDEX = 4;
     localparam BTB_INDEX = 4;

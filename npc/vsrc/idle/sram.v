@@ -50,16 +50,17 @@ module ysyx_25050136_SRAM
     
     // ====== 信号定义 ======
     reg [7:0] mem [0:MEM_SIZE_BYTES-1];
+    reg [31:0] flash [0:15]; // 用于让程序从3000_0000跳转到8000_0000
     reg                     aw_pending;
     reg                      w_pending;
     reg                     ar_pending;
-    // handshake wires
+    // 握手信号
     wire aw_fire = s_awvalid_i & s_awready_o;
     wire w_fire  = s_wvalid_i  & s_wready_o;
     wire ar_fire = s_arvalid_i & s_arready_o;
     wire b_fire  = s_bvalid_o    & s_bready_i;
     wire r_fire  = s_rvalid_o    & s_rready_i;
-    // 请求/缓冲寄存器
+    // 读寄存器
     reg  [ADDR_WIDTH-1:0]   araddr_r;
     reg  [3:0]              arid_r;
     reg  [7:0]              arlen_r;
@@ -70,7 +71,7 @@ module ysyx_25050136_SRAM
     reg  [DATA_WIDTH-1:0]   rdata_r;
     reg  [1:0]              rresp_r;
     reg  [3:0]              rid_r;
-    // 请求/缓冲寄存器
+    // 写寄存器
     reg  [ADDR_WIDTH-1:0]   awaddr_r;
     reg  [3:0]              awid_r;
     reg  [7:0]              awlen_r;
@@ -88,6 +89,8 @@ module ysyx_25050136_SRAM
     wire [MEM_WIDTH -1:0] aw_memaddr = {awaddr_r[MEM_WIDTH-1:2], 2'b00};
     wire [1:0] ar_misalign = araddr_r[1:0] & ((1 << arsize_r) - 1);
     wire ar_overstep = (araddr_r < 32'h8000_0000) || (araddr_r >= (32'h8000_0000 + MEM_SIZE_BYTES));
+    wire ar_inflash = (araddr_r >= 32'h3000_0000) && (araddr_r < 32'h3000_0000 + 64);
+    wire [3:0] ar_flashaddr = araddr_r[5:2];
     wire [MEM_WIDTH -1:0] ar_memaddr = {araddr_r[MEM_WIDTH-1:2], 2'b00};
     // ====== 逻辑实现 ======
     integer i;
@@ -96,6 +99,13 @@ module ysyx_25050136_SRAM
         $readmemh(INIT_FILE, mem);
         for (i = 0; i < 200 * 4; i = i + 4) begin
             // $display("mem[%0d-%0d] = %h", i, i+3, {mem[i+3], mem[i+2], mem[i+1], mem[i]});
+        end
+        // 初始化 flash 跳转代码
+        flash[0]  = 32'h04c4b537; // lui a0,0x4c4b
+        flash[1]  = 32'h40050513; // addi a0,a0,1024
+        flash[2]  = 32'h00050067; // jr a0
+        for (i = 3; i < 16; i = i + 1) begin
+            flash[i] = 32'h00000013; // nop
         end
     end
 
@@ -126,11 +136,14 @@ module ysyx_25050136_SRAM
                 if (ar_misalign != 0) begin
                     $display("非对齐读RAM");
                     $stop;
+                end else if(ar_inflash) begin
+                    rresp_r <= 2'b00;
+                    rdata_r <= flash[ar_flashaddr];
                 end else if(ar_overstep)begin
                     $display("读RAM地址越界,读地址为:%08x",araddr_r);
                     $stop;
                 end else begin
-                    rresp_r <= 2'b00; // OKAY
+                    rresp_r <= 2'b00; 
                     rdata_r <= {mem[ar_memaddr + 3],
                                 mem[ar_memaddr + 2],
                                 mem[ar_memaddr + 1],
