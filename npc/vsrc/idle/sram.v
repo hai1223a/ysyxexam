@@ -101,10 +101,9 @@ module ysyx_25050136_SRAM
             // $display("mem[%0d-%0d] = %h", i, i+3, {mem[i+3], mem[i+2], mem[i+1], mem[i]});
         end
         // 初始化 flash 跳转代码
-        flash[0]  = 32'h04c4b537; // lui a0,0x4c4b
-        flash[1]  = 32'h40050513; // addi a0,a0,1024
-        flash[2]  = 32'h00050067; // jr a0
-        for (i = 3; i < 16; i = i + 1) begin
+        flash[0]  = 32'h80000437; // lui s0,0x80000
+        flash[1]  = 32'h00040067; // jr s0 #8000_0000
+        for (i = 2; i < 16; i = i + 1) begin
             flash[i] = 32'h00000013; // nop
         end
     end
