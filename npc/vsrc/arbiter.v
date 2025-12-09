@@ -1,8 +1,7 @@
 //----------------------------------------------------------
-// 多主设备单从设备AXI仲裁器(超级阉割版本)
-// 目前仅支持读通道仲裁(2选1), 写通道直通
-// 目前主设备顺序为(inst: 高位, data: 低位) 优先级为 data > inst
-// 为了区分inst和data的读操作, inst为rid[3]=1, data为rid[2]=1
+// CI测试不支持返回rid，所以简单仲裁
+// 仅支持MASTER_NUM=2
+// 仅支持读通道仲裁，写通道直通
 // 想要改变MASTER_NUM参数，需要同步修改内部逻辑
 //----------------------------------------------------------
 module ysyx_25050136_ARBITER
@@ -86,8 +85,9 @@ module ysyx_25050136_ARBITER
         input     [3:0]                         m_rid_i
      );
     // ========================读通道仲裁器===========================
-    // AR通道
-    // AR通道：加锁机制 —— 一旦选中某主设备（有候选请求），在AR握手完成前保持该占用者不变
+    // 仲裁逻辑：
+    // 1. 当没有传输时，从有效请求中选择优先级最高的一个作为当前传输者，进入忙态
+    // 2. 当传输进行时，高优先级请求也不可以抢占，直到当前传输完成，释放忙态
     reg [MASTER_NUM-1:0] AR_owner;
     reg                  AR_busy;
     reg [MASTER_NUM-1:0] AR_hot;
@@ -119,23 +119,7 @@ module ysyx_25050136_ARBITER
         end
     end
 
-    assign m_arvalid_o = |(s_arvalid_i & AR_hot);
-    assign m_araddr_o  = s_araddr_i[AR_bin * ADDR_WIDTH +: ADDR_WIDTH];
-    assign m_arid_o    = s_arid_i[AR_bin * 4 +: 4];
-    assign m_arlen_o   = s_arlen_i[AR_bin * 8 +: 8];
-    assign m_arsize_o  = s_arsize_i[AR_bin * 3 +: 3];
-    assign m_arburst_o = s_arburst_i[AR_bin * 2 +: 2];
-
-    // s_arready 回授给发起者
-    genvar i;
-    generate
-        for (i = 0; i < MASTER_NUM ; i = i + 1) begin: AR_FOR
-            assign s_arready_o[i] = m_arready_i & AR_hot[i];
-        end
-    endgenerate
-
-    wire AR_fire  = |(s_arvalid_i & AR_hot) & m_arready_i; // 完成握手
-
+    wire R_fire  = |(s_rready_i & AR_hot) & m_rvalid_i & m_rlast_i; // 读通道最后一个数据握手完成
     //管理 AR_owner / AR_busy
     always @(posedge clk) begin
         if (reset) begin
@@ -150,38 +134,37 @@ module ysyx_25050136_ARBITER
                 end
             end
             // 当握手完成，释放忙态
-            if (AR_fire) begin
+            if (R_fire) begin
                 AR_owner <= 0;
                 AR_busy  <= 0;
             end
         end
     end
-    // R通道
-    // R通道成功握手后, 还需要占据一个周期用来传输rready信号
-    reg m_rid3_d, m_rid2_d; 
-    wire [MASTER_NUM-1:0] R_hot;
-    wire r_req_0 = m_rid2_d | m_rid_i[2];
-    wire r_req_1 = m_rid3_d | m_rid_i[3];
-    assign R_hot[0] = r_req_0;
-    assign R_hot[1] = ~r_req_0 & r_req_1;
-    always @(posedge clk) begin
-        if (reset) begin
-            m_rid3_d <= 0;
-            m_rid2_d <= 0;
-        end else begin
-            m_rid3_d <= m_rid_i[3];
-            m_rid2_d <= m_rid_i[2];
-        end
-    end
-    assign m_rready_o = |(s_rready_i & R_hot);
-    genvar j;
+    
+    // AR通道
+    assign m_arvalid_o = |(s_arvalid_i & AR_hot);
+    assign m_araddr_o  = s_araddr_i[AR_bin * ADDR_WIDTH +: ADDR_WIDTH];
+    assign m_arid_o    = s_arid_i[AR_bin * 4 +: 4];
+    assign m_arlen_o   = s_arlen_i[AR_bin * 8 +: 8];
+    assign m_arsize_o  = s_arsize_i[AR_bin * 3 +: 3];
+    assign m_arburst_o = s_arburst_i[AR_bin * 2 +: 2];
+
+    genvar i;
     generate
-        for (j = 0; j < MASTER_NUM ; j = j + 1) begin: R_FOR
-            assign s_rvalid_o[j] = m_rvalid_i & R_hot[j];
-            assign s_rdata_o[j*DATA_WIDTH+:DATA_WIDTH] = R_hot[j] ? m_rdata_i : 0;
-            assign s_rresp_o[j*2+:2] = R_hot[j] ? m_rresp_i : 0;
-            assign s_rlast_o[j] = m_rlast_i & R_hot[j];
-            assign s_rid_o[j*4+:4] = R_hot[j] ? m_rid_i : 0;
+        for (i = 0; i < MASTER_NUM ; i = i + 1) begin: AR_FOR
+            assign s_arready_o[i] = m_arready_i & AR_hot[i];
+        end
+    endgenerate
+
+    // R通道
+    assign m_rready_o = |(s_rready_i & AR_hot);
+    generate
+        for (i = 0; i < MASTER_NUM ; i = i + 1) begin: R_FOR
+            assign s_rvalid_o[i] = m_rvalid_i & AR_hot[i];
+            assign s_rdata_o[i*DATA_WIDTH+:DATA_WIDTH] = AR_hot[i] ? m_rdata_i : 0;
+            assign s_rresp_o[i*2+:2] = AR_hot[i] ? m_rresp_i : 0;
+            assign s_rlast_o[i] = m_rlast_i & AR_hot[i];
+            assign s_rid_o[i*4+:4] = AR_hot[i] ? m_rid_i : 0;
         end
     endgenerate
     // ========================写通道直通===========================
