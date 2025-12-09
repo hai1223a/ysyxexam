@@ -1,6 +1,6 @@
-From d04c94bcd81afb981488b5c6da77e30eb4af995a Mon Sep 17 00:00:00 2001
+From 414212f54e7956bfac06a6a032b00ccb4650e416 Mon Sep 17 00:00:00 2001
 From: ysyx_25050136-Xie pingjiang <2690477553@qq.com>
-Date: Thu, 4 Dec 2025 23:37:30 +0800
+Date: Tue, 9 Dec 2025 17:00:30 +0800
 Subject: [PATCH] =?UTF-8?q?B=E9=98=B6=E6=AE=B5=E8=80=83=E6=A0=B8=E5=87=86?=
  =?UTF-8?q?=E5=A4=87?=
 MIME-Version: 1.0
@@ -12,8 +12,8 @@ Content-Transfer-Encoding: 8bit
  bsp/abstract-machine/integrate-am-apps.py |  2 +-
  bsp/abstract-machine/src/context.c        | 91 +++++++++++++++++++----
  bsp/abstract-machine/src/hello.c          |  2 +-
- bsp/abstract-machine/src/uart.c           | 10 ++-
- 5 files changed, 133 insertions(+), 63 deletions(-)
+ bsp/abstract-machine/src/uart.c           | 14 +++-
+ 5 files changed, 137 insertions(+), 63 deletions(-)
 
 diff --git a/bsp/abstract-machine/extra.ld b/bsp/abstract-machine/extra.ld
 index 5cdc65670..3dafc5560 100644
@@ -250,7 +250,7 @@ index cda4015f7..5b08608b5 100644
 +INIT_ENV_EXPORT(hello);
 \ No newline at end of file
 diff --git a/bsp/abstract-machine/src/uart.c b/bsp/abstract-machine/src/uart.c
-index e4eb86689..aa66cb5eb 100644
+index e4eb86689..139303388 100644
 --- a/bsp/abstract-machine/src/uart.c
 +++ b/bsp/abstract-machine/src/uart.c
 @@ -13,7 +13,10 @@
@@ -265,14 +265,18 @@ index e4eb86689..aa66cb5eb 100644
  struct device_uart {
    rt_ubase_t hw_base;
    rt_uint32_t irqno;
-@@ -37,8 +40,9 @@ static int _uart_putc(struct rt_serial_device *serial, char c) {
+@@ -37,8 +40,13 @@ static int _uart_putc(struct rt_serial_device *serial, char c) {
  }
  
  static int _uart_getc(struct rt_serial_device *serial) {
 -  static const char *p = "help\ndate\nversion\nfree\nps\npwd\nls\nmemtrace\nmemcheck\nutest_list\n";
 -  return (*p != '\0' ? *(p ++) : -1);
 +  static const char *p = "";
-+  char rdata = io_read(AM_UART_RX).data;
++  char rdata;
++  if(io_read(AM_UART_CONFIG).present)
++    rdata = io_read(AM_UART_RX).data;
++  else
++    rdata = -1;
 +  return (*p != '\0' ? *(p ++) : rdata);
  }
  
