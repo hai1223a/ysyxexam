@@ -39,9 +39,11 @@ module ysyx_25050136_IF
     wire [31:0] next_pc = (pht_pred_taken && out_btb_hit_o) ? btb_pred_npc : (pc + 4);
 `ifdef YSYXSOC
     wire [31:0] if_dbg_pc = out_pc_o;
+`ifdef EVENT_COUNTER
     always @(posedge clk) begin
         if(out_fire) fetch_get();
     end
+`endif
 `endif
 
     // ==== 逻辑实现 ====

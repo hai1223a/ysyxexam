@@ -218,10 +218,12 @@ module ysyx_25050136_EX
         end
     end
     assign out_dbg_pc_o = ex_pc;
+`ifdef EVENT_COUNTER
     always @(posedge clk) begin
         if(!reset) begin
             if(branch_flush_o) predict_miss_count();
         end
     end
+`endif
 `endif
 endmodule

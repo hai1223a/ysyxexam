@@ -149,6 +149,10 @@ endchoice
 # Verilator的配置
 menu "Verilator Configuration"
 
+config EVENT_COUNTER
+  bool "Enable event counter"
+  default n
+
 config FST
   bool "Enable fst wave"
   default y

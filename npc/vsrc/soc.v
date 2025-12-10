@@ -100,6 +100,7 @@ module ysyx_25050136(
     output      [3:0]   io_slave_rid
 );
 `ifdef YSYXSOC
+`ifdef EVENT_COUNTER
     always @(*) begin
         if ((io_master_awvalid & io_master_awready & (io_master_awaddr == 0)) |
             (io_master_arvalid & io_master_arready & (io_master_araddr == 0)) )
@@ -107,6 +108,7 @@ module ysyx_25050136(
             find_addr_0();
         end
     end
+`endif
 `endif
     localparam TOP_MASTER_NUM = 2 ; // 顶层总线主设备数量
     // 顶层仲裁器只对读信号进行二选一仲裁，写信号直接连接(也是被后仿逼得)
@@ -254,7 +256,6 @@ module ysyx_25050136(
         .mem_rid_i      	(mem_rid       )
     );
     
-    // 仲裁器模块实例化
     // 仲裁器模块实例化
     ysyx_25050136_ARBITER #(
         .MASTER_NUM     (TOP_MASTER_NUM    )

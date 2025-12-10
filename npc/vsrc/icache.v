@@ -201,6 +201,7 @@ module ysyx_25050136_ICACHE
     // assign req_addr_o     = ic_addr;
 
 `ifdef YSYXSOC
+`ifdef EVENT_COUNTER
     reg [31:0] mem_type;
     reg in_pulse;
         always @(posedge clk) begin
@@ -224,5 +225,6 @@ module ysyx_25050136_ICACHE
             icache_misscycle(mem_type);
         end
     end
+`endif
 `endif
 endmodule

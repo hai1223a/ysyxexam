@@ -301,12 +301,14 @@ module ysyx_25050136_ID
     wire [31:0] id_dbg_pc = out_pc_o;
     assign out_dbg_inst_o = id_inst;
     assign out_dbg_optype_o = {type_jalr | type_jal, type_branch, type_load, type_store, type_system, type_op_imm | type_auipc | type_lui | type_op};
+`ifdef EVENT_COUNTER
     always @(posedge clk) begin
         if(!reset) begin
             if(!ready_go) related_delay_get();
             if(branch_flush_o) predict_not_jump_count();
         end
     end
+`endif
 `endif
 
 endmodule

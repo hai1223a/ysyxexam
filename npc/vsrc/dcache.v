@@ -276,6 +276,7 @@ module ysyx_25050136_DCACHE
     assign b_fire      = m_bvalid_i & m_bready_o;
 
 `ifdef YSYXSOC
+`ifdef EVENT_COUNTER
     wire [31:0] mem_type;
     assign mem_type = (req_addr_i >= 32'ha0000000) ? 32'd2 :
                       (req_addr_i >= 32'h30000000) ? 32'd1 :
@@ -290,5 +291,6 @@ module ysyx_25050136_DCACHE
             if(state == ACK) dcache_get(mem_type);
         end
     end
+`endif
 `endif
 endmodule

@@ -50,6 +50,7 @@ module ysyx_25050136_WB
             find_ebreak();
         end
     end
+`ifdef EVENT_COUNTER
     always @(posedge clk) begin
         if(!reset) begin
             if(in_fire) begin
@@ -78,6 +79,7 @@ module ysyx_25050136_WB
             end
         end
     end
+`endif
 `endif
 
     ysyx_25050136_RegisterFile #(
