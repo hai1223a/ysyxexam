@@ -26,11 +26,11 @@ override NPCFLAGS += -l $(shell dirname $(IMAGE).elf)/ysyxsoc-log.txt \
 					 -b 
 
 MAINARGS_MAX_LEN = 64
-MAINARGS_PLACEHOLDER = The insert-arg rule in Makefile will insert mainargs here.
-CFLAGS += -DMAINARGS_MAX_LEN=$(MAINARGS_MAX_LEN) -DMAINARGS_PLACEHOLDER=\""$(MAINARGS_PLACEHOLDER)"\"
+MAINARGS_PLACEHOLDER = the_insert-arg_rule_in_Makefile_will_insert_mainargs_here
+CFLAGS += -DMAINARGS_MAX_LEN=$(MAINARGS_MAX_LEN) -DMAINARGS_PLACEHOLDER=$(MAINARGS_PLACEHOLDER)
 
 insert-arg: image
-	@python $(AM_HOME)/tools/insert-arg.py $(IMAGE).bin $(MAINARGS_MAX_LEN) "$(MAINARGS_PLACEHOLDER)" "$(mainargs)"
+	@python $(AM_HOME)/tools/insert-arg.py $(IMAGE).bin $(MAINARGS_MAX_LEN) $(MAINARGS_PLACEHOLDER) "$(mainargs)"
 
 image: image-dep
 	@$(OBJDUMP) -d $(IMAGE).elf > $(IMAGE).txt
@@ -38,15 +38,15 @@ image: image-dep
 	@$(OBJCOPY) -S --set-section-flags .bss=alloc,contents -O binary $(IMAGE).elf $(IMAGE).bin
 
 run: insert-arg
-	@$(MAKE) -C $(NPC_HOME) soc_run ARGS="$(NPCFLAGS)"
+	@$(MAKE) -C $(NPC_HOME) run ARGS="$(NPCFLAGS)"
 
 gdb: insert-arg
-	@$(MAKE) -C $(NPC_HOME) soc_gdb ARGS="$(NPCFLAGS)"
+	@$(MAKE) -C $(NPC_HOME) gdb ARGS="$(NPCFLAGS)"
 
 wave: insert-arg
-	@$(MAKE) -C $(NPC_HOME) soc_wave ARGS="$(NPCFLAGS)"
+	@$(MAKE) -C $(NPC_HOME) wave ARGS="$(NPCFLAGS)"
 
-nemu: insert-arg
-	@$(MAKE) -C $(NEMU_HOME) run ARGS="$(NPCFLAGS) -t $(IMAGE)_itrace.bin"
+# nemu: insert-arg
+# 	@$(MAKE) -C $(NEMU_HOME) run ARGS="$(NPCFLAGS) -t $(IMAGE)_itrace.bin"
 
 .PHONY: insert-arg

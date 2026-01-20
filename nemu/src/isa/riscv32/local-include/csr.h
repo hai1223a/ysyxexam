@@ -4,6 +4,7 @@
 #include <common.h>
 typedef struct {
   word_t value;
+  word_t wpri_mask;
   uint16_t addr;
   char name[16];
 } riscv_csr;
@@ -11,3 +12,5 @@ typedef struct {
 extern riscv_csr csrs[6];
 
 #endif
+// warl
+// wlrl

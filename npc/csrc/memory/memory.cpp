@@ -3,6 +3,7 @@
 // 内存
 uint8_t imem[CONFIG_IMEM_SIZE] __attribute((aligned(4096))) = {}; // 内存变量
 uint8_t dmem[CONFIG_DMEM_SIZE] __attribute((aligned(4096))) = {}; // 内存变量
+mem_info_t npc_mem_info;
 
 static inline uint8_t *imem_guest_to_host(uint32_t paddr) { return imem + paddr - CONFIG_IMEM_BASE; }
 static inline uint8_t *dmem_guest_to_host(uint32_t paddr) { return dmem + paddr - CONFIG_DMEM_BASE; }
@@ -91,8 +92,8 @@ extern "C" void find_ebreak() {
 }
 
 extern "C" void find_resp() {
-  // Log("NPC抛出Access Fault异常, 但我继续仿真, 如果后续有问题可以检查这个");
-  // set_nemu_state(NPC_END, SOC_NPC, 2);
+  Log("NPC抛出Access Fault异常, 但我继续仿真, 如果后续有问题可以检查这个");
+  set_nemu_state(NPC_END, SOC_NPC, 2);
 }
 
 extern "C" void find_addr_0() {
@@ -102,6 +103,14 @@ extern "C" void find_addr_0() {
 
 extern "C" void find_diff_skip() {
   if_skip = true;
+}
+
+extern "C" void find_diff_mem(int addr, int data, char len, char mem_type) {
+  // printf("内存数据不同步, addr: 0x%08x, data: 0x%08x, len: %08x, type: %08x\n", addr, data, len, mem_type);
+  npc_mem_info.data = (uint32_t)data;
+  npc_mem_info.vaddr = (uint32_t)addr;
+  npc_mem_info.len = len & 0x7;
+  npc_mem_info.type = mem_type & 0x3;
 }
 
 NPC_perforcount npc_perC = {0};

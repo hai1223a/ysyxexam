@@ -61,6 +61,10 @@ wire [31:0]                       mem_dbg_pc/* verilator public_flat */;
 wire [31:0]                     mem_dbg_inst/* verilator public_flat */;
 wire                       mem_dbg_is_device/* verilator public_flat */;
 wire [5:0]                    mem_dbg_optype/* verilator public_flat */;
+wire [31:0]                     mem_dbg_addr/* verilator public_flat */;
+wire [31:0]                     mem_dbg_data/* verilator public_flat */;
+wire [2:0]                       mem_dbg_len/* verilator public_flat */;
+wire [1:0]                      mem_dbg_type/* verilator public_flat */;
 `endif
 // === 数据冒险 ===
 wire [ADDR_WIDTH-1:0]   ex_waddr;
@@ -351,6 +355,10 @@ ysyx_25050136_MEM #(
     .out_dbg_inst_o  	(mem_dbg_inst       ),
     .out_dbg_is_device_o(mem_dbg_is_device  ),
     .out_dbg_optype_o	(mem_dbg_optype     ),
+    .out_dbg_addr_o     (mem_dbg_addr),
+    .out_dbg_data_o     (mem_dbg_data),
+    .out_dbg_len_o      (mem_dbg_len),
+    .out_dbg_type_o     (mem_dbg_type),
 `endif
     .out_ready_i     	(mem_wb_ready       ),
     .out_rd_o        	(mem_wb_rd          ),
@@ -385,6 +393,10 @@ ysyx_25050136_WB #(
     .in_gpr_wdata_i  	(mem_wb_gpr_wdata ),
     .in_ready_o      	(mem_wb_ready     ),
 `ifdef YSYXSOC
+    .in_dbg_addr_i     (mem_dbg_addr),
+    .in_dbg_data_i     (mem_dbg_data),
+    .in_dbg_len_i      (mem_dbg_len),
+    .in_dbg_type_i     (mem_dbg_type),
     .in_dbg_pc_i     	(mem_dbg_pc       ),
     .in_dbg_inst_i   	(mem_dbg_inst     ),
     .in_dbg_is_device_i (mem_dbg_is_device),

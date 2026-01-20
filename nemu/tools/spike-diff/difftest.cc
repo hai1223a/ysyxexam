@@ -41,6 +41,13 @@ struct diff_context_t {
   word_t pc;
 };
 
+struct diff_mem_info_t{
+  word_t vaddr;   // 虚拟地址 (Spike log 记录的是 VA)
+  word_t data;    // 数据
+  uint8_t len;      // 长度 (1, 2, 4, 8)
+  uint8_t type;     // 0: None, 1: Load, 2: Store
+};
+
 static sim_t* s = NULL;
 static processor_t *p = NULL;
 static state_t *state = NULL;
@@ -51,6 +58,9 @@ void sim_t::diff_init(int port) {
 }
 
 void sim_t::diff_step(uint64_t n) {
+//执行前清空上一条指令的访存记录
+  state->log_mem_read.clear();
+  state->log_mem_write.clear();
   step(n);
 }
 
@@ -95,6 +105,24 @@ __EXPORT void difftest_regcpy(void* dut, bool direction) {
   }
 }
 
+__EXPORT void difftest_getinst(void* dut) {
+	mmu_t* mmu = p->get_mmu();
+	word_t* diff_context_t = (word_t* )dut;
+	*diff_context_t = mmu->load<uint32_t>(state->pc);
+}
+
+__EXPORT void difftest_get_store_event(void* dut) {
+  struct diff_mem_info_t* diff_mem_t = (struct diff_mem_info_t *) dut;
+  diff_mem_t->type  = 0;
+  if(state->log_mem_write.empty())
+    return;
+  auto& item = state->log_mem_write.back();
+  diff_mem_t->vaddr = std::get<0>(item);
+  diff_mem_t->data  = std::get<1>(item);
+  diff_mem_t->len   = std::get<2>(item);
+  diff_mem_t->type  = 2;
+}
+
 __EXPORT void difftest_exec(uint64_t n) {
   s->diff_step(n);
 }
@@ -116,10 +144,11 @@ __EXPORT void difftest_init(int port) {
             /*default_trigger_count=*/4);
   s = new sim_t(&cfg, false,
       difftest_mem, difftest_plugin_devices, difftest_htif_args,
-      difftest_dm_config, nullptr, false, NULL,
+      difftest_dm_config, "/dev/null", false, NULL,
       false,
       NULL,
       true);
+  s->configure_log(false, true);
   s->diff_init(port);
 }
 

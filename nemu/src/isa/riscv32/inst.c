@@ -81,8 +81,8 @@ static word_t alu(const word_t op1, const word_t op2, int op) {
 
   switch (op)
   { 
-    case ADD:     return op1 + op2;          
-    case SUB:     return op1 - op2;          
+    case ADD:     return op1 + op2;
+    case SUB:     return op1 - op2;
     case XOR:     return op1 ^ op2;
     case OR:      return op1 | op2;
     case AND:     return op1 & op2;
@@ -94,7 +94,7 @@ static word_t alu(const word_t op1, const word_t op2, int op) {
     case GEQ:     return int_op1 >= int_op2;
     case SRA:     return int_op1 >> op2_low5;
     case SLL:     return op1 << op2_low5;
-    case SRL:     return op1 >> op2_low5;                                  
+    case SRL:     return op1 >> op2_low5;
     default:      return 0;
   }
 }
@@ -160,28 +160,35 @@ static void csru(Decode *s, int op, const word_t src_value, const int rd )
     }
   }
   Assert(csr_index_state == true, "你访问的csr没有实现或者不存在, 地址为%x\n", csr_addr);
+  word_t new_value = src_value & (~csrs[csr_index].wpri_mask); //考虑wpri字段
   switch (op)
   {
-  case CSRRW:
-    if (rd != 0) {
-      Reg(rd) = csrs[csr_index].value;
-    }
-    csrs[csr_index].value = src_value;
-    break;
-  case CSRRS:
-    Reg(rd) = csrs[csr_index].value;
-    if (rs1 != 0) {
-      csrs[csr_index].value |= src_value;
-    }
-    break;
-  case CSRRC:
-    Reg(rd) = csrs[csr_index].value;
-    if (rs1 != 0) {
-      csrs[csr_index].value &= ~src_value;
-    }
-    break;
-  default:
-    break;
+	case CSRRW:
+		if (rd != 0) {
+		Reg(rd) = csrs[csr_index].value;
+		}
+		// printf("CSRRW对象为%s, rd为%d, csr旧值为0x%08x,",csrs[csr_index].name, rd, csrs[csr_index].value);
+		csrs[csr_index].value = new_value;
+		// printf(" 新值为0x%08x\n", csrs[csr_index].value);
+		break;
+	case CSRRS:
+		Reg(rd) = csrs[csr_index].value;
+		// printf("CSRRS对象为%s, rd%d, csr旧值为0x%08x,",csrs[csr_index].name, rd, csrs[csr_index].value);
+		if (rs1 != 0) {
+		csrs[csr_index].value |= new_value;
+		// printf(" 新值为0x%08x, 操作的value为0x%08x\n", csrs[csr_index].value, new_value);
+		}
+		break;
+	case CSRRC:
+		Reg(rd) = csrs[csr_index].value;
+		// printf("CSRRC对象为%s, rd%d, csr旧值为0x%08x,",csrs[csr_index].name, rd, csrs[csr_index].value);
+		if (rs1 != 0) {
+		csrs[csr_index].value &= ~new_value;
+		// printf(" 新值为0x%08x, 操作的value为0x%08x\n", csrs[csr_index].value, new_value);
+		}
+		break;
+	default:	Assert(0, "非法的CSR操作，操作代号为%d\n", op);
+		break;
   }
 }
 
@@ -296,8 +303,8 @@ static int decode_exec(Decode *s) {
   __VA_ARGS__ ; \
   IFDEF(CONFIG_FTRACE,ftracer_log(s, name)); \
 }
-
-  // printf("imm = %d  %u  %x \n src1 = %x, src2 = %x, rd = %s, Reg(rd) = %x\n $pc = 0x%x\n",(int)imm, imm, imm, src1, src2, reg_name(rd), Reg(rd), s->pc); 
+	// 放到具体指令之后
+	// printf("imm = %d  %u  %x \nsrc1 = %x, src2 = %x, rd = %s, Reg(rd) = %x\n$pc = 0x%x\n",(int)imm, imm, imm, src1, src2, reg_name(rd), Reg(rd), s->pc); 
   IFDEF(CONFIG_BTRACE, char *p = s->branchbuf;)
   INSTPAT_START();
   // RV32I
@@ -318,7 +325,7 @@ static int decode_exec(Decode *s) {
   INSTPAT("??????? ????? ????? 101 ????? 00000 11", lhu    , I, IFDEF(CONFIG_BTRACE, TRACE_COMMON);Reg(rd) = Mr(src1 + imm, 2));
   INSTPAT("??????? ????? ????? 000 ????? 01000 11", sb     , S, IFDEF(CONFIG_BTRACE, TRACE_COMMON);Mw(src1 + imm, 1, src2));
   INSTPAT("??????? ????? ????? 001 ????? 01000 11", sh     , S, IFDEF(CONFIG_BTRACE, TRACE_COMMON);Mw(src1 + imm, 2, src2));
-  INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, IFDEF(CONFIG_BTRACE, TRACE_COMMON);Mw(src1 + imm, 4, src2));
+  INSTPAT("??????? ????? ????? 010 ????? 01000 11", sw     , S, IFDEF(CONFIG_BTRACE, TRACE_COMMON);Mw(src1 + imm, 4, src2););
   INSTPAT("??????? ????? ????? 000 ????? 00100 11", addi   , I, IFDEF(CONFIG_BTRACE, TRACE_COMMON);Reg(rd) = alu(src1, imm, ADD));
   INSTPAT("??????? ????? ????? 010 ????? 00100 11", slti   , I, IFDEF(CONFIG_BTRACE, TRACE_COMMON);Reg(rd) = alu(src1, imm, LEQ));
   INSTPAT("??????? ????? ????? 011 ????? 00100 11", sltiu  , I, IFDEF(CONFIG_BTRACE, TRACE_COMMON);Reg(rd) = alu(src1, imm, LEQ_U));

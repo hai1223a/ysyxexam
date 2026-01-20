@@ -29,10 +29,14 @@ void cpu_exec_once()
     // 计算电路状态
     top->eval();
     // 记录
-    IFDEF(CONFIG_FST, tfp->dump(sim_time));
+#ifdef CONFIG_FST
+    if(sim_time >= CONFIG_FST_START && sim_time <= CONFIG_FST_END)
+      tfp->dump(sim_time);
+#endif
     // 推动仿真进行
     sim_time++;
     IFDEF(CONFIG_TARGET_SIMULATOR, if(top->clock == 1 && top->reset == 0) myuart.tick(&top->externalPins_uart_rx));
+
     IFDEF(CONFIG_TARGET_NVBOARD, if(top->clock == 1 && top->reset == 0) nvboard_update());
     // 指令计算
     // break;

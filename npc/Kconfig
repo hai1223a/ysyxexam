@@ -157,6 +157,16 @@ config FST
   bool "Enable fst wave"
   default y
 
+config FST_START
+    depends on FST
+    int "Fst wave start time"
+    default 0
+
+config FST_END
+    depends on FST
+    int "Fst wave end time"
+    default 10000000000
+
 config WALL
   bool "Enable wall"
   default n

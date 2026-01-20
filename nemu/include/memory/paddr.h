@@ -31,6 +31,15 @@ static inline bool in_pmem(paddr_t addr) {
   return (addr - CONFIG_MBASE < CONFIG_MSIZE);
 }
 
+typedef struct
+{
+  word_t vaddr;   // 虚拟地址 (Spike log 记录的是 VA)
+  word_t data;    // 数据
+  uint8_t len;      // 长度 (1, 2, 4, 8)
+  uint8_t type;     // 0: None, 1: Load, 2: Store
+} mem_info_t;
+extern mem_info_t nemu_mem_info;
+#ifdef CONFIG_SOC_MODE
 static inline bool in_sram(paddr_t addr) {
   return (addr - CONFIG_SRAM_BASE < CONFIG_SRAM_SIZE);
 }
@@ -38,6 +47,7 @@ static inline bool in_sram(paddr_t addr) {
 static inline bool in_sdram(paddr_t addr) {
   return (addr - CONFIG_SDRAM_BASE < CONFIG_SDRAM_SIZE);
 }
+#endif
 
 word_t paddr_read(paddr_t addr, int len);
 void paddr_write(paddr_t addr, int len, word_t data);

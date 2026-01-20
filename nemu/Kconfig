@@ -13,6 +13,17 @@ config ISA_loongarch32r
   bool "loongarch32r"
 endchoice
 
+choice 
+  prompt "Choose device addr mode"
+  default SOC_MODE
+config SOC_MODE
+  bool "use for ysyx_lab, default in riscv32"
+config NEMU_MODE
+  bool "use for nemu_lab, default in nemutive"
+config FLUSH_MODE
+  bool "flush the config, load default config"
+endchoice
+
 config ISA
   string
   default "x86" if ISA_x86

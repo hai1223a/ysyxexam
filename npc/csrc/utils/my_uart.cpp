@@ -14,7 +14,8 @@ MyUART::MyUART(int cycles_per_bit)
     // 回显在不需要串口输入的情况下可以打开
     tcgetattr(STDIN_FILENO, &original_tio);
     struct termios new_tio = original_tio;
-    new_tio.c_lflag &= ~(ICANON | ECHO); 
+    // new_tio.c_lflag &= ~(ICANON | ECHO); 
+    new_tio.c_lflag &= ~(ICANON); 
     tcsetattr(STDIN_FILENO, TCSANOW, &new_tio);
 }
 
@@ -24,38 +25,47 @@ MyUART::~MyUART() {
 }
 
 void MyUART::tick(unsigned char *rx_pin) {
-    char c;
-    // 从 stdin 读取一个字节
-    if (read(STDIN_FILENO, &c, 1) > 0) {
-        tx_queue.push(c);
+    // 1. 优化：大幅降低系统调用频率
+    // 每 10000 个时钟周期（或更多）才尝试读一次 stdin
+    static uint32_t poll_timer = 0;
+    if (poll_timer-- == 0) {
+        poll_timer = 20000; 
+        char c;
+        if (read(STDIN_FILENO, &c, 1) > 0) {
+            tx_queue.push(c);
+        }
     }
-    // 只有当不忙、有数据、且冷却时间已结束时，才开始发送下一个字节
-    if (!busy && !tx_queue.empty() && gap_timer == 0) {
-        uint8_t data = tx_queue.front();
-        tx_queue.pop();
-        //1 Start(0) + 8 Data + 1 Stop(1)
-        shifter = (1 << 9) | (data << 1) | 0; 
-        busy = true;
-        bit_idx = 0;
-        timer = cycles_per_bit;
-    }
+
+    // 2. 发送逻辑优化：只在 busy 时处理定时器
     if (busy) {
-        tx_line = (shifter >> bit_idx) & 1;
+        // tx_line 在整个 bit 持续期间保持不变，没必要每周期都计算
         timer--;
         if (timer <= 0) {
             timer = cycles_per_bit;
             bit_idx++;
-            if (bit_idx >= 10) { 
+            if (bit_idx < 10) {
+                tx_line = (shifter >> bit_idx) & 1;
+            } else {
                 busy = false;
-                gap_timer = 5000; // 发送完一个字节后设置冷却时间 
+                tx_line = 1; // 停止位结束后回到空闲
+                gap_timer = 10000; 
             }
         }
     } else {
-        tx_line = 1;        
-        if (gap_timer > 0) {
-            gap_timer--;
+        if (!tx_queue.empty() && gap_timer == 0) {
+            uint8_t data = tx_queue.front();
+            tx_queue.pop();
+            shifter = (1 << 9) | (data << 1) | 0; // 1 Stop + 8 Data + 1 Start
+            busy = true;
+            bit_idx = 0;
+            timer = cycles_per_bit;
+            tx_line = 0; // 起始位(0)
+        } else {
+            tx_line = 1;
+            if (gap_timer > 0) gap_timer--;
         }
     }
+
     if (rx_pin) {
         *rx_pin = tx_line;
     }

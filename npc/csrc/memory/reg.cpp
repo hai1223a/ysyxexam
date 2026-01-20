@@ -41,12 +41,17 @@ uint32_t reg_str2val(const char *s, bool *success)
 
 bool isa_difftest_checkregs(CPU_state *ref)
 {
+  if (ref->pc != SOC_NPC) {
+    Log("PC值的difftest检查不通过, 发生在pc = 0x%8x, dut: 0x%8x, ref: 0x%8x", SOC_PC, SOC_NPC, ref->pc);
+    return false;
+  }
   for (size_t i = 0; i < REG_NUM; i++)
   {
-    if (ref->gpr[i] != get_reg(i))
+    if (ref->gpr[i] != get_reg(i)) {
+      Log("gpr值的difftest检查不通过, 发生在pc = 0x%8x, name = %s, dut: 0x%8x, ref: 0x%8x", SOC_PC, regs[i], get_reg(i), ref->gpr[i]);
       return false;
+    }
   }
-  if (ref->pc != SOC_NPC)
-    return false;
+
   return true;
 }

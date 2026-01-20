@@ -1,14 +1,18 @@
 menu "Memory Configuration"
+  depends on !FLUSH_MODE
 
 config MBASE
-  hex "Memory base address"
+  hex "Memory base address" 
   default 0x0        if ISA_x86
+  default 0x30000000 if SOC_MODE
   default 0x80000000
 
 config MSIZE
   hex "Memory size"
+  default 0x2000000 if SOC_MODE
   default 0x8000000
 
+if SOC_MODE
 config SDRAM_BASE
   hex "SDRAM base address"
   default 0xa0000000
@@ -24,6 +28,7 @@ config SRAM_BASE
 config SRAM_SIZE
   hex "SRAM size"
   default 0x2000
+endif
   
 config PC_RESET_OFFSET
   hex "Offset of reset vector from the base of memory"

@@ -1,4 +1,5 @@
-menuconfig DEVICE
+menuconfig DEVICE 
+  depends on !FLUSH_MODE
   depends on !TARGET_SHARE
   bool "Devices"
   default n
@@ -28,6 +29,8 @@ config SERIAL_PORT
 
 config SERIAL_MMIO
   hex "MMIO address of the serial controller"
+  default 0xa00003f8 if NEMU_MODE
+  default 0x10000000 if SOC_MODE
   default 0xa00003f8
 
 config SERIAL_INPUT_FIFO
@@ -47,11 +50,14 @@ config RTC_PORT
 
 config RTC_MMIO
   hex "MMIO address of the timer"
+  default 0xa0000048 if NEMU_MODE
+  default 0x02000000 if SOC_MODE
   default 0xa0000048
 endif # HAS_TIMER
 
 menuconfig HAS_KEYBOARD
   bool "Enable keyboard"
+  default n if SOC_MODE
   default y
 
 if HAS_KEYBOARD
@@ -67,6 +73,7 @@ endif # HAS_KEYBOARD
 
 menuconfig HAS_VGA
   bool "Enable VGA"
+  default n if SOC_MODE
   default y
 
 if HAS_VGA
@@ -100,6 +107,7 @@ endif # HAS_VGA
 if !TARGET_AM
 menuconfig HAS_AUDIO
   bool "Enable audio"
+  default n if SOC_MODE
   default y
 
 if HAS_AUDIO
@@ -123,6 +131,7 @@ endif # HAS_AUDIO
 
 menuconfig HAS_DISK
   bool "Enable disk"
+  default n if SOC_MODE
   default y
 
 if HAS_DISK

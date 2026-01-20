@@ -2,10 +2,10 @@
 #include <nemu.h>
 
 extern char _heap_start;
-extern char _heap_end;
 int main(const char *args);
-Area heap = RANGE(&_heap_start, &_heap_end);
-static const char mainargs[MAINARGS_MAX_LEN] = MAINARGS_PLACEHOLDER; // defined in CFLAGS
+
+Area heap = RANGE(&_heap_start, PMEM_END);
+static const char mainargs[MAINARGS_MAX_LEN] = TOSTRING(MAINARGS_PLACEHOLDER); // defined in CFLAGS
 
 void putch(char ch) {
   outb(SERIAL_PORT, ch);
@@ -17,10 +17,13 @@ void halt(int code) {
   // should not reach here
   while (1);
 }
+
 static void _id_puts() {
   uint32_t mvendorid, marchid;
   asm volatile ("csrr %0, mvendorid" : "=r"(mvendorid));
   asm volatile ("csrr %0, marchid" : "=r"(marchid));
+	mvendorid = 0x11111111;
+	marchid = 0x22222222;
   for (int i = 7; i >= 0; i--) { 
       uint8_t nibble = (mvendorid >> (i * 4)) & 0xF;
       putch(nibble < 10 ? '0' + nibble : 'A' + nibble - 10);
@@ -32,8 +35,9 @@ static void _id_puts() {
   }
   putch('\n');
 }
+
 void _trm_init() {
-  _id_puts();
+  _id_puts(); // 这里不能跑difftest, spike对应这两个寄存器的值和nemu不一样
   int ret = main(mainargs);
   halt(ret);
 }

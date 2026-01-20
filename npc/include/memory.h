@@ -4,6 +4,15 @@
 #define RESET_VECTOR CONFIG_IMEM_BASE              // 程序复位地址
 extern uint8_t imem[CONFIG_IMEM_SIZE] __attribute((aligned(4096))); // 程序存储变量
 
+typedef struct
+{
+  uint32_t vaddr;   // 虚拟地址 (Spike log 记录的是 VA)
+  uint32_t data;    // 数据
+  uint8_t len;      // 长度 (1, 2, 4, 8)
+  uint8_t type;     // 0: None, 1: Load, 2: Store
+} mem_info_t;
+extern mem_info_t npc_mem_info;
+
 enum {
     wen, ren
 };

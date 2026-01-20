@@ -25,7 +25,11 @@ module ysyx_25050136_MEM
         output reg [31:0]                         out_dbg_pc_o ,
         output reg [31:0]                       out_dbg_inst_o ,
         output reg                         out_dbg_is_device_o ,
-        output reg [5:0]                      out_dbg_optype_o , 
+        output reg [5:0]                      out_dbg_optype_o ,
+        output reg [31:0]                       out_dbg_addr_o ,
+        output reg [31:0]                       out_dbg_data_o ,
+        output reg [2:0]                         out_dbg_len_o ,
+        output reg [1:0]                        out_dbg_type_o ,
 `endif
         input                                      out_ready_i ,
         output   [ADDR_WIDTH-1:0]                     out_rd_o ,
@@ -227,6 +231,37 @@ module ysyx_25050136_MEM
                 out_dbg_pc_o   <= in_dbg_pc_i;
                 out_dbg_inst_o <= in_dbg_inst_i;
                 out_dbg_optype_o <= in_dbg_optype_i;
+            end if(out_fire) begin
+            end 
+        end
+    end
+    always @(posedge clk) begin
+        if(reset) begin
+            out_dbg_addr_o <= 0;
+            out_dbg_data_o <= 0;
+            out_dbg_len_o  <= 0;
+            out_dbg_type_o <= 0;
+        end else begin
+            if(flush) begin
+            end else if(in_fire) begin
+                out_dbg_addr_o <= in_req_addr_i;
+                case(in_req_mask_i)
+                    4'h1: begin 
+                        out_dbg_data_o <= {24'd0, in_lsu_wdata_i[7:0]};
+                        out_dbg_len_o <= 3'd1;
+                    end
+                    4'h3: begin 
+                        out_dbg_data_o <= {16'd0, in_lsu_wdata_i[15:0]};
+                        out_dbg_len_o <= 3'd2;
+                    end
+                    4'hf: begin 
+                        out_dbg_data_o <= in_lsu_wdata_i;
+                        out_dbg_len_o <= 3'd4;
+                    end
+                    default;
+                endcase
+                if(in_req_wen_i) out_dbg_type_o <= 2'd2;
+                else out_dbg_type_o <= 0;
             end if(out_fire) begin
             end 
         end

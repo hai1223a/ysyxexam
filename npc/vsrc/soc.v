@@ -3,7 +3,7 @@ import "DPI-C" function void find_addr_0();
 import "DPI-C" function void find_ebreak();
 import "DPI-C" function void find_resp();
 import "DPI-C" function void find_diff_skip();
-
+import "DPI-C" function void find_diff_mem(input int addr, input int data, input byte len, input byte mem_type);
 // DPI-C 函数导入声明
 import "DPI-C" function void fetch_get();
 import "DPI-C" function void commit_get();

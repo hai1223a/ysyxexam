@@ -88,7 +88,7 @@ static void init_verilator(int argc, char *argv[])
   // 采样深度为5
   top->trace(tfp, 10);
   // 打开波形文件
-  tfp->open("wave/waveform.fst");
+  tfp->open("build/log/waveform.fst");
 #endif
 #ifdef CONFIG_TARGET_NVBOARD
   // NVBOARD初始化引脚

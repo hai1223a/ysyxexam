@@ -18,19 +18,36 @@
 
 // this is not consistent with uint8_t
 // but it is ok since we do not access the array directly
-static const uint32_t img [] = {
-    0xa00002b7, // auipc t0,0
-    0x12345337, // addi t0,t0,36     // t0 = 指令区首地址+36
-    0x67830313, // li a0,1            // a0 = 1
-    0x00629123, // sw  a0,0(t0)       // [t0+0] = a0 (把1写到数据区)
-    0x00629123, // lw  a0,0(t0)       // a0 = [t0+0] (从数据区读回a0)
-    0x00629223, // jal zero, +4       // 跳转到下一条（演示jal）
-    0x00229503, // addi t0,t0,1       // t0 = t0 + 1
-    0x00429583, // bne a0,a1,-4       // 如果a0!=a1, 跳回前面
-    0x00100073, // ebreak             // 终止
-    0xdeadbeef, // 数据区内容
-    0x12345678, // 数据区内容
+static const uint32_t img [] = 
+#ifdef CONFIG_SOC_MODE
+  {
+    0x00500093,   // li	ra,5
+    0x00300113,   // li	sp,3
+    0x002081b3,   // add	gp,ra,sp
+    0x02208233,   // mul	tp,ra,sp
+    0xa00002b7,   // lui	t0,0xa0000
+    0x0042a023,   // sw	tp,0(t0) # a0000000 
+    0x0002a183,   // lw	gp,0(t0)
+    0x00320463,   // beq	tp,gp,30000024 <ok>
+    0x00100513,   // li	a0,1
+    0x00100073   // ebreak
   };
+#else
+  {
+    0x00500093,  // li	ra,5
+    0x00300113,  // li	sp,3
+    0x002081b3,  // add	gp,ra,sp
+    0x02208233,  // mul	tp,ra,sp
+    0x00001297,  // auipc	t0,0x1
+    0x01c28293,  // addi	t0,t0,28
+    0x0042a023,  // sw	tp,0(t0) # 8000102c
+    0x0002a183,  // lw	gp,0(t0)
+    0x00320463,  // beq	tp,gp,28
+    0x00100513,  // li	a0,1
+    0x00100073   // ebreak
+  };
+#endif
+// 测试一下加法，乘法以及访存和跳转
 
 static void restart() {
   /* Set the initial program counter. */

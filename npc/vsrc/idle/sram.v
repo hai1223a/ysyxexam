@@ -45,7 +45,7 @@ module ysyx_25050136_SRAM
      );
 
     
-    localparam MEM_SIZE_BYTES = 128 * 1024 * 1024; // 128 MB
+    localparam MEM_SIZE_BYTES = 4 * 1024 * 1024; // 4 MB
     localparam MEM_WIDTH      = $clog2(MEM_SIZE_BYTES);
     
     // ====== 信号定义 ======

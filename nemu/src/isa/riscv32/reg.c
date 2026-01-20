@@ -24,16 +24,17 @@ const char *regs[] = {
 };
 
 void isa_reg_display() {
-  for (size_t i = 0; i < 32; i++)
+  printf(ANSI_FMT("nemu的寄存器状态如下:\n", ANSI_FG_GREEN));
+  for (int i = 0; i < MUXDEF(CONFIG_RVE, 16, 32); i++)
   {
-    printf("%s: %x\n",regs[i],cpu.gpr[i]);
+    printf("x%2d/%3s : 0x%8x\n",i,regs[i],cpu.gpr[i]);
   }
-  printf("PC: %x\n",cpu.pc);
+  printf("PC      : 0x%8x\n",cpu.pc);
 }
 
 word_t isa_reg_str2val(const char *s, bool *success) {
   *success = true;
-  for(int i = 0; i < 32; i++) {
+  for(int i = 0; i < MUXDEF(CONFIG_RVE, 16, 32); i++) {
     char reg[5] = "$";
     strcat(reg,regs[i]);
     if(!strcmp(reg, s)) {

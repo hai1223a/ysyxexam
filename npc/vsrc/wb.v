@@ -15,6 +15,10 @@ module ysyx_25050136_WB
         input  [31:0]                       in_dbg_inst_i,
         input                          in_dbg_is_device_i,
         input  [5:0]                      in_dbg_optype_i,
+        input  [31:0]                       in_dbg_addr_i,
+        input  [31:0]                       in_dbg_data_i,
+        input  [2:0]                         in_dbg_len_i,
+        input  [1:0]                        in_dbg_type_i,
 `endif
         input  [ADDR_WIDTH-1:0]                  raddr1_i,
         input  [ADDR_WIDTH-1:0]                  raddr2_i,
@@ -42,6 +46,7 @@ module ysyx_25050136_WB
                 wb_dbg_pc <= in_dbg_pc_i;
                 wb_dbg_inst <= in_dbg_inst_i;
                 inst_count <= inst_count + 64'd1;
+                find_diff_mem(in_dbg_addr_i, in_dbg_data_i, {5'd0, in_dbg_len_i}, {6'd0, in_dbg_type_i});
             end
         end
     end
