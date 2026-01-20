@@ -22,8 +22,6 @@ static void _id_puts() {
   uint32_t mvendorid, marchid;
   asm volatile ("csrr %0, mvendorid" : "=r"(mvendorid));
   asm volatile ("csrr %0, marchid" : "=r"(marchid));
-	mvendorid = 0x11111111;
-	marchid = 0x22222222;
   for (int i = 7; i >= 0; i--) { 
       uint8_t nibble = (mvendorid >> (i * 4)) & 0xF;
       putch(nibble < 10 ? '0' + nibble : 'A' + nibble - 10);
